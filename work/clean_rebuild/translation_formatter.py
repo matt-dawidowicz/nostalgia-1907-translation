@@ -5,6 +5,16 @@ This tool never translates Japanese.  It accepts English wording only at a
 stable ``CHAPTER:NNN`` ID, derives that record's renderer from the original
 SCN, and previews or stores semantic (unwrapped) text.  The MES compiler owns
 the final wrapping so later wording edits cannot inherit stale manual spaces.
+
+Stable IDs use the canonical zero-based record index; SCN's one-based operands
+are converted inside ``scn_layout.py``. Preview and compilation share the same
+``RecordContract``, so a translator sees the real role, visible widths, runtime
+strides, and floating-window row limit before writing.
+
+Batch changes are validated in memory before any chapter JSON is written.
+SCN-classified records become adaptive semantic text; records without proven
+reflow geometry remain explicitly fixed. See
+``docs/TRANSLATION_EDITING.md`` for the contributor workflow.
 """
 
 from __future__ import annotations
@@ -419,6 +429,7 @@ def migrate(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
 
 
 def main() -> None:
+    """Run preview, batch-apply, migration, or whole-game audit mode."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT)
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)

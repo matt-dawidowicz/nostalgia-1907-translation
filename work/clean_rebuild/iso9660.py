@@ -1,5 +1,20 @@
 #!/usr/bin/env python3
-"""Read and fixed-extent patch the ISO 9660 filesystem on the retail disc."""
+"""Read ISO 9660 directory records and patch files inside retail allocations.
+
+The clean rebuild does not master a new filesystem. It walks the retail primary
+volume descriptor, records each file's extent and directory-record location,
+and installs replacements at those same extents. A replacement may change its
+logical size only when it fits the sectors already allocated to that file.
+
+ISO 9660 stores extent and size twice, once in each byte order. The reader
+requires both copies to agree; the writer updates both size copies in every
+matching directory record, clears the complete old allocation, writes the new
+payload, and reparses the result.
+
+This fixed-extent policy is what preserves file placement and total ISO length.
+Archive/member concerns remain in ``lz_format.py``. See
+``docs/BINARY_FORMATS.md`` for the allocation and mutation model.
+"""
 
 from __future__ import annotations
 

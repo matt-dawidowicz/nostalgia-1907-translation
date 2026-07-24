@@ -1,6 +1,11 @@
 # Local Codex state
 /.agents/
 /.codex/
+.venv/
+*.egg-info/
+/build/
+/dist/
+nostalgia1907.local.json
 
 # Original, extracted, and rebuilt game media
 *.bin

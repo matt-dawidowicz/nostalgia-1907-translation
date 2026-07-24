@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
-"""Strict MODE1/2352 conversion for a fixed-geometry Mega-CD data track."""
+"""Convert the Mega-CD MODE1/2352 data track without changing its geometry.
+
+Each 2,352-byte raw sector contains a 16-byte sync/address/mode header, 2,048
+bytes of ISO user data, EDC/reserved bytes, and two ECC parity planes. Extraction
+validates the complete retail sector before exposing its user data. Rebuilding
+uses the corresponding retail sector as a template, replaces only user data,
+and regenerates EDC/ECC.
+
+This module owns raw-sector integrity and the two-track CUE syntax. It does not
+interpret ISO files or translation data. ``verify_track`` additionally checks
+the Mega-CD boot signature and can prove that the boot payload is unchanged
+from retail.
+
+See ``docs/BINARY_FORMATS.md`` for the sector map and checksum boundaries.
+"""
 
 from __future__ import annotations
 

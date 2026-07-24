@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Mandatory semantic and generated-artifact validation for canonical translation data."""
+"""Enforce semantic, policy, layout, and generated-comparison consistency.
+
+This gate combines source-bitmap auditing, glossary and contextual rules,
+reviewed preserve/exemption tables, bomb terminology checks, whole-game
+renderer auditing, canonical ID/order checks, and comparison-package freshness.
+It detects meaning/policy regressions that a byte-valid MES compiler cannot.
+
+Rules are keyed by stable record IDs and Japanese source fingerprints rather
+than by mutable English alone. Layout whitespace is normalized only for
+semantic comparison; canonical adaptive/fixed ownership is checked separately
+by ``translation_formatter.audit_layouts``.
+"""
 
 from __future__ import annotations
 
@@ -45,6 +56,7 @@ def _normalized(value: object) -> str:
 
 
 def validate(comparison_json: Path, *, require_comparison: bool = True) -> dict[str, object]:
+    """Return the complete semantic/layout report for canonical source data."""
     exact = audit(DEFAULT_RETAIL_ROOT)
     glossary = _load(GLOSSARY)
     repairs = _load(REPAIRS)
@@ -223,6 +235,7 @@ def validate(comparison_json: Path, *, require_comparison: bool = True) -> dict[
 
 
 def main() -> None:
+    """Run validation and exit nonzero when any mandatory rule fails."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--comparison-json", type=Path, default=DEFAULT_COMPARISON)
     parser.add_argument("--allow-missing-comparison", action="store_true")

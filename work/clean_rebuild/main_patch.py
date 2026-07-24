@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
-"""Apply the one guarded executable UI adjustment used by the translation."""
+"""Apply the translation's single frozen MAIN.BIN UI-coordinate adjustment.
+
+This is intentionally not a general patch framework. The function accepts only
+the exact retail executable hash, verifies every original descriptor/coordinate,
+changes the status panel and thirteen marker X positions by the reviewed amount,
+then requires the complete output hash and exact changed-byte set.
+
+New text or screenshot fixes do not belong here. They must be expressed as
+canonical wording or a shared renderer/layout rule unless separate executable
+analysis establishes a new, independently reviewed contract.
+"""
 
 from __future__ import annotations
 

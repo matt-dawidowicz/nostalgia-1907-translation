@@ -1,5 +1,22 @@
 #!/usr/bin/env python3
-"""Strict reader, codec, and fixed-slot writer for Nostalgia 1907 LZ archives."""
+"""Read, encode, and safely rewrite the game's chapter LZ archives.
+
+An archive starts with a member count and fixed-size table. Each table entry
+contains a name, payload offset, stored size, unpacked size, and preserved
+marker. Member payloads occupy ordered slots after the table. Compressed payload
+bits and output bytes are both consumed backward; the footer carries the
+unpacked size, XOR checksum, and initial bit buffer.
+
+``replace_members_fixed`` is the preferred writer because it preserves every
+member offset and the complete archive size. ``replace_members_reflow`` is a
+guarded fallback that preserves member names, order, and untouched payloads
+while repacking only inside a caller-supplied outer allocation.
+
+Compression is deterministic: dynamic programming minimizes bit cost, tie
+breaking follows stable iteration order, and every result is decompressed as an
+immediate self-check. See ``docs/BINARY_FORMATS.md`` for table offsets and
+writer invariants.
+"""
 
 from __future__ import annotations
 
@@ -18,7 +35,13 @@ class LzError(ValueError):
 
 @dataclass(frozen=True)
 class Entry:
-    """One fixed-table archive member."""
+    """One validated member-table row.
+
+    ``offset`` and ``compressed_size`` locate the stored payload.
+    ``unpacked_size`` selects stored versus compressed decoding. ``marker`` is
+    retained as opaque retail metadata because its semantics are not needed to
+    replace a member safely.
+    """
 
     index: int
     name: str

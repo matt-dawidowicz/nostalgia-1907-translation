@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "tool": {
+    "name": "nostalgia1907-tools",
+    "version": "0.1.0",
+    "python_minimum": "3.10"
+  },
+  "translation": {
+    "validated_baseline": "v7",
+    "chapter_count": 19,
+    "record_count": 2905,
+    "translated_record_count": 2882,
+    "preserved_record_count": 23,
+    "source_index_text_sha256": "F6A5813A28FC7B6C85C1A97A0FC9B7DE26047FA5FCEB28B30ADF4BA74FA4A48E"
+  },
+  "retail_inputs": {
+    "track1": {
+      "filename": "Nostalgia 1907 (Japan) (Track 1).bin",
+      "size": 192649968,
+      "sha256": "EFE9A453849F52DC72B7E72EE98D8644882655536E59991C2C85C5A35A41D0E5"
+    },
+    "track2": {
+      "filename": "Nostalgia 1907 (Japan) (Track 2).bin",
+      "size": 24710112,
+      "sha256": "F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991"
+    },
+    "retail_iso": {
+      "size": 167749632,
+      "sha256": "7944AF20FD802A43BEFBFA97734993EB63A3803F76D4AFBCEF315E41D4459ECC"
+    }
+  },
+  "validated_builds": {
+    "v7": {
+      "basename": "Nostalgia1907_CleanRebuild_v7",
+      "track1": {
+        "size": 192649968,
+        "sha256": "E8B30EA76E02656B5349898AF35FB3CF597C9E766FB8AEDDEAED617DFFD7EDC7"
+      },
+      "track2": {
+        "size": 24710112,
+        "sha256": "F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991"
+      },
+      "logical_iso_sha256": "D013704CC64B1A4129A7742AEFCFA23772A1C00ECB37F4F2225B57A7CF38D183"
+    }
+  },
+  "us_bios_test": {
+    "bios": {
+      "description": "Sega CD (U) - Model 2 v2.00w (1993)",
+      "size": 131072,
+      "sha256": "B1C2036B79467514EAAA69C76E5BA83801621E821059CAA53CB921A0B21E3AF4"
+    }
+  },
+  "paths": {
+    "clean_rebuild": "work/clean_rebuild",
+    "retail_input": "work/clean_rebuild/retail_input",
+    "retail_reference": "work/clean_rebuild/retail_reference",
+    "comparison_output": "outputs/Nostalgia1907_Bilingual_Comparison",
+    "audit_output": "outputs/Nostalgia1907_Translation_Audit",
+    "outputs": "outputs"
+  }
+}

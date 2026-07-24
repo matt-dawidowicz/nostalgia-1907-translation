@@ -6,6 +6,19 @@ renderers for lower dialogue, continuation rows, floating thought/aside
 windows, choices, and the two labels at the top of the scene UI.  Keeping the
 role inference here gives the compiler and the translation editor one shared,
 source-derived contract.
+
+SCN operands refer to MES records with one-based IDs; every public result from
+this module uses the zero-based canonical record index. Inference accepts only
+complete command shapes with in-range IDs so operand bytes elsewhere in SCN are
+not mistaken for opcodes. The SCN itself is read-only.
+
+A :class:`Layout` separates visible width from runtime stride. The engine may
+advance farther than the visibly usable cells, so the compiler wraps against
+the visible width and pads against the runtime width. :class:`RecordContract`
+combines that geometry with role and vertical row limit.
+
+See ``docs/TRANSLATION_EDITING.md`` for policy ownership and
+``docs/BINARY_FORMATS.md`` for the recognized SCN command shapes.
 """
 
 from __future__ import annotations
@@ -50,7 +63,11 @@ class ScnLayoutError(ValueError):
 
 @dataclass(frozen=True)
 class Layout:
-    """Visible cell capacity and the engine's flattened row stride."""
+    """Visible cell capacity and engine stride for first/continuation rows.
+
+    ``visible_*`` limits word wrapping. ``runtime_*`` controls padding in the
+    flattened MES record and must never be smaller than its visible partner.
+    """
 
     visible_first: int
     visible_continuation: int
@@ -60,7 +77,12 @@ class Layout:
 
 @dataclass(frozen=True)
 class RecordContract:
-    """All structurally proven formatting information for one MES record."""
+    """Structurally proven role, geometry, and row limit for one MES record.
+
+    A missing layout does not mean the record is safe to wrap. It means no
+    general reflow geometry has been proven; canonical data must then declare
+    explicit fixed-layout ownership.
+    """
 
     roles: frozenset[str]
     layout: Layout | None

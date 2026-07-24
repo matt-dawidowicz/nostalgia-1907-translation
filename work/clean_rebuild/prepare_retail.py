@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Extract every clean-build input directly from the verified retail Track 1."""
+"""Create the ignored, hash-locked retail reference used by clean builds.
+
+Preparation is the only path from the original Japanese Track 1 into the
+compiler. It verifies the complete raw-track size/hash and every sector,
+extracts a frozen logical ISO, walks its retail extents, extracts all 19 chapter
+archives, and verifies each MES/SCN member against canonical guards.
+
+The resulting directory is disposable evidence, not tracked source. No
+translated artifact is consulted, and no retail byte is modified. Downstream
+stages consume this reference to ensure renderer analysis and compilation are
+always tied to the exact supported disc.
+"""
 
 from __future__ import annotations
 

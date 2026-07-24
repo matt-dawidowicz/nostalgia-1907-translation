@@ -1,26 +1,72 @@
 # Nostalgia 1907 English translation
 
-This private repository contains the translation sources, reverse-engineering
-notes, deterministic rebuild tooling, validation code, and review utilities for
-the English localization of the Japanese Mega-CD game *Nostalgia 1907*.
+This private repository contains the canonical translation, deterministic
+rebuild pipeline, validation code, and review tools for the English
+localization of the Japanese Mega-CD game *Nostalgia 1907*.
 
 The current validated baseline is `Nostalgia1907_CleanRebuild_v7`. It is built
-from the original Japanese disc and does not restore or depend on older
-translated builds. Manual playtesting is still the final release gate.
+only from the original Japanese disc and does not restore or depend on an older
+translated build. Manual playtesting remains the final release gate.
 
-## Repository boundary
+## Contributor documentation
 
-The repository intentionally excludes:
+New contributors should begin with [CONTRIBUTING.md](CONTRIBUTING.md). The
+detailed references separate translation editing from binary-format work:
 
-- original or rebuilt BIN/CUE/ISO images;
-- extracted MES, SCN, font, archive, PCM, and WAV data;
-- BIOS files and BIOS-derived security payloads;
-- deterministic run directories and generated comparison/output packages;
-- local Python runtimes, CUDA libraries, speech models, and voice models.
+- [Architecture and production boundaries](docs/ARCHITECTURE.md)
+- [Translation analysis and editing](docs/TRANSLATION_EDITING.md)
+- [MES, LZ, ISO, raw-CD, font, and SCN formats](docs/BINARY_FORMATS.md)
+- [Development, reports, debugging, and validation](docs/DEVELOPMENT.md)
 
-Anyone rebuilding the project must provide their own legally obtained original
-Japanese Track 1 and Track 2 images. The expected local input directory is
-`work/clean_rebuild/retail_input/`.
+These guides explain which files are authoritative, how stable record IDs map
+to the original game, and which invariants must hold before a change can become
+a playable build.
+
+## Quick start
+
+From a fresh clone on Windows:
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e .
+```
+
+Place legally obtained original Japanese tracks at:
+
+```text
+work/clean_rebuild/retail_input/Nostalgia 1907 (Japan) (Track 1).bin
+work/clean_rebuild/retail_input/Nostalgia 1907 (Japan) (Track 2).bin
+```
+
+Then run:
+
+```powershell
+python nostalgia1907.py doctor
+python nostalgia1907.py prepare
+python nostalgia1907.py validate
+```
+
+`doctor` verifies Python, Pillow, the canonical source inventory, both original
+track hashes, and the prepared retail-reference state. It reports optional BIOS
+and FFmpeg readiness separately.
+
+## Machine-specific paths
+
+Instead of copying the original tracks into the checkout, create the ignored
+`nostalgia1907.local.json` file:
+
+```json
+{
+  "track1": "D:/Sega CD Games/Nostalgia 1907 (Japan)/Nostalgia 1907 (Japan) (Track 1).bin",
+  "track2": "D:/Sega CD Games/Nostalgia 1907 (Japan)/Nostalgia 1907 (Japan) (Track 2).bin",
+  "us_bios": "D:/Emulation/Sega CD (U) - Model 2 v2.00w (1993).bin",
+  "ffmpeg": "C:/Program Files/FFmpeg/bin/ffmpeg.exe"
+}
+```
+
+Command-line paths override local configuration, which overrides the
+conventional `retail_input` directory.
 
 ## Canonical translation
 
@@ -34,54 +80,131 @@ IDs, ordering, control codes, branching, SCN data, and binary boundaries remain
 authoritative. The global renderer-aware formatter owns general line wrapping;
 chapter-specific binary layout patches are not part of the production workflow.
 
+Preview a wording change without writing:
+
+```powershell
+python nostalgia1907.py edit PART1A:003 `
+  --text 'How about we switch games and play one more round?'
+```
+
+Apply one reviewed change only after its preview passes:
+
+```powershell
+python nostalgia1907.py edit PART1A:003 `
+  --text 'How about we switch games and play one more round?' `
+  --apply
+```
+
+For a batch, use an ID-keyed JSON file:
+
+```powershell
+python nostalgia1907.py edit --changes reviewed-changes.json
+```
+
 See
 [`work/clean_rebuild/ADAPTIVE_TRANSLATION_FORMATTING.md`](work/clean_rebuild/ADAPTIVE_TRANSLATION_FORMATTING.md)
 for the formatting contract.
 
-## Validate
+## Comparison and validation
 
-From the repository root:
+Regenerate the deterministic Japanese/English review package:
 
 ```powershell
-python work\clean_rebuild\translation_formatter.py
-python work\clean_rebuild\test_script_layout.py -v
-python work\clean_rebuild\translation_validation.py
+python nostalgia1907.py compare
 ```
 
-These checks cover canonical record identity, renderer-aware layout policies,
-MES and glyph limits, fixed binary boundaries, and semantic translation
-requirements.
+Run the complete normal validation sequence:
+
+```powershell
+python nostalgia1907.py validate
+```
+
+That command performs Python static compilation, the audio companion's unit
+tests, the renderer-aware audit, all script-layout tests, comparison-package
+regeneration, and semantic/generated artifact validation.
 
 ## Deterministic rebuild
 
-Prepare the retail reference directly from the original Japanese Track 1:
+First inspect the resolved plan:
 
 ```powershell
-python work\clean_rebuild\prepare_retail.py `
-  "work\clean_rebuild\retail_input\Nostalgia 1907 (Japan) (Track 1).bin" `
-  --build-root work\clean_rebuild\retail_reference
+python nostalgia1907.py build --name v8 --dry-run
 ```
 
-Then build twice from the original Japanese tracks:
+The dry run reports whether the run and delivery directories are absent, empty,
+or occupied. A real build will never overwrite an occupied path.
+
+Then create two independent builds from the original Japanese tracks:
 
 ```powershell
-python work\clean_rebuild\rebuild.py `
-  "<original Track 1.bin>" `
-  "<original Track 2.bin>" `
-  --runs-root "<new empty runs directory>" `
-  --delivery-root "<new empty output directory>" `
-  --basename "Nostalgia1907_CleanRebuild"
+python nostalgia1907.py build --name v8
 ```
 
-The builder rejects the release unless both independent products are
+Before either build begins, the tool automatically runs the complete
+static/layout/comparison/semantic validation sequence. If any check fails, no
+BIN/CUE build starts.
+
+The default result is:
+
+```text
+outputs/Nostalgia1907_CleanRebuild_v8/
+```
+
+The underlying builder refuses stale non-empty run/output directories and
+rejects publication unless both independently built BIN/CUE sets are
 byte-identical.
 
-## Companion tools
+## U.S.-BIOS test derivative
 
-- `work/region_variant/build_us_bios_test.py` creates a separate deterministic
-  U.S.-BIOS testing derivative without modifying v7.
-- `work/audio_localization/audio_localization.py` extracts and maps the Japanese
-  dialogue for review. Its transcription and synthesized English previews are
-  optional review artifacts and are never inserted into the game.
+The region tool creates a separate derivative of the hash-locked v7 output. It
+does not modify v7, translation sources, SCN data, file extents, or Track 2.
+
+```powershell
+python nostalgia1907.py build-us `
+  --us-bios '<Sega CD (U) Model 2 v2.00w BIOS.bin>' `
+  --dry-run
+
+python nostalgia1907.py build-us `
+  --us-bios '<Sega CD (U) Model 2 v2.00w BIOS.bin>'
+```
+
+## Optional audio review
+
+The audio-localization companion is review-only and never patches the game.
+Optional dependencies are isolated from the normal translation tool:
+
+```powershell
+python -m pip install -e '.[audio-asr]'
+python -m pip install -e '.[audio-tts]'
+```
+
+See [`work/audio_localization/README.md`](work/audio_localization/README.md).
+
+## Production boundary
+
+The deterministic production modules are explicitly enumerated by
+`work/clean_rebuild/rebuild.py`, which rejects references to legacy translated
+builds. The remaining `part3c_*`, `act4_translation`, and `staff_translation`
+directories are retained research history; they are not part of the production
+build graph.
+
+The repository intentionally excludes:
+
+- original or rebuilt BIN/CUE/ISO images;
+- extracted MES, SCN, font, archive, PCM, and WAV data;
+- BIOS files and BIOS-derived security payloads;
+- deterministic run directories and generated comparison/output packages;
+- local Python runtimes, CUDA libraries, speech models, and voice models.
 
 No playable game image is distributed by this repository.
+
+## Source-only development checks
+
+The checks that do not require copyrighted retail data run locally and in
+GitHub Actions:
+
+```powershell
+python -m compileall -q nostalgia1907.py work tests
+python -m unittest discover -s tests -v
+python work/audio_localization/test_audio_localization.py
+```

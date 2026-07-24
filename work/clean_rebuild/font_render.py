@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
-"""Render canonical English source cells into the game's 12x12 font format."""
+"""Render canonical English units as deterministic 12x12 game-font cells.
+
+The renderer uses one-bit 12x12 glyphs stored in 18 bytes. A normal cell holds
+one or two six-pixel English character slots; a small reviewed set of
+three-character punctuation clusters can share a compact cell. Generated
+bitmaps are prerotated into the orientation consumed by the Mega-CD renderer.
+
+This module is deliberately unaware of MES indexes, SCN roles, and line
+wrapping. ``mes_compiler.py`` chooses which source characters share cells and
+deduplicates the resulting bitmaps. Unsupported characters fail explicitly
+instead of being substituted.
+
+See ``docs/BINARY_FORMATS.md`` for how fixed and dynamic font codes reference
+these cells.
+"""
 
 from __future__ import annotations
 

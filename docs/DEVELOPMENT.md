@@ -1,0 +1,219 @@
+# Development and validation
+
+## Environment
+
+The supported runtime is Python 3.10 or newer. Install the repository in
+editable mode:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -e .
+```
+
+Pillow is the only normal runtime dependency. Speech recognition and synthesis
+packages are optional and isolated behind the audio extras.
+
+Machine-specific retail, BIOS, and FFmpeg paths belong in the ignored
+`nostalgia1907.local.json`, never in tracked source.
+
+## Command layers
+
+Use `nostalgia1907.py` for normal work:
+
+| Command | Reads | Writes | Purpose |
+| --- | --- | --- | --- |
+| `doctor` | manifest, config, input hashes | nothing | readiness diagnosis |
+| `prepare` | original Track 1 | ignored retail reference | strict extraction |
+| `edit` preview | source and retail SCN | nothing | renderer-aware proposal review |
+| `edit --apply` | source and retail SCN | canonical chapter JSON | validated English edit |
+| `compare` | source and retail reference | ignored comparison package | bilingual human review |
+| `validate` | source, retail reference, comparison | ignored reports/comparison | complete automated gate |
+| `build --dry-run` | hashes and path state | nothing | resolved build plan |
+| `build` | original tracks and canonical source | isolated runs and delivery | deterministic two-run BIN/CUE |
+| `build-us` | validated baseline and BIOS | separate derivative | BIOS-language testing only |
+
+The lower-level modules are intentionally importable for focused analysis. Run
+them directly only when you understand which higher-level preflight stages you
+are bypassing.
+
+## Validation layers
+
+Validation is layered so a failure can be localized:
+
+1. **Python compilation** catches syntax and import-time source mistakes.
+2. **Source-only unit tests** cover CLI contracts, manifests, repository
+   policy, and documentation inventory.
+3. **Audio companion unit tests** cover the reversible PCM/WAV codec and SCN
+   audio mapping without changing the game.
+4. **Renderer audit** classifies every translated record and checks adaptive or
+   fixed ownership.
+5. **Layout tests** compile every chapter from hash-locked inputs and cover
+   known renderer edge cases.
+6. **Comparison regeneration** creates the complete Japanese/English review
+   package.
+7. **Semantic validation** checks source fingerprints, duplicate consistency,
+   glossary rules, exemptions, bomb terminology, ID order, and comparison
+   freshness.
+8. **Build regression** checks MES/font capacity, LZ contents, fixed ISO
+   extents, unchanged ISO regions, raw sectors, Track 2, and CUE formatting.
+9. **Two-run comparison** proves deterministic output.
+10. **Manual playtesting** remains the release gate for visual and branching
+    behavior.
+
+## Generated reports
+
+Useful ignored artifacts include:
+
+| Artifact | Produced by | Use |
+| --- | --- | --- |
+| `retail_report.json` | `prepare_retail.py` | retail Track/ISO and extracted-member evidence |
+| `script_layout_audit.json` | `translation_formatter.py` | per-ID role, width, rows, and failures |
+| comparison JSON/HTML/images/ZIP | `export_bilingual_comparison.py` | Japanese/English review |
+| `mes_report.json` | `build_mes_set.py` | per-chapter size, glyph, and spill metrics |
+| `archive_report.json` | `build_archives.py` | slot mode and remaining archive capacity |
+| `iso_patch_report.json` | `iso9660.py` caller | extents, sizes, allocations, headroom |
+| `verification.json` | `regression.py` | one build's cross-layer proof |
+| `final_verification.json` | `rebuild.py` | two-run identity and release artifact hashes |
+
+Reports are evidence, not source. Delete and regenerate them when investigating
+staleness; do not edit them to satisfy a check.
+
+## Focused source checks
+
+Run tests that do not require retail media:
+
+```powershell
+python -m compileall -q nostalgia1907.py work tests
+python -m unittest discover -s tests -v
+python work/audio_localization/test_audio_localization.py
+```
+
+Run the retail-backed validation gate:
+
+```powershell
+python nostalgia1907.py validate
+```
+
+Inspect a build plan without creating output:
+
+```powershell
+python nostalgia1907.py build --name v8 --dry-run
+```
+
+The dry run hashes both original tracks and reports whether the selected run and
+delivery roots are absent, empty, or occupied. A real build rejects occupied,
+equal, or nested roots and performs full validation before its first build.
+
+## Debugging by failure stage
+
+### `doctor` fails
+
+Check the exact path, size, and SHA-256 in the JSON report. Do not disable a hash
+guard to accept a different disc revision. Add explicit support only after
+analyzing the revision and defining a separate contract.
+
+### Retail preparation fails
+
+The problem is below translation: raw sector header/checksum, ISO hash, file
+extent, archive table, or canonical retail MES/SCN guard. Inspect the earliest
+failing layer.
+
+### Edit preview fails
+
+Read the record's roles, layout, row limit, and message. Shorten or improve the
+wording if it genuinely exceeds a proven box. If the inferred renderer is
+wrong, analyze the SCN command shape and fix the shared inference with tests.
+
+### Semantic validation fails
+
+Use the stable ID in the error. Determine whether a glossary invariant,
+preserve policy, source fingerprint, duplicate translation, or generated
+comparison is stale. Do not blanket-replace common words across unrelated
+contexts.
+
+### MES compilation fails
+
+Classify the constraint:
+
+- unsupported source character;
+- record policy/index mismatch;
+- runtime row or glyph limit;
+- 16-bit pointer overflow;
+- PART3C hard boundary;
+- preserved dynamic-glyph reference.
+
+Prefer canonical wording or a general renderer/compiler improvement. Do not
+move records or silently truncate text.
+
+### Archive or ISO placement fails
+
+Read the reported stored size and headroom. Compression and guarded archive
+reflow may use existing allocation, but ISO extents and total size remain
+fixed. A change that requires moving files is outside the current production
+contract.
+
+### Raw-track regression fails
+
+Treat it as a release blocker. Sector address, EDC/ECC, boot payload, track
+geometry, Track 2, and CUE failures must not be waived.
+
+## Adding or changing code
+
+Keep boundaries narrow:
+
+- parsing functions validate before returning structured data;
+- writing functions accept validated structures and verify their own output;
+- orchestration calls format modules rather than duplicating format logic;
+- reports include measurements needed to review capacity and boundaries;
+- deterministic order is explicit whenever sets, mappings, files, or glyphs
+  become serialized output;
+- expected operator mistakes raise concise domain errors, not partial output.
+
+For a format change, add:
+
+1. a documented observation;
+2. a strict read path;
+3. malformed-input tests;
+4. a round-trip or independent verification;
+5. a boundary proof for the write path;
+6. integration coverage in `regression.py` when it affects the disc.
+
+For a renderer change, add:
+
+1. the SCN command evidence;
+2. a general inference rule;
+3. at least one focused layout test;
+4. a whole-game renderer audit;
+5. comparison regeneration and playtesting.
+
+## Determinism checklist
+
+Generated bytes must not depend on:
+
+- directory enumeration order;
+- hash/set iteration order;
+- temporary absolute paths;
+- timestamps;
+- a prior output directory;
+- an older translated build;
+- environment-specific line endings;
+- network services.
+
+Sort serialized collections, use fresh output roots, hash guarded inputs, and
+run the complete build twice.
+
+## Repository hygiene
+
+Never commit original or generated game media, BIOS files, extracted members,
+runtime models, comparison images, or local configuration. Before committing:
+
+```powershell
+git status --short
+git diff --check
+git diff -- work/clean_rebuild/sources
+```
+
+Confirm that every source diff is intentional and that no ignored binary was
+force-added.

@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Static and binary regressions for one clean Nostalgia 1907 rebuild."""
+"""Prove cross-layer invariants for one complete clean rebuild.
+
+This module is the binary release gate after compilation. It reconciles
+canonical inventory, MES/font reports, archive contents, ISO directory records,
+raw Track 1, untouched Track 2, and CUE syntax. It also streams both retail and
+rebuilt ISO images to prove that bytes outside declared allocations and
+directory-size fields are unchanged.
+
+A successful result is evidence for one build, not a determinism proof by
+itself. ``rebuild.py`` runs the entire pipeline twice and compares artifact
+hashes before publishing.
+"""
 
 from __future__ import annotations
 
@@ -85,7 +96,11 @@ def validate_build(
     retail_track2: Path,
     basename: str,
 ) -> dict[str, object]:
-    """Validate all compiler, archive, ISO, raw-track, audio, and CUE invariants."""
+    """Validate compiler, archive, ISO, raw-track, audio, and CUE invariants.
+
+    Raises immediately on the first unsafe boundary or stale report. The return
+    value contains review metrics and hashes only after every layer passes.
+    """
     index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
     if index["chapter_count"] != EXPECTED_CHAPTERS:
         raise ValueError("canonical chapter count changed")
