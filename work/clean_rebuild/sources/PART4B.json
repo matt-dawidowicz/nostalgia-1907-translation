@@ -1,0 +1,1783 @@
+{
+  "schema_version": 1,
+  "chapter": "PART4B",
+  "record_count": 293,
+  "retail_mes": {
+    "sha256": "5702392FF46E1DEA888D27789C38527EA96005A9668A9EB6F87F5AD4DA38FC5A",
+    "size": 19201,
+    "dynamic_glyph_count": 502
+  },
+  "retail_scn": {
+    "sha256": "4F82EEF7D79C84AD9375C684DE7FA05F564B9F338024895805C0ED92EA7D462B",
+    "size": 7433
+  },
+  "playable_reference_mes": {
+    "sha256": "AC282C6054A2F415832EEEF2B32CDFDCC9B24E8753EDEF375655C6961A957E91",
+    "size": 30039,
+    "dynamic_glyph_count": 478
+  },
+  "profile": null,
+  "text_mode": "render-ready",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-21\\in-c-users-thema-documents-codex\\work\\act4_translation\\built\\PART4B\\PART4B_manifest.json"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "translate",
+      "text": "Pilot Deck",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "Captain",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "We did it!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "Bilge",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 4,
+      "policy": "translate",
+      "text": "Yamada Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "Ilyu",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "I feigned my death in Britain, cut my hair short, and sent a telegram to Voysey.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "...Just as I thought.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "Do you know how surprised I was?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "No. I was not surprised.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "The Russian Fog is me. Ashby misplayed his last card.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "...Old Karl had the answer...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "The code name I threw away. The word that calls me without being me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "Why did you help me?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 15,
+      "policy": "translate",
+      "text": "Voysey could not decipher \"Mede\"... The head of British Intelligence, said to be the sharpest man in Britain, took three days to find the symbol of that place... I thought he was someone I could never understand.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 16,
+      "policy": "translate",
+      "text": "I still do not quite understand.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 17,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 18,
+      "policy": "translate",
+      "text": "Then suddenly it all seemed ridiculous... I had placed my own freedom within reach, yet I was trying to escape from the Emperor... A new life, same as before: obeying some country's orders, living inside someone else's plans.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 19,
+      "policy": "translate",
+      "text": "If you go to Britain, they will only use you again.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 20,
+      "policy": "translate",
+      "text": "...Changing where I live will not bring freedom... I knew that... No, I thought I did. Sorry, I am not saying this well.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 21,
+      "policy": "translate",
+      "text": "Who is?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 22,
+      "policy": "translate",
+      "text": "I suddenly realized that being controlled by others is like a comedy... and it stopped being funny... so...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 23,
+      "policy": "translate",
+      "text": "...I am pretty comical myself, carrying my empire's whole world around with me...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 24,
+      "policy": "translate",
+      "text": "Why did Kirikov claim he was the Russian Fog?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 25,
+      "policy": "translate",
+      "text": "Disinformation... He speaks about Russia from the credible position of a defector, feeding them nonsensical intelligence. At the same time, he steals Japanese secrets and passes them to Russia.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 26,
+      "policy": "translate",
+      "text": "Did he know what you were really doing?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 27,
+      "policy": "translate",
+      "text": "Of course not. He had orders to prevent my defection. I had orders to spy on him. But I turned his plan around and intended to defect to Japan...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 28,
+      "policy": "translate",
+      "text": "To think he was capable of that... He really was a dunce.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 29,
+      "policy": "translate",
+      "text": "Yes. I doubt Kirikov was that competent... But you said it, did you not? Ashby is not the winner.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 30,
+      "policy": "translate",
+      "text": "Ilyu is the poor one. Once Foreign Affairs is notified, Ashby will be discarded.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 31,
+      "policy": "translate",
+      "text": "Can you forgive that? How magnanimous.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 32,
+      "policy": "translate",
+      "text": "Well...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 33,
+      "policy": "translate",
+      "text": "Not really.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 34,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 35,
+      "policy": "translate",
+      "text": "At Sea",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 36,
+      "policy": "translate",
+      "text": "Inside Ship",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 37,
+      "policy": "translate",
+      "text": "Ashby",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 38,
+      "policy": "translate",
+      "text": "Damn! The bilge pumps are not working! The depth gauge! Now 90... 100... It has swung all the way around! Damn... no way!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 39,
+      "policy": "translate",
+      "text": "Kirikov",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 40,
+      "policy": "translate",
+      "text": "Ashby!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 41,
+      "policy": "translate",
+      "text": "Engine Room",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 42,
+      "policy": "translate",
+      "text": "What is this? What does it say?! Read it! Ashby!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 43,
+      "policy": "translate",
+      "text": "...Kasuke...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 44,
+      "policy": "translate",
+      "text": "No last words?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 45,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 46,
+      "policy": "translate",
+      "text": "Screwdriver",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 47,
+      "policy": "translate",
+      "text": "Wire Cutters",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 48,
+      "policy": "translate",
+      "text": "Wire",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 49,
+      "policy": "translate",
+      "text": "These are strange scissors.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 50,
+      "policy": "translate",
+      "text": "Wire Cutters. A tool for cutting wires...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 51,
+      "policy": "translate",
+      "text": "What is this?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 52,
+      "policy": "translate",
+      "text": "A bypass wire...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 53,
+      "policy": "translate",
+      "text": "Let us begin. The screwdriver... this one...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 54,
+      "policy": "translate",
+      "text": "It might be a trap.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 55,
+      "policy": "translate",
+      "text": "Probably.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 56,
+      "policy": "translate",
+      "text": "Did Charlie deal with this thing all alone...?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 57,
+      "policy": "translate",
+      "text": "Afraid?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 58,
+      "policy": "translate",
+      "text": "...I am disciplined under pressure.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 59,
+      "policy": "translate",
+      "text": "I am very, very scared...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 60,
+      "policy": "translate",
+      "text": "The box has two lids...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 61,
+      "policy": "translate",
+      "text": "...Japan. What kind of place is it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 62,
+      "policy": "translate",
+      "text": "I want to call it a land of girls who look lovely in light summer kimono... But now I can only think of food: simmered potatoes from Kikyo-do north of Manten Bridge, Azusa's clear broth, and Arashiyama's boiled tofu.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 63,
+      "policy": "translate",
+      "text": "Careful. The lower-right device is a safety circuit. Its battery's red wire connects to the lid. The blue wire runs through the detonator below into the box. The detonator monitors the current. Open the lid now and the current breaks.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 64,
+      "policy": "translate",
+      "text": "A mechanism that triggers the detonator...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 65,
+      "policy": "translate",
+      "text": "I'll open the lid. Right or left...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 66,
+      "policy": "translate",
+      "text": "Turn it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 67,
+      "policy": "translate",
+      "text": "Open the right box.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 68,
+      "policy": "translate",
+      "text": "Cut this wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 69,
+      "policy": "translate",
+      "text": "Cut this one.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 70,
+      "policy": "translate",
+      "text": "Cut here.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 71,
+      "policy": "translate",
+      "text": "Make a bypass so the current keeps flowing...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 72,
+      "policy": "translate",
+      "text": "A wire to the wire...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 73,
+      "policy": "translate",
+      "text": "Connect a wire to the wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 74,
+      "policy": "translate",
+      "text": "That means we attached a side road to the safety circuit, right?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 75,
+      "policy": "translate",
+      "text": "Probably... I think this is right.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 76,
+      "policy": "translate",
+      "text": "What kind of country is Russia?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 77,
+      "policy": "translate",
+      "text": "A country ruled by men who understand nothing but force... My homeland is Suomi.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 78,
+      "policy": "translate",
+      "text": "Suomi?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 79,
+      "policy": "translate",
+      "text": "A land of forests and lakes. The mainlanders call it Finland.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 80,
+      "policy": "translate",
+      "text": "Use the screwdriver.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 81,
+      "policy": "translate",
+      "text": "Open the left lunchbox.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 82,
+      "policy": "translate",
+      "text": "Finland. A Russian satellite state. Take those scissors there.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 83,
+      "policy": "translate",
+      "text": "Wire Cutters? Here.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 84,
+      "policy": "translate",
+      "text": "Thank you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 85,
+      "policy": "translate",
+      "text": "Strange. The country that defeated imperial Russia in war is the only one besides Japan that does not know wire cutters.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 86,
+      "policy": "translate",
+      "text": "Learn them well. You will be drafted soon enough. Japan has eight million gods on its side. Surely you will not lose.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 87,
+      "policy": "translate",
+      "text": "...Interesting fiction.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 88,
+      "policy": "translate",
+      "text": "Cut the blue wire...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 89,
+      "policy": "translate",
+      "text": "...Fiction?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 90,
+      "policy": "translate",
+      "text": "A construct. A temporary idea that makes reality easier to understand... Do not believe it, Kasuke.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 91,
+      "policy": "translate",
+      "text": "...I cannot believe either reality or the role you were made to play. Cut the red wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 92,
+      "policy": "translate",
+      "text": "We will not need the wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 93,
+      "policy": "translate",
+      "text": "Attach a bypass to the safety circuit.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 94,
+      "policy": "translate",
+      "text": "The fur-handled screwdriver is big...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 95,
+      "policy": "translate",
+      "text": "...Cut the safety circuit.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 96,
+      "policy": "translate",
+      "text": "I will cut the blue wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 97,
+      "policy": "translate",
+      "text": "I'll cut the red wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 98,
+      "policy": "translate",
+      "text": "...Wait, Kasuke. Think again. Is connecting the bypass wire really all right like this?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 99,
+      "policy": "translate",
+      "text": "Machines are troublesome things.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 100,
+      "policy": "translate",
+      "text": "It should be fine as it is...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 101,
+      "policy": "translate",
+      "text": "Switch it over?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 102,
+      "policy": "translate",
+      "text": "Why did you become a spy... no, why did you fail? Why turn against the Russian regime?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 103,
+      "policy": "translate",
+      "text": "When Helsinki was occupied by the Russian army, I was still a child. The only image that truly strikes me when I speak of my homeland is... the forests and lakes of Imatra.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 104,
+      "policy": "translate",
+      "text": "...Nostalgia.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 105,
+      "policy": "translate",
+      "text": "What?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 106,
+      "policy": "translate",
+      "text": "No... We can remove the lid now, right?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 107,
+      "policy": "translate",
+      "text": "Yes... probably.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 108,
+      "policy": "translate",
+      "text": "What is this girl Yuko like?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 109,
+      "policy": "translate",
+      "text": "You are no gentleman... Truthfully, I never really talked with her. There was never much reason to. In Japan, girls like her are... what do you call it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 110,
+      "policy": "translate",
+      "text": "But you like her?... A little strange... Still, she is wonderful.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 111,
+      "policy": "translate",
+      "text": "Open the left lunchbox.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 112,
+      "policy": "translate",
+      "text": "Open the right lunchbox. Here goes!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 113,
+      "policy": "translate",
+      "text": "I want to cut this wire clean through...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 114,
+      "policy": "translate",
+      "text": "Calm down. I am with you. Right?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 115,
+      "policy": "translate",
+      "text": "...Damn it. Cut this!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 116,
+      "policy": "translate",
+      "text": "We do not need the wire, do we?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 117,
+      "policy": "translate",
+      "text": "Yes.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 118,
+      "policy": "translate",
+      "text": "When Helsinki was occupied by the Russian army, what happened to you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 119,
+      "policy": "translate",
+      "text": "...I was herded at gunpoint by tall soldiers and taken to Siberia. On the frozen tundra, the few friends I had died one after another.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 120,
+      "policy": "translate",
+      "text": "What were you doing?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 121,
+      "policy": "translate",
+      "text": "I meant to obey the Emperor and train an assassination unit. Weapons training. Mountain marches. Codes. I was good with a knife. I was not an honor student.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 122,
+      "policy": "translate",
+      "text": "...Then you understand what this wobbling pendulum means, right?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 123,
+      "policy": "translate",
+      "text": "A pendulum device. The red wire from the battery connects to the outer ring, while the blue wire goes through the detonator and connects to the central weight.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 124,
+      "policy": "translate",
+      "text": "I see. If the pendulum touches the outer ring, current flows and boom.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 125,
+      "policy": "translate",
+      "text": "What is the screw below it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 126,
+      "policy": "translate",
+      "text": "...I do not know.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 127,
+      "policy": "translate",
+      "text": "We can cut the wire at its source, can we not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 128,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 129,
+      "policy": "translate",
+      "text": "It would be foolish to splice a wire here.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 130,
+      "policy": "translate",
+      "text": "It would.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 131,
+      "policy": "translate",
+      "text": "Let us open the box's left lid.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 132,
+      "policy": "translate",
+      "text": "If we remove this screw, will it not reveal the foot of the pendulum?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 133,
+      "policy": "translate",
+      "text": "I think it is dangerous.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 134,
+      "policy": "translate",
+      "text": "Try cutting this one.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 135,
+      "policy": "translate",
+      "text": "Cut the upper red wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 136,
+      "policy": "translate",
+      "text": "Cut the red wire below the battery.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 137,
+      "policy": "translate",
+      "text": "Cut the blue wire below the platform.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 138,
+      "policy": "translate",
+      "text": "Terrible... It is a trap. This circuit was connected from the start... If we cut the wire, that is the end...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 139,
+      "policy": "translate",
+      "text": "If it was a trap, you are the same as me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 140,
+      "policy": "translate",
+      "text": "You were right...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 141,
+      "policy": "translate",
+      "text": "What happened after that in Siberia?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 142,
+      "policy": "translate",
+      "text": "...One day the instructor in charge of me changed... It was unbearable. Let us stop. This is no story.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 143,
+      "policy": "translate",
+      "text": "No, continue. I want to hear it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 144,
+      "policy": "translate",
+      "text": "Wait. There is another screw in the back. See it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 145,
+      "policy": "translate",
+      "text": "It is not a pendulum yet. We will have to remove it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 146,
+      "policy": "translate",
+      "text": "Why do you want to hear?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 147,
+      "policy": "translate",
+      "text": "Because I want to know.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 148,
+      "policy": "translate",
+      "text": "Why?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 149,
+      "policy": "translate",
+      "text": "Because...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 150,
+      "policy": "translate",
+      "text": "Cut the wire with the scissors?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 151,
+      "policy": "translate",
+      "text": "Attach the bypass.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 152,
+      "policy": "translate",
+      "text": "Open the left box.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 153,
+      "policy": "translate",
+      "text": "Scary...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 154,
+      "policy": "translate",
+      "text": "You knew the risk.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 155,
+      "policy": "translate",
+      "text": "In the way. Cut it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 156,
+      "policy": "translate",
+      "text": "Cut the one under the battery.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 157,
+      "policy": "translate",
+      "text": "Cut this red one.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 158,
+      "policy": "translate",
+      "text": "Attach the bypass there.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 159,
+      "policy": "translate",
+      "text": "I see. We secured the current. It seems you are right this time. Tell me what came next in Siberia.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 160,
+      "policy": "translate",
+      "text": "The new instructor trained me in infiltration: information handling, espionage, forgery, covert entry, surveillance, resisting interrogation, emotional control, and observation.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 161,
+      "policy": "translate",
+      "text": "A poker face.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 162,
+      "policy": "translate",
+      "text": "You may not believe it, but you can become anyone if infiltration requires it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 163,
+      "policy": "translate",
+      "text": "You know, Ilyu. We might die from one mistake here.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 164,
+      "policy": "translate",
+      "text": "...I know. I am not lying to you anymore. I know...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 165,
+      "policy": "translate",
+      "text": "I know. Let us remove the pendulum guard. Then continue.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 166,
+      "policy": "translate",
+      "text": "Use the wire cutters.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 167,
+      "policy": "translate",
+      "text": "Finally remember?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 168,
+      "policy": "translate",
+      "text": "We do not need the wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 169,
+      "policy": "translate",
+      "text": "Open the left box.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 170,
+      "policy": "translate",
+      "text": "Wrong!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 171,
+      "policy": "translate",
+      "text": "Cut upper red wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 172,
+      "policy": "translate",
+      "text": "Cut the blue wire below the detonator.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 173,
+      "policy": "translate",
+      "text": "Cut the red wire below the battery.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 174,
+      "policy": "translate",
+      "text": "So the mission was successful. Then Siberia?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 175,
+      "policy": "translate",
+      "text": "...Yes. When I turned thirteen after three years in Siberia, I was taken before the Emperor in St. Petersburg.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 176,
+      "policy": "translate",
+      "text": "What was he like?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 177,
+      "policy": "translate",
+      "text": "I was a cocky child who looked down on adults. Nothing in the palace frightened me. The Emperor was kind and entrusted me with missions like an adult. I was beside myself.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 178,
+      "policy": "translate",
+      "text": "Let us open the lid.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 179,
+      "policy": "translate",
+      "text": "We need to clear away the useless wires.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 180,
+      "policy": "translate",
+      "text": "There is nowhere to use the wire...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 181,
+      "policy": "translate",
+      "text": "No time. Open the left lunchbox first.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 182,
+      "policy": "translate",
+      "text": "The rear lid. Let us open it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 183,
+      "policy": "translate",
+      "text": "Cut it? Seriously?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 184,
+      "policy": "translate",
+      "text": "It may be another battery... What mission did the Emperor give you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 185,
+      "policy": "translate",
+      "text": "To enter the court and uncover which courtiers secretly harbored treason against him.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 186,
+      "policy": "translate",
+      "text": "Even an adult could not manage that. Did you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 187,
+      "policy": "translate",
+      "text": "I saw through more than ten. They were like dolls, mere adults with jealous hearts. With my own childish arrogance, I looked for ambition and questioned them. The old hands of Petersburg society kept giving me high marks.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 188,
+      "policy": "translate",
+      "text": "You were a frightening child.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 189,
+      "policy": "translate",
+      "text": "It was a game to me... I thought the adults I could fool were idiots... Like a thoughtless child tearing the wings off insects, I delighted in tormenting people. The Emperor always praised me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 190,
+      "policy": "translate",
+      "text": "That circuit is surely there to monitor the lid of the left-hand box.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 191,
+      "policy": "translate",
+      "text": "I think so too.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 192,
+      "policy": "translate",
+      "text": "Bypass it with a wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 193,
+      "policy": "translate",
+      "text": "Let us open this.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 194,
+      "policy": "translate",
+      "text": "Not yet!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 195,
+      "policy": "translate",
+      "text": "Cut lower blue wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 196,
+      "policy": "translate",
+      "text": "Why?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 197,
+      "policy": "translate",
+      "text": "Here! Cut it!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 198,
+      "policy": "translate",
+      "text": "Idiot!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 199,
+      "policy": "translate",
+      "text": "Connect it here.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 200,
+      "policy": "translate",
+      "text": "Now it is safe to open the left lunchbox.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 201,
+      "policy": "translate",
+      "text": "Probably... In 1904, when Russia began the war against Japan, Witte opposed it and was driven out. He was disliked because he kept warning the Emperor about peasant uprisings and revolution at home.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 202,
+      "policy": "translate",
+      "text": "You know Witte! He signed the peace treaty at Portsmouth with Japanese Foreign Minister Komura Jutaro. Japan had won, yet Komura let Witte outmaneuver him and won no indemnity. Both economies were near collapse.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 203,
+      "policy": "translate",
+      "text": "What has gotten into you? I know about the peace treaty, but Japan had not defeated Russia. Witte knew the war could not continue. The Emperor intoxicated the people with an eastern campaign, then could not stop it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 204,
+      "policy": "translate",
+      "text": "A good excuse.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 205,
+      "policy": "translate",
+      "text": "Witte understood the realities of Russia and Japan. I was sent to him on a new mission. Japan was weak, but a great power afraid of isolation could not crush it. Russia allied with another power to isolate Japan.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 206,
+      "policy": "translate",
+      "text": "...I see. That was Britain. It was a way to keep Tokyo from becoming an onion field.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 207,
+      "policy": "translate",
+      "text": "An onion field?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 208,
+      "policy": "translate",
+      "text": "Those ugly onion domes. By rousing Russia's hunger for territory, Britain could watch eastern Russia from the front row. Russia sank its own fleet and plunged into war with Japan over the army's objections.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 209,
+      "policy": "translate",
+      "text": "Use the Korean Peninsula as a chessboard?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 210,
+      "policy": "translate",
+      "text": "If they did not prevent Russia from advancing onto the Korean Peninsula, the imperial defense could not stand.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 211,
+      "policy": "translate",
+      "text": "A simulation game? So now Japan is Britain's defensive wall. No complaints?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 212,
+      "policy": "translate",
+      "text": "Japan is an onion field. It will celebrate the arrival of 2001 with vodka... Admit it. Victory was a miracle.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 213,
+      "policy": "translate",
+      "text": "The color is getting paler.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 214,
+      "policy": "translate",
+      "text": "Let's get to work on the left lunchbox.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 215,
+      "policy": "translate",
+      "text": "Was your mission related to the war?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 216,
+      "policy": "translate",
+      "text": "There is.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 217,
+      "policy": "translate",
+      "text": "I knew it. The gods are with us.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 218,
+      "policy": "translate",
+      "text": "You still say that?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 219,
+      "policy": "translate",
+      "text": "It helps to have something to pray to.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 220,
+      "policy": "translate",
+      "text": "We do not need the wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 221,
+      "policy": "translate",
+      "text": "Open it. Keep your eyes open.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 222,
+      "policy": "translate",
+      "text": "...Yes.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 223,
+      "policy": "translate",
+      "text": "Cut this one.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 224,
+      "policy": "translate",
+      "text": "Still alive?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 225,
+      "policy": "translate",
+      "text": "Right next to you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 226,
+      "policy": "translate",
+      "text": "What mission did Witte give you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 227,
+      "policy": "translate",
+      "text": "Witte's plan: form a Triple Entente among Japan, Britain, and Russia and fan the Russian Revolution. To distract the Emperor from the Russo-Japanese War, I was to locate and assassinate spies of the Anglo-Japanese alliance.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 228,
+      "policy": "translate",
+      "text": "Japan and Britain stirred up the Russian Revolution...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 229,
+      "policy": "translate",
+      "text": "Britain's intelligence network controls the world. The Times and Morse communications stage a Japanese victory and broadcast it everywhere. Peasants and workers rose against the Emperor. The markets panicked, while Japan borrowed war funds from the world.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 230,
+      "policy": "translate",
+      "text": "So the Emperor's eastern front could torment the Baltic Fleet with peculiar tactics because it had no place left to return...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 231,
+      "policy": "translate",
+      "text": "...But the Emperor was mistaken too.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 232,
+      "policy": "translate",
+      "text": "Another pendulum switch... Is this also a trap...?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 233,
+      "policy": "translate",
+      "text": "Let us check below the pendulum.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 234,
+      "policy": "translate",
+      "text": "We have no choice. Cut the wire here.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 235,
+      "policy": "translate",
+      "text": "If it is a trap, the wire cannot be cut. If you cut it, boom.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 236,
+      "policy": "translate",
+      "text": "Bypass it like before?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 237,
+      "policy": "translate",
+      "text": "If it is a trap...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 238,
+      "policy": "translate",
+      "text": "Remove the small box.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 239,
+      "policy": "translate",
+      "text": "Cut the wire under the small box.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 240,
+      "policy": "translate",
+      "text": "Cut this.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 241,
+      "policy": "translate",
+      "text": "Calm down!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 242,
+      "policy": "translate",
+      "text": "That...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 243,
+      "policy": "translate",
+      "text": "Something is wrong. Look closely.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 244,
+      "policy": "translate",
+      "text": "Route the bypass.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 245,
+      "policy": "translate",
+      "text": "...That was fast.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 246,
+      "policy": "translate",
+      "text": "We cut it... We are safe. This one is the real pendulum switch.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 247,
+      "policy": "translate",
+      "text": "Kasuke...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 248,
+      "policy": "translate",
+      "text": "?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 249,
+      "policy": "translate",
+      "text": "...No, it was not nothing. I left the St. Petersburg court and traveled through Europe. Paris, unrest in Prussia, the Mediterranean. In London I learned Russia was beaten not by Japan, but by revolution and the people's uprising.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 250,
+      "policy": "translate",
+      "text": "The empire is sustained by peasants crawling over the soil, while it tries to destroy them... The Emperor's heart remains medieval. No one can stop the revolution now. Russia will fall.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 251,
+      "policy": "translate",
+      "text": "The screws on the small box...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 252,
+      "policy": "translate",
+      "text": "Cut the wire and remove this whole thing.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 253,
+      "policy": "translate",
+      "text": "We do not need the wire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 254,
+      "policy": "translate",
+      "text": "Let us take this off.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 255,
+      "policy": "translate",
+      "text": "I will cut this.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 256,
+      "policy": "translate",
+      "text": "When the Emperor falls... I will be destroyed too...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 257,
+      "policy": "translate",
+      "text": "Wait! Do not work with that mindset. This is fiction, remember? Do you know what is real? Ilyu, anything can happen while you are alive! Whatever happens to the Emperor, you...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 258,
+      "policy": "translate",
+      "text": "When Japan's king falls, will we call that common sense too? Do you intend to live in this world?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 259,
+      "policy": "translate",
+      "text": "Th-that is...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 260,
+      "policy": "translate",
+      "text": "Thank you, Kasuke. I will not hesitate anymore. I have decided. The twenty-first century will be your century. Even if Suomi becomes a land of distrust, I can leave the Emperor. My vision of forests and lakes matters most.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 261,
+      "policy": "translate",
+      "text": "You can leave him, huh. That is the first time I have heard that.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 262,
+      "policy": "translate",
+      "text": "What?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 263,
+      "policy": "translate",
+      "text": "You know, Ilyu, you use blunt words when your feelings are strong... I can believe you. Ilyu, I can believe you... The rear lid. No need for the safety device.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 264,
+      "policy": "translate",
+      "text": "Let us survive, Kasuke...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 265,
+      "policy": "translate",
+      "text": "If the safety circuit is hidden, removing the lid means boom...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 266,
+      "policy": "translate",
+      "text": "Kasuke, I...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 267,
+      "policy": "translate",
+      "text": "Shimose explosive that melted the Baltic Fleet...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 268,
+      "policy": "translate",
+      "text": "Turn it...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 269,
+      "policy": "translate",
+      "text": "Cut it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 270,
+      "policy": "translate",
+      "text": "...It is a clock timer... Ilyu. Do you hate the Emperor?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 271,
+      "policy": "translate",
+      "text": "I do not know... Maybe Stockholm syndrome is at work... Feelings stirred by the danger of being pursued by the Emperor...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 272,
+      "policy": "translate",
+      "text": "Those feelings are intuition, are they not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 273,
+      "policy": "translate",
+      "text": "I had no choice... Hurry... I am scared...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 274,
+      "policy": "translate",
+      "text": "It is now or never... Stop the clock or break the connection to the detonator... That will save us.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 275,
+      "policy": "translate",
+      "text": "Open the clock itself... or open the right-hand connector...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 276,
+      "policy": "translate",
+      "text": "...Kasuke.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 277,
+      "policy": "translate",
+      "text": "I am... scared.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 278,
+      "policy": "translate",
+      "text": "Open the clock itself...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 279,
+      "policy": "translate",
+      "text": "Open the connector... Ilyu, my sleeve is caught and I cannot turn the screwdriver!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 280,
+      "policy": "translate",
+      "text": "Red, blue, white... What is it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 281,
+      "policy": "translate",
+      "text": "...Three-phase alternating current. White is neutral, while red and blue are the poles. Never cut white. Either red or blue is the real wire from the timer to the detonator. The other is a dummy.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 282,
+      "policy": "translate",
+      "text": "If we cut the real one, it is disarmed. If we cut the dummy... game over? Which is it?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 283,
+      "policy": "translate",
+      "text": "I do not know... My hands are frozen...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 284,
+      "policy": "translate",
+      "text": "I am going to choose. If we fall, forgive me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 285,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 286,
+      "policy": "translate",
+      "text": "You said earlier, Ilyu, that you had lost the ability to choose. What did you stop being able to choose?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 287,
+      "policy": "translate",
+      "text": "At a time like this... you are still interested in me?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 288,
+      "policy": "translate",
+      "text": "Yes. I cannot think about anything but you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 289,
+      "policy": "translate",
+      "text": "You are a strange man... I will leave this choice to you. Cut whichever you want. I will not regret it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 290,
+      "policy": "translate",
+      "text": "...wire cutters are tools for cutting wires.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 291,
+      "policy": "translate",
+      "text": "This electrical wire... this cord is for making a bypass... Japanese people should learn more about Western machinery in the future...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 292,
+      "policy": "translate",
+      "text": "I am cutting it, Ilyu.",
+      "layout_policy": "adaptive"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+"""Minimal, strict parser for Nostalgia 1907 MES script containers.
+
+This module deliberately has no dependency on the historical translation tools.
+It is the first clean-room component of the deterministic retail-disc rebuild.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path
+
+
+GLYPH_BYTES = 18
+DYNAMIC_PREFIX_START = 0xF0
+DYNAMIC_PREFIX_END = 0xFF
+DYNAMIC_GLYPHS_PER_PREFIX = 0xFF
+
+
+class MesFormatError(ValueError):
+    """Raised when a MES file violates its structural invariants."""
+
+
+@dataclass(frozen=True)
+class MesFile:
+    """A validated MES pointer table, record stream, and dynamic glyph bank."""
+
+    split_offset: int
+    pointers: tuple[int, ...]
+    records: tuple[bytes, ...]
+    glyphs: tuple[bytes, ...]
+
+    @property
+    def first_pointer(self) -> int:
+        """Return the first record offset and pointer-table boundary."""
+        return self.pointers[0]
+
+    @property
+    def record_count(self) -> int:
+        """Return the number of script records."""
+        return len(self.records)
+
+    def referenced_dynamic_indexes(self) -> frozenset[int]:
+        """Return every dynamic-glyph index referenced by the record stream."""
+        indexes: set[int] = set()
+        for record_index, record in enumerate(self.records):
+            offset = 0
+            while offset < len(record):
+                value = record[offset]
+                if value < DYNAMIC_PREFIX_START:
+                    offset += 1
+                    continue
+                if value > DYNAMIC_PREFIX_END or offset + 1 >= len(record):
+                    raise MesFormatError(
+                        f"record {record_index} has a truncated dynamic reference"
+                    )
+                low = record[offset + 1]
+                if low == 0:
+                    raise MesFormatError(
+                        f"record {record_index} uses forbidden dynamic value 00"
+                    )
+                indexes.add(
+                    (value - DYNAMIC_PREFIX_START) * DYNAMIC_GLYPHS_PER_PREFIX
+                    + low
+                    - 1
+                )
+                offset += 2
+        return frozenset(indexes)
+
+
+def _u16be(data: bytes, offset: int) -> int:
+    """Read one big-endian unsigned 16-bit integer."""
+    return int.from_bytes(data[offset : offset + 2], "big")
+
+
+def parse_mes(data: bytes, *, source: str = "<bytes>") -> MesFile:
+    """Parse a MES file and reject ambiguous or unsafe layouts."""
+    if len(data) < 6:
+        raise MesFormatError(f"{source}: file is too small ({len(data)} bytes)")
+
+    split_offset = _u16be(data, 0)
+    first_pointer = _u16be(data, 2)
+    if first_pointer < 4 or first_pointer % 2:
+        raise MesFormatError(
+            f"{source}: invalid first pointer 0x{first_pointer:04X}"
+        )
+    pointer_count = (first_pointer - 2) // 2
+    if pointer_count <= 0 or 2 + pointer_count * 2 != first_pointer:
+        raise MesFormatError(f"{source}: inconsistent pointer-table length")
+    if not first_pointer <= split_offset <= len(data):
+        raise MesFormatError(
+            f"{source}: split 0x{split_offset:04X} is outside the data region"
+        )
+
+    pointers = tuple(
+        _u16be(data, 2 + index * 2) for index in range(pointer_count)
+    )
+    if pointers[0] != first_pointer:
+        raise MesFormatError(f"{source}: first pointer does not end the table")
+    if any(pointer < first_pointer or pointer >= split_offset for pointer in pointers):
+        raise MesFormatError(f"{source}: record pointer outside the script region")
+    if any(left > right for left, right in zip(pointers, pointers[1:])):
+        raise MesFormatError(f"{source}: record pointers are not monotonic")
+
+    boundaries = (*pointers, split_offset)
+    records = tuple(
+        data[start:end] for start, end in zip(boundaries, boundaries[1:])
+    )
+    glyph_tail = data[split_offset:]
+    if len(glyph_tail) % GLYPH_BYTES:
+        raise MesFormatError(
+            f"{source}: dynamic tail has {len(glyph_tail) % GLYPH_BYTES} extra bytes"
+        )
+    glyphs = tuple(
+        glyph_tail[offset : offset + GLYPH_BYTES]
+        for offset in range(0, len(glyph_tail), GLYPH_BYTES)
+    )
+
+    parsed = MesFile(
+        split_offset=split_offset,
+        pointers=pointers,
+        records=records,
+        glyphs=glyphs,
+    )
+    references = parsed.referenced_dynamic_indexes()
+    if references and max(references) >= len(glyphs):
+        raise MesFormatError(
+            f"{source}: dynamic reference {max(references)} exceeds "
+            f"the {len(glyphs)}-glyph bank"
+        )
+    return parsed
+
+
+def read_mes(path: Path) -> MesFile:
+    """Read and parse one MES file from disk."""
+    return parse_mes(path.read_bytes(), source=str(path))
+
+
+def changed_record_indexes(original: MesFile, rebuilt: MesFile) -> tuple[int, ...]:
+    """Return indexes whose encoded record bytes differ between two MES files."""
+    if original.record_count != rebuilt.record_count:
+        raise MesFormatError(
+            "cannot compare MES files with different record counts: "
+            f"{original.record_count} != {rebuilt.record_count}"
+        )
+    return tuple(
+        index
+        for index, (before, after) in enumerate(zip(original.records, rebuilt.records))
+        if before != after
+    )

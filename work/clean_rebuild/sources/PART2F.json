@@ -1,0 +1,1259 @@
+{
+  "schema_version": 1,
+  "chapter": "PART2F",
+  "record_count": 194,
+  "retail_mes": {
+    "sha256": "93C9E935635BDBF554987BA34DA263048B4669BDB1CC5DFCD6CF7AC9739458B1",
+    "size": 12852,
+    "dynamic_glyph_count": 377
+  },
+  "retail_scn": {
+    "sha256": "680D141C34100E2423A7735211839A691FC89B87BB2EA3DAE3102B9C392D99F5",
+    "size": 2693
+  },
+  "playable_reference_mes": {
+    "sha256": "E0AAC62CF6E42A9F60EE2DDC7E51DAF77E60D8D4DCD415BA62C677EECD02B8EE",
+    "size": 18322,
+    "dynamic_glyph_count": 433
+  },
+  "profile": {
+    "schema_version": 1,
+    "name": "PART2F",
+    "choice_render_cell_limit": 18,
+    "require_choice_segments": false,
+    "require_selector_window_segments": false,
+    "exclude_choice_segments_from_wrap": true,
+    "scn_selector_window_subtypes": [
+      40
+    ],
+    "infer_scn_layouts": true,
+    "infer_all_replacement_segments": true,
+    "scn_window_text_subtypes": [
+      39,
+      40
+    ],
+    "validate_runtime_row_boundaries": true,
+    "validate_text_hygiene": true,
+    "validate_wrapped_text_integrity": true,
+    "validate_scn_floating_row_limits": true,
+    "scn_dialogue_layout": {
+      "first": 12,
+      "continuation": 10
+    },
+    "scn_continuation_layout": {
+      "first": 10,
+      "continuation": 10
+    },
+    "scn_dialogue_runtime_layout": {
+      "first": 12,
+      "continuation": 11
+    },
+    "scn_continuation_runtime_layout": {
+      "first": 11,
+      "continuation": 11
+    },
+    "layout_overrides": {},
+    "runtime_layout_overrides": {},
+    "required_text_exact": {
+      "0": "Second-Class Passage",
+      "1": "Yamada Kasuke",
+      "2": "Ilyu",
+      "3": "You look awful.",
+      "4": "I don't know...",
+      "5": "Kasuke",
+      "6": "Always have.",
+      "7": "First they treat me like the culprit, then use me for their investigation.",
+      "8": "The Russian Fog... What the hell is it?",
+      "9": "A strange role, isn't it? You never know what the next moment will bring.",
+      "10": "Treasure. Curse. Weapon... What links them?",
+      "11": "Old Karl",
+      "12": "For my part, I support you. You're a man of simple tastes.",
+      "13": "...I can't solve it.",
+      "14": "The Crowd",
+      "15": "That's right! Cut Dunant down with a samurai sword!",
+      "17": "Send the aristocracy to the guillotine!",
+      "18": "...I'm starting to cry.",
+      "19": "...Ilyu. Even so, I still have to question you.",
+      "20": "You're a hopeless company man. Fine. Why not take a shower first? I'll wait in my room.",
+      "21": "Come, everyone, back to your rooms. He needs rest.",
+      "22": "Shower Room",
+      "58": "Old geezer!"
+    },
+    "forbidden_text_patterns": [
+      "(?i)Russian Mist",
+      "(?i)Russian Wolf",
+      "(?i)\\bDirecktor\\b",
+      "(?i)Queen's English"
+    ]
+  },
+  "text_mode": "prose",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-21\\in-c-users-thema-documents-codex\\work\\clean_rebuild\\recovered_compiled_text.json",
+    "inline PART2F formatting corrections"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "translate",
+      "text": "Second-Class Passage",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "Yamada Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "Ilyu",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "You look awful.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 4,
+      "policy": "translate",
+      "text": "I don't know...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "Always have.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "First they treat me like the culprit, then use me for their investigation.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "The Russian Fog... What the hell is it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "A strange role, isn't it? You never know what the next moment will bring.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "Treasure. Curse. Weapon... What links them?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "Old Karl",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "For my part, I support you. You're a man of simple tastes.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "...I can't solve it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "The Crowd",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 15,
+      "policy": "translate",
+      "text": "That's right! Cut Dunant down with a samurai sword!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 16,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 17,
+      "policy": "translate",
+      "text": "Send the aristocracy to the guillotine!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 18,
+      "policy": "translate",
+      "text": "...I'm starting to cry.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 19,
+      "policy": "translate",
+      "text": "...Ilyu. Even so, I still have to question you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 20,
+      "policy": "translate",
+      "text": "You're a hopeless company man. Fine. Why not take a shower first? I'll wait in my room.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 21,
+      "policy": "translate",
+      "text": "Come, everyone, back to your rooms. He needs rest.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 22,
+      "policy": "translate",
+      "text": "Shower Room",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 23,
+      "policy": "translate",
+      "text": "I heard about Black...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 24,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 25,
+      "policy": "translate",
+      "text": "I love to paint. It lets my heart wander anywhere... To Black, though, each painting was only merchandise.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 26,
+      "policy": "translate",
+      "text": "You cannot live on art alone.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 27,
+      "policy": "translate",
+      "text": "I do not believe you killed him.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 28,
+      "policy": "translate",
+      "text": "A crime is not only the hand that strikes...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 29,
+      "policy": "translate",
+      "text": "Are you saying I was involved?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 30,
+      "policy": "translate",
+      "text": "I don't know. Have you ever thought your very existence might make someone suffer?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 31,
+      "policy": "translate",
+      "text": "Every day...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 32,
+      "policy": "translate",
+      "text": "Then we are alike...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 33,
+      "policy": "translate",
+      "text": "They use us however they please...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 34,
+      "policy": "translate",
+      "text": "And everyone grows used to being hurt...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 35,
+      "policy": "translate",
+      "text": "It hurts, doesn't it? I enjoyed our card game.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 36,
+      "policy": "translate",
+      "text": "Do not turn me into one last memory and die. Hold on! I still do not understand. The St. Petersburg treasure. Words that curse the nobility. A secret weapon that could overturn Europe's balance of power...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 37,
+      "policy": "translate",
+      "text": "What is it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 38,
+      "policy": "translate",
+      "text": "The Russian Fog the culprit demands...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 39,
+      "policy": "translate",
+      "text": "The culprit is demanding the Russian Fog?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 40,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 41,
+      "policy": "translate",
+      "text": "What is it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 42,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 43,
+      "policy": "translate",
+      "text": "?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 44,
+      "policy": "translate",
+      "text": "What?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 45,
+      "policy": "translate",
+      "text": "You know, don't you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 46,
+      "policy": "translate",
+      "text": "...No.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 47,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 48,
+      "policy": "translate",
+      "text": "Not yet.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 49,
+      "policy": "translate",
+      "text": "...What?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 50,
+      "policy": "translate",
+      "text": "Your voice sounds far away...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 51,
+      "policy": "translate",
+      "text": "Hm?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 52,
+      "policy": "translate",
+      "text": "No, nothing.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 53,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 54,
+      "policy": "translate",
+      "text": "I see... But Kasuke, you will solve this, won't you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 55,
+      "policy": "translate",
+      "text": "I will.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 56,
+      "policy": "translate",
+      "text": "Below Deck",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 57,
+      "policy": "translate",
+      "text": "Second-Class Cabin",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 58,
+      "policy": "translate",
+      "text": "Old geezer!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 59,
+      "policy": "translate",
+      "text": "I am not senile!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 60,
+      "policy": "translate",
+      "text": "It is like a riddle from the Sphinx, young man.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 61,
+      "policy": "translate",
+      "text": "Rumor sees only one side of the truth.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 62,
+      "policy": "translate",
+      "text": "So?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 63,
+      "policy": "translate",
+      "text": "Each rumor describes one fragment of the same thing. Every fragment of language hides a sign.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 64,
+      "policy": "translate",
+      "text": "A sign?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 65,
+      "policy": "translate",
+      "text": "Exactly!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 66,
+      "policy": "translate",
+      "text": "You mean the words combine to reveal another meaning?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 67,
+      "policy": "translate",
+      "text": "When people hide the truth, they substitute one word for another. Yet the words they choose still carry the impression of the truth beneath them.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 68,
+      "policy": "translate",
+      "text": "So?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 69,
+      "policy": "translate",
+      "text": "So impatient.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 70,
+      "policy": "translate",
+      "text": "Here, the answer is a person.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 71,
+      "policy": "translate",
+      "text": "You mean the culprit wants to destroy one particular person?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 72,
+      "policy": "translate",
+      "text": "Most likely.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 73,
+      "policy": "translate",
+      "text": "Royal Suite A",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 74,
+      "policy": "translate",
+      "text": "The Russian Fog is a person: an experienced soldier serving the Tsar directly, feared even by Russian nobles and charged with watching them.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 75,
+      "policy": "translate",
+      "text": "Ashby",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 76,
+      "policy": "translate",
+      "text": "A person? Your grand deduction is that the Russian Fog is human?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 77,
+      "policy": "translate",
+      "text": "Dunant",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 78,
+      "policy": "translate",
+      "text": "The Russian court swarms with intelligence agents. Capture one close to the Tsar and you gain his plans, habits, and intentions. That knowledge is worth sinking a floating palace.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 79,
+      "policy": "translate",
+      "text": "Which nation would want such an agent most?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 80,
+      "policy": "translate",
+      "text": "The British Empire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 81,
+      "policy": "translate",
+      "text": "The British Empire?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 82,
+      "policy": "translate",
+      "text": "Why?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 83,
+      "policy": "translate",
+      "text": "Japan also bears watching. Terrorism is one of its specialties.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 84,
+      "policy": "translate",
+      "text": "Abstract theories will not solve this. Crimes are committed by people, not nations. A nation cannot be arrested.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 85,
+      "policy": "translate",
+      "text": "This is the age of empires.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 86,
+      "policy": "translate",
+      "text": "There are many nations I would gladly put behind bars.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 87,
+      "policy": "translate",
+      "text": "Which ones?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 88,
+      "policy": "translate",
+      "text": "That is beside the point.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 89,
+      "policy": "translate",
+      "text": "The culprit demands the Russian Fog and threatens to sink the ship.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 90,
+      "policy": "translate",
+      "text": "How does the culprit intend to remove the Russian Fog from the ship?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 91,
+      "policy": "translate",
+      "text": "That is your problem. Get moving.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 92,
+      "policy": "translate",
+      "text": "Aft Deck",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 93,
+      "policy": "translate",
+      "text": "Voysey",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 94,
+      "policy": "translate",
+      "text": "Mr. Yamada.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 95,
+      "policy": "translate",
+      "text": "Hard eyes. He is no civilian.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 96,
+      "policy": "translate",
+      "text": "Hello.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 97,
+      "policy": "translate",
+      "text": "You have been watching me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 98,
+      "policy": "translate",
+      "text": "Only doing my duty.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 99,
+      "policy": "translate",
+      "text": "On whose orders?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 100,
+      "policy": "translate",
+      "text": "He is not my master.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 101,
+      "policy": "translate",
+      "text": "He is my subordinate.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 102,
+      "policy": "translate",
+      "text": "What do you mean?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 103,
+      "policy": "translate",
+      "text": "That is what he says.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 104,
+      "policy": "translate",
+      "text": "Sharp. Even a professional spy might miss that.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 105,
+      "policy": "translate",
+      "text": "Who are you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 106,
+      "policy": "translate",
+      "text": "My friend here asked who you are.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 107,
+      "policy": "translate",
+      "text": "A deputy director of British Intelligence. Ashby is one of his agents.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 108,
+      "policy": "translate",
+      "text": "What did you say?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 109,
+      "policy": "translate",
+      "text": "Then all of this...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 110,
+      "policy": "translate",
+      "text": "I wore several masks. They were meant to fool the Russian agents.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 111,
+      "policy": "translate",
+      "text": "So that whole performance was for them...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 112,
+      "policy": "translate",
+      "text": "A Russian spy... Then the Russian Fog...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 113,
+      "policy": "translate",
+      "text": "Just as you said.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 114,
+      "policy": "translate",
+      "text": "A Russian agent working directly for the Tsar.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 115,
+      "policy": "translate",
+      "text": "You knew from the start.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 116,
+      "policy": "translate",
+      "text": "No more lies.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 117,
+      "policy": "translate",
+      "text": "It began a year ago.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 118,
+      "policy": "translate",
+      "text": "An anonymous cable reached our London office.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 119,
+      "policy": "translate",
+      "text": "British Intelligence officer Heynwood is a Russian spy.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 120,
+      "policy": "translate",
+      "text": "I dismissed it. Six months later another message came, this time signed:",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 121,
+      "policy": "translate",
+      "text": "Heynwood is a Russian spy.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 122,
+      "policy": "translate",
+      "text": "I am the Russian Fog.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 123,
+      "policy": "translate",
+      "text": "Our London office holds the intelligence archives that support the British Empire. I searched them.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 124,
+      "policy": "translate",
+      "text": "No record.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 125,
+      "policy": "translate",
+      "text": "Code name: Russian Fog.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 126,
+      "policy": "translate",
+      "text": "An intelligence operative reporting directly to the Russian Emperor.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 127,
+      "policy": "translate",
+      "text": "Active in the St. Petersburg court since 1897.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 128,
+      "policy": "translate",
+      "text": "Many nobles were executed after denunciations by the Russian Fog.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 129,
+      "policy": "translate",
+      "text": "Active in Manchuria since 1903 as an anti-British and anti-Japanese agent.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 130,
+      "policy": "translate",
+      "text": "Eliminated many Anglo-Japanese agents who aided Russian revolutionaries.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 131,
+      "policy": "translate",
+      "text": "Linked to military intelligence, the police, and the Interior Ministry, with access to immense stores of information.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 132,
+      "policy": "translate",
+      "text": "Enough to overturn the future balance of power.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 133,
+      "policy": "translate",
+      "text": "The highest-priority target of every anti-Russian intelligence service.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 134,
+      "policy": "translate",
+      "text": "A major Russian spy.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 135,
+      "policy": "translate",
+      "text": "Then why expose Russian agents in Britain?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 136,
+      "policy": "translate",
+      "text": "The final message arrived this January.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 137,
+      "policy": "translate",
+      "text": "Wait aboard NOSTALGIA.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 138,
+      "policy": "translate",
+      "text": "Signal: CEDAR.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 139,
+      "policy": "translate",
+      "text": "London",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 140,
+      "policy": "translate",
+      "text": "Deputy Chief",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 141,
+      "policy": "translate",
+      "text": "Regrettably, Director, our audit confirms Heynwood and Burns are Russian agents.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 142,
+      "policy": "translate",
+      "text": "Director",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 143,
+      "policy": "translate",
+      "text": "Then every accusation from the Russian Fog was correct.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 144,
+      "policy": "translate",
+      "text": "Yes.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 145,
+      "policy": "translate",
+      "text": "What is the Russian Fog's goal?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 146,
+      "policy": "translate",
+      "text": "There is only one answer: defection.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 147,
+      "policy": "translate",
+      "text": "A Russian spy defecting to Britain?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 148,
+      "policy": "translate",
+      "text": "NOSTALGIA sails from New York to Britain. Its name was a signal, and those accusations proved the value of the intelligence offered.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 149,
+      "policy": "translate",
+      "text": "A defector's calling card.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 150,
+      "policy": "translate",
+      "text": "We cannot let such a prize escape.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 151,
+      "policy": "translate",
+      "text": "It could be bait to lure you out.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 152,
+      "policy": "translate",
+      "text": "I accept that risk. I can still take my own life. This is too much for a junior officer. Let me do one last job before I retire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 153,
+      "policy": "translate",
+      "text": "Take Ashby. He may prove useful.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 154,
+      "policy": "translate",
+      "text": "Have you made contact?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 155,
+      "policy": "translate",
+      "text": "No. We could not identify the Russian Fog before the bombing and hijacking began.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 156,
+      "policy": "translate",
+      "text": "Then the hijacking is tied to the defection.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 157,
+      "policy": "translate",
+      "text": "The culprit knows who the Russian Fog is.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 158,
+      "policy": "translate",
+      "text": "Russian counterintelligence may be trying to stop the defection, or a third nation may be trying to seize the agent.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 159,
+      "policy": "translate",
+      "text": "Madness. The whole world has gone mad.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 160,
+      "policy": "translate",
+      "text": "The culprit may be one person, but that person carries out a nation's will.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 161,
+      "policy": "translate",
+      "text": "Besides the Russian Fog, other spies must be aboard. Russian counterintelligence often assigns several agents to watch one target without telling them of one another.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 162,
+      "policy": "translate",
+      "text": "I am no match for professional spies.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 163,
+      "policy": "translate",
+      "text": "Two British agents, two Russians...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 164,
+      "policy": "translate",
+      "text": "Perhaps an agent from a third nation. The culprit is one of them.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 165,
+      "policy": "translate",
+      "text": "And the Russian Fog. Seven rooms to search...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 166,
+      "policy": "translate",
+      "text": "I should never have joined that card game.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 167,
+      "policy": "translate",
+      "text": "You have my sympathy.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 168,
+      "policy": "translate",
+      "text": "Cafe de Ritz",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 169,
+      "policy": "translate",
+      "text": "You were foolish to trust this amateur, Director.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 170,
+      "policy": "translate",
+      "text": "What a charming man.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 171,
+      "policy": "translate",
+      "text": "You are a poor judge of character.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 172,
+      "policy": "translate",
+      "text": "Dunant is looking for the Russian Fog.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 173,
+      "policy": "translate",
+      "text": "So?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 174,
+      "policy": "translate",
+      "text": "You hired a fine detective.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 175,
+      "policy": "translate",
+      "text": "That clears me of suspicion.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 176,
+      "policy": "translate",
+      "text": "Joseph the bellboy and several others remain under suspicion.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 177,
+      "policy": "translate",
+      "text": "...Here it comes.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 178,
+      "policy": "translate",
+      "text": "Mind your tone. Dunant is my employer and, for now, my superior.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 179,
+      "policy": "translate",
+      "text": "And?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 180,
+      "policy": "translate",
+      "text": "The radio room and captain's cabin announcements still point to you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 181,
+      "policy": "translate",
+      "text": "You pry too much. Salesman is a vulgar profession.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 182,
+      "policy": "translate",
+      "text": "And yours?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 183,
+      "policy": "translate",
+      "text": "Still better than being a spy.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 184,
+      "policy": "translate",
+      "text": "Captain's Cabin",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 185,
+      "policy": "translate",
+      "text": "One bomb remains. It will explode at 7:00 p.m.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 186,
+      "policy": "translate",
+      "text": "Do not touch it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 187,
+      "policy": "translate",
+      "text": "Again: recover the Russian Fog.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 188,
+      "policy": "translate",
+      "text": "That is the only way to save the ship.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 189,
+      "policy": "translate",
+      "text": "This is the final warning.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 190,
+      "policy": "translate",
+      "text": "Why the hurry...?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 191,
+      "policy": "translate",
+      "text": "Captain",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 192,
+      "policy": "translate",
+      "text": "I last left this room at 2:51 p.m. It is now 3:05.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 193,
+      "policy": "translate",
+      "text": "The fourteen minutes from 2:51 to 3:05...",
+      "layout_policy": "adaptive"
+    }
+  ]
+}

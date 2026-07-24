@@ -1,0 +1,1090 @@
+{
+  "schema_version": 1,
+  "chapter": "PART1D",
+  "record_count": 173,
+  "retail_mes": {
+    "sha256": "E24E8FBA2864548902C6B54B0435AC66070808842A39B310CEAACD055B5B2549",
+    "size": 13702,
+    "dynamic_glyph_count": 423
+  },
+  "retail_scn": {
+    "sha256": "8F835E7D5E750F63CEDEB43BB7C54E48D3F791E88C0E05A19FD2DF328BA7A25D",
+    "size": 2436
+  },
+  "playable_reference_mes": {
+    "sha256": "1BFB53BF715B302955D601A0F77B94E4007F5A8994A98335A92CA112B04BB9B6",
+    "size": 28107,
+    "dynamic_glyph_count": 893
+  },
+  "profile": {
+    "schema_version": 1,
+    "name": "PART1D",
+    "choice_render_cell_limit": 18,
+    "require_choice_segments": true,
+    "exclude_choice_segments_from_wrap": true,
+    "layout_overrides": {
+      "84": {
+        "first": 11,
+        "continuation": 11,
+        "reason": "Occupation line continues in the wide dialogue-history grid."
+      },
+      "137": {
+        "first": 5,
+        "continuation": 5,
+        "reason": "Compact Is-it-though response window."
+      }
+    },
+    "required_text_prefixes": {
+      "103": "...",
+      "104": "...",
+      "109": "...",
+      "143": "The King's English"
+    },
+    "forbidden_text_patterns": [
+      "(?i)Queen of England",
+      "(?i)Queen's English"
+    ]
+  },
+  "text_mode": "render-ready",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-12\\i\\outputs\\nostalgia1907_act1_final_polish\\PART1D_act1_polished_manifest.json"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "translate",
+      "text": "Crew Meeting Room",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "Captain",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "Captain",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "This emergency meeting is now in session. Time is short, so spare us foolish questions that waste it. We have a great deal of real work ahead.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 4,
+      "policy": "translate",
+      "text": "Crew",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "Aye, aye, sir!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "Department heads, report all damage. Bosun!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "Bosun",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "The boat deck was the center of the blast. Each lifeboat appears to have been rigged with a bomb and a precisely timed detonator. We lost all eight lifeboats.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "All the lifeboats?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "This is the worst...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "What about the reserve boats?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "...We carry none...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "The culprit's aim is obvious.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "How cruel.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 15,
+      "policy": "translate",
+      "text": "May the sharks eat him! The passengers can no longer abandon ship... Chief Engineer! What is the damage to the engine room?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 16,
+      "policy": "translate",
+      "text": "Chief Engineer",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 17,
+      "policy": "translate",
+      "text": "As bad as it gets, sir. A bomb appears to have been planted on boiler No. 2. All three steam pipes ruptured, so repairs are impossible. We are dead in the water. She cannot move ahead or astern.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 18,
+      "policy": "translate",
+      "text": "Repairs...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 19,
+      "policy": "translate",
+      "text": "Dead in the water...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 20,
+      "policy": "translate",
+      "text": "You miserable old fool! If I learn later that you could have done something after all that whining, I will hang you upside down from the mainmast, damn you!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 21,
+      "policy": "translate",
+      "text": "Only Charlie, the second engineer, survived the blast down there! Impossible is impossible! I will not invent some padded repair schedule just to please you. Besides, this is no sailing ship like those we knew. It is a triumph of civilization driven by an advanced steam engine. The mast is decoration. It cannot catch so much as a breath of wind...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 22,
+      "policy": "translate",
+      "text": "Would it kill you to try rowing her forward?! You were racing around in sailing ships only yesterday! You are utterly useless...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 23,
+      "policy": "translate",
+      "text": "That is madness! She is a 2,700-ton steel ship! She handles nothing like those old wooden tubs!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 24,
+      "policy": "translate",
+      "text": "Machines have no backbone when it counts... Navigator!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 25,
+      "policy": "translate",
+      "text": "Navigator",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 26,
+      "policy": "translate",
+      "text": "We are presently at the exact midpoint of the North Atlantic route.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 27,
+      "policy": "translate",
+      "text": "The route...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 28,
+      "policy": "translate",
+      "text": "Its midpoint...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 29,
+      "policy": "translate",
+      "text": "There should be another vessel on the same route.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 30,
+      "policy": "translate",
+      "text": "According to the British Shipping Office's timetable, the next vessel to pass here is the British freighter Mary Star. In three days.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 31,
+      "policy": "translate",
+      "text": "Then, if we are sunk, she can find our bodies.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 32,
+      "policy": "translate",
+      "text": "Then she will be a bone collector, a legendary ship that gathers the dead. A little out of season, though.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 33,
+      "policy": "translate",
+      "text": "Dead center... Just perfect.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 34,
+      "policy": "translate",
+      "text": "The culprit is not merely insane. He is a calculating fanatic, and more ruthless than Selene.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 35,
+      "policy": "translate",
+      "text": "Shut up and sit down! What reply did we get to Fred's Mayday?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 36,
+      "policy": "translate",
+      "text": "Fast launches should have sailed from Southampton and New York.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 37,
+      "policy": "translate",
+      "text": "When will they arrive?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 38,
+      "policy": "translate",
+      "text": "No ship on the Atlantic is faster than the Nostalgia...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 39,
+      "policy": "translate",
+      "text": "About three days.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 40,
+      "policy": "translate",
+      "text": "So those so-called fast launches will arrive only in time to collect our bones.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 41,
+      "policy": "translate",
+      "text": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the radio room, cutting us off from shore... In other words, we are completely under his control.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 42,
+      "policy": "translate",
+      "text": "This was plainly premeditated... We have fallen into Neptune's jaws.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 43,
+      "policy": "translate",
+      "text": "I have a question.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 44,
+      "policy": "translate",
+      "text": "Allow",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 45,
+      "policy": "translate",
+      "text": "Refuse",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 46,
+      "policy": "translate",
+      "text": "What is it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 47,
+      "policy": "translate",
+      "text": "What exactly does the culprit want?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 48,
+      "policy": "translate",
+      "text": "Silence!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 49,
+      "policy": "translate",
+      "text": "Yes, sir!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 50,
+      "policy": "translate",
+      "text": "The culprit ordered us to find 'The Russian Fog.' I have no idea what those words mean.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 51,
+      "policy": "translate",
+      "text": "I have a question, sir.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 52,
+      "policy": "translate",
+      "text": "Enough of this! What is it now?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 53,
+      "policy": "translate",
+      "text": "Could the culprit still have bombs planted aboard?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 54,
+      "policy": "translate",
+      "text": "Yes.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 55,
+      "policy": "translate",
+      "text": "If that is true...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 56,
+      "policy": "translate",
+      "text": "That California drawl of yours makes me sick! This is not a comedy! Shut your mouth!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 57,
+      "policy": "translate",
+      "text": "But... that would be terrible...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 58,
+      "policy": "translate",
+      "text": "Shut up! Quit your whining!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 59,
+      "policy": "translate",
+      "text": "Damn it... These are seasoned officers, yet look at them. What is happening...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 60,
+      "policy": "translate",
+      "text": "The situation is too dire... We will not survive it by standing on ceremony.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 61,
+      "policy": "translate",
+      "text": "The culprit says he will sink this ship. But not so fast! We are sailors to the bone, men of the sea! Wipe off those gloomy faces! Remember the storm in the Caribbean! It tore away our mast, yet we made it home alive! You know what to do at a time like this. You know it well! Now get to work!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 62,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 63,
+      "policy": "translate",
+      "text": "Captain's Cabin",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 64,
+      "policy": "translate",
+      "text": "Ashby",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 65,
+      "policy": "translate",
+      "text": "The culprit...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 66,
+      "policy": "translate",
+      "text": "Will he sink us?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 67,
+      "policy": "translate",
+      "text": "That depends on our answer. Every soul aboard is at risk.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 68,
+      "policy": "translate",
+      "text": "Passengers may die...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 69,
+      "policy": "translate",
+      "text": "A wager?! This is no joke!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 70,
+      "policy": "translate",
+      "text": "Do you know the odds that passengers survive when a ship of this size sinks?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 71,
+      "policy": "translate",
+      "text": "It depends on how she sinks, but without lifeboats almost everyone will perish. Half will remain trapped in the hull, and half will be caught in the vortex. Even if they escape it, no one can endure drifting on the open sea, least of all after a disaster. Within half a day they will die of exhaustion. At this time of year, sharks ride the currents into these waters and finish the rest. If you underwrote the passengers' lives as well, you have my sympathy.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 72,
+      "policy": "translate",
+      "text": "What a tasteless man.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 73,
+      "policy": "translate",
+      "text": "That is my strong suit.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 74,
+      "policy": "translate",
+      "text": "Hull insurance, plus life insurance for all 321 passengers and crew... Every underwriter would be ruined.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 75,
+      "policy": "translate",
+      "text": "We have no choice but to yield to the culprit's demands... Damn him!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 76,
+      "policy": "translate",
+      "text": "Americans are so vulgar. One cannot even hold a civilized conversation with them.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 77,
+      "policy": "translate",
+      "text": "'The Russian Fog'... Must I possess it even if it drives all these people to ruin...?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 78,
+      "policy": "translate",
+      "text": "Royal Suite A",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 79,
+      "policy": "translate",
+      "text": "Dunant",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 80,
+      "policy": "translate",
+      "text": "An inquiry, then.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 81,
+      "policy": "translate",
+      "text": "How does he know me?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 82,
+      "policy": "translate",
+      "text": "Will this man be useful?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 83,
+      "policy": "translate",
+      "text": "The captain showed me the passenger list. A Frenchman living in Paris.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 84,
+      "policy": "translate",
+      "text": "Occupation: private detective...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 85,
+      "policy": "translate",
+      "text": "You mean the bomber? I saw the threatening letter.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 86,
+      "policy": "translate",
+      "text": "Efficient.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 87,
+      "policy": "translate",
+      "text": "Find 'The Russian Fog.'",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 88,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 89,
+      "policy": "translate",
+      "text": "And the culprit too, I presume?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 90,
+      "policy": "translate",
+      "text": "Hm. He does not dodge the point. A good sign.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 91,
+      "policy": "translate",
+      "text": "Of course... But on one condition.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 92,
+      "policy": "translate",
+      "text": "A condition?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 93,
+      "policy": "translate",
+      "text": "If you cannot find the culprit, fabricate one from among the crew.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 94,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 95,
+      "policy": "translate",
+      "text": "Have you lost your mind?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 96,
+      "policy": "translate",
+      "text": "Come now!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 97,
+      "policy": "translate",
+      "text": "Perfectly! Think! If the culprit sinks this ship, we are finished...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 98,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 99,
+      "policy": "translate",
+      "text": "Do not rush...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 100,
+      "policy": "translate",
+      "text": "Wait for it...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 101,
+      "policy": "translate",
+      "text": "GO!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 102,
+      "policy": "translate",
+      "text": "I accept that. But if it happens, every friend back home who shares this liability will be ruined! Do you know how much this ship is insured for? I cannot drag them down with me!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 103,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 104,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 105,
+      "policy": "translate",
+      "text": "Well? Come on, take the bait!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 106,
+      "policy": "translate",
+      "text": "At least I wish to save my friends back home...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 107,
+      "policy": "translate",
+      "text": "A gentleman indeed... How noble.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 108,
+      "policy": "translate",
+      "text": "That is enough.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 109,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 110,
+      "policy": "translate",
+      "text": "If the culprit is one of the crew, the insurance contract is void... Understood. If it comes to that, we will do it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 111,
+      "policy": "translate",
+      "text": "Good. He has no tiresome moral scruples.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 112,
+      "policy": "translate",
+      "text": "But no case is beyond me. Leave it to me. I will find 'The Russian Fog' and unmask the culprit.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 113,
+      "policy": "translate",
+      "text": "Infirmary",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 114,
+      "policy": "translate",
+      "text": "First Officer",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 115,
+      "policy": "translate",
+      "text": "I saw it... A starboard first-class cabin... Something was thrown from its window just before the blast... Now I understand...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 116,
+      "policy": "translate",
+      "text": "A transmitter... a compact Bell & Howell transmit-only set... Ugh!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 117,
+      "policy": "translate",
+      "text": "Ship's Dr.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 118,
+      "policy": "translate",
+      "text": "Cardiac massage! Damn it, force his mouth open!...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 119,
+      "policy": "translate",
+      "text": "Meeting Room",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 120,
+      "policy": "translate",
+      "text": "I will sit in as well.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 121,
+      "policy": "translate",
+      "text": "Do not expect tea.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 122,
+      "policy": "translate",
+      "text": "Never mind me. I will listen quietly.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 123,
+      "policy": "translate",
+      "text": "Now, detective, my fine pointer hound. Show me your skill.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 124,
+      "policy": "translate",
+      "text": "I want to ask about the bomb. The first officer was downwind of the blast when he collapsed. Correct?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 125,
+      "policy": "translate",
+      "text": "The first officer died of asphyxiation.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 126,
+      "policy": "translate",
+      "text": "The bomb contained poison gas.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 127,
+      "policy": "translate",
+      "text": "It was not gas. He inhaled superheated air, which burned his lungs raw. The passengers who collapsed on deck died the same way.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 128,
+      "policy": "translate",
+      "text": "Nonsense! First Officer Clevans was on the starboard bridge wing, far from the blast.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 129,
+      "policy": "translate",
+      "text": "Quite possible, if the explosive was SBC. It can generate that much heat.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 130,
+      "policy": "translate",
+      "text": "SBC?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 131,
+      "policy": "translate",
+      "text": "Shimose Basic Cracker. An incendiary shell explosive that annihilated Russia's Baltic Fleet in the Sea of Japan two years ago. It uses the heat reaction produced when picric acid contacts metal, scattering temperatures above 2,000 degrees when it explodes. Even steel melts like taffy. No one on deck could survive.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 132,
+      "policy": "translate",
+      "text": "A clever fellow.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 133,
+      "policy": "translate",
+      "text": "Are such things sold at morning markets in Asia?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 134,
+      "policy": "translate",
+      "text": "Hardly. It is effectively an Imperial Japanese secret weapon. Only a Japanese can handle or manufacture it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 135,
+      "policy": "translate",
+      "text": "Then the culprit is Japanese. Is that your point?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 136,
+      "policy": "translate",
+      "text": "Precisely. Case solved, Lord Ashby.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 137,
+      "policy": "translate",
+      "text": "Is it, though?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 138,
+      "policy": "translate",
+      "text": "Good work.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 139,
+      "policy": "translate",
+      "text": "Mr. Cowen! Bring the Japanese passenger on the list to my cabin! You have thirty seconds!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 140,
+      "policy": "translate",
+      "text": "Second class, Yamada Kasuke. Sales manager, Yotsui Trading. You are the only Japanese aboard. The circumstances weigh heavily against you. Do you understand?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 141,
+      "policy": "translate",
+      "text": "Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 142,
+      "policy": "translate",
+      "text": "You are not saying I am definitely the culprit. That is what you mean, right?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 143,
+      "policy": "translate",
+      "text": "The King's English! Hah. Even the ape speaks English.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 144,
+      "policy": "translate",
+      "text": "It can be no one but you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 145,
+      "policy": "translate",
+      "text": "It was someone else. Not me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 146,
+      "policy": "translate",
+      "text": "An impudent little ape. Amusing.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 147,
+      "policy": "translate",
+      "text": "Are you mocking me?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 148,
+      "policy": "translate",
+      "text": "Not at all.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 149,
+      "policy": "translate",
+      "text": "We shall see.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 150,
+      "policy": "translate",
+      "text": "The bomb was Japanese.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 151,
+      "policy": "translate",
+      "text": "Exactly. If I were the culprit, I would have boarded under an alias, forged my passport, and posed as a subject of Qing China or another country. Otherwise I would be a complete fool. Would someone capable of setting bombs with precise time fuses leave such an obvious trail? It was not me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 152,
+      "policy": "translate",
+      "text": "His argument is sound.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 153,
+      "policy": "translate",
+      "text": "So you claim the culprit is someone else.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 154,
+      "policy": "translate",
+      "text": "You had better find him.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 155,
+      "policy": "translate",
+      "text": "He feels no pressure... Wrong man, detective.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 156,
+      "policy": "translate",
+      "text": "You are the culprit.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 157,
+      "policy": "translate",
+      "text": "The ape is right. This French detective has already shown his limits.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 158,
+      "policy": "translate",
+      "text": "If I catch the culprit myself, you will stop glaring at me like that, right?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 159,
+      "policy": "translate",
+      "text": "What is he planning?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 160,
+      "policy": "translate",
+      "text": "An amusing brat. An amateur playing detective? Ah, yes. Your whole nation excels at monkey-see, monkey-do.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 161,
+      "policy": "translate",
+      "text": "I have my own methods. No petty insults or interference. If this is the only way to prove my innocence, I have no choice. Give me the command key.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 162,
+      "policy": "translate",
+      "text": "An ape and a French detective. What an odd pair.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 163,
+      "policy": "translate",
+      "text": "Very well.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 164,
+      "policy": "translate",
+      "text": "Yamada Kasuke",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 165,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 166,
+      "policy": "translate",
+      "text": "True, I did not buy Yuko a souvenir. But does that deserve this much bad luck? Seriously?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 167,
+      "policy": "translate",
+      "text": "Unless another suspect appears, I will declare you the culprit. We are on the high seas. No jury will side with a yellow man. I could shoot you now and no one would condemn me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 168,
+      "policy": "translate",
+      "text": "He would go that far?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 169,
+      "policy": "translate",
+      "text": "What is your record for catching culprits?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 170,
+      "policy": "translate",
+      "text": "One hundred percent.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 171,
+      "policy": "translate",
+      "text": "I thought so. That is bad news for me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 172,
+      "policy": "translate",
+      "text": "Maybe it is not too late. I should buy Yuko a souvenir from the ship's shop.",
+      "layout_policy": "adaptive"
+    }
+  ]
+}

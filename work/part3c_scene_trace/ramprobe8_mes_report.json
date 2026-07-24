@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "diagnostic_only": true,
+  "source_size": 16356,
+  "source_size_hex": "0x3FE4",
+  "output_size": 13770,
+  "output_size_hex": "0x35CA",
+  "retail_size": 14790,
+  "headroom_below_retail": 1020,
+  "saved_bytes": 2586,
+  "records_preserved": [
+    0,
+    162
+  ],
+  "records_emptied": [
+    163,
+    223
+  ],
+  "kept_records_render_and_control_equivalent": true,
+  "dynamic_glyphs_before": 400,
+  "dynamic_glyphs_after": 378,
+  "sha256": "403DB10450728868BB2CD4FC2A7C074912517FA32F5D252547B2E6A2EDEE0EEB"
+}

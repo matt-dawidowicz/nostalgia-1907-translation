@@ -1,0 +1,853 @@
+{
+  "schema_version": 1,
+  "chapter": "PART1A",
+  "record_count": 136,
+  "retail_mes": {
+    "sha256": "64162DDE026883BC477AD73923ADA23A01D26494D77CBB405EC2CAF1C72F456E",
+    "size": 5321,
+    "dynamic_glyph_count": 116
+  },
+  "retail_scn": {
+    "sha256": "2F345D957366BB3CDA14FA5764EFBC294F7B2C06531C6ED8E50745354DB3F00E",
+    "size": 3354
+  },
+  "playable_reference_mes": {
+    "sha256": "FADCF5C77E1DBCD08F60365EEF4C5E626B686816B6D56AC950A33AEB3860ADD8",
+    "size": 15745,
+    "dynamic_glyph_count": 510
+  },
+  "profile": {
+    "schema_version": 1,
+    "name": "PART1A",
+    "translation_status": "locked",
+    "choice_render_cell_limit": null,
+    "require_choice_segments": true,
+    "exclude_choice_segments_from_wrap": false,
+    "layout_overrides": {},
+    "required_text_prefixes": {
+      "0": "Game Hall"
+    },
+    "forbidden_text_patterns": []
+  },
+  "text_mode": "render-ready",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-12\\i\\outputs\\nostalgia1907_act2e_complete\\profile_migration_verify\\PART1A_manifest.json"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "translate",
+      "text": "Game Hall",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "Yamada Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "Ilyu",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "How about we switch games and play one more round?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 4,
+      "policy": "translate",
+      "text": "Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "Gladly. What game?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "How about Indian poker? Know the rules?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "Ask for the rules",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "Do not insult me!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "Teach me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "First, we each draw one card. Then you show me your card, and I show you mine. Neither of us can look at our own card. We bet by judging the strength of the other person's card.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "And the card rankings?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "Two is strongest, followed by ace, king, queen, jack, ten, nine, eight, seven, six, five, and four. Three is weakest. Set the stakes, call, and reveal both cards. The higher card wins.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "I can see your card, but you cannot see it yourself...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "The same goes for both of us. You can see my card, but you do not know how strong your own is.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 15,
+      "policy": "translate",
+      "text": "There is something suggestive about this game... It reminds me of something. All right, let us begin.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 16,
+      "policy": "translate",
+      "text": "I know. I read your face when you see my card.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 17,
+      "policy": "translate",
+      "text": "Hee hee, you may be tough. But I am lucky.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 18,
+      "policy": "translate",
+      "text": "Women are usually liars. Let us begin.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 19,
+      "policy": "translate",
+      "text": "Three tokens each.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 20,
+      "policy": "translate",
+      "text": "Whoever runs out of tokens loses.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 21,
+      "policy": "translate",
+      "text": "Got it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 22,
+      "policy": "translate",
+      "text": "I will strip you naked.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 23,
+      "policy": "translate",
+      "text": "Shall we?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 24,
+      "policy": "translate",
+      "text": "Let us do it!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 25,
+      "policy": "translate",
+      "text": "Not bad.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 26,
+      "policy": "translate",
+      "text": "Now it begins!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 27,
+      "policy": "translate",
+      "text": "I will keep going...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 28,
+      "policy": "translate",
+      "text": "This will be over soon.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 29,
+      "policy": "translate",
+      "text": "Ilyu has a three. I have won... I will raise the stakes and strip her bare!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 30,
+      "policy": "translate",
+      "text": "Ilyu has a seven... That is a tricky number...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 31,
+      "policy": "translate",
+      "text": "Ilyu has a jack... This could be close.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 32,
+      "policy": "translate",
+      "text": "Ilyu has a two... Calling normally means certain defeat. Force a fold, or beg for mercy?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 33,
+      "policy": "translate",
+      "text": "I can already see your crying face.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 34,
+      "policy": "translate",
+      "text": "She is coming on strong... Is she trying to tell me my card is bad? Is it a bluff?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 35,
+      "policy": "translate",
+      "text": "Well? How confident are you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 36,
+      "policy": "translate",
+      "text": "How the hell should I know my own card?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 37,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 38,
+      "policy": "translate",
+      "text": "She is acting timid... Did I draw a good card?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 39,
+      "policy": "translate",
+      "text": "Keep pressing!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 40,
+      "policy": "translate",
+      "text": "I will not let her read my face!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 41,
+      "policy": "translate",
+      "text": "Act timid...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 42,
+      "policy": "translate",
+      "text": "Your luck has run out, Ilyu. Do not come crying to me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 43,
+      "policy": "translate",
+      "text": "Well now...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 44,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 45,
+      "policy": "translate",
+      "text": "Think that card will make me cry?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 46,
+      "policy": "translate",
+      "text": "...This is tense.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 47,
+      "policy": "translate",
+      "text": "Change stakes?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 48,
+      "policy": "translate",
+      "text": "3",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 49,
+      "policy": "translate",
+      "text": "2",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 50,
+      "policy": "translate",
+      "text": "1",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 51,
+      "policy": "translate",
+      "text": "Three tokens.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 52,
+      "policy": "translate",
+      "text": "Two tokens...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 53,
+      "policy": "translate",
+      "text": "Keep the stakes as they are.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 54,
+      "policy": "translate",
+      "text": "I accept. Will you call or fold?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 55,
+      "policy": "translate",
+      "text": "I will fold.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 56,
+      "policy": "translate",
+      "text": "Call",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 57,
+      "policy": "translate",
+      "text": "Fold",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 58,
+      "policy": "translate",
+      "text": "Call.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 59,
+      "policy": "translate",
+      "text": "...I will fold.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 60,
+      "policy": "translate",
+      "text": "You have an eight.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 61,
+      "policy": "translate",
+      "text": "Hardly worth celebrating. I had you beat anyway.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 62,
+      "policy": "translate",
+      "text": "I had a seven! Oh, lucky me! I should have raised the stakes more.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 63,
+      "policy": "translate",
+      "text": "Damn! So I was close!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 64,
+      "policy": "translate",
+      "text": "You had an eight. I had... a seven.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 65,
+      "policy": "translate",
+      "text": "Not bad.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 66,
+      "policy": "translate",
+      "text": "You have an ace. This is not even a contest...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 67,
+      "policy": "translate",
+      "text": "I came pretty close.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 68,
+      "policy": "translate",
+      "text": "I had a seven! Hee hee, you are such a fool! If you knew what your card was, you would want to jump overboard! Curious? I will not tell. It is a secret. Hee hee!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 69,
+      "policy": "translate",
+      "text": "I do not want to know! ...Damn it...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 70,
+      "policy": "translate",
+      "text": "I had a seven. You had an ace. Feel good, beating a little girl like me?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 71,
+      "policy": "translate",
+      "text": "Not bad.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 72,
+      "policy": "translate",
+      "text": "You had a four. Something is not right... What did I have?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 73,
+      "policy": "translate",
+      "text": "That will remain a mystery forever.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 74,
+      "policy": "translate",
+      "text": "That was wise.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 75,
+      "policy": "translate",
+      "text": "Gee, thanks!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 76,
+      "policy": "translate",
+      "text": "You had a four. I had a seven. That was close.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 77,
+      "policy": "translate",
+      "text": "Damn!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 78,
+      "policy": "translate",
+      "text": "You had an eight...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 79,
+      "policy": "translate",
+      "text": "Waaaaah!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 80,
+      "policy": "translate",
+      "text": "I had a jack...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 81,
+      "policy": "translate",
+      "text": "My luck just will not turn...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 82,
+      "policy": "translate",
+      "text": "I had a jack! That was scary, but you had an eight. A nice win.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 83,
+      "policy": "translate",
+      "text": "Thank goodness!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 84,
+      "policy": "translate",
+      "text": "You had an ace. Lucky you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 85,
+      "policy": "translate",
+      "text": "That scared me. Your luck is not bad either.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 86,
+      "policy": "translate",
+      "text": "I had a jack. You are honest. Being weak to bluffs will make life hard.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 87,
+      "policy": "translate",
+      "text": "What? I won? Really?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 88,
+      "policy": "translate",
+      "text": "You had an ace. I had a jack at a time like this...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 89,
+      "policy": "translate",
+      "text": "Whew, that scared me. You are bad for my heart.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 90,
+      "policy": "translate",
+      "text": "You had a four. What did I have?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 91,
+      "policy": "translate",
+      "text": "I pulled it off! Bwahahaha!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 92,
+      "policy": "translate",
+      "text": "I had a jack. You could afford to be timid. Folding was right.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 93,
+      "policy": "translate",
+      "text": "What did I have?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 94,
+      "policy": "translate",
+      "text": "I had the prince of fortune! You had a pauper's four.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 95,
+      "policy": "translate",
+      "text": "Oh my God...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 96,
+      "policy": "translate",
+      "text": "You had an eight...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 97,
+      "policy": "translate",
+      "text": "Ah, I am satisfied!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 98,
+      "policy": "translate",
+      "text": "I had a two. Do you always flee when the odds turn against you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 99,
+      "policy": "translate",
+      "text": "Depends on the opponent!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 100,
+      "policy": "translate",
+      "text": "I had a two. You had an eight. Do you enjoy hopeless battles?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 101,
+      "policy": "translate",
+      "text": "A man should always be willing.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 102,
+      "policy": "translate",
+      "text": "You had an ace. I could not have won.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 103,
+      "policy": "translate",
+      "text": "Not always.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 104,
+      "policy": "translate",
+      "text": "I had a two. You had a good card. What a shame.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 105,
+      "policy": "translate",
+      "text": "That was no contest.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 106,
+      "policy": "translate",
+      "text": "You had an ace. I had a two! If you pushed harder, I would have folded.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 107,
+      "policy": "translate",
+      "text": "Do that next time...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 108,
+      "policy": "translate",
+      "text": "You had a four...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 109,
+      "policy": "translate",
+      "text": "Ah! What a rush!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 110,
+      "policy": "translate",
+      "text": "I had a two. A fair result.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 111,
+      "policy": "translate",
+      "text": "How can I fight a monster card like that?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 112,
+      "policy": "translate",
+      "text": "You had a four. I had a two. A crushing win. We make a good pair.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 113,
+      "policy": "translate",
+      "text": "Hmph!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 114,
+      "policy": "translate",
+      "text": "You had an eight. What did I have?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 115,
+      "policy": "translate",
+      "text": "Bad luck.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 116,
+      "policy": "translate",
+      "text": "I had a three! Are you mocking me? Why did you fold?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 117,
+      "policy": "translate",
+      "text": "I merely let you win!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 118,
+      "policy": "translate",
+      "text": "You had an eight. I had a three. That is awful...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 119,
+      "policy": "translate",
+      "text": "Life is not always kind.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 120,
+      "policy": "translate",
+      "text": "You had an ace.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 121,
+      "policy": "translate",
+      "text": "I was bound to win that one.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 122,
+      "policy": "translate",
+      "text": "You had an ace! I had a three! Idiot! Why did you not call?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 123,
+      "policy": "translate",
+      "text": "I had my reasons...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 124,
+      "policy": "translate",
+      "text": "You had an ace. I had a three. I am sick of it...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 125,
+      "policy": "translate",
+      "text": "You had a four. What was my card?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 126,
+      "policy": "translate",
+      "text": "We do not tell people who fold...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 127,
+      "policy": "translate",
+      "text": "I had a three! If I had called, I would have won...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 128,
+      "policy": "translate",
+      "text": "I did you a favor!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 129,
+      "policy": "translate",
+      "text": "I had a three. You had a four. I cannot believe I lost.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 130,
+      "policy": "translate",
+      "text": "That is how it goes.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 131,
+      "policy": "translate",
+      "text": "Too bad.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 132,
+      "policy": "translate",
+      "text": "This voyage looks grim...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 133,
+      "policy": "translate",
+      "text": "You have some skill.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 134,
+      "policy": "translate",
+      "text": "Thanks to you, this looks like a good voyage.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 135,
+      "policy": "preserve",
+      "text": null
+    }
+  ]
+}

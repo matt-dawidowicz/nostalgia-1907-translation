@@ -1,0 +1,1536 @@
+{
+  "schema_version": 1,
+  "chapter": "PART3B",
+  "record_count": 209,
+  "retail_mes": {
+    "sha256": "B14F4C4A442BCC27B4A8082CEF6D6307AC7A33438D5E3C9F2B5E20902E862009",
+    "size": 12988,
+    "dynamic_glyph_count": 348
+  },
+  "retail_scn": {
+    "sha256": "E634E697DB695FD3FEC87D8A26C9C6D6A67FE6B1DC1AFA55C2A24BCB5D1D988B",
+    "size": 3392
+  },
+  "playable_reference_mes": {
+    "sha256": "EE5EE3481E1F14246B3D1B6B3691342B950995930CC9E4654EDE99D90360A340",
+    "size": 20881,
+    "dynamic_glyph_count": 442
+  },
+  "profile": {
+    "schema_version": 1,
+    "name": "PART3B",
+    "choice_render_cell_limit": 18,
+    "require_choice_segments": false,
+    "require_selector_window_segments": false,
+    "exclude_choice_segments_from_wrap": true,
+    "scn_selector_window_subtypes": [
+      40
+    ],
+    "infer_scn_layouts": true,
+    "infer_all_replacement_segments": true,
+    "scn_window_text_subtypes": [
+      39,
+      40
+    ],
+    "leading_blank_anchor_segments": [
+      151,
+      163
+    ],
+    "validate_runtime_row_boundaries": true,
+    "validate_text_hygiene": true,
+    "validate_wrapped_text_integrity": true,
+    "validate_scn_floating_row_limits": true,
+    "scn_dialogue_layout": {
+      "first": 12,
+      "continuation": 10
+    },
+    "scn_continuation_layout": {
+      "first": 10,
+      "continuation": 10
+    },
+    "scn_dialogue_runtime_layout": {
+      "first": 12,
+      "continuation": 11
+    },
+    "scn_continuation_runtime_layout": {
+      "first": 11,
+      "continuation": 11
+    },
+    "layout_overrides": {},
+    "runtime_layout_overrides": {},
+    "required_text_exact": {
+      "0": "Center Hall",
+      "1": "Yamada Kasuke",
+      "2": "Chanel",
+      "3": "...None of the men you brought were here... This place has been ransacked...",
+      "4": "Kasuke",
+      "5": "Voysey!",
+      "6": "Voysey",
+      "7": "...Yamada... Th-that man is...",
+      "8": "One of Tainui Adjell's men... Damn it... I still have more to tell you...",
+      "9": "Listen carefully!",
+      "10": "...Mr. Yamada...",
+      "11": "I learned the secret of \"Mede\"...",
+      "12": "That woman is Salome... Everyone involved with her dies...",
+      "13": "Run! You still have... Voysey!",
+      "14": "...What's wrong? Hey, what's wrong? Come on... What happened...",
+      "15": "...Aah! He's dead! Aah! Somebody's dead!",
+      "17": "Voysey knew Mede's true identity. He was about to name Russia's Wing...",
+      "18": "And they killed him...",
+      "19": "Ashby",
+      "20": "I was never told. I want answers too. I must stop Russia's Wing at any cost...",
+      "21": "This is no time to argue... Voysey is dead...",
+      "22": "Who is Tainui Adjell?",
+      "23": "He belongs to a Russian secret-assassination organization.",
+      "24": "Did they kill Genkai...?",
+      "25": "An assassination ring!? Even this island has one?",
+      "26": "Why weren't you at Genkai's funeral? You were his partner!",
+      "27": "I was only his liaison! Genkai alone investigated Mede.",
+      "28": "Don't play innocent!",
+      "29": "You skipped his funeral without a care!",
+      "30": "Nonsense! You said the Royal Suite and the cabin beside First Class were suspicious!",
+      "31": "What a joke!",
+      "32": "Enough. What did you learn?",
+      "33": "Tianon and Lumeranka are clean. Lumeranka only spoke as ordered...",
+      "34": "...You insolent brat...",
+      "35": "What about the Maharaja's smuggling and that old retainer?",
+      "36": "...",
+      "37": "Listen. This case is our livelihood. We have to find a way to profit from it.",
+      "38": "Do you think you can speak to me that way?",
+      "39": "I don't care anymore!",
+      "40": "If you want Russia's Wing behind bars, keep quiet and leave this to me!",
+      "41": "Tonight. I will be in my cabin.",
+      "42": "I will get only you aboard the steamer!",
+      "43": "Then strike at the tiger's den!",
+      "44": "Second-Class Cabin",
+      "45": "Calm down... Think it through. There has to be a way.",
+      "46": "Aft Deck",
+      "47": "What in the world is happening here...? Who is setting whom up?",
+      "48": "Ashby said he and Voysey reported on Russia's Wing to Britain... Yet Voysey clearly did not trust him.",
+      "49": "The bomb could kill us all. Why expose Russia's Wing now?",
+      "50": "The evidence points to a state intelligence service... Britain, perhaps... or Germany, as Voysey suspected...",
+      "51": "Is Ashby truly the British agent Voysey said he was?",
+      "52": "Wait... If Ashby is the culprit, it all fits. Voysey could not expose Russia's Wing, so Ashby made the crew draw it out...",
+      "53": "No... I can't stand it anymore!",
+      "54": "I'll beat him senseless!",
+      "55": "Royal Suite A",
+      "56": "He isn't a Russian spy. He's clearly working for a third country. He plans to steal Russia's Wing while Britain and Russia fight over it.",
+      "57": "Suppose he is?",
+      "58": "Then hear me out!",
+      "59": "Open your ears and listen carefully.",
+      "60": "If you'll spare me the grand speech.",
+      "61": "I picked that up in London.",
+      "62": "May I?",
+      "63": "Briefly, please.",
+      "64": "Don't rush me.",
+      "65": "A third country had Voysey under surveillance. Once Voysey contacted Russia's Wing and Britain secured it, their agent planned to steal it from him, sink the ship, and escape.",
+      "66": "Why sink the ship as well?",
+      "67": "That's the point.",
+      "68": "A spy from a third country is aboard this ship.",
+      "69": "And what does that have to do with your profession?",
+      "70": "Everything!",
+      "71": "That third country has a reason to want me dead!",
+      "72": "...Fascinating, Yamada. Then lay out your case logically.",
+      "73": "Shut up!",
+      "74": "Why would they need to kill you?",
+      "75": "I'm the one being targeted.",
+      "76": "Exactly. He must make the Nostalgia vanish without a trace.",
+      "77": "But why?",
+      "78": "All this convoluted reasoning is giving me a headache... I'm sick of it.",
+      "79": "Should I stop?",
+      "80": "Go on.",
+      "81": "British Intelligence Action... Britain's foremost intelligence agency.",
+      "82": "Even among spies, they're elite.",
+      "83": "British intelligence has kept watch over the Russia's Wing affair. Their number two man even came out in person.",
+      "84": "He heads their operations. Nothing escapes him.",
+      "85": "Such dedication.",
+      "86": "...Are you following me?",
+      "87": "Listen. At Southampton, British intelligence watched Voysey and waited for Russia's Wing to contact him. Once they entered British waters, every Russian spy was to be arrested and Russia's Wing taken to London.",
+      "88": "Of course. I led that operation under orders from London.",
+      "89": "So far, so good.",
+      "90": "In other words, if anything happened, British intelligence would be on it at once.",
+      "91": "Naturally.",
+      "92": "Now, could you let me finish my own explanation?",
+      "93": "Fine. Continue.",
+      "94": "Enjoy your confidence while it lasts.",
+      "95": "Suppose the spy seized Russia's Wing at sea. The moment he returned to Britain, his identity would be exposed. British Intelligence Action is the country's finest agency. Once it knew who had touched the Wing, it would follow him anywhere.",
+      "96": "So he would sink the ship and make it look like an accident...",
+      "97": "But, Mr. Yamada, he never made contact with Russia's Wing.",
+      "98": "Exactly.",
+      "99": "That's an absurd accusation!",
+      "100": "Shall we work it out together?",
+      "101": "Your delusions have become pathological.",
+      "102": "Things do not always go according to plan.",
+      "103": "Voysey still had not caught Mede... even at the last moment before sailing.",
+      "104": "Who hadn't?!",
+      "105": "He hadn't.",
+      "106": "...What were we talking about again...?",
+      "107": "Voysey failed to catch Mede! So what?!",
+      "108": "Exactly. That is why the saboteur needed to trap everyone aboard.",
+      "109": "He destroyed the lifeboats and cut off our escape.",
+      "110": "Next, he destroyed the radio equipment.",
+      "111": "That was the finishing touch.",
+      "112": "We...",
+      "113": "had nowhere left to run.",
+      "114": "Then he blew up the engine room.",
+      "115": "No one ashore knows exactly what happened after that.",
+      "116": "Then, without lifting a finger, he could make us trapped passengers...",
+      "117": "search for Russia's Wing...",
+      "118": "and expose it for him.",
+      "119": "Quite a piece of sophistry. Interesting.",
+      "120": "Now, this is where it gets interesting for you.",
+      "121": "You know Indian poker? You are the one person who cannot see what kind of man you are!",
+      "122": "The onlooker can see it at a glance!",
+      "123": "Brutally simple!",
+      "124": "H-how... how rude!",
+      "125": "Try to remain a gentleman to the end.",
+      "126": "What are you plotting...?",
+      "127": "Now, wait.",
+      "128": "The threat was meant to force the passengers to reveal who Russia's Wing is.",
+      "129": "By that hypothesis...",
+      "130": "the culprit",
+      "131": "must have known Voysey's identity and reason for boarding from the start. Right?",
+      "132": "On what grounds...? What exactly are you trying to prove?",
+      "133": "This is getting exciting!",
+      "134": "Enough of your games.",
+      "135": "Wipe your brow.",
+      "136": "I-I am not sweating!",
+      "137": "True, you are not sweating. Then why are you so rattled?",
+      "138": "How does it feel to be interrogated? I have been forced to play this ugly charade against decent people all along!",
+      "139": "Did you come here to whine?",
+      "140": "No.",
+      "141": "Come now.",
+      "142": "C",
+      "143": "L",
+      "144": "I",
+      "145": "MAX!",
+      "146": "You...",
+      "147": "No one knew it... Voysey's true identity.",
+      "148": "Was that really so? There is no way to verify it.",
+      "149": "Shall we review it once more?",
+      "150": "The culprit's actions...",
+      "151": "center on Voysey's operation to recover Russia's Wing.",
+      "152": "Not Voysey himself! Everything centers on the Wing.",
+      "153": "My sense is the Russian spies never realized Voysey's true identity.",
+      "154": "Did you ask the Russian spies? Did those doomed criminals politely admit they knew nothing?!",
+      "155": "They as good as said it.",
+      "156": "I used every scrap of imagination I had to win this game. For the moment, it was my only asset...",
+      "157": "Fantasy impairs practical judgment...",
+      "158": "You have gone off track...",
+      "159": "Would you like a drink? Is there no Earl Grey left?",
+      "160": "I am not in the mood...",
+      "162": "The culprit...",
+      "163": "knew Voysey's background extremely well...",
+      "164": "You look troubled.",
+      "165": "...",
+      "166": "I hate this cut-and-dried Western logic.",
+      "167": "You primitive...",
+      "168": "Even the Russian spies never knew Lord Ashby's butler was deputy chief of British Intelligence Action. The disguise was perfect. Who could see through it?",
+      "169": "...",
+      "170": "Who saw through it?",
+      "171": "M",
+      "172": "E",
+      "173": "D",
+      "174": "E",
+      "175": "did.",
+      "176": "How naive. She knew from the start. Who else could know something only his partner should have known?",
+      "177": "...",
+      "178": "Say it plainly.",
+      "179": "You are the culprit.",
+      "180": "You are the culprit.",
+      "181": "You are the culprit!",
+      "182": "It is you, is it not?",
+      "183": "It is you, is it not?",
+      "184": "My lord. You are the culprit.",
+      "185": "No one else could be the culprit now, could they?",
+      "186": "Is it not you... the culprit?",
+      "187": "...",
+      "188": "This was enjoyable, Mr. Yamada...",
+      "189": "A little forceful, but it does amount to a leading interrogation.",
+      "190": "But your case is weak. Even if it were true, you have no proof. I had no time to write the manifesto in the captain's cabin, did I? Like you, I am only another victim threatened by the bomber.",
+      "191": "Ugh...",
+      "192": "I don't trust you.",
+      "193": "I do not ask you to trust a spy. But you have misjudged me. Admit defeat.",
+      "194": "Not a chance.",
+      "195": "You think so?",
+      "196": "Very well. I shall forgive your insolence as a sign of fighting spirit...",
+      "197": "...",
+      "198": "If the culprit sinks the ship, both you and Russia's Wing die! Why is a mere victim so eager to obtain the Wing now...? Almost as if you were the culprit...",
+      "199": "The deputy chief died for the Wing.",
+      "200": "You misunderstand me. I take pride in my duty too. Finding what Russia's Wing truly is may be the only way to honor the deputy chief. When this is over, am I not the only man who can take the Wing back to Britain in his place?",
+      "201": "Damn it... A gentlemanly culprit would not keep making excuses when cornered...",
+      "202": "Proof, then. If we live to see tomorrow morning, present it then.",
+      "203": "What if the culprit gets it first?! Find Russia's Wing! The deputy chief said 'that woman.' Either the Wing or the killer is a woman! You said you would settle this as the man on the ground, Mr. Yamada. Those work clothes suit you. Get to work!",
+      "204": "No... Ashby, you are starting to slip. You have set off my instincts.",
+      "205": "Is that a threat from the culprit?",
+      "206": "The logic of division of labor. I shall eat California oranges at a heated table.",
+      "207": "Yuko... I failed again...",
+      "208": "That translation is not accurate. A kotatsu is a kotatsu."
+    },
+    "forbidden_text_patterns": [
+      "(?i)Russian Mist",
+      "(?i)Russian Wolf",
+      "(?i)\\bDirecktor\\b",
+      "(?i)Queen's English",
+      "(?i)Action 3"
+    ]
+  },
+  "text_mode": "prose",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-12\\i\\outputs\\nostalgia1907_translation_profiles\\PART3B.json"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "translate",
+      "text": "Center Hall",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "Yamada Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "Chanel",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "...None of the men you brought were here... This place has been ransacked...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 4,
+      "policy": "translate",
+      "text": "Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "Voysey!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "Voysey",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "...Yamada... Th-that man is...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "One of Tainui Adjell's men... Damn it... I still have more to tell you...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "Listen carefully!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "...Mr. Yamada...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "I learned the secret of \"Mede\"...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "That woman is Salome... Everyone involved with her dies...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "Run! You still have... Voysey!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "...What's wrong? Hey, what's wrong? Come on... What happened...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 15,
+      "policy": "translate",
+      "text": "...Aah! He's dead! Aah! Somebody's dead!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 16,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 17,
+      "policy": "translate",
+      "text": "Voysey knew Mede's true identity. He was about to name Russia's Wing...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 18,
+      "policy": "translate",
+      "text": "And they killed him...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 19,
+      "policy": "translate",
+      "text": "Ashby",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 20,
+      "policy": "translate",
+      "text": "I was never told. I want answers too. I must stop Russia's Wing at any cost...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 21,
+      "policy": "translate",
+      "text": "This is no time to argue... Voysey is dead...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 22,
+      "policy": "translate",
+      "text": "Who is Tainui Adjell?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 23,
+      "policy": "translate",
+      "text": "He belongs to a Russian secret-assassination organization.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 24,
+      "policy": "translate",
+      "text": "Did they kill Genkai...?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 25,
+      "policy": "translate",
+      "text": "An assassination ring!? Even this island has one?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 26,
+      "policy": "translate",
+      "text": "Why weren't you at Genkai's funeral? You were his partner!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 27,
+      "policy": "translate",
+      "text": "I was only his liaison! Genkai alone investigated Mede.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 28,
+      "policy": "translate",
+      "text": "Don't play innocent!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 29,
+      "policy": "translate",
+      "text": "You skipped his funeral without a care!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 30,
+      "policy": "translate",
+      "text": "Nonsense! You said the Royal Suite and the cabin beside First Class were suspicious!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 31,
+      "policy": "translate",
+      "text": "What a joke!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 32,
+      "policy": "translate",
+      "text": "Enough. What did you learn?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 33,
+      "policy": "translate",
+      "text": "Tianon and Lumeranka are clean. Lumeranka only spoke as ordered...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 34,
+      "policy": "translate",
+      "text": "...You insolent brat...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 35,
+      "policy": "translate",
+      "text": "What about the Maharaja's smuggling and that old retainer?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 36,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 37,
+      "policy": "translate",
+      "text": "Listen. This case is our livelihood. We have to find a way to profit from it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 38,
+      "policy": "translate",
+      "text": "Do you think you can speak to me that way?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 39,
+      "policy": "translate",
+      "text": "I don't care anymore!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 40,
+      "policy": "translate",
+      "text": "If you want Russia's Wing behind bars, keep quiet and leave this to me!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 41,
+      "policy": "translate",
+      "text": "Tonight. I will be in my cabin.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 42,
+      "policy": "translate",
+      "text": "I will get only you aboard the steamer!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 43,
+      "policy": "translate",
+      "text": "Then strike at the tiger's den!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 44,
+      "policy": "translate",
+      "text": "Second-Class Cabin",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 45,
+      "policy": "translate",
+      "text": "Calm down... Think it through. There has to be a way.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 46,
+      "policy": "translate",
+      "text": "Aft Deck",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 47,
+      "policy": "translate",
+      "text": "What in the world is happening here...? Who is setting whom up?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 48,
+      "policy": "translate",
+      "text": "Ashby said he and Voysey reported on Russia's Wing to Britain... Yet Voysey clearly did not trust him.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 49,
+      "policy": "translate",
+      "text": "The bomb could kill us all. Why expose Russia's Wing now?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 50,
+      "policy": "translate",
+      "text": "The evidence points to a state intelligence service... Britain, perhaps... or Germany, as Voysey suspected...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 51,
+      "policy": "translate",
+      "text": "Is Ashby truly the British agent Voysey said he was?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 52,
+      "policy": "translate",
+      "text": "Wait... If Ashby is the culprit, it all fits. Voysey could not expose Russia's Wing, so Ashby made the crew draw it out...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 53,
+      "policy": "translate",
+      "text": "No... I can't stand it anymore!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 54,
+      "policy": "translate",
+      "text": "I'll beat him senseless!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 55,
+      "policy": "translate",
+      "text": "Royal Suite A",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 56,
+      "policy": "translate",
+      "text": "He isn't a Russian spy. He's clearly working for a third country. He plans to steal Russia's Wing while Britain and Russia fight over it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 57,
+      "policy": "translate",
+      "text": "Suppose he is?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 58,
+      "policy": "translate",
+      "text": "Then hear me out!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 59,
+      "policy": "translate",
+      "text": "Open your ears and listen carefully.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 60,
+      "policy": "translate",
+      "text": "If you'll spare me the grand speech.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 61,
+      "policy": "translate",
+      "text": "I picked that up in London.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 62,
+      "policy": "translate",
+      "text": "May I?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 63,
+      "policy": "translate",
+      "text": "Briefly, please.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 64,
+      "policy": "translate",
+      "text": "Don't rush me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 65,
+      "policy": "translate",
+      "text": "A third country had Voysey under surveillance. Once Voysey contacted Russia's Wing and Britain secured it, their agent planned to steal it from him, sink the ship, and escape.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 66,
+      "policy": "translate",
+      "text": "Why sink the ship as well?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 67,
+      "policy": "translate",
+      "text": "That's the point.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 68,
+      "policy": "translate",
+      "text": "A spy from a third country is aboard this ship.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 69,
+      "policy": "translate",
+      "text": "And what does that have to do with your profession?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 70,
+      "policy": "translate",
+      "text": "Everything!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 71,
+      "policy": "translate",
+      "text": "That third country has a reason to want me dead!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 72,
+      "policy": "translate",
+      "text": "...Fascinating, Yamada. Then lay out your case logically.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 73,
+      "policy": "translate",
+      "text": "Shut up!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 74,
+      "policy": "translate",
+      "text": "Why would they need to kill you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 75,
+      "policy": "translate",
+      "text": "I'm the one being targeted.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 76,
+      "policy": "translate",
+      "text": "Exactly. He must make the Nostalgia vanish without a trace.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 77,
+      "policy": "translate",
+      "text": "But why?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 78,
+      "policy": "translate",
+      "text": "All this convoluted reasoning is giving me a headache... I'm sick of it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 79,
+      "policy": "translate",
+      "text": "Should I stop?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 80,
+      "policy": "translate",
+      "text": "Go on.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 81,
+      "policy": "translate",
+      "text": "British Intelligence Action... Britain's foremost intelligence agency.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 82,
+      "policy": "translate",
+      "text": "Even among spies, they're elite.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 83,
+      "policy": "translate",
+      "text": "British intelligence has kept watch over the Russia's Wing affair. Their number two man even came out in person.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 84,
+      "policy": "translate",
+      "text": "He heads their operations. Nothing escapes him.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 85,
+      "policy": "translate",
+      "text": "Such dedication.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 86,
+      "policy": "translate",
+      "text": "...Are you following me?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 87,
+      "policy": "translate",
+      "text": "Listen. At Southampton, British intelligence watched Voysey and waited for Russia's Wing to contact him. Once they entered British waters, every Russian spy was to be arrested and Russia's Wing taken to London.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 88,
+      "policy": "translate",
+      "text": "Of course. I led that operation under orders from London.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 89,
+      "policy": "translate",
+      "text": "So far, so good.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 90,
+      "policy": "translate",
+      "text": "In other words, if anything happened, British intelligence would be on it at once.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 91,
+      "policy": "translate",
+      "text": "Naturally.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 92,
+      "policy": "translate",
+      "text": "Now, could you let me finish my own explanation?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 93,
+      "policy": "translate",
+      "text": "Fine. Continue.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 94,
+      "policy": "translate",
+      "text": "Enjoy your confidence while it lasts.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 95,
+      "policy": "translate",
+      "text": "Suppose the spy seized Russia's Wing at sea. The moment he returned to Britain, his identity would be exposed. British Intelligence Action is the country's finest agency. Once it knew who had touched the Wing, it would follow him anywhere.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 96,
+      "policy": "translate",
+      "text": "So he would sink the ship and make it look like an accident...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 97,
+      "policy": "translate",
+      "text": "But, Mr. Yamada, he never made contact with Russia's Wing.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 98,
+      "policy": "translate",
+      "text": "Exactly.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 99,
+      "policy": "translate",
+      "text": "That's an absurd accusation!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 100,
+      "policy": "translate",
+      "text": "Shall we work it out together?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 101,
+      "policy": "translate",
+      "text": "Your delusions have become pathological.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 102,
+      "policy": "translate",
+      "text": "Things do not always go according to plan.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 103,
+      "policy": "translate",
+      "text": "Voysey still had not caught Mede... even at the last moment before sailing.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 104,
+      "policy": "translate",
+      "text": "Who hadn't?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 105,
+      "policy": "translate",
+      "text": "He hadn't.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 106,
+      "policy": "translate",
+      "text": "...What were we talking about again...?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 107,
+      "policy": "translate",
+      "text": "Voysey failed to catch Mede! So what?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 108,
+      "policy": "translate",
+      "text": "Exactly. That is why the saboteur needed to trap everyone aboard.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 109,
+      "policy": "translate",
+      "text": "He destroyed the lifeboats and cut off our escape.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 110,
+      "policy": "translate",
+      "text": "Next, he destroyed the radio equipment.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 111,
+      "policy": "translate",
+      "text": "That was the finishing touch.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 112,
+      "policy": "translate",
+      "text": "We...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 113,
+      "policy": "translate",
+      "text": "had nowhere left to run.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 114,
+      "policy": "translate",
+      "text": "Then he blew up the engine room.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 115,
+      "policy": "translate",
+      "text": "No one ashore knows exactly what happened after that.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 116,
+      "policy": "translate",
+      "text": "Then, without lifting a finger, he could make us trapped passengers...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 117,
+      "policy": "translate",
+      "text": "search for Russia's Wing...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 118,
+      "policy": "translate",
+      "text": "and expose it for him.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 119,
+      "policy": "translate",
+      "text": "Quite a piece of sophistry. Interesting.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 120,
+      "policy": "translate",
+      "text": "Now, this is where it gets interesting for you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 121,
+      "policy": "translate",
+      "text": "You know Indian poker? You are the one person who cannot see what kind of man you are!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 122,
+      "policy": "translate",
+      "text": "The onlooker can see it at a glance!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 123,
+      "policy": "translate",
+      "text": "Brutally simple!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 124,
+      "policy": "translate",
+      "text": "H-how... how rude!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 125,
+      "policy": "translate",
+      "text": "Try to remain a gentleman to the end.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 126,
+      "policy": "translate",
+      "text": "What are you plotting...?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 127,
+      "policy": "translate",
+      "text": "Now, wait.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 128,
+      "policy": "translate",
+      "text": "The threat was meant to force the passengers to reveal who Russia's Wing is.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 129,
+      "policy": "translate",
+      "text": "By that hypothesis...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 130,
+      "policy": "translate",
+      "text": "the culprit",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 131,
+      "policy": "translate",
+      "text": "must have known Voysey's identity and reason for boarding from the start. Right?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 132,
+      "policy": "translate",
+      "text": "On what grounds...? What exactly are you trying to prove?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 133,
+      "policy": "translate",
+      "text": "This is getting exciting!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 134,
+      "policy": "translate",
+      "text": "Enough of your games.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 135,
+      "policy": "translate",
+      "text": "Wipe your brow.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 136,
+      "policy": "translate",
+      "text": "I-I am not sweating!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 137,
+      "policy": "translate",
+      "text": "True, you are not sweating. Then why are you so rattled?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 138,
+      "policy": "translate",
+      "text": "How does it feel to be interrogated? I have been forced to play this ugly charade against decent people all along!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 139,
+      "policy": "translate",
+      "text": "Did you come here to whine?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 140,
+      "policy": "translate",
+      "text": "No.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 141,
+      "policy": "translate",
+      "text": "Come now.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 142,
+      "policy": "translate",
+      "text": "C",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 143,
+      "policy": "translate",
+      "text": "L",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 144,
+      "policy": "translate",
+      "text": "I",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 145,
+      "policy": "translate",
+      "text": "MAX!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 146,
+      "policy": "translate",
+      "text": "You...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 147,
+      "policy": "translate",
+      "text": "No one knew it... Voysey's true identity.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 148,
+      "policy": "translate",
+      "text": "Was that really so? There is no way to verify it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 149,
+      "policy": "translate",
+      "text": "Shall we review it once more?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 150,
+      "policy": "translate",
+      "text": "The culprit's actions...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 151,
+      "policy": "translate",
+      "text": "center on Voysey's operation to recover Russia's Wing.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 152,
+      "policy": "translate",
+      "text": "Not Voysey himself! Everything centers on the Wing.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 153,
+      "policy": "translate",
+      "text": "My sense is the Russian spies never realized Voysey's true identity.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 154,
+      "policy": "translate",
+      "text": "Did you ask the Russian spies? Did those doomed criminals politely admit they knew nothing?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 155,
+      "policy": "translate",
+      "text": "They as good as said it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 156,
+      "policy": "translate",
+      "text": "I used every scrap of imagination I had to win this game. For the moment, it was my only asset...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 157,
+      "policy": "translate",
+      "text": "Fantasy impairs practical judgment...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 158,
+      "policy": "translate",
+      "text": "You have gone off track...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 159,
+      "policy": "translate",
+      "text": "Would you like a drink? Is there no Earl Grey left?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 160,
+      "policy": "translate",
+      "text": "I am not in the mood...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 161,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 162,
+      "policy": "translate",
+      "text": "The culprit...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 163,
+      "policy": "translate",
+      "text": "knew Voysey's background extremely well...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 164,
+      "policy": "translate",
+      "text": "You look troubled.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 165,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 166,
+      "policy": "translate",
+      "text": "I hate this cut-and-dried Western logic.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 167,
+      "policy": "translate",
+      "text": "You primitive...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 168,
+      "policy": "translate",
+      "text": "Even the Russian spies never knew Lord Ashby's butler was deputy chief of British Intelligence Action. The disguise was perfect. Who could see through it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 169,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 170,
+      "policy": "translate",
+      "text": "Who saw through it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 171,
+      "policy": "translate",
+      "text": "M",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 172,
+      "policy": "translate",
+      "text": "E",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 173,
+      "policy": "translate",
+      "text": "D",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 174,
+      "policy": "translate",
+      "text": "E",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 175,
+      "policy": "translate",
+      "text": "did.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 176,
+      "policy": "translate",
+      "text": "How naive. She knew from the start. Who else could know something only his partner should have known?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 177,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 178,
+      "policy": "translate",
+      "text": "Say it plainly.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 179,
+      "policy": "translate",
+      "text": "You are the culprit.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 180,
+      "policy": "translate",
+      "text": "You are the culprit.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 181,
+      "policy": "translate",
+      "text": "You are the culprit!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 182,
+      "policy": "translate",
+      "text": "It is you, is it not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 183,
+      "policy": "translate",
+      "text": "It is you, is it not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 184,
+      "policy": "translate",
+      "text": "My lord. You are the culprit.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 185,
+      "policy": "translate",
+      "text": "No one else could be the culprit now, could they?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 186,
+      "policy": "translate",
+      "text": "Is it not you... the culprit?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 187,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 188,
+      "policy": "translate",
+      "text": "This was enjoyable, Mr. Yamada...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 189,
+      "policy": "translate",
+      "text": "A little forceful, but it does amount to a leading interrogation.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 190,
+      "policy": "translate",
+      "text": "But your case is weak. Even if it were true, you have no proof. I had no time to write the manifesto in the captain's cabin, did I? Like you, I am only another victim threatened by the bomber.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 191,
+      "policy": "translate",
+      "text": "Ugh...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 192,
+      "policy": "translate",
+      "text": "I don't trust you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 193,
+      "policy": "translate",
+      "text": "I do not ask you to trust a spy. But you have misjudged me. Admit defeat.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 194,
+      "policy": "translate",
+      "text": "Not a chance.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 195,
+      "policy": "translate",
+      "text": "You think so?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 196,
+      "policy": "translate",
+      "text": "Very well. I shall forgive your insolence as a sign of fighting spirit...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 197,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 198,
+      "policy": "translate",
+      "text": "If the culprit sinks the ship, both you and Russia's Wing die! Why is a mere victim so eager to obtain the Wing now...? Almost as if you were the culprit...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 199,
+      "policy": "translate",
+      "text": "The deputy chief died for the Wing.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 200,
+      "policy": "translate",
+      "text": "You misunderstand me. I take pride in my duty too. Finding what Russia's Wing truly is may be the only way to honor the deputy chief. When this is over, am I not the only man who can take the Wing back to Britain in his place?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 201,
+      "policy": "translate",
+      "text": "Damn it... A gentlemanly culprit would not keep making excuses when cornered...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 202,
+      "policy": "translate",
+      "text": "Proof, then. If we live to see tomorrow morning, present it then.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 203,
+      "policy": "translate",
+      "text": "What if the culprit gets it first?! Find Russia's Wing! The deputy chief said 'that woman.' Either the Wing or the killer is a woman! You said you would settle this as the man on the ground, Mr. Yamada. Those work clothes suit you. Get to work!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 204,
+      "policy": "translate",
+      "text": "No... Ashby, you are starting to slip. You have set off my instincts.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 205,
+      "policy": "translate",
+      "text": "Is that a threat from the culprit?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 206,
+      "policy": "translate",
+      "text": "The logic of division of labor. I shall eat California oranges at a heated table.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 207,
+      "policy": "translate",
+      "text": "Yuko... I failed again...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 208,
+      "policy": "translate",
+      "text": "That translation is not accurate. A kotatsu is a kotatsu.",
+      "layout_policy": "adaptive"
+    }
+  ]
+}

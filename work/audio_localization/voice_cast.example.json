@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "backend": "kokoro-onnx",
+  "policy": "Generic non-imitative English voices; no voice cloning.",
+  "default_voice": "am_michael",
+  "default_speed": 1.0,
+  "default_language": "en-us",
+  "speakers": {
+    "Ilyu": {
+      "voice": "af_bella",
+      "speed": 1.0,
+      "note": "Example only; review before full synthesis."
+    },
+    "Kasuke": {
+      "voice": "am_michael",
+      "speed": 1.0,
+      "note": "Example only; review before full synthesis."
+    }
+  }
+}

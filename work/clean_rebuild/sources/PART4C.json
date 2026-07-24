@@ -1,0 +1,385 @@
+{
+  "schema_version": 1,
+  "chapter": "PART4C",
+  "record_count": 60,
+  "retail_mes": {
+    "sha256": "613D6D5A931A52DC3C19495D632F3DD81EEFA41BC9BA845A10D433BEF3D009C1",
+    "size": 4557,
+    "dynamic_glyph_count": 158
+  },
+  "retail_scn": {
+    "sha256": "DA9BE0FAA4AE60CD14575F711076355A2E71DC24A3281A04D33B50DEE57929C5",
+    "size": 1112
+  },
+  "playable_reference_mes": {
+    "sha256": "DDD8FF538FC5959FD8EE441F8B09955303C93DB855C2CF5F0DB8EA1E5FA77007",
+    "size": 8728,
+    "dynamic_glyph_count": 297
+  },
+  "profile": null,
+  "text_mode": "render-ready",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-21\\in-c-users-thema-documents-codex\\work\\act4_translation\\built\\PART4C\\PART4C_manifest.json"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "translate",
+      "text": "Rear Deck",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "Yamada Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "...One more... Tainui Adjell's assassin is hiding aboard.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 4,
+      "policy": "translate",
+      "text": "He is the one who ordered Kirikov to infiltrate Japan.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "Ilyu",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "Yes, that is right...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "Yeah?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "Is that right?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "Yeah?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "Yes. He is the one who ordered Kirikov to infiltrate Japan.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "I see.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "We cannot possibly let him escape.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "Yeah. He will definitely come back before the ship reaches port.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "What a nuisance.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 15,
+      "policy": "translate",
+      "text": "The assassin's identity has been found, though.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 16,
+      "policy": "translate",
+      "text": "You think so too?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 17,
+      "policy": "translate",
+      "text": "Paris Detective",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 18,
+      "policy": "translate",
+      "text": "Heh. How strange... We agree. I understand a little of what you are feeling.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 19,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 20,
+      "policy": "translate",
+      "text": "Cargo Hold",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 21,
+      "policy": "translate",
+      "text": "Center Hall",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 22,
+      "policy": "translate",
+      "text": "Old Karl",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 23,
+      "policy": "translate",
+      "text": "Kasuke and Ilyusha are not the culprits.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 24,
+      "policy": "translate",
+      "text": "Captain",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 25,
+      "policy": "translate",
+      "text": "I heard their conversation through the speaking tube. I released them. I wonder where they went. This evening's star attractions. What a shame.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 26,
+      "policy": "translate",
+      "text": "Medea races through the land of mist and lakes... fleet-footed beyond pursuit... and beyond, the curtain.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 27,
+      "policy": "translate",
+      "text": "Ho ho. Bravo.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 28,
+      "policy": "translate",
+      "text": "Rear Deck",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 29,
+      "policy": "translate",
+      "text": "Dunant",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 30,
+      "policy": "translate",
+      "text": "Voysey? I killed him. Black was a slight miscalculation.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 31,
+      "policy": "translate",
+      "text": "There is one more. I will kill him too. I have laid hands on him again and again.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 32,
+      "policy": "translate",
+      "text": "You were close to Ilyusha. Anyone approaching the Russian Fog would suspect a man from British Intelligence. I am Times Adjell, a professional assassin of the Imperial Russian execution bureau.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 33,
+      "policy": "translate",
+      "text": "...Is the work interesting?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 34,
+      "policy": "translate",
+      "text": "Want to try it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 35,
+      "policy": "translate",
+      "text": "It is fiction. Reality. There is no need to bind yourself to a role assigned in a few minutes.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 36,
+      "policy": "translate",
+      "text": "I see. So you were bought by Ashby some time ago?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 37,
+      "policy": "translate",
+      "text": "You told Ashby that he was British Intelligence. He believed I was a mediocre detective.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 38,
+      "policy": "translate",
+      "text": "Dunant's Recollection",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 39,
+      "policy": "translate",
+      "text": "Ashby",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 40,
+      "policy": "translate",
+      "text": "In Paris, I had you assigned to a dreary background investigation, did I not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 41,
+      "policy": "translate",
+      "text": "I can provide you a wider intelligence network jointly operated by Britain and Japan. Then you can do more political work.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 42,
+      "policy": "translate",
+      "text": "Or else, get swept up in the shipwreck and let the fish eat your rotten corpse.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 43,
+      "policy": "translate",
+      "text": "Cooperate with me, Monsieur Dunant.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 44,
+      "policy": "translate",
+      "text": "Ashby was still young. A spy who used bombs was something unheard of.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 45,
+      "policy": "translate",
+      "text": "You really threw yourself into it, did you not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 46,
+      "policy": "translate",
+      "text": "You handed Kirikov to Ashby as a source of disinformation so he could infiltrate the Japanese Empire. Excellent.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 47,
+      "policy": "translate",
+      "text": "Once I eliminate you, my mission is complete. Ilyusha Grancelius, you belong to the Emperor as long as you live. It seems you must choose death.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 48,
+      "policy": "translate",
+      "text": "Ha! What a comedy. You cannot bind a life with that nonsense, idiot.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 49,
+      "policy": "translate",
+      "text": "Fool. I am the last samurai of this century.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 50,
+      "policy": "translate",
+      "text": "Ilyusha, you are going to die too.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 51,
+      "policy": "translate",
+      "text": "No one is pursuing me...",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 52,
+      "policy": "translate",
+      "text": "Run away with me?",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 53,
+      "policy": "translate",
+      "text": "...Me?",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 54,
+      "policy": "translate",
+      "text": "No. A spy and a salesman are a bad match.",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 55,
+      "policy": "translate",
+      "text": "You cannot challenge me...",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 56,
+      "policy": "translate",
+      "text": "You are a foolish man.",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 57,
+      "policy": "translate",
+      "text": "...Again, alone...",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 58,
+      "policy": "translate",
+      "text": "I survived...",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 59,
+      "policy": "translate",
+      "text": "Now, right here.",
+      "layout_policy": "fixed"
+    }
+  ]
+}

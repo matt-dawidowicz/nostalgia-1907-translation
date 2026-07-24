@@ -1,0 +1,398 @@
+{
+  "schema_version": 1,
+  "chapter": "STAFF",
+  "record_count": 62,
+  "retail_mes": {
+    "sha256": "DE21E4D585612B31981FF434ABAE21E8AB382BA8B7729714D5D291248A35FF12",
+    "size": 2952,
+    "dynamic_glyph_count": 102
+  },
+  "retail_scn": {
+    "sha256": "9027BA4AF7C29FEE82FF17D849EFBA06F44B7CDCDF74C8F07E909CAEB3C17DAC",
+    "size": 419
+  },
+  "playable_reference_mes": {
+    "sha256": "5866DC6EBBB7BD7D9DB44CF47D25CB957CC62FB9A26A2F048A854B07BE460121",
+    "size": 6808,
+    "dynamic_glyph_count": 230
+  },
+  "profile": null,
+  "text_mode": "render-ready",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-21\\in-c-users-thema-documents-codex\\work\\staff_translation\\built\\STAFF_manifest.json"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "translate",
+      "text": "                VOICE CAST              ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "                  Kasuke                ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "            Hitoshi Kindaichi           ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "            Ilyusha & Tianon            ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 4,
+      "policy": "translate",
+      "text": "              Miyuki Kikuchi            ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "            Ashby & Kirikov             ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "              Masao Okada               ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "            Voysey & Captain            ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "              Isao Kimura               ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "Dunant                                  ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "              Hisaji Yamano             ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "Chief Engineer / Head Cook / Dept. Head ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "            Katsuyoshi Mikami           ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "        Old Karl / Ship's Doctor        ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "            Shinichi Segawa             ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 15,
+      "policy": "translate",
+      "text": "        Black / Chief Navigator         ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 16,
+      "policy": "translate",
+      "text": "              Totaro Kudo               ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 17,
+      "policy": "translate",
+      "text": "            Charlie / Bosun             ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 18,
+      "policy": "translate",
+      "text": "            Toshikazu Fujiwara          ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 19,
+      "policy": "translate",
+      "text": "Ruthie                                    ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 20,
+      "policy": "translate",
+      "text": "            Yumiko Moriyama             ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 21,
+      "policy": "translate",
+      "text": "                Stravinsky              ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 22,
+      "policy": "translate",
+      "text": "            Shimoki Matsuzaki           ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 23,
+      "policy": "translate",
+      "text": "Lumeranka                               ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 24,
+      "policy": "translate",
+      "text": "            Naoyuki Tanizaki            ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 25,
+      "policy": "translate",
+      "text": "            Locke / Passenger           ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 26,
+      "policy": "translate",
+      "text": "              Jun Yoshida               ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 27,
+      "policy": "translate",
+      "text": "                  Fred                  ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 28,
+      "policy": "translate",
+      "text": "              Shungo Saeki              ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 29,
+      "policy": "translate",
+      "text": "Fitz                                    ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 30,
+      "policy": "translate",
+      "text": "      Yuko Sugano / Sadako Sugawara     ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 31,
+      "policy": "translate",
+      "text": "Sunmin                                  ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 32,
+      "policy": "translate",
+      "text": "              Hideo Okada               ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 33,
+      "policy": "translate",
+      "text": "                Bartender               ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 34,
+      "policy": "translate",
+      "text": "                Gen Chiba               ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 35,
+      "policy": "translate",
+      "text": "              MEGA-CD STAFF             ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 36,
+      "policy": "translate",
+      "text": "              Main Program              ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 37,
+      "policy": "translate",
+      "text": "            Takashi Yoshikawa           ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 38,
+      "policy": "translate",
+      "text": "              Sub Program               ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 39,
+      "policy": "translate",
+      "text": "              Naoki Tachino             ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 40,
+      "policy": "translate",
+      "text": "                Graphics                ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 41,
+      "policy": "translate",
+      "text": "    Hiroshi Takahashi / Kazuhisa Ikeda  ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 42,
+      "policy": "translate",
+      "text": "            Music Composition           ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 43,
+      "policy": "translate",
+      "text": "              Yukie Marikawa            ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 44,
+      "policy": "translate",
+      "text": "            Music Conversion            ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 45,
+      "policy": "translate",
+      "text": "            Jitsuo Nakayama             ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 46,
+      "policy": "translate",
+      "text": "            Production Manager          ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 47,
+      "policy": "translate",
+      "text": "              Atsushi Aoki              ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 48,
+      "policy": "translate",
+      "text": "              Coordinator               ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 49,
+      "policy": "translate",
+      "text": "              Akio Watanabe             ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 50,
+      "policy": "translate",
+      "text": "                Producer                ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 51,
+      "policy": "translate",
+      "text": "            Nobukazu Watanabe           ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 52,
+      "policy": "translate",
+      "text": "          ORIGINAL SOUNDTRACK           ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 53,
+      "policy": "translate",
+      "text": "                  Staff                 ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 54,
+      "policy": "translate",
+      "text": "          Composition / Vocals          ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 55,
+      "policy": "translate",
+      "text": "          Arrangement / Lyrics          ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 56,
+      "policy": "translate",
+      "text": "            Kazuhide Sasuga             ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 57,
+      "policy": "translate",
+      "text": "                Director                ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 58,
+      "policy": "translate",
+      "text": "            Yoshiji Yokoyama            ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 59,
+      "policy": "translate",
+      "text": "              Sur De Wave               ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 60,
+      "policy": "translate",
+      "text": "            TAKERU CO., LTD             ",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 61,
+      "policy": "translate",
+      "text": "                  1991                  ",
+      "layout_policy": "fixed"
+    }
+  ]
+}

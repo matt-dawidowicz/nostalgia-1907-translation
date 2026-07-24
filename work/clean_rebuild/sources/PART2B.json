@@ -1,0 +1,674 @@
+{
+  "schema_version": 1,
+  "chapter": "PART2B",
+  "record_count": 102,
+  "retail_mes": {
+    "sha256": "E05FDE4B612BAFD06CE684FD2A3D36D6D06C6FCAADF4AC2737BDCB5151C23C00",
+    "size": 6300,
+    "dynamic_glyph_count": 184
+  },
+  "retail_scn": {
+    "sha256": "591DFE0854880437D4BB022E3E10AD77D1552B37EA88D4F266ED896EFE65FB65",
+    "size": 1601
+  },
+  "playable_reference_mes": {
+    "sha256": "DAE111006AE741C37A5ACAFC3D7D9D0FF89FB2F91B80BE3197CB15CE444D3D5D",
+    "size": 15682,
+    "dynamic_glyph_count": 550
+  },
+  "profile": {
+    "schema_version": 1,
+    "name": "PART2B",
+    "choice_render_cell_limit": 18,
+    "require_choice_segments": true,
+    "exclude_choice_segments_from_wrap": true,
+    "infer_scn_layouts": true,
+    "validate_runtime_row_boundaries": true,
+    "validate_text_hygiene": true,
+    "validate_wrapped_text_integrity": true,
+    "validate_scn_floating_row_limits": true,
+    "scn_dialogue_layout": {
+      "first": 12,
+      "continuation": 10
+    },
+    "scn_continuation_layout": {
+      "first": 10,
+      "continuation": 10
+    },
+    "scn_dialogue_runtime_layout": {
+      "first": 12,
+      "continuation": 11
+    },
+    "scn_continuation_runtime_layout": {
+      "first": 11,
+      "continuation": 11
+    },
+    "required_text_exact": {
+      "2": "Voysey",
+      "79": "Locke",
+      "101": "Yes, Director!"
+    },
+    "forbidden_text_patterns": [
+      "(?i)\\bDirecktor\\b",
+      "(?i)^Lock$",
+      "(?i)Queen's English"
+    ]
+  },
+  "text_mode": "render-ready",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-12\\i\\outputs\\nostalgia1907_act2b\\PART2B_english_manifest.json"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "translate",
+      "text": "Center Hall",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "Yamada Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "Voysey",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "I'm Aubrey Voysey. I've been sitting here all along, waiting for Lord Ashby to arrive.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 4,
+      "policy": "translate",
+      "text": "Lord Ashby?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "Robert Ashby? The maritime-insurance solicitor?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "Ah, another hired hand. I'm Yamada Kasuke. Pleased to meet you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "Lord Ashby is a gentleman, and I am a gentleman in a gentleman's service.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "Please do not make light of him. Ahem.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "Awfully stiff for a chair!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "Anyway, did anyone pass through here?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "I saw no one.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "What a strange gentleman... Why is he so formal with a chair?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "...He hasn't noticed me either.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 15,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 16,
+      "policy": "translate",
+      "text": "First-Class Cabin Block",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 17,
+      "policy": "translate",
+      "text": "I heard the radio in First-Class Cabin A. From Lark Deck, these stairs are the only way up here. The culprit climbed them... and so will I!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 18,
+      "policy": "translate",
+      "text": "Royal Suite Block",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 19,
+      "policy": "translate",
+      "text": "I'm back on the Promenade Deck by the Royal Suites. I'll circle around through the passage ahead.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 20,
+      "policy": "translate",
+      "text": "Confectionery Counter",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 21,
+      "policy": "translate",
+      "text": "Hello, Canal.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 22,
+      "policy": "translate",
+      "text": "Fitz",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 23,
+      "policy": "translate",
+      "text": "Good morning, Detective.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 24,
+      "policy": "translate",
+      "text": "A question: did anyone pass this way?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 25,
+      "policy": "translate",
+      "text": "No one did. See? Aren't I helpful?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 26,
+      "policy": "translate",
+      "text": "Very tempting.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 27,
+      "policy": "translate",
+      "text": "Detective, huh...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 28,
+      "policy": "translate",
+      "text": "What a fine woman.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 29,
+      "policy": "translate",
+      "text": "...I'm scared...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 30,
+      "policy": "translate",
+      "text": "I thought fear would be the least of my worries.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 31,
+      "policy": "translate",
+      "text": "On such a small ship, I never imagined I'd feel this lonely...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 32,
+      "policy": "translate",
+      "text": "Okay. I'll buy you a little cake as a reward.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 33,
+      "policy": "translate",
+      "text": "Keep watch on the passage to the Promenade Deck.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 34,
+      "policy": "translate",
+      "text": "From here there are stairs and two Royal Suite passages, A and B... Heh, heh, heh!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 35,
+      "policy": "translate",
+      "text": "Starboard Passage",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 36,
+      "policy": "translate",
+      "text": "The path splits. I'll take the starboard side.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 37,
+      "policy": "translate",
+      "text": "Side Promenade Deck",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 38,
+      "policy": "translate",
+      "text": "Ahead are stairs to the Boat Deck and a passage to Center Hall. Keep moving.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 39,
+      "policy": "translate",
+      "text": "Chanel",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 40,
+      "policy": "translate",
+      "text": "Look, Stra. There's an idiot investigating the ship.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 41,
+      "policy": "translate",
+      "text": "Stra",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 42,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 43,
+      "policy": "translate",
+      "text": "You fool!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 44,
+      "policy": "translate",
+      "text": "Ask about the investigation.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 45,
+      "policy": "translate",
+      "text": "Speak to them.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 46,
+      "policy": "translate",
+      "text": "I can't keep up with young people...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 47,
+      "policy": "translate",
+      "text": "What are you doing here?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 48,
+      "policy": "translate",
+      "text": "Just chatting. I'm a chorus girl with the band. You saw my show, right? Did it move you? This is Stravinsky. He's Russian... and far too shy.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 49,
+      "policy": "translate",
+      "text": "C-Cut it out, Coco! Don't stare at me... I'm a composer. I came from Russia in search of freedom. I can't let my identity get out!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 50,
+      "policy": "translate",
+      "text": "Eeeek!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 51,
+      "policy": "translate",
+      "text": "Stop! You'll expose me!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 52,
+      "policy": "translate",
+      "text": "Did anyone pass this way?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 53,
+      "policy": "translate",
+      "text": "Uh... I don't think so.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 54,
+      "policy": "translate",
+      "text": "...I'll turn back and try another route.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 55,
+      "policy": "translate",
+      "text": "Side Promenade Deck",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 56,
+      "policy": "translate",
+      "text": "This passage leads to the Boat Deck and Center Hall. Back to Center Hall.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 57,
+      "policy": "translate",
+      "text": "Center Hall, 2F",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 58,
+      "policy": "translate",
+      "text": "Old Karl",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 59,
+      "policy": "translate",
+      "text": "You look awfully grim, Kasuke.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 60,
+      "policy": "translate",
+      "text": "Lucky!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 61,
+      "policy": "translate",
+      "text": "Grandpa Karl! You were here?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 62,
+      "policy": "translate",
+      "text": "Sorrow at parting can overwhelm the heart. Tell me, has some troublesome woman ensnared you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 63,
+      "policy": "translate",
+      "text": "Thanks...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 64,
+      "policy": "translate",
+      "text": "I have plenty to ask you!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 65,
+      "policy": "translate",
+      "text": "What troubles you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 66,
+      "policy": "translate",
+      "text": "When I was your age, I studied the human heart for fifty years and still understood nothing. And don't rely on Freud! I despise that man.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 67,
+      "policy": "translate",
+      "text": "That's fascinating, but I only want to know whether anyone passed here.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 68,
+      "policy": "translate",
+      "text": "Bah! What a trivial question! Have you nothing worthier to ask? My psychology is the finest!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 69,
+      "policy": "translate",
+      "text": "The old man has lost it...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 70,
+      "policy": "translate",
+      "text": "Sorry, but...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 71,
+      "policy": "translate",
+      "text": "Enough! Go away! I don't want to see your face!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 72,
+      "policy": "translate",
+      "text": "So I asked him.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 73,
+      "policy": "translate",
+      "text": "The culprit isn't in Center Hall... That much is clear.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 74,
+      "policy": "translate",
+      "text": "There's a door to the Boat Deck here.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 75,
+      "policy": "translate",
+      "text": "For now, I'll climb the stairs.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 76,
+      "policy": "translate",
+      "text": "Boat Deck",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 77,
+      "policy": "translate",
+      "text": "I've reached the Boat Deck...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 78,
+      "policy": "translate",
+      "text": "...Ugh.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 79,
+      "policy": "translate",
+      "text": "Locke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 80,
+      "policy": "translate",
+      "text": "Outside the Chief Engineer's room.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 81,
+      "policy": "translate",
+      "text": "No one could have come through here. Locke can confirm it. After the explosion damaged the machinery, I kept watch here. No one passed... Could the culprit really have done this alone?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 82,
+      "policy": "translate",
+      "text": "...I can't believe it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 83,
+      "policy": "translate",
+      "text": "...This isn't the way.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 84,
+      "policy": "translate",
+      "text": "Crew Meeting Room",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 85,
+      "policy": "translate",
+      "text": "Then the culprit must have gone through the crew block.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 86,
+      "policy": "translate",
+      "text": "Bridge Passage",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 87,
+      "policy": "translate",
+      "text": "...I've reached the Bridge Passage. I can go straight to the Captain's Cabin from here.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 88,
+      "policy": "translate",
+      "text": "Promenade Deck",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 89,
+      "policy": "translate",
+      "text": "Dunant",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 90,
+      "policy": "translate",
+      "text": "So the culprit is somewhere between the Royal Suite and First-Class blocks.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 91,
+      "policy": "translate",
+      "text": "After the broadcast, the culprit left the cabin where it was sent.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 92,
+      "policy": "translate",
+      "text": "Exclude the crew. Their normal movement through crew areas would attract no suspicion.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 93,
+      "policy": "translate",
+      "text": "Right. The culprit could be a passenger able to move freely through crew territory.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 94,
+      "policy": "translate",
+      "text": "Open your eyes, Kasuke! You are not a chair!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 95,
+      "policy": "translate",
+      "text": "Ashby is one suspect. As his solicitor, Voysey can cross between the two blocks as well.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 96,
+      "policy": "translate",
+      "text": "What?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 97,
+      "policy": "translate",
+      "text": "Don't let a single clue lead you by the nose.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 98,
+      "policy": "translate",
+      "text": "Think! Only people assigned to these blocks can move about without question: Royal Suite and First Class. Ashby is one of them.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 99,
+      "policy": "translate",
+      "text": "Don't be blinded by the sponsor! Question everyone who can cross between passenger and crew areas. Go!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 100,
+      "policy": "translate",
+      "text": "Absurd! Sponsor or not, everyone aboard is a suspect.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 101,
+      "policy": "translate",
+      "text": "Yes, Director!",
+      "layout_policy": "adaptive"
+    }
+  ]
+}

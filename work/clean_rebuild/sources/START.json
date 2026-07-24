@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "chapter": "START",
+  "record_count": 17,
+  "retail_mes": {
+    "sha256": "A18BEFB047BAEF93A1C110B5D0C1A81C396D1129F72C644AADD38D593BDEA11F",
+    "size": 977,
+    "dynamic_glyph_count": 38
+  },
+  "retail_scn": {
+    "sha256": "D5AEA0ADEC7EE9F61664D5C41E493E552A21B8C358FF81A140C613886E4DF15A",
+    "size": 581
+  },
+  "playable_reference_mes": {
+    "sha256": "F1125AB62BA672ED4D73E3D26F4FEE4C8285331E232EE84343A9CB4317F66221",
+    "size": 2047,
+    "dynamic_glyph_count": 96
+  },
+  "profile": {
+    "schema_version": 1,
+    "name": "START",
+    "translation_status": "locked",
+    "choice_render_cell_limit": null,
+    "require_choice_segments": true,
+    "exclude_choice_segments_from_wrap": false,
+    "scn_window_text_subtypes": [
+      39,
+      40
+    ],
+    "layout_overrides": {
+      "0": {
+        "first": 16,
+        "continuation": 16,
+        "reason": "SCN 0x24/0x28 full-screen narration uses a 32-character row stride."
+      }
+    },
+    "runtime_layout_overrides": {
+      "0": {
+        "first": 16,
+        "continuation": 16,
+        "reason": "Verified against the six visible START narration rows."
+      }
+    },
+    "role_overrides": {
+      "0": "narration"
+    },
+    "required_text_prefixes": {
+      "1": "Prologue"
+    },
+    "forbidden_text_patterns": []
+  },
+  "text_mode": "render-ready",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-12\\i\\outputs\\nostalgia1907_act2d\\profile_migration_verify\\START_manifest.json"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "translate",
+      "text": "The past blends into fantasy with much the same feeling as imagining one possible future. It was not here, in this fleeting present, that I noticed the faint mark in her left eye.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "Prologue",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "Merciless Sea",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "Underworld",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 4,
+      "policy": "translate",
+      "text": "Witch",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "A Posteriori",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "PGG",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "PO",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "Isolation",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "Search",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "Interrogation",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "Charlie",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "Suspicion",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "Mede",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "Russian Fog",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 15,
+      "policy": "translate",
+      "text": "Hull",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 16,
+      "policy": "translate",
+      "text": "Return to Port",
+      "layout_policy": "adaptive"
+    }
+  ]
+}

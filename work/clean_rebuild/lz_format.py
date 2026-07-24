@@ -1,0 +1,474 @@
+#!/usr/bin/env python3
+"""Strict reader, codec, and fixed-slot writer for Nostalgia 1907 LZ archives."""
+
+from __future__ import annotations
+
+import bisect
+from dataclasses import dataclass
+from pathlib import Path
+
+
+ENTRY_SIZE = 0x1E
+Op = tuple[str, int, int]
+
+
+class LzError(ValueError):
+    """Raised when an archive or compressed member violates the game format."""
+
+
+@dataclass(frozen=True)
+class Entry:
+    """One fixed-table archive member."""
+
+    index: int
+    name: str
+    offset: int
+    compressed_size: int
+    unpacked_size: int
+    marker: bytes
+
+
+class BackwardBits:
+    """Read the game's compressed footer bitstream from end to start."""
+
+    def __init__(self, data: bytes, position: int, buffer: int, checksum: int):
+        self.data = data
+        self.position = position
+        self.buffer = buffer
+        self.checksum = checksum
+
+    def _word(self) -> int:
+        self.position -= 4
+        if self.position < 0:
+            raise LzError("compressed bitstream underflow")
+        return int.from_bytes(self.data[self.position : self.position + 4], "big")
+
+    def bit(self) -> int:
+        """Consume one least-significant-first stream bit."""
+        value = self.buffer & 1
+        self.buffer = (self.buffer >> 1) & 0xFFFFFFFF
+        if self.buffer:
+            return value
+        word = self._word()
+        self.checksum ^= word
+        self.buffer = (0x80000000 | word >> 1) & 0xFFFFFFFF
+        return word & 1
+
+    def bits(self, count: int) -> int:
+        """Consume a big-endian numeric field from stream-order bits."""
+        value = 0
+        for _ in range(count):
+            value = (value << 1) | self.bit()
+        return value
+
+
+def decompress(payload: bytes, expected_size: int | None = None) -> bytes:
+    """Decompress one backward LZ payload and verify its XOR checksum."""
+    if len(payload) < 12 or len(payload) % 4:
+        raise LzError("compressed payload must contain at least three aligned words")
+    position = len(payload)
+
+    def previous_word() -> int:
+        nonlocal position
+        position -= 4
+        if position < 0:
+            raise LzError("compressed footer underflow")
+        return int.from_bytes(payload[position : position + 4], "big")
+
+    unpacked_size = previous_word()
+    if expected_size is not None and unpacked_size != expected_size:
+        raise LzError(
+            f"footer size {unpacked_size} does not match table size {expected_size}"
+        )
+    output = bytearray(unpacked_size)
+    output_position = unpacked_size
+    checksum = previous_word()
+    initial = previous_word()
+    reader = BackwardBits(payload, position, initial, checksum ^ initial)
+
+    def literal(count_minus_one: int) -> None:
+        nonlocal output_position
+        for _ in range(count_minus_one + 1):
+            output_position -= 1
+            if output_position < 0:
+                raise LzError("literal command overran the output")
+            output[output_position] = reader.bits(8)
+
+    def copy(distance: int, count_minus_one: int) -> None:
+        nonlocal output_position
+        if distance <= 0:
+            raise LzError("copy distance must be positive")
+        for _ in range(count_minus_one + 1):
+            output_position -= 1
+            source = output_position + distance
+            if output_position < 0 or source >= len(output):
+                raise LzError("copy command overran the output")
+            output[output_position] = output[source]
+
+    while output_position:
+        if reader.bit() == 0:
+            if reader.bit() == 0:
+                literal(reader.bits(3))
+            else:
+                copy(reader.bits(8), 1)
+            continue
+        mode = reader.bits(2)
+        if mode == 3:
+            literal(reader.bits(8) + 8)
+        elif mode < 2:
+            copy(reader.bits(9 + mode), mode + 2)
+        else:
+            count = reader.bits(8)
+            copy(reader.bits(12), count)
+    if reader.checksum:
+        raise LzError(f"compressed payload checksum is 0x{reader.checksum:08X}")
+    return bytes(output)
+
+
+def _field_bits(value: int, width: int) -> list[int]:
+    """Return a numeric field in the order the decoder consumes it."""
+    return [(value >> shift) & 1 for shift in range(width - 1, -1, -1)]
+
+
+def _op_cost(op: Op) -> int:
+    kind, length, _distance = op
+    if kind == "literal":
+        return (5 if length <= 8 else 11) + length * 8
+    return {"copy2": 10, "copy3": 12, "copy4": 13, "copylong": 23}[kind]
+
+
+def _match_length(data: bytes, position: int, distance: int, limit: int) -> int:
+    length = 0
+    while length < limit:
+        destination = position - length - 1
+        if destination < 0:
+            break
+        source = destination + distance
+        if source >= len(data) or data[destination] != data[source]:
+            break
+        length += 1
+    return length
+
+
+def _copy_candidates(
+    data: bytes, positions: list[list[int]], position: int
+) -> list[Op]:
+    max_distance = min(0xFFF, len(data) - position)
+    if position <= 0 or max_distance <= 0:
+        return []
+    matching = positions[data[position - 1]]
+    first = bisect.bisect_left(matching, position)
+    last = bisect.bisect_right(matching, position - 1 + max_distance)
+    operations: list[Op] = []
+    for source in matching[first:last]:
+        distance = source - (position - 1)
+        length = _match_length(data, position, distance, min(256, position))
+        if length >= 2 and distance <= 0xFF:
+            operations.append(("copy2", 2, distance))
+        if length >= 3 and distance <= 0x1FF:
+            operations.append(("copy3", 3, distance))
+        if length >= 4 and distance <= 0x3FF:
+            operations.append(("copy4", 4, distance))
+        operations.extend(
+            ("copylong", candidate_length, distance)
+            for candidate_length in range(5, length + 1)
+        )
+    return operations
+
+
+def _choose_operations(data: bytes) -> list[tuple[int, Op]]:
+    """Find the minimum-bit backward parse with deterministic tie breaking."""
+    positions: list[list[int]] = [[] for _ in range(256)]
+    for index, byte in enumerate(data):
+        positions[byte].append(index)
+    infinity = 10**18
+    costs = [infinity] * (len(data) + 1)
+    choices: list[Op | None] = [None] * (len(data) + 1)
+    costs[0] = 0
+    for position in range(1, len(data) + 1):
+        for length in range(1, min(264, position) + 1):
+            operation: Op = ("literal", length, 0)
+            cost = costs[position - length] + _op_cost(operation)
+            if cost < costs[position]:
+                costs[position] = cost
+                choices[position] = operation
+        for operation in _copy_candidates(data, positions, position):
+            cost = costs[position - operation[1]] + _op_cost(operation)
+            if cost < costs[position]:
+                costs[position] = cost
+                choices[position] = operation
+
+    selected: list[tuple[int, Op]] = []
+    position = len(data)
+    while position:
+        operation = choices[position]
+        if operation is None:
+            raise LzError(f"compressor could not cover byte {position}")
+        selected.append((position, operation))
+        position -= operation[1]
+    return selected
+
+
+def _pack_stream(bits: list[int], unpacked_size: int) -> bytes:
+    initial = 0x80000000
+    for index, bit in enumerate(bits[:31]):
+        initial |= bit << index
+    words = [initial]
+    for start in range(31, len(bits), 32):
+        word = 0
+        for index, bit in enumerate(bits[start : start + 32]):
+            word |= bit << index
+        words.append(word)
+    checksum = 0
+    for word in words:
+        checksum ^= word
+    return b"".join(word.to_bytes(4, "big") for word in reversed(words)) + checksum.to_bytes(4, "big") + unpacked_size.to_bytes(4, "big")
+
+
+def compress(data: bytes) -> bytes:
+    """Compress bytes with the exact command set used by the game."""
+    bits: list[int] = []
+    for position, (kind, length, distance) in _choose_operations(data):
+        if kind == "literal":
+            if length <= 8:
+                bits.extend((0, 0))
+                bits.extend(_field_bits(length - 1, 3))
+            else:
+                bits.extend((1, 1, 1))
+                bits.extend(_field_bits(length - 9, 8))
+            for offset in range(1, length + 1):
+                bits.extend(_field_bits(data[position - offset], 8))
+        elif kind == "copy2":
+            bits.extend((0, 1))
+            bits.extend(_field_bits(distance, 8))
+        elif kind == "copy3":
+            bits.extend((1, 0, 0))
+            bits.extend(_field_bits(distance, 9))
+        elif kind == "copy4":
+            bits.extend((1, 0, 1))
+            bits.extend(_field_bits(distance, 10))
+        elif kind == "copylong":
+            bits.extend((1, 1, 0))
+            bits.extend(_field_bits(length - 1, 8))
+            bits.extend(_field_bits(distance, 12))
+        else:
+            raise LzError(f"unknown compression operation {kind!r}")
+    payload = _pack_stream(bits, len(data))
+    if decompress(payload, len(data)) != data:
+        raise LzError("compressor self-check failed")
+    return payload
+
+
+def parse_archive(data: bytes, *, source: str = "<bytes>") -> tuple[Entry, ...]:
+    """Parse and fully bound-check an archive member table."""
+    if len(data) < 4:
+        raise LzError(f"{source}: archive is too small")
+    count = int.from_bytes(data[:2], "big")
+    entry_size = int.from_bytes(data[2:4], "big")
+    if entry_size != ENTRY_SIZE:
+        raise LzError(f"{source}: unexpected table entry size 0x{entry_size:04X}")
+    table_end = 4 + count * ENTRY_SIZE
+    if table_end > len(data):
+        raise LzError(f"{source}: truncated member table")
+    entries: list[Entry] = []
+    for index in range(count):
+        offset = 4 + index * ENTRY_SIZE
+        raw = data[offset : offset + ENTRY_SIZE]
+        try:
+            name = raw[:14].split(b"\0", 1)[0].decode("ascii")
+        except UnicodeDecodeError as error:
+            raise LzError(f"{source}: member {index} has a non-ASCII name") from error
+        entry = Entry(
+            index=index,
+            name=name,
+            offset=int.from_bytes(raw[14:18], "big"),
+            compressed_size=int.from_bytes(raw[18:22], "big"),
+            unpacked_size=int.from_bytes(raw[22:26], "big"),
+            marker=raw[26:30],
+        )
+        if not name:
+            raise LzError(f"{source}: empty member name at index {index}")
+        if entry.offset < table_end or entry.offset + entry.compressed_size > len(data):
+            raise LzError(f"{source}:{name}: payload lies outside the archive")
+        entries.append(entry)
+    if any(left.offset >= right.offset for left, right in zip(entries, entries[1:])):
+        raise LzError(f"{source}: member slots are not strictly ordered")
+    for index, entry in enumerate(entries):
+        slot_end = entries[index + 1].offset if index + 1 < len(entries) else len(data)
+        if entry.offset + entry.compressed_size > slot_end:
+            raise LzError(f"{source}:{entry.name}: payload overlaps the next slot")
+    return tuple(entries)
+
+
+def member_bytes(data: bytes, entry: Entry) -> bytes:
+    """Return one member's unpacked bytes with full format validation."""
+    payload = data[entry.offset : entry.offset + entry.compressed_size]
+    if entry.compressed_size == entry.unpacked_size:
+        return payload
+    return decompress(payload, entry.unpacked_size)
+
+
+def read_member(archive_path: Path, member_name: str) -> bytes:
+    """Read an archive member by its exact table name."""
+    data = archive_path.read_bytes()
+    matches = [entry for entry in parse_archive(data, source=str(archive_path)) if entry.name == member_name]
+    if len(matches) != 1:
+        raise LzError(f"{archive_path}: expected one member named {member_name!r}")
+    return member_bytes(data, matches[0])
+
+
+def _replacement_entries(
+    entries: tuple[Entry, ...], replacements: dict[str, Path]
+) -> dict[str, Entry]:
+    """Resolve replacement names while permitting unrelated duplicate names."""
+    resolved: dict[str, Entry] = {}
+    for name in replacements:
+        matches = [entry for entry in entries if entry.name == name]
+        if not matches:
+            raise LzError(f"archive lacks replacement member {name!r}")
+        if len(matches) != 1:
+            raise LzError(
+                f"replacement member {name!r} is ambiguous ({len(matches)} entries)"
+            )
+        resolved[name] = matches[0]
+    return resolved
+
+
+def replace_members_fixed(
+    source_archive: Path,
+    output_archive: Path,
+    replacements: dict[str, Path],
+) -> list[dict[str, object]]:
+    """Compress replacement members inside their retail slots without reflow."""
+    if not replacements:
+        raise LzError("at least one archive replacement is required")
+    data = bytearray(source_archive.read_bytes())
+    entries = parse_archive(data, source=str(source_archive))
+    by_name = _replacement_entries(entries, replacements)
+    report: list[dict[str, object]] = []
+    expected: dict[str, bytes] = {}
+    for name, replacement_path in sorted(replacements.items()):
+        entry = by_name[name]
+        unpacked = replacement_path.read_bytes()
+        encoded = compress(unpacked)
+        payload = encoded if len(encoded) < len(unpacked) else unpacked
+        compressed_size = len(payload)
+        unpacked_size = len(unpacked) if payload is encoded else len(payload)
+        slot_end = entries[entry.index + 1].offset if entry.index + 1 < len(entries) else len(data)
+        slot_size = slot_end - entry.offset
+        if len(payload) > slot_size:
+            raise LzError(
+                f"{name}: encoded payload is {len(payload)} bytes but retail slot is {slot_size}"
+            )
+        data[entry.offset:slot_end] = payload + b"\0" * (slot_size - len(payload))
+        table_offset = 4 + entry.index * ENTRY_SIZE
+        data[table_offset + 18 : table_offset + 22] = compressed_size.to_bytes(4, "big")
+        data[table_offset + 22 : table_offset + 26] = unpacked_size.to_bytes(4, "big")
+        expected[name] = unpacked
+        report.append(
+            {
+                "member": name,
+                "unpacked_size": len(unpacked),
+                "stored_size": len(payload),
+                "slot_size": slot_size,
+                "headroom": slot_size - len(payload),
+                "mode": "compressed" if payload is encoded else "stored",
+            }
+        )
+    output_archive.parent.mkdir(parents=True, exist_ok=True)
+    output_archive.write_bytes(data)
+    if output_archive.stat().st_size != source_archive.stat().st_size:
+        raise LzError("fixed-slot write changed archive size")
+    rebuilt = output_archive.read_bytes()
+    rebuilt_entries = parse_archive(rebuilt, source=str(output_archive))
+    for name, unpacked in expected.items():
+        entry = next(item for item in rebuilt_entries if item.name == name)
+        if member_bytes(rebuilt, entry) != unpacked:
+            raise LzError(f"{name}: rebuilt member failed round-trip verification")
+    return report
+
+
+def replace_members_reflow(
+    source_archive: Path,
+    output_archive: Path,
+    replacements: dict[str, Path],
+    *,
+    maximum_archive_size: int | None = None,
+) -> dict[str, object]:
+    """Reflow members within a guarded outer-file allocation."""
+    if not replacements:
+        raise LzError("at least one archive replacement is required")
+    source = source_archive.read_bytes()
+    entries = parse_archive(source, source=str(source_archive))
+    by_name = _replacement_entries(entries, replacements)
+    replacement_indexes = {entry.index for entry in by_name.values()}
+
+    payloads: list[tuple[bytes, int, int]] = []
+    expected: dict[str, bytes] = {}
+    replacements_report: list[dict[str, object]] = []
+    for entry in entries:
+        if entry.index in replacement_indexes:
+            unpacked = replacements[entry.name].read_bytes()
+            encoded = compress(unpacked)
+            payload = encoded if len(encoded) < len(unpacked) else unpacked
+            compressed_size = len(payload)
+            unpacked_size = len(unpacked) if payload is encoded else len(payload)
+            expected[entry.name] = unpacked
+            replacements_report.append(
+                {
+                    "member": entry.name,
+                    "unpacked_size": len(unpacked),
+                    "stored_size": len(payload),
+                    "mode": "compressed" if payload is encoded else "stored",
+                }
+            )
+        else:
+            payload = source[entry.offset : entry.offset + entry.compressed_size]
+            compressed_size = entry.compressed_size
+            unpacked_size = entry.unpacked_size
+        payloads.append((payload, compressed_size, unpacked_size))
+
+    first_payload = entries[0].offset
+    required_end = first_payload + sum(len(payload) for payload, _, _ in payloads)
+    limit = len(source) if maximum_archive_size is None else maximum_archive_size
+    if limit < len(source):
+        raise LzError("maximum archive size is smaller than the retail archive")
+    if required_end > limit:
+        raise LzError(
+            f"reflow needs {required_end - limit} bytes beyond the guarded allocation"
+        )
+    output_size = max(len(source), required_end)
+    output = bytearray(source + b"\0" * (output_size - len(source)))
+    output[first_payload:] = b"\0" * (output_size - first_payload)
+    cursor = first_payload
+    for entry, (payload, compressed_size, unpacked_size) in zip(entries, payloads):
+        table_offset = 4 + entry.index * ENTRY_SIZE
+        output[table_offset + 14 : table_offset + 18] = cursor.to_bytes(4, "big")
+        output[table_offset + 18 : table_offset + 22] = compressed_size.to_bytes(4, "big")
+        output[table_offset + 22 : table_offset + 26] = unpacked_size.to_bytes(4, "big")
+        output[cursor : cursor + len(payload)] = payload
+        cursor += len(payload)
+
+    output_archive.parent.mkdir(parents=True, exist_ok=True)
+    output_archive.write_bytes(output)
+    if not source_archive.stat().st_size <= output_archive.stat().st_size <= limit:
+        raise LzError("reflow output escaped the guarded archive-size range")
+    rebuilt = output_archive.read_bytes()
+    rebuilt_entries = parse_archive(rebuilt, source=str(output_archive))
+    if [entry.name for entry in rebuilt_entries] != [entry.name for entry in entries]:
+        raise LzError("reflow changed member order or names")
+    for name, unpacked in expected.items():
+        matches = [item for item in rebuilt_entries if item.name == name]
+        if len(matches) != 1:
+            raise LzError(f"{name}: rebuilt replacement member became ambiguous")
+        entry = matches[0]
+        if member_bytes(rebuilt, entry) != unpacked:
+            raise LzError(f"{name}: reflowed member failed round-trip verification")
+    return {
+        "replacements": replacements_report,
+        "payload_start": first_payload,
+        "payload_end": cursor,
+        "archive_size": len(output),
+        "allocation_size": limit,
+        "headroom": limit - cursor,
+    }

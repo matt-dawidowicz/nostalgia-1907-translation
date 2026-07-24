@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "unit": "MES cells; one generated English cell contains up to two characters",
+  "require_all_classified_adaptive": true,
+  "require_explicit_fixed_policy": true,
+  "roles": {
+    "main_dialogue": {
+      "source": "SCN 0x21 second text ID",
+      "format": "word-wrap and pad to the inferred lower-window runtime stride"
+    },
+    "dialogue_continuation": {
+      "source": "SCN 0x21 first text ID when the second ID is zero",
+      "format": "word-wrap and pad to the inferred continuation stride"
+    },
+    "speaker_name": {
+      "source": "SCN 0x21 first text ID",
+      "format": "one normalized line",
+      "max_characters": 24
+    },
+    "side_thought": {
+      "source": "SCN 0x24/0x27 initial text ID and immediate standalone 0x27 continuation IDs",
+      "format": "word-wrap to the command's encoded floating-window width"
+    },
+    "overlay_text": {
+      "source": "SCN 0x24/0x28 initial text ID and immediate standalone 0x27 continuation IDs",
+      "format": "word-wrap to the command or reviewed override"
+    },
+    "location_name": {
+      "source": "SCN adjacent 0x22/0x23 pair, 0x22 text ID",
+      "format": "one normalized line",
+      "max_characters": 26
+    },
+    "perspective_name": {
+      "source": "SCN adjacent 0x22/0x23 pair, 0x23 text ID",
+      "format": "one normalized line",
+      "max_characters": 20
+    },
+    "narration": {
+      "source": "reviewed record override for a distinct narration renderer",
+      "format": "word-wrap and enforce the reviewed row limit"
+    },
+    "menu_choice": {
+      "source": "SCN 0x31 text ID with a valid branch target",
+      "format": "one normalized line; never merge with dialogue wrapping"
+    }
+  },
+  "safety_rules": [
+    "Japanese MES and SCN files are read-only inputs",
+    "record IDs and order are never inferred from English text",
+    "formatting collapses whitespace only and must reconstruct the same words",
+    "words may not be split unless one word is wider than the complete box",
+    "floating and narration windows may not exceed their SCN-derived row limits",
+    "every SCN-classified translated record must use adaptive canonical layout",
+    "every translated record without proven reflow geometry must declare fixed layout",
+    "records with no proven role retain their explicit rendering"
+  ]
+}

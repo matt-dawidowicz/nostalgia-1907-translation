@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "source_mes": {
+    "size": 16966,
+    "sha256": "9147D0880BC7060B7DDB0BA934985C0BE944E8235F78C8BEED647194E320D789",
+    "split_offset": 9712
+  },
+  "output_mes": {
+    "path": "C:\\Users\\thema\\Documents\\Codex\\2026-07-21\\in-c-users-thema-documents-codex\\work\\part3c_globalfontfix3\\PART3C_globalfontfix3.MES",
+    "size": 16966,
+    "sha256": "C798E626AD28C28FC06707ECC740FBA221DE425BC3CB0D7B656798C246707643",
+    "split_offset": 9712,
+    "text_headroom": 16
+  },
+  "font_contract": {
+    "source_part3c_font_sha256": "01A88A5CAC558D5DE074F4CE5461D5B7BD160AA8A8EBAD43CD2CFA48E0F7338A",
+    "global_visualfix3_font_sha256": "13512E87F61EA3E9D10F30D545FBBDDFC1E1F963C4F4204112E34B5EE3CAD64B",
+    "used_source_fixed_codes": 45,
+    "mapped_fixed_codes": 45,
+    "missing_bitmaps": 0,
+    "replaced_fixed_code_occurrences": 3369,
+    "unchanged_fixed_code_occurrences": 130,
+    "records_with_code_changes": 219,
+    "checked_manifest_glyph_occurrences": 6268,
+    "bitmap_mismatches": 0
+  },
+  "structure_contract": {
+    "pointer_table_byte_identical": true,
+    "record_sizes_byte_identical": true,
+    "dynamic_tail_byte_identical": true,
+    "untranslated_record_158_byte_identical_to_visualfix3": true
+  }
+}

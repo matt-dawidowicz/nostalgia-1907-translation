@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "chapter": "PART1B",
+  "record_count": 33,
+  "retail_mes": {
+    "sha256": "0B6C27D618C84E84E15E1D25E6A8B4CDF457BEE23414275847D34EB0978069F4",
+    "size": 1746,
+    "dynamic_glyph_count": 64
+  },
+  "retail_scn": {
+    "sha256": "587B00EF6925D21C6AE64F1A267B2F8A91E07B815274317BB6CA447CF4346E6D",
+    "size": 1021
+  },
+  "playable_reference_mes": {
+    "sha256": "8DDDF88446BE41E4AA6FEC4A921A74F215E360F2EBB3E433E2D7F4F2412AF287",
+    "size": 4371,
+    "dynamic_glyph_count": 212
+  },
+  "profile": {
+    "schema_version": 1,
+    "name": "PART1B",
+    "translation_status": "locked",
+    "choice_render_cell_limit": null,
+    "require_choice_segments": false,
+    "exclude_choice_segments_from_wrap": false,
+    "layout_overrides": {},
+    "required_text_prefixes": {
+      "5": "N. Atlantic"
+    },
+    "forbidden_text_patterns": []
+  },
+  "text_mode": "render-ready",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-12\\i\\outputs\\nostalgia1907_act2d\\profile_migration_verify\\PART1B_manifest.json"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "Ilyu",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "Fun. A con man?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 4,
+      "policy": "translate",
+      "text": "A salesman.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "N. Atlantic, 7/9/1907",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "Fred",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "Crew of Nostalgia.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "Ship is ours, fools!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "Helm",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "W-what?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "Navigator",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "Mate! Poison gas!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "Captain",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 15,
+      "policy": "translate",
+      "text": "Hard port!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 16,
+      "policy": "translate",
+      "text": "Bow to wind!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 17,
+      "policy": "translate",
+      "text": "Damn it!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 18,
+      "policy": "translate",
+      "text": "Helm stuck. Prop dead!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 19,
+      "policy": "translate",
+      "text": "Chief!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 20,
+      "policy": "translate",
+      "text": "Chief Engineer",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 21,
+      "policy": "translate",
+      "text": "Engine room hit!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 22,
+      "policy": "translate",
+      "text": "Paul! Starboard 2.5!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 23,
+      "policy": "translate",
+      "text": "Captain!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 24,
+      "policy": "translate",
+      "text": "Stone! Check engine!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 25,
+      "policy": "translate",
+      "text": "Fred! Mayday!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 26,
+      "policy": "translate",
+      "text": "Just before the blast.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 27,
+      "policy": "translate",
+      "text": "Your ship is now ours.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 28,
+      "policy": "translate",
+      "text": "11:00 a.m. Sharp.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 29,
+      "policy": "translate",
+      "text": "Attack came with war.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 30,
+      "policy": "translate",
+      "text": "This is hell.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 31,
+      "policy": "translate",
+      "text": "Ashby",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 32,
+      "policy": "translate",
+      "text": "The captain, now.",
+      "layout_policy": "adaptive"
+    }
+  ]
+}

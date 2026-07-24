@@ -1,0 +1,229 @@
+{
+  "status": "PASS",
+  "source_mes_size": 13770,
+  "source_dynamic_glyphs": 378,
+  "rows": [
+    {
+      "text": "Admit you have lost",
+      "units": [
+        {
+          "text": "Ad",
+          "style": "packed",
+          "token": "F0 EE",
+          "new": false
+        },
+        {
+          "text": "mi",
+          "style": "packed",
+          "token": "F0 5C",
+          "new": false
+        },
+        {
+          "text": "t y",
+          "style": "packed",
+          "token": "F1 7C",
+          "new": true
+        },
+        {
+          "text": "ou",
+          "style": "packed",
+          "token": "1F",
+          "new": false
+        },
+        {
+          "text": " ha",
+          "style": "packed",
+          "token": "F1 7D",
+          "new": true
+        },
+        {
+          "text": "ve",
+          "style": "packed",
+          "token": "F0 70",
+          "new": false
+        },
+        {
+          "text": " lo",
+          "style": "packed",
+          "token": "F1 7E",
+          "new": true
+        },
+        {
+          "text": "st",
+          "style": "packed",
+          "token": "D2",
+          "new": false
+        }
+      ],
+      "padding": 0
+    },
+    {
+      "text": "your judgment,",
+      "units": [
+        {
+          "text": "yo",
+          "style": "packed",
+          "token": "33",
+          "new": false
+        },
+        {
+          "text": "ur",
+          "style": "packed",
+          "token": "F0 6C",
+          "new": false
+        },
+        {
+          "text": " ju",
+          "style": "packed",
+          "token": "F1 7F",
+          "new": true
+        },
+        {
+          "text": "dg",
+          "style": "packed",
+          "token": "F1 7B",
+          "new": false
+        },
+        {
+          "text": "me",
+          "style": "packed",
+          "token": "46",
+          "new": false
+        },
+        {
+          "text": "n",
+          "style": "packed",
+          "token": "3F",
+          "new": false
+        },
+        {
+          "text": "t,",
+          "style": "packed",
+          "token": "F0 48",
+          "new": false
+        }
+      ],
+      "padding": 1
+    },
+    {
+      "text": "Kasuke. This is",
+      "units": [
+        {
+          "text": "Ka",
+          "style": "packed",
+          "token": "F0 07",
+          "new": false
+        },
+        {
+          "text": "su",
+          "style": "packed",
+          "token": "F0 08",
+          "new": false
+        },
+        {
+          "text": "ke.",
+          "style": "packed",
+          "token": "F1 80",
+          "new": true
+        },
+        {
+          "text": " Th",
+          "style": "packed",
+          "token": "F1 81",
+          "new": true
+        },
+        {
+          "text": "is",
+          "style": "packed",
+          "token": "8A",
+          "new": false
+        },
+        {
+          "text": " is",
+          "style": "packed",
+          "token": "F1 82",
+          "new": true
+        }
+      ],
+      "padding": 2
+    },
+    {
+      "text": "an enlightened age.",
+      "units": [
+        {
+          "text": "an",
+          "style": "packed",
+          "token": "36",
+          "new": false
+        },
+        {
+          "text": " en",
+          "style": "packed",
+          "token": "F1 83",
+          "new": true
+        },
+        {
+          "text": "li",
+          "style": "packed",
+          "token": "48",
+          "new": false
+        },
+        {
+          "text": "gh",
+          "style": "packed",
+          "token": "F0 8E",
+          "new": false
+        },
+        {
+          "text": "te",
+          "style": "packed",
+          "token": "27",
+          "new": false
+        },
+        {
+          "text": "ne",
+          "style": "packed",
+          "token": "F0 A3",
+          "new": false
+        },
+        {
+          "text": "d a",
+          "style": "packed",
+          "token": "F1 84",
+          "new": true
+        },
+        {
+          "text": "ge.",
+          "style": "packed",
+          "token": "F1 85",
+          "new": true
+        }
+      ],
+      "padding": 0
+    }
+  ],
+  "cells": 32,
+  "new_unique_bitmaps": 10,
+  "new_dynamic_glyphs": 388,
+  "source_record_size": 56,
+  "target_record_size": 53,
+  "projected_mes_size": 13947,
+  "encoded_hex": "F0 EE F0 5C F1 7C 1F F1 7D F0 70 F1 7E D2 33 F0 6C F1 7F F1 7B 46 3F F0 48 01 F0 07 F0 08 F1 80 F1 81 8A F1 82 01 01 36 F1 83 48 F0 8E 27 F0 A3 F1 84 F1 85 00",
+  "new_bitmap_hex": [
+    "0100FC1100800000002384404404403F8000",
+    "0001FC0200100101E00000C01281A81F0000",
+    "0001041FC1000000000000F01081080F0000",
+    "0002004103F40000000000F81001801F8000",
+    "1FC0400A01100000000F0128128128030180",
+    "0000040041FC0040040001FC0200101E0000",
+    "0001101F41000000000001101281280C8000",
+    "0000F01281281280300001F80100081F0000",
+    "0E01101301FC0000000C01281280A81F0000",
+    "2304484484483F80000F0128128128030180"
+  ],
+  "score": [
+    10,
+    53,
+    29
+  ]
+}

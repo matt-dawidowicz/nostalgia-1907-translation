@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "reviewed_visible_translation_exemptions": {
+    "PART1C:122": {
+      "reason": "Punctuation-only opening-quote fragment; retail bytes are intentionally preserved.",
+      "expected_policy": "preserve"
+    },
+    "PART1D:088": {
+      "reason": "Punctuation-only opening-quote fragment; retail bytes are intentionally preserved.",
+      "expected_policy": "preserve"
+    },
+    "PART2E:028": {
+      "reason": "Punctuation-only opening-quote fragment; retail bytes are intentionally preserved.",
+      "expected_policy": "preserve"
+    },
+    "PART3B:161": {
+      "reason": "Punctuation-only opening-quote fragment; retail bytes are intentionally preserved.",
+      "expected_policy": "preserve"
+    },
+    "PART3C:037": {
+      "reason": "Punctuation-only opening-quote fragment; retail bytes are intentionally preserved.",
+      "expected_policy": "preserve"
+    },
+    "PART3B_:015": {
+      "reason": "Punctuation-only floating-window record; retail bytes are intentionally preserved.",
+      "expected_policy": "preserve"
+    }
+  },
+  "reviewed_control_records": {
+    "PART3B_:004": {
+      "reason": "Blank/control record with no visible nonblank Japanese glyph.",
+      "expected_policy": "preserve"
+    }
+  }
+}

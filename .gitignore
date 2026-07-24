@@ -1,0 +1,76 @@
+# Local Codex state
+/.agents/
+/.codex/
+
+# Original, extracted, and rebuilt game media
+*.bin
+*.BIN
+*.cue
+*.CUE
+*.iso
+*.ISO
+*.wav
+*.WAV
+*.pcm
+*.PCM
+*.mes
+*.MES
+*.scn
+*.SCN
+*.lz
+*.LZ
+*.fnt
+*.FNT
+*.dmy
+*.DMY
+*.unpacked
+
+# Generated packages and archives
+/outputs/
+*.zip
+*.7z
+*.png
+*.gif
+
+# Rebuild inputs, scratch trees, and deterministic run products
+/work/clean_rebuild/build/
+/work/clean_rebuild/retail_input/
+/work/clean_rebuild/retail_reference/
+/work/clean_rebuild/runs*/
+/work/clean_rebuild/test-output/
+/work/region_variant/runs*/
+/work/**/built/
+/work/**/dump/
+/work/**/*_extract/
+/work/**/*_part3c/
+
+# Audio-localization models, vendored runtimes, and generated data
+/work/audio_localization/.cuda/
+/work/audio_localization/.kokoro_models/
+/work/audio_localization/.kokoro_runtime/
+/work/audio_localization/.models/
+/work/audio_localization/.runtime/
+/work/audio_localization/.tts_runtime/
+*.onnx
+*.dll
+*.pyd
+*.lib
+*.exe
+
+# Python and tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+Thumbs.db
+Desktop.ini

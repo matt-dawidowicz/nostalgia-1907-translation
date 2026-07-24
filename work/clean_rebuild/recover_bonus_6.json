@@ -1,0 +1,2627 @@
+{
+  "status": "REVIEW",
+  "corpus_line_count": 2616,
+  "beam_width": 800,
+  "space_bonus": 6.0,
+  "locked_text_mismatch_count": 36,
+  "chapters": [
+    {
+      "chapter": "PART2F",
+      "record_count": 194,
+      "locked_text_count": 24,
+      "locked_text_matches": 22,
+      "locked_text_mismatches": [
+        {
+          "record": 8,
+          "expected": "The Russian Fog... What the hell is it?",
+          "recovered": "The Russian Fog...What the hell is it?"
+        },
+        {
+          "record": 10,
+          "expected": "Treasure. Curse. Weapon... What links them?",
+          "recovered": "Treasure. Curse.Weapon...What links them?"
+        }
+      ],
+      "records": [
+        {
+          "record": 0,
+          "text": "Second-Class Passage",
+          "score": -14.505113118031554,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 1,
+          "text": "Yamada Kasuke",
+          "score": -1.2318926585253778,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 2,
+          "text": "Iryu",
+          "score": -6.695582787793491,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 3,
+          "text": "You look awful.",
+          "score": -4.407605844065514,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 4,
+          "text": "I don't know...",
+          "score": -5.505439155131991,
+          "ambiguous_cells": 3
+        },
+        {
+          "record": 5,
+          "text": "Kasuke",
+          "score": -5.625615706495568,
+          "ambiguous_cells": 0
+        },
+        {
+          "record": 6,
+          "text": "Always have.",
+          "score": -16.929771354253525,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 7,
+          "text": "First they treat me like the culprit, then use me for their investigation.",
+          "score": -9.151389482745662,
+          "ambiguous_cells": 20
+        },
+        {
+          "record": 8,
+          "text": "The Russian Fog...What the hell is it?",
+          "score": -10.139299178292058,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 9,
+          "text": "A strange role, isn't it? You never know what the next moment will bring.",
+          "score": -10.623325522165107,
+          "ambiguous_cells": 22
+        },
+        {
+          "record": 10,
+          "text": "Treasure. Curse.Weapon...What links them?",
+          "score": -62.920833999324934,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 11,
+          "text": "Old Karl",
+          "score": -5.728829755234777,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 12,
+          "text": "For my part, I support you. You're a man of simple tastes.",
+          "score": -16.30542858092985,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 13,
+          "text": "...I can't solve it.",
+          "score": -9.65935701451536,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 14,
+          "text": "The Crowd",
+          "score": -6.9740448393475285,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 15,
+          "text": "That's right! Cut Dunant down with a samurai sword!",
+          "score": -16.60376120604643,
+          "ambiguous_cells": 13
+        },
+        {
+          "record": 16,
+          "text": "",
+          "score": -11.376796415640765,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 17,
+          "text": "Send the aristocracy to the guillotine!",
+          "score": -30.29471550598333,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 18,
+          "text": "...I'm starting to cry.",
+          "score": -16.60862084720042,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 19,
+          "text": "...Iryu. Even so, I still have to question you.",
+          "score": -10.09458636712213,
+          "ambiguous_cells": 17
+        },
+        {
+          "record": 20,
+          "text": "You're a hopeless company man. Fine. Why not take a shower first? I'll wait in my room.",
+          "score": -23.75951939387721,
+          "ambiguous_cells": 27
+        },
+        {
+          "record": 21,
+          "text": "Come, everyone, back to your rooms. He needs rest.",
+          "score": -15.881580216351932,
+          "ambiguous_cells": 15
+        },
+        {
+          "record": 22,
+          "text": "Shower Room",
+          "score": -12.461606610290668,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 23,
+          "text": "I heard about Black...",
+          "score": -15.60966960905677,
+          "ambiguous_cells": 5
+        },
+        {
+          "record": 24,
+          "text": "...",
+          "score": -14.570648175604354,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 25,
+          "text": "I love to paint. It l ets my heart wander anywhere...To Black, though, each painting was only merchandise.",
+          "score": -206.48335374527716,
+          "ambiguous_cells": 29
+        },
+        {
+          "record": 26,
+          "text": "You cannot live on art alone.",
+          "score": -15.941494735716258,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 27,
+          "text": "I do not believe you killed him.",
+          "score": -1.6648441934236065,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 28,
+          "text": "A crime is not only the hand that strikes...",
+          "score": -42.85483555007197,
+          "ambiguous_cells": 20
+        },
+        {
+          "record": 29,
+          "text": "Are you saying I was involved?",
+          "score": -23.981318414043354,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 30,
+          "text": "I don't know. Have you ever thought your very existence might make someone suffer?",
+          "score": -90.9519569314667,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 31,
+          "text": "Every day...",
+          "score": -9.45003131416986,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 32,
+          "text": "Then we are alike...",
+          "score": -26.031493338944756,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 33,
+          "text": "They use ushowever they please...",
+          "score": -65.60538970401527,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 34,
+          "text": "And everyone grows used to being hurt...",
+          "score": -69.25948973516799,
+          "ambiguous_cells": 19
+        },
+        {
+          "record": 35,
+          "text": "It hurts,doesn't it? I enjoyed our card game.",
+          "score": -87.1047330350575,
+          "ambiguous_cells": 19
+        },
+        {
+          "record": 36,
+          "text": "Do not turn me into one last memory and die. Hold on! I still do not understand. The St. Petersburg treasure. Words that curse the nobility. A secret weapon that could overturn Europe's balance of power...",
+          "score": -201.1587996325407,
+          "ambiguous_cells": 45
+        },
+        {
+          "record": 37,
+          "text": "What is it?",
+          "score": 0.056571866613477795,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 38,
+          "text": "The Russian Fog the culprit demands...",
+          "score": -6.01679773777251,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 39,
+          "text": "The culprit is demanding the Russian Fog?",
+          "score": 2.404219523447221,
+          "ambiguous_cells": 23
+        },
+        {
+          "record": 40,
+          "text": "...",
+          "score": -4.193585845954744,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 41,
+          "text": "What is it?",
+          "score": 0.8770089841930901,
+          "ambiguous_cells": 3
+        },
+        {
+          "record": 42,
+          "text": "...",
+          "score": -14.570648175604354,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 43,
+          "text": "?",
+          "score": -10.797717971344365,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 44,
+          "text": "What?",
+          "score": -8.175117729369177,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 45,
+          "text": "You know, don't you?",
+          "score": -6.030508492373794,
+          "ambiguous_cells": 5
+        },
+        {
+          "record": 46,
+          "text": "...No.",
+          "score": -8.417245110997367,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 47,
+          "text": "...",
+          "score": -4.193585845954744,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 48,
+          "text": "Not yet.",
+          "score": -10.731344214642494,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 49,
+          "text": "...What?",
+          "score": -12.557331565212937,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 50,
+          "text": "Your voice sounds faraway...",
+          "score": -42.503372189036725,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 51,
+          "text": "Hm?",
+          "score": -20.338958335918853,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 52,
+          "text": "No, nothing.",
+          "score": -20.290275759798188,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 53,
+          "text": "...",
+          "score": -14.570648175604354,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 54,
+          "text": "I see...But Kasuke, you will solve this, won't you?",
+          "score": -43.41213673280396,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 55,
+          "text": "I will.",
+          "score": -13.123194538584492,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 56,
+          "text": "Below Deck",
+          "score": -30.37354053053785,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 57,
+          "text": "Second-Class Cabin",
+          "score": -8.071771708272784,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 58,
+          "text": "Old geezer!",
+          "score": -15.053372698458146,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 59,
+          "text": "I am not senile!",
+          "score": -23.836828215069787,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 60,
+          "text": "It is like a ri ddle from the Sphinx, young man.",
+          "score": -80.40857771898484,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 61,
+          "text": "Rumor sees only one side of the truth.",
+          "score": -52.47836160675097,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 62,
+          "text": "So?",
+          "score": -20.022263569007087,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 63,
+          "text": "Each rumor describes one fragment of the same thing. Every fragment of language hides a sign.",
+          "score": -180.39047871603285,
+          "ambiguous_cells": 22
+        },
+        {
+          "record": 64,
+          "text": "A sign?",
+          "score": -17.952180445630063,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 65,
+          "text": "Exactly!",
+          "score": -14.091207555629241,
+          "ambiguous_cells": 0
+        },
+        {
+          "record": 66,
+          "text": "You mean the words combine to reveal another meaning?",
+          "score": -76.30822789812201,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 67,
+          "text": "When people hide the truth,they substitute one word for another. Yet the words they choose still carry the impression of the truth beneath them.",
+          "score": -141.97370333323522,
+          "ambiguous_cells": 33
+        },
+        {
+          "record": 68,
+          "text": "And?",
+          "score": -21.08532120429622,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 69,
+          "text": "So impatient.",
+          "score": -33.47532778966075,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 70,
+          "text": "Here, the answer is a person.",
+          "score": -28.173757845037567,
+          "ambiguous_cells": 13
+        },
+        {
+          "record": 71,
+          "text": "You mean the culprit wants to destroy one particular person?",
+          "score": -59.84825630034156,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 72,
+          "text": "Most likely.",
+          "score": -44.6340226178735,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 73,
+          "text": "Royal Suite A",
+          "score": 2.4679125861728117,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 74,
+          "text": "The Russian Fog is a person:an experienced soldier serving the Tsar directly,feared even by Russian nobles and charged with watching them.",
+          "score": -178.06316751461935,
+          "ambiguous_cells": 42
+        },
+        {
+          "record": 75,
+          "text": "Ashby",
+          "score": -6.920374935897604,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 76,
+          "text": "A person? Your grand deduction is that the Russian Fog is human?",
+          "score": -43.67023960995851,
+          "ambiguous_cells": 25
+        },
+        {
+          "record": 77,
+          "text": "Dunant",
+          "score": -6.3357282566107065,
+          "ambiguous_cells": 0
+        },
+        {
+          "record": 78,
+          "text": "The Russian court swarms with intelligence agents. Capture one close to the Tsar and you gain his plans, habits, and intentions. That knowledge is worth sinking a floating palace.",
+          "score": -216.45707547049952,
+          "ambiguous_cells": 64
+        },
+        {
+          "record": 79,
+          "text": "Which nation would want suchan agent most?",
+          "score": -84.07936048643056,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 80,
+          "text": "The British Empire.",
+          "score": -5.3123059326653195,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 81,
+          "text": "The British Empire?",
+          "score": -16.424316177277763,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 82,
+          "text": "Why?",
+          "score": -6.577563271495364,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 83,
+          "text": "Japan also bears watching. Terrorism is one of its special ties.",
+          "score": -128.64019327383772,
+          "ambiguous_cells": 23
+        },
+        {
+          "record": 84,
+          "text": "Abstract theories willnot solve this. Crimes are committed by people, not nations. A nation cannot be arrested.",
+          "score": -176.18484324638376,
+          "ambiguous_cells": 28
+        },
+        {
+          "record": 85,
+          "text": "This is the age of empires.",
+          "score": -20.196526677429617,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 86,
+          "text": "There are many nations I would gladly put behind bars.",
+          "score": -77.60869612034205,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 87,
+          "text": "Which ones?",
+          "score": -28.896925785376734,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 88,
+          "text": "That is beside the point.",
+          "score": -3.6423203698168645,
+          "ambiguous_cells": 13
+        },
+        {
+          "record": 89,
+          "text": "The culprit demands the Russian Fog and threatens to sink the ship.",
+          "score": -21.156202921828612,
+          "ambiguous_cells": 26
+        },
+        {
+          "record": 90,
+          "text": "How does the culprit intend to remove the Russian Fog from the ship?",
+          "score": 7.754023118145311,
+          "ambiguous_cells": 21
+        },
+        {
+          "record": 91,
+          "text": "That is your problem. Get moving.",
+          "score": -42.77074037472417,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 92,
+          "text": "Aft Deck",
+          "score": -5.693583674650369,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 93,
+          "text": "Ashby",
+          "score": -6.920374935897604,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 94,
+          "text": "Mr. Yamada.",
+          "score": -6.386483855706774,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 95,
+          "text": "Hard eyes. He isno civilian.",
+          "score": -63.64918919480722,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 96,
+          "text": "Hello.",
+          "score": -23.92419507305084,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 97,
+          "text": "You have been watching me.",
+          "score": -12.78974424562303,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 98,
+          "text": "Only doing my duty.",
+          "score": -25.622570918442023,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 99,
+          "text": "On whose orders?",
+          "score": -18.109688954278266,
+          "ambiguous_cells": 3
+        },
+        {
+          "record": 100,
+          "text": "He is not my master.",
+          "score": -12.984282770501158,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 101,
+          "text": "He is my subordinate.",
+          "score": -35.314046611507315,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 102,
+          "text": "What do you mean?",
+          "score": -0.31040294549160397,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 103,
+          "text": "That is what he says.",
+          "score": -6.012536729619647,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 104,
+          "text": "Sharp. Even a professional spy might miss that.",
+          "score": -50.82645903131483,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 105,
+          "text": "Who are you?",
+          "score": -6.371538437217378,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 106,
+          "text": "My friend here asked who you are.",
+          "score": -42.31677692861223,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 107,
+          "text": "A deputy director of British Intelligence. Ashby is one of his agents.",
+          "score": -13.92298341177866,
+          "ambiguous_cells": 36
+        },
+        {
+          "record": 108,
+          "text": "What did you say?",
+          "score": -8.702924754552702,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 109,
+          "text": "Then all of this...",
+          "score": -21.800876075876516,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 110,
+          "text": "I wore several masks.They were meant to fool the Russian agents.",
+          "score": -89.67835264434983,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 111,
+          "text": "So that whole performance wasfor them...",
+          "score": -67.29134521048474,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 112,
+          "text": "A Russian spy...Then the Russian Fog...",
+          "score": -18.375305461654687,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 113,
+          "text": "Just as you said.",
+          "score": -12.097079492879935,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 114,
+          "text": "A Russian agent working directly for the Tsar.",
+          "score": -37.99211245831821,
+          "ambiguous_cells": 19
+        },
+        {
+          "record": 115,
+          "text": "You knew from the start.",
+          "score": -0.6825410611816078,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 116,
+          "text": "No more lies.",
+          "score": -23.616236439355212,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 117,
+          "text": "It began a year ago.",
+          "score": -28.890358579897477,
+          "ambiguous_cells": 5
+        },
+        {
+          "record": 118,
+          "text": "An anonymous cable reached our London office.",
+          "score": -102.58701788920223,
+          "ambiguous_cells": 15
+        },
+        {
+          "record": 119,
+          "text": "British Intelligence officer Heynwood is a Russian spy.",
+          "score": -46.78484517862489,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 120,
+          "text": "I dismissed it. Six months later another message came, this time signed:",
+          "score": -145.5316496993487,
+          "ambiguous_cells": 21
+        },
+        {
+          "record": 121,
+          "text": "Heynwood is a Russian spy.",
+          "score": -34.68596589025364,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 122,
+          "text": "I am the Russian Fog.",
+          "score": 7.9705823281509165,
+          "ambiguous_cells": 3
+        },
+        {
+          "record": 123,
+          "text": "Our London office holds the intelligence archives that support the British Empire. I searched them.",
+          "score": -93.23662680455358,
+          "ambiguous_cells": 41
+        },
+        {
+          "record": 124,
+          "text": "No record.",
+          "score": -17.9887148861472,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 125,
+          "text": "Code name:Russian Fog.",
+          "score": -39.91700500705654,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 126,
+          "text": "An intelligence operative reporting directly to the Russian Emperor.",
+          "score": -48.358098478948996,
+          "ambiguous_cells": 22
+        },
+        {
+          "record": 127,
+          "text": "Active in the St. Petersburg court since 1897.",
+          "score": -47.95450099454626,
+          "ambiguous_cells": 17
+        },
+        {
+          "record": 128,
+          "text": "Many nobles were executed after denunciations by the Russian Fog.",
+          "score": -85.6134075826447,
+          "ambiguous_cells": 20
+        },
+        {
+          "record": 129,
+          "text": "Active in Manchuria since 1903 as an anti-British and anti-Japanese agent.",
+          "score": -171.3732080958733,
+          "ambiguous_cells": 15
+        },
+        {
+          "record": 130,
+          "text": "Eliminated many Anglo-Japanese agents who aided Russian revolutionaries.",
+          "score": -123.66414700574971,
+          "ambiguous_cells": 29
+        },
+        {
+          "record": 131,
+          "text": "Li nked to military intelligence, the police, and the Interior Ministry, with access to i mmense stores of information.",
+          "score": -179.7700754167665,
+          "ambiguous_cells": 43
+        },
+        {
+          "record": 132,
+          "text": "Enough to overturn the future balance of power.",
+          "score": -68.39824723048295,
+          "ambiguous_cells": 13
+        },
+        {
+          "record": 133,
+          "text": "The highest-priority target of every anti-Russian intelligence service.",
+          "score": -120.33193660872028,
+          "ambiguous_cells": 30
+        },
+        {
+          "record": 134,
+          "text": "A major Russian spy.",
+          "score": -23.674940990669743,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 135,
+          "text": "Then why expose Russian agents in Britain?",
+          "score": -25.466887036139735,
+          "ambiguous_cells": 17
+        },
+        {
+          "record": 136,
+          "text": "The final message arrived this January.",
+          "score": -66.47751551071792,
+          "ambiguous_cells": 19
+        },
+        {
+          "record": 137,
+          "text": "Wait aboard NOSTALGIA.",
+          "score": -49.467508845611405,
+          "ambiguous_cells": 3
+        },
+        {
+          "record": 138,
+          "text": "Signal:CEDAR.",
+          "score": -63.054392633436315,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 139,
+          "text": "London",
+          "score": -22.2714047857633,
+          "ambiguous_cells": 0
+        },
+        {
+          "record": 140,
+          "text": "",
+          "score": -11.376796415640765,
+          "ambiguous_cells": 0
+        },
+        {
+          "record": 141,
+          "text": "Regrettably, Director, our audit confirms Heynwood and Burns are Russian agents.",
+          "score": -188.92686070986866,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 142,
+          "text": "Director",
+          "score": -12.892930337578377,
+          "ambiguous_cells": 0
+        },
+        {
+          "record": 143,
+          "text": "Then every accusation from the Russian Fog was correct.",
+          "score": -38.07712450558883,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 144,
+          "text": "Yes.",
+          "score": -7.359979754646211,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 145,
+          "text": "What is the Russian Fog's goal?",
+          "score": -32.200685338707984,
+          "ambiguous_cells": 13
+        },
+        {
+          "record": 146,
+          "text": "There is only one answer:defection.",
+          "score": -36.70560935607631,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 147,
+          "text": "A Russian spy defecting to Britain?",
+          "score": -33.894992605871984,
+          "ambiguous_cells": 24
+        },
+        {
+          "record": 148,
+          "text": "NOSTALGIA sails from New York to Britain. Its name was a signal, and those accusations proved the value of the intelligence offered.",
+          "score": -160.3573246403013,
+          "ambiguous_cells": 44
+        },
+        {
+          "record": 149,
+          "text": "A defector's calling card.",
+          "score": -46.42775411264684,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 150,
+          "text": "We cannot let such a prize escape.",
+          "score": -31.88763986208404,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 151,
+          "text": "It could be bait to l ure you out.",
+          "score": -41.134961046769035,
+          "ambiguous_cells": 13
+        },
+        {
+          "record": 152,
+          "text": "I accept that risk. I can still take my own life. This is too much for a juniorofficer. Let me do one last job before I retire.",
+          "score": -125.65358683674829,
+          "ambiguous_cells": 35
+        },
+        {
+          "record": 153,
+          "text": "Take Ashby. He may prove useful.",
+          "score": -52.62376560101342,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 154,
+          "text": "Have you made contact?",
+          "score": -23.554162772386853,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 155,
+          "text": "No. We could not identify the Russian Fog before the bombing and hijacking began.",
+          "score": -70.40282302758611,
+          "ambiguous_cells": 27
+        },
+        {
+          "record": 156,
+          "text": "Then the hijacking is tied to the defection.",
+          "score": -8.547681506211765,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 157,
+          "text": "The culprit knows who the Russian Fog is.",
+          "score": -4.338647427832493,
+          "ambiguous_cells": 13
+        },
+        {
+          "record": 158,
+          "text": "Russian counterintelligence may be trying to stop the defection, or a third nation may be trying to seize the agent.",
+          "score": -55.70163816880134,
+          "ambiguous_cells": 37
+        },
+        {
+          "record": 159,
+          "text": "Madness. The whole world has gone mad.",
+          "score": -55.41145234120771,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 160,
+          "text": "The culprit may be oneperson, but that person carries out a nation's will .",
+          "score": -63.52976822961536,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 161,
+          "text": "Besides the Russian Fog, other spies must be aboard. Russian counterintelligence often assigns several agents to watch one target without telling them of one another.",
+          "score": -171.7442473669318,
+          "ambiguous_cells": 53
+        },
+        {
+          "record": 162,
+          "text": "I am no match for professionalspies.",
+          "score": -55.677360230430466,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 163,
+          "text": "Two British agents, two Russians...",
+          "score": -47.077388864549064,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 164,
+          "text": "Perhaps an agent from a third nation. The culprit is one of them.",
+          "score": -9.742342066391437,
+          "ambiguous_cells": 19
+        },
+        {
+          "record": 165,
+          "text": "And the Russian Fog. Seven rooms to search...",
+          "score": -45.866444959818395,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 166,
+          "text": "I should never have joined that card game.",
+          "score": -50.33607567882707,
+          "ambiguous_cells": 19
+        },
+        {
+          "record": 167,
+          "text": "You have my sympathy.",
+          "score": -3.166356355849965,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 168,
+          "text": "Cafe de Paris",
+          "score": -12.542603346520554,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 169,
+          "text": "You were foolish to trust this amateur, Director.",
+          "score": -34.25010779016915,
+          "ambiguous_cells": 16
+        },
+        {
+          "record": 170,
+          "text": "What a charming man.",
+          "score": -13.684290622026113,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 171,
+          "text": "You are a poor judge of character.",
+          "score": -53.75003400986339,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 172,
+          "text": "Dunant is looking for the Russian Fog.",
+          "score": -8.878658184901202,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 173,
+          "text": "So?",
+          "score": -20.022263569007087,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 174,
+          "text": "You hired a fine detective.",
+          "score": -29.06303477363425,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 175,
+          "text": "That clears me of suspicion.",
+          "score": -37.88808941898315,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 176,
+          "text": "Joseph the bellboy and several others remain under suspicion.",
+          "score": -116.83798412812565,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 177,
+          "text": "...Here it comes.",
+          "score": -23.43409234011597,
+          "ambiguous_cells": 5
+        },
+        {
+          "record": 178,
+          "text": "Mind your tone. Dunantis my employer and, for now, my superior.",
+          "score": -117.1553783599937,
+          "ambiguous_cells": 20
+        },
+        {
+          "record": 179,
+          "text": "And?",
+          "score": -21.08532120429622,
+          "ambiguous_cells": 3
+        },
+        {
+          "record": 180,
+          "text": "The radio room and captain's cabin announcements still point to you.",
+          "score": -51.9641582538801,
+          "ambiguous_cells": 21
+        },
+        {
+          "record": 181,
+          "text": "You pry too much. Salesman is a vulgar profession.",
+          "score": -57.09659548277256,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 182,
+          "text": "And yours?",
+          "score": -16.121191997801162,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 183,
+          "text": "Still better than being a spy.",
+          "score": -17.697006669362615,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 184,
+          "text": "Captain's Cabin",
+          "score": -5.239689691796295,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 185,
+          "text": "One bomb remains. It will explode at 7:00 p.m.",
+          "score": -75.38701482966837,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 186,
+          "text": "Do not touch it.",
+          "score": -9.556330641702623,
+          "ambiguous_cells": 3
+        },
+        {
+          "record": 187,
+          "text": "Again:recover the Russian Fog.",
+          "score": -29.170278349935217,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 188,
+          "text": "That is the only way to save the ship.",
+          "score": 9.864951981492123,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 189,
+          "text": "This is the final warning.",
+          "score": -25.12962504482541,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 190,
+          "text": "Why the hurry...?",
+          "score": -28.860124677421908,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 191,
+          "text": "Captain's Cabin",
+          "score": -5.239689691796295,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 192,
+          "text": "I last left this room at 2:51 p.m. It is now 3:05.",
+          "score": -56.994811856056366,
+          "ambiguous_cells": 20
+        },
+        {
+          "record": 193,
+          "text": "The fourteen minutes from 2:51 to 3:05...",
+          "score": -29.419229685365234,
+          "ambiguous_cells": 8
+        }
+      ]
+    },
+    {
+      "chapter": "PART3B",
+      "record_count": 209,
+      "locked_text_count": 207,
+      "locked_text_matches": 173,
+      "locked_text_mismatches": [
+        {
+          "record": 7,
+          "expected": "...Yamada... Th-that man is...",
+          "recovered": "...Yamada...Th-that man is..."
+        },
+        {
+          "record": 8,
+          "expected": "One of Tainui Adjell's men... Damn it... I still have more to tell you...",
+          "recovered": "One of Tainui Adjell's men...Damn it...I still have more to tell you..."
+        },
+        {
+          "record": 12,
+          "expected": "That woman is Salome... Everyone involved with her dies...",
+          "recovered": "That woman is Salome...Everyone involved with her dies..."
+        },
+        {
+          "record": 13,
+          "expected": "Run! You still have... Voysey!",
+          "recovered": "Run! You still have.. .Voysey!"
+        },
+        {
+          "record": 14,
+          "expected": "...What's wrong? Hey, what's wrong? Come on... What happened...",
+          "recovered": "...What's wrong? Hey, what's wrong? Come on...What happened..."
+        },
+        {
+          "record": 25,
+          "expected": "An assassination ring!? Even this island has one?",
+          "recovered": "An assassinationring!? Even thisisland has one?"
+        },
+        {
+          "record": 30,
+          "expected": "Nonsense! You said the Royal Suite and the cabin beside First Class were suspicious!",
+          "recovered": "Nonsense! You said theRoyal Suite and the cabin beside First Class were suspicious!"
+        },
+        {
+          "record": 41,
+          "expected": "Tonight. I will be in my cabin.",
+          "recovered": "Tonight. I will be i nmy cabin."
+        },
+        {
+          "record": 45,
+          "expected": "Calm down... Think it through. There has to be a way.",
+          "recovered": "Calm down...Think it through. There has to be a way."
+        },
+        {
+          "record": 48,
+          "expected": "Ashby said he and Voysey reported on Russia's Wing to Britain... Yet Voysey clearly did not trust him.",
+          "recovered": "Ashby said he and Voysey reported on Russia's Wing to Britain...Yet Voysey clearly did not trust him."
+        },
+        {
+          "record": 49,
+          "expected": "The bomb could kill us all. Why expose Russia's Wing now?",
+          "recovered": "The bomb could kill usall. Why expose Russia's Wing now?"
+        },
+        {
+          "record": 50,
+          "expected": "The evidence points to a state intelligence service... Britain, perhaps... or Germany, as Voysey suspected...",
+          "recovered": "The evidence points to a state intelligence service... Britain, perhaps...or Germany, as Voysey suspected..."
+        },
+        {
+          "record": 52,
+          "expected": "Wait... If Ashby is the culprit, it all fits. Voysey could not expose Russia's Wing, so Ashby made the crew draw it out...",
+          "recovered": "Wait...If Ashby is the culprit, it all fits. Voysey could notexpose Russia's Wing, so Ashby made the crew draw it out..."
+        },
+        {
+          "record": 53,
+          "expected": "No... I can't stand it anymore!",
+          "recovered": "No...I can't stand it anymore!"
+        },
+        {
+          "record": 60,
+          "expected": "If you'll spare me the grand speech.",
+          "recovered": "If you'll spare me thegrand speech."
+        },
+        {
+          "record": 61,
+          "expected": "I picked that up in London.",
+          "recovered": "I picked that upin London."
+        },
+        {
+          "record": 67,
+          "expected": "That's the point.",
+          "recovered": "That's thepoint."
+        },
+        {
+          "record": 71,
+          "expected": "That third country has a reason to want me dead!",
+          "recovered": "That third country hasareason to want me dead!"
+        },
+        {
+          "record": 74,
+          "expected": "Why would they need to kill you?",
+          "recovered": "Why would they need tokill you?"
+        },
+        {
+          "record": 78,
+          "expected": "All this convoluted reasoning is giving me a headache... I'm sick of it.",
+          "recovered": "All this convoluted reasoning is giving me a headache...I'm sick of it."
+        },
+        {
+          "record": 81,
+          "expected": "British Intelligence Action... Britain's foremost intelligence agency.",
+          "recovered": "British Intelligence Action...Britain's foremost intelligence agency."
+        },
+        {
+          "record": 88,
+          "expected": "Of course. I led that operation under orders from London.",
+          "recovered": "Of course. I led thatoperation under orders from London."
+        },
+        {
+          "record": 94,
+          "expected": "Enjoy your confidence while it lasts.",
+          "recovered": "Enjoy your confidence whil eit lasts."
+        },
+        {
+          "record": 103,
+          "expected": "Voysey still had not caught Mede... even at the last moment before sailing.",
+          "recovered": "Voysey still had not caught Mede...even at the last moment before sailing."
+        },
+        {
+          "record": 107,
+          "expected": "Voysey failed to catch Mede! So what?!",
+          "recovered": "Voysey failed to catchMede! So what?!"
+        },
+        {
+          "record": 121,
+          "expected": "You know Indian poker? You are the one person who cannot see what kind of man you are!",
+          "recovered": "You know Indian poker?You are the one person who cannot see what kind of man you are!"
+        },
+        {
+          "record": 124,
+          "expected": "H-how... how rude!",
+          "recovered": "H-how...how rude!"
+        },
+        {
+          "record": 137,
+          "expected": "True, you are not sweating. Then why are you so rattled?",
+          "recovered": "True, you are not sweating. Then why are youso rattled?"
+        },
+        {
+          "record": 138,
+          "expected": "How does it feel to be interrogated? I have been forced to play this ugly charade against decent people all along!",
+          "recovered": "How does it feel to beinterrogated? I have been forced to play this ugly charade against decent people all along!"
+        },
+        {
+          "record": 168,
+          "expected": "Even the Russian spies never knew Lord Ashby's butler was deputy chief of British Executive Action. The disguise was perfect. Who could see through it?",
+          "recovered": "Even the Russian spiesnever knew Lord Ashby's butler was deputy chief of British Executive Action. The disguise was perfect. Who could see through it?"
+        },
+        {
+          "record": 186,
+          "expected": "Is it not you... the culprit?",
+          "recovered": "Is it not you...the culprit?"
+        },
+        {
+          "record": 201,
+          "expected": "Damn it... A gentlemanly culprit would not keep making excuses when cornered...",
+          "recovered": "Damn it...A gentlemanly culprit would not keep making excuses when cornered..."
+        },
+        {
+          "record": 204,
+          "expected": "No... Ashby, you are starting to slip. You have set off my instincts.",
+          "recovered": "No...Ashby, you are starting to slip. You have set off my instincts."
+        },
+        {
+          "record": 206,
+          "expected": "The logic of division of labor. I shall eat California oranges at a heated table.",
+          "recovered": "The logic of divisionof labor. I shall eat California oranges at a heated table."
+        }
+      ],
+      "records": [
+        {
+          "record": 0,
+          "text": "Center Hall",
+          "score": -5.132720031559936,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 1,
+          "text": "Yamada Kasuke",
+          "score": -1.2318926585253778,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 2,
+          "text": "Chanel",
+          "score": -8.47056353311851,
+          "ambiguous_cells": 0
+        },
+        {
+          "record": 3,
+          "text": "...None of the men you brought were here... This place has been ransacked...",
+          "score": -26.970261543458406,
+          "ambiguous_cells": 16
+        },
+        {
+          "record": 4,
+          "text": "Kasuke",
+          "score": -5.625615706495568,
+          "ambiguous_cells": 0
+        },
+        {
+          "record": 5,
+          "text": "Voysey!",
+          "score": -12.436615857323131,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 6,
+          "text": "Voysey",
+          "score": -8.29951359386276,
+          "ambiguous_cells": 0
+        },
+        {
+          "record": 7,
+          "text": "...Yamada...Th-that man is...",
+          "score": -32.069553565168015,
+          "ambiguous_cells": 13
+        },
+        {
+          "record": 8,
+          "text": "One of Tainui Adjell's men...Damn it...I still have more to tell you...",
+          "score": -27.69127975481717,
+          "ambiguous_cells": 19
+        },
+        {
+          "record": 9,
+          "text": "Listen carefully!",
+          "score": -18.091659335356454,
+          "ambiguous_cells": 5
+        },
+        {
+          "record": 10,
+          "text": "...Mr. Yamada...",
+          "score": -13.671809138171039,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 11,
+          "text": "I learned the secret of \"Mede\"...",
+          "score": -14.3318868107859,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 12,
+          "text": "That woman is Salome...Everyone involved with her dies...",
+          "score": -30.924742713135714,
+          "ambiguous_cells": 24
+        },
+        {
+          "record": 13,
+          "text": "Run! You still have.. .Voysey!",
+          "score": -36.41545726460795,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 14,
+          "text": "...What's wrong? Hey, what's wrong? Come on...What happened...",
+          "score": -37.12863945150957,
+          "ambiguous_cells": 21
+        },
+        {
+          "record": 15,
+          "text": "...Aah! He's dead! Aah! Somebody's dead!",
+          "score": -22.824606354327553,
+          "ambiguous_cells": 16
+        },
+        {
+          "record": 16,
+          "text": "",
+          "score": -11.376796415640765,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 17,
+          "text": "Voysey knew Mede's true identity. He was about to name Russia's Wing...",
+          "score": -7.782722702586794,
+          "ambiguous_cells": 17
+        },
+        {
+          "record": 18,
+          "text": "And they killed him...",
+          "score": -11.54308861313844,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 19,
+          "text": "Ashby",
+          "score": -6.920374935897604,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 20,
+          "text": "I was never told. I want answers too. I must stop Russia's Wing at any cost...",
+          "score": -7.6612092069107165,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 21,
+          "text": "This is no time to argue... Voysey is dead...",
+          "score": -7.714349597134129,
+          "ambiguous_cells": 16
+        },
+        {
+          "record": 22,
+          "text": "Who is Tainui Adjell?",
+          "score": -2.5860565422722614,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 23,
+          "text": "He belongs to a Russian secret-assassination organization.",
+          "score": -24.069554997828043,
+          "ambiguous_cells": 22
+        },
+        {
+          "record": 24,
+          "text": "Did they kill Genkai...?",
+          "score": -15.462209393821304,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 25,
+          "text": "An assassinationring!? Even thisisland has one?",
+          "score": -61.89999876728226,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 26,
+          "text": "Why weren't you at Genkai's funeral? You were his partner!",
+          "score": -22.09770541530993,
+          "ambiguous_cells": 22
+        },
+        {
+          "record": 27,
+          "text": "I was only his liaison! Genkai alone investigated Mede.",
+          "score": -20.300942470386268,
+          "ambiguous_cells": 28
+        },
+        {
+          "record": 28,
+          "text": "Don't play innocent!",
+          "score": -10.58529147287118,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 29,
+          "text": "You skipped his funeral without a care!",
+          "score": -18.0166262695154,
+          "ambiguous_cells": 22
+        },
+        {
+          "record": 30,
+          "text": "Nonsense! You said theRoyal Suite and the cabin beside First Class were suspicious!",
+          "score": -30.83299867984489,
+          "ambiguous_cells": 29
+        },
+        {
+          "record": 31,
+          "text": "What a joke!",
+          "score": -6.531075874255958,
+          "ambiguous_cells": 5
+        },
+        {
+          "record": 32,
+          "text": "Enough. What did you learn?",
+          "score": -10.41631265350471,
+          "ambiguous_cells": 13
+        },
+        {
+          "record": 33,
+          "text": "Tianon and Lumeranka are clean. Lumeranka only spoke as ordered...",
+          "score": -17.214463515716538,
+          "ambiguous_cells": 16
+        },
+        {
+          "record": 34,
+          "text": "...You insolent brat...",
+          "score": -18.497178341915554,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 35,
+          "text": "What about the Maharaja's smuggling and that old retainer?",
+          "score": -28.580942235179428,
+          "ambiguous_cells": 22
+        },
+        {
+          "record": 36,
+          "text": "...",
+          "score": -14.570648175604354,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 37,
+          "text": "Listen. This case is our livelihood. We have to find a way to profit from it.",
+          "score": -3.284563396889597,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 38,
+          "text": "Do you think you can speak to me that way?",
+          "score": 5.548027919385684,
+          "ambiguous_cells": 16
+        },
+        {
+          "record": 39,
+          "text": "I don't care anymore!",
+          "score": -13.96056957057194,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 40,
+          "text": "If you want Russia's Wing behind bars, keep quiet and leave this to me!",
+          "score": -3.7420590140542016,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 41,
+          "text": "Tonight. I will be i nmy cabin.",
+          "score": -29.518715182643028,
+          "ambiguous_cells": 15
+        },
+        {
+          "record": 42,
+          "text": "I will get only you aboard the steamer!",
+          "score": -5.922141132295552,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 43,
+          "text": "Then strike at the tiger's den!",
+          "score": -18.371689965661012,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 44,
+          "text": "First-Class Cabin",
+          "score": -4.196493356948098,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 45,
+          "text": "Calm down...Think it through. There has to be a way.",
+          "score": -20.254812988091714,
+          "ambiguous_cells": 15
+        },
+        {
+          "record": 46,
+          "text": "Aft Deck",
+          "score": -5.693583674650369,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 47,
+          "text": "What in the world is happening here...? Who is setting whom up?",
+          "score": -11.221222634385423,
+          "ambiguous_cells": 25
+        },
+        {
+          "record": 48,
+          "text": "Ashby said he and Voysey reported on Russia's Wing to Britain...Yet Voysey clearly did not trust him.",
+          "score": -29.232057491935084,
+          "ambiguous_cells": 31
+        },
+        {
+          "record": 49,
+          "text": "The bomb could kill usall. Why expose Russia's Wing now?",
+          "score": -20.061941613896998,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 50,
+          "text": "The evidence points to a state intelligence service... Britain, perhaps...or Germany, as Voysey suspected...",
+          "score": -63.57972233874004,
+          "ambiguous_cells": 40
+        },
+        {
+          "record": 51,
+          "text": "Is Ashby truly the British agent Voysey said he was?",
+          "score": -5.622312477136937,
+          "ambiguous_cells": 17
+        },
+        {
+          "record": 52,
+          "text": "Wait...If Ashby is the culprit, it all fits. Voysey could notexpose Russia's Wing, so Ashby made the crew draw it out...",
+          "score": -32.4188607935388,
+          "ambiguous_cells": 20
+        },
+        {
+          "record": 53,
+          "text": "No...I can't stand it anymore!",
+          "score": -25.52418424401838,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 54,
+          "text": "I'll beat him senseless!",
+          "score": -15.883121147235826,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 55,
+          "text": "Royal Suite A",
+          "score": 2.4679125861728117,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 56,
+          "text": "He isn't a Russian spy. He's clearly working for a third country. He plans to steal Russia's Wing while Britain and Russia fight over it.",
+          "score": -1.1250592152727608,
+          "ambiguous_cells": 46
+        },
+        {
+          "record": 57,
+          "text": "Suppose he is?",
+          "score": -15.7334906111573,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 58,
+          "text": "Then hear me out!",
+          "score": -7.894634792431121,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 59,
+          "text": "Open your ears and listen carefully.",
+          "score": -13.483932808090128,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 60,
+          "text": "If you'll spare me thegrand speech.",
+          "score": -42.077417280329165,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 61,
+          "text": "I picked that upin London.",
+          "score": -37.54164414669855,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 62,
+          "text": "May I?",
+          "score": -6.983176717533987,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 63,
+          "text": "Briefly, please.",
+          "score": -17.217261392472835,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 64,
+          "text": "Don't rush me.",
+          "score": -7.391548240700605,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 65,
+          "text": "A third country had Voysey under surveillance. Once Voysey contacted Russia's Wing and Britain secured it, their agent planned to steal it from him, sink the ship, and escape.",
+          "score": -21.66076157003214,
+          "ambiguous_cells": 51
+        },
+        {
+          "record": 66,
+          "text": "Why sink the ship as well?",
+          "score": -2.7789246221157295,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 67,
+          "text": "That's thepoint.",
+          "score": -30.6958633960293,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 68,
+          "text": "A spy from a third country is aboard this ship.",
+          "score": 6.12877936991477,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 69,
+          "text": "And what does that have to do with your profession?",
+          "score": -1.4802033600506896,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 70,
+          "text": "Everything!",
+          "score": -14.220629591173973,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 71,
+          "text": "That third country hasareason to want me dead!",
+          "score": -27.13855040174163,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 72,
+          "text": "...Fascinating, Yamada. Then lay out your case logically.",
+          "score": -33.76456090651441,
+          "ambiguous_cells": 13
+        },
+        {
+          "record": 73,
+          "text": "Shut up!",
+          "score": -3.0786685418058393,
+          "ambiguous_cells": 1
+        },
+        {
+          "record": 74,
+          "text": "Why would they need tokill you?",
+          "score": -21.900563295132287,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 75,
+          "text": "I'm the one being targeted.",
+          "score": -12.203923727087876,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 76,
+          "text": "Exactly. He must make the Nostalgia vanish without a trace.",
+          "score": -17.228905274456096,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 77,
+          "text": "But why?",
+          "score": -13.334380649296918,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 78,
+          "text": "All this convoluted reasoning is giving me a headache...I'm sick of it.",
+          "score": -43.10760936084757,
+          "ambiguous_cells": 25
+        },
+        {
+          "record": 79,
+          "text": "Should I stop?",
+          "score": -12.820847045719315,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 80,
+          "text": "Go on.",
+          "score": -12.461325623824308,
+          "ambiguous_cells": 3
+        },
+        {
+          "record": 81,
+          "text": "British Intelligence Action...Britain's foremost intelligence agency.",
+          "score": -47.04430588616738,
+          "ambiguous_cells": 23
+        },
+        {
+          "record": 82,
+          "text": "Even among spies, they're elite.",
+          "score": -23.10162709046409,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 83,
+          "text": "British intelligence has kept watch over the Russia's Wing affair. Their number two man even came out in person.",
+          "score": -25.145795580992452,
+          "ambiguous_cells": 28
+        },
+        {
+          "record": 84,
+          "text": "He heads their operations. Nothing escapes him.",
+          "score": -22.196197173475902,
+          "ambiguous_cells": 17
+        },
+        {
+          "record": 85,
+          "text": "Such dedication.",
+          "score": -17.651759710469307,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 86,
+          "text": "...Are you following me?",
+          "score": -9.718521369328679,
+          "ambiguous_cells": 17
+        },
+        {
+          "record": 87,
+          "text": "Listen. At Southampton, British intelligence watched Voysey and waited for Russia's Wing to contact him. Once they entered British waters, every Russian spy was to be arrested and Russia's Wing taken to London.",
+          "score": -33.51847996553509,
+          "ambiguous_cells": 51
+        },
+        {
+          "record": 88,
+          "text": "Of course. I led thatoperation under orders from London.",
+          "score": -38.26881203628886,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 89,
+          "text": "So far, so good.",
+          "score": -9.150495197367789,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 90,
+          "text": "In other words, if anything happened, British intelligence would be on it at once.",
+          "score": -14.881527167184348,
+          "ambiguous_cells": 30
+        },
+        {
+          "record": 91,
+          "text": "Naturally.",
+          "score": -17.021127153624164,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 92,
+          "text": "Now, could you let me finish my own explanation?",
+          "score": -18.5842744390888,
+          "ambiguous_cells": 15
+        },
+        {
+          "record": 93,
+          "text": "Fine. Continue.",
+          "score": -13.657060501219208,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 94,
+          "text": "Enjoy your confidence whil eit lasts.",
+          "score": -53.114944588663036,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 95,
+          "text": "Suppose the spy seized Russia's Wing at sea. The moment he returned to Britain, his identity would be exposed. British Intelligence Action is the country's finest agency. Once it knew who had touched the Wing, it would follow him anywhere.",
+          "score": -42.30169120651795,
+          "ambiguous_cells": 65
+        },
+        {
+          "record": 96,
+          "text": "So he would sink the ship and make it look like an accident...",
+          "score": -3.465041085092932,
+          "ambiguous_cells": 24
+        },
+        {
+          "record": 97,
+          "text": "But, Mr. Yamada, he never made contact with Russia's Wing.",
+          "score": -11.226186284050321,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 98,
+          "text": "Exactly.",
+          "score": -9.054987801534285,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 99,
+          "text": "That's an absurd accusation!",
+          "score": -18.612895588609014,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 100,
+          "text": "Shall we work it out together?",
+          "score": -19.114764304977186,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 101,
+          "text": "Your delusions have become pathological.",
+          "score": -29.433462094099415,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 102,
+          "text": "Things do not always go according to plan.",
+          "score": -19.62246653296892,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 103,
+          "text": "Voysey still had not caught Mede...even at the last moment before sailing.",
+          "score": -38.85450722533383,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 104,
+          "text": "Who hadn't?!",
+          "score": -17.28084282129171,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 105,
+          "text": "He hadn't.",
+          "score": -13.665202964070287,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 106,
+          "text": "...What were we talking about again...?",
+          "score": -16.392539137336172,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 107,
+          "text": "Voysey failed to catchMede! So what?!",
+          "score": -29.18560606951667,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 108,
+          "text": "Exactly. That is why the saboteur needed to trap everyone aboard.",
+          "score": -15.87674718865698,
+          "ambiguous_cells": 19
+        },
+        {
+          "record": 109,
+          "text": "He destroyed the lifeboats and cut off our escape.",
+          "score": -6.990356626859713,
+          "ambiguous_cells": 15
+        },
+        {
+          "record": 110,
+          "text": "Next, he destroyed the radio equipment.",
+          "score": -14.762899020527904,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 111,
+          "text": "That was the finishing touch.",
+          "score": -11.745552217877806,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 112,
+          "text": "We...",
+          "score": -14.22902093801514,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 113,
+          "text": "had nowhere left to run.",
+          "score": -17.455308636218884,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 114,
+          "text": "Then he blew up the engine room.",
+          "score": -5.82137422408418,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 115,
+          "text": "No one ashore knows exactly what happened after that.",
+          "score": -10.127872294718227,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 116,
+          "text": "Then, without lifting a finger, he could make us trapped passengers...",
+          "score": -28.765157920945292,
+          "ambiguous_cells": 31
+        },
+        {
+          "record": 117,
+          "text": "search for Russia's Wing...",
+          "score": -11.143924308223337,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 118,
+          "text": "and expose it for him.",
+          "score": -13.525076283137226,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 119,
+          "text": "Quite a piece of sophistry. Interesting.",
+          "score": -30.060824288907245,
+          "ambiguous_cells": 21
+        },
+        {
+          "record": 120,
+          "text": "Now, this is where it gets interesting for you.",
+          "score": -11.99633786919194,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 121,
+          "text": "You know Indian poker?You are the one person who cannot see what kind of man you are!",
+          "score": -23.7523096531012,
+          "ambiguous_cells": 26
+        },
+        {
+          "record": 122,
+          "text": "The onlooker can see it at a glance!",
+          "score": -14.883696093253391,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 123,
+          "text": "Brutally simple!",
+          "score": -23.216298426961817,
+          "ambiguous_cells": 5
+        },
+        {
+          "record": 124,
+          "text": "H-how...how rude!",
+          "score": -44.184176174081266,
+          "ambiguous_cells": 5
+        },
+        {
+          "record": 125,
+          "text": "Try to remain a gentleman to the end.",
+          "score": -9.799691820743508,
+          "ambiguous_cells": 20
+        },
+        {
+          "record": 126,
+          "text": "What are you plotting...?",
+          "score": -13.598530359027642,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 127,
+          "text": "Now, wait.",
+          "score": -10.442769065414273,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 128,
+          "text": "The threat was meant to force the passengers to reveal who Russia's Wing is.",
+          "score": -2.230178037285052,
+          "ambiguous_cells": 25
+        },
+        {
+          "record": 129,
+          "text": "By that hypothesis...",
+          "score": -27.429642375089397,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 130,
+          "text": "the culprit",
+          "score": -7.746541351332363,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 131,
+          "text": "must have known Voysey's identity and reason for boarding from the start. Right?",
+          "score": -26.236156128621012,
+          "ambiguous_cells": 24
+        },
+        {
+          "record": 132,
+          "text": "On what grounds...? What exactly are you trying to prove?",
+          "score": -14.292508658727307,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 133,
+          "text": "This is getting exciting!",
+          "score": -14.749837649711049,
+          "ambiguous_cells": 15
+        },
+        {
+          "record": 134,
+          "text": "Enough of your games.",
+          "score": -8.609761096201291,
+          "ambiguous_cells": 3
+        },
+        {
+          "record": 135,
+          "text": "Wipe your brow.",
+          "score": -13.204554246105031,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 136,
+          "text": "I-I am not sweating!",
+          "score": -8.142980283168342,
+          "ambiguous_cells": 5
+        },
+        {
+          "record": 137,
+          "text": "True, you are not sweating. Then why are youso rattled?",
+          "score": -36.242686219509565,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 138,
+          "text": "How does it feel to beinterrogated? I have been forced to play this ugly charade against decent people all along!",
+          "score": -46.422206872455895,
+          "ambiguous_cells": 28
+        },
+        {
+          "record": 139,
+          "text": "Did you come here to whine?",
+          "score": -12.056680127612346,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 140,
+          "text": "No.",
+          "score": -6.0387722047456425,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 141,
+          "text": "Come now.",
+          "score": -7.958006876783847,
+          "ambiguous_cells": 8
+        },
+        {
+          "record": 142,
+          "text": "C",
+          "score": -9.679879483017857,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 143,
+          "text": "L",
+          "score": -9.70645521405729,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 144,
+          "text": "I",
+          "score": -5.398980520680961,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 145,
+          "text": "MAX!",
+          "score": -13.1054952718796,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 146,
+          "text": "You...",
+          "score": -11.03149502688518,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 147,
+          "text": "No one knew it... Voysey's true identity.",
+          "score": -5.584444775385744,
+          "ambiguous_cells": 19
+        },
+        {
+          "record": 148,
+          "text": "Was that really so? There is no way to verify it.",
+          "score": -8.22156539727018,
+          "ambiguous_cells": 21
+        },
+        {
+          "record": 149,
+          "text": "Shall we review it once more?",
+          "score": -19.494358384472967,
+          "ambiguous_cells": 13
+        },
+        {
+          "record": 150,
+          "text": "The culprit's actions...",
+          "score": -12.475324756043378,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 151,
+          "text": "center on Voysey's operation to recover Russia's Wing.",
+          "score": -18.51666784923275,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 152,
+          "text": "Not Voysey himself! Everything centers on the Wing.",
+          "score": -21.873517863390482,
+          "ambiguous_cells": 14
+        },
+        {
+          "record": 153,
+          "text": "My sense is the Russian spies never realized Voysey's true identity.",
+          "score": -3.439267579251121,
+          "ambiguous_cells": 21
+        },
+        {
+          "record": 154,
+          "text": "Did you ask the Russian spies? Did those doomed criminals politely admit they knew nothing?!",
+          "score": -33.214234178901876,
+          "ambiguous_cells": 39
+        },
+        {
+          "record": 155,
+          "text": "They as good as said it.",
+          "score": -7.531356820183343,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 156,
+          "text": "I used every scrap of imagination I had to win this game. For the moment, it was my only asset...",
+          "score": -27.49267004760563,
+          "ambiguous_cells": 24
+        },
+        {
+          "record": 157,
+          "text": "Fantasy impairs practical judgment...",
+          "score": -34.798903597785994,
+          "ambiguous_cells": 22
+        },
+        {
+          "record": 158,
+          "text": "You have gone off track...",
+          "score": -16.6322189889839,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 159,
+          "text": "Would you like a drink? Is there no Earl Grey left?",
+          "score": -10.902186863279924,
+          "ambiguous_cells": 17
+        },
+        {
+          "record": 160,
+          "text": "I am not in the mood...",
+          "score": -3.3353439412590165,
+          "ambiguous_cells": 15
+        },
+        {
+          "record": 161,
+          "text": "",
+          "score": -11.376796415640765,
+          "ambiguous_cells": 0
+        },
+        {
+          "record": 162,
+          "text": "The culprit...",
+          "score": -6.706167049178043,
+          "ambiguous_cells": 5
+        },
+        {
+          "record": 163,
+          "text": "knew Voysey's background extremely well...",
+          "score": -36.70254506035447,
+          "ambiguous_cells": 16
+        },
+        {
+          "record": 164,
+          "text": "You look troubled.",
+          "score": -11.585594938598387,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 165,
+          "text": "...",
+          "score": -14.570648175604354,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 166,
+          "text": "I hate this cut-and-dried Western logic.",
+          "score": -24.414453572636702,
+          "ambiguous_cells": 17
+        },
+        {
+          "record": 167,
+          "text": "You primitive...",
+          "score": -20.809445627151515,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 168,
+          "text": "Even the Russian spiesnever knew Lord Ashby's butler was deputy chief of British Executive Action. The disguise was perfect. Who could see through it?",
+          "score": -46.17172105030524,
+          "ambiguous_cells": 45
+        },
+        {
+          "record": 169,
+          "text": "...",
+          "score": -14.570648175604354,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 170,
+          "text": "Who saw through it?",
+          "score": -7.128791205835849,
+          "ambiguous_cells": 7
+        },
+        {
+          "record": 171,
+          "text": "M",
+          "score": -9.714108928213973,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 172,
+          "text": "E",
+          "score": -9.716234133361837,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 173,
+          "text": "D",
+          "score": -9.687422724550931,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 174,
+          "text": "E",
+          "score": -9.716234133361837,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 175,
+          "text": "did.",
+          "score": -11.998728708423583,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 176,
+          "text": "How naive. She knew from the start. Who else could know something only his partner should have known?",
+          "score": -10.43328755852734,
+          "ambiguous_cells": 30
+        },
+        {
+          "record": 177,
+          "text": "...",
+          "score": -14.570648175604354,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 178,
+          "text": "Say it plainly.",
+          "score": -19.622259437386887,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 179,
+          "text": "You are the culprit.",
+          "score": 2.607147839363676,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 180,
+          "text": "You are the culprit.",
+          "score": 2.607147839363676,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 181,
+          "text": "You are the culprit!",
+          "score": -1.3968099602720487,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 182,
+          "text": "It is you, is it not?",
+          "score": 1.4523487422162678,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 183,
+          "text": "It is you, is it not?",
+          "score": 1.4523487422162678,
+          "ambiguous_cells": 6
+        },
+        {
+          "record": 184,
+          "text": "My lord. You are the culprit.",
+          "score": -1.4442058318973583,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 185,
+          "text": "No one else could be the culprit now, could they?",
+          "score": 3.6916156617504194,
+          "ambiguous_cells": 18
+        },
+        {
+          "record": 186,
+          "text": "Is it not you...the culprit?",
+          "score": -33.605216726486525,
+          "ambiguous_cells": 13
+        },
+        {
+          "record": 187,
+          "text": "...",
+          "score": -14.570648175604354,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 188,
+          "text": "This was enjoyable, Mr. Yamada...",
+          "score": -15.257276904517305,
+          "ambiguous_cells": 10
+        },
+        {
+          "record": 189,
+          "text": "A little forceful, but it does amount to a leading interrogation.",
+          "score": -17.43102892117147,
+          "ambiguous_cells": 20
+        },
+        {
+          "record": 190,
+          "text": "But your case is weak. Even if it were true, you have no proof. I had no time to write the manifesto in the captain's cabin, did I? Like you, I am only another victim threatened by the bomber.",
+          "score": 12.735310401581955,
+          "ambiguous_cells": 53
+        },
+        {
+          "record": 191,
+          "text": "Ugh...",
+          "score": -16.0341040420779,
+          "ambiguous_cells": 2
+        },
+        {
+          "record": 192,
+          "text": "I don't trust you.",
+          "score": -2.79288767070583,
+          "ambiguous_cells": 5
+        },
+        {
+          "record": 193,
+          "text": "I do not ask you to trust a spy. But you have misjudged me. Admit defeat.",
+          "score": -3.07976021914181,
+          "ambiguous_cells": 17
+        },
+        {
+          "record": 194,
+          "text": "Not a chance.",
+          "score": -4.932645253185419,
+          "ambiguous_cells": 4
+        },
+        {
+          "record": 195,
+          "text": "You think so?",
+          "score": -3.513442506923969,
+          "ambiguous_cells": 9
+        },
+        {
+          "record": 196,
+          "text": "Very well. I shall forgive your insolence as a sign of fighting spirit...",
+          "score": -31.61986174672092,
+          "ambiguous_cells": 37
+        },
+        {
+          "record": 197,
+          "text": "...",
+          "score": -14.570648175604354,
+          "ambiguous_cells": 3
+        },
+        {
+          "record": 198,
+          "text": "If the culprit sinks the ship, both you and Russia's Wing die! Why is a mere victim so eager to obtain the Wing now...? Almost as if you were the culprit...",
+          "score": 6.738773790926103,
+          "ambiguous_cells": 47
+        },
+        {
+          "record": 199,
+          "text": "The deputy chief died for the Wing.",
+          "score": -3.227942904133957,
+          "ambiguous_cells": 11
+        },
+        {
+          "record": 200,
+          "text": "You misunderstand me. I take pride in my duty too. Finding what Russia's Wing truly is may be the only way to honor the deputy chief. When this is over, am I not the only man who can take the Wing back to Britain in his place?",
+          "score": 3.5720456584498326,
+          "ambiguous_cells": 54
+        },
+        {
+          "record": 201,
+          "text": "Damn it...A gentlemanly culprit would not keep making excuses when cornered...",
+          "score": -47.6791510755405,
+          "ambiguous_cells": 22
+        },
+        {
+          "record": 202,
+          "text": "Proof, then. If we live to see tomorrow morning, present it then.",
+          "score": -30.25148575823495,
+          "ambiguous_cells": 22
+        },
+        {
+          "record": 203,
+          "text": "What if the culprit gets it first?! Find Russia's Wing! The deputy chief said 'that woman.' Either the Wing or the killer is a woman! You said you would settle this as the man on the ground, Mr. Yamada. Those work clothes suit you. Get to work!",
+          "score": -12.844974175603783,
+          "ambiguous_cells": 55
+        },
+        {
+          "record": 204,
+          "text": "No...Ashby, you are starting to slip. You have set off my instincts.",
+          "score": -28.17073416508235,
+          "ambiguous_cells": 17
+        },
+        {
+          "record": 205,
+          "text": "Is that a threat from the culprit?",
+          "score": -1.8574995606387876,
+          "ambiguous_cells": 12
+        },
+        {
+          "record": 206,
+          "text": "The logic of divisionof labor. I shall eat California oranges at a heated table.",
+          "score": -49.75397861056147,
+          "ambiguous_cells": 26
+        },
+        {
+          "record": 207,
+          "text": "Yuko... I failed again...",
+          "score": -17.13824096622049,
+          "ambiguous_cells": 5
+        },
+        {
+          "record": 208,
+          "text": "That translation is not accurate. A kotatsu is a kotatsu.",
+          "score": -21.828744094026092,
+          "ambiguous_cells": 9
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,847 @@
+{
+  "schema_version": 1,
+  "chapter": "PART2A",
+  "record_count": 128,
+  "retail_mes": {
+    "sha256": "B349140047DD07E075C369A197FE16D7364492547B4C79113F04964D9DB7C5A4",
+    "size": 7814,
+    "dynamic_glyph_count": 229
+  },
+  "retail_scn": {
+    "sha256": "D2BE5A3DC2681A9C469805F4DF94DFDA7269B6C1893B20897934203AFE052759",
+    "size": 1853
+  },
+  "playable_reference_mes": {
+    "sha256": "8D5B5FAA1B102CDBDF5EED5767DB4F5262743340B4906806FFA0182AA06E2B1A",
+    "size": 19362,
+    "dynamic_glyph_count": 652
+  },
+  "profile": {
+    "schema_version": 1,
+    "name": "PART2A",
+    "choice_render_cell_limit": 18,
+    "require_choice_segments": true,
+    "exclude_choice_segments_from_wrap": true,
+    "infer_scn_layouts": true,
+    "validate_runtime_row_boundaries": true,
+    "validate_text_hygiene": true,
+    "validate_wrapped_text_integrity": true,
+    "validate_scn_floating_row_limits": true,
+    "scn_dialogue_layout": {
+      "first": 12,
+      "continuation": 10
+    },
+    "scn_continuation_layout": {
+      "first": 10,
+      "continuation": 10
+    },
+    "scn_dialogue_runtime_layout": {
+      "first": 12,
+      "continuation": 11
+    },
+    "scn_continuation_runtime_layout": {
+      "first": 11,
+      "continuation": 11
+    },
+    "layout_overrides": {
+      "93": {
+        "first": 12,
+        "continuation": 10,
+        "reason": "SCN opcode 0x28 renders this route caption in the ordinary lower text area."
+      }
+    },
+    "runtime_layout_overrides": {
+      "93": {
+        "first": 12,
+        "continuation": 11,
+        "reason": "Opcode 0x28 uses the lower renderer's 11-cell continuation stride."
+      }
+    },
+    "required_text_prefixes": {
+      "1": "ACT 2:"
+    },
+    "required_text_exact": {
+      "12": "At least call me Director.",
+      "74": "Locke",
+      "117": "Come on, not a 'Russki' at a time like this. That's dangerous."
+    },
+    "forbidden_text_patterns": [
+      "(?i)^ACTION\\s+2:",
+      "(?i)\\bDirecktor\\b",
+      "(?i)^Lock$"
+    ]
+  },
+  "text_mode": "render-ready",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-12\\i\\outputs\\nostalgia1907_act2d\\profile_migration_verify\\PART2A_manifest.json"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "ACT 2: THE UNDERWORLD",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "Promenade Deck",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "Yamada Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 4,
+      "policy": "translate",
+      "text": "Dunant",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "Listen. From now on, you answer to me. Show any insolence and I'll shoot you on the spot! Report every finding as the investigation proceeds. Remember, my gun is always at the back of your head.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "Is this guy under some kind of delusion?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "There are 297 passengers... We'll be here all day if we question them at random.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "Depending on what we find, there may be no tomorrow.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "Good grief. Am I spending the last day of my life with this guy?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "The first threat came by radio. The next was written in rouge on the captain's window... So we find the radio and the rouge. Right, Manager?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "At least call me Director.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "Rotten luck. I barely saw Yuko, and now I'm stuck with this guy...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "Yes, Director.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 15,
+      "policy": "translate",
+      "text": "Your pronunciation is terrible. The first officer saw the radio thrown overboard from a first-class cabin. The vacant room is on the starboard side.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 16,
+      "policy": "translate",
+      "text": "First class... On this little ship, it felt worlds away from mine.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 17,
+      "policy": "translate",
+      "text": "And you still claim I'm the culprit?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 18,
+      "policy": "translate",
+      "text": "How can you prove you were not the one who threw it away? Search the starboard first-class cabins and bring me whatever you find. Now hop to it!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 19,
+      "policy": "translate",
+      "text": "Was this guy born in the boss's chair?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 20,
+      "policy": "translate",
+      "text": "Yes, sir, Director!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 21,
+      "policy": "translate",
+      "text": "First-Class Cabin A",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 22,
+      "policy": "translate",
+      "text": "Fitz",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 23,
+      "policy": "translate",
+      "text": "I'm Canal Fitz, a cabin attendant. The key cabinet is at the service counter on the Promenade Deck, which is also my station.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 24,
+      "policy": "translate",
+      "text": "The key...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 25,
+      "policy": "translate",
+      "text": "She is calm.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 26,
+      "policy": "translate",
+      "text": "A master key?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 27,
+      "policy": "translate",
+      "text": "No. First-class cabins use individual keys.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 28,
+      "policy": "translate",
+      "text": "You are holding up well. Aren't you afraid?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 29,
+      "policy": "translate",
+      "text": "...Would you prefer me to panic? I... am a cabin attendant. I can still do my job.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 30,
+      "policy": "translate",
+      "text": "Okay. So no one has taken this cabin's key.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 31,
+      "policy": "translate",
+      "text": "No one.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 32,
+      "policy": "translate",
+      "text": "Hmm.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 33,
+      "policy": "translate",
+      "text": "...Open it, please.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 34,
+      "policy": "translate",
+      "text": "First-Class Cabin A",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 35,
+      "policy": "translate",
+      "text": "Nothing appears unusual. I inspected it before we sailed.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 36,
+      "policy": "translate",
+      "text": "The window is shut exactly as it was. A careful culprit.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 37,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 38,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 39,
+      "policy": "translate",
+      "text": "Something wrong?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 40,
+      "policy": "translate",
+      "text": "All right. For the last day of my life, I'm doing rather well.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 41,
+      "policy": "translate",
+      "text": "Look at the table. A square patch is clear of dust. The radio was used here.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 42,
+      "policy": "translate",
+      "text": "But... the key...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 43,
+      "policy": "translate",
+      "text": "You could get it if you were an accomplice. Or if you were the culprit yourself.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 44,
+      "policy": "translate",
+      "text": "Are you serious?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 45,
+      "policy": "translate",
+      "text": "No.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 46,
+      "policy": "translate",
+      "text": "Forget the key. The culprit obtained a priceless radio and built all those bombs. One or two keys would be child's play. Am I wrong?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 47,
+      "policy": "translate",
+      "text": "Don't frighten me. What a disagreeable man.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 48,
+      "policy": "translate",
+      "text": "Lovely smile.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 49,
+      "policy": "translate",
+      "text": "I'm a good man, to my friends.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 50,
+      "policy": "translate",
+      "text": "Is that how you always do business?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 51,
+      "policy": "translate",
+      "text": "Threats, bluffs, flattery... whatever works.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 52,
+      "policy": "translate",
+      "text": "A sordid trade, being an errand-boy salesman.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 53,
+      "policy": "translate",
+      "text": "Hee hee. You're a strange man.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 54,
+      "policy": "translate",
+      "text": "You'll help us?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 55,
+      "policy": "translate",
+      "text": "The hijacker's warning came from First-Class Cabin A. Have you checked who approached it at the time of transmission?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 56,
+      "policy": "translate",
+      "text": "I forgot! I was too busy admiring Fitz's curves!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 57,
+      "policy": "translate",
+      "text": "Not yet...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 58,
+      "policy": "translate",
+      "text": "Idiot! You aren't here to chase keys! Get moving and investigate!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 59,
+      "policy": "translate",
+      "text": "Quit shouting! You're just like the director back at headquarters!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 60,
+      "policy": "translate",
+      "text": "May I have a map of the ship?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 61,
+      "policy": "translate",
+      "text": "You idiot! You're not a toddling baby. Work it out yourself!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 62,
+      "policy": "translate",
+      "text": "Damn it!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 63,
+      "policy": "translate",
+      "text": "Sure, Director.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 64,
+      "policy": "translate",
+      "text": "Navigation Control Room",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 65,
+      "policy": "translate",
+      "text": "Captain",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 66,
+      "policy": "translate",
+      "text": "I came up to the pilot deck at 10:58 a.m., just before the transmission came in.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 67,
+      "policy": "translate",
+      "text": "Two minutes... Not enough to enter his cabin and write the threat.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 68,
+      "policy": "translate",
+      "text": "About what time did you discover the threat written in rouge on your cabin window?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 69,
+      "policy": "translate",
+      "text": "Let's see...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 70,
+      "policy": "translate",
+      "text": "Around 11:15... shortly after the radio room exploded.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 71,
+      "policy": "translate",
+      "text": "Fifteen minutes since it aired... Which means...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 72,
+      "policy": "translate",
+      "text": "...while explosions were tearing through the deck,",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 73,
+      "policy": "translate",
+      "text": "the culprit moved from first class to the captain's cabin...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 74,
+      "policy": "translate",
+      "text": "Locke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 75,
+      "policy": "translate",
+      "text": "This is our present position. From top to bottom: High Deck, Boat Deck, Promenade Deck, and Lark Deck.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 76,
+      "policy": "translate",
+      "text": "After transmitting the message, the culprit threw the radio overboard.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 77,
+      "policy": "translate",
+      "text": "Then came the lifeboat and engine-room explosions... During them, the culprit entered the captain's cabin and wrote the threat. Several routes are possible.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 78,
+      "policy": "translate",
+      "text": "First class to the captain's cabin. Good. I can retrace it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 79,
+      "policy": "translate",
+      "text": "And what will that tell you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 80,
+      "policy": "translate",
+      "text": "That's the point!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 81,
+      "policy": "translate",
+      "text": "I'll retrace the culprit's steps... Fortunately, everyone involved is still aboard.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 82,
+      "policy": "translate",
+      "text": "Who do you mean?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 83,
+      "policy": "translate",
+      "text": "Everyone aboard. Use the shipwide broadcast and have them wait where they were at 11:00 a.m.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 84,
+      "policy": "translate",
+      "text": "Absurd! What if that provokes the culprit?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 85,
+      "policy": "translate",
+      "text": "I'm already furious!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 86,
+      "policy": "translate",
+      "text": "I'm the culprit, remember? I authorize it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 87,
+      "policy": "translate",
+      "text": "You...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 88,
+      "policy": "translate",
+      "text": "God, this is irritating!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 89,
+      "policy": "translate",
+      "text": "The culprit wants 'The Russian Fog.' Phrase it as something connected to that. I'm taking the map. Please make the announcement.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 90,
+      "policy": "translate",
+      "text": "NOSTALGIA",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 91,
+      "policy": "translate",
+      "text": "This is Captain Stewart. To meet the culprit's demand, I ask all passengers to cooperate...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 92,
+      "policy": "translate",
+      "text": "First-Class Cabin Block",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 93,
+      "policy": "translate",
+      "text": "Lark Deck. Head aft.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 94,
+      "policy": "translate",
+      "text": "Follow this passage to second class. Cabins C and D are on the right. The shop is ahead.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 95,
+      "policy": "translate",
+      "text": "Shop",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 96,
+      "policy": "translate",
+      "text": "Sunmin",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 97,
+      "policy": "translate",
+      "text": "I was here the whole time.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 98,
+      "policy": "translate",
+      "text": "...What should I get Yuko?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 99,
+      "policy": "translate",
+      "text": "Did anyone pass by?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 100,
+      "policy": "translate",
+      "text": "No one. I don't lie. I sell nothing to the Japanese army.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 101,
+      "policy": "translate",
+      "text": "This is awkward...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 102,
+      "policy": "translate",
+      "text": "The culprit did not come through the passage toward second class. I should turn around and head forward.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 103,
+      "policy": "translate",
+      "text": "Back in the first-class block. The forward passage runs past the game hall, bar, and galley, with Center Hall at the end.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 104,
+      "policy": "translate",
+      "text": "Game Hall",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 105,
+      "policy": "translate",
+      "text": "Oh, I was here...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 106,
+      "policy": "translate",
+      "text": "Ilyu",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 107,
+      "policy": "translate",
+      "text": "What are you doing?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 108,
+      "policy": "translate",
+      "text": "Slaving for the man in the chair.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 109,
+      "policy": "translate",
+      "text": "It's a game. A troublesome one.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 110,
+      "policy": "translate",
+      "text": "Yeah...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 111,
+      "policy": "translate",
+      "text": "You'll be fine. I'm sure you'll win.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 112,
+      "policy": "translate",
+      "text": "I'm a sucker for that kind of encouragement...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 113,
+      "policy": "translate",
+      "text": "That's good to hear. Thanks.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 114,
+      "policy": "translate",
+      "text": "Bar Hokusai",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 115,
+      "policy": "translate",
+      "text": "Bartender",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 116,
+      "policy": "translate",
+      "text": "It was dead quiet. The Russian customer was gloomy. No one else came in. Something was happening at the game hall.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 117,
+      "policy": "translate",
+      "text": "Come on, not a 'Russki' at a time like this. That's dangerous.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 118,
+      "policy": "translate",
+      "text": "Passenger",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 119,
+      "policy": "translate",
+      "text": "...Bartender!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 120,
+      "policy": "translate",
+      "text": "Stolovaya, straight! Corona for a chaser!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 121,
+      "policy": "translate",
+      "text": "I'll pretend I heard nothing.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 122,
+      "policy": "translate",
+      "text": "Galley",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 123,
+      "policy": "translate",
+      "text": "Head Chef",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 124,
+      "policy": "translate",
+      "text": "It was just before lunch!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 125,
+      "policy": "translate",
+      "text": "We needed every hand. If anyone came in, we'd know.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 126,
+      "policy": "translate",
+      "text": "I'd grab them and put them to work peeling cabbages!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 127,
+      "policy": "translate",
+      "text": "...I suppose so.",
+      "layout_policy": "adaptive"
+    }
+  ]
+}

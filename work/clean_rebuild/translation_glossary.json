@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "style": {
+    "electrical_conductor": "wire by default; preserve deliberate source distinctions such as 電線 versus コード",
+    "wire_cutting_tool": "Wire Cutters",
+    "room_style": "title case",
+    "speaker_label_style": "canonical name or rank without punctuation",
+    "contextual_exception_policy": "record-scoped, source-fingerprinted exceptions override generic prose preferences"
+  },
+  "fixed_source_terms": [
+    {"id":"yamada_kasuke","japanese":"山田加助","canonical_english":"Yamada Kasuke","category":"character_name","source_record_id":"PART1A:001","normalized_bitmap_sha256":"0D178A74275F462ECD9B5C4FD4C3A6477FCC531E6AF0E45C8FAF7DA133688559"},
+    {"id":"ashby","japanese":"アッシュビー","canonical_english":"Ashby","category":"surname","source_record_id":"PART1B:031","normalized_bitmap_sha256":"8826E35DAA80C9D82C5C7F96C2C1518A3ADE7978AE05A107CC776242D161BDC0"},
+    {"id":"voysey","japanese":"オイジー","canonical_english":"Voysey","category":"surname","source_record_id":"PART3B:006","normalized_bitmap_sha256":"60AAEEC54F7EB28C3CFD3FE68E1A698270A35DEB45F4DDAAC64AF23A56C2FD23"},
+    {"id":"ruthie","japanese":"ルーティ","canonical_english":"Ruthie","category":"character_name","source_record_id":"PART3B_:005","normalized_bitmap_sha256":"AF9D57D836DD1892D92C3DE2E9F0E20365B6DC79785C5164936B6BB3B028C7F6"},
+    {"id":"old_karl","japanese":"カール老","canonical_english":"Old Karl","category":"name_and_title","source_record_id":"PART3B_:039","normalized_bitmap_sha256":"D72C5D640E1CC0FDDACD2A79338D3A2F526F169F0E5BEBCB4AD749AF392874AC"},
+    {"id":"fitz","japanese":"フィッツ","canonical_english":"Fitz","category":"surname","source_record_id":"STAFF:029","normalized_bitmap_sha256":"D2CAE754AAE4D21CC5F5BF030E1C9E68B3DA5903CEB82582C0045811003BB288"},
+    {"id":"kirikov","japanese":"キリーコフ","canonical_english":"Kirikov","category":"surname","source_record_id":"PART3C:048","normalized_bitmap_sha256":"F959565356690F81D80592A66588D604EEBF3C14E3159CEA1B2CF1BED8CFDCFA"},
+    {"id":"ilyu","japanese":"イリュ","canonical_english":"Ilyu","category":"nickname","source_record_id":"PART1A:002","normalized_bitmap_sha256":"7BF93AF721BD378F0D3EFA5635E28369CE154F66E5B1408A12DD65BAA071FD34","review_required":true},
+    {"id":"ilyusha","japanese":"イリューシャ","canonical_english":"Ilyusha","category":"character_name","source_record_id":"PART3B_:185","normalized_bitmap_sha256":"26FEBE6E4F094072904F7972298D6774B110718E58A8683375F9DD6E8C498410"},
+    {"id":"lumeranka","japanese":"ルメランカ","canonical_english":"Lumeranka","category":"character_name","source_record_id":"PART2C:085","normalized_bitmap_sha256":"7388A3EE967087C57A93A92731AF0939ECFDAF1FB5BBB63DE04170189AE487EB","review_required":true},
+    {"id":"sunmin","japanese":"スンミン","canonical_english":"Sunmin","category":"character_name","source_record_id":"PART2A:096","normalized_bitmap_sha256":"4AC091E5D0292BBB8CB149C2666B94A23F07F3D35473DEE94A27E83051B281BA","review_required":true},
+    {"id":"dunant","japanese":"デュナン","canonical_english":"Dunant","category":"surname","source_record_id":"PART1C:113","normalized_bitmap_sha256":"FE108F070AB3F12A6220D2AE7F8D542A0CF00E123D62F4C11E7632205718A835"},
+    {"id":"stra","japanese":"ストラ","canonical_english":"Stra","category":"nickname","source_record_id":"PART2B:041","normalized_bitmap_sha256":"FB29FEF1E1634C96E97D9D75AE039AFE70B8222C21CC66B39BFCD89B171411BA"},
+    {"id":"captain","japanese":"船長","canonical_english":"Captain","category":"rank","source_record_id":"PART1B:014","normalized_bitmap_sha256":"80B753836621BDFE86263F413F2FA4E2172CA0ABFE734F740758627478854297"},
+    {"id":"chief_engineer","japanese":"機関長","canonical_english":"Chief Engineer","category":"rank","source_record_id":"PART1C:053","normalized_bitmap_sha256":"9462D96AEBA6E80D5D6E0B69E2B7409F70B67AC9FCC69C5751B3BD44FC376C0D"},
+    {"id":"deputy_chief","japanese":"次長","canonical_english":"Deputy Chief","category":"rank","source_record_id":"PART2F:140","normalized_bitmap_sha256":"EC24633DB3256DDDD0BBB35EF412E111D4550ED6D84620B705310694AAAFE72F"},
+    {"id":"cargo_hold","japanese":"船倉","canonical_english":"Cargo Hold","category":"ship_location","source_record_id":"PART3B_:001","normalized_bitmap_sha256":"B417AE2099BEE16D39A71D1DB5AB22C5BF042A75955C31E7C69EB88F379F5698"},
+    {"id":"captains_cabin","japanese":"船長室","canonical_english":"Captain's Cabin","category":"ship_location","source_record_id":"PART1C:037","normalized_bitmap_sha256":"594503C8829A0BA4050208EE6845447757927A34C8B833DD05311A6E19F14B91"},
+    {"id":"second_class_cabin","japanese":"二等客室","canonical_english":"Second-Class Cabin","category":"ship_location","source_record_id":"PART3B_:078","normalized_bitmap_sha256":"FCFE2B31B0BDBDB7CE4362748591BE932249AB4C158F65304CD7BA6F11E90114"},
+    {"id":"first_class_cabin_block","japanese":"一等客室ブロック","canonical_english":"First-Class Cabin Block","category":"ship_location","source_record_id":"PART2A:092","normalized_bitmap_sha256":"6343495AC257358F60474D359F9D969DF1B9B7ECD84075514667DD4B97BEB504"},
+    {"id":"adjoining_room_c","japanese":"付き部屋C","canonical_english":"Adjoining Room C","category":"ship_location","source_record_id":"PART2D:062","normalized_bitmap_sha256":"0ACC935E55861CBB2B684D7112028C4BDCB3D25A7BC9B3A0671E773F02E65A97"},
+    {"id":"crew_meeting_room","japanese":"クルー会議室","canonical_english":"Crew Meeting Room","category":"ship_location","source_record_id":"PART1C:039","normalized_bitmap_sha256":"A0366DA41F1C3A7D9BB6B2DAC08A4A6BC47911EBF8A263C3B6398D82694AE5C7"},
+    {"id":"navigation_control_room","japanese":"運航管制室","canonical_english":"Navigation Control Room","category":"ship_location","source_record_id":"PART1C:002","normalized_bitmap_sha256":"F0495F2ADCB4D155DA10F8C4372EEC79C611373941451276BCF3A0D9974CA8C8"},
+    {"id":"wire_cutters","japanese":"ニッパー","canonical_english":"Wire Cutters","category":"tool","source_record_id":"PART2E:053","normalized_bitmap_sha256":"ED3935848926F61D8B7177F48B10B46BB47A4144F5BDF7A799F1F78D5F75CBE7"},
+    {"id":"wire","japanese":"コード","canonical_english":"Wire","category":"object","source_record_id":"PART2E:054","normalized_bitmap_sha256":"A05DD4C6B985642EAACDDE2FEAD8F353A18F36DC8DDBBCD52E130B22853BCC45"},
+    {"id":"affirmative_ee","japanese":"「ええ」","canonical_english":"Yes.","category":"affirmative_choice","source_record_id":"PART4B:117","normalized_bitmap_sha256":"59A3966953D8B0E4E9749585F5C11E6980BFEE2E6A635C85347BE0FE9F10B6EF"},
+    {"id":"not_at_all","japanese":"全然","literal_english":"Not at all.","canonical_english":"No.","category":"negative_response","source_record_id":"PART2A:045","normalized_bitmap_sha256":"EC73C9286838A26B5065B5D15464E98537902787282712B96DB9FF016653B1B9"}
+  ],
+  "controlled_phrases": [
+    {"id":"kanal_fitz","japanese":"カナル・フィッツ","canonical_english":"Canal Fitz","category":"full_name","review_required":true},
+    {"id":"british_intelligence_action","japanese":"イギリス・インテリジェンス・アクション","canonical_english":"British Intelligence Action","category":"organization"},
+    {"id":"mede","japanese":"メデ","canonical_english":"Mede","category":"code_name"},
+    {"id":"medea","japanese":"メディア","canonical_english":"Medea","category":"mythological_name"},
+    {"id":"grancelius","japanese":"グランセリウス","canonical_english":"Grancelius","category":"surname","record_ids":["PART2E:041","PART3B_:029","PART3B_:077","PART3B_:194","PART3C:022","PART4A:013","PART4C:047"]},
+    {"id":"kamorovich","japanese":"カモルビッチ","canonical_english":"Kamorovich","category":"surname","record_ids":["PART2D:122","PART3C:148","PART3C:209"]},
+    {"id":"upper","japanese":"上","canonical_english":"upper","category":"position"},
+    {"id":"lower","japanese":"下","canonical_english":"lower/below","category":"position"},
+    {"id":"left","japanese":"ひだり","canonical_english":"left","category":"position"},
+    {"id":"right","japanese":"みぎ","canonical_english":"right","category":"position"},
+    {"id":"red","japanese":"赤","canonical_english":"red","category":"wire_color"},
+    {"id":"blue","japanese":"青","canonical_english":"blue","category":"wire_color"},
+    {"id":"white","japanese":"白","canonical_english":"white","category":"wire_color"}
+  ],
+  "source_authoritative_records": [
+    {"record_id":"PART2B:087","source_record_sha256":"A1D53A46B42D633D925C9DC37FD0CB8206154F01CAB17BFE2AE7B39DA6D127A3","expected_english":"...I've reached the Bridge Passage. I can go straight to the Captain's Cabin from here."},
+    {"record_id":"PART2E:121","source_record_sha256":"937E1FDBDE3657330485AFF61A187FE85D9BFEF28C382C450DBDB21304BAE73B","expected_english":"Betty... I knew a woman with your name. She was far smarter than you, and above all, a real flesh-and-blood woman. You two were alike... fickle and cruel. Nothing she said came from the heart. I know. It was because I wasn't ashore... Use the wire."},
+    {"record_id":"PART4B:290","source_record_sha256":"2AED7860FC0F79ACC2DBA433F2D58BE7E6F97D706526EFFDC9546A7AB918A096","expected_english":"...wire cutters are tools for cutting wires."},
+    {"record_id":"PART4B:291","source_record_sha256":"41947E89EB06EC796004B95DB19397E081CED8A22ADB29E07340FD5331DEE201","expected_english":"This electrical wire... this cord is for making a bypass... Japanese people should learn more about Western machinery in the future..."}
+  ],
+  "reviewed_contextual_exceptions": [
+    {"record_id":"PART4B:290","normalized_bitmap_sha256":"2648ABC9458BDA23CDF8EC55E447B2CCD7FC6FF5BA1A62FD237EE96419B524A5","category":"running_dialogue_tool_case","required_english_pattern":"(?i)\\bwire cutters\\b","forbidden_english_pattern":"Wire Cutters","reason":"Running dialogue uses lowercase even though the standalone inventory label is title case."},
+    {"record_id":"PART4B:291","normalized_bitmap_sha256":"13A2518D0CDACAE8AE8CB6E8816F27098C22A698F725065E6937BA7D61DC2C9F","category":"deliberate_lexical_self_correction","required_english_pattern":"(?i)\\belectrical wire\\b.*\\bcord\\b.*\\bbypass\\b","reason":"Japanese self-corrects 電線 to コード; both English terms must remain in source order."}
+  ],
+  "forbidden_english_patterns": [
+    "\\bRudy\\b", "\\bLutie\\b", "\\bOld Carl\\b", "\\bFilitz\\b",
+    "\\bKiriko\\b", "\\bIryu\\b", "\\bRumeranna\\b",
+    "\\bGranzelius\\b", "\\bKamolovich\\b",
+    "British Executive Action", "Captain Room", "\\bNippers\\b", "\\bnippers\\b"
+  ],
+  "known_invalid_exact_mappings": [
+    {"japanese":"船倉","invalid_english":"Bosun"},
+    {"japanese":"船倉","invalid_english":"Secret Pact"},
+    {"japanese":"機関長","invalid_english":"Secret Room"},
+    {"japanese":"船長","invalid_english":"Silence."}
+  ]
+}

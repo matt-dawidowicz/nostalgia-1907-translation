@@ -1,0 +1,1590 @@
+{
+  "schema_version": 1,
+  "chapter": "PART3C",
+  "record_count": 224,
+  "retail_mes": {
+    "sha256": "AFDB5EDBE44DEE2C7EC18A8A3B0BA1E742A98E58C6D08139C2DAF744B4B1E0CB",
+    "size": 14790,
+    "dynamic_glyph_count": 410
+  },
+  "retail_scn": {
+    "sha256": "DC742A1D60E27C5DC657B75647DF3E51B6006A17F1388D4E6705EA983DB675E5",
+    "size": 4041
+  },
+  "playable_reference_mes": {
+    "sha256": "01D1C5F3F1F2D74362897F241C3144BCEF1C7695DEE8B676FC69AC6F73266EE3",
+    "size": 16361,
+    "dynamic_glyph_count": 400
+  },
+  "profile": {
+    "schema_version": 1,
+    "name": "PART3C",
+    "choice_render_cell_limit": 18,
+    "require_choice_segments": false,
+    "require_selector_window_segments": false,
+    "exclude_choice_segments_from_wrap": true,
+    "scn_selector_window_subtypes": [
+      40
+    ],
+    "infer_scn_layouts": true,
+    "infer_all_replacement_segments": true,
+    "scn_window_text_subtypes": [
+      39,
+      40
+    ],
+    "leading_blank_anchor_segments": [],
+    "validate_runtime_row_boundaries": true,
+    "validate_text_hygiene": true,
+    "validate_wrapped_text_integrity": true,
+    "validate_scn_floating_row_limits": true,
+    "scn_dialogue_layout": {
+      "first": 12,
+      "continuation": 10
+    },
+    "scn_continuation_layout": {
+      "first": 10,
+      "continuation": 10
+    },
+    "scn_dialogue_runtime_layout": {
+      "first": 12,
+      "continuation": 11
+    },
+    "scn_continuation_runtime_layout": {
+      "first": 11,
+      "continuation": 11
+    },
+    "layout_overrides": {
+      "0": {
+        "first": 12,
+        "continuation": 10,
+        "reason": "Location label is not attached to an inferred SCN text window."
+      },
+      "1": {
+        "first": 12,
+        "continuation": 10,
+        "reason": "Speaker label is not attached to an inferred SCN text window."
+      },
+      "3": {
+        "first": 12,
+        "continuation": 10,
+        "reason": "Speaker label is not attached to an inferred SCN text window."
+      }
+    },
+    "runtime_layout_overrides": {
+      "0": {
+        "first": 12,
+        "continuation": 11,
+        "reason": "Location label uses the lower renderer's continuation stride."
+      },
+      "1": {
+        "first": 12,
+        "continuation": 11,
+        "reason": "Speaker label uses the lower renderer's continuation stride."
+      },
+      "3": {
+        "first": 12,
+        "continuation": 11,
+        "reason": "Speaker label uses the lower renderer's continuation stride."
+      }
+    },
+    "required_text_exact": {
+      "0": "Second-Class Cabin",
+      "1": "Kasuke",
+      "2": "Do you know anything about Tainui Adjell's assassin?",
+      "3": "Ilyu",
+      "4": "Once their identities are exposed, it is over. They hide them even from their comrades.",
+      "5": "Did you know about Kirikov from the moment you boarded?",
+      "6": "Heh. Had I not noticed, I would be the Russian Fog, with him as my observer.",
+      "7": "Had I known him from the start, I would be the observer and he the Fog...",
+      "8": "No. A simple trick question like that will not work on me.",
+      "9": "As I told you, my mission was strictly against Britain, not to police my own organization.",
+      "10": "Capturing Voysey alive...? I don't believe it.",
+      "11": "You are not acting directly! Something is making you hesitate!",
+      "12": "I am always watching... Sensitivity is a fine word.",
+      "13": "Again, the feel of it... Thinking while sensing...",
+      "14": "Always reading the flow beneath conscious thought? Intuition?",
+      "15": "Or switching actions on impulse, without preparation?",
+      "16": "Russia's assassination bureau... You serve the same country, don't you?",
+      "17": "Internal Security is entirely separate from General Intelligence. Even on the same ship...",
+      "18": "Besides, there is a killer...",
+      "19": "I concede the wager. What is your objective?",
+      "20": "Only to finish the voyage safely and return to my old life.",
+      "21": "...As a spy?",
+      "22": "Ilyusha Grancelius... That is not the name of a native Russian...",
+      "23": "The name is real... I prefer myself when I am lying.",
+      "24": "Don't play games with me!",
+      "25": "Why become a spy?",
+      "26": "I had no choice... No one can understand my twenty-one years.",
+      "27": "...An opening... Are you showing me a weakness?",
+      "28": "What is wrong? You should be able to handle me better.",
+      "29": "You are someone who can live alone.",
+      "30": "What do you like?",
+      "31": "I already have the evidence. Tell me the truth.",
+      "32": "Heh. You already lost the wager.",
+      "33": "Ngh...",
+      "34": "Even if you are not the Russian Fog, you must know what they look like. Otherwise you could not watch them.",
+      "35": "Why do you want to know so badly?",
+      "36": "...Th-that's...",
+      "38": "Why?",
+      "39": "...The culprit demanded it.",
+      "40": "That's a lie. Do you really think the culprit will disarm the bomb once he has the Fog?",
+      "41": "You do not believe that.",
+      "42": "Agh...",
+      "43": "The culprit is playing you.",
+      "44": "Is that fun?",
+      "45": "...",
+      "46": "...",
+      "47": "Second-Class Cabin",
+      "48": "Kirikov",
+      "49": "Th-that knife... It belonged to Tainui Adjell...",
+      "50": "The Killer",
+      "51": "A mere salesman exposed you? From now on, you will obey every order I give.",
+      "52": "Heh. What kind of interrogator stays silent? You will leave your subject at a loss.",
+      "53": "...",
+      "54": "I am at a loss too.",
+      "55": "Have you ever been interrogated?",
+      "56": "Our sales director is a sly fox. Every report to him feels like an interrogation.",
+      "57": "But your director would not kill you.",
+      "58": "You are always trying to escape from something.",
+      "59": "Maybe. But can one person directly see what another is thinking?",
+      "60": "Sometimes. Often.",
+      "61": "...",
+      "62": "Ilyusha, do you have any family?",
+      "63": "Do not try to trap me. Defectors are not always alone. Or did you expect to make me cry?",
+      "64": "You are seriously twisted.",
+      "65": "Sometimes I wonder whether everything others understand so naturally is exactly what I fail to grasp. I even doubt my own insight.",
+      "66": "Maybe you simply cannot prey on people's weaknesses.",
+      "67": "I cannot see them... I understand my own thoughts, but... do I? I may not even understand those.",
+      "68": "Once, while undercover in Prague, I was caught and interrogated.",
+      "69": "The interrogator was a veteran.",
+      "70": "Can you imagine how terrified I was?",
+      "71": "If he read my thoughts and exposed me, I would be executed.",
+      "72": "Fear of reliving that drove me to defect.",
+      "73": "Defection destroys your whole life. Even on dangerous missions, you have comrades who value you and a place where you belong.",
+      "74": "Sounds like quiet, ordinary work.",
+      "75": "I am serious.",
+      "76": "Did you survive?",
+      "77": "I never showed my true feelings. I trusted my disguise. I acted every day, toward everyone...",
+      "78": "...at all times.",
+      "79": "Acting every day...",
+      "80": "Her walls are too high... How can I ever step inside?",
+      "81": "Even now?",
+      "82": "It became a habit. I doubt even my passing feelings. Is this my true heart? Is this feeling real? I no longer know.",
+      "83": "Ilyu's true feelings...",
+      "84": "To defect, you must be alone. As you are now.",
+      "85": "No one can know that.",
+      "86": "You are chaos. You enjoy confusing me, like a siren...",
+      "87": "There are no witches.",
+      "88": "You are the Russian Fog, are you not?",
+      "89": "I do not know what expression to wear when I tell the truth... You will not believe any answer I give.",
+      "90": "...Acting every day...",
+      "91": "Then stop living that ridiculous life.",
+      "92": "Heh... I wish I could. Talking to you is strange. Somehow, I can relax.",
+      "93": "Ilyu is not trying to escape the Empire. She is fleeing something more abstract...",
+      "94": "Ask him about Kirikov. Ask what Russia's privileged classes do with their lives.",
+      "95": "Defection openly betrays the Empire. The Tsar will be humiliated. Reveal yourself publicly before his assassins silence you.",
+      "96": "...Shut up...",
+      "97": "Well, Kirikov. How does it feel to make the greatest gamble of your life? Your family, or your future?",
+      "98": "We captured one of the Russian agents watching you. We can make him reveal your identity. He knows you intend to defect, and he will kill you. What will you do?",
+      "99": "I-it is me! I am the Russian Fog!",
+      "100": "Thank you for your cooperation!",
+      "101": "Take me to British Intelligence!",
+      "102": "Defection is not that simple.",
+      "103": "I will request British protection. Right now!",
+      "104": "What are your terms?",
+      "105": "Safety. A house in Devon, with a fishing river, orchard, horse, and land. In return, I will give them every secret I know.",
+      "106": "How low the Siberian Cossack cavalry has fallen.",
+      "107": "Not now.",
+      "108": "W-why not?",
+      "109": "They need me too, do they not?",
+      "110": "This is no time to leisurely list your asylum terms!",
+      "111": "...The bomber.",
+      "112": "Why are you relying on me now?",
+      "113": "You bastard! You forced me to confess!",
+      "114": "The person offering you sanctuary may be behind the bombing, an agent of a third country. Then Britain is not your destination at all.",
+      "115": "That is absurd...",
+      "116": "Pathetic.",
+      "117": "Try any little trick...",
+      "118": "...and I will snap your neck!",
+      "119": "Enough! I will kill you!",
+      "120": "He is huge...",
+      "121": "The bomber is neither a Russian nor a British agent. He is a thief acting under another country's orders.",
+      "122": "You are lying!",
+      "123": "Calm down! A third country is trying to steal you!",
+      "124": "Do you know why they call me the Fog? Because I can kill without a sound. Shall I demonstrate?",
+      "125": "Sorry, but forget defecting to Britain.",
+      "126": "N-no! Russia knows I intend to defect. I cannot go back. They will kill me!",
+      "127": "Damn it...",
+      "128": "Do you understand the situation now? Are you calm?",
+      "129": "The bomber wants me. Hand me over, and the ship will be saved.",
+      "130": "Kill me, and you will never know who wants you.",
+      "131": "...I will not kill you.",
+      "132": "The bomber will not disarm it. This ship is evidence of the theft, so it can never reach Southampton. At eight, the bomb will erase it. Our only hope is to catch the culprit and dismantle it ourselves.",
+      "133": "The culprit must have an escape route. Hand me over.",
+      "134": "So anywhere but Britain will do?",
+      "135": "Anywhere outside Russia's satellite states.",
+      "136": "Try Antarctica. The vodka is excellent.",
+      "137": "...No.",
+      "138": "Why not?",
+      "139": "Do you not understand? You can escape to a third country that will protect you. But the culprit will flee this doomed ship with you, leaving 411 innocent people behind.",
+      "140": "A first-rate spy thinks first about survival.",
+      "141": "Idiot! Everyone does!",
+      "142": "I am disappointed, Russian Fog. You are nothing but an egoist."
+    },
+    "forbidden_text_patterns": [
+      "Russian Mist",
+      "Direcktor",
+      "Queen's English",
+      "Action 3"
+    ]
+  },
+  "text_mode": "render-ready",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-12\\i\\outputs\\nostalgia1907_act3c_000_223_visualfix3\\PART3C_000_223_visualfix3_build_config.json",
+    "record 194 speaker corrected from record 146"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "translate",
+      "text": "Second-Class Cabin",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "Do you know anything about Tainui Adjell's assassin?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "Ilyu",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 4,
+      "policy": "translate",
+      "text": "Once their identities are exposed, it is over. They hide them even from their comrades.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "Did you know about Kirikov from the moment you boarded?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "Heh. Had I not noticed, I would be the Russian Fog, with him as my observer.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "Had I known him from the start, I would be the observer and he the Fog...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "No. A simple trick question like that will not work on me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "As I told you, my mission was strictly against Britain, not to police my own organization.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "Capturing Voysey alive...? I don't believe it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "You are not acting directly! Something is making you hesitate!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "I am always watching... Sensitivity is a fine word.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "Again, the feel of it... Thinking while sensing...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "Always reading the flow beneath conscious thought? Intuition?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 15,
+      "policy": "translate",
+      "text": "Or switching actions on impulse, without preparation?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 16,
+      "policy": "translate",
+      "text": "Russia's assassination bureau... You serve the same country, don't you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 17,
+      "policy": "translate",
+      "text": "Internal Security is entirely separate from General Intelligence. Even on the same ship...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 18,
+      "policy": "translate",
+      "text": "Besides, there is a killer...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 19,
+      "policy": "translate",
+      "text": "I concede the wager. What is your objective?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 20,
+      "policy": "translate",
+      "text": "Only to finish the voyage safely and return to my old life.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 21,
+      "policy": "translate",
+      "text": "...As a spy?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 22,
+      "policy": "translate",
+      "text": "Ilyusha Grancelius... That is not the name of a native Russian...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 23,
+      "policy": "translate",
+      "text": "The name is real... I prefer myself when I am lying.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 24,
+      "policy": "translate",
+      "text": "Don't play games with me!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 25,
+      "policy": "translate",
+      "text": "Why become a spy?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 26,
+      "policy": "translate",
+      "text": "I had no choice... No one can understand my twenty-one years.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 27,
+      "policy": "translate",
+      "text": "...An opening... Are you showing me a weakness?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 28,
+      "policy": "translate",
+      "text": "What is wrong? You should be able to handle me better.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 29,
+      "policy": "translate",
+      "text": "You are someone who can live alone.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 30,
+      "policy": "translate",
+      "text": "What do you like?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 31,
+      "policy": "translate",
+      "text": "I already have the evidence. Tell me the truth.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 32,
+      "policy": "translate",
+      "text": "Heh. You already lost the wager.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 33,
+      "policy": "translate",
+      "text": "Ngh...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 34,
+      "policy": "translate",
+      "text": "Even if you are not the Russian Fog, you must know what they look like. Otherwise you could not watch them.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 35,
+      "policy": "translate",
+      "text": "Why do you want to know so badly?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 36,
+      "policy": "translate",
+      "text": "...Th-that's...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 37,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 38,
+      "policy": "translate",
+      "text": "Why?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 39,
+      "policy": "translate",
+      "text": "...The culprit demanded it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 40,
+      "policy": "translate",
+      "text": "That's a lie. Do you really think the culprit will disarm the bomb once he has the Fog?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 41,
+      "policy": "translate",
+      "text": "You do not believe that.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 42,
+      "policy": "translate",
+      "text": "Agh...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 43,
+      "policy": "translate",
+      "text": "The culprit is playing you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 44,
+      "policy": "translate",
+      "text": "Is that fun?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 45,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 46,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 47,
+      "policy": "translate",
+      "text": "Second-Class Cabin",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 48,
+      "policy": "translate",
+      "text": "Kirikov",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 49,
+      "policy": "translate",
+      "text": "Th-that knife... It belonged to Tainui Adjell...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 50,
+      "policy": "translate",
+      "text": "The Killer",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 51,
+      "policy": "translate",
+      "text": "A mere salesman exposed you? From now on, you will obey every order I give.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 52,
+      "policy": "translate",
+      "text": "Heh. What kind of interrogator stays silent? You will leave your subject at a loss.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 53,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 54,
+      "policy": "translate",
+      "text": "I am at a loss too.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 55,
+      "policy": "translate",
+      "text": "Have you ever been interrogated?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 56,
+      "policy": "translate",
+      "text": "Our sales director is a sly fox. Every report to him feels like an interrogation.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 57,
+      "policy": "translate",
+      "text": "But your director would not kill you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 58,
+      "policy": "translate",
+      "text": "You are always trying to escape from something.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 59,
+      "policy": "translate",
+      "text": "Maybe. But can one person directly see what another is thinking?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 60,
+      "policy": "translate",
+      "text": "Sometimes. Often.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 61,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 62,
+      "policy": "translate",
+      "text": "Ilyusha, do you have any family?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 63,
+      "policy": "translate",
+      "text": "Do not try to trap me. Defectors are not always alone. Or did you expect to make me cry?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 64,
+      "policy": "translate",
+      "text": "You are seriously twisted.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 65,
+      "policy": "translate",
+      "text": "Sometimes I wonder whether everything others understand so naturally is exactly what I fail to grasp. I even doubt my own insight.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 66,
+      "policy": "translate",
+      "text": "Maybe you simply cannot prey on people's weaknesses.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 67,
+      "policy": "translate",
+      "text": "I cannot see them... I understand my own thoughts, but... do I? I may not even understand those.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 68,
+      "policy": "translate",
+      "text": "Once, while undercover in Prague, I was caught and interrogated.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 69,
+      "policy": "translate",
+      "text": "The interrogator was a veteran.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 70,
+      "policy": "translate",
+      "text": "Can you imagine how terrified I was?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 71,
+      "policy": "translate",
+      "text": "If he read my thoughts and exposed me, I would be executed.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 72,
+      "policy": "translate",
+      "text": "Fear of reliving that drove me to defect.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 73,
+      "policy": "translate",
+      "text": "Defection destroys your whole life. Even on dangerous missions, you have comrades who value you and a place where you belong.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 74,
+      "policy": "translate",
+      "text": "Sounds like quiet, ordinary work.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 75,
+      "policy": "translate",
+      "text": "I am serious.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 76,
+      "policy": "translate",
+      "text": "Did you survive?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 77,
+      "policy": "translate",
+      "text": "I never showed my true feelings. I trusted my disguise. I acted every day, toward everyone...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 78,
+      "policy": "translate",
+      "text": "...at all times.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 79,
+      "policy": "translate",
+      "text": "Acting every day...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 80,
+      "policy": "translate",
+      "text": "Her walls are too high... How can I ever step inside?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 81,
+      "policy": "translate",
+      "text": "Even now?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 82,
+      "policy": "translate",
+      "text": "It became a habit. I doubt even my passing feelings. Is this my true heart? Is this feeling real? I no longer know.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 83,
+      "policy": "translate",
+      "text": "Ilyu's true feelings...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 84,
+      "policy": "translate",
+      "text": "To defect, you must be alone. As you are now.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 85,
+      "policy": "translate",
+      "text": "No one can know that.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 86,
+      "policy": "translate",
+      "text": "You are chaos. You enjoy confusing me, like a siren...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 87,
+      "policy": "translate",
+      "text": "There are no witches.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 88,
+      "policy": "translate",
+      "text": "You are the Russian Fog, are you not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 89,
+      "policy": "translate",
+      "text": "I do not know what expression to wear when I tell the truth... You will not believe any answer I give.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 90,
+      "policy": "translate",
+      "text": "...Acting every day...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 91,
+      "policy": "translate",
+      "text": "Then stop living that ridiculous life.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 92,
+      "policy": "translate",
+      "text": "Heh... I wish I could. Talking to you is strange. Somehow, I can relax.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 93,
+      "policy": "translate",
+      "text": "Ilyu is not trying to escape the Empire. She is fleeing something more abstract...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 94,
+      "policy": "translate",
+      "text": "Ask him about Kirikov. Ask what Russia's privileged classes do with their lives.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 95,
+      "policy": "translate",
+      "text": "Defection openly betrays the Empire. The Tsar will be humiliated. Reveal yourself publicly before his assassins silence you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 96,
+      "policy": "translate",
+      "text": "...Shut up...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 97,
+      "policy": "translate",
+      "text": "Well, Kirikov. How does it feel to make the greatest gamble of your life? Your family, or your future?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 98,
+      "policy": "translate",
+      "text": "We captured one of the Russian agents watching you. We can make him reveal your identity. He knows you intend to defect, and he will kill you. What will you do?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 99,
+      "policy": "translate",
+      "text": "I-it is me! I am the Russian Fog!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 100,
+      "policy": "translate",
+      "text": "Thank you for your cooperation!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 101,
+      "policy": "translate",
+      "text": "Take me to British Intelligence!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 102,
+      "policy": "translate",
+      "text": "Defection is not that simple.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 103,
+      "policy": "translate",
+      "text": "I will request British protection. Right now!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 104,
+      "policy": "translate",
+      "text": "What are your terms?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 105,
+      "policy": "translate",
+      "text": "Safety. A house in Devon, with a fishing river, orchard, horse, and land. In return, I will give them every secret I know.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 106,
+      "policy": "translate",
+      "text": "How low the Siberian Cossack cavalry has fallen.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 107,
+      "policy": "translate",
+      "text": "Not now.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 108,
+      "policy": "translate",
+      "text": "W-why not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 109,
+      "policy": "translate",
+      "text": "They need me too, do they not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 110,
+      "policy": "translate",
+      "text": "This is no time to leisurely list your asylum terms!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 111,
+      "policy": "translate",
+      "text": "...The bomber.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 112,
+      "policy": "translate",
+      "text": "Why are you relying on me now?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 113,
+      "policy": "translate",
+      "text": "You bastard! You forced me to confess!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 114,
+      "policy": "translate",
+      "text": "The person offering you sanctuary may be behind the bombing, an agent of a third country. Then Britain is not your destination at all.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 115,
+      "policy": "translate",
+      "text": "That is absurd...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 116,
+      "policy": "translate",
+      "text": "Pathetic.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 117,
+      "policy": "translate",
+      "text": "Try any little trick...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 118,
+      "policy": "translate",
+      "text": "...and I will snap your neck!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 119,
+      "policy": "translate",
+      "text": "Enough! I will kill you!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 120,
+      "policy": "translate",
+      "text": "He is huge...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 121,
+      "policy": "translate",
+      "text": "The bomber is neither a Russian nor a British agent. He is a thief acting under another country's orders.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 122,
+      "policy": "translate",
+      "text": "You are lying!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 123,
+      "policy": "translate",
+      "text": "Calm down! A third country is trying to steal you!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 124,
+      "policy": "translate",
+      "text": "Do you know why they call me the Fog? Because I can kill without a sound. Shall I demonstrate?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 125,
+      "policy": "translate",
+      "text": "Sorry, but forget defecting to Britain.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 126,
+      "policy": "translate",
+      "text": "N-no! Russia knows I intend to defect. I cannot go back. They will kill me!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 127,
+      "policy": "translate",
+      "text": "Damn it...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 128,
+      "policy": "translate",
+      "text": "Do you understand the situation now? Are you calm?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 129,
+      "policy": "translate",
+      "text": "The bomber wants me. Hand me over, and the ship will be saved.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 130,
+      "policy": "translate",
+      "text": "Kill me, and you will never know who wants you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 131,
+      "policy": "translate",
+      "text": "...I will not kill you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 132,
+      "policy": "translate",
+      "text": "The bomber will not disarm it. This ship is evidence of the theft, so it can never reach Southampton. At eight, the bomb will erase it. Our only hope is to catch the culprit and dismantle it ourselves.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 133,
+      "policy": "translate",
+      "text": "The culprit must have an escape route. Hand me over.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 134,
+      "policy": "translate",
+      "text": "So anywhere but Britain will do?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 135,
+      "policy": "translate",
+      "text": "Anywhere outside Russia's satellite states.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 136,
+      "policy": "translate",
+      "text": "Try Antarctica. The vodka is excellent.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 137,
+      "policy": "translate",
+      "text": "...No.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 138,
+      "policy": "translate",
+      "text": "Why not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 139,
+      "policy": "translate",
+      "text": "Do you not understand? You can escape to a third country that will protect you. But the culprit will flee this doomed ship with you, leaving 411 innocent people behind.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 140,
+      "policy": "translate",
+      "text": "A first-rate spy thinks first about survival.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 141,
+      "policy": "translate",
+      "text": "Idiot! Everyone does!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 142,
+      "policy": "translate",
+      "text": "I am disappointed, Russian Fog. You are nothing but an egoist.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 143,
+      "policy": "translate",
+      "text": "St. Petersburg",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 144,
+      "policy": "translate",
+      "text": "...You know nothing of the Russian Empire's rigid class system.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 145,
+      "policy": "translate",
+      "text": "Promenade Deck",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 146,
+      "policy": "translate",
+      "text": "Yamada Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 147,
+      "policy": "translate",
+      "text": "Dunant",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 148,
+      "policy": "translate",
+      "text": "So the Russian Fog is Kirikov Kamorovich?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 149,
+      "policy": "translate",
+      "text": "It appears so...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 150,
+      "policy": "translate",
+      "text": "Then it is settled. Keep this from Ashby.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 151,
+      "policy": "translate",
+      "text": "You still suspect Ashby?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 152,
+      "policy": "translate",
+      "text": "Who else could it be?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 153,
+      "policy": "translate",
+      "text": "If he is innocent, we can tell him tomorrow morning. Please. I am close to solving this.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 154,
+      "policy": "translate",
+      "text": "Then what are you getting at?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 155,
+      "policy": "translate",
+      "text": "Something is wrong...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 156,
+      "policy": "translate",
+      "text": "Let me think.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 157,
+      "policy": "translate",
+      "text": "Ashby could not have written the second claim letter.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 158,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 159,
+      "policy": "translate",
+      "text": "Captain's Cabin",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 160,
+      "policy": "translate",
+      "text": "Ashby could not have written the second claim letter.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 161,
+      "policy": "translate",
+      "text": "Damn it... My emotions are clouding me. I hate that man.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 162,
+      "policy": "translate",
+      "text": "Admit you have lost your judgment, Kasuke. This is an enlightened age.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 163,
+      "policy": "translate",
+      "text": "The age of drawing a sword on a passing emotion is over.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 164,
+      "policy": "translate",
+      "text": "What?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 165,
+      "policy": "translate",
+      "text": "Why does the rouge glow in the sunset?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 166,
+      "policy": "translate",
+      "text": "What a fool I am... Why did I not see it? Ashby has an accomplice!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 167,
+      "policy": "translate",
+      "text": "Bridge Passage",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 168,
+      "policy": "translate",
+      "text": "The culprit is Robert Ashby. He tried to sink the ship and conceal his theft of the Russian Fog.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 169,
+      "policy": "translate",
+      "text": "I heard a snap!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 170,
+      "policy": "translate",
+      "text": "Shall I help you, Kasuke?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 171,
+      "policy": "translate",
+      "text": "Such a lovely voice... I could fall for it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 172,
+      "policy": "translate",
+      "text": "You are a strange spy.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 173,
+      "policy": "translate",
+      "text": "We are adults, are we not? Let us be friends.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 174,
+      "policy": "translate",
+      "text": "Enough... Getting attached only leads to dreadful people. Such is life...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 175,
+      "policy": "translate",
+      "text": "What about loyalty to your country...?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 176,
+      "policy": "translate",
+      "text": "Which matters more to a woman?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 177,
+      "policy": "translate",
+      "text": "Well...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 178,
+      "policy": "translate",
+      "text": "Idiot. Do not take that seriously. Your superior...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 179,
+      "policy": "translate",
+      "text": "Raymond Dunant?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 180,
+      "policy": "translate",
+      "text": "Do you love him?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 181,
+      "policy": "translate",
+      "text": "Of course!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 182,
+      "policy": "translate",
+      "text": "No feelings, then.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 183,
+      "policy": "translate",
+      "text": "Second-Class Cabin",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 184,
+      "policy": "translate",
+      "text": "I knew we would be found out.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 185,
+      "policy": "translate",
+      "text": "Would a man carry this? I found this rouge here.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 186,
+      "policy": "translate",
+      "text": "Careless of you... Never trust your boss. That is the first rule of working life.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 187,
+      "policy": "translate",
+      "text": "The culprit is Ashby...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 188,
+      "policy": "translate",
+      "text": "You mad dog.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 189,
+      "policy": "translate",
+      "text": "The accomplice is Dunant. When I would not abandon my suspicion of Ashby, Dunant rushed out a third claim letter. Unlike the others, it lacked planning.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 190,
+      "policy": "translate",
+      "text": "I bet on my favorite bluff.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 191,
+      "policy": "translate",
+      "text": "Did you win?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 192,
+      "policy": "translate",
+      "text": "Honestly, it was a hunch. But the enemy was gambling too.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 193,
+      "policy": "translate",
+      "text": "Royal Suite A",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 194,
+      "policy": "translate",
+      "text": "Ashby",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 195,
+      "policy": "translate",
+      "text": "My master is Ito, an elder statesman of an empire allied with Britain. He wants the Russian Fog, and I will obtain it by any means.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 196,
+      "policy": "translate",
+      "text": "So you planted the bomb.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 197,
+      "policy": "translate",
+      "text": "British and Russian spies were fighting over the Fog. Stealing it by ordinary means was impossible.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 198,
+      "policy": "translate",
+      "text": "How will you escape?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 199,
+      "policy": "translate",
+      "text": "You little punk...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 200,
+      "policy": "translate",
+      "text": "Do you not want to know who the Russian Fog is?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 201,
+      "policy": "translate",
+      "text": "You are my prisoner now.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 202,
+      "policy": "translate",
+      "text": "Kasuke found the Russian Fog. What will you do?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 203,
+      "policy": "translate",
+      "text": "Bring the Russian Fog here.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 204,
+      "policy": "translate",
+      "text": "Dunant is your partner. He helped you through this affair and took every risk. Yet you mean to abandon him now?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 205,
+      "policy": "translate",
+      "text": "Silence!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 206,
+      "policy": "translate",
+      "text": "How will you escape? Will you leave your partner aboard a ship doomed to explode and sink? You bastard!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 207,
+      "policy": "translate",
+      "text": "First bring me the Russian Fog.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 208,
+      "policy": "translate",
+      "text": "Foreign Affairs",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 209,
+      "policy": "translate",
+      "text": "The Russian Fog is Kirikov Kamorovich.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 210,
+      "policy": "translate",
+      "text": "A Russian spy should be watching Kirikov.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 211,
+      "policy": "translate",
+      "text": "That appears to be Ilyu. If she killed Voysey and Pring, Russian Intelligence would recognize the pattern and identify Kirikov as the Fog.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 212,
+      "policy": "translate",
+      "text": "Good work.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 213,
+      "policy": "translate",
+      "text": "A submersible is waiting below. The bomb in the hold will open an underwater escape passage.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 214,
+      "policy": "translate",
+      "text": "You, me, and the Russian Fog. That fills its capacity. We will go to the country where your master Ito awaits.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 215,
+      "policy": "translate",
+      "text": "Then I can eliminate all of you at once.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 216,
+      "policy": "translate",
+      "text": "You are wicked... Damn you!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 217,
+      "policy": "translate",
+      "text": "Cargo Hold",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 218,
+      "policy": "translate",
+      "text": "Ito... ITO means Ito Hirobumi, elder statesman of the Imperial Diet... He betrayed me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 219,
+      "policy": "translate",
+      "text": "...How pathetic.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 220,
+      "policy": "translate",
+      "text": "Cargo Hold",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 221,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 222,
+      "policy": "translate",
+      "text": "You damn fool... Just you wait...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 223,
+      "policy": "translate",
+      "text": "You are the ones who will sink to the seabed.",
+      "layout_policy": "adaptive"
+    }
+  ]
+}

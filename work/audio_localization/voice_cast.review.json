@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "backend": "kokoro-onnx",
+  "policy": "Generic non-imitative English voices chosen by character and dramatic role; no cloning or performer imitation.",
+  "default_voice": "am_michael",
+  "default_speed": 1.0,
+  "default_language": "en-us",
+  "voice_text_replacements": {
+    "Boyzie": "Voysey",
+    "Boise": "Voysey",
+    "Boisie": "Voysey",
+    "Russian mist": "Russian Fog",
+    "Russian fog": "Russian Fog"
+  },
+  "speakers": {
+    "Ashby": {"voice": "bm_daniel", "speed": 0.98},
+    "Bartender": {"voice": "am_adam"},
+    "Bosun": {"voice": "bm_lewis", "speed": 1.02},
+    "Braque": {"voice": "bm_fable"},
+    "Captain": {"voice": "am_onyx", "speed": 0.96},
+    "Chanel": {"voice": "af_nova", "speed": 1.03},
+    "Charlie": {"voice": "am_puck", "speed": 1.02},
+    "Chief Engineer": {"voice": "bm_george", "speed": 0.97},
+    "Crew": {"voice": "am_echo", "speed": 1.04},
+    "Deputy Chief": {"voice": "am_eric", "speed": 0.98},
+    "Director": {"voice": "am_onyx", "speed": 0.94},
+    "Dunant": {"voice": "am_liam", "speed": 0.99},
+    "First Officer": {"voice": "bm_daniel"},
+    "Fitz": {"voice": "bm_lewis", "speed": 1.01},
+    "Fred": {"voice": "am_fenrir", "speed": 1.01},
+    "Head Chef": {"voice": "am_adam", "speed": 1.04},
+    "Helm": {"voice": "am_puck", "speed": 1.05},
+    "Ilyu": {"voice": "af_bella", "speed": 1.01},
+    "Kasuke": {"voice": "am_michael", "speed": 1.01},
+    "Kirikov": {"voice": "am_onyx", "speed": 0.94},
+    "Locke": {"voice": "am_echo", "speed": 1.02},
+    "Lumeranka": {"voice": "am_liam", "speed": 0.97},
+    "Navigator": {"voice": "am_eric"},
+    "Old Karl": {"voice": "bm_george", "speed": 0.86},
+    "Passenger": {"voice": "af_sarah"},
+    "Ruthie": {"voice": "bf_emma", "speed": 1.01},
+    "Ship's Dr.": {"voice": "am_michael", "speed": 1.02},
+    "Stra": {"voice": "bm_fable", "speed": 0.99},
+    "Sunmin": {"voice": "am_eric"},
+    "The Crowd": {"voice": "am_echo", "speed": 1.06},
+    "The Killer": {"voice": "am_onyx", "speed": 0.90},
+    "Tianon": {"voice": "af_kore", "speed": 0.99},
+    "Voysey": {"voice": "bm_daniel", "speed": 0.98}
+  },
+  "assets": {
+    "0000.PCM": {"voice": "af_nicole", "speed": 0.96},
+    "0042.PCM": {
+      "voice": "af_bella",
+      "text": "You have an ace. There is no way I can beat you."
+    },
+    "0111.PCM": {
+      "voice": "af_nicole",
+      "speed": 0.96,
+      "text": "North Atlantic Ocean. July 9, 1907."
+    },
+    "0112.PCM": {
+      "voice": "af_nicole",
+      "speed": 0.96,
+      "text": "The Nostalgia, a luxury liner of the American Trans-Atlantic Company, was sailing in the North Atlantic."
+    },
+    "0113.PCM": {
+      "voice": "am_fenrir",
+      "speed": 0.98,
+      "text": "Crew of the Nostalgia: be advised that your ship has now been seized."
+    },
+    "0166.PCM": {
+      "text": "According to the British Shipping Office's timetable, the next vessel to pass here is the British freighter Mary Star. In three days."
+    },
+    "0291.PCM": {
+      "text": "About what time did you discover the threatening message written in lipstick on the captain's cabin window?"
+    },
+    "0335.PCM": {
+      "text": "Turn right at the stairs. To the left are Royal Suite passages A and B. Heh, heh, heh!"
+    },
+    "0648.PCM": {
+      "text": "Many intelligence agents are hidden in the St. Petersburg court to deter rebellion by the nobility. They effectively serve as the Tsar's personal guard, and each one constantly manages an enormous amount of information. If one of Russia's great enemy powers captured such an agent, Europe's political landscape would change completely. They would learn every intention, desire, and plan of Tsar Nicholas the Second. That is worth obtaining even if it means sinking an entire passenger liner."
+    },
+    "0677.PCM": {
+      "text": "The Nostalgia is an American passenger liner bound from New York to Britain on the North Atlantic route. We are still analyzing MEDE. The accusations against Haynwood and Burns are a demonstration meant to show us the intelligence value of the incident."
+    },
+    "1476.PCM": {
+      "text": "An amateur cannot disarm it. Not unless we enlist the culprit's help."
+    },
+    "1538.PCM": {
+      "voice": "am_michael",
+      "text": "Use the screwdriver."
+    },
+    "1582.PCM": {
+      "text": "It is a pendulum fuse. The red wire from the battery connects to the outer ring, while the blue wire runs through the detonator and probably connects to the pendulum in the center."
+    },
+    "1608.PCM": {
+      "voice": "am_michael",
+      "text": "Cut the wire with the scissors?"
+    },
+    "1820.PCM": {"voice": "af_bella", "speed": 0.99},
+    "1821.PCM": {"voice": "am_michael"},
+    "1822.PCM": {"voice": "af_bella", "speed": 0.99},
+    "1823.PCM": {"voice": "af_bella", "speed": 0.97}
+  }
+}

@@ -1,0 +1,687 @@
+{
+  "command_count": 38,
+  "first_current_over_40_cells": {
+    "scn_offset": 1582,
+    "scn_offset_hex": "0x062E",
+    "record": 93,
+    "width_cells": 8,
+    "original": {
+      "raw_size": 51,
+      "cells": 44,
+      "rows": 6
+    },
+    "current": {
+      "raw_size": 68,
+      "cells": 48,
+      "rows": 6
+    }
+  },
+  "first_current_over_5_rows": {
+    "scn_offset": 1582,
+    "scn_offset_hex": "0x062E",
+    "record": 93,
+    "width_cells": 8,
+    "original": {
+      "raw_size": 51,
+      "cells": 44,
+      "rows": 6
+    },
+    "current": {
+      "raw_size": 68,
+      "cells": 48,
+      "rows": 6
+    }
+  },
+  "record_162_exact_prose_rewrap": {
+    "phrase": "Admit you have lost your judgment, Kasuke. This is an enlightened age.",
+    "minimum_rows_at_8_cells": 4,
+    "minimum_wraps": [
+      [
+        {
+          "text": "Admit you have lost",
+          "cells": 8
+        },
+        {
+          "text": "your judgment,",
+          "cells": 7
+        },
+        {
+          "text": "Kasuke. This is",
+          "cells": 6
+        },
+        {
+          "text": "an enlightened age.",
+          "cells": 8
+        }
+      ],
+      [
+        {
+          "text": "Admit you have lost",
+          "cells": 8
+        },
+        {
+          "text": "your judgment,",
+          "cells": 7
+        },
+        {
+          "text": "Kasuke. This is an",
+          "cells": 7
+        },
+        {
+          "text": "enlightened age.",
+          "cells": 7
+        }
+      ]
+    ]
+  },
+  "commands": [
+    {
+      "scn_offset": 213,
+      "scn_offset_hex": "0x00D5",
+      "record": 10,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 24,
+        "cells": 20,
+        "rows": 3
+      },
+      "current": {
+        "raw_size": 47,
+        "cells": 32,
+        "rows": 4
+      }
+    },
+    {
+      "scn_offset": 258,
+      "scn_offset_hex": "0x0102",
+      "record": 13,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 33,
+        "cells": 30,
+        "rows": 4
+      },
+      "current": {
+        "raw_size": 40,
+        "cells": 24,
+        "rows": 3
+      }
+    },
+    {
+      "scn_offset": 266,
+      "scn_offset_hex": "0x010A",
+      "record": 14,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 40,
+        "cells": 29,
+        "rows": 4
+      },
+      "current": {
+        "raw_size": 60,
+        "cells": 40,
+        "rows": 5
+      }
+    },
+    {
+      "scn_offset": 274,
+      "scn_offset_hex": "0x0112",
+      "record": 15,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 34,
+        "cells": 26,
+        "rows": 4
+      },
+      "current": {
+        "raw_size": 50,
+        "cells": 32,
+        "rows": 4
+      }
+    },
+    {
+      "scn_offset": 317,
+      "scn_offset_hex": "0x013D",
+      "record": 18,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 15,
+        "cells": 10,
+        "rows": 2
+      },
+      "current": {
+        "raw_size": 23,
+        "cells": 16,
+        "rows": 2
+      }
+    },
+    {
+      "scn_offset": 360,
+      "scn_offset_hex": "0x0168",
+      "record": 21,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 10,
+        "cells": 9,
+        "rows": 2
+      },
+      "current": {
+        "raw_size": 11,
+        "cells": 8,
+        "rows": 1
+      }
+    },
+    {
+      "scn_offset": 403,
+      "scn_offset_hex": "0x0193",
+      "record": 24,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 15,
+        "cells": 13,
+        "rows": 2
+      },
+      "current": {
+        "raw_size": 23,
+        "cells": 16,
+        "rows": 2
+      }
+    },
+    {
+      "scn_offset": 446,
+      "scn_offset_hex": "0x01BE",
+      "record": 27,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 23,
+        "cells": 22,
+        "rows": 3
+      },
+      "current": {
+        "raw_size": 35,
+        "cells": 24,
+        "rows": 3
+      }
+    },
+    {
+      "scn_offset": 489,
+      "scn_offset_hex": "0x01E9",
+      "record": 30,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 8,
+        "cells": 7,
+        "rows": 1
+      },
+      "current": {
+        "raw_size": 20,
+        "cells": 16,
+        "rows": 2
+      }
+    },
+    {
+      "scn_offset": 532,
+      "scn_offset_hex": "0x0214",
+      "record": 33,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 9,
+        "cells": 8,
+        "rows": 1
+      },
+      "current": {
+        "raw_size": 11,
+        "cells": 8,
+        "rows": 1
+      }
+    },
+    {
+      "scn_offset": 730,
+      "scn_offset_hex": "0x02DA",
+      "record": 46,
+      "width_cells": 5,
+      "original": {
+        "raw_size": 5,
+        "cells": 4,
+        "rows": 1
+      },
+      "current": {
+        "raw_size": 6,
+        "cells": 5,
+        "rows": 1
+      }
+    },
+    {
+      "scn_offset": 869,
+      "scn_offset_hex": "0x0365",
+      "record": 53,
+      "width_cells": 5,
+      "original": {
+        "raw_size": 4,
+        "cells": 3,
+        "rows": 1
+      },
+      "current": {
+        "raw_size": 6,
+        "cells": 5,
+        "rows": 1
+      }
+    },
+    {
+      "scn_offset": 1033,
+      "scn_offset_hex": "0x0409",
+      "record": 61,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 12,
+        "cells": 11,
+        "rows": 2
+      },
+      "current": {
+        "raw_size": 9,
+        "cells": 8,
+        "rows": 1
+      }
+    },
+    {
+      "scn_offset": 1095,
+      "scn_offset_hex": "0x0447",
+      "record": 64,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 10,
+        "cells": 8,
+        "rows": 1
+      },
+      "current": {
+        "raw_size": 29,
+        "cells": 24,
+        "rows": 3
+      }
+    },
+    {
+      "scn_offset": 1342,
+      "scn_offset_hex": "0x053E",
+      "record": 80,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 45,
+        "cells": 34,
+        "rows": 5
+      },
+      "current": {
+        "raw_size": 45,
+        "cells": 32,
+        "rows": 4
+      }
+    },
+    {
+      "scn_offset": 1400,
+      "scn_offset_hex": "0x0578",
+      "record": 83,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 12,
+        "cells": 9,
+        "rows": 2
+      },
+      "current": {
+        "raw_size": 23,
+        "cells": 16,
+        "rows": 2
+      }
+    },
+    {
+      "scn_offset": 1532,
+      "scn_offset_hex": "0x05FC",
+      "record": 90,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 12,
+        "cells": 10,
+        "rows": 2
+      },
+      "current": {
+        "raw_size": 24,
+        "cells": 16,
+        "rows": 2
+      }
+    },
+    {
+      "scn_offset": 1582,
+      "scn_offset_hex": "0x062E",
+      "record": 93,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 51,
+        "cells": 44,
+        "rows": 6
+      },
+      "current": {
+        "raw_size": 68,
+        "cells": 48,
+        "rows": 6
+      }
+    },
+    {
+      "scn_offset": 1904,
+      "scn_offset_hex": "0x0770",
+      "record": 106,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 24,
+        "cells": 20,
+        "rows": 3
+      },
+      "current": {
+        "raw_size": 50,
+        "cells": 32,
+        "rows": 4
+      }
+    },
+    {
+      "scn_offset": 2121,
+      "scn_offset_hex": "0x0849",
+      "record": 120,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 8,
+        "cells": 7,
+        "rows": 1
+      },
+      "current": {
+        "raw_size": 12,
+        "cells": 8,
+        "rows": 1
+      }
+    },
+    {
+      "scn_offset": 2444,
+      "scn_offset_hex": "0x098C",
+      "record": 136,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 21,
+        "cells": 17,
+        "rows": 3
+      },
+      "current": {
+        "raw_size": 37,
+        "cells": 24,
+        "rows": 3
+      }
+    },
+    {
+      "scn_offset": 2529,
+      "scn_offset_hex": "0x09E1",
+      "record": 141,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 15,
+        "cells": 14,
+        "rows": 2
+      },
+      "current": {
+        "raw_size": 25,
+        "cells": 16,
+        "rows": 2
+      }
+    },
+    {
+      "scn_offset": 2650,
+      "scn_offset_hex": "0x0A5A",
+      "record": 149,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 9,
+        "cells": 8,
+        "rows": 1
+      },
+      "current": {
+        "raw_size": 15,
+        "cells": 8,
+        "rows": 1
+      }
+    },
+    {
+      "scn_offset": 2690,
+      "scn_offset_hex": "0x0A82",
+      "record": 152,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 20,
+        "cells": 16,
+        "rows": 2
+      },
+      "current": {
+        "raw_size": 25,
+        "cells": 16,
+        "rows": 2
+      }
+    },
+    {
+      "scn_offset": 2730,
+      "scn_offset_hex": "0x0AAA",
+      "record": 155,
+      "width_cells": 9,
+      "original": {
+        "raw_size": 11,
+        "cells": 9,
+        "rows": 1
+      },
+      "current": {
+        "raw_size": 22,
+        "cells": 18,
+        "rows": 2
+      }
+    },
+    {
+      "scn_offset": 2835,
+      "scn_offset_hex": "0x0B13",
+      "record": 160,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 34,
+        "cells": 27,
+        "rows": 4
+      },
+      "current": {
+        "raw_size": 47,
+        "cells": 32,
+        "rows": 4
+      }
+    },
+    {
+      "scn_offset": 2843,
+      "scn_offset_hex": "0x0B1B",
+      "record": 161,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 36,
+        "cells": 30,
+        "rows": 4
+      },
+      "current": {
+        "raw_size": 47,
+        "cells": 32,
+        "rows": 4
+      }
+    },
+    {
+      "scn_offset": 2851,
+      "scn_offset_hex": "0x0B23",
+      "record": 162,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 41,
+        "cells": 29,
+        "rows": 4
+      },
+      "current": {
+        "raw_size": 65,
+        "cells": 48,
+        "rows": 6
+      }
+    },
+    {
+      "scn_offset": 2859,
+      "scn_offset_hex": "0x0B2B",
+      "record": 163,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 43,
+        "cells": 32,
+        "rows": 4
+      },
+      "current": {
+        "raw_size": 49,
+        "cells": 32,
+        "rows": 4
+      }
+    },
+    {
+      "scn_offset": 2884,
+      "scn_offset_hex": "0x0B44",
+      "record": 164,
+      "width_cells": 5,
+      "original": {
+        "raw_size": 5,
+        "cells": 4,
+        "rows": 1
+      },
+      "current": {
+        "raw_size": 7,
+        "cells": 5,
+        "rows": 1
+      }
+    },
+    {
+      "scn_offset": 3005,
+      "scn_offset_hex": "0x0BBD",
+      "record": 168,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 51,
+        "cells": 42,
+        "rows": 6
+      },
+      "current": {
+        "raw_size": 82,
+        "cells": 56,
+        "rows": 7
+      }
+    },
+    {
+      "scn_offset": 3083,
+      "scn_offset_hex": "0x0C0B",
+      "record": 171,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 17,
+        "cells": 14,
+        "rows": 2
+      },
+      "current": {
+        "raw_size": 39,
+        "cells": 24,
+        "rows": 3
+      }
+    },
+    {
+      "scn_offset": 3123,
+      "scn_offset_hex": "0x0C33",
+      "record": 174,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 41,
+        "cells": 33,
+        "rows": 5
+      },
+      "current": {
+        "raw_size": 64,
+        "cells": 40,
+        "rows": 5
+      }
+    },
+    {
+      "scn_offset": 3163,
+      "scn_offset_hex": "0x0C5B",
+      "record": 177,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 8,
+        "cells": 7,
+        "rows": 1
+      },
+      "current": {
+        "raw_size": 10,
+        "cells": 8,
+        "rows": 1
+      }
+    },
+    {
+      "scn_offset": 3361,
+      "scn_offset_hex": "0x0D21",
+      "record": 188,
+      "width_cells": 5,
+      "original": {
+        "raw_size": 6,
+        "cells": 3,
+        "rows": 1
+      },
+      "current": {
+        "raw_size": 15,
+        "cells": 10,
+        "rows": 2
+      }
+    },
+    {
+      "scn_offset": 3401,
+      "scn_offset_hex": "0x0D49",
+      "record": 191,
+      "width_cells": 6,
+      "original": {
+        "raw_size": 7,
+        "cells": 5,
+        "rows": 1
+      },
+      "current": {
+        "raw_size": 9,
+        "cells": 6,
+        "rows": 1
+      }
+    },
+    {
+      "scn_offset": 3950,
+      "scn_offset_hex": "0x0F6E",
+      "record": 219,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 11,
+        "cells": 10,
+        "rows": 2
+      },
+      "current": {
+        "raw_size": 14,
+        "cells": 8,
+        "rows": 1
+      }
+    },
+    {
+      "scn_offset": 4019,
+      "scn_offset_hex": "0x0FB3",
+      "record": 223,
+      "width_cells": 8,
+      "original": {
+        "raw_size": 16,
+        "cells": 12,
+        "rows": 2
+      },
+      "current": {
+        "raw_size": 34,
+        "cells": 24,
+        "rows": 3
+      }
+    }
+  ]
+}

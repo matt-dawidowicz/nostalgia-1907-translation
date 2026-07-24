@@ -1,0 +1,347 @@
+{
+  "audited_other_chapters": [
+    "PART1A\\001_PART1A.MES.unpacked",
+    "PART1B\\001_PART1B.MES.unpacked",
+    "PART1C\\001_PART1C.MES.unpacked",
+    "PART1D\\001_PART1D.MES.unpacked",
+    "PART2A\\001_PART2A.MES.unpacked",
+    "PART2B\\001_PART2B.MES.unpacked",
+    "PART2C\\001_PART2C.MES.unpacked",
+    "PART2D\\001_PART2D.MES.unpacked",
+    "PART2E\\001_PART2E.MES.unpacked",
+    "PART2F\\001_PART2F.MES.unpacked",
+    "PART3A\\001_PART3A.MES.unpacked",
+    "PART3B\\001_PART3B.MES.unpacked",
+    "PART3B_\\001_PART3B_.MES.unpacked",
+    "PART4A\\001_PART4A.MES.unpacked",
+    "PART4B\\001_PART4B.MES.unpacked",
+    "PART4C\\001_PART4C.MES.unpacked",
+    "STAFF\\001_STAFF.MES.unpacked",
+    "START\\001_START.MES.unpacked"
+  ],
+  "candidate_count": 46,
+  "candidates": [
+    {
+      "code": "0x48",
+      "part3c_occurrences": 0,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "  ",
+      "visualfix3_declared_occurrences": 1340
+    },
+    {
+      "code": "0xBC",
+      "part3c_occurrences": 0,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "ve",
+      "visualfix3_declared_occurrences": 28
+    },
+    {
+      "code": "0x46",
+      "part3c_occurrences": 29,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "me",
+      "visualfix3_declared_occurrences": 29
+    },
+    {
+      "code": "0x4F",
+      "part3c_occurrences": 29,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": " m",
+      "visualfix3_declared_occurrences": 29
+    },
+    {
+      "code": "0x25",
+      "part3c_occurrences": 32,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "en",
+      "visualfix3_declared_occurrences": 32
+    },
+    {
+      "code": "0x3D",
+      "part3c_occurrences": 32,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "o ",
+      "visualfix3_declared_occurrences": 32
+    },
+    {
+      "code": "0x3E",
+      "part3c_occurrences": 32,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "? ",
+      "visualfix3_declared_occurrences": 32
+    },
+    {
+      "code": "0x47",
+      "part3c_occurrences": 32,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "ss",
+      "visualfix3_declared_occurrences": 32
+    },
+    {
+      "code": "0xB6",
+      "part3c_occurrences": 32,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "it",
+      "visualfix3_declared_occurrences": 32
+    },
+    {
+      "code": "0xD2",
+      "part3c_occurrences": 32,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "st",
+      "visualfix3_declared_occurrences": 32
+    },
+    {
+      "code": "0xE4",
+      "part3c_occurrences": 32,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "r ",
+      "visualfix3_declared_occurrences": 31
+    },
+    {
+      "code": "0x3B",
+      "part3c_occurrences": 33,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "ri",
+      "visualfix3_declared_occurrences": 32
+    },
+    {
+      "code": "0x4E",
+      "part3c_occurrences": 33,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "Th",
+      "visualfix3_declared_occurrences": 33
+    },
+    {
+      "code": "0x27",
+      "part3c_occurrences": 34,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "te",
+      "visualfix3_declared_occurrences": 34
+    },
+    {
+      "code": "0x45",
+      "part3c_occurrences": 34,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "wi",
+      "visualfix3_declared_occurrences": 34
+    },
+    {
+      "code": "0x4B",
+      "part3c_occurrences": 34,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "ar",
+      "visualfix3_declared_occurrences": 34
+    },
+    {
+      "code": "0x84",
+      "part3c_occurrences": 35,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "nd",
+      "visualfix3_declared_occurrences": 35
+    },
+    {
+      "code": "0xA5",
+      "part3c_occurrences": 35,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "I ",
+      "visualfix3_declared_occurrences": 35
+    },
+    {
+      "code": "0xBE",
+      "part3c_occurrences": 35,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": " I",
+      "visualfix3_declared_occurrences": 35
+    },
+    {
+      "code": "0x39",
+      "part3c_occurrences": 36,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "re",
+      "visualfix3_declared_occurrences": 36
+    },
+    {
+      "code": "0x3A",
+      "part3c_occurrences": 38,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": " w",
+      "visualfix3_declared_occurrences": 37
+    },
+    {
+      "code": "0x40",
+      "part3c_occurrences": 39,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": " y",
+      "visualfix3_declared_occurrences": 38
+    },
+    {
+      "code": "0x8D",
+      "part3c_occurrences": 39,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": " i",
+      "visualfix3_declared_occurrences": 39
+    },
+    {
+      "code": "0x8A",
+      "part3c_occurrences": 40,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "is",
+      "visualfix3_declared_occurrences": 40
+    },
+    {
+      "code": "0x1B",
+      "part3c_occurrences": 43,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "ng",
+      "visualfix3_declared_occurrences": 42
+    },
+    {
+      "code": "0x51",
+      "part3c_occurrences": 43,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "d ",
+      "visualfix3_declared_occurrences": 43
+    },
+    {
+      "code": "0x19",
+      "part3c_occurrences": 44,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "no",
+      "visualfix3_declared_occurrences": 44
+    },
+    {
+      "code": "0x37",
+      "part3c_occurrences": 45,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "ll",
+      "visualfix3_declared_occurrences": 45
+    },
+    {
+      "code": "0x42",
+      "part3c_occurrences": 47,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "y ",
+      "visualfix3_declared_occurrences": 47
+    },
+    {
+      "code": "0x0D",
+      "part3c_occurrences": 48,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "at",
+      "visualfix3_declared_occurrences": 48
+    },
+    {
+      "code": "0x33",
+      "part3c_occurrences": 48,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "yo",
+      "visualfix3_declared_occurrences": 49
+    },
+    {
+      "code": "0x4A",
+      "part3c_occurrences": 49,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "u ",
+      "visualfix3_declared_occurrences": 49
+    },
+    {
+      "code": "0x44",
+      "part3c_occurrences": 52,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "he",
+      "visualfix3_declared_occurrences": 52
+    },
+    {
+      "code": "0x50",
+      "part3c_occurrences": 52,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "er",
+      "visualfix3_declared_occurrences": 52
+    },
+    {
+      "code": "0x36",
+      "part3c_occurrences": 53,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "an",
+      "visualfix3_declared_occurrences": 53
+    },
+    {
+      "code": "0x1A",
+      "part3c_occurrences": 54,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "s",
+      "visualfix3_declared_occurrences": 54
+    },
+    {
+      "code": "0x2D",
+      "part3c_occurrences": 54,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": " a",
+      "visualfix3_declared_occurrences": 54
+    },
+    {
+      "code": "0x23",
+      "part3c_occurrences": 55,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "in",
+      "visualfix3_declared_occurrences": 55
+    },
+    {
+      "code": "0x3F",
+      "part3c_occurrences": 56,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "n ",
+      "visualfix3_declared_occurrences": 56
+    },
+    {
+      "code": "0x35",
+      "part3c_occurrences": 64,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "...",
+      "visualfix3_declared_occurrences": 62
+    },
+    {
+      "code": "0x41",
+      "part3c_occurrences": 64,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "t ",
+      "visualfix3_declared_occurrences": 64
+    },
+    {
+      "code": "0x1F",
+      "part3c_occurrences": 76,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "ou",
+      "visualfix3_declared_occurrences": 75
+    },
+    {
+      "code": "0x43",
+      "part3c_occurrences": 80,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "th",
+      "visualfix3_declared_occurrences": 80
+    },
+    {
+      "code": "0x0A",
+      "part3c_occurrences": 82,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": " t",
+      "visualfix3_declared_occurrences": 81
+    },
+    {
+      "code": "0x2E",
+      "part3c_occurrences": 84,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": ". ",
+      "visualfix3_declared_occurrences": 84
+    },
+    {
+      "code": "0x87",
+      "part3c_occurrences": 144,
+      "other_chapter_occurrences": 0,
+      "visualfix3_unit": "e ",
+      "visualfix3_declared_occurrences": 144
+    }
+  ]
+}

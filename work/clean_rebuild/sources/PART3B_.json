@@ -1,0 +1,1328 @@
+{
+  "schema_version": 1,
+  "chapter": "PART3B_",
+  "record_count": 211,
+  "retail_mes": {
+    "sha256": "47F99BD71DC9FA7FA8F982D64B98EBAF773AA0B1F1F1DC55C12AAF9A33EC4C00",
+    "size": 12763,
+    "dynamic_glyph_count": 357
+  },
+  "retail_scn": {
+    "sha256": "0A069792CB67A8D3AFBE1051CE37707A7CABF6DBEF6B00D1FD28823C971817C0",
+    "size": 3534
+  },
+  "playable_reference_mes": {
+    "sha256": "47F99BD71DC9FA7FA8F982D64B98EBAF773AA0B1F1F1DC55C12AAF9A33EC4C00",
+    "size": 12763,
+    "dynamic_glyph_count": 357
+  },
+  "profile": {
+    "schema_version": 1,
+    "name": "PART3B_",
+    "choice_render_cell_limit": 18,
+    "require_choice_segments": false,
+    "require_selector_window_segments": false,
+    "exclude_choice_segments_from_wrap": true,
+    "scn_selector_window_subtypes": [
+      40
+    ],
+    "infer_scn_layouts": true,
+    "infer_all_replacement_segments": true,
+    "scn_window_text_subtypes": [
+      39
+    ],
+    "leading_blank_anchor_segments": [],
+    "validate_runtime_row_boundaries": true,
+    "validate_text_hygiene": true,
+    "validate_wrapped_text_integrity": true,
+    "validate_scn_floating_row_limits": true,
+    "scn_dialogue_layout": {
+      "first": 12,
+      "continuation": 11
+    },
+    "scn_continuation_layout": {
+      "first": 10,
+      "continuation": 10
+    },
+    "scn_dialogue_runtime_layout": {
+      "first": 12,
+      "continuation": 11
+    },
+    "scn_continuation_runtime_layout": {
+      "first": 11,
+      "continuation": 11
+    },
+    "layout_overrides": {},
+    "runtime_layout_overrides": {}
+  },
+  "text_mode": "prose",
+  "text_sources": [
+    "C:\\Users\\thema\\Documents\\Codex\\2026-07-21\\in-c-users-thema-documents-codex\\work\\clean_rebuild\\part3b_translation.json"
+  ],
+  "records": [
+    {
+      "index": 0,
+      "policy": "translate",
+      "text": "Yamada Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 1,
+      "policy": "translate",
+      "text": "Cargo Hold",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 2,
+      "policy": "translate",
+      "text": "Kasuke",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 3,
+      "policy": "translate",
+      "text": "Laugh, Charlie. I have him in my sights, but I cannot kill him... Do not be angry... I have always been a coward. Just give me a little more time...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 4,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 5,
+      "policy": "translate",
+      "text": "Ruthie",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 6,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 7,
+      "policy": "translate",
+      "text": "You were here...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 8,
+      "policy": "translate",
+      "text": "Sorry, but I do not want to see anyone right now.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 9,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 10,
+      "policy": "translate",
+      "text": "Now, Ruthie... It looks like I will not be returning to southern France... Sorry.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 11,
+      "policy": "translate",
+      "text": "You are kind. You are wonderful.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 12,
+      "policy": "translate",
+      "text": "I am just a fool.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 13,
+      "policy": "translate",
+      "text": "...Words like that must be exactly what I need right now...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 14,
+      "policy": "translate",
+      "text": "...It is about Lord Ashby's butler, who was killed in the Center Hall...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 15,
+      "policy": "preserve",
+      "text": null
+    },
+    {
+      "index": 16,
+      "policy": "translate",
+      "text": "Aubrey Voysey?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 17,
+      "policy": "translate",
+      "text": "He deceived me about 'Mede.'",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 18,
+      "policy": "translate",
+      "text": "Mede!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 19,
+      "policy": "translate",
+      "text": "When?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 20,
+      "policy": "translate",
+      "text": "A little before he was killed. I know a little about art...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 21,
+      "policy": "translate",
+      "text": "What do you know?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 22,
+      "policy": "translate",
+      "text": "He figured it out? How?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 23,
+      "policy": "translate",
+      "text": "The title of the poster...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 24,
+      "policy": "translate",
+      "text": "Huh?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 25,
+      "policy": "translate",
+      "text": "Poster?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 26,
+      "policy": "translate",
+      "text": "The poster for Sarah Bernhardt's play 'Medea.' It was everywhere in Paris.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 27,
+      "policy": "translate",
+      "text": "Poster?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 28,
+      "policy": "translate",
+      "text": "What?!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 29,
+      "policy": "translate",
+      "text": "Look, Ilyusha Grancelius copied it and displayed it in the Center Hall. Do you not remember?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 30,
+      "policy": "translate",
+      "text": "Yes! I remember! So that was 'Mede'!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 31,
+      "policy": "translate",
+      "text": "'Mede' is the French reading of 'Medea'... Did any of this help you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 32,
+      "policy": "translate",
+      "text": "Of course it did!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 33,
+      "policy": "translate",
+      "text": "Thank you, Ruthie!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 34,
+      "policy": "translate",
+      "text": "I am glad...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 35,
+      "policy": "translate",
+      "text": "I wanted to repay you somehow... for staying with me through my dreary nostalgia... I...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 36,
+      "policy": "translate",
+      "text": "I will be back!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 37,
+      "policy": "translate",
+      "text": "Ah... A perfect underground railway... I am not the only passenger...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 38,
+      "policy": "translate",
+      "text": "Center Hall",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 39,
+      "policy": "translate",
+      "text": "Old Karl",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 40,
+      "policy": "translate",
+      "text": "Alphonse Mucha's Medea. It is terribly uncouth to dissect art, but shall we try interpreting it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 41,
+      "policy": "translate",
+      "text": "Mede...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 42,
+      "policy": "translate",
+      "text": "Interpretation...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 43,
+      "policy": "translate",
+      "text": "The contact code designated by the 'Russian Fog'...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 44,
+      "policy": "translate",
+      "text": "It is unusually grim for Mucha, a picture that sets the nerves on edge...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 45,
+      "policy": "translate",
+      "text": "Like symbols in language?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 46,
+      "policy": "translate",
+      "text": "No one willingly exposes their true feelings.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 47,
+      "policy": "translate",
+      "text": "You mean true feelings are hidden in pictures?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 48,
+      "policy": "translate",
+      "text": "More frightening than being judged by others is having to acknowledge one's own naked desires. Everyone hides their true desires from their own eyes. When speaking or expressing something, they replace those desires with forms they can accept.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 49,
+      "policy": "translate",
+      "text": "Emotions we do not want to acknowledge are... stifled... Am I wrong?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 50,
+      "policy": "translate",
+      "text": "Human reason is not so stubborn. When desire coiled at the bottom of the heart tries to escape, it always passes through a checkpoint called 'reason' before it can be expressed.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 51,
+      "policy": "translate",
+      "text": "So one's own subconscious deceives oneself?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 52,
+      "policy": "translate",
+      "text": "Desire constantly tries to escape. Reason suppresses it. The suppressed 'desire' changes form and slips out so that 'reason' will not see its true nature.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 53,
+      "policy": "translate",
+      "text": "People become devious when the expression of desire grows indirect and roundabout... Easy enough to understand.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 54,
+      "policy": "translate",
+      "text": "A picture does not make its meaning as explicit as words. It is easier to deceive 'reason.' For 'desire,' it can become the perfect outlet.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 55,
+      "policy": "translate",
+      "text": "There was a reason she chose to copy it. Her reason does not know it, but she unconsciously sympathized with the desire clearly present in the picture.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 56,
+      "policy": "translate",
+      "text": "So the artist's deepest feelings are projected into the picture... unconsciously.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 57,
+      "policy": "translate",
+      "text": "Her true feelings, which even she has not noticed, overflow from within her and settle here...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 58,
+      "policy": "translate",
+      "text": "Ilyu's true feelings... frightening.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 59,
+      "policy": "translate",
+      "text": "This is the sort of picture made by someone who has always lived under intense pressure... a daily life of oppression...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 60,
+      "policy": "translate",
+      "text": "For example?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 61,
+      "policy": "translate",
+      "text": "Her work, perhaps. A duty that completely forbids revealing one's true feelings...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 62,
+      "policy": "translate",
+      "text": "...Ilyu too...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 63,
+      "policy": "translate",
+      "text": "...Is Ilyu a spy too...? What happens when repression continues too long?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 64,
+      "policy": "translate",
+      "text": "Stop searching for your children!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 65,
+      "policy": "translate",
+      "text": "What?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 66,
+      "policy": "translate",
+      "text": "A line from the Greek tragedy 'Medea.' Medea kills the princess who bewitched her husband, then kills both of her own children.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 67,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 68,
+      "policy": "translate",
+      "text": "A terrifying story.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 69,
+      "policy": "translate",
+      "text": "The shape of distorted desire... its symbols. The 'husband' is the symbol of her 'belief'; the 'king' is 'society' or 'authority.' Killing the king's 'daughter' is the expression of rebellion. Through it we can see her true feelings, feelings even she has not noticed. When shaken, the truth behind an action that leaps beyond reason...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 70,
+      "policy": "translate",
+      "text": "...A 'rebellious impulse' against the 'Emperor' who brainwashed her.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 71,
+      "policy": "translate",
+      "text": "...Then why kill her own 'children'?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 72,
+      "policy": "translate",
+      "text": "At the limit, destroying with her own hands the self she treasures... Loss of purpose.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 73,
+      "policy": "translate",
+      "text": "...'Stop searching for your children'...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 74,
+      "policy": "translate",
+      "text": "Seclusion. Escape. Everyone tries to flee somewhere no one can see through their wounded heart.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 75,
+      "policy": "translate",
+      "text": "...Foolish Ilyu...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 76,
+      "policy": "translate",
+      "text": "...It is 'defection,' is it not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 77,
+      "policy": "translate",
+      "text": "The 'Russian Fog' is Ilyusha Grancelius.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 78,
+      "policy": "translate",
+      "text": "Second-Class Cabin",
+      "layout_policy": "fixed"
+    },
+    {
+      "index": 79,
+      "policy": "translate",
+      "text": "Do you know Aubrey Voysey?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 80,
+      "policy": "translate",
+      "text": "Ilyu",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 81,
+      "policy": "translate",
+      "text": "He was an insurance gentleman's butler, was he not? We did not speak, but... the man killed in the Center Hall.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 82,
+      "policy": "translate",
+      "text": "Your Earl Grey was rather well brewed.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 83,
+      "policy": "translate",
+      "text": "Tea?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 84,
+      "policy": "translate",
+      "text": "A dog's death.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 85,
+      "policy": "translate",
+      "text": "What a terrible way to put it...?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 86,
+      "policy": "translate",
+      "text": "Are you trying to make me uncomfortable?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 87,
+      "policy": "translate",
+      "text": "I do not want you acting so aloof.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 88,
+      "policy": "translate",
+      "text": "He was the deputy chief of British Intelligence Action.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 89,
+      "policy": "translate",
+      "text": "? What does that matter?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 90,
+      "policy": "translate",
+      "text": "This woman...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 91,
+      "policy": "translate",
+      "text": "British Intelligence Action... the British Empire's intelligence service. The new weapons of the twentieth century are not mere cannons. In the final stretch of the race for Asian colonies, they were the secret that let Britain pull ahead of the other European powers.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 92,
+      "policy": "translate",
+      "text": "So?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 93,
+      "policy": "translate",
+      "text": "There is a real monster aboard this ship! Still alive! Right before my eyes!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 94,
+      "policy": "translate",
+      "text": "Another game of Indian poker? Your bluff will not work on me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 95,
+      "policy": "translate",
+      "text": "Why did you go to art school?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 96,
+      "policy": "translate",
+      "text": "Living in Paris makes one curious about such things.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 97,
+      "policy": "translate",
+      "text": "A modern college girl, are you?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 98,
+      "policy": "translate",
+      "text": "Will you telephone me?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 99,
+      "policy": "translate",
+      "text": "He was trying to contact the 'Russian Fog' demanded by the culprit. Then he was killed. Do you feel nothing?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 100,
+      "policy": "translate",
+      "text": "To me, he was a stranger.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 101,
+      "policy": "translate",
+      "text": "This woman... She is a veteran who has talked her way out of questioning many times before...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 102,
+      "policy": "translate",
+      "text": "You used to be a good girl. You cooperated with me.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 103,
+      "policy": "translate",
+      "text": "We cannot remain strangers forever. You are special.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 104,
+      "policy": "translate",
+      "text": "Thank you. We are neighbors. Let us get along as before.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 105,
+      "policy": "translate",
+      "text": "You drew the picture in the Center Hall well.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 106,
+      "policy": "translate",
+      "text": "I only copied it. I am an imitator.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 107,
+      "policy": "translate",
+      "text": "It is good enough.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 108,
+      "policy": "translate",
+      "text": "Where did you learn to paint?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 109,
+      "policy": "translate",
+      "text": "It is not something others can teach you, is it? Just like your own life.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 110,
+      "policy": "translate",
+      "text": "One failure after another.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 111,
+      "policy": "translate",
+      "text": "Do you know what I suspect?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 112,
+      "policy": "translate",
+      "text": "A little.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 113,
+      "policy": "translate",
+      "text": "Voysey was searching for the key to contact the 'Russian Fog.' It was...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 114,
+      "policy": "translate",
+      "text": "'Mede.'",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 115,
+      "policy": "translate",
+      "text": "Was it not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 116,
+      "policy": "translate",
+      "text": "Damn, I knew it...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 117,
+      "policy": "translate",
+      "text": "You knew something, did you not?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 118,
+      "policy": "translate",
+      "text": "...I knew it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 119,
+      "policy": "translate",
+      "text": "I was the one who painted the 'Medea' poster... I had felt that someday you would question me about it.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 120,
+      "policy": "translate",
+      "text": "You sensed it...? You use vague wording. Habit or personality...?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 121,
+      "policy": "translate",
+      "text": "You are a spy for the Russian Empire.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 122,
+      "policy": "translate",
+      "text": "Correct. Care to press your advantage? Shall I deal the cards?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 123,
+      "policy": "translate",
+      "text": "Nonsense!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 124,
+      "policy": "translate",
+      "text": "Am I a little late?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 125,
+      "policy": "translate",
+      "text": "They will dock your pay. Heh.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 126,
+      "policy": "translate",
+      "text": "Why are you so calm...?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 127,
+      "policy": "translate",
+      "text": "A Russian lapdog. That much has been established.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 128,
+      "policy": "translate",
+      "text": "That is not a nice way to put it. Words can ruin a person.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 129,
+      "policy": "translate",
+      "text": "Touchy.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 130,
+      "policy": "translate",
+      "text": "You too, Ilyusha?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 131,
+      "policy": "translate",
+      "text": "It is not such special work. There are any number of similar jobs.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 132,
+      "policy": "translate",
+      "text": "Salesmen too?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 133,
+      "policy": "translate",
+      "text": "You make a strange 'Russian Fog.'",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 134,
+      "policy": "translate",
+      "text": "Me?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 135,
+      "policy": "translate",
+      "text": "She is perfectly calm... Damn it!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 136,
+      "policy": "translate",
+      "text": "The candidates are down to two: you and Kirikov. I will bet on you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 137,
+      "policy": "translate",
+      "text": "...How hasty. Do you think this will go like Indian poker? Are you confident in your cards? Shall I call?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 138,
+      "policy": "translate",
+      "text": "Call! Call!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 139,
+      "policy": "translate",
+      "text": "You think you can win?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 140,
+      "policy": "translate",
+      "text": "This is the showdown.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 141,
+      "policy": "translate",
+      "text": "Such delightful tension.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 142,
+      "policy": "translate",
+      "text": "Uhhh...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 143,
+      "policy": "translate",
+      "text": "Getting cold feet? Will you fold?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 144,
+      "policy": "translate",
+      "text": "Wait... Wait...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 145,
+      "policy": "translate",
+      "text": "What is wrong? Is that bravado from moments ago gone?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 146,
+      "policy": "translate",
+      "text": "I have it. You are the 'Russian Fog.' Call!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 147,
+      "policy": "translate",
+      "text": "...I certainly painted 'Mede.'",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 148,
+      "policy": "translate",
+      "text": "I intercepted a message the 'Russian Fog' had addressed to the I.A. deputy chief. I thought that displaying something connected to 'Mede' would make the deputy chief approach me...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 149,
+      "policy": "translate",
+      "text": "My mission was to capture a senior British Intelligence officer.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 150,
+      "policy": "translate",
+      "text": "...That is the truth... Pity. Give me the stakes.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 151,
+      "policy": "translate",
+      "text": "...You damned old fool! Ilyu is not the Russian Fog!",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 152,
+      "policy": "translate",
+      "text": "...Then Kirikov really is the Russian Fog.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 153,
+      "policy": "translate",
+      "text": "I wonder...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 154,
+      "policy": "translate",
+      "text": "Damn it! I am the one being interrogated...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 155,
+      "policy": "translate",
+      "text": "Your statement clearly violates Russia's state security regulations. I could inform on you to Kirikov.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 156,
+      "policy": "translate",
+      "text": "I will kill him.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 157,
+      "policy": "translate",
+      "text": "You are a formidable opponent... Nothing but traps.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 158,
+      "policy": "translate",
+      "text": "Being chased by someone is exhilarating.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 159,
+      "policy": "translate",
+      "text": "...A backlash from 'escape'?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 160,
+      "policy": "translate",
+      "text": "How can you put on such a complicated act? A split personality?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 161,
+      "policy": "translate",
+      "text": "I am always saying things contrary to my heart... Is that...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 162,
+      "policy": "translate",
+      "text": "only",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 163,
+      "policy": "translate",
+      "text": "me?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 164,
+      "policy": "translate",
+      "text": "That is an unstable way of speaking...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 165,
+      "policy": "translate",
+      "text": "This is bad. I am losing the will to do this again...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 166,
+      "policy": "translate",
+      "text": "I am not going to encourage you...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 167,
+      "policy": "translate",
+      "text": "I was not expecting you to.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 168,
+      "policy": "translate",
+      "text": "You killed Voysey because you did not want to surrender Kirikov.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 169,
+      "policy": "translate",
+      "text": "Tainui Adjell's men killed Voysey. Killing is all they know.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 170,
+      "policy": "translate",
+      "text": "...My mission was not to kill, but to monitor him and capture him alive.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 171,
+      "policy": "translate",
+      "text": "Your mission is gone. What will you do now?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 172,
+      "policy": "translate",
+      "text": "I wanted the deputy chief of British Intelligence Action... He died... The bomber is an intruder, and we will die too... Strange. With my duty gone, I cannot think what to do at all... I am such a boring person.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 173,
+      "policy": "translate",
+      "text": "Mede is the manifestation of the desire to escape hidden within you.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 174,
+      "policy": "translate",
+      "text": "?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 175,
+      "policy": "translate",
+      "text": "...It comes out when you are weakened.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 176,
+      "policy": "translate",
+      "text": "Are you lost about something?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 177,
+      "policy": "translate",
+      "text": "Sometimes, yes.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 178,
+      "policy": "translate",
+      "text": "Fragile, perhaps...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 179,
+      "policy": "translate",
+      "text": "Should you not be keeping watch on Kirikov? The culprit may take him.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 180,
+      "policy": "translate",
+      "text": "I am no longer interested.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 181,
+      "policy": "translate",
+      "text": "'Stop searching'... Is that it?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 182,
+      "policy": "translate",
+      "text": "What...?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 183,
+      "policy": "translate",
+      "text": "...No.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 184,
+      "policy": "translate",
+      "text": "Second-Class Corridor",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 185,
+      "policy": "translate",
+      "text": "Ilyusha",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 186,
+      "policy": "translate",
+      "text": "Old Karl. Please watch her...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 187,
+      "policy": "translate",
+      "text": "It is a cramped ship. There is nowhere to run. Young lady, let us all have some fun here. At any rate, we have only a few hours left to live.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 188,
+      "policy": "translate",
+      "text": "...You are kind. With this man I can ignore my position... a composed old man and one carefree soul... buoyant and unbound, poor Kasuke...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 189,
+      "policy": "translate",
+      "text": "...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 190,
+      "policy": "translate",
+      "text": "How long will you keep playing dumb, Ilyu?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 191,
+      "policy": "translate",
+      "text": "Wonderful.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 192,
+      "policy": "translate",
+      "text": "Promenade Deck",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 193,
+      "policy": "translate",
+      "text": "Dunant",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 194,
+      "policy": "translate",
+      "text": "Ilyusha Grancelius was also a Russian spy.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 195,
+      "policy": "translate",
+      "text": "There are two of them.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 196,
+      "policy": "translate",
+      "text": "One is Kirikov. The other is Ilyusha. One of them is the 'Russian Fog.'",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 197,
+      "policy": "translate",
+      "text": "Either one. No doubt.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 198,
+      "policy": "translate",
+      "text": "And there is one more. A third Russian spy is somewhere aboard: the Tainui Adjell agent who killed Deputy Chief Voysey...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 199,
+      "policy": "translate",
+      "text": "If Ashby is the culprit, we had better keep that quiet.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 200,
+      "policy": "translate",
+      "text": "Why?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 201,
+      "policy": "translate",
+      "text": "If Ashby is the culprit, he must know who the 'Russian Fog' is. He will seize the Fog and escape the ship.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 202,
+      "policy": "translate",
+      "text": "He is not a complete fool.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 203,
+      "policy": "translate",
+      "text": "What about the bomb?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 204,
+      "policy": "translate",
+      "text": "You are naive. This ship is one enormous piece of evidence in this whole act of plunder. Do you think a spy from a third country would leave it intact? That is what worried me from the start.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 205,
+      "policy": "translate",
+      "text": "Am I the fool?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 206,
+      "policy": "translate",
+      "text": "That is right... Damn! Either way, we only have until tonight...",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 207,
+      "policy": "translate",
+      "text": "Use your head. If we find the 'Russian Fog' first, we can use the Fog as bait and force him to disarm the bomb.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 208,
+      "policy": "translate",
+      "text": "Why do things always go exactly the way this man thinks?",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 209,
+      "policy": "translate",
+      "text": "It could work.",
+      "layout_policy": "adaptive"
+    },
+    {
+      "index": 210,
+      "policy": "translate",
+      "text": "Question both of them more forcefully.",
+      "layout_policy": "adaptive"
+    }
+  ]
+}

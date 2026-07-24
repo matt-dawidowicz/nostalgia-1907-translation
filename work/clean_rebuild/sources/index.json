@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "chapter_count": 19,
+  "chapters": [
+    {
+      "chapter": "START",
+      "source": "START.json",
+      "record_count": 17,
+      "translated_records": 17,
+      "preserved_records": 0
+    },
+    {
+      "chapter": "PART1A",
+      "source": "PART1A.json",
+      "record_count": 136,
+      "translated_records": 135,
+      "preserved_records": 1
+    },
+    {
+      "chapter": "PART1B",
+      "source": "PART1B.json",
+      "record_count": 33,
+      "translated_records": 32,
+      "preserved_records": 1
+    },
+    {
+      "chapter": "PART1C",
+      "source": "PART1C.json",
+      "record_count": 207,
+      "translated_records": 205,
+      "preserved_records": 2
+    },
+    {
+      "chapter": "PART1D",
+      "source": "PART1D.json",
+      "record_count": 173,
+      "translated_records": 171,
+      "preserved_records": 2
+    },
+    {
+      "chapter": "PART2A",
+      "source": "PART2A.json",
+      "record_count": 128,
+      "translated_records": 127,
+      "preserved_records": 1
+    },
+    {
+      "chapter": "PART2B",
+      "source": "PART2B.json",
+      "record_count": 102,
+      "translated_records": 101,
+      "preserved_records": 1
+    },
+    {
+      "chapter": "PART2C",
+      "source": "PART2C.json",
+      "record_count": 169,
+      "translated_records": 168,
+      "preserved_records": 1
+    },
+    {
+      "chapter": "PART2D",
+      "source": "PART2D.json",
+      "record_count": 153,
+      "translated_records": 152,
+      "preserved_records": 1
+    },
+    {
+      "chapter": "PART2E",
+      "source": "PART2E.json",
+      "record_count": 219,
+      "translated_records": 217,
+      "preserved_records": 2
+    },
+    {
+      "chapter": "PART2F",
+      "source": "PART2F.json",
+      "record_count": 194,
+      "translated_records": 193,
+      "preserved_records": 1
+    },
+    {
+      "chapter": "PART3A",
+      "source": "PART3A.json",
+      "record_count": 252,
+      "translated_records": 251,
+      "preserved_records": 1
+    },
+    {
+      "chapter": "PART3B",
+      "source": "PART3B.json",
+      "record_count": 209,
+      "translated_records": 207,
+      "preserved_records": 2
+    },
+    {
+      "chapter": "PART3B_",
+      "source": "PART3B_.json",
+      "record_count": 211,
+      "translated_records": 209,
+      "preserved_records": 2
+    },
+    {
+      "chapter": "PART3C",
+      "source": "PART3C.json",
+      "record_count": 224,
+      "translated_records": 222,
+      "preserved_records": 2
+    },
+    {
+      "chapter": "PART4A",
+      "source": "PART4A.json",
+      "record_count": 63,
+      "translated_records": 62,
+      "preserved_records": 1
+    },
+    {
+      "chapter": "PART4B",
+      "source": "PART4B.json",
+      "record_count": 293,
+      "translated_records": 292,
+      "preserved_records": 1
+    },
+    {
+      "chapter": "PART4C",
+      "source": "PART4C.json",
+      "record_count": 60,
+      "translated_records": 59,
+      "preserved_records": 1
+    },
+    {
+      "chapter": "STAFF",
+      "source": "STAFF.json",
+      "record_count": 62,
+      "translated_records": 62,
+      "preserved_records": 0
+    }
+  ]
+}

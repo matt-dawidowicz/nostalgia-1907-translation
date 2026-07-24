@@ -1,0 +1,351 @@
+{
+  "status": "PASS",
+  "release_candidate": true,
+  "diagnosis": "retail title padding and exact 0x24 window geometry are runtime invariants",
+  "mes": {
+    "source_size": 16356,
+    "output_size": 16354,
+    "output_size_hex": "0x3FE2",
+    "hard_limit": 16383,
+    "headroom": 29,
+    "source_split": 9156,
+    "output_split": 9154,
+    "text_split_limit": 9728,
+    "visualfix3_size": 16869,
+    "saving_from_visualfix3": 515,
+    "minimum_saving": 486,
+    "pointer_count": 224,
+    "sha256": "C00645FFE2D1EDDF827373A007DF0EF311AEC8AA653DDCF65752EA66C8D0EBD1"
+  },
+  "scope": {
+    "changed_records": [
+      14,
+      83,
+      93,
+      110,
+      136,
+      146,
+      149,
+      154,
+      157,
+      159,
+      162
+    ],
+    "records_112_123_byte_identical": true,
+    "records_163_223_byte_identical": true,
+    "all_224_records_present": true,
+    "translated_prose_preserved": true,
+    "control_sequences_preserved": true
+  },
+  "safe_reflows": [
+    {
+      "record": 14,
+      "row": 0,
+      "row_width": 8,
+      "prose": "Always reading",
+      "retired_dynamic_indexes": [
+        136
+      ],
+      "source_bytes": 59,
+      "target_bytes": 60
+    },
+    {
+      "record": 83,
+      "row": 0,
+      "row_width": 8,
+      "prose": "Iryu's true",
+      "retired_dynamic_indexes": [
+        294
+      ],
+      "source_bytes": 22,
+      "target_bytes": 22
+    },
+    {
+      "record": 93,
+      "row": 0,
+      "row_width": 8,
+      "prose": "Iryu is not",
+      "retired_dynamic_indexes": [
+        302
+      ],
+      "source_bytes": 67,
+      "target_bytes": 68
+    },
+    {
+      "record": 110,
+      "row": 2,
+      "row_width": 10,
+      "prose": "asylum terms!",
+      "retired_dynamic_indexes": [
+        333
+      ],
+      "source_bytes": 40,
+      "target_bytes": 40
+    },
+    {
+      "record": 136,
+      "row": 1,
+      "row_width": 8,
+      "prose": "The vodka is",
+      "retired_dynamic_indexes": [
+        352
+      ],
+      "source_bytes": 36,
+      "target_bytes": 36
+    },
+    {
+      "record": 146,
+      "row": 0,
+      "row_width": 7,
+      "prose": "Yamada Kasuke",
+      "retired_dynamic_indexes": [
+        364
+      ],
+      "source_bytes": 13,
+      "target_bytes": 13
+    },
+    {
+      "record": 149,
+      "row": 0,
+      "row_width": 8,
+      "prose": "It appears so...",
+      "retired_dynamic_indexes": [
+        367
+      ],
+      "source_bytes": 14,
+      "target_bytes": 11
+    },
+    {
+      "record": 154,
+      "row": 1,
+      "row_width": 9,
+      "prose": "getting at?!",
+      "retired_dynamic_indexes": [
+        371
+      ],
+      "source_bytes": 23,
+      "target_bytes": 23
+    },
+    {
+      "record": 157,
+      "row": 1,
+      "row_width": 10,
+      "prose": "written the second",
+      "retired_dynamic_indexes": [
+        373
+      ],
+      "source_bytes": 44,
+      "target_bytes": 43
+    }
+  ],
+  "record_159": {
+    "retail_leading_padding_restored": "01 01",
+    "translated_suffix_byte_identical": true
+  },
+  "record_162": {
+    "prose": "Admit you have lost your judgment, Kasuke. This is an enlightened age.",
+    "rows": [
+      {
+        "text": "Admit you have lost",
+        "units": [
+          {
+            "unit": "Ad",
+            "token": "F0 EE",
+            "recycled_slot": null
+          },
+          {
+            "unit": "mi",
+            "token": "F0 5C",
+            "recycled_slot": null
+          },
+          {
+            "unit": "t y",
+            "token": "F0 89",
+            "recycled_slot": 136
+          },
+          {
+            "unit": "ou",
+            "token": "1F",
+            "recycled_slot": null
+          },
+          {
+            "unit": " ha",
+            "token": "F1 28",
+            "recycled_slot": 294
+          },
+          {
+            "unit": "ve",
+            "token": "F0 70",
+            "recycled_slot": null
+          },
+          {
+            "unit": " lo",
+            "token": "F1 30",
+            "recycled_slot": 302
+          },
+          {
+            "unit": "st",
+            "token": "D2",
+            "recycled_slot": null
+          }
+        ],
+        "padding_cells": 0
+      },
+      {
+        "text": "your judgment,",
+        "units": [
+          {
+            "unit": "yo",
+            "token": "33",
+            "recycled_slot": null
+          },
+          {
+            "unit": "ur",
+            "token": "F0 6C",
+            "recycled_slot": null
+          },
+          {
+            "unit": " ju",
+            "token": "F1 4F",
+            "recycled_slot": 333
+          },
+          {
+            "unit": "dg",
+            "token": "F1 7B",
+            "recycled_slot": null
+          },
+          {
+            "unit": "me",
+            "token": "46",
+            "recycled_slot": null
+          },
+          {
+            "unit": "nt",
+            "token": "F0 1D",
+            "recycled_slot": null
+          },
+          {
+            "unit": ",",
+            "token": "F0 81",
+            "recycled_slot": null
+          }
+        ],
+        "padding_cells": 1
+      },
+      {
+        "text": "Kasuke. This is",
+        "units": [
+          {
+            "unit": "Ka",
+            "token": "F0 07",
+            "recycled_slot": null
+          },
+          {
+            "unit": "su",
+            "token": "F0 08",
+            "recycled_slot": null
+          },
+          {
+            "unit": "ke.",
+            "token": "F1 62",
+            "recycled_slot": 352
+          },
+          {
+            "unit": " Th",
+            "token": "F1 6E",
+            "recycled_slot": 364
+          },
+          {
+            "unit": "is",
+            "token": "8A",
+            "recycled_slot": null
+          },
+          {
+            "unit": " is",
+            "token": "F1 71",
+            "recycled_slot": 367
+          }
+        ],
+        "padding_cells": 2
+      },
+      {
+        "text": "an enlightened age.",
+        "units": [
+          {
+            "unit": "an",
+            "token": "36",
+            "recycled_slot": null
+          },
+          {
+            "unit": " en",
+            "token": "F1 75",
+            "recycled_slot": 371
+          },
+          {
+            "unit": "li",
+            "token": "48",
+            "recycled_slot": null
+          },
+          {
+            "unit": "gh",
+            "token": "F0 8E",
+            "recycled_slot": null
+          },
+          {
+            "unit": "te",
+            "token": "27",
+            "recycled_slot": null
+          },
+          {
+            "unit": "ne",
+            "token": "F0 A3",
+            "recycled_slot": null
+          },
+          {
+            "unit": "d a",
+            "token": "F1 77",
+            "recycled_slot": 373
+          },
+          {
+            "unit": "ge.",
+            "token": "F1 7A",
+            "recycled_slot": 376
+          }
+        ],
+        "padding_cells": 0
+      }
+    ],
+    "row_count": 4,
+    "width_cells": 8,
+    "cell_count": 32,
+    "retail_row_count": 4,
+    "no_f1_low_byte_ge_0x80": true
+  },
+  "dynamic_tail": {
+    "source_glyphs": 400,
+    "output_glyphs": 400,
+    "byte_length_unchanged": true,
+    "recycled_slots": [
+      136,
+      294,
+      302,
+      333,
+      352,
+      364,
+      367,
+      371,
+      373,
+      376
+    ],
+    "each_recycled_slot_owned_only_by_record_162": true,
+    "all_slots_referenced": true
+  },
+  "scn": {
+    "byte_identical_to_retail": true,
+    "critical_chain_offset": "0x0B13",
+    "critical_chain_byte_identical": true,
+    "record_162_width_operand": "0x0E",
+    "sha256": "DC742A1D60E27C5DC657B75647DF3E51B6006A17F1388D4E6705EA983DB675E5"
+  },
+  "font_changed": false
+}
