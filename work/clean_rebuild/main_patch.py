@@ -45,7 +45,23 @@ def sha256(data: bytes) -> str:
 
 
 def patch_main(retail: bytes) -> bytes:
-    """Move the status panel and all thirteen markers right by eight pixels."""
+    """Move the status panel and all thirteen markers right by eight pixels.
+
+    Args:
+        retail: Exact unmodified retail ``MAIN.BIN`` bytes.
+
+    Returns:
+        A same-length executable matching the single frozen patched hash.
+
+    Raises:
+        ValueError: If the input hash or expected original coordinates differ.
+        AssertionError: If implementation drift changes the output hash,
+            length, or exact byte-offset mutation set.
+
+    Notes:
+        This is a closed, reviewed UI-coordinate recipe. It is not an extension
+        point for translation or chapter-specific layout fixes.
+    """
     digest = sha256(retail)
     if digest != RETAIL_SHA256:
         raise ValueError(

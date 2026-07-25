@@ -75,7 +75,19 @@ def find_project_root(explicit: Path | None = None) -> Path:
 
 
 def load_manifest(root: Path) -> dict[str, Any]:
-    """Load and minimally validate the frozen project contract."""
+    """Load and minimally validate the frozen project contract.
+
+    Args:
+        root: Checkout root containing ``nostalgia1907.project.json``.
+
+    Returns:
+        Parsed schema-version-1 manifest.
+
+    Raises:
+        ToolError: If the file is missing, invalid JSON, or uses an unsupported
+            schema. Individual nested contracts are validated at their point of
+            use so diagnostics retain operator context.
+    """
     path = root / MANIFEST_NAME
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
@@ -190,7 +202,15 @@ def require_file(name: str, path: Path, spec: dict[str, Any]) -> None:
 
 
 def source_index_check(root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
-    """Validate the tracked canonical chapter inventory without retail data."""
+    """Validate the tracked canonical chapter inventory without retail data.
+
+    The normalized-text hash permits platform line endings but no semantic JSON
+    change. Chapter and record totals are cross-checked independently.
+
+    Returns:
+        A doctor-compatible status mapping; ordinary mismatches are reported,
+        not raised.
+    """
     clean = rooted(root, manifest["paths"]["clean_rebuild"])
     path = clean / "sources" / "index.json"
     if not path.is_file():
@@ -241,7 +261,12 @@ def source_index_check(root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
 
 
 def retail_reference_check(root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
-    """Check whether the local retail reference was prepared from the guarded input."""
+    """Check whether the prepared retail tree matches frozen input contracts.
+
+    This inexpensive readiness check trusts only the preparation report's
+    Track 1 and logical ISO sizes/hashes. Deeper member validation belongs to
+    preparation and the downstream retail-backed gates.
+    """
     reference = rooted(root, manifest["paths"]["retail_reference"])
     report_path = reference / "retail_report.json"
     if not report_path.is_file():
@@ -293,7 +318,15 @@ def retail_reference_check(root: Path, manifest: dict[str, Any]) -> dict[str, An
 
 
 def doctor_report(root: Path, args: argparse.Namespace) -> dict[str, Any]:
-    """Inspect whether the checkout is ready to prepare, validate, and build."""
+    """Inspect whether the checkout is ready to prepare, validate, and build.
+
+    Required Python, Pillow, canonical-source, and original-track checks
+    determine the overall status. Prepared retail data, BIOS, and FFmpeg are
+    reported according to whether their optional workflows were configured.
+
+    Returns:
+        A machine-readable report without modifying the checkout.
+    """
     manifest = load_manifest(root)
     local = load_local_config(root)
     minimum = tuple(int(part) for part in manifest["tool"]["python_minimum"].split("."))
@@ -446,7 +479,14 @@ def command_doctor(root: Path, args: argparse.Namespace) -> int:
 
 
 def command_prepare(root: Path, args: argparse.Namespace) -> int:
-    """Prepare the guarded retail reference from original Track 1."""
+    """Prepare and recheck the guarded retail reference from original Track 1.
+
+    The complete input is size/hash checked before the lower-level extraction
+    command runs. A postcondition check then confirms the resulting report.
+
+    Side Effects:
+        Creates the ignored prepared-retail tree declared by the manifest.
+    """
     manifest = load_manifest(root)
     local = load_local_config(root)
     track1 = default_input_path(root, manifest, local, "track1", args.track1)
@@ -468,7 +508,12 @@ def command_prepare(root: Path, args: argparse.Namespace) -> int:
 
 
 def command_edit(root: Path, args: argparse.Namespace) -> int:
-    """Preview or atomically apply canonical ID-keyed wording changes."""
+    """Preview or apply canonical ID-keyed English wording changes.
+
+    Preview mode writes nothing. Batch mode delegates one reviewed file.
+    Single-record apply mode creates a temporary batch file, delegates the same
+    atomic validator/writer, and removes the temporary file in ``finally``.
+    """
     validate_edit_request(args)
     manifest = load_manifest(root)
     retail = require_retail_reference(root, manifest)
@@ -558,7 +603,11 @@ def operator_python_sources(root: Path, manifest: dict[str, Any]) -> list[Path]:
 
 
 def command_compare(root: Path, args: argparse.Namespace) -> int:
-    """Regenerate the deterministic Japanese/English review package."""
+    """Regenerate the deterministic Japanese/English review package.
+
+    A prepared retail reference and Pillow are mandatory. The lower-level
+    exporter owns alignment, bitmap, package, and determinism checks.
+    """
     manifest = load_manifest(root)
     retail = require_retail_reference(root, manifest)
     if importlib.util.find_spec("PIL") is None:
@@ -578,7 +627,12 @@ def command_compare(root: Path, args: argparse.Namespace) -> int:
 
 
 def command_validate(root: Path, args: argparse.Namespace) -> int:
-    """Run source syntax, layout, comparison, and semantic validation."""
+    """Run static, audio, renderer, comparison, and semantic validation.
+
+    Stages run sequentially so the first failing layer retains its native
+    diagnostic. Comparison regeneration is the only material output unless the
+    caller explicitly skips it; audit scripts may also refresh ignored reports.
+    """
     manifest = load_manifest(root)
     retail = require_retail_reference(root, manifest)
     python_sources = operator_python_sources(root, manifest)
@@ -671,7 +725,13 @@ def require_separate_build_directories(runs: Path, delivery: Path) -> None:
 
 
 def command_build(root: Path, args: argparse.Namespace) -> int:
-    """Build a clean deterministic BIN/CUE twice from original Japanese tracks."""
+    """Build a clean deterministic BIN/CUE twice from original tracks.
+
+    Exact input hashes and non-overlapping output roots are resolved before the
+    dry-run boundary. A real build additionally requires fresh destinations,
+    runs the complete validation gate, and delegates two-run byte-identity
+    proof and publication.
+    """
     manifest = load_manifest(root)
     local = load_local_config(root)
     track1 = default_input_path(root, manifest, local, "track1", args.track1)
@@ -724,7 +784,12 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
 
 
 def command_build_us(root: Path, args: argparse.Namespace) -> int:
-    """Build the separate U.S.-BIOS test derivative from a validated baseline."""
+    """Build the separate U.S.-BIOS test derivative from a validated baseline.
+
+    Baseline Track 1/2 and the licensed BIOS are hash-guarded through the
+    manifest. This command does not invoke an emulator; it only delegates the
+    deterministic derivative build after fresh-directory preflight.
+    """
     manifest = load_manifest(root)
     local = load_local_config(root)
     baseline = args.baseline or manifest["translation"]["validated_baseline"]
@@ -805,7 +870,7 @@ def command_build_us(root: Path, args: argparse.Namespace) -> int:
 
 
 def parser() -> argparse.ArgumentParser:
-    """Build the command-line grammar."""
+    """Build the complete command-line grammar without parsing process state."""
     result = argparse.ArgumentParser(description=__doc__)
     result.add_argument(
         "--project-root",
@@ -868,7 +933,16 @@ def parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """Run the unified tool and convert expected failures into concise messages."""
+    """Run the unified tool and translate expected operator failures.
+
+    Args:
+        argv: Optional explicit arguments for tests or embedding. ``None`` uses
+            the process command line.
+
+    Returns:
+        Handler status, two for expected setup/data errors, or 130 for user
+        cancellation. Unexpected programming errors retain their traceback.
+    """
     args = parser().parse_args(argv)
     try:
         root = find_project_root(args.project_root)

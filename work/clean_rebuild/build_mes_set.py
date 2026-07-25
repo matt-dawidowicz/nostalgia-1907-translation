@@ -32,7 +32,22 @@ def sha256(path: Path) -> str:
 
 
 def build_mes_set(build_root: Path) -> dict[str, object]:
-    """Compile all chapters from retail members extracted from Track 1."""
+    """Compile all chapters and assemble the generated fixed-font image.
+
+    Args:
+        build_root: Prepared build tree containing guarded retail members.
+
+    Returns:
+        Capacity and hash evidence for every MES plus the merged font patches.
+
+    Raises:
+        ValueError: If compilation fails, font patches conflict, or a patched
+            code lies outside the retail fixed-font bank.
+
+    Side Effects:
+        Writes generated MES files, ``FIX_CODE.FNT``, and ``mes_report.json``
+        below ``build_root``. Canonical and retail inputs remain unchanged.
+    """
     original = build_root / "retail_unpacked"
     output = build_root / "mes"
     retail_font = build_root / "retail_files" / "FIX_CODE.FNT"

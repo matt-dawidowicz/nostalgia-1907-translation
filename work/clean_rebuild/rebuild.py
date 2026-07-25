@@ -85,7 +85,12 @@ def _build_once(
     product_root: Path,
     basename: str,
 ) -> dict[str, object]:
-    """Perform one complete retail-to-test-image build and regression pass."""
+    """Perform one complete retail-to-test-image build and regression pass.
+
+    Both output roots must be absent or empty. The function writes every
+    intermediate into ``build_root`` and only the candidate BIN/CUE plus
+    verification into ``product_root``.
+    """
     _ensure_empty(build_root)
     _ensure_empty(product_root)
     prepare_retail(track1, build_root)
@@ -164,7 +169,27 @@ def rebuild(
     delivery_root: Path,
     basename: str,
 ) -> dict[str, object]:
-    """Build twice, prove byte identity, and publish one fresh BIN/CUE set."""
+    """Build twice, prove byte identity, and publish one fresh BIN/CUE set.
+
+    Args:
+        track1: Exact original Japanese MODE1/2352 data track.
+        track2: Exact original retail audio track.
+        runs_root: Fresh parent for independent ``run_a`` and ``run_b`` trees.
+        delivery_root: Absent or empty release destination.
+        basename: Safe artifact stem supplied by higher-level orchestration.
+
+    Returns:
+        Final two-run verification report and deterministic artifact hashes.
+
+    Raises:
+        ValueError: If any input, build, regression, independence, directory,
+            or byte-identity invariant fails.
+
+    Side Effects:
+        Creates two full staging builds, publishes run A's BIN/CUE only after
+        equality is proven, and writes final verification and test notes.
+        Existing non-empty directories are never cleaned or overwritten.
+    """
     _verify_production_independence()
     run_a_build = runs_root / "run_a" / "build"
     run_a_product = runs_root / "run_a" / "product"

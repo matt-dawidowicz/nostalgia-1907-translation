@@ -45,6 +45,7 @@ EXPECTED_RECORDS = 2905
 
 
 def _load(path: Path) -> dict[str, object]:
+    """Load a tracked UTF-8 JSON object used by semantic validation."""
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise ValueError(f"{path}: expected JSON object")
@@ -52,11 +53,30 @@ def _load(path: Path) -> dict[str, object]:
 
 
 def _normalized(value: object) -> str:
+    """Collapse presentation whitespace for configured phrase comparisons."""
     return re.sub(r"\s+", " ", value if isinstance(value, str) else "").strip()
 
 
 def validate(comparison_json: Path, *, require_comparison: bool = True) -> dict[str, object]:
-    """Return the complete semantic/layout report for canonical source data."""
+    """Validate canonical meaning, policy, layout, and comparison freshness.
+
+    Args:
+        comparison_json: Generated bilingual comparison manifest to verify.
+        require_comparison: Whether a missing comparison is a mandatory
+            failure. Source-only diagnostic callers may disable this check.
+
+    Returns:
+        A JSON-serializable summary whose ``status`` is ``PASS`` only when all
+        mandatory semantic, source, renderer, and comparison checks succeed.
+
+    Raises:
+        OSError: If required source or prepared-retail files cannot be read.
+        ValueError: If a tracked rule table or source object is malformed.
+
+    Side Effects:
+        Reads source, retail, rule, and optional comparison files; writes
+        nothing. Individual failures are accumulated in the returned report.
+    """
     exact = audit(DEFAULT_RETAIL_ROOT)
     glossary = _load(GLOSSARY)
     repairs = _load(REPAIRS)

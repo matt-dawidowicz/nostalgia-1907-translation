@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
-"""Extract, map, transcribe, dub, and validate Nostalgia 1907 Track 1 audio.
+"""Extract, map, transcribe, dub, and validate Track 1 voice assets.
 
-This tool is intentionally separate from the clean rebuild pipeline.  It reads
-the hash-locked Japanese retail ISO and canonical translation sources, and
-writes only to a caller-selected review directory.
+This optional tool is intentionally separate from the clean rebuild pipeline.
+It reads the hash-locked Japanese retail ISO, original SCN programs, and
+canonical translation sources, then writes only to a caller-selected review
+directory. It cannot install generated audio into the game.
+
+Retail ``.PCM`` files use RF5C164 8-bit sign-magnitude mono samples. Their
+effective playback rate is derived from the documented clock and frequency
+delta, not guessed from a modern WAV preset. SCN mapping remains structural and
+records its confidence relation; transcription and local synthesis are
+review aids rather than authoritative translation sources.
 """
 
 from __future__ import annotations
@@ -60,6 +67,7 @@ class AudioLocalizationError(RuntimeError):
 
 
 def sha256_path(path: Path) -> str:
+    """Return an uppercase SHA-256 digest without loading a file at once."""
     digest = hashlib.sha256()
     with path.open("rb") as stream:
         while block := stream.read(1024 * 1024):
@@ -68,6 +76,7 @@ def sha256_path(path: Path) -> str:
 
 
 def sha256_bytes(data: bytes) -> str:
+    """Return an uppercase SHA-256 digest for in-memory artifact bytes."""
     return hashlib.sha256(data).hexdigest().upper()
 
 
@@ -97,6 +106,13 @@ def load_clean_rebuild(clean_rebuild: Path) -> tuple[Any, Any]:
 
 
 def load_sources(sources_dir: Path) -> list[dict[str, Any]]:
+    """Load canonical chapters in index order with identity/count checks.
+
+    Raises:
+        AudioLocalizationError: If a chapter name or record count disagrees
+            with the canonical index.
+        OSError: If a tracked source file cannot be read.
+    """
     index = json.loads((sources_dir / "index.json").read_text(encoding="utf-8"))
     chapters: list[dict[str, Any]] = []
     for item in index["chapters"]:
@@ -111,6 +127,11 @@ def load_sources(sources_dir: Path) -> list[dict[str, Any]]:
 
 
 def extract_entry(iso_stream: Any, entry: Any, sector_size: int) -> bytes:
+    """Read one complete ISO entry from an already-open binary stream.
+
+    The function trusts only the parsed extent and declared logical size; a
+    short read is a hard error rather than a partially extracted asset.
+    """
     iso_stream.seek(entry.extent * sector_size)
     data = iso_stream.read(entry.size)
     if len(data) != entry.size:
@@ -140,6 +161,12 @@ def encode_sign_magnitude(samples: Iterable[int]) -> bytes:
 
 
 def write_wav(path: Path, pcm16: bytes, sample_rate: int = WAV_SAMPLE_RATE) -> None:
+    """Write deterministic mono little-endian PCM16 WAV review audio.
+
+    Side Effects:
+        Creates parent directories and replaces ``path`` through the standard
+        library WAV writer.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
     with wave.open(str(path), "wb") as output:
         output.setnchannels(1)
@@ -149,6 +176,7 @@ def write_wav(path: Path, pcm16: bytes, sample_rate: int = WAV_SAMPLE_RATE) -> N
 
 
 def read_wav(path: Path) -> tuple[int, int, int, bytes]:
+    """Return channel count, sample width, rate, and complete frame bytes."""
     with wave.open(str(path), "rb") as stream:
         channels = stream.getnchannels()
         width = stream.getsampwidth()
@@ -158,6 +186,7 @@ def read_wav(path: Path) -> tuple[int, int, int, bytes]:
 
 
 def zero_run(raw: bytes, *, from_end: bool = False) -> int:
+    """Count contiguous zero-valued source samples at either asset boundary."""
     values = reversed(raw) if from_end else raw
     count = 0
     for value in values:
@@ -170,6 +199,11 @@ def zero_run(raw: bytes, *, from_end: bool = False) -> int:
 def valid_dialogue_command(
     scn: bytes, offset: int, record_count: int
 ) -> dict[str, Any] | None:
+    """Parse a structurally valid SCN ``0x21`` dialogue or continuation.
+
+    SCN operands are one-based. Returned record and speaker indexes are
+    converted to the canonical zero-based convention.
+    """
     if offset + 5 > len(scn) or scn[offset] != 0x21:
         return None
     first_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
@@ -197,6 +231,7 @@ def valid_window_command(
     record_count: int,
     window_subtypes: set[int],
 ) -> dict[str, Any] | None:
+    """Parse a configured SCN ``0x24`` text window at one byte offset."""
     if (
         offset + 8 > len(scn)
         or scn[offset] != 0x24
@@ -238,6 +273,12 @@ def valid_inline_command(
 def text_commands(
     scn: bytes, record_count: int, profile: dict[str, Any] | None
 ) -> list[dict[str, Any]]:
+    """Return deduplicated structural text commands in deterministic order.
+
+    Every byte offset is considered because SCN commands are embedded in a
+    reverse-engineered stream without a complete control-flow disassembler.
+    Strict operand and subtype checks reduce false positives.
+    """
     profile = profile or {}
     window_subtypes = set(profile.get("scn_window_text_subtypes", [0x27]))
     commands: dict[tuple[int, str], dict[str, Any]] = {}
@@ -255,6 +296,11 @@ def text_commands(
 
 
 def audio_commands(scn: bytes, valid_names: set[str]) -> list[dict[str, Any]]:
+    """Return referenced retail PCM names and their SCN byte ranges.
+
+    Regex candidates are accepted only when their normalized filename exists
+    in the exact retail PCM inventory.
+    """
     commands: list[dict[str, Any]] = []
     for match in PCM_COMMAND.finditer(scn):
         name = match.group(1).decode("ascii").upper()
@@ -276,6 +322,19 @@ def record_metadata(
     commands: list[dict[str, Any]],
     relation: str,
 ) -> dict[str, Any]:
+    """Build canonical record and speaker metadata for one mapped voice span.
+
+    Args:
+        chapter: Canonical chapter identifier.
+        records: Chapter record objects in stable index order.
+        commands: One or more text commands associated with the same asset.
+        relation: Structural mapping relation such as ``following`` or
+            ``inline_span``.
+
+    Returns:
+        A JSON-ready mapping that retains every contributing stable record ID
+        and both line-preserving and speech-normalized canonical English.
+    """
     primary = commands[0]
     index = primary["record_index"]
     speaker_index = primary["speaker_index"]
@@ -322,7 +381,18 @@ def map_chapter_audio(
     scn: bytes,
     valid_names: set[str],
 ) -> list[dict[str, Any]]:
-    """Map each SCN audio occurrence to the nearest structural text command."""
+    """Map each SCN audio occurrence to nearby structural text commands.
+
+    Mapping is bounded by neighboring audio commands. Ordinary dialogue prefers
+    the first following text command and collects continuations; PART4C-style
+    inline exchanges may precede the asset. The explosion sound is classified
+    as SFX. Unresolved occurrences remain explicit rather than receiving a
+    guessed record.
+
+    Returns:
+        Occurrence dictionaries in SCN order with ``mapping_relation`` stating
+        the structural rule used for each association.
+    """
     chapter = chapter_source["chapter"]
     records = chapter_source["records"]
     audios = audio_commands(scn, valid_names)
@@ -420,6 +490,29 @@ def build_manifest(
     *,
     write_audio: bool,
 ) -> dict[str, Any]:
+    """Reconstruct the complete retail voice inventory and SCN mapping.
+
+    Args:
+        clean_rebuild: Active validated ``work/clean_rebuild`` directory.
+        output_dir: Isolated review root used only when ``write_audio`` is true.
+        write_audio: Whether to extract raw PCM and decoded WAV files.
+
+    Returns:
+        A JSON-serializable manifest for all 1,828 expected PCM assets,
+        including hashes, exact timing, silence, occurrences, canonical text,
+        speaker candidates, and generated-work placeholders.
+
+    Raises:
+        AudioLocalizationError: If the retail ISO hash, PCM inventory, source
+            structure, extraction length, or chapter identity is unexpected.
+        OSError: If a required input cannot be read or an enabled output cannot
+            be written.
+
+    Side Effects:
+        When ``write_audio`` is true, writes raw PCM and decoded WAV assets
+        below ``output_dir``. The clean rebuild and retail reference remain
+        read-only.
+    """
     iso9660, _mes_format = load_clean_rebuild(clean_rebuild)
     iso_path = clean_rebuild / "retail_reference" / "retail.iso"
     sources_dir = clean_rebuild / "sources"
@@ -588,6 +681,15 @@ def build_manifest(
 
 
 def write_manifest(output_dir: Path, manifest: dict[str, Any]) -> Path:
+    """Write the primary manifest and synchronized transcript exports.
+
+    Returns:
+        Path to ``audio_manifest.json``.
+
+    Side Effects:
+        Creates ``output_dir`` and replaces the JSON, CSV, JSONL, and warning
+        exports derived from ``manifest``.
+    """
     output_dir.mkdir(parents=True, exist_ok=True)
     path = output_dir / "audio_manifest.json"
     path.write_text(
@@ -599,6 +701,11 @@ def write_manifest(output_dir: Path, manifest: dict[str, Any]) -> Path:
 
 
 def transcript_row(asset: dict[str, Any]) -> dict[str, Any]:
+    """Flatten one manifest asset into a human-review transcript row.
+
+    Stable record IDs are deduplicated in occurrence order so CSV output does
+    not lose multi-record voice spans.
+    """
     record_ids: list[str] = []
     for occurrence in asset["occurrences"]:
         for record_id in occurrence.get("record_ids", []):
@@ -624,6 +731,11 @@ def transcript_row(asset: dict[str, Any]) -> dict[str, Any]:
 
 
 def write_transcript_exports(output_dir: Path, manifest: dict[str, Any]) -> None:
+    """Write spreadsheet-friendly, streaming, and warning transcript views.
+
+    The CSV files use a UTF-8 byte-order mark for convenient Windows
+    spreadsheet import; JSONL remains plain UTF-8 with LF terminators.
+    """
     rows = [transcript_row(asset) for asset in manifest["assets"]]
     csv_path = output_dir / "transcripts.csv"
     with csv_path.open("w", encoding="utf-8-sig", newline="") as stream:
@@ -643,6 +755,7 @@ def write_transcript_exports(output_dir: Path, manifest: dict[str, Any]) -> None
 
 
 def load_manifest(output_dir: Path) -> dict[str, Any]:
+    """Load the current review manifest and enforce its schema version."""
     path = output_dir / "audio_manifest.json"
     if not path.is_file():
         raise AudioLocalizationError(f"manifest not found: {path}")
@@ -682,6 +795,12 @@ GENERATED_FIELDS = (
 
 
 def run_refresh(args: argparse.Namespace) -> None:
+    """Refresh retail mappings while preserving generated review fields.
+
+    Side Effects:
+        Rewrites the manifest, transcript exports, and HTML review. Existing
+        raw/WAV audio and preserved ASR/TTS fields are not regenerated.
+    """
     previous = load_manifest(args.output)
     generated = {
         asset["pcm"]: {
@@ -698,6 +817,7 @@ def run_refresh(args: argparse.Namespace) -> None:
 
 
 def run_extract(args: argparse.Namespace) -> None:
+    """Extract all retail PCM, decode WAVs, and create initial review files."""
     manifest = build_manifest(args.clean_rebuild, args.output, write_audio=True)
     path = write_manifest(args.output, manifest)
     write_review(args.output, manifest)
@@ -714,6 +834,7 @@ def run_extract(args: argparse.Namespace) -> None:
 
 
 def segments_to_dicts(segments: Iterable[Any]) -> list[dict[str, Any]]:
+    """Normalize lazy Whisper segments into deterministic JSON-ready values."""
     return [
         {
             "start": round(float(segment.start), 3),
@@ -727,6 +848,19 @@ def segments_to_dicts(segments: Iterable[Any]) -> list[dict[str, Any]]:
 
 
 def run_transcribe(args: argparse.Namespace) -> None:
+    """Transcribe Japanese and request Whisper's English translation.
+
+    Selected assets are processed independently with periodic manifest
+    checkpoints. Existing completed results are skipped unless ``--force`` is
+    set. ASR text is review evidence and never overwrites canonical English.
+
+    Raises:
+        AudioLocalizationError: If ``faster-whisper`` is unavailable.
+
+    Side Effects:
+        May load a local or cached Whisper model and rewrite manifest,
+        transcript, and HTML review files throughout the run.
+    """
     try:
         from faster_whisper import WhisperModel  # type: ignore
     except ImportError as exc:
@@ -791,6 +925,12 @@ def run_transcribe(args: argparse.Namespace) -> None:
 
 
 def choose_canonical_text(asset: dict[str, Any]) -> str:
+    """Return canonical speech only when every mapped occurrence agrees.
+
+    Reused PCM assets can appear beside different records. Ambiguous canonical
+    line sequences deliberately return an empty string so a reviewer must
+    supply an asset override rather than synthesizing the wrong dialogue.
+    """
     sequences = {
         tuple(occurrence.get("canonical_english_lines", []))
         for occurrence in asset.get("occurrences", [])
@@ -829,6 +969,12 @@ def speech_text_from_lines(lines: Iterable[str]) -> str:
 def choose_english_text(
     asset: dict[str, Any], cast: dict[str, Any]
 ) -> tuple[str, str]:
+    """Select a voice script and provenance using explicit precedence.
+
+    Per-asset cast text wins, followed by completed ASR translation with
+    configured whole-word replacements, then an unambiguous canonical
+    translation fallback. The second return value records that decision.
+    """
     override = cast.get("assets", {}).get(asset["pcm"], {})
     if clean_text(override.get("text")):
         return clean_text(override["text"]), "cast_override"
@@ -849,6 +995,11 @@ def choose_english_text(
 
 
 def load_cast(path: Path) -> dict[str, Any]:
+    """Load and validate a local Kokoro voice-cast configuration.
+
+    Network or opaque cloud backends are intentionally rejected so generated
+    review assets have reproducible local model provenance.
+    """
     cast = json.loads(path.read_text(encoding="utf-8"))
     if cast.get("schema_version") != 1 or not isinstance(cast.get("speakers"), dict):
         raise AudioLocalizationError(f"invalid voice cast file: {path}")
@@ -865,6 +1016,7 @@ def load_cast(path: Path) -> dict[str, Any]:
 
 
 def voice_for_asset(asset: dict[str, Any], cast: dict[str, Any]) -> str | None:
+    """Resolve an asset override, unique speaker voice, or default voice."""
     override = cast.get("assets", {}).get(asset["pcm"], {})
     if override.get("voice"):
         return override["voice"]
@@ -875,6 +1027,11 @@ def voice_for_asset(asset: dict[str, Any], cast: dict[str, Any]) -> str | None:
 
 
 def settings_for_asset(asset: dict[str, Any], cast: dict[str, Any]) -> dict[str, Any]:
+    """Merge unique-speaker settings with per-asset overrides.
+
+    Asset settings apply last. The returned dictionary is new and does not
+    mutate the cast configuration.
+    """
     settings: dict[str, Any] = {}
     speakers = asset.get("speaker_variants", [])
     if len(speakers) == 1:
@@ -890,6 +1047,22 @@ def ffmpeg_convert(
     *,
     sample_rate: int | None = None,
 ) -> None:
+    """Convert one audio file to mono PCM16 with optional resampling.
+
+    Args:
+        ffmpeg: Path to the caller-supplied FFmpeg executable.
+        source: Input media understood by FFmpeg.
+        destination: WAV output path.
+        sample_rate: Optional integer output rate; preserve FFmpeg's decoded
+            rate when omitted.
+
+    Raises:
+        subprocess.CalledProcessError: If FFmpeg exits nonzero.
+
+    Side Effects:
+        Creates parent directories and replaces ``destination`` using FFmpeg's
+        explicit overwrite flag.
+    """
     destination.parent.mkdir(parents=True, exist_ok=True)
     command = [
         str(ffmpeg),
@@ -930,6 +1103,22 @@ def ffmpeg_time_fit(
     *,
     tempo_factor: float,
 ) -> str:
+    """Time-fit synthesized speech and resample it to the game WAV rate.
+
+    ``tempo_factor`` is synthesis duration divided by available slot duration.
+    Exact unity performs resampling only. Other values try FFmpeg ``atempo``;
+    builds lacking the required capability fall back to ``rubberband``.
+
+    Returns:
+        The backend label recorded in model provenance.
+
+    Raises:
+        AudioLocalizationError: If the tempo factor is invalid.
+        subprocess.CalledProcessError: If both FFmpeg strategies fail.
+
+    Side Effects:
+        Replaces ``destination`` with mono PCM16 audio at ``WAV_SAMPLE_RATE``.
+    """
     destination.parent.mkdir(parents=True, exist_ok=True)
     if math.isclose(tempo_factor, 1.0, rel_tol=0.0, abs_tol=1e-9):
         ffmpeg_convert(
@@ -996,6 +1185,15 @@ def force_wav_samples(
     *,
     leading_silence_samples: int = 0,
 ) -> None:
+    """Force a game-rate WAV to an exact sample count and leading silence.
+
+    Existing samples are prefixed with retail-equivalent silence, then
+    truncated or zero-padded to the original PCM slot length. A sibling
+    temporary WAV is written and atomically replaces ``path``.
+
+    Raises:
+        AudioLocalizationError: If ``path`` is not mono PCM16 at the game rate.
+    """
     channels, width, rate, data = read_wav(path)
     if (channels, width, rate) != (1, 2, WAV_SAMPLE_RATE):
         raise AudioLocalizationError(f"cannot fit unexpected WAV format: {path}")
@@ -1034,6 +1232,15 @@ def synthesize_kokoro_asset(
     speed: float,
     language: str,
 ) -> Path:
+    """Synthesize one natural-duration local Kokoro source WAV.
+
+    Returns:
+        Path to the deterministic PCM16 source WAV used for review and timing.
+
+    Side Effects:
+        Runs the already-loaded local engine and writes under
+        ``english_voice_source`` in ``output_dir``.
+    """
     destination = output_dir / "english_voice_source" / f"{Path(asset['pcm']).stem}.wav"
     samples, sample_rate = engine.create(
         text,
@@ -1047,6 +1254,26 @@ def synthesize_kokoro_asset(
 
 
 def synthesize_all(args: argparse.Namespace) -> None:
+    """Generate and time-fit selected English review voices with Kokoro.
+
+    The model and voice-style files must be local and are hashed into each
+    completed asset. Each candidate script records whether it came from an
+    override, ASR translation, or unambiguous canonical fallback. SFX,
+    unresolved scripts, unavailable voices, and invalid speeds remain explicit
+    statuses instead of silently generating substitutes.
+
+    Failed attempts are checkpointed and retried per asset. Completed natural,
+    review, and exact-slot WAVs are accompanied by timing/model provenance.
+
+    Raises:
+        AudioLocalizationError: If required local models, runtime packages, or
+            generated audio contracts are unavailable or invalid.
+        subprocess.CalledProcessError: If FFmpeg conversion cannot complete.
+
+    Side Effects:
+        Writes synthesized WAV trees and periodically replaces manifest,
+        transcript, warning, and HTML review files. Game data is untouched.
+    """
     manifest = load_manifest(args.output)
     cast = load_cast(args.cast)
     if not args.model.is_file():
@@ -1199,10 +1426,12 @@ def synthesize_all(args: argparse.Namespace) -> None:
 
 
 def run_synthesize(args: argparse.Namespace) -> None:
+    """Dispatch the synthesis subcommand through the shared implementation."""
     synthesize_all(args)
 
 
 def media_cell(path: str | None) -> str:
+    """Render a safely escaped lazy HTML audio player for a relative path."""
     if not path:
         return ""
     escaped = html.escape(path, quote=True)
@@ -1210,6 +1439,14 @@ def media_cell(path: str | None) -> str:
 
 
 def write_review(output_dir: Path, manifest: dict[str, Any]) -> Path:
+    """Write the self-contained HTML audio review index.
+
+    The page links relative media paths and escapes all manifest-derived text.
+    It is a human review surface, not a game asset or validation authority.
+
+    Returns:
+        Path to ``review.html``.
+    """
     rows: list[str] = []
     for asset in manifest["assets"]:
         occurrence = next(
@@ -1280,6 +1517,19 @@ hours; {summary['mapped_occurrences']} of
 
 
 def validate_manifest(output_dir: Path, manifest: dict[str, Any]) -> list[str]:
+    """Collect extraction and generated-audio contract violations.
+
+    Validation proves the complete PCM inventory, original raw hashes, exact
+    RF5C164 decoding, WAV format/sample counts, and provenance/file contracts
+    for completed synthesized voices. It reports all detectable problems
+    instead of stopping at the first asset.
+
+    Returns:
+        Human-readable errors; an empty list means the manifest and files pass.
+
+    Side Effects:
+        Reads review artifacts but writes nothing.
+    """
     errors: list[str] = []
     assets = manifest.get("assets", [])
     if len(assets) != len(PCM_NAMES_EXPECTED):
@@ -1358,6 +1608,12 @@ def validate_manifest(output_dir: Path, manifest: dict[str, Any]) -> list[str]:
 
 
 def run_validate(args: argparse.Namespace) -> None:
+    """Validate review files and prove mappings match current source/SCN data.
+
+    A fresh in-memory manifest is rebuilt without rewriting audio, then its raw
+    hashes, occurrences, and canonical variants are compared with the saved
+    manifest. Any accumulated error raises ``AudioLocalizationError``.
+    """
     manifest = load_manifest(args.output)
     errors = validate_manifest(args.output, manifest)
     fresh = build_manifest(args.clean_rebuild, args.output, write_audio=False)
@@ -1395,10 +1651,12 @@ def run_validate(args: argparse.Namespace) -> None:
 
 
 def default_clean_rebuild() -> Path:
+    """Return the active sibling clean-rebuild directory for CLI defaults."""
     return Path(__file__).resolve().parents[1] / "clean_rebuild"
 
 
 def parser() -> argparse.ArgumentParser:
+    """Build the extract, refresh, transcribe, synthesize, and validate CLI."""
     result = argparse.ArgumentParser(description=__doc__)
     result.add_argument(
         "--clean-rebuild",
@@ -1470,6 +1728,12 @@ def parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    """Run the selected audio command and convert expected failures to exit 1.
+
+    Returns:
+        Zero on success or one after printing an actionable error. Unexpected
+        programming exceptions retain their traceback.
+    """
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="backslashreplace")
     if hasattr(sys.stderr, "reconfigure"):

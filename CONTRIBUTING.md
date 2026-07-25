@@ -16,6 +16,8 @@ Start with these references:
   font, and SCN structures enforced by the code.
 - [Development and validation](docs/DEVELOPMENT.md) explains the test layers,
   generated reports, debugging sequence, and extension rules.
+- [Python documentation standard](docs/DOCSTRING_STANDARD.md) defines the
+  PEP 257 docstring and PEP 8 explanatory-comment contract for maintained code.
 
 ## Non-negotiable invariants
 
@@ -83,3 +85,9 @@ python nostalgia1907.py validate
 Then verify that `git diff -- work/clean_rebuild/sources` contains only the
 intended canonical records, and that no BIN, CUE, ISO, WAV, extracted archive,
 or generated comparison package is staged.
+
+Documentation is part of the implementation. New or changed Python callables
+must describe their contract at the level required by
+`docs/DOCSTRING_STANDARD.md`, including non-obvious assumptions, side effects,
+and expected failures. Comments should explain preservation or design
+decisions, not translate individual Python statements into English.

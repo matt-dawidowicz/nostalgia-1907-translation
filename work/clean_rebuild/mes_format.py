@@ -90,7 +90,24 @@ def _u16be(data: bytes, offset: int) -> int:
 
 
 def parse_mes(data: bytes, *, source: str = "<bytes>") -> MesFile:
-    """Parse a MES file and reject ambiguous or unsafe layouts."""
+    """Parse a MES file and reject ambiguous or unsafe layouts.
+
+    The first pointer defines both pointer-table length and record count.
+    Pointers must be ordered, records must remain before the glyph split, every
+    record must terminate, and dynamic references must fit the complete
+    18-byte glyph bank.
+
+    Args:
+        data: Complete MES member bytes.
+        source: Human-readable label used in validation errors.
+
+    Returns:
+        An immutable ``MesFile`` retaining exact record and glyph bytes.
+
+    Raises:
+        MesFormatError: If any boundary, pointer, terminator, or glyph-reference
+            invariant fails.
+    """
     if len(data) < 6:
         raise MesFormatError(f"{source}: file is too small ({len(data)} bytes)")
 

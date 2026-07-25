@@ -42,7 +42,26 @@ def sha256(path: Path) -> str:
 
 
 def prepare_retail(track1: Path, build_root: Path) -> dict[str, object]:
-    """Verify retail Track 1 and extract all guarded compiler inputs."""
+    """Verify retail Track 1 and extract every guarded compiler input.
+
+    Args:
+        track1: Original Japanese MODE1/2352 Track 1.
+        build_root: Disposable destination for the prepared retail reference.
+
+    Returns:
+        A report containing source hashes, sector count, chapter member guards,
+        duplicate archive names, and the fixed-font/executable hashes.
+
+    Raises:
+        ValueError: If the disc, logical ISO, archive, MES, or SCN violates a
+            frozen size/hash/structure contract.
+        OSError: If an input cannot be read or an output cannot be written.
+
+    Side Effects:
+        Creates the logical ISO, extracted archives, unpacked MES/SCN members,
+        fixed font, MAIN.BIN, and ``retail_report.json`` below ``build_root``.
+        It never writes to ``track1``.
+    """
     if track1.stat().st_size != RETAIL_TRACK1_SIZE:
         raise ValueError(
             f"retail Track 1 size mismatch: expected {RETAIL_TRACK1_SIZE}, "

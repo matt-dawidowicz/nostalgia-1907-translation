@@ -247,6 +247,7 @@ def _pack_row(line: str, shifted: bool) -> tuple[int, tuple[Cell, ...]] | None:
     cache: dict[int, tuple[int, tuple[Cell, ...]]] = {}
 
     def best(index: int) -> tuple[int, tuple[Cell, ...]]:
+        """Return the best deterministic cell packing from ``index`` onward."""
         if index >= len(packed):
             return 0, ()
         if index in cache:
@@ -336,6 +337,7 @@ def _optimize_phases(
     }
 
     def byte_cost(references: Counter[bytes]) -> int:
+        """Measure encoded references plus newly required dynamic glyph bytes."""
         record_bytes = sum(
             count * (1 if glyph in fixed_by_bitmap else 2)
             for glyph, count in references.items()
@@ -346,6 +348,7 @@ def _optimize_phases(
         return record_bytes + dynamic_glyphs * GLYPH_BYTES
 
     def subtract(references: Counter[bytes], values: Counter[bytes]) -> None:
+        """Remove one row's multiset from the mutable global reference count."""
         for glyph, count in values.items():
             remaining = references[glyph] - count
             if remaining:
@@ -697,7 +700,15 @@ def compile_files(
     *,
     glyph_order: str = "first-use",
 ) -> BuildResult:
-    """Compile file inputs and write one derived MES artifact."""
+    """Compile guarded file inputs and write one derived MES artifact.
+
+    Retail MES/SCN and canonical JSON are read before calling ``compile_mes``.
+    The returned bytes are written only after all compiler checks succeed.
+
+    Side Effects:
+        Creates the output parent directory and replaces ``output_path``.
+        Retail and canonical inputs remain read-only.
+    """
     canonical = json.loads(canonical_path.read_text(encoding="utf-8"))
     result = compile_mes(
         retail_mes_path.read_bytes(),

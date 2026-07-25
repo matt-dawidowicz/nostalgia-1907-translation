@@ -254,7 +254,14 @@ def infer_layouts(
     translated_indexes: set[int],
     profile: dict[str, object] | None,
 ) -> dict[int, Layout]:
-    """Infer every translated record selected by a dialogue/window command."""
+    """Infer translated-record geometry from structural SCN commands.
+
+    Dialogue, continuation, floating-window, and selector command operands are
+    converted from one-based SCN IDs to zero-based canonical indexes. Reviewed
+    profile overrides may refine visible/runtime widths but cannot make runtime
+    stride smaller than visible capacity or resolve conflicting SCN evidence
+    silently.
+    """
     settings = profile or {}
     dialogue_visible = _pair(settings, "scn_dialogue_layout", (12, 11))
     continuation_visible = _pair(settings, "scn_continuation_layout", (12, 10))
@@ -270,6 +277,7 @@ def infer_layouts(
     layouts: dict[int, Layout] = {}
 
     def add(index: int, layout: Layout, source: str) -> None:
+        """Merge one proven layout while rejecting conflicting SCN evidence."""
         if index not in translated_indexes:
             return
         previous = layouts.get(index)
@@ -391,6 +399,7 @@ def infer_roles(
     roles: dict[int, set[str]] = {}
 
     def add(index: int, role: str) -> None:
+        """Attach one structural role only to a translated record."""
         if index in translated_indexes:
             roles.setdefault(index, set()).add(role)
 
@@ -446,7 +455,11 @@ def infer_row_limits(
     translated_indexes: set[int],
     profile: dict[str, object] | None,
 ) -> dict[int, int]:
-    """Infer the number of visible rows available in floating windows."""
+    """Infer visible row limits from floating-window Y coordinates.
+
+    Only structurally valid configured window subtypes participate. Profile
+    overrides are explicit record-indexed evidence for exceptional renderers.
+    """
     settings = profile or {}
     window_subtypes = _window_subtypes(settings)
     limits: dict[int, int] = {}
@@ -499,7 +512,12 @@ def infer_contracts(
     translated_indexes: set[int],
     profile: dict[str, object] | None,
 ) -> dict[int, RecordContract]:
-    """Return the shared role/layout/vertical contract for translated records."""
+    """Return shared role, layout, and row contracts for translated records.
+
+    The result is keyed only by translated canonical indexes that have at least
+    one proven role, layout, or vertical limit. English text is never consulted,
+    preventing the translation from determining its own renderer rules.
+    """
     roles = infer_roles(scn, record_count, translated_indexes, profile)
     layouts = infer_layouts(scn, record_count, translated_indexes, profile)
     row_limits = infer_row_limits(scn, record_count, translated_indexes, profile)

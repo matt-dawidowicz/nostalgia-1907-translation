@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Audit bomb instructions directly from original Japanese glyph sequences."""
+"""Audit bomb instructions directly from original Japanese glyph sequences.
+
+The bomb sequence is branch-sensitive, so ordinary English search is not
+sufficient evidence. Reviewed Japanese bitmap slices identify semantic terms
+such as wire colors, positions, and actions. Canonical English is then checked
+against required and forbidden patterns without modifying any translation.
+"""
 
 from __future__ import annotations
 
@@ -21,6 +27,7 @@ GLYPH_BYTES = 18
 
 
 def _load(path: Path) -> dict[str, object]:
+    """Load one UTF-8 JSON object used by the bomb semantic rules."""
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise ValueError(f"{path}: expected JSON object")
@@ -28,10 +35,12 @@ def _load(path: Path) -> dict[str, object]:
 
 
 def _normalize(text: object) -> str:
+    """Collapse renderer whitespace for English semantic comparisons."""
     return re.sub(r"\s+", " ", text if isinstance(text, str) else "").strip()
 
 
 def _contains(haystack: tuple[bytes, ...], needle: tuple[bytes, ...]) -> bool:
+    """Return whether an exact ordered glyph subsequence is present."""
     return bool(needle) and any(
         haystack[offset : offset + len(needle)] == needle
         for offset in range(len(haystack) - len(needle) + 1)
@@ -39,6 +48,21 @@ def _contains(haystack: tuple[bytes, ...], needle: tuple[bytes, ...]) -> bool:
 
 
 def run_audit() -> dict[str, object]:
+    """Validate bomb-sequence English against reviewed Japanese bitmap terms.
+
+    Returns:
+        A JSON-serializable report containing every candidate stable ID,
+        source evidence, semantic interpretation, branch notes, and failures.
+
+    Raises:
+        ValueError: If rule data, canonical records, or representative glyph
+            slices are missing or malformed.
+        OSError: If tracked or prepared-retail inputs cannot be read.
+
+    Side Effects:
+        Reads source, rule, optional historical-report, font, and MES files.
+        It does not alter canonical English or game data.
+    """
     config = _load(SEMANTICS)
     fixed_data = (DEFAULT_RETAIL_ROOT / "retail_files" / "FIX_CODE.FNT").read_bytes()
     fixed = tuple(fixed_data[i : i + GLYPH_BYTES] for i in range(0, len(fixed_data), GLYPH_BYTES))
@@ -144,6 +168,7 @@ def run_audit() -> dict[str, object]:
 
 
 def _markdown(payload: dict[str, object]) -> str:
+    """Render one bomb-audit report as a deterministic Markdown table."""
     lines = [
         "# Nostalgia 1907 bomb-sequence source audit",
         "",
@@ -167,6 +192,7 @@ def _markdown(payload: dict[str, object]) -> str:
 
 
 def main() -> None:
+    """Write bomb-audit reports and exit nonzero on semantic failure."""
     payload = run_audit()
     OUTPUT.mkdir(parents=True, exist_ok=True)
     (OUTPUT / "bomb_sequence_audit.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

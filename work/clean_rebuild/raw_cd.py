@@ -110,7 +110,18 @@ def validate_sector_header(sector: bytes | bytearray, sector_index: int) -> None
 
 
 def regenerate_checksums(sector: bytearray) -> None:
-    """Regenerate EDC, reserved bytes, and both ECC planes in place."""
+    """Regenerate MODE1 EDC, reserved bytes, and both ECC planes in place.
+
+    Args:
+        sector: Mutable complete 2,352-byte MODE1 sector.
+
+    Raises:
+        RawCdError: If the buffer lacks the raw sync, size, or MODE1 marker.
+
+    Side Effects:
+        Replaces only the checksum/reserved ranges of ``sector``. Header and
+        2,048-byte user data are not altered.
+    """
     if len(sector) != RAW_SECTOR_SIZE or sector[:12] != SYNC or sector[MODE_OFFSET] != 1:
         raise RawCdError("cannot checksum a non-MODE1/2352 sector")
     sector[EDC_OFFSET:ZERO_OFFSET] = edc(sector[:EDC_OFFSET]).to_bytes(4, "little")
@@ -149,7 +160,18 @@ def verify_sector_checksums(sector: bytes | bytearray) -> bool:
 
 
 def raw_to_iso(raw_path: Path, iso_path: Path, *, verify: bool = True) -> int:
-    """Extract all 2048-byte user-data sectors from a raw Track 1 image."""
+    """Extract all 2,048-byte user-data sectors from raw Track 1.
+
+    When ``verify`` is true, every address and EDC/ECC checksum is validated
+    before its payload is accepted.
+
+    Returns:
+        Number of sectors written to ``iso_path``.
+
+    Side Effects:
+        Creates parent directories and replaces ``iso_path``; the raw input is
+        read-only.
+    """
     size = raw_path.stat().st_size
     if size % RAW_SECTOR_SIZE:
         raise RawCdError(f"{raw_path}: size is not divisible by {RAW_SECTOR_SIZE}")
@@ -168,7 +190,19 @@ def raw_to_iso(raw_path: Path, iso_path: Path, *, verify: bool = True) -> int:
 def iso_to_raw_fixed(
     template_raw_path: Path, iso_path: Path, output_raw_path: Path
 ) -> int:
-    """Rebuild Track 1 using the retail raw sectors as an exact-size template."""
+    """Rebuild Track 1 using retail raw sectors as an exact-size template.
+
+    The logical ISO must contain exactly one user-data payload per template
+    sector. Headers are preserved from retail and all checksum fields are
+    regenerated after installing each 2,048-byte payload.
+
+    Returns:
+        Number of raw sectors written.
+
+    Raises:
+        RawCdError: If sizes, headers, source checksums, or rebuilt checksums
+            violate the fixed-geometry contract.
+    """
     raw_size = template_raw_path.stat().st_size
     iso_size = iso_path.stat().st_size
     if raw_size % RAW_SECTOR_SIZE:
@@ -202,7 +236,20 @@ def iso_to_raw_fixed(
 
 
 def verify_track(raw_path: Path, *, compare_boot_to: Path | None = None) -> dict[str, object]:
-    """Validate every sector plus the Mega-CD signature and optional boot payload."""
+    """Validate all raw sectors, boot signature, and optional boot equality.
+
+    Args:
+        raw_path: MODE1/2352 Track 1 to inspect.
+        compare_boot_to: Optional retail template whose first 16 user-data
+            sectors must match exactly.
+
+    Returns:
+        Sector count and boot/checksum evidence for regression reports.
+
+    Raises:
+        RawCdError: If geometry, address, checksum, signature, or boot equality
+            fails.
+    """
     size = raw_path.stat().st_size
     if size % RAW_SECTOR_SIZE:
         raise RawCdError("track has a partial raw sector")
@@ -244,7 +291,12 @@ def verify_track(raw_path: Path, *, compare_boot_to: Path | None = None) -> dict
 
 
 def write_two_track_cue(cue_path: Path, data_track: Path, audio_track: Path) -> None:
-    """Write the retail-compatible two-track CUE with CRLF line endings."""
+    """Write the retail-compatible two-track CUE with exact CRLF endings.
+
+    All three files must share one directory so the CUE contains portable base
+    names rather than machine-specific paths. Track 2 retains the retail
+    two-second pregap represented by INDEX 00 and INDEX 01.
+    """
     if cue_path.parent.resolve() != data_track.parent.resolve() or cue_path.parent.resolve() != audio_track.parent.resolve():
         raise RawCdError("CUE and both track files must share one directory")
     text = (

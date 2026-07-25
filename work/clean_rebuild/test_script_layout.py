@@ -29,10 +29,12 @@ HERE = Path(__file__).resolve().parent
 
 
 def source(chapter: str) -> dict[str, object]:
+    """Load one canonical chapter object by its production identifier."""
     return json.loads((SOURCES / f"{chapter}.json").read_text(encoding="utf-8"))
 
 
 def contracts(chapter: str) -> dict[int, object]:
+    """Infer renderer contracts from one chapter's hash-locked retail SCN."""
     canonical = source(chapter)
     scn = (
         DEFAULT_RETAIL_ROOT
@@ -86,7 +88,10 @@ def bitmap_records(mes_data: bytes, fixed_font: bytes) -> tuple[tuple[bytes, ...
 
 
 class ScriptLayoutTests(unittest.TestCase):
+    """Protect shared renderer inference, wrapping, and compiler boundaries."""
+
     def test_start_narration_contract_and_rows(self) -> None:
+        """Keep full-screen START narration within its proven six-row box."""
         canonical = source("START")
         contract = contracts("START")[0]
         self.assertEqual(contract.roles, frozenset((ROLE_NARRATION,)))
@@ -106,6 +111,7 @@ class ScriptLayoutTests(unittest.TestCase):
         self.assertEqual(" ".join(rows), canonical["records"][0]["text"])
 
     def test_part1a_scene_roles_and_no_split_words(self) -> None:
+        """Keep prologue roles and general word wrapping source-derived."""
         canonical = source("PART1A")
         inferred = contracts("PART1A")
         self.assertIn(ROLE_LOCATION, inferred[0].roles)
@@ -121,6 +127,7 @@ class ScriptLayoutTests(unittest.TestCase):
         self.assertEqual(rows, ["How about Indian poker?", "Know the rules?"])
 
     def test_prologue_dialogue_reflows_without_screenshot_splits(self) -> None:
+        """Prevent stale screenshot-specific breaks in adaptive dialogue."""
         canonical = source("PART1A")
         inferred = contracts("PART1A")
         expected = {
@@ -136,6 +143,7 @@ class ScriptLayoutTests(unittest.TestCase):
                 )
 
     def test_selector_and_standalone_window_continuation_are_classified(self) -> None:
+        """Classify selector choices and standalone continuation windows."""
         part1a = contracts("PART1A")
         self.assertIn(ROLE_CHOICE, part1a[39].roles)
         self.assertIn(ROLE_CHOICE, part1a[40].roles)
@@ -148,6 +156,7 @@ class ScriptLayoutTests(unittest.TestCase):
         self.assertEqual(part1c[97].max_rows, 10)
 
     def test_whole_game_audit_requires_exhaustive_layout_policy(self) -> None:
+        """Require every translated record to be adaptive or explicit fixed."""
         report = audit_layouts()
         self.assertEqual(report["status"], "PASS")
         self.assertEqual(report["adaptive_record_count"], 2759)
@@ -159,6 +168,7 @@ class ScriptLayoutTests(unittest.TestCase):
         self.assertEqual(report["legacy_issue_count"], 0)
 
     def test_every_chapter_compiles_from_hash_locked_inputs(self) -> None:
+        """Compile all chapters while preserving record and glyph limits."""
         index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary)
@@ -175,6 +185,7 @@ class ScriptLayoutTests(unittest.TestCase):
                 self.assertLessEqual(result.dynamic_glyphs, 1020)
 
     def test_part3c_spill_compaction_is_bitmap_identical(self) -> None:
+        """Prove PART3C compaction changes storage without changing display."""
         retail_root = DEFAULT_RETAIL_ROOT
         retail_dir = retail_root / "retail_unpacked" / "PART3C"
         retail_mes = (retail_dir / "PART3C.MES").read_bytes()

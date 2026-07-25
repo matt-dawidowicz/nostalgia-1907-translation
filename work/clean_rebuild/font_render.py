@@ -76,7 +76,12 @@ def _bytes_matrix(data: bytes) -> list[list[int]]:
 
 
 def prerotate_clockwise(data: bytes) -> bytes:
-    """Apply the storage rotation expected by the Mega-CD renderer."""
+    """Apply the storage rotation expected by the Mega-CD renderer.
+
+    Input and output are exact 12-by-12 one-bit cells encoded as 18 row-major
+    bytes. The apparent clockwise transform compensates for the game's runtime
+    tile orientation rather than changing visible text direction.
+    """
     source = _bytes_matrix(data)
     rotated = [
         [source[GLYPH_HEIGHT - 1 - x][y] for x in range(GLYPH_WIDTH)]
@@ -86,7 +91,12 @@ def prerotate_clockwise(data: bytes) -> bytes:
 
 
 def render_literal_cell(unit: str) -> bytes:
-    """Render one or two literal six-pixel character slots in a 12-pixel cell."""
+    """Render one or two literal six-pixel character slots in one cell.
+
+    Spaces intentionally leave their half-cell blank. Unsupported characters
+    and strings outside the one/two-character contract raise ``FontError``
+    rather than substituting a glyph.
+    """
     if not 1 <= len(unit) <= 2:
         raise FontError(f"literal cell must contain one or two characters: {unit!r}")
     matrix = [[0] * GLYPH_WIDTH for _ in range(GLYPH_HEIGHT)]
@@ -126,7 +136,11 @@ def _resample_row(row: str, width: int) -> str:
 
 
 def render_compact_cluster(unit: str) -> bytes:
-    """Render a three-character apostrophe, decimal, or ellipsis cluster."""
+    """Render a reviewed three-character punctuation cluster in one cell.
+
+    Compact rendering is restricted to patterns recognized by the compiler so
+    prose cannot be squeezed arbitrarily to evade layout or glyph limits.
+    """
     if len(unit) != 3 or " " in unit or not any(char in ".'" for char in unit):
         raise FontError(f"unsupported compact punctuation cluster {unit!r}")
     patterns = [_pattern(char) for char in unit]
@@ -162,7 +176,11 @@ def render_compact_cluster(unit: str) -> bytes:
 
 
 def stored_cell(style: str, unit: str) -> bytes:
-    """Render one canonical cell style in the game's stored orientation."""
+    """Render one canonical cell style in the game's stored orientation.
+
+    ``style`` selects literal or reviewed compact rendering. Unknown styles are
+    rejected so serialized font bytes always have an explicit compiler origin.
+    """
     if style == "literal":
         glyph = render_literal_cell(unit)
     elif style == "compact":
@@ -173,7 +191,11 @@ def stored_cell(style: str, unit: str) -> bytes:
 
 
 def validate_text(text: str) -> None:
-    """Reject characters that cannot be represented by the canonical font."""
+    """Reject text that cannot be represented by the canonical font.
+
+    Newlines are layout separators and are ignored. Every other character must
+    have an exact source pattern; no lossy Unicode fallback is permitted.
+    """
     unsupported = sorted({char for char in text if char not in CHARSET and char != "\n"})
     if unsupported:
         raise FontError(f"unsupported source characters: {unsupported}")

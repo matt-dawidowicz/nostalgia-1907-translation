@@ -171,6 +171,13 @@ Keep boundaries narrow:
   become serialized output;
 - expected operator mistakes raise concise domain errors, not partial output.
 
+All maintained Python follows the
+[Python documentation standard](DOCSTRING_STANDARD.md). Every module, class,
+function, method, property, and nested helper has a PEP 257 docstring.
+Non-trivial APIs document meaningful inputs, outputs, side effects, failure
+conditions, assumptions, and design choices. PEP 8 block comments explain why
+reverse-engineered or preservation-sensitive steps exist.
+
 For a format change, add:
 
 1. a documented observation;
