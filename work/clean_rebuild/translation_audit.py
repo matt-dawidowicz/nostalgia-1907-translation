@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Fingerprint retail Japanese records and audit canonical English consistency."""
+"""Fingerprint retail Japanese records and audit canonical English consistency.
+
+Japanese identity is derived from the ordered retail glyph bitmaps rather than
+from OCR or mutable English. Leading and trailing blank glyphs are removed only
+for duplicate-source grouping; exact record bytes and exact bitmap fingerprints
+remain in the report. The audit is read-only until the CLI writes its derived
+JSON and Markdown reports.
+"""
 
 from __future__ import annotations
 
@@ -24,10 +31,12 @@ FIXED_FONT_SHA256 = "0204DBCA3D3DC2C1B23CCC3FC10FC61DD2F1054805619B2E953247E61A1
 
 
 def _sha256(data: bytes) -> str:
+    """Return an uppercase SHA-256 digest for an in-memory byte sequence."""
     return hashlib.sha256(data).hexdigest().upper()
 
 
 def _load_json(path: Path) -> dict[str, object]:
+    """Load one UTF-8 JSON object or reject an incompatible top level."""
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise ValueError(f"{path}: expected a JSON object")
@@ -65,6 +74,7 @@ def _glyphs(record: bytes, fixed: tuple[bytes, ...], dynamic: tuple[bytes, ...])
 
 
 def _trim_blank(glyphs: tuple[bytes, ...]) -> tuple[bytes, ...]:
+    """Remove only leading and trailing all-zero glyph cells."""
     start = 0
     end = len(glyphs)
     while start < end and not any(glyphs[start]):
@@ -75,6 +85,7 @@ def _trim_blank(glyphs: tuple[bytes, ...]) -> tuple[bytes, ...]:
 
 
 def _fingerprint(glyphs: tuple[bytes, ...]) -> str:
+    """Hash an ordered glyph sequence with an explicit length prefix."""
     payload = len(glyphs).to_bytes(4, "big") + b"".join(glyphs)
     return _sha256(payload)
 
@@ -87,6 +98,7 @@ def normalize_english_for_semantic_comparison(value: object) -> str:
 
 
 def _category(nonblank_count: int, english: str, policy: str) -> str:
+    """Assign a review category without altering policy or canonical text."""
     if nonblank_count == 0:
         return "control_record"
     if policy == "preserve":
@@ -97,7 +109,25 @@ def _category(nonblank_count: int, english: str, policy: str) -> str:
 
 
 def audit(retail_root: Path) -> dict[str, object]:
-    """Return a complete stable-ID/fingerprint audit of all canonical records."""
+    """Return a stable-ID and retail-bitmap audit of all canonical records.
+
+    Args:
+        retail_root: Prepared Japanese reference containing the guarded fixed
+            font and unpacked retail MES files.
+
+    Returns:
+        A JSON-serializable report with exact and normalized source
+        fingerprints, duplicate groups, policy categories, and missing-text
+        findings for every canonical record.
+
+    Raises:
+        ValueError: If fonts, MES references, source indexes, or exemption
+            tables violate the validated project contract.
+        OSError: If a required source or retail artifact cannot be read.
+
+    Side Effects:
+        Reads canonical and retail files; writes nothing.
+    """
     index = _load_json(SOURCES / "index.json")
     exemptions = _load_json(EXEMPTIONS)
     visible_exemptions = exemptions["reviewed_visible_translation_exemptions"]
@@ -233,6 +263,7 @@ def audit(retail_root: Path) -> dict[str, object]:
 
 
 def _markdown(payload: dict[str, object]) -> str:
+    """Render the audit payload as a deterministic Markdown review table."""
     lines = [
         "# Nostalgia 1907 exact-source translation audit",
         "",
@@ -277,6 +308,7 @@ def _markdown(payload: dict[str, object]) -> str:
 
 
 def main() -> None:
+    """Write JSON and Markdown audit reports for command-line review."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT)
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)

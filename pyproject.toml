@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nostalgia1907-tools"
+version = "0.1.0"
+description = "Operator tooling for the Nostalgia 1907 English translation project"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "Pillow>=10.0"
+]
+
+[project.optional-dependencies]
+test = [
+  "numpy>=1.26"
+]
+audio-asr = [
+  "faster-whisper==1.1.1",
+  "requests==2.32.5",
+  "chardet==5.2.0"
+]
+audio-tts = [
+  "kokoro-onnx==0.5.0"
+]
+
+[project.scripts]
+nostalgia1907 = "nostalgia1907:main"
+
+[tool.setuptools]
+py-modules = ["nostalgia1907"]

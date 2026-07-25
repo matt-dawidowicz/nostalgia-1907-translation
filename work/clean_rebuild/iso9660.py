@@ -1,5 +1,20 @@
 #!/usr/bin/env python3
-"""Read and fixed-extent patch the ISO 9660 filesystem on the retail disc."""
+"""Read ISO 9660 directory records and patch files inside retail allocations.
+
+The clean rebuild does not master a new filesystem. It walks the retail primary
+volume descriptor, records each file's extent and directory-record location,
+and installs replacements at those same extents. A replacement may change its
+logical size only when it fits the sectors already allocated to that file.
+
+ISO 9660 stores extent and size twice, once in each byte order. The reader
+requires both copies to agree; the writer updates both size copies in every
+matching directory record, clears the complete old allocation, writes the new
+payload, and reparses the result.
+
+This fixed-extent policy is what preserves file placement and total ISO length.
+Archive/member concerns remain in ``lz_format.py``. See
+``docs/BINARY_FORMATS.md`` for the allocation and mutation model.
+"""
 
 from __future__ import annotations
 
@@ -70,7 +85,12 @@ def _parse_record(data: bytes, offset: int) -> tuple[str, int, int, int, int] | 
 
 
 def read_entries(iso_path: Path) -> tuple[IsoEntry, ...]:
-    """Walk every ISO directory and return strict directory-record references."""
+    """Walk every ISO directory and return strict record references.
+
+    The parser starts at the primary volume descriptor, requires little- and
+    big-endian extent/size copies to agree, bounds every directory, and retains
+    the byte offset of each directory record for fixed-extent patching.
+    """
     iso_size = iso_path.stat().st_size
     if iso_size % SECTOR_SIZE:
         raise IsoError("ISO size is not sector aligned")
@@ -87,6 +107,12 @@ def read_entries(iso_path: Path) -> tuple[IsoEntry, ...]:
         visited: set[tuple[int, int]] = set()
 
         def walk(prefix: str, extent: int, size: int) -> None:
+            """Append one bounded directory tree to ``entries``.
+
+            ``visited`` prevents recursion through repeated directory records.
+            The helper mutates the enclosing result and file position, and
+            raises ``IsoError`` when a declared extent leaves the ISO.
+            """
             key = (extent, size)
             if key in visited:
                 return
@@ -248,7 +274,12 @@ def patch_exact_files(
     output_iso: Path,
     replacements: dict[str, Path],
 ) -> list[dict[str, object]]:
-    """Compatibility wrapper that additionally requires unchanged sizes."""
+    """Patch fixed extents while additionally requiring unchanged file sizes.
+
+    This compatibility entry point performs the stronger logical-size preflight
+    before delegating to ``patch_fixed_extent_files``. It has the same output
+    side effects and verification report.
+    """
     entries = read_entries(source_iso)
     for target, replacement_path in replacements.items():
         entry = unique_file(entries, target)

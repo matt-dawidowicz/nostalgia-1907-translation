@@ -30,9 +30,7 @@ or a non-reflowable record is not explicitly fixed.
 ## Preview a wording change
 
 ```powershell
-$python = 'C:\Users\thema\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe'
-& $python work\clean_rebuild\translation_formatter.py `
-  --record PART1A:003 `
+python nostalgia1907.py edit PART1A:003 `
   --text 'How about we switch games and play one more round?'
 ```
 
@@ -51,7 +49,7 @@ Create a JSON file keyed by stable IDs:
 Then run:
 
 ```powershell
-& $python work\clean_rebuild\translation_formatter.py --changes changes.json
+python nostalgia1907.py edit --changes changes.json
 ```
 
 For a proven renderer, the editor writes semantic English and marks the record
@@ -62,7 +60,7 @@ The editor refuses an adaptive edit that exceeds a box or vertical limit.
 ## Migrate the complete canonical script
 
 ```powershell
-& $python work\clean_rebuild\translation_formatter.py --migrate
+python work\clean_rebuild\translation_formatter.py --migrate
 ```
 
 This is a whole-script operation, not a record allowlist.
@@ -70,9 +68,7 @@ This is a whole-script operation, not a record allowlist.
 ## Audit and tests
 
 ```powershell
-& $python work\clean_rebuild\translation_formatter.py
-& $python work\clean_rebuild\test_script_layout.py -v
-& $python work\clean_rebuild\translation_validation.py
+python nostalgia1907.py validate
 ```
 
 The whole-game audit is written to

@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Rebuild every translated script archive inside its retail fixed slots."""
+"""Install generated MES files into retail chapter-archive allocations.
+
+Each chapter archive is re-extracted from the verified retail ISO. The writer
+first attempts an exact member-slot replacement. Only when the generated MES
+does not fit may it reflow member payloads, and that fallback is bounded by the
+archive's existing ISO sector allocation.
+
+Member names and order always remain retail-authored. Fixed-slot mode also
+preserves offsets and archive size; guarded-reflow mode preserves every
+untouched payload and reports remaining outer-allocation headroom. The
+generated ``archive_report.json`` records which strategy each chapter used.
+"""
 
 from __future__ import annotations
 
@@ -22,7 +33,21 @@ def sha256(path: Path) -> str:
 
 
 def build_archives(build_root: Path) -> dict[str, object]:
-    """Replace MES members while preserving each retail ISO allocation."""
+    """Replace MES members while preserving each retail ISO allocation.
+
+    Fixed-slot replacement is attempted first. Reflow is permitted only for
+    the specific capacity failure that means a compressed MES no longer fits
+    its member slot, and it remains bounded by the archive's retail ISO sector
+    allocation.
+
+    Returns:
+        A report recording mode, hashes, member count, replacement details, and
+        remaining allocation headroom for every chapter.
+
+    Side Effects:
+        Re-extracts retail archives and writes rebuilt archives plus
+        ``archive_report.json`` below ``build_root``.
+    """
     retail_iso = build_root / "retail.iso"
     mes_root = build_root / "mes"
     source_root = build_root / "retail_archives"

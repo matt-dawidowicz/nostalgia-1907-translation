@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
-"""Build every canonical chapter MES and emit a deterministic audit report."""
+"""Compile the complete canonical script and assemble its generated font.
+
+This orchestration layer iterates ``sources/index.json`` in canonical chapter
+order, calls ``mes_compiler.compile_files`` with each hash-locked retail MES and
+SCN, writes derived MES files, and collects capacity metrics. It also applies
+the compiler's declared fixed-font spill bitmaps to a copy of the retail fixed
+font while rejecting conflicting or out-of-range codes.
+
+The emitted ``mes_report.json`` is generated evidence for regression and
+capacity review; it is never a source input.
+"""
 
 from __future__ import annotations
 
@@ -22,7 +32,22 @@ def sha256(path: Path) -> str:
 
 
 def build_mes_set(build_root: Path) -> dict[str, object]:
-    """Compile all chapters from retail members extracted from Track 1."""
+    """Compile all chapters and assemble the generated fixed-font image.
+
+    Args:
+        build_root: Prepared build tree containing guarded retail members.
+
+    Returns:
+        Capacity and hash evidence for every MES plus the merged font patches.
+
+    Raises:
+        ValueError: If compilation fails, font patches conflict, or a patched
+            code lies outside the retail fixed-font bank.
+
+    Side Effects:
+        Writes generated MES files, ``FIX_CODE.FNT``, and ``mes_report.json``
+        below ``build_root``. Canonical and retail inputs remain unchanged.
+    """
     original = build_root / "retail_unpacked"
     output = build_root / "mes"
     retail_font = build_root / "retail_files" / "FIX_CODE.FNT"

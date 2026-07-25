@@ -1,5 +1,20 @@
 #!/usr/bin/env python3
-"""Deterministically translate a verified Japanese Nostalgia 1907 BIN/CUE."""
+"""Orchestrate and prove a deterministic retail-to-English BIN/CUE rebuild.
+
+This is the production graph's composition root. One build verifies/extracts
+retail Track 1, compiles all canonical MES files, installs them into guarded LZ
+and ISO allocations, applies the frozen UI/font changes, reconstructs raw
+MODE1/2352 sectors, copies Track 2 exactly, writes the CUE, and runs the complete
+binary regression.
+
+A release invokes that process twice in fresh independent trees. Hash manifests
+cover intermediate MES/LZ/font/ISO artifacts as well as delivery BIN/CUE files;
+nothing is published unless both manifests are identical.
+
+``PRODUCTION_MODULES`` is also a policy boundary. Tests and runtime checks use
+it to prevent historical investigation workspaces or playable older builds from
+becoming dependencies. See ``docs/ARCHITECTURE.md`` for stage ownership.
+"""
 
 from __future__ import annotations
 
@@ -21,6 +36,7 @@ from regression import sha256, validate_build
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
 SOURCES = HERE / "sources"
+DEFAULT_BASENAME = "Nostalgia1907_CleanRebuild"
 PRODUCTION_MODULES = (
     "raw_cd.py",
     "iso9660.py",
@@ -36,6 +52,9 @@ PRODUCTION_MODULES = (
     "regression.py",
     "rebuild.py",
 )
+
+
+# One isolated build and its artifact manifest.
 
 
 def _ensure_empty(path: Path) -> None:
@@ -66,7 +85,12 @@ def _build_once(
     product_root: Path,
     basename: str,
 ) -> dict[str, object]:
-    """Perform one complete retail-to-test-image build and regression pass."""
+    """Perform one complete retail-to-test-image build and regression pass.
+
+    Both output roots must be absent or empty. The function writes every
+    intermediate into ``build_root`` and only the candidate BIN/CUE plus
+    verification into ``product_root``.
+    """
     _ensure_empty(build_root)
     _ensure_empty(product_root)
     prepare_retail(track1, build_root)
@@ -135,6 +159,9 @@ def _manifest(build_root: Path, product_root: Path) -> dict[str, str]:
     return {name: sha256(path) for name, path in sorted(files.items())}
 
 
+# Two-run determinism proof and publication.
+
+
 def rebuild(
     track1: Path,
     track2: Path,
@@ -142,7 +169,27 @@ def rebuild(
     delivery_root: Path,
     basename: str,
 ) -> dict[str, object]:
-    """Build twice, prove byte identity, and publish one fresh BIN/CUE set."""
+    """Build twice, prove byte identity, and publish one fresh BIN/CUE set.
+
+    Args:
+        track1: Exact original Japanese MODE1/2352 data track.
+        track2: Exact original retail audio track.
+        runs_root: Fresh parent for independent ``run_a`` and ``run_b`` trees.
+        delivery_root: Absent or empty release destination.
+        basename: Safe artifact stem supplied by higher-level orchestration.
+
+    Returns:
+        Final two-run verification report and deterministic artifact hashes.
+
+    Raises:
+        ValueError: If any input, build, regression, independence, directory,
+            or byte-identity invariant fails.
+
+    Side Effects:
+        Creates two full staging builds, publishes run A's BIN/CUE only after
+        equality is proven, and writes final verification and test notes.
+        Existing non-empty directories are never cleaned or overwritten.
+    """
     _verify_production_independence()
     run_a_build = runs_root / "run_a" / "build"
     run_a_product = runs_root / "run_a" / "product"
@@ -208,9 +255,9 @@ def main() -> None:
     parser.add_argument(
         "--delivery-root",
         type=Path,
-        default=WORKSPACE / "outputs" / "Nostalgia1907_CleanRebuild_v1",
+        default=WORKSPACE / "outputs" / DEFAULT_BASENAME,
     )
-    parser.add_argument("--basename", default="Nostalgia1907_CleanRebuild_v1")
+    parser.add_argument("--basename", default=DEFAULT_BASENAME)
     args = parser.parse_args()
     result = rebuild(
         args.track1, args.track2, args.runs_root, args.delivery_root, args.basename

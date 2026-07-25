@@ -5,6 +5,16 @@ This tool never translates Japanese.  It accepts English wording only at a
 stable ``CHAPTER:NNN`` ID, derives that record's renderer from the original
 SCN, and previews or stores semantic (unwrapped) text.  The MES compiler owns
 the final wrapping so later wording edits cannot inherit stale manual spaces.
+
+Stable IDs use the canonical zero-based record index; SCN's one-based operands
+are converted inside ``scn_layout.py``. Preview and compilation share the same
+``RecordContract``, so a translator sees the real role, visible widths, runtime
+strides, and floating-window row limit before writing.
+
+Batch changes are validated in memory before any chapter JSON is written.
+SCN-classified records become adaptive semantic text; records without proven
+reflow geometry remain explicitly fixed. See
+``docs/TRANSLATION_EDITING.md`` for the contributor workflow.
 """
 
 from __future__ import annotations
@@ -35,6 +45,7 @@ RECORD_ID = re.compile(r"^(?P<chapter>[A-Z0-9_]+):(?P<index>[0-9]{3})$")
 
 
 def _load(path: Path) -> dict[str, object]:
+    """Load one UTF-8 JSON object or reject an incompatible top level."""
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise ValueError(f"{path}: expected a JSON object")
@@ -42,6 +53,16 @@ def _load(path: Path) -> dict[str, object]:
 
 
 def _chapter_sources() -> tuple[dict[str, object], dict[str, tuple[Path, dict[str, object]]]]:
+    """Load the canonical index and every chapter in declared order.
+
+    Returns:
+        The index object and a chapter-keyed mapping of source paths and parsed
+        chapter objects. The mapping preserves the index's insertion order.
+
+    Raises:
+        ValueError: If an input does not contain a JSON object.
+        OSError: If a tracked source cannot be read.
+    """
     index = _load(SOURCES / "index.json")
     chapters: dict[str, tuple[Path, dict[str, object]]] = {}
     for item in index["chapters"]:
@@ -52,6 +73,15 @@ def _chapter_sources() -> tuple[dict[str, object], dict[str, tuple[Path, dict[st
 
 
 def _contracts(source: dict[str, object], retail_root: Path) -> dict[int, RecordContract]:
+    """Infer renderer contracts from one chapter's original retail SCN.
+
+    Canonical English never supplies geometry. Only translated record indexes
+    are requested from the source-independent SCN inference engine.
+
+    Raises:
+        FileNotFoundError: If the hash-locked retail SCN is unavailable.
+        ScnLayoutError: If the SCN evidence is malformed or contradictory.
+    """
     chapter = source["chapter"]
     scn = retail_root / "retail_unpacked" / chapter / f"{chapter}.SCN"
     if not scn.exists():
@@ -70,6 +100,7 @@ def _contracts(source: dict[str, object], retail_root: Path) -> dict[int, Record
 
 
 def _rules_by_role() -> dict[str, dict[str, object]]:
+    """Return the configured role rules after validating their container."""
     rules = _load(RULES).get("roles")
     if not isinstance(rules, dict):
         raise ValueError("script_layout_rules.json has no roles object")
@@ -97,7 +128,12 @@ def _require_explicit_fixed_policy() -> bool:
 
 
 def format_preview(text: str, contract: RecordContract | None) -> list[str]:
-    """Return visible, unpadded rows for a proposed semantic string."""
+    """Return visible, unpadded rows for a proposed semantic string.
+
+    Records without proven SCN geometry remain a single fixed-layout value.
+    The preview shares normalization and wrapping code with the compiler, so it
+    is suitable for review but never writes canonical source.
+    """
     semantic = normalize_semantic_text(text)
     if contract is None or contract.layout is None:
         return [semantic]
@@ -111,6 +147,12 @@ def _record_audit(
     contract: RecordContract | None,
     rules: dict[str, dict[str, object]],
 ) -> dict[str, object]:
+    """Describe one proposed record and collect renderer-policy violations.
+
+    The function is pure: it returns failures and warnings rather than raising
+    for ordinary layout problems, allowing whole-game audits to report all
+    affected stable IDs in one pass.
+    """
     semantic = normalize_semantic_text(text)
     rows = format_preview(text, contract)
     roles = sorted(contract.roles) if contract is not None else []
@@ -167,7 +209,23 @@ def _record_audit(
 
 
 def audit_layouts(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
-    """Audit every canonical record against its original SCN renderer."""
+    """Audit every canonical record against its original SCN renderer.
+
+    Args:
+        retail_root: Prepared, hash-locked Japanese retail reference.
+
+    Returns:
+        A JSON-serializable report containing per-record contracts, aggregate
+        role counts, migration state, warnings, and mandatory failures.
+
+    Raises:
+        OSError: If canonical data or required retail SCN files cannot be read.
+        ValueError: If canonical configuration is malformed.
+        ScnLayoutError: If SCN evidence cannot produce safe shared contracts.
+
+    Side Effects:
+        Reads tracked source and retail reference files; writes nothing.
+    """
     _, chapters = _chapter_sources()
     rules = _rules_by_role()
     records: list[dict[str, object]] = []
@@ -263,6 +321,7 @@ def audit_layouts(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
 
 
 def _parse_record_id(value: str) -> tuple[str, int]:
+    """Parse an exact zero-based ``CHAPTER:NNN`` stable record ID."""
     match = RECORD_ID.fullmatch(value)
     if match is None:
         raise ValueError(f"invalid stable record ID: {value!r}")
@@ -270,6 +329,11 @@ def _parse_record_id(value: str) -> tuple[str, int]:
 
 
 def _changes(path: Path) -> dict[str, str]:
+    """Load an ID-to-English change set in object or entry-list form.
+
+    Duplicate list entries are rejected instead of allowing the last value to
+    win silently.
+    """
     payload = _load(path)
     raw = payload.get("changes", payload)
     if isinstance(raw, dict):
@@ -286,7 +350,28 @@ def _changes(path: Path) -> dict[str, str]:
 
 
 def apply_changes(path: Path, retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
-    """Atomically apply reviewed English changes using adaptive per-record layout."""
+    """Atomically apply reviewed English changes using per-record contracts.
+
+    Every requested ID is resolved, policy-checked, and audited in memory
+    before any chapter file is written. SCN-classified records store normalized
+    semantic text with adaptive layout; unclassified records preserve the
+    reviewer's exact fixed layout.
+
+    Args:
+        path: UTF-8 JSON change set accepted by ``_changes``.
+        retail_root: Prepared Japanese reference that supplies original SCNs.
+
+    Returns:
+        A report with before/after text, roles, and preview rows for each ID.
+
+    Raises:
+        ValueError: If any ID, policy, text, or renderer contract is invalid.
+        OSError: If source files cannot be read or written.
+
+    Side Effects:
+        Rewrites only canonical chapter JSON files affected by the validated
+        batch. It does not compile MES data or modify retail files.
+    """
     changes = _changes(path)
     _, chapters = _chapter_sources()
     pending: dict[Path, dict[str, object]] = {}
@@ -344,7 +429,16 @@ def apply_changes(path: Path, retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[s
 
 
 def migrate(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
-    """Atomically adopt adaptive layout for every SCN-classified record."""
+    """Adopt adaptive layout for every SCN-classified translated record.
+
+    The migration first audits the complete source set in memory. If any
+    classified record fails, it raises before writing. Records without proven
+    geometry are explicitly marked fixed so future tooling cannot guess.
+
+    Side Effects:
+        Rewrites changed canonical chapter JSON files after the global
+        preflight succeeds.
+    """
     _, chapters = _chapter_sources()
     changed_records = 0
     adopted_records = 0
@@ -419,6 +513,7 @@ def migrate(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
 
 
 def main() -> None:
+    """Run preview, batch-apply, migration, or whole-game audit mode."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT)
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)

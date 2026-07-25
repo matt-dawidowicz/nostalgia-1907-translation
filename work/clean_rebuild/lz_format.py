@@ -1,5 +1,22 @@
 #!/usr/bin/env python3
-"""Strict reader, codec, and fixed-slot writer for Nostalgia 1907 LZ archives."""
+"""Read, encode, and safely rewrite the game's chapter LZ archives.
+
+An archive starts with a member count and fixed-size table. Each table entry
+contains a name, payload offset, stored size, unpacked size, and preserved
+marker. Member payloads occupy ordered slots after the table. Compressed payload
+bits and output bytes are both consumed backward; the footer carries the
+unpacked size, XOR checksum, and initial bit buffer.
+
+``replace_members_fixed`` is the preferred writer because it preserves every
+member offset and the complete archive size. ``replace_members_reflow`` is a
+guarded fallback that preserves member names, order, and untouched payloads
+while repacking only inside a caller-supplied outer allocation.
+
+Compression is deterministic: dynamic programming minimizes bit cost, tie
+breaking follows stable iteration order, and every result is decompressed as an
+immediate self-check. See ``docs/BINARY_FORMATS.md`` for table offsets and
+writer invariants.
+"""
 
 from __future__ import annotations
 
@@ -18,7 +35,13 @@ class LzError(ValueError):
 
 @dataclass(frozen=True)
 class Entry:
-    """One fixed-table archive member."""
+    """One validated member-table row.
+
+    ``offset`` and ``compressed_size`` locate the stored payload.
+    ``unpacked_size`` selects stored versus compressed decoding. ``marker`` is
+    retained as opaque retail metadata because its semantics are not needed to
+    replace a member safely.
+    """
 
     index: int
     name: str
@@ -32,12 +55,21 @@ class BackwardBits:
     """Read the game's compressed footer bitstream from end to start."""
 
     def __init__(self, data: bytes, position: int, buffer: int, checksum: int):
+        """Initialize a backward reader at the first footer-owned bit word.
+
+        Args:
+            data: Complete aligned compressed payload.
+            position: Exclusive byte offset of the next backing word.
+            buffer: Initial 32-bit shift register stored in the footer.
+            checksum: XOR accumulator after consuming the initial word.
+        """
         self.data = data
         self.position = position
         self.buffer = buffer
         self.checksum = checksum
 
     def _word(self) -> int:
+        """Consume one preceding big-endian word or reject stream underflow."""
         self.position -= 4
         if self.position < 0:
             raise LzError("compressed bitstream underflow")
@@ -63,12 +95,25 @@ class BackwardBits:
 
 
 def decompress(payload: bytes, expected_size: int | None = None) -> bytes:
-    """Decompress one backward LZ payload and verify its XOR checksum."""
+    """Decompress one backward LZ payload and verify its footer checksum.
+
+    Args:
+        payload: Complete 32-bit-aligned stored payload, including footer.
+        expected_size: Optional archive-table unpacked size to cross-check.
+
+    Returns:
+        Exact unpacked bytes.
+
+    Raises:
+        LzError: If alignment, footer size, command bounds, copy distance, or
+            XOR checksum is invalid.
+    """
     if len(payload) < 12 or len(payload) % 4:
         raise LzError("compressed payload must contain at least three aligned words")
     position = len(payload)
 
     def previous_word() -> int:
+        """Consume one big-endian footer word while moving backward."""
         nonlocal position
         position -= 4
         if position < 0:
@@ -87,6 +132,7 @@ def decompress(payload: bytes, expected_size: int | None = None) -> bytes:
     reader = BackwardBits(payload, position, initial, checksum ^ initial)
 
     def literal(count_minus_one: int) -> None:
+        """Decode a literal run into the preceding output positions."""
         nonlocal output_position
         for _ in range(count_minus_one + 1):
             output_position -= 1
@@ -95,6 +141,7 @@ def decompress(payload: bytes, expected_size: int | None = None) -> bytes:
             output[output_position] = reader.bits(8)
 
     def copy(distance: int, count_minus_one: int) -> None:
+        """Decode a backward overlap-safe copy command."""
         nonlocal output_position
         if distance <= 0:
             raise LzError("copy distance must be positive")
@@ -131,6 +178,7 @@ def _field_bits(value: int, width: int) -> list[int]:
 
 
 def _op_cost(op: Op) -> int:
+    """Return the exact encoded bit count for one compressor operation."""
     kind, length, _distance = op
     if kind == "literal":
         return (5 if length <= 8 else 11) + length * 8
@@ -138,6 +186,7 @@ def _op_cost(op: Op) -> int:
 
 
 def _match_length(data: bytes, position: int, distance: int, limit: int) -> int:
+    """Measure a legal backward match without crossing input boundaries."""
     length = 0
     while length < limit:
         destination = position - length - 1
@@ -153,6 +202,11 @@ def _match_length(data: bytes, position: int, distance: int, limit: int) -> int:
 def _copy_candidates(
     data: bytes, positions: list[list[int]], position: int
 ) -> list[Op]:
+    """Enumerate every encodable copy ending at ``position``.
+
+    Candidate ordering is stable and therefore participates in deterministic
+    dynamic-programming tie breaking.
+    """
     max_distance = min(0xFFF, len(data) - position)
     if position <= 0 or max_distance <= 0:
         return []
@@ -210,6 +264,7 @@ def _choose_operations(data: bytes) -> list[tuple[int, Op]]:
 
 
 def _pack_stream(bits: list[int], unpacked_size: int) -> bytes:
+    """Pack stream-order bits, XOR checksum, and size into the game footer."""
     initial = 0x80000000
     for index, bit in enumerate(bits[:31]):
         initial |= bit << index
@@ -226,7 +281,16 @@ def _pack_stream(bits: list[int], unpacked_size: int) -> bytes:
 
 
 def compress(data: bytes) -> bytes:
-    """Compress bytes with the exact command set used by the game."""
+    """Compress bytes with the game's exact backward command set.
+
+    Dynamic programming selects the minimum encoded bit cost. Stable candidate
+    ordering supplies deterministic tie breaking, and the result is immediately
+    decompressed to prove a byte-exact round trip.
+
+    Raises:
+        LzError: If no command sequence covers the input or the internal
+            round-trip check fails.
+    """
     bits: list[int] = []
     for position, (kind, length, distance) in _choose_operations(data):
         if kind == "literal":
@@ -260,7 +324,12 @@ def compress(data: bytes) -> bytes:
 
 
 def parse_archive(data: bytes, *, source: str = "<bytes>") -> tuple[Entry, ...]:
-    """Parse and fully bound-check an archive member table."""
+    """Parse and fully bound-check an archive member table.
+
+    Entry order and duplicate names are preserved. Payload offsets must begin
+    after the complete table, remain ordered, and fit the archive; stored and
+    compressed sizes must form a decodable representation.
+    """
     if len(data) < 4:
         raise LzError(f"{source}: archive is too small")
     count = int.from_bytes(data[:2], "big")
@@ -339,7 +408,20 @@ def replace_members_fixed(
     output_archive: Path,
     replacements: dict[str, Path],
 ) -> list[dict[str, object]]:
-    """Compress replacement members inside their retail slots without reflow."""
+    """Compress replacement members inside their retail slots without reflow.
+
+    Member offsets, table rows, untouched stored payloads, and total archive
+    size remain byte-identical. Each replacement is re-read through the parser
+    and decoder before the output is accepted.
+
+    Raises:
+        LzError: If a name is ambiguous, compressed data exceeds its retail
+            slot, or any output invariant fails.
+
+    Side Effects:
+        Writes ``output_archive`` only; ``source_archive`` and replacement
+        source files are read-only.
+    """
     if not replacements:
         raise LzError("at least one archive replacement is required")
     data = bytearray(source_archive.read_bytes())
@@ -395,7 +477,19 @@ def replace_members_reflow(
     *,
     maximum_archive_size: int | None = None,
 ) -> dict[str, object]:
-    """Reflow members within a guarded outer-file allocation."""
+    """Reflow members within a guarded outer-file allocation.
+
+    Reflow is the capacity fallback for a replacement that cannot fit its
+    original member slot. Names and order remain fixed, untouched stored
+    payloads remain exact, and the complete archive cannot exceed
+    ``maximum_archive_size``.
+
+    Returns:
+        Replacement details and remaining outer-allocation headroom.
+
+    Side Effects:
+        Writes and reparses ``output_archive``; no input is modified.
+    """
     if not replacements:
         raise LzError("at least one archive replacement is required")
     source = source_archive.read_bytes()

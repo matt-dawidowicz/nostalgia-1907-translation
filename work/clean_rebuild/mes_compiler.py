@@ -1,5 +1,24 @@
 #!/usr/bin/env python3
-"""Compile canonical translation records into a strict standalone MES file."""
+"""Compile one canonical chapter into a structurally valid MES container.
+
+The compiler joins three authorities: retail MES supplies record count,
+preserved bytes, and retained glyphs; retail SCN supplies renderer contracts;
+canonical JSON supplies record policy and English. It never inserts, deletes,
+or reorders a record.
+
+Adaptive records are normalized to semantic text, wrapped against the visible
+SCN-derived geometry, and padded to the engine's runtime stride. Fixed records
+retain explicit source layout. English characters become deterministic 12x12
+cells, identical cells share dynamic glyphs, and preserved records keep their
+retail glyph bitmaps through index remapping.
+
+The output is rejected if it violates a retail hash guard, record policy,
+renderer row limit, 16-bit pointer range, runtime dynamic-glyph capacity, or the
+proven PART3C hard boundary. The result is parsed again before it is returned.
+
+See ``docs/ARCHITECTURE.md`` for pipeline ownership and
+``docs/BINARY_FORMATS.md`` for MES/font encoding.
+"""
 
 from __future__ import annotations
 
@@ -85,6 +104,10 @@ class BuildResult:
 
 
 Cell = tuple[str, str]
+
+
+# Text normalization, wrapping, and cell planning. These functions operate on
+# semantic English and renderer contracts; they do not write MES bytes.
 
 
 @dataclass
@@ -224,6 +247,7 @@ def _pack_row(line: str, shifted: bool) -> tuple[int, tuple[Cell, ...]] | None:
     cache: dict[int, tuple[int, tuple[Cell, ...]]] = {}
 
     def best(index: int) -> tuple[int, tuple[Cell, ...]]:
+        """Return the best deterministic cell packing from ``index`` onward."""
         if index >= len(packed):
             return 0, ()
         if index in cache:
@@ -313,6 +337,7 @@ def _optimize_phases(
     }
 
     def byte_cost(references: Counter[bytes]) -> int:
+        """Measure encoded references plus newly required dynamic glyph bytes."""
         record_bytes = sum(
             count * (1 if glyph in fixed_by_bitmap else 2)
             for glyph, count in references.items()
@@ -323,6 +348,7 @@ def _optimize_phases(
         return record_bytes + dynamic_glyphs * GLYPH_BYTES
 
     def subtract(references: Counter[bytes], values: Counter[bytes]) -> None:
+        """Remove one row's multiset from the mutable global reference count."""
         for glyph, count in values.items():
             remaining = references[glyph] - count
             if remaining:
@@ -382,7 +408,12 @@ def compile_mes(
     *,
     glyph_order: str = "first-use",
 ) -> BuildResult:
-    """Compile one canonical chapter against its hash-locked retail MES."""
+    """Compile one canonical chapter against hash-locked retail MES and SCN.
+
+    The returned :class:`BuildResult` contains both bytes and capacity metrics
+    used by later regression stages. No input mapping or byte string is
+    modified in place.
+    """
     chapter = canonical.get("chapter")
     if not isinstance(chapter, str):
         raise CompileError("canonical source has no chapter name")
@@ -669,7 +700,15 @@ def compile_files(
     *,
     glyph_order: str = "first-use",
 ) -> BuildResult:
-    """Compile file inputs and write one derived MES artifact."""
+    """Compile guarded file inputs and write one derived MES artifact.
+
+    Retail MES/SCN and canonical JSON are read before calling ``compile_mes``.
+    The returned bytes are written only after all compiler checks succeed.
+
+    Side Effects:
+        Creates the output parent directory and replaces ``output_path``.
+        Retail and canonical inputs remain read-only.
+    """
     canonical = json.loads(canonical_path.read_text(encoding="utf-8"))
     result = compile_mes(
         retail_mes_path.read_bytes(),

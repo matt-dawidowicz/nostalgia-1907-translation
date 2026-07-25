@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Export record-aligned retail Japanese glyphs and canonical English text."""
+"""Export record-aligned retail Japanese glyphs and canonical English text.
+
+The comparison package is a deterministic human-review artifact. Japanese is
+rendered directly from the hash-locked retail fixed and dynamic bitmap glyphs;
+OCR and invented Unicode transcription are deliberately excluded. Canonical
+English, policy, source tokens, controls, and bytes remain aligned by stable
+zero-based ``CHAPTER:NNN`` record IDs.
+"""
 
 from __future__ import annotations
 
@@ -237,7 +244,25 @@ q.addEventListener('input',filter);c.addEventListener('change',filter);filter();
 
 
 def export_comparison(retail_root: Path, output_root: Path) -> dict[str, object]:
-    """Export all 2,905 retail/canonical record pairs and validate alignment."""
+    """Export and verify all 2,905 retail/canonical record pairs.
+
+    Args:
+        retail_root: Prepared hash-locked Japanese retail reference.
+        output_root: Disposable comparison-package destination.
+
+    Returns:
+        Coverage counts and hashes for the canonical HTML, JSON, and ZIP.
+
+    Raises:
+        ValueError: If fonts, MES guards, record counts, indexes, or complete
+            project coverage differ from the validated contract.
+        AssertionError: If generated JSON or image references fail self-checks.
+
+    Side Effects:
+        Writes 2,905 PNGs, per-chapter and combined Markdown, searchable HTML,
+        canonical JSON, package README, and a deterministic ZIP. ZIP timestamps,
+        permissions, ordering, and compression settings are fixed.
+    """
     fixed_path = retail_root / "retail_files" / "FIX_CODE.FNT"
     if fixed_path.stat().st_size != FIXED_FONT_SIZE or sha256(fixed_path) != FIXED_FONT_SHA256:
         raise ValueError("retail fixed font failed its frozen size/hash guard")

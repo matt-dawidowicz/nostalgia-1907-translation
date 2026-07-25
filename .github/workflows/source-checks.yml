@@ -1,0 +1,29 @@
+name: Source checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  source-tests:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            python: "3.12"
+          - os: ubuntu-latest
+            python: "3.10"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install tool
+        run: python -m pip install -e ".[test]"
+      - name: Compile tracked Python
+        run: python -m compileall -q nostalgia1907.py work tests
+      - name: Run source-only tests
+        run: python -m unittest discover -s tests -v
+      - name: Run audio companion tests
+        run: python work/audio_localization/test_audio_localization.py

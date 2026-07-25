@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
-"""Minimal, strict parser for Nostalgia 1907 MES script containers.
+"""Parse the game's MES pointer/record/glyph container without interpretation.
 
-This module deliberately has no dependency on the historical translation tools.
-It is the first clean-room component of the deterministic retail-disc rebuild.
+MES has three contiguous regions: a big-endian pointer table, encoded records,
+and an 18-byte-per-glyph dynamic font tail. The first pointer terminates the
+pointer table; the header's split offset terminates the record region. Adjacent
+pointers therefore define records without scanning for terminators.
+
+This module validates only structural facts: pointer order and bounds, glyph
+alignment, and dynamic-reference bounds. It does not decide which records are
+English, how text wraps, or which SCN renderer consumes a record. Those belong
+to ``mes_compiler.py`` and ``scn_layout.py``.
+
+The parser has no dependency on historical translation tools or generated
+builds. See ``docs/BINARY_FORMATS.md`` for an offset diagram and the fixed versus
+dynamic code convention.
 """
 
 from __future__ import annotations
@@ -23,7 +34,12 @@ class MesFormatError(ValueError):
 
 @dataclass(frozen=True)
 class MesFile:
-    """A validated MES pointer table, record stream, and dynamic glyph bank."""
+    """A validated MES split point, pointer table, records, and glyph bank.
+
+    ``records[index]`` is the exact encoded byte range selected by pointer
+    ``index``. ``glyphs[index]`` is one stored 12x12 bitmap. The object is
+    immutable so callers cannot accidentally mutate retail evidence.
+    """
 
     split_offset: int
     pointers: tuple[int, ...]
@@ -74,7 +90,24 @@ def _u16be(data: bytes, offset: int) -> int:
 
 
 def parse_mes(data: bytes, *, source: str = "<bytes>") -> MesFile:
-    """Parse a MES file and reject ambiguous or unsafe layouts."""
+    """Parse a MES file and reject ambiguous or unsafe layouts.
+
+    The first pointer defines both pointer-table length and record count.
+    Pointers must be ordered, records must remain before the glyph split, every
+    record must terminate, and dynamic references must fit the complete
+    18-byte glyph bank.
+
+    Args:
+        data: Complete MES member bytes.
+        source: Human-readable label used in validation errors.
+
+    Returns:
+        An immutable ``MesFile`` retaining exact record and glyph bytes.
+
+    Raises:
+        MesFormatError: If any boundary, pointer, terminator, or glyph-reference
+            invariant fails.
+    """
     if len(data) < 6:
         raise MesFormatError(f"{source}: file is too small ({len(data)} bytes)")
 

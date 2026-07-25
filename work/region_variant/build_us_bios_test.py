@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Build and validate a deterministic U.S.-BIOS test variant of Nostalgia 1907."""
+"""Build and validate a deterministic U.S.-BIOS test variant.
+
+This derivative exists only to show the English U.S. Sega CD BIOS during
+testing. It accepts the exact validated v7 Track 1, exact retail Track 2, and a
+hash-locked licensed U.S. BIOS. The builder replaces the boot security program,
+installs a relocation wrapper, regenerates only affected raw-sector checksums,
+and proves that translation, SCN, ISO extents, remaining sectors, and audio are
+unchanged.
+
+The normal entry point builds into two fresh staging trees and publishes only
+after their BIN/CUE artifacts are byte-identical. It never modifies its inputs.
+"""
 
 from __future__ import annotations
 
@@ -97,18 +108,27 @@ def sha256(path: Path) -> str:
 
 
 def _bytes_sha256(data: bytes | bytearray) -> str:
+    """Return an uppercase SHA-256 digest for in-memory boot data."""
     return hashlib.sha256(data).hexdigest().upper()
 
 
 def _read_be32(data: bytes | bytearray, offset: int) -> int:
+    """Read one unsigned big-endian 32-bit boot-header field."""
     return int.from_bytes(data[offset : offset + 4], "big")
 
 
 def _write_be32(data: bytearray, offset: int, value: int) -> None:
+    """Write one unsigned big-endian 32-bit field into mutable boot data."""
     data[offset : offset + 4] = value.to_bytes(4, "big")
 
 
 def _ensure_empty(path: Path) -> None:
+    """Create an output directory or reject reuse of non-empty state.
+
+    Existing empty directories are permitted for resumable orchestration. The
+    function never deletes files, because stale build state must be reviewed by
+    an operator rather than silently overwritten.
+    """
     if path.exists() and any(path.iterdir()):
         raise RegionVariantError(f"refusing to reuse non-empty directory: {path}")
     path.mkdir(parents=True, exist_ok=True)
@@ -175,7 +195,25 @@ def _wrapper(input_boot: bytes) -> bytes:
 
 
 def build_wrapped_boot(input_boot: bytes, us_security: bytes) -> bytes:
-    """Return the canonical U.S.-security wrapper around the intact v7 boot."""
+    """Build the canonical U.S.-security wrapper around the intact v7 boot.
+
+    Args:
+        input_boot: First 32 KiB of logical user data from validated v7.
+        us_security: Licensed security program derived from the guarded BIOS.
+
+    Returns:
+        A new 32 KiB boot area with updated header fields, security program,
+        restoration wrapper, tag, canonical padding, and an exact relocated
+        copy of the original used boot bytes.
+
+    Raises:
+        RegionVariantError: If any size, signature, header, country metadata,
+            zero-capacity, relocation, or mutation-boundary invariant fails.
+
+    Notes:
+        The Japanese country metadata is intentionally preserved. BIOS region
+        behavior comes from the security program, not that metadata field.
+    """
     if len(input_boot) != BOOT_SIZE:
         raise RegionVariantError("input boot area is not exactly 32 KiB")
     if input_boot[:16] != b"SEGADISCSYSTEM  ":
@@ -378,6 +416,26 @@ def _build_once(
     product_root: Path,
     basename: str,
 ) -> dict[str, object]:
+    """Build and verify one isolated region-variant product.
+
+    Args:
+        baseline_track1: Exact validated v7 raw MODE1/2352 data track.
+        baseline_track2: Exact retail audio track.
+        us_bios: Hash-locked licensed v2.00w U.S. BIOS.
+        product_root: Absent or empty staging directory for this run.
+        basename: Filename stem shared by the BIN and CUE artifacts.
+
+    Returns:
+        The verification report also written beside the staged artifacts.
+
+    Raises:
+        RegionVariantError: If any input guard, sector proof, Track 2 copy, or
+            CUE contract fails.
+
+    Side Effects:
+        Creates Track 1, Track 2, CUE, and ``verification.json`` under
+        ``product_root``. Inputs are read-only.
+    """
     _ensure_empty(product_root)
     input_boot = _read_boot(baseline_track1)
     us_security = _derive_us_security(us_bios)
@@ -432,7 +490,15 @@ def publish_existing(
     delivery_root: Path,
     basename: str,
 ) -> dict[str, object]:
-    """Validate two completed staging products and publish run A."""
+    """Validate two completed staging products and publish run A.
+
+    Both reports and every staged artifact are rehashed before publication.
+    The destination must be absent or empty; no prior release is overwritten.
+
+    Side Effects:
+        Copies the verified run-A BIN/CUE files and writes final verification
+        and manual test notes under ``delivery_root``.
+    """
     run_a = runs_root / "run_a" / "product"
     run_b = runs_root / "run_b" / "product"
     first = json.loads(
@@ -535,7 +601,16 @@ def build_twice(
     delivery_root: Path,
     basename: str,
 ) -> dict[str, object]:
-    """Build twice, compare binary artifacts, and publish one delivery set."""
+    """Build twice, compare binary artifacts, and publish one delivery set.
+
+    Input hashes are checked before either run begins. Each build uses an
+    independent product directory, and ``publish_existing`` requires exact
+    agreement before copying the delivery artifacts.
+
+    Side Effects:
+        Creates two staging products and one delivery directory. Existing
+        non-empty directories are rejected and never cleaned automatically.
+    """
     if sha256(baseline_track1) != EXPECTED_V7_TRACK1_SHA256:
         raise RegionVariantError("Track 1 is not the validated v7 baseline")
     if sha256(baseline_track2) != EXPECTED_TRACK2_SHA256:
@@ -553,6 +628,7 @@ def build_twice(
 
 
 def main() -> None:
+    """Run a fresh two-pass build or publish two prevalidated staging runs."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("baseline_track1", type=Path)
     parser.add_argument("baseline_track2", type=Path)
