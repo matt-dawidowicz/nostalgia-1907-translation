@@ -9,11 +9,12 @@ editable mode:
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-python -m pip install -e .
+python -m pip install -e ".[test]"
 ```
 
-Pillow is the only normal runtime dependency. Speech recognition and synthesis
-packages are optional and isolated behind the audio extras.
+The `test` extra adds NumPy for the audio codec/synthesis companion tests.
+Pillow remains the only normal runtime dependency. Speech recognition and
+synthesis packages are optional and isolated behind the audio extras.
 
 Machine-specific retail, BIOS, and FFmpeg paths belong in the ignored
 `nostalgia1907.local.json`, never in tracked source.
