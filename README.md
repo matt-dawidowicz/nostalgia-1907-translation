@@ -198,6 +198,21 @@ The repository intentionally excludes:
 
 No playable game image is distributed by this repository.
 
+## License and third-party materials
+
+The original code, tools, tests, documentation, and other contributor-created
+materials in this repository are licensed under the [MIT License](LICENSE).
+
+The MIT License does **not** grant rights to the original game or to any
+third-party software, story, dialogue, characters, names, logos, graphics,
+music, audio, trademarks, or other copyrighted materials. Those materials
+remain the property of their respective rights holders. See
+[`THIRD_PARTY_NOTICE.md`](THIRD_PARTY_NOTICE.md) for the complete boundary.
+
+This is an unofficial fan-translation and reverse-engineering project. It is
+not affiliated with, authorized by, or endorsed by the original publisher or
+rights holders. Users must provide their own legally obtained source files.
+
 ## Source-only development checks
 
 The checks that do not require copyrighted retail data run locally and in
