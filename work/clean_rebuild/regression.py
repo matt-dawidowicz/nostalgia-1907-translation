@@ -21,6 +21,7 @@ from pathlib import Path
 from iso9660 import SECTOR_SIZE, extract_file, read_entries, unique_file
 from lz_format import member_bytes, parse_archive, read_member
 from main_patch import PATCHED_SHA256, RETAIL_SHA256
+from mes_compiler import FIXED_ENGLISH_UNITS
 from mes_format import read_mes
 from raw_cd import verify_track
 
@@ -202,6 +203,9 @@ def validate_build(
     patched_codes = {
         int(value, 16) for value in mes_report["fixed_font"]["patched_codes"]
     }
+    expected_fixed_codes = {code for code, _style, _unit in FIXED_ENGLISH_UNITS}
+    if patched_codes != expected_fixed_codes:
+        raise ValueError("generated fixed-font dictionary does not match the compiler")
     changed_codes = {
         code
         for code in range(1, len(after_font) // 18 + 1)
@@ -210,31 +214,6 @@ def validate_build(
     }
     if changed_codes != patched_codes:
         raise ValueError("fixed font changed outside the declared spill glyphs")
-    for item in index["chapters"]:
-        chapter = item["chapter"]
-        if chapter == "PART3C":
-            continue
-        mes = read_mes(build_root / "mes" / f"{chapter}.MES")
-        used_patched_codes: set[int] = set()
-        for record in mes.records:
-            offset = 0
-            while offset < len(record):
-                value = record[offset]
-                if value >= 0xF0:
-                    offset += 2
-                    continue
-                if value in patched_codes:
-                    used_patched_codes.add(value)
-                offset += 1
-        if used_patched_codes:
-            formatted = ", ".join(
-                f"0x{code:02X}" for code in sorted(used_patched_codes)
-            )
-            raise ValueError(
-                f"{chapter}: PART3C fixed spill codes leaked into another MES: "
-                f"{formatted}"
-            )
-
     retail_iso = build_root / "retail.iso"
     output_iso = build_root / "translated.iso"
     retail_iso_entries = read_entries(retail_iso)

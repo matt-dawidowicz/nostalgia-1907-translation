@@ -120,7 +120,7 @@
     {
       "index": 16,
       "policy": "translate",
-      "text": "D-damn yooooou!",
+      "text": "C-C-Captaaaain!",
       "layout_policy": "adaptive"
     },
     {
@@ -132,7 +132,7 @@
     {
       "index": 18,
       "policy": "translate",
-      "text": "B-bad news! A bomb in the bilge!",
+      "text": "A-a bomb! We found a bomb in the keel section!",
       "layout_policy": "adaptive"
     },
     {
@@ -174,7 +174,7 @@
     {
       "index": 25,
       "policy": "translate",
-      "text": "Botch this and I may shoot you! Move!",
+      "text": "Keep making a fuss and I won't mind shooting one of you! Get moving!",
       "layout_policy": "adaptive"
     },
     {
@@ -324,19 +324,19 @@
     {
       "index": 50,
       "policy": "translate",
-      "text": "Stop, Kirikov! Put down the gun!",
+      "text": "Then what is it?! Stop, Kirikov! Put the gun away!",
       "layout_policy": "adaptive"
     },
     {
       "index": 51,
       "policy": "translate",
-      "text": "They call me a detective, but I am only a naive amateur.",
+      "text": "Detective or not, he is still an amateur. How naive.",
       "layout_policy": "adaptive"
     },
     {
       "index": 52,
       "policy": "translate",
-      "text": "You are good.",
+      "text": "Good shooting.",
       "layout_policy": "adaptive"
     },
     {

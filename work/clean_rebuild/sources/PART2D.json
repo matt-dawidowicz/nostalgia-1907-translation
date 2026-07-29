@@ -118,7 +118,7 @@
     {
       "index": 7,
       "policy": "translate",
-      "text": "Investigate the wreckage on the seabed.",
+      "text": "Let's hear how the investigation is going.",
       "layout_policy": "adaptive"
     },
     {
@@ -142,7 +142,7 @@
     {
       "index": 11,
       "policy": "translate",
-      "text": "You are the last person he should distrust.",
+      "text": "I don't believe I'm under any obligation to report to you.",
       "layout_policy": "adaptive"
     },
     {
@@ -376,7 +376,7 @@
     {
       "index": 50,
       "policy": "translate",
-      "text": "War is ruled by money. Britain contained Russia, but Asia can no longer belong to Britain alone.",
+      "text": "The alliance was formed on equal terms. When Russia reached into Asia, Britain was the one actually threatened. If Japan had been crushed, Britain's Asian colonies would not have remained hers alone forever. The Japanese were used.",
       "layout_policy": "adaptive"
     },
     {
@@ -514,25 +514,25 @@
     {
       "index": 73,
       "policy": "translate",
-      "text": "That is a dreadful deduction. You have no evidence.",
+      "text": "Your employer is an awful man. He treats people like things.",
       "layout_policy": "adaptive"
     },
     {
       "index": 74,
       "policy": "translate",
-      "text": "You are Yamada, aren't you?",
+      "text": "You're in a bad mood... taking it out on me?",
       "layout_policy": "adaptive"
     },
     {
       "index": 75,
       "policy": "translate",
-      "text": "Please excuse me... I seem to have lost my way.",
+      "text": "...I'll admit it. I'm irritated.",
       "layout_policy": "adaptive"
     },
     {
       "index": 76,
       "policy": "translate",
-      "text": "Are you searching this room too?",
+      "text": "Paris doesn't leave a beautiful woman alone. Surely someone like you had any number of more worthwhile jobs?",
       "layout_policy": "adaptive"
     },
     {
@@ -544,31 +544,31 @@
     {
       "index": 78,
       "policy": "translate",
-      "text": "No...",
+      "text": "She's a good woman.",
       "layout_policy": "adaptive"
     },
     {
       "index": 79,
       "policy": "translate",
-      "text": "What were you doing here?",
+      "text": "What was he doing today?",
       "layout_policy": "adaptive"
     },
     {
       "index": 80,
       "policy": "translate",
-      "text": "I was looking into the Russian Fog.",
+      "text": "In the Second-Class Cabin... I think.",
       "layout_policy": "adaptive"
     },
     {
       "index": 81,
       "policy": "translate",
-      "text": "Ilyu and another passenger came here together.",
+      "text": "He had breakfast with Ilyusha Grancelius,",
       "layout_policy": "adaptive"
     },
     {
       "index": 82,
       "policy": "translate",
-      "text": "Afterward, they remained in the room for some time.",
+      "text": "and I think he stayed in his room after that.",
       "layout_policy": "adaptive"
     },
     {
@@ -592,7 +592,7 @@
     {
       "index": 86,
       "policy": "translate",
-      "text": "You are a detective, aren't you?",
+      "text": "You're an optimist, aren't you?",
       "layout_policy": "adaptive"
     },
     {
@@ -652,7 +652,7 @@
     {
       "index": 96,
       "policy": "translate",
-      "text": "I hate liars too.",
+      "text": "I hate my current boss too.",
       "layout_policy": "adaptive"
     },
     {
@@ -772,19 +772,19 @@
     {
       "index": 116,
       "policy": "translate",
-      "text": "Now that Braque has been attacked, he must be considered in the search for the culprit.",
+      "text": "Braque is one possibility.",
       "layout_policy": "adaptive"
     },
     {
       "index": 117,
       "policy": "translate",
-      "text": "Yamada alone has reached the Russian Fog... but something does not fit.",
+      "text": "He's the only one openly after the Russian Fog... but...",
       "layout_policy": "adaptive"
     },
     {
       "index": 118,
       "policy": "translate",
-      "text": "We still do not know what the 'patron' means.",
+      "text": "Somehow... it just doesn't click.",
       "layout_policy": "adaptive"
     },
     {
@@ -796,49 +796,49 @@
     {
       "index": 120,
       "policy": "translate",
-      "text": "I cannot believe Braque appreciates art that deeply. He is far too wary.",
+      "text": "I don't think he could devise a plan this elaborate... His methods are far too crude.",
       "layout_policy": "adaptive"
     },
     {
       "index": 121,
       "policy": "translate",
-      "text": "One more thing. The passenger in First-Class Cabin B...",
+      "text": "One more thing. First-Class Cabin B was unoccupied.",
       "layout_policy": "adaptive"
     },
     {
       "index": 122,
       "policy": "translate",
-      "text": "Kirikov Kamorovich. A Russian. He was on the starboard side. Something strange?",
+      "text": "Kirikov Kamorovich. A Russian. He was at Bar Hokusai. Something strange?",
       "layout_policy": "adaptive"
     },
     {
       "index": 123,
       "policy": "translate",
-      "text": "No. Forget you heard that.",
+      "text": "No... So you do work after all. Sorry. I apologize for laughing.",
       "layout_policy": "adaptive"
     },
     {
       "index": 124,
       "policy": "translate",
-      "text": "Enough. You speak too freely about the heart of this case. Kirikov said nothing about the ship's secret. He is an unpleasant man.",
+      "text": "Never mind. I was only watching to make sure you weren't going around hiding evidence of your own crime. Kirikov refuses to say anything about his background. He's a creepy fellow.",
       "layout_policy": "adaptive"
     },
     {
       "index": 125,
       "policy": "translate",
-      "text": "Tch. Now there is nothing to discuss.",
+      "text": "Tch. I wasted that compliment.",
       "layout_policy": "adaptive"
     },
     {
       "index": 126,
       "policy": "translate",
-      "text": "Then leave him alone. Do not press him.",
+      "text": "He was in the bar at the time of the crime. I want to rule him out.",
       "layout_policy": "adaptive"
     },
     {
       "index": 127,
       "policy": "translate",
-      "text": "The Russian Fog... and a Russian passenger...",
+      "text": "Ask the Russian about the Russian Fog.",
       "layout_policy": "adaptive"
     },
     {
@@ -904,7 +904,7 @@
     {
       "index": 138,
       "policy": "translate",
-      "text": "C-C-Captain!",
+      "text": "C-C-Captaaaain! Waaaaah!",
       "layout_policy": "adaptive"
     },
     {
@@ -922,25 +922,25 @@
     {
       "index": 141,
       "policy": "translate",
-      "text": "Navigator! What is it, Locke?",
+      "text": "A bomb! Where is it, Locke?!",
       "layout_policy": "adaptive"
     },
     {
       "index": 142,
       "policy": "translate",
-      "text": "T-this wind and fog... We are listing hard to starboard!",
+      "text": "A-aft section, starboard cargo hold... i-it's sitting right in front of me... ticking, ticking! A r-real bomb!",
       "layout_policy": "adaptive"
     },
     {
       "index": 143,
       "policy": "translate",
-      "text": "Bring her around! Can you correct the list?",
+      "text": "Calm down! Can you carry it out?",
       "layout_policy": "adaptive"
     },
     {
       "index": 144,
       "policy": "translate",
-      "text": "I-I don't know! Help! The rudder may be damaged!",
+      "text": "I-I don't know! Help... My legs have given out! I can't stand!",
       "layout_policy": "adaptive"
     },
     {
@@ -952,7 +952,7 @@
     {
       "index": 146,
       "policy": "translate",
-      "text": "Captain! If she keeps listing, the machinery will be ruined! Correct it before she capsizes!",
+      "text": "No, Captain! If the bomb is Japanese-made, it'll be incredibly complicated. The instant we try to move it... boom!",
       "layout_policy": "adaptive"
     },
     {

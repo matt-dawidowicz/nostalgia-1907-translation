@@ -74,7 +74,15 @@ def _parse_record(data: bytes, offset: int) -> tuple[str, int, int, int, int] | 
     if extent_le != extent_be or size_le != size_be:
         raise IsoError("ISO directory record endian copies disagree")
     name_size = record[32]
-    raw_name = record[33 : 33 + name_size]
+    if name_size == 0:
+        raise IsoError("ISO directory record has an empty file identifier")
+    identifier_end = 33 + name_size
+    padding_size = 1 if name_size % 2 == 0 else 0
+    if identifier_end + padding_size > length:
+        raise IsoError("ISO directory record truncates its file identifier or padding")
+    if padding_size and record[identifier_end] != 0:
+        raise IsoError("ISO directory record has nonzero file-identifier padding")
+    raw_name = record[33:identifier_end]
     if raw_name == b"\0":
         name = "."
     elif raw_name == b"\1":
@@ -84,12 +92,30 @@ def _parse_record(data: bytes, offset: int) -> tuple[str, int, int, int, int] | 
     return name, extent_le, size_le, record[25], length
 
 
+def _validate_extent(
+    extent: int,
+    size: int,
+    iso_size: int,
+    label: str,
+) -> None:
+    """Require one logical extent and its sector allocation to fit the ISO."""
+    start = extent * SECTOR_SIZE
+    logical_end = start + size
+    allocated_size = (size + SECTOR_SIZE - 1) // SECTOR_SIZE * SECTOR_SIZE
+    allocated_end = start + allocated_size
+    if start > iso_size or logical_end > iso_size:
+        raise IsoError(f"{label} logical extent is outside the ISO")
+    if allocated_end > iso_size:
+        raise IsoError(f"{label} sector allocation is outside the ISO")
+
+
 def read_entries(iso_path: Path) -> tuple[IsoEntry, ...]:
     """Walk every ISO directory and return strict record references.
 
     The parser starts at the primary volume descriptor, requires little- and
-    big-endian extent/size copies to agree, bounds every directory, and retains
-    the byte offset of each directory record for fixed-extent patching.
+    big-endian extent/size copies to agree, bounds every directory and ordinary
+    file allocation, and retains each directory-record byte offset for
+    fixed-extent patching.
     """
     iso_size = iso_path.stat().st_size
     if iso_size % SECTOR_SIZE:
@@ -102,6 +128,7 @@ def read_entries(iso_path: Path) -> tuple[IsoEntry, ...]:
         root = _parse_record(pvd, 156)
         if root is None:
             raise IsoError("primary volume descriptor has no root record")
+        _validate_extent(root[1], root[2], iso_size, "root directory")
 
         entries: list[IsoEntry] = []
         visited: set[tuple[int, int]] = set()
@@ -117,8 +144,7 @@ def read_entries(iso_path: Path) -> tuple[IsoEntry, ...]:
             if key in visited:
                 return
             visited.add(key)
-            if extent * SECTOR_SIZE + size > iso_size:
-                raise IsoError(f"directory {prefix or '/'} is outside the ISO")
+            _validate_extent(extent, size, iso_size, f"directory {prefix or '/'}")
             iso.seek(extent * SECTOR_SIZE)
             directory = iso.read(size)
             offset = 0
@@ -135,6 +161,13 @@ def read_entries(iso_path: Path) -> tuple[IsoEntry, ...]:
                 if name in {".", ".."}:
                     continue
                 path = f"{prefix}/{name}" if prefix else name
+                kind = "directory" if flags & 0x02 else "file"
+                _validate_extent(
+                    child_extent,
+                    child_size,
+                    iso_size,
+                    f"{kind} {path}",
+                )
                 entry = IsoEntry(path, child_extent, child_size, flags, record_offset)
                 entries.append(entry)
                 if entry.is_directory:

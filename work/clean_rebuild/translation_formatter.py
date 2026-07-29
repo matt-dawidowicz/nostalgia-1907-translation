@@ -11,18 +11,23 @@ are converted inside ``scn_layout.py``. Preview and compilation share the same
 ``RecordContract``, so a translator sees the real role, visible widths, runtime
 strides, and floating-window row limit before writing.
 
-Batch changes are validated in memory before any chapter JSON is written.
+Batch changes are validated in memory before any chapter JSON is written, then
+committed through same-directory temporary files with prepared rollback copies.
 SCN-classified records become adaptive semantic text; records without proven
-reflow geometry remain explicitly fixed. See
-``docs/TRANSLATION_EDITING.md`` for the contributor workflow.
+reflow geometry remain explicitly fixed. See ``docs/TRANSLATION_EDITING.md``
+for the contributor workflow.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
+import stat
+import tempfile
 from collections import Counter
+from collections.abc import Mapping
 from pathlib import Path
 
 from mes_compiler import _wrap_words, normalize_semantic_text
@@ -44,12 +49,217 @@ DEFAULT_REPORT = (
 RECORD_ID = re.compile(r"^(?P<chapter>[A-Z0-9_]+):(?P<index>[0-9]{3})$")
 
 
+class DuplicateJsonKeyError(ValueError):
+    """Raised when a JSON object repeats a key before object construction."""
+
+
+def _object_without_duplicate_keys(
+    pairs: list[tuple[str, object]],
+) -> dict[str, object]:
+    """Build one JSON object while rejecting every repeated source key."""
+    value: dict[str, object] = {}
+    for key, item in pairs:
+        if key in value:
+            raise DuplicateJsonKeyError(f"duplicate JSON object key: {key!r}")
+        value[key] = item
+    return value
+
+
 def _load(path: Path) -> dict[str, object]:
     """Load one UTF-8 JSON object or reject an incompatible top level."""
-    value = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        value = json.loads(
+            path.read_text(encoding="utf-8"),
+            object_pairs_hook=_object_without_duplicate_keys,
+        )
+    except DuplicateJsonKeyError as error:
+        raise ValueError(f"{path}: {error}") from error
     if not isinstance(value, dict):
         raise ValueError(f"{path}: expected a JSON object")
     return value
+
+
+def _json_source_bytes(source: dict[str, object]) -> bytes:
+    """Serialize one canonical chapter deterministically as UTF-8 JSON."""
+    return (
+        json.dumps(source, ensure_ascii=False, indent=2) + "\n"
+    ).encode("utf-8")
+
+
+def _write_transaction_temp(
+    target: Path,
+    payload: bytes,
+    mode: int,
+    kind: str,
+) -> Path:
+    """Write and fsync one same-directory transaction file.
+
+    Args:
+        target: Canonical file whose directory and basename seed the temp name.
+        payload: Exact bytes to stage.
+        mode: Permission bits copied from the canonical target.
+        kind: Human-readable suffix distinguishing new data from backups.
+
+    Returns:
+        The created temporary path after its contents are durable to the file.
+
+    Raises:
+        OSError: If creation, writing, syncing, or permission preservation fails.
+
+    Side Effects:
+        Creates one hidden temporary file beside ``target``. Any failed write
+        removes its incomplete temporary file before the error escapes.
+    """
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{target.name}.",
+        suffix=f".{kind}",
+        dir=target.parent,
+    )
+    temporary = Path(temporary_name)
+    try:
+        try:
+            stream = os.fdopen(descriptor, "wb")
+        except BaseException:
+            os.close(descriptor)
+            raise
+        with stream:
+            stream.write(payload)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.chmod(temporary, mode)
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        raise
+    return temporary
+
+
+def _sync_directory(path: Path) -> None:
+    """Fsync one directory where the platform supports directory handles."""
+    if os.name == "nt":
+        return
+    flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
+    descriptor = os.open(path, flags)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _cleanup_transaction_files(paths: set[Path]) -> None:
+    """Best-effort remove transaction files that were not consumed by replace."""
+    for path in paths:
+        try:
+            path.unlink(missing_ok=True)
+        except OSError:
+            # Source contents are already committed or rolled back. A stale
+            # hidden temp is safer than reporting a false content failure.
+            pass
+
+
+def _transactional_write_json_sources(
+    pending: Mapping[Path, dict[str, object]],
+) -> None:
+    """Commit canonical JSON files as one all-or-rollback transaction.
+
+    Every output and byte-for-byte backup is written beside its target before
+    the first canonical file is replaced. Individual replacements are atomic.
+    If a later replacement or directory sync fails, already replaced targets
+    are restored from their prepared backups in reverse order.
+
+    Args:
+        pending: Canonical paths mapped to fully validated in-memory objects.
+
+    Raises:
+        OSError: If staging, replacement, syncing, or rollback fails.
+        TypeError: If a pending source cannot be serialized as JSON.
+
+    Side Effects:
+        Replaces every requested canonical file on success. On an ordinary
+        process-visible failure, restores every target whose replacement had
+        completed. This does not claim crash-atomicity across multiple files.
+    """
+    ordered = sorted(pending.items(), key=lambda item: str(item[0]))
+    if not ordered:
+        return
+
+    serialized: dict[Path, bytes] = {}
+    originals: dict[Path, bytes] = {}
+    modes: dict[Path, int] = {}
+    for target, source in ordered:
+        serialized[target] = _json_source_bytes(source)
+        originals[target] = target.read_bytes()
+        modes[target] = stat.S_IMODE(target.stat().st_mode)
+
+    new_files: dict[Path, Path] = {}
+    backups: dict[Path, Path] = {}
+    temporary_paths: set[Path] = set()
+    replaced: list[Path] = []
+    parents = sorted({target.parent for target, _source in ordered}, key=str)
+    try:
+        for target, _source in ordered:
+            staged = _write_transaction_temp(
+                target,
+                serialized[target],
+                modes[target],
+                "new",
+            )
+            new_files[target] = staged
+            temporary_paths.add(staged)
+        for target, _source in ordered:
+            backup = _write_transaction_temp(
+                target,
+                originals[target],
+                modes[target],
+                "backup",
+            )
+            backups[target] = backup
+            temporary_paths.add(backup)
+
+        for target, _source in ordered:
+            os.replace(new_files[target], target)
+            temporary_paths.discard(new_files[target])
+            replaced.append(target)
+        for parent in parents:
+            _sync_directory(parent)
+    except BaseException as error:
+        rollback_errors: list[str] = []
+        retained_backups: set[Path] = set()
+        for target in reversed(replaced):
+            backup = backups[target]
+            try:
+                os.replace(backup, target)
+                temporary_paths.discard(backup)
+            except OSError as rollback_error:
+                retained_backups.add(backup)
+                rollback_errors.append(f"{target}: {rollback_error}")
+        if not rollback_errors:
+            for parent in parents:
+                try:
+                    _sync_directory(parent)
+                except OSError as rollback_sync_error:
+                    rollback_errors.append(
+                        f"cannot sync rollback directory {parent}: "
+                        f"{rollback_sync_error}"
+                    )
+        if rollback_errors:
+            # A backup that could not be restored is the only byte-for-byte
+            # recovery copy of that target. Preserve it for manual recovery
+            # while removing unrelated staged files and unused backups.
+            _cleanup_transaction_files(temporary_paths - retained_backups)
+            retained = sorted(
+                str(path) for path in retained_backups if path.exists()
+            )
+            recovery = (
+                f"; recovery backups retained at {retained}" if retained else ""
+            )
+            raise OSError(
+                "canonical JSON transaction failed and rollback was incomplete: "
+                + "; ".join(rollback_errors)
+                + recovery
+            ) from error
+        _cleanup_transaction_files(temporary_paths)
+        raise
+    _cleanup_transaction_files(temporary_paths)
 
 
 def _chapter_sources() -> tuple[dict[str, object], dict[str, tuple[Path, dict[str, object]]]]:
@@ -331,17 +541,28 @@ def _parse_record_id(value: str) -> tuple[str, int]:
 def _changes(path: Path) -> dict[str, str]:
     """Load an ID-to-English change set in object or entry-list form.
 
-    Duplicate list entries are rejected instead of allowing the last value to
-    win silently.
+    Duplicate object keys are rejected by ``_load`` before normal JSON object
+    construction can discard an earlier value. Duplicate list entries are also
+    rejected instead of allowing the last value to win silently.
     """
     payload = _load(path)
     raw = payload.get("changes", payload)
     if isinstance(raw, dict):
         changes = raw
     elif isinstance(raw, list):
-        changes = {item["id"]: item["text"] for item in raw if isinstance(item, dict)}
-        if len(changes) != len(raw):
-            raise ValueError("changes list contains an invalid or duplicate entry")
+        changes = {}
+        for position, item in enumerate(raw):
+            if not isinstance(item, dict):
+                raise ValueError(f"changes list entry {position} is not an object")
+            record_id = item.get("id")
+            text = item.get("text")
+            if not isinstance(record_id, str) or not isinstance(text, str):
+                raise ValueError(
+                    f"changes list entry {position} requires string id and text"
+                )
+            if record_id in changes:
+                raise ValueError(f"changes list repeats stable ID {record_id!r}")
+            changes[record_id] = text
     else:
         raise ValueError("changes must be an ID-to-text object or an entry list")
     if not all(isinstance(key, str) and isinstance(value, str) for key, value in changes.items()):
@@ -420,11 +641,7 @@ def apply_changes(path: Path, retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[s
                 "preview_rows": audited["preview_rows"],
             }
         )
-    for source_path, source in pending.items():
-        source_path.write_text(
-            json.dumps(source, ensure_ascii=False, indent=2) + "\n",
-            encoding="utf-8",
-        )
+    _transactional_write_json_sources(pending)
     return {"status": "PASS", "changed_record_count": len(report), "changes": report}
 
 
@@ -498,11 +715,7 @@ def migrate(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
             "adaptive migration aborted before writing; "
             + "; ".join(blocking_failures)
         )
-    for path, source in pending:
-        path.write_text(
-            json.dumps(source, ensure_ascii=False, indent=2) + "\n",
-            encoding="utf-8",
-        )
+    _transactional_write_json_sources(dict(pending))
     return {
         "status": "PASS",
         "changed_chapters": changed_chapters,

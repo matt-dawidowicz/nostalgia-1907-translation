@@ -93,13 +93,13 @@
     {
       "index": 6,
       "policy": "translate",
-      "text": "PGG",
+      "text": "OFF",
       "layout_policy": "adaptive"
     },
     {
       "index": 7,
       "policy": "translate",
-      "text": "PO",
+      "text": "ON",
       "layout_policy": "adaptive"
     },
     {

@@ -139,8 +139,9 @@ The first pointer is also the end of the pointer table:
 record_count = (first_pointer - 2) / 2
 ```
 
-Pointers are big-endian, monotonic, and bounded before `split_offset`. Adjacent
-pointers define each record; the final record ends at `split_offset`.
+Pointers are big-endian, strictly increasing, and bounded before
+`split_offset`. Adjacent pointers define a nonempty record; the final record
+ends at `split_offset`. Every record must end in the `0x00` terminator.
 
 ### Record codes
 
@@ -151,9 +152,10 @@ Values `0xF0` through `0xFF` begin a two-byte dynamic-glyph reference:
 index = (prefix - 0xF0) * 255 + low - 1
 ```
 
-The low byte may not be zero. Generated English records end in `0x00`.
-Preserved retail records remain byte-authoritative except that their dynamic
-references may be remapped when unused retail glyphs are removed.
+The low byte may not be zero. Generated English and preserved retail records
+must end in `0x00`. Preserved retail records otherwise remain
+byte-authoritative except that their dynamic references may be remapped when
+unused retail glyphs are removed.
 
 The runtime permits at most 1,020 dynamic glyphs. All MES pointers must fit
 16-bit offsets. PART3C also has a proven hard file boundary at `0x3FFF`.
@@ -173,11 +175,14 @@ The MES compiler deduplicates identical bitmaps into the chapter's dynamic
 glyph bank. This is why text capacity depends on unique rendered cells as well
 as encoded record length.
 
-PART3C uses a frozen set of reviewed fixed-font spill cells to remain inside its
-existing hard boundary. Regression checks prove those codes are unused by
-preserved PART3C records, do not leak into other chapters, and are the only
-fixed-font bytes that change. This compatibility mechanism is not a template
-for screenshot-specific formatting patches.
+The compiler uses one frozen, shared dictionary of reviewed English cells in
+otherwise unused fixed-font slots. Every chapter may reference that dictionary;
+it is a storage encoding, not a scene-specific formatting rule. Regression
+checks prove the dictionary is unused by all byte-preserved retail records,
+changes only its declared fixed-font cells, and produces the same bitmap
+sequences as an all-dynamic encoding. This avoids using a visible leading blank
+to alter pair phase while retaining PART3C's hard-boundary safety margin.
+
 
 ## SCN renderer references
 

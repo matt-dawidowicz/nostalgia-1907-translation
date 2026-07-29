@@ -65,7 +65,7 @@
     "\\bRudy\\b", "\\bLutie\\b", "\\bOld Carl\\b", "\\bFilitz\\b",
     "\\bKiriko\\b", "\\bIryu\\b", "\\bRumeranna\\b",
     "\\bGranzelius\\b", "\\bKamolovich\\b",
-    "British Executive Action", "Captain Room", "\\bNippers\\b", "\\bnippers\\b"
+    "British Executive Action", "Captain Room", "Russia's Wing", "\\bNippers\\b", "\\bnippers\\b"
   ],
   "known_invalid_exact_mappings": [
     {"japanese":"船倉","invalid_english":"Bosun"},

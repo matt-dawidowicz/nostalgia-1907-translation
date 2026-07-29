@@ -46,15 +46,16 @@ from scn_layout import (
 DYNAMIC_GLYPHS_PER_PREFIX = 0xFF
 RUNTIME_DYNAMIC_GLYPH_LIMIT = 1020
 PART3C_HARD_LIMIT = 0x3FFF
-PART3C_ADDITIONAL_FIXED_UNITS = (
-    # Whole-script adaptive wrapping adds required runtime padding.  These six
-    # additional one-byte spill slots are unused by every canonical preserved
-    # MES record and save at least 179 record bytes before tail reduction.
+FIXED_ENGLISH_UNITS = (
+    # These cells form a shared English dictionary, not a chapter-specific
+    # workaround.  Each one is a display-identical 12x12 cell installed in an
+    # otherwise unused fixed-font slot.  One-byte references let every chapter
+    # retain a left-aligned pair phase without paying a two-byte dynamic
+    # reference for common cells.  The chosen codes are checked against every
+    # preserved retail record by the integration suite before a build is made.
     (0x02, "literal", " c"), (0x03, "literal", " s"),
     (0x04, "literal", " o"), (0x05, "literal", "on"),
     (0x06, "literal", "li"), (0x08, "literal", ","),
-)
-PART3C_FIXED_UNITS = PART3C_ADDITIONAL_FIXED_UNITS + (
     (0x84, "literal", "nd"), (0x47, "literal", "ss"),
     (0x23, "literal", "in"), (0x48, "literal", "  "),
     (0x40, "literal", " y"), (0x1F, "literal", "ou"),
@@ -78,6 +79,36 @@ PART3C_FIXED_UNITS = PART3C_ADDITIONAL_FIXED_UNITS + (
     (0x4F, "literal", " m"), (0x42, "literal", "y "),
     (0xBC, "literal", "ve"), (0x39, "literal", "re"),
     (0x27, "literal", "te"), (0x3D, "literal", "o "),
+    (0x09, "literal", "g"), (0x0B, "literal", ".."),
+    (0x0C, "literal", "hi"), (0x0E, "literal", "le"),
+    (0x0F, "literal", "ha"), (0x11, "literal", "to"),
+    (0x12, "literal", "co"), (0x13, "literal", "l"),
+    (0x14, "literal", "be"), (0x15, "literal", "or"),
+    (0x16, "literal", "de"), (0x17, "literal", "ot"),
+    (0x18, "literal", "Yo"), (0x1C, "literal", "ca"),
+    (0x1D, "literal", "si"), (0x1E, "literal", "ed"),
+    (0x20, "literal", " n"), (0x21, "literal", "Ru"),
+    (0x22, "literal", "ia"), (0x24, "literal", "as"),
+    (0x26, "literal", "es"), (0x28, "literal", " b"),
+    (0x29, "literal", "a"), (0x2A, "literal", "se"),
+    (0x2B, "literal", "ow"), (0x2C, "literal", "e."),
+    (0x2F, "literal", "el"), (0x30, "literal", "sh"),
+    (0x31, "literal", "fe"), (0x32, "literal", "nt"),
+    (0x34, "literal", "ti"), (0x38, "literal", "ct"),
+    (0x3C, "literal", "ly"), (0x49, "literal", "al"),
+    (0x4C, "literal", "ea"), (0x4D, "literal", " e"),
+    (0x52, "literal", "io"), (0x53, "literal", "ry"),
+    (0x54, "literal", "Wh"), (0x55, "literal", "wh"),
+    (0x56, "literal", "rs"), (0x57, "literal", " f"),
+    (0x58, "literal", "Fo"), (0x59, "literal", " l"),
+    (0x5A, "literal", "wa"), (0x5B, "literal", "do"),
+    (0x5C, "literal", "il"), (0x5D, "literal", "tr"),
+    (0x5E, "literal", " k"), (0x5F, "literal", "w"),
+    (0x60, "literal", "ur"), (0x61, "literal", "ne"),
+    (0x62, "literal", "us"), (0x63, "literal", "pe"),
+    (0x64, "literal", " d"), (0x65, "literal", "ab"),
+    (0x66, "literal", "ce"), (0x67, "literal", "ke"),
+    (0x68, "literal", "ai"), (0x69, "literal", "am"),
 )
 
 
@@ -112,7 +143,14 @@ Cell = tuple[str, str]
 
 @dataclass
 class RowPlan:
-    """One runtime row with an optional bitmap-equivalent half-cell phase."""
+    """One left-aligned runtime row.
+
+    ``alternate`` remains part of the compact-row optimizer's data contract,
+    but normal compilation deliberately leaves it unavailable. A former
+    shifted packing alternative placed a literal blank before the first source
+    character. It improved glyph reuse but visibly indented selected rows, so
+    display position takes priority over that storage optimization.
+    """
 
     record: int
     prefix: tuple[Cell, ...]
@@ -228,21 +266,16 @@ def _compact_cluster(unit: str) -> bool:
     )
 
 
-def _pack_row(line: str, shifted: bool) -> tuple[int, tuple[Cell, ...]] | None:
-    """Pack one row, maximizing safe punctuation clusters at fixed cell count."""
+def _pack_row(line: str) -> tuple[int, tuple[Cell, ...]] | None:
+    """Pack one left-aligned row with safe punctuation clusters.
+
+    The first source character must occupy the first visible character slot.
+    Punctuation compression may reduce storage only within that fixed visual
+    placement; it must never introduce a leading blank to change pair phase.
+    """
     cell_count = (len(line) + 1) // 2
     packed = line
-    prefix: tuple[Cell, ...] = ()
     start = 0
-    if shifted:
-        if not packed or packed.startswith(" "):
-            return None
-        if len(packed) % 2 == 0 and packed.endswith(" "):
-            packed = packed[:-1]
-        if len(packed) % 2 == 0:
-            return None
-        prefix = (("literal", f" {packed[0]}"),)
-        start = 1
 
     cache: dict[int, tuple[int, tuple[Cell, ...]]] = {}
 
@@ -269,7 +302,7 @@ def _pack_row(line: str, shifted: bool) -> tuple[int, tuple[Cell, ...]] | None:
         return result
 
     punctuation_count, suffix = best(start)
-    units = prefix + suffix
+    units = suffix
     if len(units) > cell_count:
         return None
     units += (("literal", "  "),) * (cell_count - len(units))
@@ -277,22 +310,15 @@ def _pack_row(line: str, shifted: bool) -> tuple[int, tuple[Cell, ...]] | None:
 
 
 def _row_plan(record: int, line: str, prefix: tuple[Cell, ...] = ()) -> RowPlan:
-    """Build the best normal and shifted options for one runtime row."""
-    candidates = [
-        (packed[0], packed[1], shifted)
-        for shifted in (False, True)
-        if (packed := _pack_row(line, shifted)) is not None
-    ]
-    if not candidates:
+    """Build one position-preserving packed row for the runtime renderer."""
+    packed = _pack_row(line)
+    if packed is None:
         return RowPlan(record, prefix, (), None)
-    best_score = max(item[0] for item in candidates)
-    candidates = [item for item in candidates if item[0] == best_score]
-    candidates.sort(key=lambda item: item[2])
     return RowPlan(
         record=record,
         prefix=prefix,
-        primary=candidates[0][1],
-        alternate=candidates[1][1] if len(candidates) > 1 else None,
+        primary=packed[1],
+        alternate=None,
     )
 
 
@@ -541,43 +567,29 @@ def compile_mes(
             row_plans.append(plan)
             rows_by_record[index].append(plan)
     fixed_by_bitmap: dict[bytes, int] = {}
-    fixed_font_patches: tuple[tuple[int, str], ...] = ()
-    if chapter == "PART3C":
-        patches: list[tuple[int, str]] = []
-        preserved_fixed_codes = {
-            value
-            for record_index in preserved
-            for value in retail.records[record_index]
-            if 1 <= value < DYNAMIC_PREFIX_START
-        }
-        for code, style, unit in PART3C_FIXED_UNITS:
-            if code in preserved_fixed_codes:
-                raise CompileError(
-                    f"PART3C fixed spill code 0x{code:02X} is used by a "
-                    "byte-preserved retail record"
-                )
-            bitmap = stored_cell(style, unit)
-            previous = fixed_by_bitmap.get(bitmap)
-            if previous is not None and previous != code:
-                raise CompileError(
-                    f"PART3C fixed spill aliases codes 0x{previous:02X} and 0x{code:02X}"
-                )
-            fixed_by_bitmap[bitmap] = code
-            patches.append((code, bitmap.hex().upper()))
-        fixed_font_patches = tuple(patches)
-    phase_fixed_by_bitmap = fixed_by_bitmap
-    if chapter == "PART3C":
-        # The additional spill slots must compact bytes without changing the
-        # already-tested half-cell phase of any rendered row.
-        additional_codes = {
-            code for code, _style, _unit in PART3C_ADDITIONAL_FIXED_UNITS
-        }
-        phase_fixed_by_bitmap = {
-            bitmap: code
-            for bitmap, code in fixed_by_bitmap.items()
-            if code not in additional_codes
-        }
-    _optimize_phases(row_plans, glyphs, phase_fixed_by_bitmap)
+    patches: list[tuple[int, str]] = []
+    preserved_fixed_codes = {
+        value
+        for record_index in preserved
+        for value in retail.records[record_index]
+        if 1 <= value < DYNAMIC_PREFIX_START
+    }
+    for code, style, unit in FIXED_ENGLISH_UNITS:
+        if code in preserved_fixed_codes:
+            raise CompileError(
+                f"{chapter}: fixed English code 0x{code:02X} is used by a "
+                "byte-preserved retail record"
+            )
+        bitmap = stored_cell(style, unit)
+        previous = fixed_by_bitmap.get(bitmap)
+        if previous is not None and previous != code:
+            raise CompileError(
+                f"fixed English dictionary aliases codes 0x{previous:02X} and 0x{code:02X}"
+            )
+        fixed_by_bitmap[bitmap] = code
+        patches.append((code, bitmap.hex().upper()))
+    fixed_font_patches = tuple(patches)
+    _optimize_phases(row_plans, glyphs, fixed_by_bitmap)
 
     generated_frequency: Counter[bytes] = Counter(
         stored_cell(*cell)

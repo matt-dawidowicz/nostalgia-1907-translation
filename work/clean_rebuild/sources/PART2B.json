@@ -361,7 +361,7 @@
     {
       "index": 50,
       "policy": "translate",
-      "text": "Eeeek!",
+      "text": "Eeeek! Wonderful!",
       "layout_policy": "adaptive"
     },
     {
@@ -445,7 +445,7 @@
     {
       "index": 64,
       "policy": "translate",
-      "text": "I have plenty to ask you!",
+      "text": "There are so many things I want your help with!",
       "layout_policy": "adaptive"
     },
     {
@@ -541,13 +541,13 @@
     {
       "index": 80,
       "policy": "translate",
-      "text": "Outside the Chief Engineer's room.",
+      "text": "At the time of the explosion,",
       "layout_policy": "adaptive"
     },
     {
       "index": 81,
       "policy": "translate",
-      "text": "No one could have come through here. Locke can confirm it. After the explosion damaged the machinery, I kept watch here. No one passed... Could the culprit really have done this alone?",
+      "text": "it was impossible to pass through here. The culprit knew that better than anyone. After the flames died down and the blast of heat passed, I was here clearing away the bodies... Nobody came through... No human could do this... The culprit is a demon.",
       "layout_policy": "adaptive"
     },
     {

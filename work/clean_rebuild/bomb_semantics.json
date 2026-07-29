@@ -43,7 +43,7 @@
     "PART4B:172":{"japanese":"「震管の下の青。切って」","literal":"Cut the blue wire below the detonator.","corrected_english":"Cut the blue wire below the detonator."},
     "PART4B:173":{"japanese":"「バッテリーの下、赤を切る」","literal":"Cut the red wire below the battery.","corrected_english":"Cut the red wire below the battery."},
     "PART4B:195":{"japanese":"「下、青を切る」","literal":"Cut the lower blue wire.","corrected_english":"Cut lower blue wire."},
-    "PART4B:216":{"japanese":"「あるね」","literal":"There is.","corrected_english":"There is."},
+    "PART4B:216":{"japanese":"「あるね」","literal":"There is.","corrected_english":"Yes."},
     "PART4B:221":{"japanese":"「開けるぞ、目をつむるな」","literal":"Open it. Do not close your eyes.","corrected_english":"Open it. Keep your eyes open."},
     "PART4B:235":{"japanese":"「トラップなら、コードは切れない。切ったら、ドカーンだ」","literal":"If it is a trap, the wire cannot be cut. If cut, boom.","required_english":["\\b(?:cannot|can't)\\b.*\\bcut\\b","\\bboom\\b"],"branch_or_consequence":"Cutting a trap wire explodes the bomb."},
     "PART4B:245":{"japanese":"「・・・はやい」","literal":"...Fast/early.","corrected_english":"...That was fast.","review_required":true},

@@ -60,7 +60,7 @@
     {
       "index": 4,
       "policy": "translate",
-      "text": "A salesman.",
+      "text": "Just an ordinary salesman.",
       "layout_policy": "adaptive"
     },
     {
@@ -90,7 +90,7 @@
     {
       "index": 9,
       "policy": "translate",
-      "text": "Ship is ours, fools!",
+      "text": "This passenger ship has just been hijacked... No way.",
       "layout_policy": "adaptive"
     },
     {
@@ -168,7 +168,7 @@
     {
       "index": 22,
       "policy": "translate",
-      "text": "Paul! Starboard 2.5!",
+      "text": "Mr. Paul! Two and a half spokes to starboard!",
       "layout_policy": "adaptive"
     },
     {
@@ -180,13 +180,13 @@
     {
       "index": 24,
       "policy": "translate",
-      "text": "Stone! Check engine!",
+      "text": "Mr. Stone! Check the engine room's condition!",
       "layout_policy": "adaptive"
     },
     {
       "index": 25,
       "policy": "translate",
-      "text": "Fred! Mayday!",
+      "text": "Fred! Don't just stand there like an idiot! Send a Mayday!",
       "layout_policy": "adaptive"
     },
     {
