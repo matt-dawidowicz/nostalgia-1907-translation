@@ -91,6 +91,12 @@ python -m unittest discover -s tests -v
 python work/audio_localization/test_audio_localization.py
 ```
 
+`work/clean_rebuild/test_script_layout.py` is retail-backed integration
+coverage. In a media-free checkout it reports one explicit skipped prerequisite
+with the missing prepared-fixture inventory instead of emitting layout test
+errors. `python nostalgia1907.py validate` still requires the complete prepared
+retail reference and remains the release gate.
+
 Run the retail-backed validation gate:
 
 ```powershell
@@ -171,6 +177,13 @@ Keep boundaries narrow:
 - deterministic order is explicit whenever sets, mappings, files, or glyphs
   become serialized output;
 - expected operator mistakes raise concise domain errors, not partial output.
+
+Multi-file canonical edits and layout migration use same-directory staged files
+and prepared backups. A process-visible failure must restore every target that
+was already replaced or raise an explicit incomplete-rollback error while
+retaining the affected recovery backup. Direct low-level rebuild calls validate
+their artifact basename again rather than
+trusting the higher-level CLI.
 
 All maintained Python follows the
 [Python documentation standard](DOCSTRING_STANDARD.md). Every module, class,

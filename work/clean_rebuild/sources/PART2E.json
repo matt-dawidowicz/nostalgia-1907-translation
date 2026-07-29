@@ -77,7 +77,7 @@
       "86": "Cut the blue wire.",
       "87": "Cut the red wire.",
       "93": "Open the left box.",
-      "95": "Bypass this wire.",
+      "95": "That wire is in the way.",
       "112": "Cut the upper red wire.",
       "113": "Cut the red wire below the battery.",
       "114": "Cut the blue wire below the platform.",
@@ -358,7 +358,7 @@
     {
       "index": 38,
       "policy": "translate",
-      "text": "How should I know? Maybe you have a split personality, like Jekyll and Hyde!",
+      "text": "How should I know? Maybe you have a split personality, like Jekyll and Hyde. Without realizing it, another you may be committing this whole series of crimes... You're a murderer... Can you deny it?",
       "layout_policy": "adaptive"
     },
     {
@@ -676,13 +676,13 @@
     {
       "index": 91,
       "policy": "translate",
-      "text": "Her pulse just jumped. I have wounded the lady.",
+      "text": "I took off her chastity belt. She's defenseless.",
       "layout_policy": "adaptive"
     },
     {
       "index": 92,
       "policy": "translate",
-      "text": "You have a lovely heart too, Betty.",
+      "text": "Betty, you look beautiful tonight too.",
       "layout_policy": "adaptive"
     },
     {
@@ -700,7 +700,7 @@
     {
       "index": 95,
       "policy": "translate",
-      "text": "Bypass this wire.",
+      "text": "That wire is in the way.",
       "layout_policy": "adaptive"
     },
     {
@@ -718,19 +718,19 @@
     {
       "index": 98,
       "policy": "translate",
-      "text": "The upper box is open. A little dancer inside is swaying back and forth.",
+      "text": "The right box is open... What is this? A dancing girl... swaying... a dancer of death. Triggered by the ship's motion? It's a pendulum detonator!",
       "layout_policy": "adaptive"
     },
     {
       "index": 99,
       "policy": "translate",
-      "text": "She keeps excess current from reaching the detonator.",
+      "text": "It's there to keep anyone from removing the bomb.",
       "layout_policy": "adaptive"
     },
     {
       "index": 100,
       "policy": "translate",
-      "text": "No joke now. One slip and Betty explodes. What a woman...",
+      "text": "This is no joke! With that swing, even a little rough sea will set it off! What a woman. Tip her over and she slaps you!",
       "layout_policy": "adaptive"
     },
     {
@@ -742,7 +742,7 @@
     {
       "index": 102,
       "policy": "translate",
-      "text": "The red wire runs to the lower bar. The blue wire passes through the detonator to the dancer.",
+      "text": "The red wire runs to the outer-frame bar. The blue wire passes through the detonator and is probably connected to the dancer...",
       "layout_policy": "adaptive"
     },
     {
@@ -760,7 +760,7 @@
     {
       "index": 105,
       "policy": "translate",
-      "text": "What is this contact for...?",
+      "text": "This platform mechanism is tricky...",
       "layout_policy": "adaptive"
     },
     {
@@ -790,7 +790,7 @@
     {
       "index": 110,
       "policy": "translate",
-      "text": "A screw pins the dancer's foot to the floor. Loosen it.",
+      "text": "There's a screw securing the floor beneath the dancer's feet... Let's take a look...",
       "layout_policy": "adaptive"
     },
     {
@@ -820,37 +820,37 @@
     {
       "index": 115,
       "policy": "translate",
-      "text": "A trap! The circuit was live from the start. Cutting that wire disturbed the floor beneath it.",
+      "text": "Damn! What a trap! The circuit was connected from the start! If we'd cut the wire... boom!",
       "layout_policy": "adaptive"
     },
     {
       "index": 116,
       "policy": "translate",
-      "text": "Charlie, what happened? Was the circuit built that way?",
+      "text": "...Charlie, about the wages I still owe you...",
       "layout_policy": "adaptive"
     },
     {
       "index": 117,
       "policy": "translate",
-      "text": "Never mind. There is another panel behind it. Let us keep going, Betty.",
+      "text": "Forget that! There seems to be another door farther in... Let us keep going, Betty...",
       "layout_policy": "adaptive"
     },
     {
       "index": 118,
       "policy": "translate",
-      "text": "You are a wicked girl, Betty. Do not make me shake.",
+      "text": "Betty, you're a wicked woman... Come to think of it, it was the same then. Do you remember? That rainy night...",
       "layout_policy": "adaptive"
     },
     {
       "index": 119,
       "policy": "translate",
-      "text": "One more blue screw... Easy now. Where is my driver?",
+      "text": "I was still a greenhorn mechanic then... It may have been a joke to you, but... that night too, I was holding a screwdriver...",
       "layout_policy": "adaptive"
     },
     {
       "index": 120,
       "policy": "translate",
-      "text": "Another little trick. Perhaps the adhesive will hold it.",
+      "text": "The luxury liner I dreamed of... She wanted to go to Paris on this ship too... Look inside the engine room! It's a hell of coal dust, oil, and steam... and even now I'm standing at the gates of hell... with wire cutters in one hand.",
       "layout_policy": "adaptive"
     },
     {
@@ -862,7 +862,7 @@
     {
       "index": 122,
       "policy": "translate",
-      "text": "In the way. Cut it.",
+      "text": "It's in the way, so I'm cutting it.",
       "layout_policy": "adaptive"
     },
     {
@@ -892,7 +892,7 @@
     {
       "index": 127,
       "policy": "translate",
-      "text": "What is in the tool case, Charlie?",
+      "text": "Charlie, did something happen with your girl ashore?",
       "layout_policy": "adaptive"
     },
     {
@@ -916,7 +916,7 @@
     {
       "index": 131,
       "policy": "translate",
-      "text": "The wire is secure. Hold on, Charlie Muffin. Nothing can stop you now.",
+      "text": "No wire needed. Come on! Pull yourself together, Charlie Muffin! I'm not dying in a place like this!",
       "layout_policy": "adaptive"
     },
     {
@@ -946,7 +946,7 @@
     {
       "index": 136,
       "policy": "translate",
-      "text": "The detonator is isolated, just as I thought. There is another panel behind it.",
+      "text": "The platform is removed. Just as I thought, there is another door farther in.",
       "layout_policy": "adaptive"
     },
     {
@@ -1000,13 +1000,13 @@
     {
       "index": 145,
       "policy": "translate",
-      "text": "The left box has another defense circuit. It is warming up... Hot.",
+      "text": "I see. The left box's defense circuit. I'm beginning to see your tricks... Easy!",
       "layout_policy": "adaptive"
     },
     {
       "index": 146,
       "policy": "translate",
-      "text": "You can do it, Charlie. Find where the circuit turns back.",
+      "text": "Charlie, you can do it! You're the best sailor!",
       "layout_policy": "adaptive"
     },
     {
@@ -1060,7 +1060,7 @@
     {
       "index": 155,
       "policy": "translate",
-      "text": "Both traps in the left box should be isolated now. Right?",
+      "text": "That should have disarmed the lid trap on the left box, right?",
       "layout_policy": "adaptive"
     },
     {
@@ -1072,7 +1072,7 @@
     {
       "index": 157,
       "policy": "translate",
-      "text": "Do not make me nervous.",
+      "text": "Don't chicken out. That's not like you.",
       "layout_policy": "adaptive"
     },
     {
@@ -1090,31 +1090,31 @@
     {
       "index": 160,
       "policy": "translate",
-      "text": "Naughty Betty... Bend at the waist. No more wires in sight.",
+      "text": "Betty, men are weak... In the end, I'm captivated by your arrogance... The wire won't do!",
       "layout_policy": "adaptive"
     },
     {
       "index": 161,
       "policy": "translate",
-      "text": "Loosen the rear screw.",
+      "text": "Now, show me your secret garden...",
       "layout_policy": "adaptive"
     },
     {
       "index": 162,
       "policy": "translate",
-      "text": "The second dancer's foot is free.",
+      "text": "There. A second dancing girl was hiding...",
       "layout_policy": "adaptive"
     },
     {
       "index": 163,
       "policy": "translate",
-      "text": "So this one is a trap too.",
+      "text": "...Might that be a trap too?",
       "layout_policy": "adaptive"
     },
     {
       "index": 164,
       "policy": "translate",
-      "text": "I do not know. Nothing seems to have changed.",
+      "text": "I don't know. I can't say...",
       "layout_policy": "adaptive"
     },
     {
@@ -1126,7 +1126,7 @@
     {
       "index": 166,
       "policy": "translate",
-      "text": "If this is a trap, I cannot cut its wire... If it is red, I cut.",
+      "text": "If this is a trap, we can't cut the wire... If it's real, cut it.",
       "layout_policy": "adaptive"
     },
     {
@@ -1162,13 +1162,13 @@
     {
       "index": 172,
       "policy": "translate",
-      "text": "The nut will not turn. An external vibration circuit... You are a cold woman, Betty.",
+      "text": "Nothing happened... Whew, this one was a real pendulum detonator... You're nasty, Betty... Remove it all.",
       "layout_policy": "adaptive"
     },
     {
       "index": 173,
       "policy": "translate",
-      "text": "Charlie, what do we do?",
+      "text": "...Charlie, may I ask you something?",
       "layout_policy": "adaptive"
     },
     {
@@ -1180,13 +1180,13 @@
     {
       "index": 175,
       "policy": "translate",
-      "text": "Charlie Muffin is in quite a muffin now.",
+      "text": "The \"Muffin\" in Charlie Muffin...",
       "layout_policy": "adaptive"
     },
     {
       "index": 176,
       "policy": "translate",
-      "text": "That ticking is a German clock. What do we do?",
+      "text": "It means the hard-baked bread you can find anywhere. Why?",
       "layout_policy": "adaptive"
     },
     {
@@ -1204,7 +1204,7 @@
     {
       "index": 179,
       "policy": "translate",
-      "text": "The edge of the floor bothers me.",
+      "text": "The floor structure bothers me...",
       "layout_policy": "adaptive"
     },
     {
@@ -1258,13 +1258,13 @@
     {
       "index": 188,
       "policy": "translate",
-      "text": "The bomb explodes when the 2,000-second counter reaches zero.",
+      "text": "An explosive that detonates while spewing heat of 2,000 degrees...",
       "layout_policy": "adaptive"
     },
     {
       "index": 189,
       "policy": "translate",
-      "text": "Do not cut that. You are doing well, Charlie, but that is the wrong wire.",
+      "text": "Don't worry. Charlie, you're doing quite well! But it's not time for the wire yet...",
       "layout_policy": "adaptive"
     },
     {
@@ -1282,19 +1282,19 @@
     {
       "index": 192,
       "policy": "translate",
-      "text": "The timer! The countdown has started... Tick, tick, tick...",
+      "text": "...A timer. It's counting down to the blast... Tick, tick, tick... Hey, stop that ticking! A time limit?! Don't screw with me! Damn it! I hate clocks!",
       "layout_policy": "adaptive"
     },
     {
       "index": 193,
       "policy": "translate",
-      "text": "Stop the timer or sever the detonator. Do it and everyone lives!",
+      "text": "Stop the timer or sever its connection to the detonator and we'll all be saved! C-c-calm down!",
       "layout_policy": "adaptive"
     },
     {
       "index": 194,
       "policy": "translate",
-      "text": "I am alive!",
+      "text": "I'm calm!",
       "layout_policy": "adaptive"
     },
     {
@@ -1312,7 +1312,7 @@
     {
       "index": 197,
       "policy": "translate",
-      "text": "The wire will turn red when Charlie is dead. This is no joke.",
+      "text": "I'm going ashore to become a teacher! I don't give a damn about this ship!",
       "layout_policy": "adaptive"
     },
     {
@@ -1348,7 +1348,7 @@
     {
       "index": 203,
       "policy": "translate",
-      "text": "White is neutral. Red and blue run to opposite sides of the circuit.",
+      "text": "Don't cut white! It's the neutral in a three-phase circuit! It's connected to both red and blue!",
       "layout_policy": "adaptive"
     },
     {
@@ -1372,7 +1372,7 @@
     {
       "index": 207,
       "policy": "translate",
-      "text": "Think, Charlie. What did the lower box teach you?",
+      "text": "Charlie, Charlie, Charlie! Enough! Never mind! Come back up! Get out! Do it! I can't let you take such a reckless gamble! That's an order! Withdraw! Charlie!",
       "layout_policy": "adaptive"
     },
     {
@@ -1384,7 +1384,7 @@
     {
       "index": 209,
       "policy": "translate",
-      "text": "Charlie! You cannot bluff this one. Follow the direction of the circuit.",
+      "text": "Charlie! I mean it! I'm not lying! This time I won't tolerate your pointless defiance! Run, Charlie!",
       "layout_policy": "adaptive"
     },
     {

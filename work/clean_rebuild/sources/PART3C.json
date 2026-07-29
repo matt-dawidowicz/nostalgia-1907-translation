@@ -181,7 +181,7 @@
       "91": "Then stop living that ridiculous life.",
       "92": "Heh... I wish I could. Talking to you is strange. Somehow, I can relax.",
       "93": "Ilyu is not trying to escape the Empire. She is fleeing something more abstract...",
-      "94": "Ask him about Kirikov. Ask what Russia's privileged classes do with their lives.",
+      "94": "Ask him about Kirikov. Remind him how Russia's privileged class behaves and he will confess. He thinks every country is the same, but now he is on the receiving end.",
       "95": "Defection openly betrays the Empire. The Tsar will be humiliated. Reveal yourself publicly before his assassins silence you.",
       "96": "...Shut up...",
       "97": "Well, Kirikov. How does it feel to make the greatest gamble of your life? Your family, or your future?",
@@ -810,7 +810,7 @@
     {
       "index": 94,
       "policy": "translate",
-      "text": "Ask him about Kirikov. Ask what Russia's privileged classes do with their lives.",
+      "text": "Ask him about Kirikov. Remind him how Russia's privileged class behaves and he will confess. He thinks every country is the same, but now he is on the receiving end.",
       "layout_policy": "adaptive"
     },
     {

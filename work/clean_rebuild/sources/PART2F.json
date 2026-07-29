@@ -538,7 +538,7 @@
     {
       "index": 74,
       "policy": "translate",
-      "text": "The Russian Fog is a person: an experienced soldier serving the Tsar directly, feared even by Russian nobles and charged with watching them.",
+      "text": "The Russian Fog is a person... probably a soldier with considerable combat experience, directly under the Russian Emperor... hostile to the aristocracy... no, tasked with monitoring the aristocracy.",
       "layout_policy": "adaptive"
     },
     {
@@ -550,7 +550,7 @@
     {
       "index": 76,
       "policy": "translate",
-      "text": "A person? Your grand deduction is that the Russian Fog is human?",
+      "text": "\"Overturn Europe's balance of power\"... \"curse the aristocracy to death\"... \"the Emperor's cherished treasure\"... and your answer is \"a person\"? That's quite a leap.",
       "layout_policy": "adaptive"
     },
     {
@@ -568,31 +568,31 @@
     {
       "index": 79,
       "policy": "translate",
-      "text": "Which nation would want such an agent most?",
+      "text": "This is an intelligence war between great powers.",
       "layout_policy": "adaptive"
     },
     {
       "index": 80,
       "policy": "translate",
-      "text": "The British Empire.",
+      "text": "So the Russian Fog is an intelligence agent directly under the Russian Emperor. Then which hostile nation would want such an agent most?",
       "layout_policy": "adaptive"
     },
     {
       "index": 81,
       "policy": "translate",
-      "text": "The British Empire?",
+      "text": "The British Empire.",
       "layout_policy": "adaptive"
     },
     {
       "index": 82,
       "policy": "translate",
-      "text": "Why?",
+      "text": "One more.",
       "layout_policy": "adaptive"
     },
     {
       "index": 83,
       "policy": "translate",
-      "text": "Japan also bears watching. Terrorism is one of its specialties.",
+      "text": "I hate to admit it, but the Empire of Japan is also among the principal suspect nations. The bomb is Japanese-made, after all.",
       "layout_policy": "adaptive"
     },
     {
@@ -604,7 +604,7 @@
     {
       "index": 85,
       "policy": "translate",
-      "text": "This is the age of empires.",
+      "text": "We live in an age of empires free to plunder.",
       "layout_policy": "adaptive"
     },
     {
@@ -616,13 +616,13 @@
     {
       "index": 87,
       "policy": "translate",
-      "text": "Which ones?",
+      "text": "Enough talk! If the Russian Fog is a person, bring them here right now!",
       "layout_policy": "adaptive"
     },
     {
       "index": 88,
       "policy": "translate",
-      "text": "That is beside the point.",
+      "text": "If we knew who it was, we would not be struggling.",
       "layout_policy": "adaptive"
     },
     {
@@ -724,7 +724,7 @@
     {
       "index": 105,
       "policy": "translate",
-      "text": "Who are you?",
+      "text": "...What?",
       "layout_policy": "adaptive"
     },
     {
@@ -736,13 +736,13 @@
     {
       "index": 107,
       "policy": "translate",
-      "text": "A deputy director of British Intelligence. Ashby is one of his agents.",
+      "text": "Aubrey Voysey. Deputy Chief of British Intelligence Action. Ashby is one of its agents.",
       "layout_policy": "adaptive"
     },
     {
       "index": 108,
       "policy": "translate",
-      "text": "What did you say?",
+      "text": "Wait, calm down... Keep quiet and listen, Kasuke.",
       "layout_policy": "adaptive"
     },
     {
@@ -814,13 +814,13 @@
     {
       "index": 120,
       "policy": "translate",
-      "text": "I dismissed it. Six months later another message came, this time signed:",
+      "text": "Heynwood was my subordinate. I didn't believe the accusation. The second message came six months later, signed by the sender.",
       "layout_policy": "adaptive"
     },
     {
       "index": 121,
       "policy": "translate",
-      "text": "Heynwood is a Russian spy.",
+      "text": "Barnes, employed by British Intelligence, is a spy for the Russian side.",
       "layout_policy": "adaptive"
     },
     {
@@ -838,7 +838,7 @@
     {
       "index": 124,
       "policy": "translate",
-      "text": "No record.",
+      "text": "I was astonished.",
       "layout_policy": "adaptive"
     },
     {
@@ -1018,7 +1018,7 @@
     {
       "index": 154,
       "policy": "translate",
-      "text": "Have you made contact?",
+      "text": "I see... So, did you make contact with the Russian Fog?",
       "layout_policy": "adaptive"
     },
     {
@@ -1066,7 +1066,7 @@
     {
       "index": 162,
       "policy": "translate",
-      "text": "I am no match for professional spies.",
+      "text": "Come on, I'm an amateur... Can I really stand on the same stage as professional spies?",
       "layout_policy": "adaptive"
     },
     {
@@ -1210,7 +1210,7 @@
     {
       "index": 186,
       "policy": "translate",
-      "text": "Do not touch it.",
+      "text": "Warning: Do not touch the bomb.",
       "layout_policy": "adaptive"
     },
     {

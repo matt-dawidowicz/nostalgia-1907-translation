@@ -28,6 +28,41 @@ from translation_formatter import audit_layouts, format_preview
 HERE = Path(__file__).resolve().parent
 
 
+def required_retail_layout_files(
+    retail_root: Path = DEFAULT_RETAIL_ROOT,
+) -> tuple[Path, ...]:
+    """Return every retail MES/SCN/font fixture required by this test module."""
+    index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+    files = [retail_root / "retail_files" / "FIX_CODE.FNT"]
+    for item in index["chapters"]:
+        chapter = item["chapter"]
+        chapter_root = retail_root / "retail_unpacked" / chapter
+        files.extend(
+            (
+                chapter_root / f"{chapter}.MES",
+                chapter_root / f"{chapter}.SCN",
+            )
+        )
+    return tuple(files)
+
+
+def require_retail_layout_fixtures(
+    retail_root: Path = DEFAULT_RETAIL_ROOT,
+) -> None:
+    """Skip layout integration tests when prepared retail fixtures are absent."""
+    missing = [path for path in required_retail_layout_files(retail_root) if not path.is_file()]
+    if not missing:
+        return
+    examples = ", ".join(str(path) for path in missing[:3])
+    remainder = len(missing) - min(len(missing), 3)
+    suffix = f" (and {remainder} more)" if remainder else ""
+    raise unittest.SkipTest(
+        "prepared retail MES/SCN/font fixtures are unavailable; "
+        f"missing {examples}{suffix}. Run the supported prepare/validate workflow "
+        "with the verified retail tracks to execute these integration tests."
+    )
+
+
 def source(chapter: str) -> dict[str, object]:
     """Load one canonical chapter object by its production identifier."""
     return json.loads((SOURCES / f"{chapter}.json").read_text(encoding="utf-8"))
@@ -89,6 +124,12 @@ def bitmap_records(mes_data: bytes, fixed_font: bytes) -> tuple[tuple[bytes, ...
 
 class ScriptLayoutTests(unittest.TestCase):
     """Protect shared renderer inference, wrapping, and compiler boundaries."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        """Require the complete retail-backed fixture set once for the class."""
+        super().setUpClass()
+        require_retail_layout_fixtures()
 
     def test_start_narration_contract_and_rows(self) -> None:
         """Keep full-screen START narration within its proven six-row box."""
@@ -184,26 +225,29 @@ class ScriptLayoutTests(unittest.TestCase):
                 self.assertEqual(result.record_count, source(chapter)["record_count"])
                 self.assertLessEqual(result.dynamic_glyphs, 1020)
 
-    def test_part3c_spill_compaction_is_bitmap_identical(self) -> None:
-        """Prove PART3C compaction changes storage without changing display."""
+    def test_fixed_english_dictionary_is_bitmap_identical(self) -> None:
+        """Prove shared fixed-cell compression preserves every PART3C bitmap."""
         retail_root = DEFAULT_RETAIL_ROOT
         retail_dir = retail_root / "retail_unpacked" / "PART3C"
         retail_mes = (retail_dir / "PART3C.MES").read_bytes()
         retail_scn = (retail_dir / "PART3C.SCN").read_bytes()
         canonical = source("PART3C")
-        all_spills = mes_compiler.PART3C_FIXED_UNITS
+        dictionary = mes_compiler.FIXED_ENGLISH_UNITS
         hard_limit = mes_compiler.PART3C_HARD_LIMIT
         try:
-            mes_compiler.PART3C_FIXED_UNITS = all_spills[6:]
+            mes_compiler.FIXED_ENGLISH_UNITS = ()
             mes_compiler.PART3C_HARD_LIMIT = 0xFFFF
             before = mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
         finally:
-            mes_compiler.PART3C_FIXED_UNITS = all_spills
+            mes_compiler.FIXED_ENGLISH_UNITS = dictionary
             mes_compiler.PART3C_HARD_LIMIT = hard_limit
         after = mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
         self.assertGreater(len(before.data), 0x3FFF)
-        self.assertEqual(len(after.data), 0x3F89)
-        self.assertLessEqual(len(after.data), 0x3FFF)
+        # This dictionary is an encoding choice, not a layout choice. It must
+        # leave a meaningful safety margin rather than merely crossing the
+        # hard boundary by a few bytes.
+        self.assertLess(len(after.data), len(before.data))
+        self.assertLessEqual(len(after.data), 0x3DFF)
 
         retail_font = (retail_root / "retail_files" / "FIX_CODE.FNT").read_bytes()
         before_font = patched_font(retail_font, before.fixed_font_patches)

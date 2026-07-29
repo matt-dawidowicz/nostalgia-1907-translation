@@ -72,7 +72,13 @@ specific stage.
 ## Production module ownership
 
 `rebuild.py` contains `PRODUCTION_MODULES`, the executable production boundary.
-The modules have deliberately narrow responsibilities:
+Before a build, a bounded static audit verifies that all local imports stay in
+that allowlist, canonical source paths remain direct children of `sources/`,
+tracked production data exists, and production code contains no known
+historical-workspace marker. The final report describes that exact scope rather
+than claiming a universal absence of every possible legacy dependency. Retail
+inputs and generated artifacts remain independently protected by hashes and
+cross-layer regression. The modules have deliberately narrow responsibilities:
 
 | Module | Owns | Must not own |
 | --- | --- | --- |

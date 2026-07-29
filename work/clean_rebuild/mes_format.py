@@ -6,10 +6,11 @@ and an 18-byte-per-glyph dynamic font tail. The first pointer terminates the
 pointer table; the header's split offset terminates the record region. Adjacent
 pointers therefore define records without scanning for terminators.
 
-This module validates only structural facts: pointer order and bounds, glyph
-alignment, and dynamic-reference bounds. It does not decide which records are
-English, how text wraps, or which SCN renderer consumes a record. Those belong
-to ``mes_compiler.py`` and ``scn_layout.py``.
+This module validates only structural facts: strictly increasing pointer
+boundaries, nonempty terminated records, glyph alignment, and dynamic-reference
+bounds. It does not decide which records are English, how text wraps, or which
+SCN renderer consumes a record. Those belong to ``mes_compiler.py`` and
+``scn_layout.py``.
 
 The parser has no dependency on historical translation tools or generated
 builds. See ``docs/BINARY_FORMATS.md`` for an offset diagram and the fixed versus
@@ -108,7 +109,7 @@ def parse_mes(data: bytes, *, source: str = "<bytes>") -> MesFile:
         MesFormatError: If any boundary, pointer, terminator, or glyph-reference
             invariant fails.
     """
-    if len(data) < 6:
+    if len(data) < 5:
         raise MesFormatError(f"{source}: file is too small ({len(data)} bytes)")
 
     split_offset = _u16be(data, 0)
@@ -132,13 +133,22 @@ def parse_mes(data: bytes, *, source: str = "<bytes>") -> MesFile:
         raise MesFormatError(f"{source}: first pointer does not end the table")
     if any(pointer < first_pointer or pointer >= split_offset for pointer in pointers):
         raise MesFormatError(f"{source}: record pointer outside the script region")
-    if any(left > right for left, right in zip(pointers, pointers[1:])):
-        raise MesFormatError(f"{source}: record pointers are not monotonic")
+    if any(left >= right for left, right in zip(pointers, pointers[1:])):
+        raise MesFormatError(
+            f"{source}: record pointers are not strictly increasing"
+        )
 
     boundaries = (*pointers, split_offset)
     records = tuple(
         data[start:end] for start, end in zip(boundaries, boundaries[1:])
     )
+    for record_index, record in enumerate(records):
+        if not record:
+            raise MesFormatError(f"{source}: record {record_index} is empty")
+        if record[-1] != 0:
+            raise MesFormatError(
+                f"{source}: record {record_index} lacks its 00 terminator"
+            )
     glyph_tail = data[split_offset:]
     if len(glyph_tail) % GLYPH_BYTES:
         raise MesFormatError(

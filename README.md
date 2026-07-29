@@ -8,6 +8,11 @@ The current validated baseline is `Nostalgia1907_CleanRebuild_v7`. It is built
 only from the original Japanese disc and does not restore or depend on an older
 translated build. Manual playtesting remains the final release gate.
 
+The canonical sources also contain the reviewed post-v7 English revision. These
+source edits remain a release candidate until the retail-backed validation and
+scene/branch playtesting gates are completed; they do not rename or supersede
+the already validated v7 binary artifact.
+
 ## Contributor documentation
 
 New contributors should begin with [CONTRIBUTING.md](CONTRIBUTING.md). The
@@ -15,6 +20,7 @@ detailed references separate translation editing from binary-format work:
 
 - [Architecture and production boundaries](docs/ARCHITECTURE.md)
 - [Translation analysis and editing](docs/TRANSLATION_EDITING.md)
+- [English glossary and localization style guide](docs/GLOSSARY_STYLE_GUIDE.md)
 - [MES, LZ, ISO, raw-CD, font, and SCN formats](docs/BINARY_FORMATS.md)
 - [Development, reports, debugging, and validation](docs/DEVELOPMENT.md)
 

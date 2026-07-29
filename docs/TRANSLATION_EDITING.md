@@ -195,8 +195,14 @@ Apply:
 python nostalgia1907.py edit --changes reviewed-changes.json
 ```
 
-All entries are validated before chapter files are written. Do not combine
-`--changes` with a positional record, `--text`, or `--apply`.
+All entries are validated before chapter files are written. Duplicate keys are
+rejected before JSON object construction can silently discard an earlier edit.
+Affected chapters are staged beside their canonical files with byte-for-byte
+backups; a later write or replacement failure rolls back chapters already
+replaced. If the rollback itself fails, the tool retains the affected byte-for-byte
+backup and reports its recovery path. This is an all-or-rollback process
+guarantee, not a claim of multi-file crash atomicity. Do not combine `--changes` with a positional record,
+`--text`, or `--apply`.
 
 ## Screenshot-driven investigation
 
@@ -217,6 +223,8 @@ Do not identify records by their current English alone when scripting a change.
 Use stable IDs so duplicate wording cannot target the wrong record.
 
 ## Semantic consistency data
+
+Use [`GLOSSARY_STYLE_GUIDE.md`](GLOSSARY_STYLE_GUIDE.md) for the reviewed English naming, terminology, dialogue, warning, choice, and layout conventions. The machine-enforced tables below remain authoritative where they define a source fingerprint or record-scoped exception.
 
 The validation layer uses:
 

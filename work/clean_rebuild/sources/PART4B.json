@@ -714,7 +714,7 @@
     {
       "index": 115,
       "policy": "translate",
-      "text": "...Damn it. Cut this!",
+      "text": "...I can't take it anymore. I'm cutting this!",
       "layout_policy": "adaptive"
     },
     {
@@ -954,7 +954,7 @@
     {
       "index": 155,
       "policy": "translate",
-      "text": "In the way. Cut it.",
+      "text": "It's in the way, so I'm cutting it.",
       "layout_policy": "adaptive"
     },
     {
@@ -990,7 +990,7 @@
     {
       "index": 161,
       "policy": "translate",
-      "text": "A poker face.",
+      "text": "So that explains the poker face.",
       "layout_policy": "adaptive"
     },
     {
@@ -1320,7 +1320,7 @@
     {
       "index": 216,
       "policy": "translate",
-      "text": "There is.",
+      "text": "Yes.",
       "layout_policy": "adaptive"
     },
     {
@@ -1590,7 +1590,7 @@
     {
       "index": 261,
       "policy": "translate",
-      "text": "You can leave him, huh. That is the first time I have heard that.",
+      "text": "Abandon him, huh? That's the first time I've heard you say that.",
       "layout_policy": "adaptive"
     },
     {
@@ -1602,7 +1602,7 @@
     {
       "index": 263,
       "policy": "translate",
-      "text": "You know, Ilyu, you use blunt words when your feelings are strong... I can believe you. Ilyu, I can believe you... The rear lid. No need for the safety device.",
+      "text": "You know, Ilyu, you use blunt words when your feelings are strong... I can believe you, Ilyu. I can believe you... There's a lid farther in. I don't see any defense mechanism.",
       "layout_policy": "adaptive"
     },
     {

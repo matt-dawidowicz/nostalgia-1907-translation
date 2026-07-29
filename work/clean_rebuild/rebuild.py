@@ -12,15 +12,17 @@ cover intermediate MES/LZ/font/ISO artifacts as well as delivery BIN/CUE files;
 nothing is published unless both manifests are identical.
 
 ``PRODUCTION_MODULES`` is also a policy boundary. Tests and runtime checks use
-it to prevent historical investigation workspaces or playable older builds from
-becoming dependencies. See ``docs/ARCHITECTURE.md`` for stage ownership.
+it for a static local-import allowlist, tracked-data path containment, and known
+historical-workspace marker audit. Retail provenance remains separately
+hash-guarded. See ``docs/ARCHITECTURE.md`` for stage ownership.
 """
 
 from __future__ import annotations
 
 import argparse
-import hashlib
+import ast
 import json
+import re
 import shutil
 from pathlib import Path
 
@@ -37,6 +39,8 @@ HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
 SOURCES = HERE / "sources"
 DEFAULT_BASENAME = "Nostalgia1907_CleanRebuild"
+RELEASE_BASENAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
+SOURCE_JSON_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*\.json$")
 PRODUCTION_MODULES = (
     "raw_cd.py",
     "iso9660.py",
@@ -64,18 +68,279 @@ def _ensure_empty(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
 
 
-def _verify_production_independence() -> None:
-    """Reject accidental runtime references to legacy or playable build trees."""
-    forbidden = (
+def _validate_basename(basename: str) -> str:
+    """Reject path syntax and unsafe characters in a direct build basename."""
+    if not isinstance(basename, str) or not RELEASE_BASENAME.fullmatch(basename):
+        raise ValueError(
+            "basename must start with a letter or digit and contain only "
+            "letters, digits, period, underscore, or hyphen"
+        )
+    return basename
+
+
+def _legacy_markers() -> tuple[str, ...]:
+    """Return known historical-workspace markers without self-matching source."""
+    return (
         "2026-" + "07-12",
         "Act4_" + "firstpass",
         "nostalgia1907_" + "tools",
     )
-    for name in PRODUCTION_MODULES:
-        text = (HERE / name).read_text(encoding="utf-8")
-        hits = [value for value in forbidden if value in text]
-        if hits:
-            raise ValueError(f"production module {name} references legacy inputs: {hits}")
+
+
+def _production_data_files(root: Path) -> tuple[Path, ...]:
+    """Resolve every tracked static data file consumed by production modules."""
+    sources = root / "sources"
+    index_path = sources / "index.json"
+    index = json.loads(index_path.read_text(encoding="utf-8"))
+    chapters = index.get("chapters")
+    if not isinstance(chapters, list):
+        raise ValueError("production source index has no chapters list")
+    data_files = [root / "font_patterns.json", index_path]
+    seen: set[str] = set()
+    for item in chapters:
+        if not isinstance(item, dict) or not isinstance(item.get("source"), str):
+            raise ValueError("production source index contains an invalid source entry")
+        source_name = item["source"]
+        source_path = Path(source_name)
+        if (
+            source_path.is_absolute()
+            or len(source_path.parts) != 1
+            or source_path.name != source_name
+            or not SOURCE_JSON_NAME.fullmatch(source_name)
+        ):
+            raise ValueError(
+                f"production source path must be one JSON filename: {source_name!r}"
+            )
+        if source_name in seen:
+            raise ValueError(f"production source index repeats {source_name!r}")
+        seen.add(source_name)
+        data_files.append(sources / source_name)
+    missing = [str(path) for path in data_files if not path.is_file()]
+    if missing:
+        raise ValueError(f"production data files are missing: {missing}")
+    return tuple(data_files)
+
+
+def _verify_production_independence(
+    root: Path = HERE,
+    production_modules: tuple[str, ...] = PRODUCTION_MODULES,
+) -> dict[str, object]:
+    """Audit static production imports and tracked data against legacy inputs.
+
+    The audit proves a bounded claim: every allowlisted module exists, its
+    local imports remain inside the allowlist, all tracked production data
+    paths stay under the clean source directory, and production code contains
+    no known historical-workspace marker. Runtime retail inputs remain
+    independently protected by size and SHA-256 validation.
+
+    Args:
+        root: Clean-rebuild module directory to audit.
+        production_modules: Exact local Python-module allowlist.
+
+    Returns:
+        A JSON-serializable report describing the static audit scope.
+
+    Raises:
+        ValueError: If a module/data file is missing, an import escapes the
+            allowlist, a source path escapes its root, or a forbidden marker is
+            present.
+    """
+    allowed_files = set(production_modules)
+    allowed_stems = {Path(name).stem for name in production_modules}
+    local_modules = {path.stem: path.name for path in root.glob("*.py")}
+    local_modules.update(
+        {
+            path.name: f"{path.name}/__init__.py"
+            for path in root.iterdir()
+            if path.is_dir() and (path / "__init__.py").is_file()
+        }
+    )
+    import_edges: set[str] = set()
+    unapproved_imports: list[str] = []
+    marker_hits: list[str] = []
+    scanned_files: list[Path] = []
+    markers = _legacy_markers()
+
+    for name in production_modules:
+        if Path(name).name != name or Path(name).suffix != ".py":
+            raise ValueError(f"invalid production module name: {name!r}")
+        path = root / name
+        if name not in allowed_files or not path.is_file():
+            raise ValueError(f"production module is missing: {path}")
+        text = path.read_text(encoding="utf-8")
+        scanned_files.append(path)
+        for marker in markers:
+            if marker in text:
+                marker_hits.append(f"{name}: {marker}")
+        tree = ast.parse(text, filename=str(path))
+        for node in ast.walk(tree):
+            imported: list[str] = []
+            if isinstance(node, ast.Import):
+                imported.extend(alias.name.split(".", 1)[0] for alias in node.names)
+            elif isinstance(node, ast.ImportFrom):
+                if node.level:
+                    imported.append(f"relative:{node.module or ''}")
+                elif node.module:
+                    imported.append(node.module.split(".", 1)[0])
+            for imported_name in imported:
+                if imported_name.startswith("relative:"):
+                    unapproved_imports.append(f"{name} -> {imported_name}")
+                    continue
+                local_file = local_modules.get(imported_name)
+                if local_file is None:
+                    continue
+                import_edges.add(f"{name} -> {local_file}")
+                if imported_name not in allowed_stems:
+                    unapproved_imports.append(f"{name} -> {local_file}")
+
+    data_files = _production_data_files(root)
+
+    if unapproved_imports or marker_hits:
+        problems = []
+        if unapproved_imports:
+            problems.append(f"unapproved local imports: {sorted(unapproved_imports)}")
+        if marker_hits:
+            problems.append(f"historical-workspace markers: {sorted(marker_hits)}")
+        raise ValueError("production dependency audit failed: " + "; ".join(problems))
+
+    return {
+        "status": "PASS",
+        "scope": (
+            "static allowlisted local imports, known code markers, and tracked "
+            "production-data path containment"
+        ),
+        "modules_scanned": len(production_modules),
+        "data_files_scanned": len(data_files),
+        "local_import_edges": sorted(import_edges),
+        "unapproved_local_import_count": 0,
+        "known_historical_marker_hit_count": 0,
+        "known_historical_markers_checked": len(markers),
+        "files_scanned": [
+            path.relative_to(root).as_posix() for path in sorted(scanned_files)
+        ],
+        "data_files_validated": [
+            path.relative_to(root).as_posix() for path in data_files
+        ],
+    }
+
+
+def _canonical_coverage(sources: Path = SOURCES) -> dict[str, object]:
+    """Derive release-note coverage directly from canonical source JSON."""
+    index = json.loads((sources / "index.json").read_text(encoding="utf-8"))
+    items = index.get("chapters")
+    if not isinstance(items, list):
+        raise ValueError("canonical source index has no chapters list")
+    totals = {
+        "record_count": 0,
+        "translated_record_count": 0,
+        "preserved_record_count": 0,
+        "adaptive_record_count": 0,
+        "fixed_record_count": 0,
+    }
+    part3b_preserved: list[int] = []
+    part3b_translated = 0
+    for item in items:
+        if not isinstance(item, dict):
+            raise ValueError("canonical source index contains a non-object chapter")
+        chapter = item.get("chapter")
+        source_name = item.get("source")
+        if not isinstance(chapter, str) or not isinstance(source_name, str):
+            raise ValueError("canonical source index contains an invalid chapter entry")
+        if not SOURCE_JSON_NAME.fullmatch(source_name):
+            raise ValueError(f"{chapter}: canonical source path is unsafe: {source_name!r}")
+        source = json.loads((sources / source_name).read_text(encoding="utf-8"))
+        records = source.get("records")
+        if not isinstance(records, list) or source.get("record_count") != len(records):
+            raise ValueError(f"{chapter}: canonical record count is inconsistent")
+        translated = 0
+        preserved = 0
+        for index_value, record in enumerate(records):
+            if not isinstance(record, dict) or record.get("index") != index_value:
+                raise ValueError(f"{chapter}: canonical record ordering is inconsistent")
+            policy = record.get("policy")
+            if policy == "translate":
+                translated += 1
+                layout_policy = record.get("layout_policy")
+                if layout_policy == "adaptive":
+                    totals["adaptive_record_count"] += 1
+                elif layout_policy == "fixed":
+                    totals["fixed_record_count"] += 1
+                else:
+                    raise ValueError(
+                        f"{chapter}:{index_value:03d}: translated record has no "
+                        "explicit layout policy"
+                    )
+            elif policy == "preserve":
+                preserved += 1
+            else:
+                raise ValueError(f"{chapter}:{index_value:03d}: invalid record policy")
+        if (
+            item.get("record_count") != len(records)
+            or item.get("translated_records") != translated
+            or item.get("preserved_records") != preserved
+        ):
+            raise ValueError(f"{chapter}: source-index coverage counts are stale")
+        totals["record_count"] += len(records)
+        totals["translated_record_count"] += translated
+        totals["preserved_record_count"] += preserved
+        if chapter == "PART3B_":
+            part3b_translated = translated
+            part3b_preserved = [
+                record["index"]
+                for record in records
+                if record.get("policy") == "preserve"
+            ]
+    if index.get("chapter_count") != len(items):
+        raise ValueError("canonical source-index chapter count is stale")
+    if (
+        totals["adaptive_record_count"] + totals["fixed_record_count"]
+        != totals["translated_record_count"]
+    ):
+        raise ValueError("canonical translated layout-policy counts are incomplete")
+    return {
+        "chapter_count": len(items),
+        **totals,
+        "part3b_translated_record_count": part3b_translated,
+        "part3b_preserved_record_indexes": part3b_preserved,
+    }
+
+
+def _render_test_notes(
+    coverage: dict[str, object],
+    dependency_audit: dict[str, object],
+) -> str:
+    """Render release notes from validated coverage and dependency evidence."""
+    preserved_indexes = ", ".join(
+        str(index) for index in coverage["part3b_preserved_record_indexes"]
+    )
+    return (
+        "# Nostalgia 1907 clean rebuild\n\n"
+        "Built twice, byte-for-byte identically, from the verified original "
+        "Japanese BIN.\n"
+        f"A static production dependency audit scanned "
+        f"{dependency_audit['modules_scanned']} allowlisted modules and "
+        f"{dependency_audit['data_files_scanned']} tracked data paths; it found "
+        "no unapproved local imports, escaped source paths, or known "
+        "historical-workspace markers in production code. "
+        "Retail inputs remain separately size- and SHA-256-guarded.\n\n"
+        f"Static checks cover all {coverage['chapter_count']} chapters and "
+        f"{coverage['record_count']:,} records, MES pointer/glyph bounds, the "
+        "PART3C 0x3FFF limit, exhaustive adaptive/fixed layout policies, "
+        "renderer-proven row and width limits, speaker-label regression, archive "
+        "round trips, unchanged SCN/non-MES payloads, fixed ISO extents, ISO "
+        "mutation boundaries, all MODE1 EDC/ECC sectors, retail boot data, exact "
+        "Track 2 audio, and CUE formatting.\n\n"
+        f"The canonical source declares {coverage['adaptive_record_count']:,} "
+        "translated records with adaptive renderer-aware wrapping and "
+        f"{coverage['fixed_record_count']:,} translated records with explicit "
+        "fixed-layout ownership; no translated record is undeclared.\n\n"
+        f"PART3B_ contains {coverage['part3b_translated_record_count']:,} "
+        f"translated records. Retail records {preserved_indexes} remain "
+        "retail-preserved without translation or reflow because they are "
+        "blank/punctuation-only window records.\n\n"
+        "Manual playtesting remains the final release gate, especially dialogue "
+        "formatting.\n"
+    )
 
 
 def _build_once(
@@ -190,7 +455,9 @@ def rebuild(
         equality is proven, and writes final verification and test notes.
         Existing non-empty directories are never cleaned or overwritten.
     """
-    _verify_production_independence()
+    basename = _validate_basename(basename)
+    dependency_audit = _verify_production_independence()
+    coverage = _canonical_coverage()
     run_a_build = runs_root / "run_a" / "build"
     run_a_product = runs_root / "run_a" / "product"
     run_b_build = runs_root / "run_b" / "build"
@@ -214,7 +481,8 @@ def rebuild(
     report = {
         "status": "PASS",
         "pipeline": "retail Japanese Track 1 -> clean extraction -> canonical translation -> fixed extents -> BIN/CUE",
-        "production_legacy_dependencies": 0,
+        "production_dependency_audit": dependency_audit,
+        "canonical_coverage": coverage,
         "two_clean_builds_byte_identical": True,
         "artifact_count_compared": len(manifest_a),
         "verification": first,
@@ -224,24 +492,7 @@ def rebuild(
     (delivery_root / "final_verification.json").write_text(
         json.dumps(report, indent=2) + "\n", encoding="utf-8"
     )
-    notes = (
-        "# Nostalgia 1907 clean rebuild\n\n"
-        "Built twice, byte-for-byte identically, from the verified original Japanese BIN.\n"
-        "The production pipeline does not import or copy any legacy translated build.\n\n"
-        "Static checks cover all 19 chapters and 2,905 records, MES pointer/glyph bounds, "
-        "the PART3C 0x3FFF limit, exhaustive adaptive/fixed layout policies, renderer-proven "
-        "row and width limits, speaker-label regression, archive round trips, unchanged "
-        "SCN/non-MES payloads, fixed ISO extents, ISO mutation boundaries, all MODE1 EDC/ECC "
-        "sectors, retail boot data, exact Track 2 audio, and CUE formatting.\n\n"
-        "All 2,759 SCN-classified visible records use adaptive renderer-aware wrapping. "
-        "The remaining 123 credits, counters, static labels, and direct overlays have "
-        "explicit fixed-layout policy; no record is undeclared and no classified record "
-        "retains legacy manual wrapping.\n\n"
-        "PART3B_ scenes 106-113 now contain 209 translated records; retail records 4 and 15 "
-        "remain retail-preserved without translation or reflow because they are "
-        "blank/punctuation-only window records.\n\n"
-        "Manual playtesting remains the final release gate, especially dialogue formatting.\n"
-    )
+    notes = _render_test_notes(coverage, dependency_audit)
     (delivery_root / "TEST_NOTES.md").write_text(notes, encoding="utf-8")
     return report
 

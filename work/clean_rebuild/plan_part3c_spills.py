@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plan additional globally safe fixed-font spill slots for oversized PART3C."""
+"""Analyze candidate additions to the shared fixed English-cell dictionary."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from itertools import product
 from pathlib import Path
 
 from font_render import CHARSET, FontError, stored_cell
-from mes_compiler import PART3C_FIXED_UNITS
+from mes_compiler import FIXED_ENGLISH_UNITS
 from mes_format import DYNAMIC_PREFIX_START, read_mes
 from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 
@@ -85,7 +85,7 @@ def _bitmap_names() -> dict[bytes, tuple[str, str]]:
 def plan(candidate: Path, retail_root: Path) -> dict[str, object]:
     """Return safe codes and high-value dynamic units without editing files."""
     preserved_usage = _preserved_code_usage(retail_root)
-    existing_codes = {code for code, _style, _unit in PART3C_FIXED_UNITS}
+    existing_codes = {code for code, _style, _unit in FIXED_ENGLISH_UNITS}
     available_codes = [
         code
         for code in range(1, 0xEE)
