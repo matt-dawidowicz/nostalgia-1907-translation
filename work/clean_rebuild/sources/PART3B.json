@@ -32,10 +32,6 @@
       39,
       40
     ],
-    "leading_blank_anchor_segments": [
-      151,
-      163
-    ],
     "validate_runtime_row_boundaries": true,
     "validate_text_hygiene": true,
     "validate_wrapped_text_integrity": true,
@@ -62,24 +58,24 @@
       "0": "Center Hall",
       "1": "Yamada Kasuke",
       "2": "Chanel",
-      "3": "...None of the men you brought were here... This place has been ransacked...",
+      "3": "...none of the men you brought were here...this place has been ransacked...",
       "4": "Kasuke",
       "5": "Voysey!",
       "6": "Voysey",
-      "7": "...Yamada... Th-that man is...",
-      "8": "One of Tainui Adjell's men... Damn it... I still have more to tell you...",
+      "7": "...Yamada...th-that man is...",
+      "8": "One of Tainui Adjell's men...damn it...I still have more to tell you...",
       "9": "Listen carefully!",
       "10": "...Mr. Yamada...",
       "11": "I learned the secret of \"Mede\"...",
-      "12": "That woman is Salome... Everyone involved with her dies...",
-      "13": "Run! You still have... Voysey!",
-      "14": "...What's wrong? Hey, what's wrong? Come on... What happened...",
-      "15": "...Aah! He's dead! Aah! Somebody's dead!",
+      "12": "That woman is Salome...everyone involved with her dies...",
+      "13": "Run! You still have...Voysey!",
+      "14": "...what's wrong? Hey, what's wrong? Come on...what happened...",
+      "15": "...aah! He's dead! Aah! Somebody's dead!",
       "17": "Voysey had deciphered what \"Mede\" meant. He learned who the Russian Fog was. Didn't he tell you?",
       "18": "Calm down, Kasuke! Tell me...",
       "19": "Ashby",
       "20": "I wasn't told. I'm the one who wants to know. Find the Russian Fog at any cost. Under no circumstances let the bomber have them. The bombing is a defensive measure by the Russian side.",
-      "21": "Don't bite yet... If you don't want this man to get away, stay quiet for now.",
+      "21": "Don't bite yet...if you don't want this man to get away, stay quiet for now.",
       "22": "Who is Tainui Adjell?",
       "23": "He belongs to a Russian secret-assassination organization.",
       "24": "Was the Deputy Chief killed by them...?",
@@ -92,7 +88,7 @@
       "31": "What a joke!",
       "32": "Enough. What did you learn?",
       "33": "Tianon and Lumeranka are clean. Lumeranka spoke to me alone. They...",
-      "34": "...You insolent brat...",
+      "34": "...you insolent brat...",
       "35": "The Maharaja's princess and her old retainer!",
       "36": "...",
       "37": "Listen, I'm the one who has to crawl around and run all over the scene of this case! You can sit cozily under a kotatsu eating tangerines and occasionally spout some pompous lecture! Just don't take pointless action and make this mess any worse!",
@@ -103,15 +99,15 @@
       "42": "I will get only you aboard the steamer!",
       "43": "Then strike at the tiger's den!",
       "44": "Second-Class Cabin",
-      "45": "Calm down... Think it through. There has to be a way.",
+      "45": "Calm down...think it through. There has to be a way.",
       "46": "Aft Deck",
       "47": "What in the world is happening here...? Who is setting whom up?",
-      "48": "Ashby boarded with Voysey to protect the Russian Fog's defection... Voysey is dead, and Ashby still hasn't identified the Russian Fog.",
+      "48": "Ashby boarded with Voysey to protect the Russian Fog's defection...Voysey is dead, and Ashby still hasn't identified the Russian Fog.",
       "49": "With the bomb threatening to kill everyone, why does Ashby still want to learn the Russian Fog's identity now?",
-      "50": "The evidence points to a state intelligence service... Britain, perhaps... or Germany, as Voysey suspected...",
+      "50": "The evidence points to a state intelligence service...Britain, perhaps...or Germany, as Voysey suspected...",
       "51": "Is Ashby truly the British agent Voysey said he was?",
-      "52": "Wait... If Ashby is the culprit, it all fits. He tried to make the crew find the Russian Fog after he couldn't get the identity out of Voysey...",
-      "53": "No... I can't stand it anymore!",
+      "52": "Wait...if Ashby is the culprit, it all fits. He tried to make the crew find the Russian Fog after he couldn't get the identity out of Voysey...",
+      "53": "No...I can't stand it anymore!",
       "54": "I'll beat him senseless!",
       "55": "Royal Suite A",
       "56": "He isn't a Russian spy. He's clearly working for a third country. He plans to steal the Russian Fog while Britain and Russia fight over it.",
@@ -130,21 +126,21 @@
       "69": "And what does that have to do with your profession?",
       "70": "Everything!",
       "71": "That third country has a reason to want me dead!",
-      "72": "...Fascinating, Yamada. Then lay out your case logically.",
+      "72": "...fascinating, Yamada. Then lay out your case logically.",
       "73": "Shut up!",
       "74": "Why would they need to kill you?",
       "75": "I'm the one being targeted.",
       "76": "Exactly. He must make the Nostalgia vanish without a trace.",
       "77": "But why?",
-      "78": "All this convoluted reasoning is giving me a headache... I'm sick of it.",
+      "78": "All this convoluted reasoning is giving me a headache...I'm sick of it.",
       "79": "Should I stop?",
       "80": "Go on.",
-      "81": "British Intelligence Action... Britain's foremost intelligence agency.",
+      "81": "British Intelligence Action...Britain's foremost intelligence agency.",
       "82": "Even among spies, they're elite.",
       "83": "British Intelligence has thrown everything into capturing the Russian Fog. Its number-two man even came out in person.",
       "84": "He heads their operations. Nothing escapes him.",
       "85": "Such dedication.",
-      "86": "...Are you following me?",
+      "86": "...are you following me?",
       "87": "Listen. British Intelligence agents are swarming Southampton, waiting for Voysey to bring back the Russian Fog. Once they reach British soil, every Russian spy will be arrested and the Russian Fog hidden deep in London. Am I wrong?",
       "88": "Of course. I led that operation under orders from London.",
       "89": "So far, so good.",
@@ -161,10 +157,10 @@
       "100": "Shall we work it out together?",
       "101": "Your delusions have become pathological.",
       "102": "Things do not always go according to plan.",
-      "103": "Voysey still had not caught Mede... even at the last moment before sailing.",
+      "103": "Voysey still had not caught Mede...even at the last moment before sailing.",
       "104": "Who hadn't?!",
       "105": "He hadn't.",
-      "106": "...What were we talking about again...?",
+      "106": "...what were we talking about again...?",
       "107": "Voysey couldn't decipher \"Mede\"! So what?!",
       "108": "Exactly. That's why the culprit needed a written claim of responsibility. It gave us time to think carefully about what was about to happen.",
       "109": "The culprit destroyed the lifeboats and cut off our retreat. More precisely, he blocked the escape of the Russian Fog and the 321 witnesses to the crime.",
@@ -182,7 +178,7 @@
       "121": "You know Indian poker? You are the one person who cannot see what kind of man you are!",
       "122": "The onlooker can see it at a glance!",
       "123": "Brutally simple!",
-      "124": "H-how... how rude!",
+      "124": "H-how...how rude!",
       "125": "Try to remain a gentleman to the end.",
       "126": "What are you plotting...?",
       "127": "Now, wait.",
@@ -205,7 +201,7 @@
       "144": "I",
       "145": "MAX!",
       "146": "You...",
-      "147": "No one knew it... Voysey's true identity.",
+      "147": "No one knew it...Voysey's true identity.",
       "148": "Was that really so? There is no way to verify it.",
       "149": "Shall we review it once more?",
       "150": "The culprit's actions...",
@@ -243,7 +239,7 @@
       "183": "It is you, is it not?",
       "184": "My lord. You are the culprit.",
       "185": "No one else could be the culprit now, could they?",
-      "186": "Is it not you... the culprit?",
+      "186": "Is it not you...the culprit?",
       "187": "...",
       "188": "This was enjoyable, Mr. Yamada...",
       "189": "A little forceful, but it does amount to a leading interrogation.",
@@ -258,13 +254,13 @@
       "198": "If the culprit sinks the ship, both you and the Russian Fog die! Why is a mere victim so eager to obtain the Russian Fog now...? Almost as if you were the culprit...",
       "199": "The deputy chief died for the Wing.",
       "200": "You misunderstand me. You make no effort to understand. I have professional pride, spirit, and a burning drive. Identifying the Russian Fog may be the only way to honor the Deputy Chief. When this is over, am I not the only man who can take the Fog back to Britain in his place?",
-      "201": "Damn it... A gentlemanly culprit would not keep making excuses when cornered...",
+      "201": "Damn it...a gentlemanly culprit would not keep making excuses when cornered...",
       "202": "Proof, then. If we live to see tomorrow morning, present it then.",
       "203": "What if the culprit gets there first?! Find the Russian Fog! The Deputy Chief said 'that woman.' Either the Russian Fog or the killer is a woman! You said you would settle this as the man on the ground, Mr. Yamada. Those work clothes suit you. Get to work!",
-      "204": "No... Ashby, you are starting to slip. You have set off my instincts.",
+      "204": "No...Ashby, you are starting to slip. You have set off my instincts.",
       "205": "Is that a threat from the culprit?",
       "206": "The logic of division of labor. I shall eat California oranges at a heated table.",
-      "207": "Yuko... I failed again...",
+      "207": "Yuko...I failed again...",
       "208": "That translation is not accurate. A kotatsu is a kotatsu."
     },
     "forbidden_text_patterns": [
@@ -301,7 +297,7 @@
     {
       "index": 3,
       "policy": "translate",
-      "text": "...None of the men you brought were here... This place has been ransacked...",
+      "text": "...none of the men you brought were here...this place has been ransacked...",
       "layout_policy": "adaptive"
     },
     {
@@ -325,13 +321,13 @@
     {
       "index": 7,
       "policy": "translate",
-      "text": "...Yamada... Th-that man is...",
+      "text": "...Yamada...th-that man is...",
       "layout_policy": "adaptive"
     },
     {
       "index": 8,
       "policy": "translate",
-      "text": "One of Tainui Adjell's men... Damn it... I still have more to tell you...",
+      "text": "One of Tainui Adjell's men...damn it...I still have more to tell you...",
       "layout_policy": "adaptive"
     },
     {
@@ -355,25 +351,25 @@
     {
       "index": 12,
       "policy": "translate",
-      "text": "That woman is Salome... Everyone involved with her dies...",
+      "text": "That woman is Salome...everyone involved with her dies...",
       "layout_policy": "adaptive"
     },
     {
       "index": 13,
       "policy": "translate",
-      "text": "Run! You still have... Voysey!",
+      "text": "Run! You still have...Voysey!",
       "layout_policy": "adaptive"
     },
     {
       "index": 14,
       "policy": "translate",
-      "text": "...What's wrong? Hey, what's wrong? Come on... What happened...",
+      "text": "...what's wrong? Hey, what's wrong? Come on...what happened...",
       "layout_policy": "adaptive"
     },
     {
       "index": 15,
       "policy": "translate",
-      "text": "...Aah! He's dead! Aah! Somebody's dead!",
+      "text": "...aah! He's dead! Aah! Somebody's dead!",
       "layout_policy": "adaptive"
     },
     {
@@ -408,7 +404,7 @@
     {
       "index": 21,
       "policy": "translate",
-      "text": "Don't bite yet... If you don't want this man to get away, stay quiet for now.",
+      "text": "Don't bite yet...if you don't want this man to get away, stay quiet for now.",
       "layout_policy": "adaptive"
     },
     {
@@ -486,7 +482,7 @@
     {
       "index": 34,
       "policy": "translate",
-      "text": "...You insolent brat...",
+      "text": "...you insolent brat...",
       "layout_policy": "adaptive"
     },
     {
@@ -552,7 +548,7 @@
     {
       "index": 45,
       "policy": "translate",
-      "text": "Calm down... Think it through. There has to be a way.",
+      "text": "Calm down...think it through. There has to be a way.",
       "layout_policy": "adaptive"
     },
     {
@@ -570,7 +566,7 @@
     {
       "index": 48,
       "policy": "translate",
-      "text": "Ashby boarded with Voysey to protect the Russian Fog's defection... Voysey is dead, and Ashby still hasn't identified the Russian Fog.",
+      "text": "Ashby boarded with Voysey to protect the Russian Fog's defection...Voysey is dead, and Ashby still hasn't identified the Russian Fog.",
       "layout_policy": "adaptive"
     },
     {
@@ -582,7 +578,7 @@
     {
       "index": 50,
       "policy": "translate",
-      "text": "The evidence points to a state intelligence service... Britain, perhaps... or Germany, as Voysey suspected...",
+      "text": "The evidence points to a state intelligence service...Britain, perhaps...or Germany, as Voysey suspected...",
       "layout_policy": "adaptive"
     },
     {
@@ -594,13 +590,13 @@
     {
       "index": 52,
       "policy": "translate",
-      "text": "Wait... If Ashby is the culprit, it all fits. He tried to make the crew find the Russian Fog after he couldn't get the identity out of Voysey...",
+      "text": "Wait...if Ashby is the culprit, it all fits. He tried to make the crew find the Russian Fog after he couldn't get the identity out of Voysey...",
       "layout_policy": "adaptive"
     },
     {
       "index": 53,
       "policy": "translate",
-      "text": "No... I can't stand it anymore!",
+      "text": "No...I can't stand it anymore!",
       "layout_policy": "adaptive"
     },
     {
@@ -714,7 +710,7 @@
     {
       "index": 72,
       "policy": "translate",
-      "text": "...Fascinating, Yamada. Then lay out your case logically.",
+      "text": "...fascinating, Yamada. Then lay out your case logically.",
       "layout_policy": "adaptive"
     },
     {
@@ -750,7 +746,7 @@
     {
       "index": 78,
       "policy": "translate",
-      "text": "All this convoluted reasoning is giving me a headache... I'm sick of it.",
+      "text": "All this convoluted reasoning is giving me a headache...I'm sick of it.",
       "layout_policy": "adaptive"
     },
     {
@@ -768,7 +764,7 @@
     {
       "index": 81,
       "policy": "translate",
-      "text": "British Intelligence Action... Britain's foremost intelligence agency.",
+      "text": "British Intelligence Action...Britain's foremost intelligence agency.",
       "layout_policy": "adaptive"
     },
     {
@@ -798,7 +794,7 @@
     {
       "index": 86,
       "policy": "translate",
-      "text": "...Are you following me?",
+      "text": "...are you following me?",
       "layout_policy": "adaptive"
     },
     {
@@ -900,7 +896,7 @@
     {
       "index": 103,
       "policy": "translate",
-      "text": "Voysey still had not caught Mede... even at the last moment before sailing.",
+      "text": "Voysey still had not caught Mede...even at the last moment before sailing.",
       "layout_policy": "adaptive"
     },
     {
@@ -918,7 +914,7 @@
     {
       "index": 106,
       "policy": "translate",
-      "text": "...What were we talking about again...?",
+      "text": "...what were we talking about again...?",
       "layout_policy": "adaptive"
     },
     {
@@ -1026,7 +1022,7 @@
     {
       "index": 124,
       "policy": "translate",
-      "text": "H-how... how rude!",
+      "text": "H-how...how rude!",
       "layout_policy": "adaptive"
     },
     {
@@ -1164,7 +1160,7 @@
     {
       "index": 147,
       "policy": "translate",
-      "text": "No one knew it... Voysey's true identity.",
+      "text": "No one knew it...Voysey's true identity.",
       "layout_policy": "adaptive"
     },
     {
@@ -1397,7 +1393,7 @@
     {
       "index": 186,
       "policy": "translate",
-      "text": "Is it not you... the culprit?",
+      "text": "Is it not you...the culprit?",
       "layout_policy": "adaptive"
     },
     {
@@ -1487,7 +1483,7 @@
     {
       "index": 201,
       "policy": "translate",
-      "text": "Damn it... A gentlemanly culprit would not keep making excuses when cornered...",
+      "text": "Damn it...a gentlemanly culprit would not keep making excuses when cornered...",
       "layout_policy": "adaptive"
     },
     {
@@ -1505,7 +1501,7 @@
     {
       "index": 204,
       "policy": "translate",
-      "text": "No... Ashby, you are starting to slip. You have set off my instincts.",
+      "text": "No...Ashby, you are starting to slip. You have set off my instincts.",
       "layout_policy": "adaptive"
     },
     {
@@ -1523,7 +1519,7 @@
     {
       "index": 207,
       "policy": "translate",
-      "text": "Yuko... I failed again...",
+      "text": "Yuko...I failed again...",
       "layout_policy": "adaptive"
     },
     {

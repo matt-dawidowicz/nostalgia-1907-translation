@@ -5,6 +5,9 @@
     "version": "0.1.0",
     "python_minimum": "3.10"
   },
+  "build": {
+    "default_region": "north-america"
+  },
   "translation": {
     "validated_baseline": "v7",
     "chapter_count": 19,
@@ -41,6 +44,18 @@
         "sha256": "F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991"
       },
       "logical_iso_sha256": "D013704CC64B1A4129A7742AEFCFA23772A1C00ECB37F4F2225B57A7CF38D183"
+    },
+    "v22": {
+      "basename": "Nostalgia1907_CleanRebuild_v22",
+      "track1": {
+        "size": 192649968,
+        "sha256": "481409A9A90271F997D33100F35FF6E49A3DE127E7183A764B749BBF270E2C02"
+      },
+      "track2": {
+        "size": 24710112,
+        "sha256": "F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991"
+      },
+      "logical_iso_sha256": "7996ECE4B45A44DCE413BBC50E9F9E1626F8CEC3722D0B992651698C716DF45A"
     }
   },
   "us_bios_test": {

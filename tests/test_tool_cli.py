@@ -83,6 +83,12 @@ class CliContractTests(unittest.TestCase):
             {"doctor", "prepare", "edit", "compare", "validate", "build", "build-us"},
         )
 
+    def test_project_defaults_new_builds_to_north_america(self) -> None:
+        manifest = nostalgia1907.load_manifest(ROOT)
+        self.assertEqual(manifest["build"]["default_region"], "north-america")
+        args = nostalgia1907.parser().parse_args(["build", "--name", "test"])
+        self.assertIsNone(args.region)
+
     def test_release_names_are_normalized_without_paths(self) -> None:
         self.assertEqual(
             nostalgia1907.release_basename("v8"),
@@ -195,6 +201,8 @@ class CliContractTests(unittest.TestCase):
                 name="test",
                 track1=temporary_root / "track1.bin",
                 track2=temporary_root / "track2.bin",
+                region="japan",
+                us_bios=None,
                 runs_root=temporary_root / "runs",
                 output=temporary_root / "delivery",
                 dry_run=False,
@@ -215,6 +223,73 @@ class CliContractTests(unittest.TestCase):
             ):
                 self.assertEqual(nostalgia1907.command_build(ROOT, args), 0)
             self.assertEqual(events, ["validate", "build"])
+
+    def test_north_american_build_wraps_only_a_proven_clean_stage(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary_root = Path(temporary)
+            args = Namespace(
+                name="test",
+                track1=temporary_root / "track1.bin",
+                track2=temporary_root / "track2.bin",
+                region="north-america",
+                us_bios=temporary_root / "bios.bin",
+                runs_root=temporary_root / "runs",
+                output=temporary_root / "delivery",
+                dry_run=False,
+            )
+            events: list[str] = []
+            scripts: list[tuple[str, tuple[str, ...]]] = []
+
+            def fake_run_script(
+                _root: Path,
+                script: str,
+                *script_args: str,
+                **_kwargs: object,
+            ) -> None:
+                scripts.append((script, script_args))
+                if script.endswith("clean_rebuild/rebuild.py"):
+                    events.append("clean")
+                    delivery_index = script_args.index("--delivery-root") + 1
+                    basename_index = script_args.index("--basename") + 1
+                    clean_delivery = Path(script_args[delivery_index])
+                    clean_basename = script_args[basename_index]
+                    clean_delivery.mkdir(parents=True)
+                    (clean_delivery / f"{clean_basename}_Track1.bin").write_bytes(
+                        b"clean track 1"
+                    )
+                    (clean_delivery / f"{clean_basename}_Track2.bin").write_bytes(
+                        b"clean track 2"
+                    )
+                else:
+                    events.append("region")
+
+            with (
+                patch.object(nostalgia1907, "require_file"),
+                patch.object(
+                    nostalgia1907,
+                    "command_validate",
+                    side_effect=lambda *_args: events.append("validate") or 0,
+                ),
+                patch.object(nostalgia1907, "run_script", side_effect=fake_run_script),
+            ):
+                self.assertEqual(nostalgia1907.command_build(ROOT, args), 0)
+
+            self.assertEqual(events, ["validate", "clean", "region"])
+            self.assertEqual(
+                scripts[0][0],
+                "work/clean_rebuild/rebuild.py",
+            )
+            self.assertEqual(
+                scripts[1][0],
+                "work/region_variant/build_us_bios_test.py",
+            )
+            region_args = scripts[1][1]
+            expected_hash = hashlib.sha256(b"clean track 1").hexdigest().upper()
+            self.assertEqual(
+                region_args[region_args.index("--expected-track1-sha256") + 1],
+                expected_hash,
+            )
+            self.assertIn("Nostalgia1907_CleanRebuild_test_NorthAmerica", region_args)
 
 
 class RepositoryPolicyTests(unittest.TestCase):

@@ -63,9 +63,9 @@
       "5": "Kasuke",
       "6": "Always have.",
       "7": "First they treat me like the culprit, then use me for their investigation.",
-      "8": "The Russian Fog... What the hell is it?",
+      "8": "The Russian Fog...what the hell is it?",
       "9": "A strange role, isn't it? You never know what the next moment will bring.",
-      "10": "Treasure. Curse. Weapon... What links them?",
+      "10": "Treasure. Curse. Weapon...what links them?",
       "11": "Old Karl",
       "12": "For my part, I support you. You're a man of simple tastes.",
       "13": "...I can't solve it.",
@@ -143,7 +143,7 @@
     {
       "index": 8,
       "policy": "translate",
-      "text": "The Russian Fog... What the hell is it?",
+      "text": "The Russian Fog...what the hell is it?",
       "layout_policy": "adaptive"
     },
     {
@@ -155,7 +155,7 @@
     {
       "index": 10,
       "policy": "translate",
-      "text": "Treasure. Curse. Weapon... What links them?",
+      "text": "Treasure. Curse. Weapon...what links them?",
       "layout_policy": "adaptive"
     },
     {
@@ -244,7 +244,7 @@
     {
       "index": 25,
       "policy": "translate",
-      "text": "I love to paint. It lets my heart wander anywhere... To Black, though, each painting was only merchandise.",
+      "text": "I love to paint. It lets my heart wander anywhere...to Black, though, each painting was only merchandise.",
       "layout_policy": "adaptive"
     },
     {
@@ -370,7 +370,7 @@
     {
       "index": 46,
       "policy": "translate",
-      "text": "...No.",
+      "text": "...no.",
       "layout_policy": "adaptive"
     },
     {
@@ -388,7 +388,7 @@
     {
       "index": 49,
       "policy": "translate",
-      "text": "...What?",
+      "text": "...what?",
       "layout_policy": "adaptive"
     },
     {
@@ -418,7 +418,7 @@
     {
       "index": 54,
       "policy": "translate",
-      "text": "I see... But Kasuke, you will solve this, won't you?",
+      "text": "I see...but Kasuke, you will solve this, won't you?",
       "layout_policy": "adaptive"
     },
     {
@@ -538,7 +538,7 @@
     {
       "index": 74,
       "policy": "translate",
-      "text": "The Russian Fog is a person... probably a soldier with considerable combat experience, directly under the Russian Emperor... hostile to the aristocracy... no, tasked with monitoring the aristocracy.",
+      "text": "The Russian Fog is a person...probably a soldier with considerable combat experience, directly under the Russian Emperor...hostile to the aristocracy...no, tasked with monitoring the aristocracy.",
       "layout_policy": "adaptive"
     },
     {
@@ -550,7 +550,7 @@
     {
       "index": 76,
       "policy": "translate",
-      "text": "\"Overturn Europe's balance of power\"... \"curse the aristocracy to death\"... \"the Emperor's cherished treasure\"... and your answer is \"a person\"? That's quite a leap.",
+      "text": "\"Overturn Europe's balance of power\"...\"curse the aristocracy to death\"...\"the Emperor's cherished treasure\"...and your answer is \"a person\"? That's quite a leap.",
       "layout_policy": "adaptive"
     },
     {
@@ -724,7 +724,7 @@
     {
       "index": 105,
       "policy": "translate",
-      "text": "...What?",
+      "text": "...what?",
       "layout_policy": "adaptive"
     },
     {
@@ -742,7 +742,7 @@
     {
       "index": 108,
       "policy": "translate",
-      "text": "Wait, calm down... Keep quiet and listen, Kasuke.",
+      "text": "Wait, calm down...keep quiet and listen, Kasuke.",
       "layout_policy": "adaptive"
     },
     {
@@ -766,7 +766,7 @@
     {
       "index": 112,
       "policy": "translate",
-      "text": "A Russian spy... Then the Russian Fog...",
+      "text": "A Russian spy...then the Russian Fog...",
       "layout_policy": "adaptive"
     },
     {
@@ -1018,7 +1018,7 @@
     {
       "index": 154,
       "policy": "translate",
-      "text": "I see... So, did you make contact with the Russian Fog?",
+      "text": "I see...so, did you make contact with the Russian Fog?",
       "layout_policy": "adaptive"
     },
     {
@@ -1066,7 +1066,7 @@
     {
       "index": 162,
       "policy": "translate",
-      "text": "Come on, I'm an amateur... Can I really stand on the same stage as professional spies?",
+      "text": "Come on, I'm an amateur...can I really stand on the same stage as professional spies?",
       "layout_policy": "adaptive"
     },
     {
@@ -1156,7 +1156,7 @@
     {
       "index": 177,
       "policy": "translate",
-      "text": "...Here it comes.",
+      "text": "...here it comes.",
       "layout_policy": "adaptive"
     },
     {

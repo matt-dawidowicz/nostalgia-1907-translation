@@ -43,7 +43,7 @@
     {
       "index": 3,
       "policy": "translate",
-      "text": "...One more... Tainui Adjell's assassin is hiding aboard.",
+      "text": "...one more...Tainui Adjell's assassin is hiding aboard.",
       "layout_policy": "adaptive"
     },
     {
@@ -133,7 +133,7 @@
     {
       "index": 18,
       "policy": "translate",
-      "text": "Heh. How strange... We agree. I understand a little of what you are feeling.",
+      "text": "Heh. How strange...we agree. I understand a little of what you are feeling.",
       "layout_policy": "adaptive"
     },
     {
@@ -180,7 +180,7 @@
     {
       "index": 26,
       "policy": "translate",
-      "text": "Medea races through the land of mist and lakes... fleet-footed beyond pursuit... and beyond, the curtain.",
+      "text": "Medea races through the land of mist and lakes...fleet-footed beyond pursuit...and beyond, the curtain.",
       "layout_policy": "adaptive"
     },
     {
@@ -222,7 +222,7 @@
     {
       "index": 33,
       "policy": "translate",
-      "text": "...Is the work interesting?",
+      "text": "...is the work interesting?",
       "layout_policy": "adaptive"
     },
     {
@@ -342,7 +342,7 @@
     {
       "index": 53,
       "policy": "translate",
-      "text": "...Me?",
+      "text": "...me?",
       "layout_policy": "fixed"
     },
     {
@@ -366,7 +366,7 @@
     {
       "index": 57,
       "policy": "translate",
-      "text": "...Again, alone...",
+      "text": "...again, alone...",
       "layout_policy": "fixed"
     },
     {

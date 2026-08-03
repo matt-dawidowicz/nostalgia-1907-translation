@@ -31,7 +31,6 @@
     "scn_window_text_subtypes": [
       39
     ],
-    "leading_blank_anchor_segments": [],
     "validate_runtime_row_boundaries": true,
     "validate_text_hygiene": true,
     "validate_wrapped_text_integrity": true,
@@ -81,7 +80,7 @@
     {
       "index": 3,
       "policy": "translate",
-      "text": "Laugh, Charlie. I have him in my sights, but I cannot kill him... Do not be angry... I have always been a coward. Just give me a little more time...",
+      "text": "Laugh, Charlie. I have him in my sights, but I cannot kill him...do not be angry...I have always been a coward. Just give me a little more time...",
       "layout_policy": "adaptive"
     },
     {
@@ -122,7 +121,7 @@
     {
       "index": 10,
       "policy": "translate",
-      "text": "Now, Ruthie... It looks like I will not be returning to southern France... Sorry.",
+      "text": "Now, Ruthie...it looks like I will not be returning to southern France...sorry.",
       "layout_policy": "adaptive"
     },
     {
@@ -140,13 +139,13 @@
     {
       "index": 13,
       "policy": "translate",
-      "text": "...Words like that must be exactly what I need right now...",
+      "text": "...words like that must be exactly what I need right now...",
       "layout_policy": "adaptive"
     },
     {
       "index": 14,
       "policy": "translate",
-      "text": "...It is about Lord Ashby's butler, who was killed in the Center Hall...",
+      "text": "...it is about Lord Ashby's butler, who was killed in the Center Hall...",
       "layout_policy": "adaptive"
     },
     {
@@ -247,7 +246,7 @@
     {
       "index": 31,
       "policy": "translate",
-      "text": "'Mede' is the French reading of 'Medea'... Did any of this help you?",
+      "text": "'Mede' is the French reading of 'Medea'...did any of this help you?",
       "layout_policy": "adaptive"
     },
     {
@@ -271,7 +270,7 @@
     {
       "index": 35,
       "policy": "translate",
-      "text": "I wanted to repay you somehow... for staying with me through my dreary nostalgia... I...",
+      "text": "I wanted to repay you somehow...for staying with me through my dreary nostalgia...I...",
       "layout_policy": "adaptive"
     },
     {
@@ -283,7 +282,7 @@
     {
       "index": 37,
       "policy": "translate",
-      "text": "Ah... A perfect underground railway... I am not the only passenger...",
+      "text": "Ah...a perfect underground railway...I am not the only passenger...",
       "layout_policy": "adaptive"
     },
     {
@@ -355,7 +354,7 @@
     {
       "index": 49,
       "policy": "translate",
-      "text": "Emotions we do not want to acknowledge are... stifled... Am I wrong?",
+      "text": "Emotions we do not want to acknowledge are...stifled...am I wrong?",
       "layout_policy": "adaptive"
     },
     {
@@ -379,7 +378,7 @@
     {
       "index": 53,
       "policy": "translate",
-      "text": "People become devious when the expression of desire grows indirect and roundabout... Easy enough to understand.",
+      "text": "People become devious when the expression of desire grows indirect and roundabout...easy enough to understand.",
       "layout_policy": "adaptive"
     },
     {
@@ -397,7 +396,7 @@
     {
       "index": 56,
       "policy": "translate",
-      "text": "So the artist's deepest feelings are projected into the picture... unconsciously.",
+      "text": "So the artist's deepest feelings are projected into the picture...unconsciously.",
       "layout_policy": "adaptive"
     },
     {
@@ -409,13 +408,13 @@
     {
       "index": 58,
       "policy": "translate",
-      "text": "Ilyu's true feelings... frightening.",
+      "text": "Ilyu's true feelings...frightening.",
       "layout_policy": "adaptive"
     },
     {
       "index": 59,
       "policy": "translate",
-      "text": "This is the sort of picture made by someone who has always lived under intense pressure... a daily life of oppression...",
+      "text": "This is the sort of picture made by someone who has always lived under intense pressure...a daily life of oppression...",
       "layout_policy": "adaptive"
     },
     {
@@ -439,7 +438,7 @@
     {
       "index": 63,
       "policy": "translate",
-      "text": "...Is Ilyu a spy too...? What happens when repression continues too long?",
+      "text": "...is Ilyu a spy too...? What happens when repression continues too long?",
       "layout_policy": "adaptive"
     },
     {
@@ -475,31 +474,31 @@
     {
       "index": 69,
       "policy": "translate",
-      "text": "The shape of distorted desire... its symbols. The 'husband' is the symbol of her 'belief'; the 'king' is 'society' or 'authority.' Killing the king's 'daughter' is the expression of rebellion. Through it we can see her true feelings, feelings even she has not noticed. When shaken, the truth behind an action that leaps beyond reason...",
+      "text": "The shape of distorted desire...its symbols. The 'husband' is the symbol of her 'belief'; the 'king' is 'society' or 'authority.' Killing the king's 'daughter' is the expression of rebellion. Through it we can see her true feelings, feelings even she has not noticed. When shaken, the truth behind an action that leaps beyond reason...",
       "layout_policy": "adaptive"
     },
     {
       "index": 70,
       "policy": "translate",
-      "text": "...A 'rebellious impulse' against the 'Emperor' who brainwashed her.",
+      "text": "...a 'rebellious impulse' against the 'Emperor' who brainwashed her.",
       "layout_policy": "adaptive"
     },
     {
       "index": 71,
       "policy": "translate",
-      "text": "...Then why kill her own 'children'?",
+      "text": "...then why kill her own 'children'?",
       "layout_policy": "adaptive"
     },
     {
       "index": 72,
       "policy": "translate",
-      "text": "At the limit, destroying with her own hands the self she treasures... Loss of purpose.",
+      "text": "At the limit, destroying with her own hands the self she treasures...loss of purpose.",
       "layout_policy": "adaptive"
     },
     {
       "index": 73,
       "policy": "translate",
-      "text": "...'Stop searching for your children'...",
+      "text": "...'stop searching for your children'...",
       "layout_policy": "adaptive"
     },
     {
@@ -511,13 +510,13 @@
     {
       "index": 75,
       "policy": "translate",
-      "text": "...Foolish Ilyu...",
+      "text": "...foolish Ilyu...",
       "layout_policy": "adaptive"
     },
     {
       "index": 76,
       "policy": "translate",
-      "text": "...It is 'defection,' is it not?",
+      "text": "...it is 'defection,' is it not?",
       "layout_policy": "adaptive"
     },
     {
@@ -547,7 +546,7 @@
     {
       "index": 81,
       "policy": "translate",
-      "text": "He was an insurance gentleman's butler, was he not? We did not speak, but... the man killed in the Center Hall.",
+      "text": "He was an insurance gentleman's butler, was he not? We did not speak, but...the man killed in the Center Hall.",
       "layout_policy": "adaptive"
     },
     {
@@ -607,7 +606,7 @@
     {
       "index": 91,
       "policy": "translate",
-      "text": "British Intelligence Action... the British Empire's intelligence service. The new weapons of the twentieth century are not mere cannons. In the final stretch of the race for Asian colonies, they were the secret that let Britain pull ahead of the other European powers.",
+      "text": "British Intelligence Action...the British Empire's intelligence service. The new weapons of the twentieth century are not mere cannons. In the final stretch of the race for Asian colonies, they were the secret that let Britain pull ahead of the other European powers.",
       "layout_policy": "adaptive"
     },
     {
@@ -667,7 +666,7 @@
     {
       "index": 101,
       "policy": "translate",
-      "text": "This woman... She is a veteran who has talked her way out of questioning many times before...",
+      "text": "This woman...she is a veteran who has talked her way out of questioning many times before...",
       "layout_policy": "adaptive"
     },
     {
@@ -775,7 +774,7 @@
     {
       "index": 119,
       "policy": "translate",
-      "text": "I was the one who painted the 'Medea' poster... I had felt that someday you would question me about it.",
+      "text": "I was the one who painted the 'Medea' poster...I had felt that someday you would question me about it.",
       "layout_policy": "adaptive"
     },
     {
@@ -871,7 +870,7 @@
     {
       "index": 135,
       "policy": "translate",
-      "text": "She is perfectly calm... Damn it!",
+      "text": "She is perfectly calm...damn it!",
       "layout_policy": "adaptive"
     },
     {
@@ -883,7 +882,7 @@
     {
       "index": 137,
       "policy": "translate",
-      "text": "...How hasty. Do you think this will go like Indian poker? Are you confident in your cards? Shall I call?",
+      "text": "...how hasty. Do you think this will go like Indian poker? Are you confident in your cards? Shall I call?",
       "layout_policy": "adaptive"
     },
     {
@@ -925,7 +924,7 @@
     {
       "index": 144,
       "policy": "translate",
-      "text": "Wait... Wait...",
+      "text": "Wait...wait...",
       "layout_policy": "adaptive"
     },
     {
@@ -961,19 +960,19 @@
     {
       "index": 150,
       "policy": "translate",
-      "text": "...That is the truth... Pity. Give me the stakes.",
+      "text": "...that is the truth...pity. Give me the stakes.",
       "layout_policy": "adaptive"
     },
     {
       "index": 151,
       "policy": "translate",
-      "text": "...You damned old fool! Ilyu is not the Russian Fog!",
+      "text": "...you damned old fool! Ilyu is not the Russian Fog!",
       "layout_policy": "adaptive"
     },
     {
       "index": 152,
       "policy": "translate",
-      "text": "...Then Kirikov really is the Russian Fog.",
+      "text": "...then Kirikov really is the Russian Fog.",
       "layout_policy": "adaptive"
     },
     {
@@ -1003,7 +1002,7 @@
     {
       "index": 157,
       "policy": "translate",
-      "text": "You are a formidable opponent... Nothing but traps.",
+      "text": "You are a formidable opponent...nothing but traps.",
       "layout_policy": "adaptive"
     },
     {
@@ -1015,7 +1014,7 @@
     {
       "index": 159,
       "policy": "translate",
-      "text": "...A backlash from 'escape'?",
+      "text": "...a backlash from 'escape'?",
       "layout_policy": "adaptive"
     },
     {
@@ -1027,7 +1026,7 @@
     {
       "index": 161,
       "policy": "translate",
-      "text": "I am always saying things contrary to my heart... Is that...",
+      "text": "I am always saying things contrary to my heart...is that...",
       "layout_policy": "adaptive"
     },
     {
@@ -1081,7 +1080,7 @@
     {
       "index": 170,
       "policy": "translate",
-      "text": "...My mission was not to kill, but to monitor him and capture him alive.",
+      "text": "...my mission was not to kill, but to monitor him and capture him alive.",
       "layout_policy": "adaptive"
     },
     {
@@ -1093,7 +1092,7 @@
     {
       "index": 172,
       "policy": "translate",
-      "text": "I wanted the deputy chief of British Intelligence Action... He died... The bomber is an intruder, and we will die too... Strange. With my duty gone, I cannot think what to do at all... I am such a boring person.",
+      "text": "I wanted the deputy chief of British Intelligence Action...he died...the bomber is an intruder, and we will die too...strange. With my duty gone, I cannot think what to do at all...I am such a boring person.",
       "layout_policy": "adaptive"
     },
     {
@@ -1111,7 +1110,7 @@
     {
       "index": 175,
       "policy": "translate",
-      "text": "...It comes out when you are weakened.",
+      "text": "...it comes out when you are weakened.",
       "layout_policy": "adaptive"
     },
     {
@@ -1147,7 +1146,7 @@
     {
       "index": 181,
       "policy": "translate",
-      "text": "'Stop searching'... Is that it?",
+      "text": "'Stop searching'...is that it?",
       "layout_policy": "adaptive"
     },
     {
@@ -1159,7 +1158,7 @@
     {
       "index": 183,
       "policy": "translate",
-      "text": "...No.",
+      "text": "...no.",
       "layout_policy": "adaptive"
     },
     {
@@ -1189,7 +1188,7 @@
     {
       "index": 188,
       "policy": "translate",
-      "text": "...You are kind. With this man I can ignore my position... a composed old man and one carefree soul... buoyant and unbound, poor Kasuke...",
+      "text": "...you are kind. With this man I can ignore my position...a composed old man and one carefree soul...buoyant and unbound, poor Kasuke...",
       "layout_policy": "adaptive"
     },
     {
@@ -1297,7 +1296,7 @@
     {
       "index": 206,
       "policy": "translate",
-      "text": "That is right... Damn! Either way, we only have until tonight...",
+      "text": "That is right...damn! Either way, we only have until tonight...",
       "layout_policy": "adaptive"
     },
     {

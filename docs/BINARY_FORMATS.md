@@ -181,7 +181,14 @@ it is a storage encoding, not a scene-specific formatting rule. Regression
 checks prove the dictionary is unused by all byte-preserved retail records,
 changes only its declared fixed-font cells, and produces the same bitmap
 sequences as an all-dynamic encoding. This avoids using a visible leading blank
-to alter pair phase while retaining PART3C's hard-boundary safety margin.
+to alter pair phase while retaining PART3C's hard-boundary safety margin. The
+lower-dialogue renderer is separate: its retail main-dialogue records normally
+begin with fixed code `0x10`, a Japanese opening-quote cell drawn in the left
+gutter. The English compiler replaces that one initial cell with the shared
+blank fixed cell. The physical row cadence is 12/11/11 cells and repeats every
+three rows; the initial gutter uses one cell of row zero, while later page
+starts retain their full 12-cell prose stride. No extra cell is emitted at a
+page transition.
 
 
 ## SCN renderer references

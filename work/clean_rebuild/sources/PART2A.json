@@ -126,7 +126,7 @@
     {
       "index": 8,
       "policy": "translate",
-      "text": "There are 297 passengers... We'll be here all day if we question them at random.",
+      "text": "There are 297 passengers...we'll be here all day if we question them at random.",
       "layout_policy": "adaptive"
     },
     {
@@ -144,7 +144,7 @@
     {
       "index": 11,
       "policy": "translate",
-      "text": "The first threat came by radio. The next was written in rouge on the captain's window... So we find the radio and the rouge. Right, Manager?",
+      "text": "The first threat came by radio. The next was written in rouge on the captain's window...so we find the radio and the rouge. Right, Manager?",
       "layout_policy": "adaptive"
     },
     {
@@ -174,7 +174,7 @@
     {
       "index": 16,
       "policy": "translate",
-      "text": "First class... On this little ship, it felt worlds away from mine.",
+      "text": "First class...on this little ship, it felt worlds away from mine.",
       "layout_policy": "adaptive"
     },
     {
@@ -252,7 +252,7 @@
     {
       "index": 29,
       "policy": "translate",
-      "text": "...Would you prefer me to panic? I... am a cabin attendant. I can still do my job.",
+      "text": "...would you prefer me to panic? I...am a cabin attendant. I can still do my job.",
       "layout_policy": "adaptive"
     },
     {
@@ -276,7 +276,7 @@
     {
       "index": 33,
       "policy": "translate",
-      "text": "...Open it, please.",
+      "text": "...open it, please.",
       "layout_policy": "adaptive"
     },
     {
@@ -330,7 +330,7 @@
     {
       "index": 42,
       "policy": "translate",
-      "text": "But... the key...",
+      "text": "But...the key...",
       "layout_policy": "adaptive"
     },
     {
@@ -384,7 +384,7 @@
     {
       "index": 51,
       "policy": "translate",
-      "text": "Threats, bluffs, flattery... whatever works.",
+      "text": "Threats, bluffs, flattery...whatever works.",
       "layout_policy": "adaptive"
     },
     {
@@ -480,7 +480,7 @@
     {
       "index": 67,
       "policy": "translate",
-      "text": "Two minutes... Not enough to enter his cabin and write the threat.",
+      "text": "Two minutes...not enough to enter his cabin and write the threat.",
       "layout_policy": "adaptive"
     },
     {
@@ -498,13 +498,13 @@
     {
       "index": 70,
       "policy": "translate",
-      "text": "Around 11:15... shortly after the radio room exploded.",
+      "text": "Around 11:15...shortly after the radio room exploded.",
       "layout_policy": "adaptive"
     },
     {
       "index": 71,
       "policy": "translate",
-      "text": "Fifteen minutes since it aired... Which means...",
+      "text": "Fifteen minutes since it aired...which means...",
       "layout_policy": "adaptive"
     },
     {
@@ -540,7 +540,7 @@
     {
       "index": 77,
       "policy": "translate",
-      "text": "Then came the lifeboat and engine-room explosions... During them, the culprit entered the captain's cabin and wrote the threat. Several routes are possible.",
+      "text": "Then came the lifeboat and engine-room explosions...during them, the culprit entered the captain's cabin and wrote the threat. Several routes are possible.",
       "layout_policy": "adaptive"
     },
     {
@@ -564,7 +564,7 @@
     {
       "index": 81,
       "policy": "translate",
-      "text": "I'll retrace the culprit's steps... Fortunately, everyone involved is still aboard.",
+      "text": "I'll retrace the culprit's steps...fortunately, everyone involved is still aboard.",
       "layout_policy": "adaptive"
     },
     {
@@ -666,7 +666,7 @@
     {
       "index": 98,
       "policy": "translate",
-      "text": "...What should I get Yuko?",
+      "text": "...what should I get Yuko?",
       "layout_policy": "adaptive"
     },
     {

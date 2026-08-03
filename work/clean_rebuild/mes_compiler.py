@@ -46,6 +46,40 @@ from scn_layout import (
 DYNAMIC_GLYPHS_PER_PREFIX = 0xFF
 RUNTIME_DYNAMIC_GLYPH_LIMIT = 1020
 PART3C_HARD_LIMIT = 0x3FFF
+FIXED_BLANK_CELL_CODE = 0x48
+ELLIPSIS_CAPITALIZED_FOLLOWERS = frozenset(
+    (
+        "Ashby",
+        "Bartender",
+        "Betty",
+        "Britain",
+        "Britain's",
+        "Braque's",
+        "Charlie",
+        "Chief",
+        "I",
+        "I'll",
+        "I'm",
+        "I've",
+        "Ilyu",
+        "ITO",
+        "Japanese",
+        "Japan",
+        "Kasuke",
+        "Mr",
+        "Navigator",
+        "Nostalgia",
+        "Tainui",
+        "Tsar",
+        "Voysey",
+        "Voysey's",
+        "Yamada",
+    )
+)
+ELLIPSIS_FOLLOWER = re.compile(
+    r"\.\.\.(?P<gap>[ \t]*)(?P<newline>\r?\n)?"
+    r"(?P<quote>[\"']?)(?P<word>[A-Za-z0-9][A-Za-z0-9'-]*)"
+)
 FIXED_ENGLISH_UNITS = (
     # These cells form a shared English dictionary, not a chapter-specific
     # workaround.  Each one is a display-identical 12x12 cell installed in an
@@ -57,7 +91,10 @@ FIXED_ENGLISH_UNITS = (
     (0x04, "literal", " o"), (0x05, "literal", "on"),
     (0x06, "literal", "li"), (0x08, "literal", ","),
     (0x84, "literal", "nd"), (0x47, "literal", "ss"),
-    (0x23, "literal", "in"), (0x48, "literal", "  "),
+    (0x23, "literal", "in"),
+    # Shared opaque-position spacer. The compiler verifies that translated
+    # chapters do not collide with a byte-preserved retail use of this slot.
+    (FIXED_BLANK_CELL_CODE, "literal", "  "),
     (0x40, "literal", " y"), (0x1F, "literal", "ou"),
     (0x19, "literal", "no"), (0x36, "literal", "an"),
     (0x1B, "literal", "ng"), (0x41, "literal", "t "),
@@ -135,6 +172,7 @@ class BuildResult:
 
 
 Cell = tuple[str, str]
+BLANK_CELL: Cell = ("literal", "  ")
 
 
 # Text normalization, wrapping, and cell planning. These functions operate on
@@ -208,40 +246,127 @@ def normalize_semantic_text(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def _wrap_words(text: str, layout: Layout, anchor: bool) -> list[str]:
-    """Wrap prose without splitting words unless one word exceeds a whole row."""
+def normalize_ellipsis_style(text: str) -> str:
+    """Remove post-ellipsis spaces and lower ordinary following words.
+
+    The translation's dialogue style treats an ellipsis as an attached pause:
+    ``"Wait... What?"`` becomes ``"Wait...what?"``. Names, proper adjectives,
+    direct-address titles, acronyms, and grammatical first-person forms retain
+    their established capitalization through an explicit reviewed exception
+    set. Fixed-layout newlines and any preceding row padding are retained as
+    renderer-owned boundaries, while the following ordinary word is still
+    normalized.
+
+    Args:
+        text: Canonical English text in adaptive or explicit fixed layout.
+
+    Returns:
+        The same text with spaces after an ellipsis removed and ordinary next
+        words lowercased.
+
+    Side Effects:
+        None.
+    """
+    def replace(match: re.Match[str]) -> str:
+        """Rewrite one ellipsis boundary while retaining fixed row padding."""
+        gap = match.group("gap") if match.group("newline") else ""
+        newline = match.group("newline") or ""
+        quote = match.group("quote")
+        word = match.group("word")
+        follower = word if word in ELLIPSIS_CAPITALIZED_FOLLOWERS else word.lower()
+        return f"...{gap}{newline}{quote}{follower}"
+
+    return ELLIPSIS_FOLLOWER.sub(replace, text)
+
+
+def _ellipsis_atoms(source_word: str) -> tuple[str, ...]:
+    """Split one whitespace token at style-approved zero-space ellipses.
+
+    An ellipsis can join two semantic words without a literal space, yet it is
+    still a safe renderer row boundary. Each returned atom retains the
+    ellipsis on the preceding text so the compiled bitmap never gains a space.
+
+    Args:
+        source_word: One non-whitespace portion of canonical English.
+
+    Returns:
+        One or more nonempty, renderable atoms in source order.
+
+    Side Effects:
+        None.
+    """
+    parts = source_word.split("...")
+    if len(parts) == 1:
+        return (source_word,)
+    atoms = [f"{part}..." for part in parts[:-1]]
+    if parts[-1]:
+        atoms.append(parts[-1])
+    return tuple(atom for atom in atoms if atom)
+
+
+def _reconstruct_wrapped_text(rows: list[str]) -> str:
+    """Rebuild semantic prose from formatter rows without restoring ellipse gaps.
+
+    Ordinary renderer row boundaries represent a source space. A boundary
+    immediately after ``...`` instead represents the approved zero-space pause
+    style, so it must not reintroduce a space during audit reconstruction.
+
+    Args:
+        rows: Visible, unpadded formatter rows in display order.
+
+    Returns:
+        Normalized semantic English represented by the rows.
+
+    Side Effects:
+        None.
+    """
+    if not rows:
+        return ""
+    rebuilt = rows[0]
+    for row in rows[1:]:
+        rebuilt += "" if rebuilt.endswith("...") else " "
+        rebuilt += row
+    return normalize_semantic_text(rebuilt)
+
+
+def _wrap_words(text: str, layout: Layout) -> list[str]:
+    """Wrap prose at spaces or ellipses without fragmenting ordinary words.
+
+    A row break after an ellipsis is legal even though the canonical style
+    deliberately omits a following space. Any other source word remains
+    indivisible unless it exceeds a complete renderer row by itself.
+    """
     rows: list[str] = []
     for paragraph in text.split("\n"):
-        words = paragraph.split()
-        if not words:
+        source_words = paragraph.split()
+        if not source_words:
             rows.append("")
             continue
         current = ""
-        for source_word in words:
-            remainder = source_word
-            while remainder:
-                row_index = len(rows)
-                cells = layout.visible_first if row_index == 0 else layout.visible_continuation
-                if anchor and row_index == 0:
-                    cells -= 1
-                if cells <= 0:
-                    raise CompileError("leading anchor consumes the complete first row")
-                if current:
-                    candidate = f"{current} {remainder}"
-                    if _measure_literal(candidate) <= cells:
-                        current = candidate
+        for word_index, source_word in enumerate(source_words):
+            atoms = _ellipsis_atoms(source_word)
+            for atom_index, atom in enumerate(atoms):
+                separator = " " if word_index and atom_index == 0 else ""
+                remainder = atom
+                while remainder:
+                    row_index = len(rows)
+                    cells = layout.visible_cells(row_index)
+                    if current:
+                        candidate = f"{current}{separator}{remainder}"
+                        if _measure_literal(candidate) <= cells:
+                            current = candidate
+                            remainder = ""
+                        else:
+                            rows.append(current)
+                            current = ""
+                        continue
+                    if _measure_literal(remainder) <= cells:
+                        current = remainder
                         remainder = ""
-                    else:
-                        rows.append(current)
-                        current = ""
-                    continue
-                if _measure_literal(remainder) <= cells:
-                    current = remainder
-                    remainder = ""
-                    continue
-                maximum_chars = cells * 2
-                rows.append(remainder[:maximum_chars])
-                remainder = remainder[maximum_chars:]
+                        continue
+                    maximum_chars = cells * 2
+                    rows.append(remainder[:maximum_chars])
+                    remainder = remainder[maximum_chars:]
         if current:
             rows.append(current)
     return rows
@@ -322,23 +447,20 @@ def _row_plan(record: int, line: str, prefix: tuple[Cell, ...] = ()) -> RowPlan:
     )
 
 
-def _prose_rows(text: str, layout: Layout | None, anchor: bool) -> list[tuple[tuple[Cell, ...], str]]:
-    """Wrap prose and pad every engine-managed row to its runtime stride."""
+def _prose_rows(text: str, layout: Layout | None) -> list[tuple[tuple[Cell, ...], str]]:
+    """Wrap prose with any native one-time lower-dialogue gutter preserved."""
     if layout is None:
         return [((), line) for line in text.split("\n")]
-    rows = _wrap_words(text, layout, anchor)
+    rows = _wrap_words(text, layout)
     output: list[tuple[tuple[Cell, ...], str]] = []
     for row_index, row in enumerate(rows):
-        runtime_cells = layout.runtime_first if row_index == 0 else layout.runtime_continuation
-        prefix: tuple[Cell, ...] = ()
-        if anchor and row_index == 0:
-            prefix = (("literal", " "),)
-            runtime_cells -= 1
+        runtime_cells = layout.runtime_cells(row_index)
         if _measure_literal(row) > runtime_cells:
             raise CompileError(
                 f"wrapped row {row!r} exceeds runtime stride {runtime_cells}"
             )
         padded = row.ljust(runtime_cells * 2)
+        prefix = (BLANK_CELL,) * layout.anchor_cells(row_index)
         output.append((prefix, padded))
     return output
 
@@ -511,7 +633,13 @@ def compile_mes(
         adaptive_indexes = set(translated)
     needs_layouts = text_mode == "prose" or bool(adaptive_indexes)
     layouts = (
-        infer_layouts(scn_data, retail.record_count, set(translated), profile)
+        infer_layouts(
+            scn_data,
+            retail.record_count,
+            set(translated),
+            profile,
+            retail_records=retail.records,
+        )
         if needs_layouts
         else {}
     )
@@ -525,13 +653,6 @@ def compile_mes(
         if adaptive_indexes
         else {}
     )
-    anchors = set()
-    if isinstance(profile, dict):
-        raw_anchors = profile.get("leading_blank_anchor_segments", [])
-        if not isinstance(raw_anchors, list) or not all(isinstance(item, int) for item in raw_anchors):
-            raise CompileError(f"{chapter}: leading anchor profile is invalid")
-        anchors = set(raw_anchors)
-
     retained_indexes = sorted(
         index
         for record_index in preserved
@@ -554,8 +675,8 @@ def compile_mes(
                 if layouts.get(index) is not None or record_roles & (
                     PROSE_ROLES | LABEL_ROLES | {ROLE_CHOICE}
                 ):
-                    working = normalize_semantic_text(text)
-            row_specs = _prose_rows(working, layouts.get(index), index in anchors)
+                    working = normalize_ellipsis_style(normalize_semantic_text(text))
+            row_specs = _prose_rows(working, layouts.get(index))
         max_rows = row_limits.get(index) if adaptive_record else None
         if max_rows is not None and len(row_specs) > max_rows:
             raise CompileError(

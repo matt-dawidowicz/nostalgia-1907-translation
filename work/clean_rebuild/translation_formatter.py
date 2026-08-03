@@ -30,7 +30,14 @@ from collections import Counter
 from collections.abc import Mapping
 from pathlib import Path
 
-from mes_compiler import _wrap_words, normalize_semantic_text
+from mes_compiler import (
+    _measure_literal,
+    _reconstruct_wrapped_text,
+    _wrap_words,
+    normalize_ellipsis_style,
+    normalize_semantic_text,
+)
+from mes_format import parse_mes
 from scn_layout import (
     LABEL_ROLES,
     ROLE_CHOICE,
@@ -43,6 +50,7 @@ from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
 RULES = HERE / "script_layout_rules.json"
+GLOSSARY = HERE / "translation_glossary.json"
 DEFAULT_REPORT = (
     WORKSPACE / "outputs" / "Nostalgia1907_Translation_Audit" / "script_layout_audit.json"
 )
@@ -283,19 +291,24 @@ def _chapter_sources() -> tuple[dict[str, object], dict[str, tuple[Path, dict[st
 
 
 def _contracts(source: dict[str, object], retail_root: Path) -> dict[int, RecordContract]:
-    """Infer renderer contracts from one chapter's original retail SCN.
+    """Infer contracts from a chapter's retail SCN and opening MES cells.
 
-    Canonical English never supplies geometry. Only translated record indexes
-    are requested from the source-independent SCN inference engine.
+    Canonical English never supplies geometry. SCN determines the renderer;
+    the original MES only identifies the native opening quote gutter that
+    persists beside main dialogue across continuation rows.
 
     Raises:
         FileNotFoundError: If the hash-locked retail SCN is unavailable.
         ScnLayoutError: If the SCN evidence is malformed or contradictory.
     """
     chapter = source["chapter"]
-    scn = retail_root / "retail_unpacked" / chapter / f"{chapter}.SCN"
+    retail = retail_root / "retail_unpacked" / chapter
+    scn = retail / f"{chapter}.SCN"
+    mes = retail / f"{chapter}.MES"
     if not scn.exists():
         raise FileNotFoundError(f"missing hash-locked retail SCN: {scn}")
+    if not mes.exists():
+        raise FileNotFoundError(f"missing hash-locked retail MES: {mes}")
     translated = {
         record["index"]
         for record in source["records"]
@@ -306,6 +319,7 @@ def _contracts(source: dict[str, object], retail_root: Path) -> dict[int, Record
         source["record_count"],
         translated,
         source.get("profile"),
+        retail_records=parse_mes(mes.read_bytes(), source=str(mes)).records,
     )
 
 
@@ -344,10 +358,92 @@ def format_preview(text: str, contract: RecordContract | None) -> list[str]:
     The preview shares normalization and wrapping code with the compiler, so it
     is suitable for review but never writes canonical source.
     """
-    semantic = normalize_semantic_text(text)
+    semantic = normalize_ellipsis_style(normalize_semantic_text(text))
     if contract is None or contract.layout is None:
         return [semantic]
-    return _wrap_words(semantic, contract.layout, False)
+    return _wrap_words(semantic, contract.layout)
+
+
+def _renderer_tokens(text: str) -> list[str]:
+    """Return lexical formatter tokens while treating ``...`` as a soft edge.
+
+    The canonical style removes the space after an ellipsis, but the formatter
+    may still wrap at that pause without splitting a normal word. This helper
+    makes the boundary audit compare that representation instead of mistaking a
+    legal ellipse wrap for a fragmented source token.
+
+    Args:
+        text: Canonical semantic English or visible formatter text.
+
+    Returns:
+        Ordered tokens with a virtual boundary after an ellipsis when text
+        immediately follows it. This includes terminal punctuation because
+        the renderer may legally place that punctuation on the next row.
+
+    Side Effects:
+        None.
+    """
+    return re.sub(r"\.\.\.(?=\S)", "... ", text).split()
+
+
+def _renderer_boundary_failures(
+    semantic: str,
+    rows: list[str],
+    contract: RecordContract,
+) -> list[str]:
+    """Return formatter failures that would fragment a token at a row edge.
+
+    The renderer consumes one packed two-character cell at a time, while the
+    canonical text is stored as ordinary semantic prose.  A row may therefore
+    end only after a complete whitespace-delimited source token; otherwise the
+    renderer can expose pieces of a word on separate visual lines.  This check
+    deliberately compares tokens, rather than relying solely on reconstructed
+    text, so an inserted row boundary is reported as the specific regression it
+    represents.
+
+    Args:
+        semantic: Normalized canonical English for the record.
+        rows: Unpadded visible rows emitted by :func:`format_preview`.
+        contract: SCN-derived geometry for the record's renderer.
+
+    Returns:
+        Human-readable violations. An empty list means every source token is
+        present whole in order and every row fits its proven visible cell span.
+
+    Side Effects:
+        None. The helper does not modify canonical text or compiled MES data.
+    """
+    failures: list[str] = []
+    source_tokens = _renderer_tokens(semantic)
+    rendered_tokens = [token for row in rows for token in _renderer_tokens(row)]
+    if source_tokens != rendered_tokens:
+        mismatch = next(
+            (
+                index
+                for index, (source, rendered) in enumerate(
+                    zip(source_tokens, rendered_tokens, strict=False)
+                )
+                if source != rendered
+            ),
+            min(len(source_tokens), len(rendered_tokens)),
+        )
+        source_token = source_tokens[mismatch] if mismatch < len(source_tokens) else "<end>"
+        rendered_token = (
+            rendered_tokens[mismatch] if mismatch < len(rendered_tokens) else "<end>"
+        )
+        failures.append(
+            "renderer row boundary splits or alters source token "
+            f"{mismatch + 1}: {source_token!r} -> {rendered_token!r}"
+        )
+    for row_index, row in enumerate(rows):
+        permitted_cells = contract.layout.visible_cells(row_index)
+        used_cells = _measure_literal(row)
+        if used_cells > permitted_cells:
+            failures.append(
+                f"row {row_index + 1} uses {used_cells} visible cells; "
+                f"renderer permits {permitted_cells}"
+            )
+    return failures
 
 
 def _record_audit(
@@ -363,15 +459,17 @@ def _record_audit(
     for ordinary layout problems, allowing whole-game audits to report all
     affected stable IDs in one pass.
     """
-    semantic = normalize_semantic_text(text)
-    rows = format_preview(text, contract)
+    normalized = normalize_semantic_text(text)
+    semantic = normalize_ellipsis_style(normalized)
+    rows = format_preview(semantic, contract)
     roles = sorted(contract.roles) if contract is not None else []
     failures: list[str] = []
     warnings: list[str] = []
     if contract is not None and contract.layout is not None:
-        rebuilt = normalize_semantic_text("\n".join(rows))
+        rebuilt = _reconstruct_wrapped_text(rows)
         if rebuilt != semantic:
             failures.append("wrapped rows do not reconstruct the semantic text")
+        failures.extend(_renderer_boundary_failures(semantic, rows, contract))
         if contract.max_rows is not None and len(rows) > contract.max_rows:
             failures.append(
                 f"uses {len(rows)} rows but the renderer permits {contract.max_rows}"
@@ -391,8 +489,10 @@ def _record_audit(
     if ROLE_CHOICE in roles and ("\n" in text or "\r" in text):
         failures.append("menu choice is not a single line")
     if adaptive and (roles or (contract and contract.layout)):
-        if text != semantic:
+        if text != normalized:
             failures.append("adaptive canonical text contains legacy layout whitespace")
+    if text != normalize_ellipsis_style(text):
+        failures.append("canonical text violates the no-space ellipsis style")
     layout = None
     if contract is not None and contract.layout is not None:
         layout = {
@@ -404,6 +504,8 @@ def _record_audit(
                 "first": contract.layout.runtime_first,
                 "continuation": contract.layout.runtime_continuation,
             },
+            "page_rows": contract.layout.page_rows,
+            "opening_anchor_cells": contract.layout.opening_anchor_cells,
         }
     return {
         "id": record_id,
@@ -619,12 +721,12 @@ def apply_changes(path: Path, retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[s
             raise ValueError(f"{record_id}: " + "; ".join(audited["failures"]))
         before = record["text"]
         if contract is not None and (contract.roles or contract.layout is not None):
-            record["text"] = normalize_semantic_text(proposed)
+            record["text"] = normalize_ellipsis_style(normalize_semantic_text(proposed))
             record["layout_policy"] = "adaptive"
         else:
             # Without proven SCN geometry the record is an explicit bitmap
             # layout.  Preserve the reviewer's exact line/space decisions.
-            record["text"] = proposed
+            record["text"] = normalize_ellipsis_style(proposed)
             record["layout_policy"] = "fixed"
         profile = source.get("profile")
         if isinstance(profile, dict):
@@ -643,6 +745,81 @@ def apply_changes(path: Path, retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[s
         )
     _transactional_write_json_sources(pending)
     return {"status": "PASS", "changed_record_count": len(report), "changes": report}
+
+
+def normalize_ellipsis_sources(
+    retail_root: Path = DEFAULT_RETAIL_ROOT,
+) -> dict[str, object]:
+    """Apply the reviewed global ellipsis style to every translated record.
+
+    This migration is deliberately source-wide rather than chapter-specific.
+    It removes an ordinary space following every ellipsis and lowercases the
+    following word unless the shared canonical-style exception list marks it as
+    a name, proper form, title, acronym, or grammatical first-person form.
+    The transformation is geometry-neutral: it removes a literal pause space
+    or replaces an ASCII capital with its same-width lowercase form. The
+    migration proves that no record gains rendered cells, commits atomically,
+    and relies on the normal whole-game renderer audit and compile gates for
+    complete SCN validation. This avoids re-running that complete audit once
+    per changed record.
+
+    Args:
+        retail_root: Retained for CLI compatibility with other formatter
+            migrations. The geometry-neutral preflight does not read it.
+
+    Returns:
+        A report listing changed chapters and the number of revised records.
+
+    Raises:
+        ValueError: If a normalized record unexpectedly gains rendered cells.
+        OSError: If canonical source files cannot be read or committed.
+
+    Side Effects:
+        Rewrites only canonical chapter JSON files whose translated text
+        changes. It does not modify Japanese retail inputs, SCN data, or game
+        binaries.
+    """
+    del retail_root
+    _, chapters = _chapter_sources()
+    pending: dict[Path, dict[str, object]] = {}
+    changed_chapters: list[str] = []
+    changed_records = 0
+    for chapter, (path, source) in chapters.items():
+        source_changed = False
+        for record in source["records"]:
+            if record.get("policy") != "translate":
+                continue
+            before = record["text"]
+            if not isinstance(before, str):
+                raise ValueError(f"{chapter}:{record['index']:03d}: text is not a string")
+            after = normalize_ellipsis_style(before)
+            if after == before:
+                continue
+            record_id = f"{chapter}:{record['index']:03d}"
+            if _measure_literal(after) > _measure_literal(before):
+                raise ValueError(
+                    f"{record_id}: ellipsis normalization increased rendered cells"
+                )
+            record["text"] = after
+            profile = source.get("profile")
+            if isinstance(profile, dict):
+                required_exact = profile.get("required_text_exact")
+                if isinstance(required_exact, dict) and str(record["index"]) in required_exact:
+                    exact = required_exact[str(record["index"])]
+                    if not isinstance(exact, str):
+                        raise ValueError(f"{record_id}: required exact text is not a string")
+                    required_exact[str(record["index"])] = normalize_ellipsis_style(exact)
+            changed_records += 1
+            source_changed = True
+        if source_changed:
+            pending[path] = source
+            changed_chapters.append(chapter)
+    _transactional_write_json_sources(pending)
+    return {
+        "status": "PASS",
+        "changed_chapters": changed_chapters,
+        "changed_record_count": changed_records,
+    }
 
 
 def migrate(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
@@ -677,7 +854,7 @@ def migrate(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
                     fixed_records += 1
                     source_changed = True
                 continue
-            semantic = normalize_semantic_text(record["text"])
+            semantic = normalize_ellipsis_style(normalize_semantic_text(record["text"]))
             audited = _record_audit(
                 f"{chapter}:{record['index']:03d}",
                 semantic,
@@ -726,13 +903,18 @@ def migrate(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
 
 
 def main() -> None:
-    """Run preview, batch-apply, migration, or whole-game audit mode."""
+    """Run preview, batch-apply, style migration, layout migration, or audit."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT)
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
     action = parser.add_mutually_exclusive_group()
     action.add_argument("--record", help="preview one stable CHAPTER:NNN record")
     action.add_argument("--changes", type=Path, help="apply an ID-keyed English change file")
+    action.add_argument(
+        "--normalize-ellipses",
+        action="store_true",
+        help="apply the reviewed no-space ellipsis style to all translated records",
+    )
     action.add_argument("--migrate", action="store_true", help="adopt adaptive mode and semantic text")
     parser.add_argument("--text", help="proposed English for --record")
     args = parser.parse_args()
@@ -760,6 +942,8 @@ def main() -> None:
         )
     elif args.changes:
         payload = apply_changes(args.changes, args.retail_root)
+    elif args.normalize_ellipses:
+        payload = normalize_ellipsis_sources(args.retail_root)
     elif args.migrate:
         payload = migrate(args.retail_root)
     else:

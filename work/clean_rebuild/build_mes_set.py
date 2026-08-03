@@ -31,6 +31,23 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest().upper()
 
 
+def report_path(build_root: Path, path: Path) -> str:
+    """Return a deterministic POSIX path relative to the current build root.
+
+    Generated reports are compared across independent clean-build directories.
+    Absolute temporary paths would make otherwise identical builds appear
+    different, so every managed artifact path is serialized relative to the
+    run-local build root.
+    """
+    try:
+        relative = path.relative_to(build_root)
+    except ValueError as error:
+        raise ValueError(
+            f"report artifact escapes build root: {path} is not below {build_root}"
+        ) from error
+    return relative.as_posix()
+
+
 def build_mes_set(build_root: Path) -> dict[str, object]:
     """Compile all chapters and assemble the generated fixed-font image.
 
@@ -80,7 +97,7 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
         details.update(
             {
                 "chapter": chapter,
-                "path": str(output_path),
+                "path": report_path(build_root, output_path),
                 "size": output_path.stat().st_size,
                 "sha256": sha256(output_path),
             }
@@ -102,7 +119,7 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
         "total_records": sum(int(item["record_count"]) for item in chapters),
         "max_dynamic_glyphs": max(int(item["dynamic_glyphs"]) for item in chapters),
         "fixed_font": {
-            "path": str(output_font),
+            "path": report_path(build_root, output_font),
             "size": output_font.stat().st_size,
             "sha256": sha256(output_font),
             "patched_codes": [f"0x{code:02X}" for code in sorted(font_patches)],

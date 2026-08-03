@@ -127,7 +127,7 @@
     {
       "index": 15,
       "policy": "translate",
-      "text": "There is something suggestive about this game... It reminds me of something. All right, let us begin.",
+      "text": "There is something suggestive about this game...it reminds me of something. All right, let us begin.",
       "layout_policy": "adaptive"
     },
     {
@@ -139,7 +139,7 @@
     {
       "index": 17,
       "policy": "translate",
-      "text": "Hee hee, you may be tough. But I am lucky.",
+      "text": "Heh. You may be tough, but I'm lucky.",
       "layout_policy": "adaptive"
     },
     {
@@ -181,7 +181,7 @@
     {
       "index": 24,
       "policy": "translate",
-      "text": "Let us do it!",
+      "text": "Let's do it!",
       "layout_policy": "adaptive"
     },
     {
@@ -211,25 +211,25 @@
     {
       "index": 29,
       "policy": "translate",
-      "text": "Ilyu has a three. I have won... I will raise the stakes and strip her bare!",
+      "text": "Ilyu has a three. I have won...I will raise the stakes and strip her bare!",
       "layout_policy": "adaptive"
     },
     {
       "index": 30,
       "policy": "translate",
-      "text": "Ilyu has a seven... That is a tricky number...",
+      "text": "Ilyu has a seven...that is a tricky number...",
       "layout_policy": "adaptive"
     },
     {
       "index": 31,
       "policy": "translate",
-      "text": "Ilyu has a jack... This could be close.",
+      "text": "Ilyu has a jack...this could be close.",
       "layout_policy": "adaptive"
     },
     {
       "index": 32,
       "policy": "translate",
-      "text": "Ilyu has a two... Calling normally means certain defeat. Force a fold, or beg for mercy?",
+      "text": "Ilyu has a two...calling normally means certain defeat. Force a fold, or beg for mercy?",
       "layout_policy": "adaptive"
     },
     {
@@ -241,7 +241,7 @@
     {
       "index": 34,
       "policy": "translate",
-      "text": "She is coming on strong... Is she trying to tell me my card is bad? Is it a bluff?",
+      "text": "She is coming on strong...is she trying to tell me my card is bad? Is it a bluff?",
       "layout_policy": "adaptive"
     },
     {
@@ -265,7 +265,7 @@
     {
       "index": 38,
       "policy": "translate",
-      "text": "She is acting timid... Did I draw a good card?",
+      "text": "She is acting timid...did I draw a good card?",
       "layout_policy": "adaptive"
     },
     {
@@ -313,7 +313,7 @@
     {
       "index": 46,
       "policy": "translate",
-      "text": "...This is tense.",
+      "text": "...this is tense.",
       "layout_policy": "adaptive"
     },
     {
@@ -421,7 +421,7 @@
     {
       "index": 64,
       "policy": "translate",
-      "text": "You had an eight. I had... a seven.",
+      "text": "You had an eight. I had...a seven.",
       "layout_policy": "adaptive"
     },
     {
@@ -451,7 +451,7 @@
     {
       "index": 69,
       "policy": "translate",
-      "text": "I do not want to know! ...Damn it...",
+      "text": "I do not want to know! ...damn it...",
       "layout_policy": "adaptive"
     },
     {
@@ -469,7 +469,7 @@
     {
       "index": 72,
       "policy": "translate",
-      "text": "You had a four. Something is not right... What did I have?",
+      "text": "You had a four. Something is not right...what did I have?",
       "layout_policy": "adaptive"
     },
     {

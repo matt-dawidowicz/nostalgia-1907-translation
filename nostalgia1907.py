@@ -12,8 +12,9 @@ Command flow
 ``doctor`` checks the environment and retail inputs. ``prepare`` creates a
 hash-locked, ignored retail reference. ``edit`` changes canonical English by
 stable record ID. ``compare`` and ``validate`` produce review evidence.
-``build`` performs full validation and then delegates the deterministic two-run
-BIN/CUE build. ``build-us`` creates a separate BIOS-testing derivative.
+``build`` performs full validation, delegates the deterministic two-run clean
+build, and defaults to a second deterministic North American region stage.
+``build-us`` remains available for wrapping an older validated baseline.
 
 Safety model
 ------------
@@ -31,7 +32,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import importlib.util
 import json
 import re
 import shutil
@@ -320,8 +320,8 @@ def retail_reference_check(root: Path, manifest: dict[str, Any]) -> dict[str, An
 def doctor_report(root: Path, args: argparse.Namespace) -> dict[str, Any]:
     """Inspect whether the checkout is ready to prepare, validate, and build.
 
-    Required Python, Pillow, canonical-source, and original-track checks
-    determine the overall status. Prepared retail data, BIOS, and FFmpeg are
+    Required Python, canonical-source, and original-track checks determine
+    the overall status. Prepared retail data, BIOS, and FFmpeg are
     reported according to whether their optional workflows were configured.
 
     Returns:
@@ -340,13 +340,6 @@ def doctor_report(root: Path, args: argparse.Namespace) -> dict[str, Any]:
                 f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}; "
                 f"minimum {manifest['tool']['python_minimum']}"
             ),
-        },
-        {
-            "name": "Pillow",
-            "status": "PASS" if importlib.util.find_spec("PIL") else "FAIL",
-            "required": True,
-            "path": "",
-            "detail": "available" if importlib.util.find_spec("PIL") else "install with `python -m pip install -e .`",
         },
         source_index_check(root, manifest),
     ]
@@ -605,13 +598,12 @@ def operator_python_sources(root: Path, manifest: dict[str, Any]) -> list[Path]:
 def command_compare(root: Path, args: argparse.Namespace) -> int:
     """Regenerate the deterministic Japanese/English review package.
 
-    A prepared retail reference and Pillow are mandatory. The lower-level
-    exporter owns alignment, bitmap, package, and determinism checks.
+    A prepared retail reference is mandatory. The lower-level exporter owns
+    alignment, metadata-free bitmap encoding, exact package inventory, and
+    deterministic archive checks without a Pillow dependency.
     """
     manifest = load_manifest(root)
     retail = require_retail_reference(root, manifest)
-    if importlib.util.find_spec("PIL") is None:
-        raise ToolError("Pillow is required; install with `python -m pip install -e .`")
     default_output, _ = comparison_paths(root, manifest)
     output = args.output.expanduser().resolve() if args.output else default_output
     run_script(
@@ -725,12 +717,13 @@ def require_separate_build_directories(runs: Path, delivery: Path) -> None:
 
 
 def command_build(root: Path, args: argparse.Namespace) -> int:
-    """Build a clean deterministic BIN/CUE twice from original tracks.
+    """Build a deterministic BIN/CUE for the selected console region.
 
     Exact input hashes and non-overlapping output roots are resolved before the
     dry-run boundary. A real build additionally requires fresh destinations,
     runs the complete validation gate, and delegates two-run byte-identity
-    proof and publication.
+    proof. North American builds then wrap that proven clean result twice and
+    publish only the region-adjusted delivery.
     """
     manifest = load_manifest(root)
     local = load_local_config(root)
@@ -738,7 +731,25 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
     track2 = default_input_path(root, manifest, local, "track2", args.track2)
     require_file("original Japanese Track 1", track1, manifest["retail_inputs"]["track1"])
     require_file("original Japanese Track 2", track2, manifest["retail_inputs"]["track2"])
-    basename = release_basename(args.name)
+    region = getattr(args, "region", None) or manifest["build"]["default_region"]
+    if region not in {"north-america", "japan"}:
+        raise ToolError(f"unsupported build region: {region!r}")
+    base_basename = release_basename(args.name)
+    basename = (
+        f"{base_basename}_NorthAmerica"
+        if region == "north-america"
+        else base_basename
+    )
+    bios: Path | None = None
+    if region == "north-america":
+        bios_value = getattr(args, "us_bios", None) or local.get("us_bios")
+        if not bios_value:
+            raise ToolError(
+                f"U.S. BIOS path is required; pass --us-bios or set it in "
+                f"{LOCAL_CONFIG_NAME}"
+            )
+        bios = rooted(root, bios_value)
+        require_file("U.S. BIOS", bios, manifest["us_bios_test"]["bios"])
     runs = (
         args.runs_root.expanduser().resolve()
         if args.runs_root
@@ -751,6 +762,7 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
     )
     require_separate_build_directories(runs, delivery)
     plan = {
+        "region": region,
         "track1": str(track1),
         "track2": str(track2),
         "basename": basename,
@@ -758,27 +770,74 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
         "runs_root_state": directory_state(runs),
         "delivery_root": str(delivery),
         "delivery_root_state": directory_state(delivery),
-        "independent_builds": 2,
+        "independent_clean_builds": 2,
+        "independent_region_builds": 2 if region == "north-america" else 0,
         "validation": "full semantic/layout/static preflight",
     }
+    if bios is not None:
+        plan["us_bios"] = str(bios)
+        plan["clean_stage_basename"] = base_basename
+        plan["clean_stage_delivery"] = str(runs / "clean_delivery")
     if args.dry_run:
         print(json.dumps(plan, indent=2))
         return 0
     require_fresh_build_directory("runs root", runs)
     require_fresh_build_directory("delivery root", delivery)
     command_validate(root, argparse.Namespace(skip_comparison=False))
+    if region == "japan":
+        run_script(
+            root,
+            "work/clean_rebuild/rebuild.py",
+            str(track1),
+            str(track2),
+            "--runs-root",
+            str(runs),
+            "--delivery-root",
+            str(delivery),
+            "--basename",
+            basename,
+            label=f"Deterministic clean rebuild {args.name}",
+        )
+        return 0
+
+    if bios is None:  # Defensive narrowing; region resolution required it above.
+        raise ToolError("North American build did not resolve a U.S. BIOS")
+    clean_runs = runs / "clean_runs"
+    clean_delivery = runs / "clean_delivery"
+    region_runs = runs / "north_america_runs"
     run_script(
         root,
         "work/clean_rebuild/rebuild.py",
         str(track1),
         str(track2),
         "--runs-root",
-        str(runs),
+        str(clean_runs),
+        "--delivery-root",
+        str(clean_delivery),
+        "--basename",
+        base_basename,
+        label=f"Deterministic clean rebuild stage {args.name}",
+    )
+    baseline_track1 = clean_delivery / f"{base_basename}_Track1.bin"
+    baseline_track2 = clean_delivery / f"{base_basename}_Track2.bin"
+    if not baseline_track1.is_file() or not baseline_track2.is_file():
+        raise ToolError("clean build returned without its proven BIN artifacts")
+    baseline_track1_sha256 = sha256(baseline_track1)
+    run_script(
+        root,
+        "work/region_variant/build_us_bios_test.py",
+        str(baseline_track1),
+        str(baseline_track2),
+        str(bios),
+        "--runs-root",
+        str(region_runs),
         "--delivery-root",
         str(delivery),
         "--basename",
         basename,
-        label=f"Deterministic clean rebuild {args.name}",
+        "--expected-track1-sha256",
+        baseline_track1_sha256,
+        label=f"Deterministic North American region stage {args.name}",
     )
     return 0
 
@@ -861,6 +920,8 @@ def command_build_us(root: Path, args: argparse.Namespace) -> int:
         str(delivery),
         "--basename",
         basename,
+        "--expected-track1-sha256",
+        build_spec["track1"]["sha256"],
         label=f"U.S.-BIOS test derivative from {baseline}",
     )
     return 0
@@ -910,10 +971,19 @@ def parser() -> argparse.ArgumentParser:
     )
     validate.set_defaults(handler=command_validate)
 
-    build = commands.add_parser("build", help="build deterministic BIN/CUE twice from retail")
+    build = commands.add_parser(
+        "build",
+        help="build deterministic BIN/CUE; North America is the default region",
+    )
     build.add_argument("--name", required=True, help="release label, such as v8")
     build.add_argument("--track1", type=Path)
     build.add_argument("--track2", type=Path)
+    build.add_argument(
+        "--region",
+        choices=("north-america", "japan"),
+        help="console region; defaults to the project policy (North America)",
+    )
+    build.add_argument("--us-bios", type=Path)
     build.add_argument("--runs-root", type=Path)
     build.add_argument("--output", type=Path)
     build.add_argument("--dry-run", action="store_true", help="show resolved inputs/outputs only")

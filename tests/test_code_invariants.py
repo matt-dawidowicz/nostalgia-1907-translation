@@ -20,6 +20,7 @@ import iso9660  # noqa: E402
 import mes_compiler  # noqa: E402
 import mes_format  # noqa: E402
 import rebuild as clean_rebuild  # noqa: E402
+import scn_layout  # noqa: E402
 import test_script_layout as layout_tests  # noqa: E402
 import translation_formatter  # noqa: E402
 
@@ -178,6 +179,86 @@ class RowPackingTests(unittest.TestCase):
                 self.assertIsNone(row.alternate)
                 self.assertFalse(row.selected_alternate)
                 self.assertEqual(row.cells()[0], ("literal", text[:2]))
+
+    def test_prose_rows_without_an_anchor_never_reserve_a_leading_blank_cell(self) -> None:
+        """Keep non-dialogue adaptive rows aligned to their renderer's first cell."""
+        layout = mes_compiler.Layout(4, 4, 4, 4)
+        rows = mes_compiler._prose_rows("left aligned", layout)
+        self.assertEqual(rows[0][0], ())
+        self.assertTrue(rows[0][1].startswith("left"))
+
+    def test_opening_anchor_is_emitted_once_for_the_full_dialogue_stream(self) -> None:
+        """Keep one gutter while restoring every later page's first stride."""
+        layout = mes_compiler.Layout(
+            3,
+            2,
+            3,
+            2,
+            page_rows=3,
+            opening_anchor_cells=1,
+        )
+        rows = mes_compiler._prose_rows("one two three four five six seven", layout)
+        self.assertEqual(
+            [len(prefix) for prefix, _line in rows[:7]],
+            [1, 0, 0, 0, 0, 0, 0],
+        )
+        self.assertEqual(
+            [layout.visible_cells(index) for index in range(7)],
+            [2, 2, 2, 3, 2, 2, 3],
+        )
+        self.assertEqual(
+            [layout.physical_cells(index) for index in range(7)],
+            [3, 2, 2, 3, 2, 2, 3],
+        )
+        self.assertEqual(rows[0][0], (mes_compiler.BLANK_CELL,))
+        self.assertEqual(
+            [
+                len(prefix) + mes_compiler._measure_literal(line)
+                for prefix, line in rows[:7]
+            ],
+            [3, 2, 2, 3, 2, 2, 3],
+        )
+
+    def test_layout_rejects_invalid_cell_geometry_and_row_indexes(self) -> None:
+        """Fail closed instead of silently compiling an impossible layout."""
+        with self.assertRaisesRegex(scn_layout.ScnLayoutError, "must be positive"):
+            mes_compiler.Layout(0, 2, 2, 2)
+        with self.assertRaisesRegex(scn_layout.ScnLayoutError, "narrower"):
+            mes_compiler.Layout(3, 2, 2, 2)
+        layout = mes_compiler.Layout(3, 2, 3, 2)
+        with self.assertRaisesRegex(scn_layout.ScnLayoutError, "must not be negative"):
+            layout.physical_cells(-1)
+        with self.assertRaisesRegex(scn_layout.ScnLayoutError, "page_rows"):
+            mes_compiler.Layout(3, 2, 3, 2, page_rows=0)
+        with self.assertRaisesRegex(scn_layout.ScnLayoutError, "leaves no"):
+            mes_compiler.Layout(1, 2, 1, 2, opening_anchor_cells=1)
+
+    def test_retail_opening_anchor_applies_only_to_main_dialogue(self) -> None:
+        """Never assign the quote gutter to a continuation stream fragment."""
+        retail_records = (b"\x01\x00", b"\x10\x00")
+        main = scn_layout.infer_layouts(
+            b"\x21\x00\x01\x00\x02",
+            2,
+            {1},
+            None,
+            retail_records=retail_records,
+        )
+        self.assertEqual(main[1].opening_anchor_cells, 1)
+        self.assertEqual(
+            (main[1].visible_first, main[1].runtime_first),
+            (12, 12),
+        )
+        self.assertEqual(main[1].page_rows, 3)
+        self.assertEqual(main[1].visible_cells(0), 11)
+        self.assertEqual(main[1].visible_cells(3), 12)
+        continuation = scn_layout.infer_layouts(
+            b"\x21\x00\x02\x00\x00",
+            2,
+            {1},
+            None,
+            retail_records=retail_records,
+        )
+        self.assertEqual(continuation[1].opening_anchor_cells, 0)
 
 
 class IsoFormatTests(unittest.TestCase):

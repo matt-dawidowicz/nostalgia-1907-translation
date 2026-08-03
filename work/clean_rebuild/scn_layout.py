@@ -51,6 +51,13 @@ ROLE_OVERLAY = "overlay_text"
 ROLE_NARRATION = "narration"
 ROLE_CHOICE = "menu_choice"
 
+# Retail lower dialogue begins with this fixed Japanese opening-quote cell in
+# almost every ordinary ``0x21`` dialogue record.  MAIN.BIN renders that first
+# cell at X=$4A, then renders every later row at X=$56.  English must retain a
+# one-time gutter there, otherwise its first letter becomes the persistent
+# left-side glyph on every later page.
+DIALOGUE_OPENING_ANCHOR_CODE = 0x10
+
 LABEL_ROLES = frozenset((ROLE_SPEAKER, ROLE_LOCATION, ROLE_PERSPECTIVE))
 PROSE_ROLES = frozenset(
     (ROLE_DIALOGUE, ROLE_CONTINUATION, ROLE_THOUGHT, ROLE_OVERLAY, ROLE_NARRATION)
@@ -67,12 +74,112 @@ class Layout:
 
     ``visible_*`` limits word wrapping. ``runtime_*`` controls padding in the
     flattened MES record and must never be smaller than its visible partner.
+    ``page_rows`` repeats the first-row geometry when the renderer advances to
+    a later page of the same MES record. A normal dialogue record may reserve
+    ``opening_anchor_cells`` once at the beginning of its stream. That anchor
+    consumes part of row zero only; later page starts retain the full native
+    first-row width.
     """
 
     visible_first: int
     visible_continuation: int
     runtime_first: int
     runtime_continuation: int
+    page_rows: int | None = None
+    opening_anchor_cells: int = 0
+
+    def __post_init__(self) -> None:
+        """Reject invalid cell geometry before layout inference uses it."""
+        widths = (
+            self.visible_first,
+            self.visible_continuation,
+            self.runtime_first,
+            self.runtime_continuation,
+        )
+        if any(width <= 0 for width in widths):
+            raise ScnLayoutError("layout cell widths must be positive")
+        if self.runtime_first < self.visible_first:
+            raise ScnLayoutError("layout first-row stride is narrower than visibility")
+        if self.runtime_continuation < self.visible_continuation:
+            raise ScnLayoutError(
+                "layout continuation stride is narrower than visibility"
+            )
+        if self.page_rows is not None and self.page_rows <= 0:
+            raise ScnLayoutError("layout page_rows must be positive")
+        if self.opening_anchor_cells < 0:
+            raise ScnLayoutError("layout opening anchor cells must not be negative")
+        if (
+            self.opening_anchor_cells >= self.visible_first
+            or self.opening_anchor_cells >= self.runtime_first
+        ):
+            raise ScnLayoutError(
+                "layout opening anchor leaves no first-row prose cells"
+            )
+
+    def is_first_row(self, row_index: int) -> bool:
+        """Return whether ``row_index`` uses the renderer's first-row geometry."""
+        if row_index < 0:
+            raise ScnLayoutError("layout row index must not be negative")
+        return row_index == 0 or self.is_page_start(row_index)
+
+    def is_page_start(self, row_index: int) -> bool:
+        """Return whether ``row_index`` begins a later renderer page."""
+        if row_index < 0:
+            raise ScnLayoutError("layout row index must not be negative")
+        return (
+            self.page_rows is not None
+            and row_index > 0
+            and row_index % self.page_rows == 0
+        )
+
+    def anchor_cells(self, row_index: int) -> int:
+        """Return the one-time initial gutter cells before prose begins."""
+        if row_index < 0:
+            raise ScnLayoutError("layout row index must not be negative")
+        return self.opening_anchor_cells if row_index == 0 else 0
+
+    def physical_cells(self, row_index: int) -> int:
+        """Return all emitted cells, including a one-time opening gutter."""
+        return self.runtime_cells(row_index) + self.anchor_cells(row_index)
+
+    def visible_cells(self, row_index: int) -> int:
+        """Return the proven visible capacity for one flattened row index."""
+        cells = (
+            self.visible_first
+            if self.is_first_row(row_index)
+            else self.visible_continuation
+        )
+        return cells - self.anchor_cells(row_index)
+
+    def runtime_cells(self, row_index: int) -> int:
+        """Return the engine stride for one flattened row index."""
+        cells = (
+            self.runtime_first
+            if self.is_first_row(row_index)
+            else self.runtime_continuation
+        )
+        return cells - self.anchor_cells(row_index)
+
+    def with_opening_anchor(self, cells: int = 1) -> "Layout":
+        """Return a body-width layout with a one-time native dialogue gutter.
+
+        The caller establishes from retail MES bytes that the original record
+        begins with the opening-quote anchor. Its row-zero body therefore loses
+        the same number of visible/runtime cells while its physical row length
+        and every later page-start width remain unchanged.
+        """
+        if cells <= 0:
+            raise ScnLayoutError("layout opening anchor cells must be positive")
+        if self.visible_first <= cells or self.runtime_first <= cells:
+            raise ScnLayoutError("layout opening anchor leaves no first-row prose cells")
+        return Layout(
+            self.visible_first,
+            self.visible_continuation,
+            self.runtime_first,
+            self.runtime_continuation,
+            page_rows=self.page_rows,
+            opening_anchor_cells=cells,
+        )
 
 
 @dataclass(frozen=True)
@@ -253,14 +360,18 @@ def infer_layouts(
     record_count: int,
     translated_indexes: set[int],
     profile: dict[str, object] | None,
+    *,
+    retail_records: tuple[bytes, ...] | None = None,
 ) -> dict[int, Layout]:
     """Infer translated-record geometry from structural SCN commands.
 
     Dialogue, continuation, floating-window, and selector command operands are
-    converted from one-based SCN IDs to zero-based canonical indexes. Reviewed
-    profile overrides may refine visible/runtime widths but cannot make runtime
-    stride smaller than visible capacity or resolve conflicting SCN evidence
-    silently.
+    converted from one-based SCN IDs to zero-based canonical indexes. When the
+    matching hash-locked MES records are supplied, a retail opening quote at
+    the start of a normal dialogue record becomes a one-time blank English
+    gutter. Reviewed profile overrides may refine visible/runtime widths but
+    cannot make runtime stride smaller than visible capacity or resolve
+    conflicting SCN evidence silently.
     """
     settings = profile or {}
     dialogue_visible = _pair(settings, "scn_dialogue_layout", (12, 11))
@@ -275,6 +386,9 @@ def infer_layouts(
     visible_overrides = _indexed_pairs(settings, "layout_overrides")
     runtime_overrides = _indexed_pairs(settings, "runtime_layout_overrides")
     layouts: dict[int, Layout] = {}
+    if retail_records is not None and len(retail_records) != record_count:
+        raise ScnLayoutError("retail MES record count does not match SCN layout input")
+    dialogue_anchor_indexes: set[int] = set()
 
     def add(index: int, layout: Layout, source: str) -> None:
         """Merge one proven layout while rejecting conflicting SCN evidence."""
@@ -295,15 +409,25 @@ def infer_layouts(
             first_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
             second_id = int.from_bytes(scn[offset + 3 : offset + 5], "big")
             if 1 <= second_id <= record_count:
+                index = second_id - 1
                 add(
-                    second_id - 1,
-                    Layout(*dialogue_visible, *dialogue_runtime),
+                    index,
+                    Layout(*dialogue_visible, *dialogue_runtime, page_rows=3),
                     f"0x21 dialogue at 0x{offset:X}",
                 )
+                if (
+                    retail_records is not None
+                    and retail_records[index][:1] == bytes((DIALOGUE_OPENING_ANCHOR_CODE,))
+                ):
+                    dialogue_anchor_indexes.add(index)
             elif second_id == 0 and 1 <= first_id <= record_count:
                 add(
                     first_id - 1,
-                    Layout(*continuation_visible, *continuation_runtime),
+                    Layout(
+                        *continuation_visible,
+                        *continuation_runtime,
+                        page_rows=3,
+                    ),
                     f"0x21 continuation at 0x{offset:X}",
                 )
     for offset, _subtype, width_byte, _raw_y, indexes in _window_text_commands(
@@ -370,7 +494,14 @@ def infer_layouts(
                     else visible
                 )
             )
-        override = Layout(*visible, *runtime)
+        override = Layout(
+            *visible,
+            *runtime,
+            page_rows=previous.page_rows if previous is not None else None,
+            opening_anchor_cells=(
+                previous.opening_anchor_cells if previous is not None else 0
+            ),
+        )
         if (
             override.runtime_first < override.visible_first
             or override.runtime_continuation < override.visible_continuation
@@ -379,6 +510,10 @@ def infer_layouts(
                 f"record {index}: runtime override is smaller than visible width"
             )
         layouts[index] = override
+    for index in sorted(dialogue_anchor_indexes):
+        layout = layouts.get(index)
+        if layout is not None:
+            layouts[index] = layout.with_opening_anchor()
     return layouts
 
 
@@ -511,6 +646,8 @@ def infer_contracts(
     record_count: int,
     translated_indexes: set[int],
     profile: dict[str, object] | None,
+    *,
+    retail_records: tuple[bytes, ...] | None = None,
 ) -> dict[int, RecordContract]:
     """Return shared role, layout, and row contracts for translated records.
 
@@ -519,7 +656,13 @@ def infer_contracts(
     preventing the translation from determining its own renderer rules.
     """
     roles = infer_roles(scn, record_count, translated_indexes, profile)
-    layouts = infer_layouts(scn, record_count, translated_indexes, profile)
+    layouts = infer_layouts(
+        scn,
+        record_count,
+        translated_indexes,
+        profile,
+        retail_records=retail_records,
+    )
     row_limits = infer_row_limits(scn, record_count, translated_indexes, profile)
     indexes = set(roles) | set(layouts) | set(row_limits)
     return {
