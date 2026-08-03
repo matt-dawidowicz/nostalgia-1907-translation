@@ -7,6 +7,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
+try:
+    import tomllib
+except ModuleNotFoundError:  # pragma: no cover - exercised by the Python 3.10 CI job.
+    import tomli as tomllib
+
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE_PATH = ROOT / "tools" / "source_health.py"
@@ -19,6 +24,12 @@ SPEC.loader.exec_module(source_health)
 
 class SourceHealthTests(unittest.TestCase):
     """Keep structural checks strict without inspecting ignored local state."""
+
+    def test_python_310_toml_backport_is_declared(self) -> None:
+        """Keep source-health TOML parsing available at the supported minimum."""
+        project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+        dependencies = project["project"]["dependencies"]
+        self.assertIn("tomli>=2.0; python_version < '3.11'", dependencies)
 
     def test_clean_source_tree_passes(self) -> None:
         """Accept valid UTF-8 Python, JSON, and TOML source files."""

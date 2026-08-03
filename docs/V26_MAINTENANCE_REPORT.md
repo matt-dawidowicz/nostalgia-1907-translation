@@ -146,7 +146,9 @@ chapter-specific patch:
 - ISO and MES parsers gained strict bounds, duplicate-record, padding,
   terminator, and extent validation.
 - `tools/source_health.py` enforces UTF-8/LF text hygiene, strict JSON keys,
-  parseable maintained source, and a media-free source checkout.
+  parseable maintained source, and a media-free source checkout. It uses the
+  standard-library TOML parser on Python 3.11+ and the conditional `tomli`
+  backport on the supported Python 3.10 minimum.
 - New focused test modules cover build reports, comparison determinism,
   ellipsis style, renderer boundaries, review exports, source health, and
   verification-manifest binding.
@@ -182,7 +184,7 @@ The following checks completed successfully with CPython 3.12.13 on Windows:
 | --- | --- |
 | Source-health audit | PASS; 201 files checked, zero forbidden media or failures |
 | Python static compilation | PASS |
-| Maintained unit-test discovery | PASS; 94 tests |
+| Maintained unit-test discovery | PASS; 95 tests |
 | Audio companion unit tests | PASS; 19 tests |
 | Operator `doctor` | PASS for Python, canonical inventory, both original tracks, and prepared retail reference; optional BIOS/FFmpeg skipped because not configured |
 | Full `validate` command | PASS |
