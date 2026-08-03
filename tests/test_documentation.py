@@ -30,12 +30,15 @@ MAINTAINED_PYTHON = (
     ROOT / "work" / "clean_rebuild" / "build_archives.py",
     ROOT / "work" / "clean_rebuild" / "main_patch.py",
     ROOT / "work" / "clean_rebuild" / "regression.py",
+    ROOT / "work" / "clean_rebuild" / "verification_manifest.py",
     ROOT / "work" / "clean_rebuild" / "rebuild.py",
     ROOT / "work" / "clean_rebuild" / "translation_formatter.py",
     ROOT / "work" / "clean_rebuild" / "translation_validation.py",
     ROOT / "work" / "clean_rebuild" / "translation_audit.py",
     ROOT / "work" / "clean_rebuild" / "bomb_audit.py",
     ROOT / "work" / "clean_rebuild" / "export_bilingual_comparison.py",
+    ROOT / "work" / "clean_rebuild" / "export_fixed_layout_review.py",
+    ROOT / "work" / "clean_rebuild" / "export_translation_proposals.py",
     ROOT / "work" / "clean_rebuild" / "test_script_layout.py",
     ROOT / "work" / "region_variant" / "build_us_bios_test.py",
     ROOT / "work" / "audio_localization" / "audio_localization.py",
@@ -109,6 +112,21 @@ class DocumentationTests(unittest.TestCase):
         ):
             with self.subTest(heading=heading):
                 self.assertRegex(formats, rf"(?m)^## .*{re.escape(heading)}")
+
+
+    def test_determinism_and_binding_scope_is_documented(self) -> None:
+        """Keep package determinism and report-binding limitations explicit."""
+        development = DOCS["development"].read_text(encoding="utf-8")
+        architecture = DOCS["architecture"].read_text(encoding="utf-8")
+        for token in (
+            "CPython major/minor",
+            "fresh output roots",
+            "verification_manifest.py",
+            "aggregate input fingerprint",
+            "runtime claim",
+        ):
+            with self.subTest(token=token):
+                self.assertIn(token, development + architecture)
 
     def test_guides_contain_no_machine_specific_absolute_paths(self) -> None:
         documents = [ROOT / "CONTRIBUTING.md", *DOCS.values(), DOCSTRING_GUIDE]

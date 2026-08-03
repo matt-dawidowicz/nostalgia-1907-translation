@@ -9,10 +9,13 @@ description = "Operator tooling for the Nostalgia 1907 English translation proje
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-  "Pillow>=10.0"
+  "tomli>=2.0; python_version < '3.11'"
 ]
 
 [project.optional-dependencies]
+legacy-render = [
+  "Pillow>=10.0"
+]
 test = [
   "numpy>=1.26"
 ]

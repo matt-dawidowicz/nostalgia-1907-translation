@@ -144,6 +144,20 @@ def render_compact_cluster(unit: str) -> bytes:
     if len(unit) != 3 or " " in unit or not any(char in ".'" for char in unit):
         raise FontError(f"unsupported compact punctuation cluster {unit!r}")
     patterns = [_pattern(char) for char in unit]
+    if unit == "...":
+        # The three one-pixel dots previously occupied only columns 0, 2, and
+        # 4, which left most of the compact cell blank and looked like a space
+        # before the next word. Spread them through the full cell so the last
+        # dot reaches the normal following-character boundary.
+        matrix = [[0] * GLYPH_WIDTH for _ in range(GLYPH_HEIGHT)]
+        for pattern, x_base in zip(patterns, (0, 5, 10), strict=True):
+            for row_index, row in enumerate(pattern):
+                y = 2 + row_index
+                if y >= GLYPH_HEIGHT:
+                    break
+                if any(value in {"1", "#"} for value in row):
+                    matrix[y][x_base] = 1
+        return _matrix_bytes(matrix)
     widths = [max(len(row) for row in pattern) for pattern in patterns]
     gaps = [
         0 if unit[index] not in ".'" and unit[index + 1] in ".'" else 1

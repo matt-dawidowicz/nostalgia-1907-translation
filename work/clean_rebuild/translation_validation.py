@@ -20,6 +20,7 @@ import re
 from pathlib import Path
 
 from bomb_audit import run_audit as run_bomb_audit
+from export_bilingual_comparison import validate_comparison_package
 from translation_formatter import audit_layouts
 from translation_audit import (
     DEFAULT_RETAIL_ROOT,
@@ -217,6 +218,13 @@ def validate(comparison_json: Path, *, require_comparison: bool = True) -> dict[
     failures.extend(f"layout: {failure}" for failure in layout["failures"])
 
     comparison_checked = False
+    comparison_package_checked = False
+    comparison_package: dict[str, object] = {
+        "status": "NOT_CHECKED",
+        "failure_count": 0,
+        "failures": [],
+        "member_count": 0,
+    }
     if comparison_json.exists():
         comparison = _load(comparison_json)
         generated = [record for chapter in comparison["chapters"] for record in chapter["records"]]
@@ -230,6 +238,12 @@ def validate(comparison_json: Path, *, require_comparison: bool = True) -> dict[
             if record.get("source_record_hex") != records_by_id[record_id]["source_record_hex"]:
                 failures.append(f"{record_id}: generated comparison Japanese source is stale")
         comparison_checked = True
+        comparison_package = validate_comparison_package(comparison_json.parent)
+        comparison_package_checked = True
+        failures.extend(
+            f"comparison-package: {failure}"
+            for failure in comparison_package["failures"]
+        )
     elif require_comparison:
         failures.append(f"generated comparison is missing: {comparison_json}")
 
@@ -251,6 +265,10 @@ def validate(comparison_json: Path, *, require_comparison: bool = True) -> dict[
         "adaptive_layout_records": layout["adaptive_record_count"],
         "legacy_layout_issues": layout["legacy_issue_count"],
         "comparison_checked": comparison_checked,
+        "comparison_package_checked": comparison_package_checked,
+        "comparison_package_status": comparison_package["status"],
+        "comparison_package_member_count": comparison_package["member_count"],
+        "comparison_package_failure_count": comparison_package["failure_count"],
     }
 
 

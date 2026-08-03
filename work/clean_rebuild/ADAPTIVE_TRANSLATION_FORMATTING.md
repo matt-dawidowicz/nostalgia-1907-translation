@@ -16,16 +16,39 @@ a neighboring record and a UI role is never inferred from English context.
 
 The width used to choose words and the runtime row stride are separate. Before
 encoding, adaptive prose is normalized, word-wrapped, and padded to the exact
-runtime stride. Floating windows also have an SCN-derived maximum row count.
+runtime stride. Most retail main-dialogue records begin with a Japanese
+opening-quote gutter. For those records only, the compiler emits one shared
+blank cell at the start. Lower dialogue then follows its repeating 12/11/11
+physical row cadence: the gutter leaves 11 prose cells on row zero, while rows
+3, 6, and later page starts retain all 12 prose cells. No artificial cell is
+emitted at a page transition. Floating windows also have an SCN-derived maximum
+row count.
 Every translated record has one explicit policy:
 
 - `adaptive` when SCN proves the renderer geometry; the compiler owns wrapping.
 - `fixed` when SCN provides no safe reflow geometry, such as credits, counters,
   static navigation labels, and direct overlays; exact bitmap layout is retained.
 
+## Ellipsis style
+
+Canonical dialogue uses an attached ellipsis pause: `Wait...what happened?`
+rather than `Wait... What happened?`. The formatter removes an immediate
+post-ellipsis space and lowercases an ordinary following word across the full
+translated script. It preserves capitalization for reviewed names, proper
+adjectives, direct-address titles, acronyms, and the first-person pronoun and
+its contractions. A renderer row may end after `...`; this is a soft wrapping
+boundary only, so compilation never adds a visible space when the next row
+continues the same thought. The compact ellipsis bitmap spans its full cell so
+it does not create a false visual space before an attached following word.
+
 Migration is atomic. It writes nothing if any classified record exceeds its
 renderer, and the whole-game audit fails if a classified record is not adaptive
-or a non-reflowable record is not explicitly fixed.
+or a non-reflowable record is not explicitly fixed. The same audit also checks
+every SCN-derived adaptive row for its visible packed-cell limit and verifies
+that each whitespace-delimited canonical token remains whole across renderer
+row boundaries. This catches a future formatter regression that would expose
+parts of one word on adjacent lines; it cannot replace scene playtesting for a
+renderer behavior that static SCN evidence does not describe.
 
 ## Preview a wording change
 

@@ -2,11 +2,11 @@
 """Build and validate a deterministic U.S.-BIOS test variant.
 
 This derivative exists only to show the English U.S. Sega CD BIOS during
-testing. It accepts the exact validated v7 Track 1, exact retail Track 2, and a
-hash-locked licensed U.S. BIOS. The builder replaces the boot security program,
-installs a relocation wrapper, regenerates only affected raw-sector checksums,
-and proves that translation, SCN, ISO extents, remaining sectors, and audio are
-unchanged.
+testing. It accepts a separately hash-locked clean-build Track 1, exact retail
+Track 2, and a hash-locked licensed U.S. BIOS. The builder replaces the boot
+security program, installs a relocation wrapper, regenerates only affected
+raw-sector checksums, and proves that translation, SCN, ISO extents, remaining
+sectors, and audio are unchanged.
 
 The normal entry point builds into two fresh staging trees and publishes only
 after their BIN/CUE artifacts are byte-identical. It never modifies its inputs.
@@ -75,10 +75,6 @@ EXPECTED_US_BIOS_SHA256 = (
 EXPECTED_US_SECURITY_SHA256 = (
     "6DDF49D3E9EDFFE66B98776507AAE447B3B0A90D96D3DAE4572618D258D1259D"
 )
-EXPECTED_CANONICAL_ISO_SHA256 = (
-    "49AD02E1923B9ACBFD8E68A0D764B8F5A2A5459479C1AB616F5314372D7F516C"
-)
-
 US_BIOS_SECURITY_SLICE = slice(0x6DF6, 0x7374)
 US_SECURITY_PREFIX = bytes.fromhex("43 FA 00 0A 4E B8")
 CONVERSION_TAG = b"MoDJConverted from Japan to US by ConvSCD 1.10\0"
@@ -388,11 +384,6 @@ def _validate_track_delta(
         raise RegionVariantError("outer Japanese metadata was not preserved")
 
     logical_hash = logical_digest.hexdigest().upper()
-    if logical_hash != EXPECTED_CANONICAL_ISO_SHA256:
-        raise RegionVariantError(
-            "canonical logical ISO hash mismatch: "
-            f"{logical_hash} != {EXPECTED_CANONICAL_ISO_SHA256}"
-        )
     return {
         "sector_count": sector_index,
         "size": output_track.stat().st_size,
@@ -415,11 +406,12 @@ def _build_once(
     us_bios: Path,
     product_root: Path,
     basename: str,
+    expected_track1_sha256: str,
 ) -> dict[str, object]:
     """Build and verify one isolated region-variant product.
 
     Args:
-        baseline_track1: Exact validated v7 raw MODE1/2352 data track.
+        baseline_track1: Exact separately verified raw MODE1/2352 data track.
         baseline_track2: Exact retail audio track.
         us_bios: Hash-locked licensed v2.00w U.S. BIOS.
         product_root: Absent or empty staging directory for this run.
@@ -467,7 +459,7 @@ def _build_once(
 
     report = {
         "status": "PASS",
-        "baseline_track1_sha256": EXPECTED_V7_TRACK1_SHA256,
+        "baseline_track1_sha256": expected_track1_sha256,
         "us_bios_sha256": EXPECTED_US_BIOS_SHA256,
         "track1": track1_report,
         "track2": {
@@ -543,17 +535,19 @@ def publish_existing(
         shutil.copyfile(run_a / name, delivery_root / name)
     report = {
         "status": "PASS",
-        "purpose": "U.S. Sega CD BIOS startup test; game content remains v7",
+        "purpose": (
+            "North American Sega CD BIOS region build; game content is unchanged"
+        ),
         "pipeline": (
-            "validated v7 Track 1 -> licensed U.S. security wrapper derived "
+            "verified clean-build Track 1 -> licensed U.S. security wrapper derived "
             "from supplied BIOS -> fixed-geometry BIN/CUE"
         ),
         "two_clean_region_builds_byte_identical": True,
-        "source_v7_track1_sha256": EXPECTED_V7_TRACK1_SHA256,
+        "source_track1_sha256": first["baseline_track1_sha256"],
         "source_track2_sha256": EXPECTED_TRACK2_SHA256,
         "us_bios_sha256": EXPECTED_US_BIOS_SHA256,
         "us_security_sha256": EXPECTED_US_SECURITY_SHA256,
-        "canonical_logical_iso_sha256": EXPECTED_CANONICAL_ISO_SHA256,
+        "region_variant_logical_iso_sha256": first["track1"]["logical_iso_sha256"],
         "artifact_sha256": compared,
         "verification": first,
         "second_verification": second,
@@ -571,8 +565,8 @@ def publish_existing(
         json.dumps(report, indent=2) + "\n", encoding="utf-8"
     )
     notes = (
-        "# Nostalgia 1907 v7 - U.S. BIOS test variant\n\n"
-        "This is a separate test derivative of the validated v7 translation. "
+        "# Nostalgia 1907 - North American region build\n\n"
+        "This is a region derivative of the verified clean-build translation. "
         "It installs the licensed U.S. Sega CD security program derived from "
         "the verified v2.00w BIOS and uses a guarded wrapper to restore the "
         "original Nostalgia bootstrap before the game starts.\n\n"
@@ -600,6 +594,7 @@ def build_twice(
     runs_root: Path,
     delivery_root: Path,
     basename: str,
+    expected_track1_sha256: str = EXPECTED_V7_TRACK1_SHA256,
 ) -> dict[str, object]:
     """Build twice, compare binary artifacts, and publish one delivery set.
 
@@ -611,18 +606,25 @@ def build_twice(
         Creates two staging products and one delivery directory. Existing
         non-empty directories are rejected and never cleaned automatically.
     """
-    if sha256(baseline_track1) != EXPECTED_V7_TRACK1_SHA256:
-        raise RegionVariantError("Track 1 is not the validated v7 baseline")
+    expected_track1_sha256 = expected_track1_sha256.upper()
+    if len(expected_track1_sha256) != 64 or any(
+        character not in "0123456789ABCDEF" for character in expected_track1_sha256
+    ):
+        raise RegionVariantError("expected Track 1 SHA-256 is not a 64-digit hexadecimal value")
+    if sha256(baseline_track1) != expected_track1_sha256:
+        raise RegionVariantError("Track 1 does not match the selected validated baseline")
     if sha256(baseline_track2) != EXPECTED_TRACK2_SHA256:
         raise RegionVariantError("Track 2 is not the exact retail audio track")
 
     run_a = runs_root / "run_a" / "product"
     run_b = runs_root / "run_b" / "product"
     _build_once(
-        baseline_track1, baseline_track2, us_bios, run_a, basename
+        baseline_track1, baseline_track2, us_bios, run_a, basename,
+        expected_track1_sha256
     )
     _build_once(
-        baseline_track1, baseline_track2, us_bios, run_b, basename
+        baseline_track1, baseline_track2, us_bios, run_b, basename,
+        expected_track1_sha256
     )
     return publish_existing(runs_root, delivery_root, basename)
 
@@ -633,6 +635,11 @@ def main() -> None:
     parser.add_argument("baseline_track1", type=Path)
     parser.add_argument("baseline_track2", type=Path)
     parser.add_argument("us_bios", type=Path)
+    parser.add_argument(
+        "--expected-track1-sha256",
+        default=EXPECTED_V7_TRACK1_SHA256,
+        help="hash from the selected clean-build verification contract",
+    )
     parser.add_argument("--runs-root", type=Path, default=HERE / "runs")
     parser.add_argument(
         "--delivery-root",
@@ -662,6 +669,7 @@ def main() -> None:
             args.runs_root,
             args.delivery_root,
             args.basename,
+            args.expected_track1_sha256,
         )
     print(
         json.dumps(

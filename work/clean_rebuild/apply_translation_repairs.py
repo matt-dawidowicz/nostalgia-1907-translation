@@ -8,6 +8,7 @@ import re
 import textwrap
 from pathlib import Path
 
+from mes_compiler import normalize_ellipsis_style
 from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES, audit
 
 
@@ -25,6 +26,23 @@ def _load(path: Path) -> dict[str, object]:
 
 def _normalized(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip()
+
+
+def _canonical_text(value: str, *, adaptive: bool) -> str:
+    """Apply global prose style without discarding fixed renderer boundaries.
+
+    Args:
+        value: A reviewed repair string, optionally with fixed-layout newlines.
+        adaptive: Whether SCN proves that the compiler owns row wrapping.
+
+    Returns:
+        Semantic adaptive prose or fixed-layout text with the canonical
+        no-space ellipsis style applied.
+
+    Side Effects:
+        None.
+    """
+    return normalize_ellipsis_style(_normalized(value) if adaptive else value)
 
 
 def _fit_like(old: str, new: str) -> str:
@@ -105,7 +123,7 @@ def main() -> None:
                     preserve_shape = explicit[record_id].get("preserve_render_shape", True)
                 if record["policy"] == "translate" and isinstance(record.get("text"), str):
                     adaptive = record.get("layout_policy") == "adaptive"
-                    working = _normalized(record["text"]) if adaptive else record["text"]
+                    working = _canonical_text(record["text"], adaptive=adaptive)
                     for pattern, replacement in global_rules:
                         working = pattern.sub(replacement, working)
                     if chapter in {"PART2E", "PART4B"}:
@@ -125,9 +143,12 @@ def main() -> None:
                             working = "\n".join(line.ljust(render_width) for line in requested_lines)
                         else:
                             working = _fit_like(working, requested) if preserve_shape else requested
-                    record["text"] = _normalized(working) if adaptive else working
+                    record["text"] = _canonical_text(working, adaptive=adaptive)
                     if isinstance(required_exact, dict) and str(record["index"]) in required_exact:
-                        required_exact[str(record["index"])] = _normalized(working)
+                        required_exact[str(record["index"])] = _canonical_text(
+                            working,
+                            adaptive=adaptive,
+                        )
                 elif requested is not None:
                     raise ValueError(f"{record_id}: requested replacement is not a translated record")
             if before_policy != record["policy"] or before_text != record.get("text"):

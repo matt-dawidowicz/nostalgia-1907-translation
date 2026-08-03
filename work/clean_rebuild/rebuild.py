@@ -32,7 +32,16 @@ from iso9660 import patch_fixed_extent_files
 from main_patch import patch_main
 from prepare_retail import prepare_retail
 from raw_cd import iso_to_raw_fixed, write_two_track_cue
-from regression import sha256, validate_build
+from regression import validate_build
+from verification_manifest import (
+    assert_exact_managed_inventory,
+    collect_build_bindings,
+    create_input_manifest,
+    expected_build_artifacts,
+    expected_delivery_artifacts,
+    snapshot_artifacts,
+    write_bound_verification,
+)
 
 
 HERE = Path(__file__).resolve().parent
@@ -54,6 +63,7 @@ PRODUCTION_MODULES = (
     "build_archives.py",
     "main_patch.py",
     "regression.py",
+    "verification_manifest.py",
     "rebuild.py",
 )
 
@@ -338,8 +348,73 @@ def _render_test_notes(
         f"translated records. Retail records {preserved_indexes} remain "
         "retail-preserved without translation or reflow because they are "
         "blank/punctuation-only window records.\n\n"
-        "Manual playtesting remains the final release gate, especially dialogue "
-        "formatting.\n"
+        "Static previews and measurements do not prove runtime correctness. Manual "
+        "playtesting remains the final release gate, especially dialogue formatting.\n"
+    )
+
+
+def _chapter_names(sources: Path = SOURCES) -> tuple[str, ...]:
+    """Return canonical chapter names in their declared build order."""
+    index = json.loads((sources / "index.json").read_text(encoding="utf-8"))
+    chapters = index.get("chapters")
+    if not isinstance(chapters, list):
+        raise ValueError("canonical source index has no chapters list")
+    names: list[str] = []
+    for item in chapters:
+        if not isinstance(item, dict) or not isinstance(item.get("chapter"), str):
+            raise ValueError("canonical source index contains an invalid chapter entry")
+        names.append(item["chapter"])
+    if len(names) != len(set(names)):
+        raise ValueError("canonical source index repeats a chapter")
+    return tuple(names)
+
+
+def _run_input_manifest(
+    track1: Path,
+    track2: Path,
+    build_root: Path,
+    basename: str,
+) -> dict[str, object]:
+    """Fingerprint every declared source and prepared Japanese build fixture."""
+    project_manifest = json.loads(
+        (WORKSPACE / "nostalgia1907.project.json").read_text(encoding="utf-8")
+    )
+    translation = project_manifest.get("translation")
+    baseline = (
+        translation.get("validated_baseline")
+        if isinstance(translation, dict)
+        else None
+    )
+    profile = {
+        "name": "clean-rebuild-single-run",
+        "validated_architectural_baseline": baseline,
+        "basename": basename,
+        "chapter_count": len(_chapter_names()),
+    }
+    command = [
+        "python",
+        "work/clean_rebuild/rebuild.py",
+        "<ORIGINAL_TRACK1>",
+        "<ORIGINAL_TRACK2>",
+        "--runs-root",
+        "<RUNS_ROOT>",
+        "--delivery-root",
+        "<DELIVERY_ROOT>",
+        "--basename",
+        basename,
+    ]
+    bindings = collect_build_bindings(
+        WORKSPACE,
+        HERE,
+        build_root,
+        PRODUCTION_MODULES,
+    )
+    return create_input_manifest(
+        bindings,
+        track1=track1,
+        track2=track2,
+        build_profile=profile,
+        command=command,
     )
 
 
@@ -350,15 +425,17 @@ def _build_once(
     product_root: Path,
     basename: str,
 ) -> dict[str, object]:
-    """Perform one complete retail-to-test-image build and regression pass.
+    """Perform one complete build and bind its report to inputs and outputs.
 
-    Both output roots must be absent or empty. The function writes every
-    intermediate into ``build_root`` and only the candidate BIN/CUE plus
-    verification into ``product_root``.
+    Both output roots must be absent or empty. Every expected artifact is named
+    explicitly, hashed immediately after regression, and rehashed before the
+    reports are written. A modified, missing, or unexpected product artifact
+    therefore cannot be presented as current verification evidence.
     """
     _ensure_empty(build_root)
     _ensure_empty(product_root)
     prepare_retail(track1, build_root)
+    input_manifest = _run_input_manifest(track1, track2, build_root, basename)
     build_mes_set(build_root)
     build_archives(build_root)
 
@@ -397,31 +474,56 @@ def _build_once(
     verification = validate_build(
         build_root, product_root, track1, track2, basename
     )
-    (product_root / "verification.json").write_text(
-        json.dumps(verification, indent=2) + "\n", encoding="utf-8"
+
+    chapters = _chapter_names()
+    assert_exact_managed_inventory(
+        build_root,
+        product_root,
+        basename,
+        chapters,
     )
-    return verification
+    artifacts = expected_build_artifacts(
+        build_root,
+        product_root,
+        basename,
+        chapters,
+    )
+    generated_snapshot = snapshot_artifacts(artifacts)
+    return write_bound_verification(
+        product_root,
+        input_manifest=input_manifest,
+        artifact_paths=artifacts,
+        generated_snapshot=generated_snapshot,
+        verification=verification,
+        manifest_name="verification_manifest.json",
+        report_name="verification.json",
+        report_kind="clean-rebuild-run",
+        explanation=(
+            "This report is bound to the exact canonical sources, Japanese retail "
+            "fixtures, production and verification code, configuration, original "
+            "track hashes, normalized build command, runtime identity, and direct "
+            "hashes of every expected artifact from this run."
+        ),
+    )
 
 
-def _manifest(build_root: Path, product_root: Path) -> dict[str, str]:
-    """Hash all deterministic binary artifacts from one run."""
-    files: dict[str, Path] = {
-        "FIX_CODE.FNT": build_root / "FIX_CODE.FNT",
-        "MAIN.BIN": build_root / "MAIN.BIN",
-        "translated.iso": build_root / "translated.iso",
+def _manifest(
+    build_root: Path,
+    product_root: Path,
+    basename: str,
+) -> dict[str, str]:
+    """Hash the explicit artifact contract for one completed clean run."""
+    artifacts = expected_build_artifacts(
+        build_root,
+        product_root,
+        basename,
+        _chapter_names(),
+    )
+    return {
+        str(item["path"]): str(item["sha256"])
+        for item in snapshot_artifacts(artifacts)
     }
-    files.update(
-        {f"mes/{path.name}": path for path in sorted((build_root / "mes").glob("*.MES"))}
-    )
-    files.update(
-        {
-            f"archives/{path.name}": path
-            for path in sorted((build_root / "archives").glob("*.LZ"))
-        }
-    )
-    files.update({f"product/{path.name}": path for path in sorted(product_root.glob("*.bin"))})
-    files.update({f"product/{path.name}": path for path in sorted(product_root.glob("*.cue"))})
-    return {name: sha256(path) for name, path in sorted(files.items())}
+
 
 
 # Two-run determinism proof and publication.
@@ -464,8 +566,14 @@ def rebuild(
     run_b_product = runs_root / "run_b" / "product"
     first = _build_once(track1, track2, run_a_build, run_a_product, basename)
     second = _build_once(track1, track2, run_b_build, run_b_product, basename)
-    manifest_a = _manifest(run_a_build, run_a_product)
-    manifest_b = _manifest(run_b_build, run_b_product)
+    first_fingerprint = first["provenance"]["aggregate_input_fingerprint"]
+    second_fingerprint = second["provenance"]["aggregate_input_fingerprint"]
+    if first_fingerprint != second_fingerprint:
+        raise ValueError(
+            "two clean builds did not use the same aggregate input fingerprint"
+        )
+    manifest_a = _manifest(run_a_build, run_a_product, basename)
+    manifest_b = _manifest(run_b_build, run_b_product, basename)
     if manifest_a != manifest_b:
         mismatches = sorted(
             name
@@ -478,19 +586,37 @@ def rebuild(
     for suffix in ("_Track1.bin", "_Track2.bin", ".cue"):
         name = f"{basename}{suffix}"
         shutil.copyfile(run_a_product / name, delivery_root / name)
+    delivery_artifacts = expected_delivery_artifacts(delivery_root, basename)
+    delivery_snapshot = snapshot_artifacts(delivery_artifacts)
+    run_manifest = json.loads(
+        (run_a_product / "verification_manifest.json").read_text(encoding="utf-8")
+    )
     report = {
         "status": "PASS",
         "pipeline": "retail Japanese Track 1 -> clean extraction -> canonical translation -> fixed extents -> BIN/CUE",
         "production_dependency_audit": dependency_audit,
         "canonical_coverage": coverage,
         "two_clean_builds_byte_identical": True,
+        "two_clean_builds_same_input_fingerprint": True,
         "artifact_count_compared": len(manifest_a),
         "verification": first,
         "second_verification": second,
         "artifact_sha256": manifest_a,
     }
-    (delivery_root / "final_verification.json").write_text(
-        json.dumps(report, indent=2) + "\n", encoding="utf-8"
+    report = write_bound_verification(
+        delivery_root,
+        input_manifest=run_manifest["input_manifest"],
+        artifact_paths=delivery_artifacts,
+        generated_snapshot=delivery_snapshot,
+        verification=report,
+        manifest_name="final_verification_manifest.json",
+        report_name="final_verification.json",
+        report_kind="clean-rebuild-delivery",
+        explanation=(
+            "This final report rehashes the three delivered game artifacts and "
+            "binds them to the same aggregate input fingerprint proven by both "
+            "independent clean build runs."
+        ),
     )
     notes = _render_test_notes(coverage, dependency_audit)
     (delivery_root / "TEST_NOTES.md").write_text(notes, encoding="utf-8")

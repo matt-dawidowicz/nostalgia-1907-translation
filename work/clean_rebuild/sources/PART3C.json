@@ -32,7 +32,6 @@
       39,
       40
     ],
-    "leading_blank_anchor_segments": [],
     "validate_runtime_row_boundaries": true,
     "validate_text_hygiene": true,
     "validate_wrapped_text_integrity": true,
@@ -100,22 +99,22 @@
       "9": "As I told you, my mission was strictly against Britain, not to police my own organization.",
       "10": "Capturing Voysey alive...? I don't believe it.",
       "11": "You are not acting directly! Something is making you hesitate!",
-      "12": "I am always watching... Sensitivity is a fine word.",
-      "13": "Again, the feel of it... Thinking while sensing...",
+      "12": "I am always watching...sensitivity is a fine word.",
+      "13": "Again, the feel of it...thinking while sensing...",
       "14": "Always reading the flow beneath conscious thought? Intuition?",
       "15": "Or switching actions on impulse, without preparation?",
-      "16": "Russia's assassination bureau... You serve the same country, don't you?",
+      "16": "Russia's assassination bureau...you serve the same country, don't you?",
       "17": "Internal Security is entirely separate from General Intelligence. Even on the same ship...",
       "18": "Besides, there is a killer...",
       "19": "I concede the wager. What is your objective?",
       "20": "Only to finish the voyage safely and return to my old life.",
-      "21": "...As a spy?",
-      "22": "Ilyusha Grancelius... That is not the name of a native Russian...",
-      "23": "The name is real... I prefer myself when I am lying.",
+      "21": "...as a spy?",
+      "22": "Ilyusha Grancelius...that is not the name of a native Russian...",
+      "23": "The name is real...I prefer myself when I am lying.",
       "24": "Don't play games with me!",
       "25": "Why become a spy?",
-      "26": "I had no choice... No one can understand my twenty-one years.",
-      "27": "...An opening... Are you showing me a weakness?",
+      "26": "I had no choice...no one can understand my twenty-one years.",
+      "27": "...an opening...are you showing me a weakness?",
       "28": "What is wrong? You should be able to handle me better.",
       "29": "You are someone who can live alone.",
       "30": "What do you like?",
@@ -124,9 +123,9 @@
       "33": "Ngh...",
       "34": "Even if you are not the Russian Fog, you must know what they look like. Otherwise you could not watch them.",
       "35": "Why do you want to know so badly?",
-      "36": "...Th-that's...",
+      "36": "...th-that's...",
       "38": "Why?",
-      "39": "...The culprit demanded it.",
+      "39": "...the culprit demanded it.",
       "40": "That's a lie. Do you really think the culprit will disarm the bomb once he has the Fog?",
       "41": "You do not believe that.",
       "42": "Agh...",
@@ -136,7 +135,7 @@
       "46": "...",
       "47": "Second-Class Cabin",
       "48": "Kirikov",
-      "49": "Th-that knife... It belonged to Tainui Adjell...",
+      "49": "Th-that knife...it belonged to Tainui Adjell...",
       "50": "The Killer",
       "51": "A mere salesman exposed you? From now on, you will obey every order I give.",
       "52": "Heh. What kind of interrogator stays silent? You will leave your subject at a loss.",
@@ -154,7 +153,7 @@
       "64": "You are seriously twisted.",
       "65": "Sometimes I wonder whether everything others understand so naturally is exactly what I fail to grasp. I even doubt my own insight.",
       "66": "Maybe you simply cannot prey on people's weaknesses.",
-      "67": "I cannot see them... I understand my own thoughts, but... do I? I may not even understand those.",
+      "67": "I cannot see them...I understand my own thoughts, but...do I? I may not even understand those.",
       "68": "Once, while undercover in Prague, I was caught and interrogated.",
       "69": "The interrogator was a veteran.",
       "70": "Can you imagine how terrified I was?",
@@ -167,7 +166,7 @@
       "77": "I never showed my true feelings. I trusted my disguise. I acted every day, toward everyone...",
       "78": "...at all times.",
       "79": "Acting every day...",
-      "80": "Her walls are too high... How can I ever step inside?",
+      "80": "Her walls are too high...how can I ever step inside?",
       "81": "Even now?",
       "82": "It became a habit. I doubt even my passing feelings. Is this my true heart? Is this feeling real? I no longer know.",
       "83": "Ilyu's true feelings...",
@@ -176,14 +175,14 @@
       "86": "You are chaos. You enjoy confusing me, like a siren...",
       "87": "There are no witches.",
       "88": "You are the Russian Fog, are you not?",
-      "89": "I do not know what expression to wear when I tell the truth... You will not believe any answer I give.",
-      "90": "...Acting every day...",
+      "89": "I do not know what expression to wear when I tell the truth...you will not believe any answer I give.",
+      "90": "...acting every day...",
       "91": "Then stop living that ridiculous life.",
-      "92": "Heh... I wish I could. Talking to you is strange. Somehow, I can relax.",
+      "92": "Heh...I wish I could. Talking to you is strange. Somehow, I can relax.",
       "93": "Ilyu is not trying to escape the Empire. She is fleeing something more abstract...",
       "94": "Ask him about Kirikov. Remind him how Russia's privileged class behaves and he will confess. He thinks every country is the same, but now he is on the receiving end.",
       "95": "Defection openly betrays the Empire. The Tsar will be humiliated. Reveal yourself publicly before his assassins silence you.",
-      "96": "...Shut up...",
+      "96": "...shut up...",
       "97": "Well, Kirikov. How does it feel to make the greatest gamble of your life? Your family, or your future?",
       "98": "We captured one of the Russian agents watching you. We can make him reveal your identity. He knows you intend to defect, and he will kill you. What will you do?",
       "99": "I-it is me! I am the Russian Fog!",
@@ -198,7 +197,7 @@
       "108": "W-why not?",
       "109": "They need me too, do they not?",
       "110": "This is no time to leisurely list your asylum terms!",
-      "111": "...The bomber.",
+      "111": "...the bomber.",
       "112": "Why are you relying on me now?",
       "113": "You bastard! You forced me to confess!",
       "114": "The person offering you sanctuary may be behind the bombing, an agent of a third country. Then Britain is not your destination at all.",
@@ -224,7 +223,7 @@
       "134": "So anywhere but Britain will do?",
       "135": "Anywhere outside Russia's satellite states.",
       "136": "Try Antarctica. The vodka is excellent.",
-      "137": "...No.",
+      "137": "...no.",
       "138": "Why not?",
       "139": "Do you not understand? You can escape to a third country that will protect you. But the culprit will flee this doomed ship with you, leaving 411 innocent people behind.",
       "140": "A first-rate spy thinks first about survival.",
@@ -319,13 +318,13 @@
     {
       "index": 12,
       "policy": "translate",
-      "text": "I am always watching... Sensitivity is a fine word.",
+      "text": "I am always watching...sensitivity is a fine word.",
       "layout_policy": "adaptive"
     },
     {
       "index": 13,
       "policy": "translate",
-      "text": "Again, the feel of it... Thinking while sensing...",
+      "text": "Again, the feel of it...thinking while sensing...",
       "layout_policy": "adaptive"
     },
     {
@@ -343,7 +342,7 @@
     {
       "index": 16,
       "policy": "translate",
-      "text": "Russia's assassination bureau... You serve the same country, don't you?",
+      "text": "Russia's assassination bureau...you serve the same country, don't you?",
       "layout_policy": "adaptive"
     },
     {
@@ -373,19 +372,19 @@
     {
       "index": 21,
       "policy": "translate",
-      "text": "...As a spy?",
+      "text": "...as a spy?",
       "layout_policy": "adaptive"
     },
     {
       "index": 22,
       "policy": "translate",
-      "text": "Ilyusha Grancelius... That is not the name of a native Russian...",
+      "text": "Ilyusha Grancelius...that is not the name of a native Russian...",
       "layout_policy": "adaptive"
     },
     {
       "index": 23,
       "policy": "translate",
-      "text": "The name is real... I prefer myself when I am lying.",
+      "text": "The name is real...I prefer myself when I am lying.",
       "layout_policy": "adaptive"
     },
     {
@@ -403,13 +402,13 @@
     {
       "index": 26,
       "policy": "translate",
-      "text": "I had no choice... No one can understand my twenty-one years.",
+      "text": "I had no choice...no one can understand my twenty-one years.",
       "layout_policy": "adaptive"
     },
     {
       "index": 27,
       "policy": "translate",
-      "text": "...An opening... Are you showing me a weakness?",
+      "text": "...an opening...are you showing me a weakness?",
       "layout_policy": "adaptive"
     },
     {
@@ -463,7 +462,7 @@
     {
       "index": 36,
       "policy": "translate",
-      "text": "...Th-that's...",
+      "text": "...th-that's...",
       "layout_policy": "adaptive"
     },
     {
@@ -480,7 +479,7 @@
     {
       "index": 39,
       "policy": "translate",
-      "text": "...The culprit demanded it.",
+      "text": "...the culprit demanded it.",
       "layout_policy": "adaptive"
     },
     {
@@ -540,7 +539,7 @@
     {
       "index": 49,
       "policy": "translate",
-      "text": "Th-that knife... It belonged to Tainui Adjell...",
+      "text": "Th-that knife...it belonged to Tainui Adjell...",
       "layout_policy": "adaptive"
     },
     {
@@ -648,7 +647,7 @@
     {
       "index": 67,
       "policy": "translate",
-      "text": "I cannot see them... I understand my own thoughts, but... do I? I may not even understand those.",
+      "text": "I cannot see them...I understand my own thoughts, but...do I? I may not even understand those.",
       "layout_policy": "adaptive"
     },
     {
@@ -726,7 +725,7 @@
     {
       "index": 80,
       "policy": "translate",
-      "text": "Her walls are too high... How can I ever step inside?",
+      "text": "Her walls are too high...how can I ever step inside?",
       "layout_policy": "adaptive"
     },
     {
@@ -780,13 +779,13 @@
     {
       "index": 89,
       "policy": "translate",
-      "text": "I do not know what expression to wear when I tell the truth... You will not believe any answer I give.",
+      "text": "I do not know what expression to wear when I tell the truth...you will not believe any answer I give.",
       "layout_policy": "adaptive"
     },
     {
       "index": 90,
       "policy": "translate",
-      "text": "...Acting every day...",
+      "text": "...acting every day...",
       "layout_policy": "adaptive"
     },
     {
@@ -798,7 +797,7 @@
     {
       "index": 92,
       "policy": "translate",
-      "text": "Heh... I wish I could. Talking to you is strange. Somehow, I can relax.",
+      "text": "Heh...I wish I could. Talking to you is strange. Somehow, I can relax.",
       "layout_policy": "adaptive"
     },
     {
@@ -822,7 +821,7 @@
     {
       "index": 96,
       "policy": "translate",
-      "text": "...Shut up...",
+      "text": "...shut up...",
       "layout_policy": "adaptive"
     },
     {
@@ -912,7 +911,7 @@
     {
       "index": 111,
       "policy": "translate",
-      "text": "...The bomber.",
+      "text": "...the bomber.",
       "layout_policy": "adaptive"
     },
     {
@@ -1068,7 +1067,7 @@
     {
       "index": 137,
       "policy": "translate",
-      "text": "...No.",
+      "text": "...no.",
       "layout_policy": "adaptive"
     },
     {
@@ -1110,7 +1109,7 @@
     {
       "index": 144,
       "policy": "translate",
-      "text": "...You know nothing of the Russian Empire's rigid class system.",
+      "text": "...you know nothing of the Russian Empire's rigid class system.",
       "layout_policy": "adaptive"
     },
     {
@@ -1211,7 +1210,7 @@
     {
       "index": 161,
       "policy": "translate",
-      "text": "Damn it... My emotions are clouding me. I hate that man.",
+      "text": "Damn it...my emotions are clouding me. I hate that man.",
       "layout_policy": "adaptive"
     },
     {
@@ -1241,7 +1240,7 @@
     {
       "index": 166,
       "policy": "translate",
-      "text": "What a fool I am... Why did I not see it? Ashby has an accomplice!",
+      "text": "What a fool I am...why did I not see it? Ashby has an accomplice!",
       "layout_policy": "adaptive"
     },
     {
@@ -1271,7 +1270,7 @@
     {
       "index": 171,
       "policy": "translate",
-      "text": "Such a lovely voice... I could fall for it.",
+      "text": "Such a lovely voice...I could fall for it.",
       "layout_policy": "adaptive"
     },
     {
@@ -1289,7 +1288,7 @@
     {
       "index": 174,
       "policy": "translate",
-      "text": "Enough... Getting attached only leads to dreadful people. Such is life...",
+      "text": "Enough...getting attached only leads to dreadful people. Such is life...",
       "layout_policy": "adaptive"
     },
     {
@@ -1361,7 +1360,7 @@
     {
       "index": 186,
       "policy": "translate",
-      "text": "Careless of you... Never trust your boss. That is the first rule of working life.",
+      "text": "Careless of you...never trust your boss. That is the first rule of working life.",
       "layout_policy": "adaptive"
     },
     {
@@ -1541,7 +1540,7 @@
     {
       "index": 216,
       "policy": "translate",
-      "text": "You are wicked... Damn you!",
+      "text": "You are wicked...damn you!",
       "layout_policy": "adaptive"
     },
     {
@@ -1553,13 +1552,13 @@
     {
       "index": 218,
       "policy": "translate",
-      "text": "Ito... ITO means Ito Hirobumi, elder statesman of the Imperial Diet... He betrayed me.",
+      "text": "Ito...ITO means Ito Hirobumi, elder statesman of the Imperial Diet...he betrayed me.",
       "layout_policy": "adaptive"
     },
     {
       "index": 219,
       "policy": "translate",
-      "text": "...How pathetic.",
+      "text": "...how pathetic.",
       "layout_policy": "adaptive"
     },
     {
@@ -1577,7 +1576,7 @@
     {
       "index": 222,
       "policy": "translate",
-      "text": "You damn fool... Just you wait...",
+      "text": "You damn fool...just you wait...",
       "layout_policy": "adaptive"
     },
     {

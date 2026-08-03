@@ -88,20 +88,20 @@
       "129": "Use the screwdriver.",
       "130": "Use the wire cutters.",
       "132": "Open the left box.",
-      "133": "Cut upper red wire.",
+      "133": "Cut the upper red wire.",
       "134": "Cut the blue wire under the floor.",
       "135": "Cut the red wire below the battery.",
       "142": "Open the left box first.",
       "148": "Now for the wire.",
       "149": "Open it now.",
-      "150": "Cut lower blue wire.",
+      "150": "Cut the lower blue wire.",
       "151": "Cut here.",
       "152": "Route the bypass as the manual says...",
       "168": "Remove the floor...",
       "169": "Cut the wire under the floor.",
       "170": "Cut this wire.",
       "171": "Route the bypass.",
-      "178": "...Continue working.",
+      "178": "...continue working.",
       "180": "Cut out and remove the circuit.",
       "181": "The wire is unnecessary.",
       "182": "Look under the floor.",
@@ -109,8 +109,8 @@
       "198": "Touch the timer unit...",
       "199": "Touch the connector tube...",
       "200": "Red, blue, and white wires.",
-      "212": "Set the cutters around the red wire... Cut.",
-      "213": "Wire cutters on blue wire... Cut.",
+      "212": "I've got the cutters on the red wire...I'm cutting it.",
+      "213": "I've got the cutters on the blue wire...I'm cutting it.",
       "214": "Click.",
       "215": "Captain",
       "216": "Damn...",
@@ -192,7 +192,7 @@
     {
       "index": 10,
       "policy": "translate",
-      "text": "...It is only a rumor.",
+      "text": "...it is only a rumor.",
       "layout_policy": "adaptive"
     },
     {
@@ -252,7 +252,7 @@
     {
       "index": 20,
       "policy": "translate",
-      "text": "In the fog... I never want to go near it again.",
+      "text": "In the fog...I never want to go near it again.",
       "layout_policy": "adaptive"
     },
     {
@@ -352,13 +352,13 @@
     {
       "index": 37,
       "policy": "translate",
-      "text": "I don't understand... Why must anyone be killed over this?",
+      "text": "I don't understand...why must anyone be killed over this?",
       "layout_policy": "adaptive"
     },
     {
       "index": 38,
       "policy": "translate",
-      "text": "How should I know? Maybe you have a split personality, like Jekyll and Hyde. Without realizing it, another you may be committing this whole series of crimes... You're a murderer... Can you deny it?",
+      "text": "How should I know? Maybe you have a split personality, like Jekyll and Hyde. Without realizing it, another you may be committing this whole series of crimes...you're a murderer...can you deny it?",
       "layout_policy": "adaptive"
     },
     {
@@ -370,7 +370,7 @@
     {
       "index": 40,
       "policy": "translate",
-      "text": "...It wasn't me...",
+      "text": "...it wasn't me...",
       "layout_policy": "adaptive"
     },
     {
@@ -406,7 +406,7 @@
     {
       "index": 46,
       "policy": "translate",
-      "text": "I got the lid off... Nasty-looking thing. No mechanism, just an iron cover held down by screws.",
+      "text": "I got the lid off...nasty-looking thing. No mechanism, just an iron cover held down by screws.",
       "layout_policy": "adaptive"
     },
     {
@@ -424,19 +424,19 @@
     {
       "index": 49,
       "policy": "translate",
-      "text": "I cannot see one... It is a sealed trick. I want to find a way in.",
+      "text": "I cannot see one...it is a sealed trick. I want to find a way in.",
       "layout_policy": "adaptive"
     },
     {
       "index": 50,
       "policy": "translate",
-      "text": "...Suit yourself.",
+      "text": "...suit yourself.",
       "layout_policy": "adaptive"
     },
     {
       "index": 51,
       "policy": "translate",
-      "text": "What a fat little thing... Betty will do. Let us poke around inside this box...",
+      "text": "What a fat little thing...Betty will do. Let us poke around inside this box...",
       "layout_policy": "adaptive"
     },
     {
@@ -466,7 +466,7 @@
     {
       "index": 56,
       "policy": "translate",
-      "text": "Bypass wire... Enough for a detour, but I do not need it yet. I know that... Damn, my palms are sweating...",
+      "text": "Bypass wire...enough for a detour, but I do not need it yet. I know that...damn, my palms are sweating...",
       "layout_policy": "adaptive"
     },
     {
@@ -478,31 +478,31 @@
     {
       "index": 58,
       "policy": "translate",
-      "text": "Driver on the upper-left screw... One button on Betty's dress...",
+      "text": "Driver on the upper-left screw...one button on Betty's dress...",
       "layout_policy": "adaptive"
     },
     {
       "index": 59,
       "policy": "translate",
-      "text": "Driver on the upper-right screw... Do not look at me like that, Betty.",
+      "text": "Driver on the upper-right screw...do not look at me like that, Betty.",
       "layout_policy": "adaptive"
     },
     {
       "index": 60,
       "policy": "translate",
-      "text": "Driver on the lower-left screw... Turning it now.",
+      "text": "Driver on the lower-left screw...turning it now.",
       "layout_policy": "adaptive"
     },
     {
       "index": 61,
       "policy": "translate",
-      "text": "Driver on the lower-right screw... Turning...",
+      "text": "Driver on the lower-right screw...turning...",
       "layout_policy": "adaptive"
     },
     {
       "index": 62,
       "policy": "translate",
-      "text": "Betty's dress is off... So is the cover. Two lidded boxes, left and right. Quite a corset. Will Papa be angry? It is Saturday night... Hold still...",
+      "text": "Betty's dress is off...so is the cover. Two lidded boxes, left and right. Quite a corset. Will Papa be angry? It is Saturday night...hold still...",
       "layout_policy": "adaptive"
     },
     {
@@ -520,7 +520,7 @@
     {
       "index": 65,
       "policy": "translate",
-      "text": "...Boom...",
+      "text": "...boom...",
       "layout_policy": "adaptive"
     },
     {
@@ -574,7 +574,7 @@
     {
       "index": 74,
       "policy": "translate",
-      "text": "There, Betty. The key is in your chastity belt... Easy now, it will not be long... Hah... hah... hah...",
+      "text": "There, Betty. The key is in your chastity belt...easy now, it will not be long...hah...hah...hah...",
       "layout_policy": "adaptive"
     },
     {
@@ -640,7 +640,7 @@
     {
       "index": 85,
       "policy": "translate",
-      "text": "This side is guarded too. Women always resist just when a man wants to go on... Cut the defense circuit.",
+      "text": "This side is guarded too. Women always resist just when a man wants to go on...cut the defense circuit.",
       "layout_policy": "adaptive"
     },
     {
@@ -694,7 +694,7 @@
     {
       "index": 94,
       "policy": "translate",
-      "text": "Come, Betty. Show me everything... Open the right box.",
+      "text": "Come, Betty. Show me everything...open the right box.",
       "layout_policy": "adaptive"
     },
     {
@@ -712,13 +712,13 @@
     {
       "index": 97,
       "policy": "translate",
-      "text": "I need a cigarette... Betty dislikes men who smoke.",
+      "text": "I need a cigarette...Betty dislikes men who smoke.",
       "layout_policy": "adaptive"
     },
     {
       "index": 98,
       "policy": "translate",
-      "text": "The right box is open... What is this? A dancing girl... swaying... a dancer of death. Triggered by the ship's motion? It's a pendulum detonator!",
+      "text": "The right box is open...what is this? A dancing girl...swaying...a dancer of death. Triggered by the ship's motion? It's a pendulum detonator!",
       "layout_policy": "adaptive"
     },
     {
@@ -790,7 +790,7 @@
     {
       "index": 110,
       "policy": "translate",
-      "text": "There's a screw securing the floor beneath the dancer's feet... Let's take a look...",
+      "text": "There's a screw securing the floor beneath the dancer's feet...let's take a look...",
       "layout_policy": "adaptive"
     },
     {
@@ -820,7 +820,7 @@
     {
       "index": 115,
       "policy": "translate",
-      "text": "Damn! What a trap! The circuit was connected from the start! If we'd cut the wire... boom!",
+      "text": "Damn! What a trap! The circuit was connected from the start! If we'd cut the wire...boom!",
       "layout_policy": "adaptive"
     },
     {
@@ -832,31 +832,31 @@
     {
       "index": 117,
       "policy": "translate",
-      "text": "Forget that! There seems to be another door farther in... Let us keep going, Betty...",
+      "text": "Forget that! There seems to be another door farther in...let us keep going, Betty...",
       "layout_policy": "adaptive"
     },
     {
       "index": 118,
       "policy": "translate",
-      "text": "Betty, you're a wicked woman... Come to think of it, it was the same then. Do you remember? That rainy night...",
+      "text": "Betty, you're a wicked woman...come to think of it, it was the same then. Do you remember? That rainy night...",
       "layout_policy": "adaptive"
     },
     {
       "index": 119,
       "policy": "translate",
-      "text": "I was still a greenhorn mechanic then... It may have been a joke to you, but... that night too, I was holding a screwdriver...",
+      "text": "I was still a greenhorn mechanic then...it may have been a joke to you, but...that night too, I was holding a screwdriver...",
       "layout_policy": "adaptive"
     },
     {
       "index": 120,
       "policy": "translate",
-      "text": "The luxury liner I dreamed of... She wanted to go to Paris on this ship too... Look inside the engine room! It's a hell of coal dust, oil, and steam... and even now I'm standing at the gates of hell... with wire cutters in one hand.",
+      "text": "The luxury liner I dreamed of...she wanted to go to Paris on this ship too...look inside the engine room! It's a hell of coal dust, oil, and steam...and even now I'm standing at the gates of hell...with wire cutters in one hand.",
       "layout_policy": "adaptive"
     },
     {
       "index": 121,
       "policy": "translate",
-      "text": "Betty... I knew a woman with your name. She was far smarter than you, and above all, a real flesh-and-blood woman. You two were alike... fickle and cruel. Nothing she said came from the heart. I know. It was because I wasn't ashore... Use the wire.",
+      "text": "Betty...I knew a woman with your name. She was far smarter than you, and above all, a real flesh-and-blood woman. You two were alike...fickle and cruel. Nothing she said came from the heart. I know. It was because I wasn't ashore...use the wire.",
       "layout_policy": "adaptive"
     },
     {
@@ -928,7 +928,7 @@
     {
       "index": 133,
       "policy": "translate",
-      "text": "Cut upper red wire.",
+      "text": "Cut the upper red wire.",
       "layout_policy": "adaptive"
     },
     {
@@ -964,13 +964,13 @@
     {
       "index": 139,
       "policy": "translate",
-      "text": "Adhesive on a detonator... I learned that trick from a Californian.",
+      "text": "Adhesive on a detonator...I learned that trick from a Californian.",
       "layout_policy": "adaptive"
     },
     {
       "index": 140,
       "policy": "translate",
-      "text": "I remember a man in East Germany. Dudley Slayman... or was it Jerry?",
+      "text": "I remember a man in East Germany. Dudley Slayman...or was it Jerry?",
       "layout_policy": "adaptive"
     },
     {
@@ -1000,7 +1000,7 @@
     {
       "index": 145,
       "policy": "translate",
-      "text": "I see. The left box's defense circuit. I'm beginning to see your tricks... Easy!",
+      "text": "I see. The left box's defense circuit. I'm beginning to see your tricks...easy!",
       "layout_policy": "adaptive"
     },
     {
@@ -1030,7 +1030,7 @@
     {
       "index": 150,
       "policy": "translate",
-      "text": "Cut lower blue wire.",
+      "text": "Cut the lower blue wire.",
       "layout_policy": "adaptive"
     },
     {
@@ -1090,7 +1090,7 @@
     {
       "index": 160,
       "policy": "translate",
-      "text": "Betty, men are weak... In the end, I'm captivated by your arrogance... The wire won't do!",
+      "text": "Betty, men are weak...in the end, I'm captivated by your arrogance...the wire won't do!",
       "layout_policy": "adaptive"
     },
     {
@@ -1108,7 +1108,7 @@
     {
       "index": 163,
       "policy": "translate",
-      "text": "...Might that be a trap too?",
+      "text": "...might that be a trap too?",
       "layout_policy": "adaptive"
     },
     {
@@ -1126,7 +1126,7 @@
     {
       "index": 166,
       "policy": "translate",
-      "text": "If this is a trap, we can't cut the wire... If it's real, cut it.",
+      "text": "If this is a trap, we can't cut the wire...if it's real, cut it.",
       "layout_policy": "adaptive"
     },
     {
@@ -1162,7 +1162,7 @@
     {
       "index": 172,
       "policy": "translate",
-      "text": "Nothing happened... Whew, this one was a real pendulum detonator... You're nasty, Betty... Remove it all.",
+      "text": "Nothing happened...whew, this one was a real pendulum detonator...you're nasty, Betty...remove it all.",
       "layout_policy": "adaptive"
     },
     {
@@ -1192,13 +1192,13 @@
     {
       "index": 177,
       "policy": "translate",
-      "text": "Let me see... There must be a cylinder hidden somewhere.",
+      "text": "Let me see...there must be a cylinder hidden somewhere.",
       "layout_policy": "adaptive"
     },
     {
       "index": 178,
       "policy": "translate",
-      "text": "...Continue working.",
+      "text": "...continue working.",
       "layout_policy": "adaptive"
     },
     {
@@ -1246,7 +1246,7 @@
     {
       "index": 186,
       "policy": "translate",
-      "text": "I cannot see it. We go in from here... Carefully.",
+      "text": "I cannot see it. We go in from here...carefully.",
       "layout_policy": "adaptive"
     },
     {
@@ -1282,7 +1282,7 @@
     {
       "index": 192,
       "policy": "translate",
-      "text": "...A timer. It's counting down to the blast... Tick, tick, tick... Hey, stop that ticking! A time limit?! Don't screw with me! Damn it! I hate clocks!",
+      "text": "...a timer. It's counting down to the blast...tick, tick, tick...hey, stop that ticking! A time limit?! Don't screw with me! Damn it! I hate clocks!",
       "layout_policy": "adaptive"
     },
     {
@@ -1300,7 +1300,7 @@
     {
       "index": 195,
       "policy": "translate",
-      "text": "Two thousand seconds. Plenty of time, Betty... Is that what you think?",
+      "text": "Two thousand seconds. Plenty of time, Betty...is that what you think?",
       "layout_policy": "adaptive"
     },
     {
@@ -1402,13 +1402,13 @@
     {
       "index": 212,
       "policy": "translate",
-      "text": "Set the cutters around the red wire... Cut.",
+      "text": "I've got the cutters on the red wire...I'm cutting it.",
       "layout_policy": "adaptive"
     },
     {
       "index": 213,
       "policy": "translate",
-      "text": "Wire cutters on blue wire... Cut.",
+      "text": "I've got the cutters on the blue wire...I'm cutting it.",
       "layout_policy": "adaptive"
     },
     {

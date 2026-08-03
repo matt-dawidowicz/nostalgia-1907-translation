@@ -53,9 +53,9 @@
   ],
   "source_authoritative_records": [
     {"record_id":"PART2B:087","source_record_sha256":"A1D53A46B42D633D925C9DC37FD0CB8206154F01CAB17BFE2AE7B39DA6D127A3","expected_english":"...I've reached the Bridge Passage. I can go straight to the Captain's Cabin from here."},
-    {"record_id":"PART2E:121","source_record_sha256":"937E1FDBDE3657330485AFF61A187FE85D9BFEF28C382C450DBDB21304BAE73B","expected_english":"Betty... I knew a woman with your name. She was far smarter than you, and above all, a real flesh-and-blood woman. You two were alike... fickle and cruel. Nothing she said came from the heart. I know. It was because I wasn't ashore... Use the wire."},
+    {"record_id":"PART2E:121","source_record_sha256":"937E1FDBDE3657330485AFF61A187FE85D9BFEF28C382C450DBDB21304BAE73B","expected_english":"Betty...I knew a woman with your name. She was far smarter than you, and above all, a real flesh-and-blood woman. You two were alike...fickle and cruel. Nothing she said came from the heart. I know. It was because I wasn't ashore...use the wire."},
     {"record_id":"PART4B:290","source_record_sha256":"2AED7860FC0F79ACC2DBA433F2D58BE7E6F97D706526EFFDC9546A7AB918A096","expected_english":"...wire cutters are tools for cutting wires."},
-    {"record_id":"PART4B:291","source_record_sha256":"41947E89EB06EC796004B95DB19397E081CED8A22ADB29E07340FD5331DEE201","expected_english":"This electrical wire... this cord is for making a bypass... Japanese people should learn more about Western machinery in the future..."}
+    {"record_id":"PART4B:291","source_record_sha256":"41947E89EB06EC796004B95DB19397E081CED8A22ADB29E07340FD5331DEE201","expected_english":"This electrical wire...this cord is for making a bypass...Japanese people should learn more about Western machinery in the future..."}
   ],
   "reviewed_contextual_exceptions": [
     {"record_id":"PART4B:290","normalized_bitmap_sha256":"2648ABC9458BDA23CDF8EC55E447B2CCD7FC6FF5BA1A62FD237EE96419B524A5","category":"running_dialogue_tool_case","required_english_pattern":"(?i)\\bwire cutters\\b","forbidden_english_pattern":"Wire Cutters","reason":"Running dialogue uses lowercase even though the standalone inventory label is title case."},

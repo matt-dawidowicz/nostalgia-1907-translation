@@ -93,7 +93,6 @@ requirements. Common fields include:
 | `runtime_layout_overrides` | Engine stride when it differs from visible width |
 | `row_limit_overrides` | Reviewed vertical capacity |
 | `role_overrides` | Renderer role for a structurally exceptional record |
-| `leading_blank_anchor_segments` | Records whose first runtime cell is intentionally reserved |
 
 Do not add an override merely to make one screenshot pass. First show why the
 original SCN selects a renderer that the shared inference does not yet model.
@@ -132,7 +131,9 @@ python nostalgia1907.py compare
 ```
 
 Its JSON preserves IDs and raw Japanese source bytes; its HTML and images are
-for human review.
+for human review. The exporter uses fresh run-specific staging, packages only
+the current expected-file manifest, and writes an exact inventory/hash
+sidecar. Static comparison previews do not prove runtime correctness.
 
 ## Preview a single edit
 
@@ -270,3 +271,21 @@ work, but it bypasses the CLI's preview/apply guard. If you edit JSON directly:
 
 Never edit generated MES/LZ/BIN output and then attempt to reverse-import it as
 canonical English.
+
+## Fixed-layout runtime evidence
+
+A record marked `layout_policy: "fixed"` has no safe general SCN-derived reflow
+contract. Static character counts and preview rows may guide review, but they do
+not prove runtime width, centering, clipping, row stride, page behavior, or
+timing. Use `export_fixed_layout_review.py` to generate the complete review
+queue. Capture the exact retail and candidate scene before changing layout
+ownership; start with `PART4C:051` through `PART4C:059`.
+
+## Non-applied wording proposals
+
+`export_translation_proposals.py` produces evidence reports only. It does not
+write canonical JSON. For Japanese claims, cite a tracked human-reviewed source
+such as `bomb_semantics.json` by file hash and record key. Do not derive Japanese
+readings from mojibake, uncertain byte decoding, or an unlabeled screenshot.
+After human approval, preview and apply a canonical edit through the normal
+`nostalgia1907.py edit` workflow, then rerun all validation.

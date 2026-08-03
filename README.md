@@ -4,9 +4,13 @@ This private repository contains the canonical translation, deterministic
 rebuild pipeline, validation code, and review tools for the English
 localization of the Japanese Mega-CD game *Nostalgia 1907*.
 
-The current validated baseline is `Nostalgia1907_CleanRebuild_v7`. It is built
-only from the original Japanese disc and does not restore or depend on an older
-translated build. Manual playtesting remains the final release gate.
+The validated architectural baseline is `Nostalgia1907_CleanRebuild_v7`. It
+is built only from the original Japanese disc and does not restore or depend on
+an older translated build. `Nostalgia1907_CleanRebuild_v26_NorthAmerica` is the
+retained playtest candidate. The experimental v27 revision was rejected after
+manual testing and is not a supported source or artifact baseline. Canonical
+source may advance beyond v26 without renaming or replacing the validated v7
+architectural baseline. Manual playtesting remains the final release gate.
 
 The canonical sources also contain the reviewed post-v7 English revision. These
 source edits remain a release candidate until the retail-backed validation and
@@ -23,6 +27,7 @@ detailed references separate translation editing from binary-format work:
 - [English glossary and localization style guide](docs/GLOSSARY_STYLE_GUIDE.md)
 - [MES, LZ, ISO, raw-CD, font, and SCN formats](docs/BINARY_FORMATS.md)
 - [Development, reports, debugging, and validation](docs/DEVELOPMENT.md)
+- [v26 maintenance, verification, rollback, and cleanup report](docs/V26_MAINTENANCE_REPORT.md)
 
 These guides explain which files are authoritative, how stable record IDs map
 to the original game, and which invariants must hold before a change can become
@@ -53,7 +58,7 @@ python nostalgia1907.py prepare
 python nostalgia1907.py validate
 ```
 
-`doctor` verifies Python, Pillow, the canonical source inventory, both original
+`doctor` verifies Python, the canonical source inventory, both original
 track hashes, and the prepared retail-reference state. It reports optional BIOS
 and FFmpeg readiness separately.
 
@@ -126,8 +131,10 @@ python nostalgia1907.py validate
 ```
 
 That command performs Python static compilation, the audio companion's unit
-tests, the renderer-aware audit, all script-layout tests, comparison-package
-regeneration, and semantic/generated artifact validation.
+tests, the renderer-aware audit, all script-layout tests, clean comparison
+regeneration, exact disk/ZIP inventory and member-hash validation, and semantic
+validation. The comparison exporter uses deterministic in-module PNG/ZIP
+encoders and does not require Pillow.
 
 ## Deterministic rebuild
 
@@ -140,7 +147,8 @@ python nostalgia1907.py build --name v8 --dry-run
 The dry run reports whether the run and delivery directories are absent, empty,
 or occupied. A real build will never overwrite an occupied path.
 
-Then create two independent builds from the original Japanese tracks:
+Then create the default North American build from the original Japanese tracks
+and the licensed U.S. BIOS configured above:
 
 ```powershell
 python nostalgia1907.py build --name v8
@@ -150,20 +158,36 @@ Before either build begins, the tool automatically runs the complete
 static/layout/comparison/semantic validation sequence. If any check fails, no
 BIN/CUE build starts.
 
+The command first makes two independent clean builds, proves they are identical,
+then creates and compares two independent North American region wrappers. Only
+the verified North American result is published to the output directory.
+
 The default result is:
 
 ```text
-outputs/Nostalgia1907_CleanRebuild_v8/
+outputs/Nostalgia1907_CleanRebuild_v8_NorthAmerica/
 ```
 
-The underlying builder refuses stale non-empty run/output directories and
-rejects publication unless both independently built BIN/CUE sets are
-byte-identical.
+The underlying builders refuse stale non-empty run/output directories and
+reject publication unless both independently built artifact sets in each stage
+are byte-identical; the clean builds must also use the same aggregate input
+fingerprint. Machine-readable manifests bind canonical source, Japanese
+fixtures, production/validation code, configuration, original tracks, runtime
+identity, and direct output hashes to each report.
 
-## U.S.-BIOS test derivative
+An unwrapped Japanese-region image is available only as an explicit archival or
+diagnostic override:
 
-The region tool creates a separate derivative of the hash-locked v7 output. It
-does not modify v7, translation sources, SCN data, file extents, or Track 2.
+```powershell
+python nostalgia1907.py build --name v8 --region japan
+```
+
+## Wrapping an older validated build
+
+`build-us` is retained for creating a North American derivative of a hash-locked
+older validated output. New builds should use `build`, whose project-wide
+default region is North America. Neither path modifies translation sources, SCN
+data, file extents, or Track 2.
 
 ```powershell
 python nostalgia1907.py build-us `
@@ -225,7 +249,8 @@ The checks that do not require copyrighted retail data run locally and in
 GitHub Actions:
 
 ```powershell
-python -m compileall -q nostalgia1907.py work tests
+python tools/source_health.py
+python -m compileall -q nostalgia1907.py work tests tools
 python -m unittest discover -s tests -v
 python work/audio_localization/test_audio_localization.py
 ```

@@ -58,9 +58,6 @@
     "no_pad_final_row_segments": [
       74
     ],
-    "leading_blank_anchor_segments": [
-      75
-    ],
     "required_text_exact": {
       "65": "Tianon",
       "85": "Lumeranka",
@@ -113,7 +110,7 @@
     {
       "index": 5,
       "policy": "translate",
-      "text": "I would hardly call it a good start... May I ask you a few questions?",
+      "text": "I would hardly call it a good start...may I ask you a few questions?",
       "layout_policy": "adaptive"
     },
     {
@@ -143,7 +140,7 @@
     {
       "index": 10,
       "policy": "translate",
-      "text": "Weathered... A self-made, hands-on captain.",
+      "text": "Weathered...a self-made, hands-on captain.",
       "layout_policy": "adaptive"
     },
     {
@@ -233,7 +230,7 @@
     {
       "index": 25,
       "policy": "translate",
-      "text": "1905... the year the Russo-Japanese War ended.",
+      "text": "1905...the year the Russo-Japanese War ended.",
       "layout_policy": "adaptive"
     },
     {
@@ -251,7 +248,7 @@
     {
       "index": 28,
       "policy": "translate",
-      "text": "...No.",
+      "text": "...no.",
       "layout_policy": "adaptive"
     },
     {
@@ -365,7 +362,7 @@
     {
       "index": 47,
       "policy": "translate",
-      "text": "Luxurious interiors... and service.",
+      "text": "Luxurious interiors...and service.",
       "layout_policy": "adaptive"
     },
     {
@@ -419,7 +416,7 @@
     {
       "index": 56,
       "policy": "translate",
-      "text": "Quite the old salt... and not a man who lies.",
+      "text": "Quite the old salt...and not a man who lies.",
       "layout_policy": "adaptive"
     },
     {
@@ -431,7 +428,7 @@
     {
       "index": 58,
       "policy": "translate",
-      "text": "A poor start... Damn. This is what happens when I act on a theory I don't believe.",
+      "text": "A poor start...damn. This is what happens when I act on a theory I don't believe.",
       "layout_policy": "adaptive"
     },
     {
@@ -490,7 +487,7 @@
     {
       "index": 68,
       "policy": "translate",
-      "text": "Oh? You seem troubled... Allow me to tell your fortune.",
+      "text": "Oh? You seem troubled...allow me to tell your fortune.",
       "layout_policy": "adaptive"
     },
     {
@@ -598,7 +595,7 @@
     {
       "index": 86,
       "policy": "translate",
-      "text": "...Enter!",
+      "text": "...enter!",
       "layout_policy": "adaptive"
     },
     {
@@ -622,7 +619,7 @@
     {
       "index": 90,
       "policy": "translate",
-      "text": "A familiar scent... sharp enough to bite...",
+      "text": "A familiar scent...sharp enough to bite...",
       "layout_policy": "adaptive"
     },
     {
@@ -652,7 +649,7 @@
     {
       "index": 95,
       "policy": "translate",
-      "text": "Insolent! You... You...",
+      "text": "Insolent! You...you...",
       "layout_policy": "adaptive"
     },
     {
@@ -706,7 +703,7 @@
     {
       "index": 104,
       "policy": "translate",
-      "text": "Why are you so angry? You're scary... and strange.",
+      "text": "Why are you so angry? You're scary...and strange.",
       "layout_policy": "adaptive"
     },
     {
@@ -754,7 +751,7 @@
     {
       "index": 112,
       "policy": "translate",
-      "text": "You... You must be an assassin sent by Li Bai!",
+      "text": "You...you must be an assassin sent by Li Bai!",
       "layout_policy": "adaptive"
     },
     {
@@ -886,7 +883,7 @@
     {
       "index": 134,
       "policy": "translate",
-      "text": "I've heard rumors about you in Paris... none flattering. You bind young artists with money and drive them like slaves.",
+      "text": "I've heard rumors about you in Paris...none flattering. You bind young artists with money and drive them like slaves.",
       "layout_policy": "adaptive"
     },
     {
@@ -916,7 +913,7 @@
     {
       "index": 139,
       "policy": "translate",
-      "text": "So arrogant... irritating.",
+      "text": "So arrogant...irritating.",
       "layout_policy": "adaptive"
     },
     {
@@ -1078,13 +1075,13 @@
     {
       "index": 166,
       "policy": "translate",
-      "text": "Paris's narrow-minded crowd all sneer, but I appreciate it. Everything from there is beautiful. The Russian Fog is the pinnacle... I see. So it is aboard this ship...",
+      "text": "Paris's narrow-minded crowd all sneer, but I appreciate it. Everything from there is beautiful. The Russian Fog is the pinnacle...I see. So it is aboard this ship...",
       "layout_policy": "adaptive"
     },
     {
       "index": 167,
       "policy": "translate",
-      "text": "The culprit thinks so... So it was a jewel...",
+      "text": "The culprit thinks so...so it was a jewel...",
       "layout_policy": "adaptive"
     },
     {

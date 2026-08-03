@@ -12,9 +12,11 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[test]"
 ```
 
-The `test` extra adds NumPy for the audio codec/synthesis companion tests.
-Pillow remains the only normal runtime dependency. Speech recognition and
-synthesis packages are optional and isolated behind the audio extras.
+The supported production and comparison path uses only the Python standard
+library. The `test` extra adds NumPy for the audio codec/synthesis companion
+tests. Pillow is available only through the optional `legacy-render` extra for
+historical research utilities; the comparison exporter does not import it.
+Speech recognition and synthesis packages are isolated behind the audio extras.
 
 Machine-specific retail, BIOS, and FFmpeg paths belong in the ignored
 `nostalgia1907.local.json`, never in tracked source.
@@ -32,8 +34,9 @@ Use `nostalgia1907.py` for normal work:
 | `compare` | source and retail reference | ignored comparison package | bilingual human review |
 | `validate` | source, retail reference, comparison | ignored reports/comparison | complete automated gate |
 | `build --dry-run` | hashes and path state | nothing | resolved build plan |
-| `build` | original tracks and canonical source | isolated runs and delivery | deterministic two-run BIN/CUE |
-| `build-us` | validated baseline and BIOS | separate derivative | BIOS-language testing only |
+| `build` | original tracks, canonical source, U.S. BIOS | isolated clean/region runs and delivery | deterministic North American BIN/CUE by default |
+| `build --region japan` | original tracks and canonical source | isolated runs and delivery | explicit unwrapped diagnostic build |
+| `build-us` | older validated baseline and BIOS | separate derivative | compatibility wrapper for older builds |
 
 The lower-level modules are intentionally importable for focused analysis. Run
 them directly only when you understand which higher-level preflight stages you
@@ -55,8 +58,8 @@ Validation is layered so a failure can be localized:
 6. **Comparison regeneration** creates the complete Japanese/English review
    package.
 7. **Semantic validation** checks source fingerprints, duplicate consistency,
-   glossary rules, exemptions, bomb terminology, ID order, and comparison
-   freshness.
+   glossary rules, exemptions, bomb terminology, ID order, comparison
+   freshness, and the package manifest against exact disk and ZIP inventories.
 8. **Build regression** checks MES/font capacity, LZ contents, fixed ISO
    extents, unchanged ISO regions, raw sectors, Track 2, and CUE formatting.
 9. **Two-run comparison** proves deterministic output.
@@ -71,12 +74,14 @@ Useful ignored artifacts include:
 | --- | --- | --- |
 | `retail_report.json` | `prepare_retail.py` | retail Track/ISO and extracted-member evidence |
 | `script_layout_audit.json` | `translation_formatter.py` | per-ID role, width, rows, and failures |
-| comparison JSON/HTML/images/ZIP | `export_bilingual_comparison.py` | Japanese/English review |
+| comparison JSON/HTML/images/ZIP plus `.manifest.json` | `export_bilingual_comparison.py` | Japanese/English review and exact package inventory |
+| `fixed_layout_runtime_review.tsv` / `.md` | `export_fixed_layout_review.py` | all fixed records awaiting runtime geometry evidence |
+| `translation_polish_proposals.json` / `.md` | `export_translation_proposals.py` | non-applied wording proposals with source, layout, and encoded-size evidence |
 | `mes_report.json` | `build_mes_set.py` | per-chapter size, glyph, and spill metrics |
 | `archive_report.json` | `build_archives.py` | slot mode and remaining archive capacity |
 | `iso_patch_report.json` | `iso9660.py` caller | extents, sizes, allocations, headroom |
-| `verification.json` | `regression.py` | one build's cross-layer proof |
-| `final_verification.json` | `rebuild.py` | two-run identity and release artifact hashes |
+| `verification_manifest.json` / `verification.json` | `verification_manifest.py` and `rebuild.py` | one run's exact input fingerprint and direct output hashes |
+| `final_verification_manifest.json` / `final_verification.json` | `verification_manifest.py` and `rebuild.py` | delivery hashes bound to the two-run input fingerprint |
 
 Reports are evidence, not source. Delete and regenerate them when investigating
 staleness; do not edit them to satisfy a check.
@@ -109,9 +114,33 @@ Inspect a build plan without creating output:
 python nostalgia1907.py build --name v8 --dry-run
 ```
 
-The dry run hashes both original tracks and reports whether the selected run and
-delivery roots are absent, empty, or occupied. A real build rejects occupied,
-equal, or nested roots and performs full validation before its first build.
+The dry run hashes both original tracks and the U.S. BIOS, reports the selected
+region, and reports whether the selected run and delivery roots are absent,
+empty, or occupied. A real build rejects occupied, equal, or nested roots and
+performs full validation before its first build. North America is the manifest
+default; the build publishes only after two clean runs and two region-wrapper
+runs independently agree.
+
+## Fixed-layout and proposal review exports
+
+`export_fixed_layout_review.py` creates TSV and Markdown queues for every
+translated record whose `layout_policy` is `fixed`. Unknown width, row count,
+placement, centering, clear/redraw behavior, and timing remain explicitly
+unknown; the queue never converts a static preview into a runtime claim.
+`PART4C:051` through `PART4C:059` are the first capture priority.
+
+`export_translation_proposals.py` exports the current approval queue without
+writing canonical JSON. When the queue is empty, it produces an explicit
+source-only `NO_PENDING_PROPOSALS` report and does not require retail fixtures.
+For an active proposal, Japanese wording is accepted only from the tracked
+human-reviewed `bomb_semantics.json`; retail MES record, token-stream, and
+preview hashes bind that evidence to the exact record without embedding raw
+retail records or generated preview images. The tool compiles proposed MES
+bytes in memory and reports exact record/MES deltas plus conservative retail
+slot and ISO-allocation bounds. It does not run production recompression, does
+not claim final archive fit when the uncompressed upper bound is insufficient,
+and writes no archive or BIN/CUE. Human approval remains mandatory before any
+canonical edit.
 
 ## Debugging by failure stage
 
@@ -220,7 +249,28 @@ Generated bytes must not depend on:
 - a prior output directory;
 - an older translated build;
 - environment-specific line endings;
+- Pillow or compression-library heuristics;
 - network services.
+
+The comparison exporter guarantees a byte-identical ZIP when the input bytes,
+exporter source, and CPython major/minor runtime are identical. The guarantee
+covers Windows/Linux/macOS filesystem differences because text line endings,
+member paths, member order, ZIP timestamps/platform/permissions, PNG metadata,
+PNG filtering, and DEFLATE blocks are specified by the exporter. It deliberately
+does not promise identity across different CPython major/minor versions or after
+a third-party program rewrites the archive. The external package manifest records
+the exact member inventory and hashes.
+
+Each comparison run uses a newly created staging directory. The expected file
+set is built from that invocation's canonical chapter/record inventory. Missing
+files fail; unexpected files fail; the ZIP receives only manifest-listed files.
+No incremental comparison output is reused.
+
+For game builds, `verification_manifest.py` records one canonical declared-input
+manifest and a stable aggregate input fingerprint. It then binds direct output
+hashes to that fingerprint. Two clean runs in one recorded environment
+prove same-environment determinism; cross-environment game-build identity still
+requires independent runs in those environments.
 
 Sort serialized collections, use fresh output roots, hash guarded inputs, and
 run the complete build twice.
