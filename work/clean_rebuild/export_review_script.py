@@ -9,6 +9,8 @@ import json
 import zipfile
 from pathlib import Path
 
+from source_json import load_json_object
+
 
 HERE = Path(__file__).resolve().parent
 SOURCES = HERE / "sources"
@@ -49,14 +51,14 @@ def _markdown_chapter(chapter: dict[str, object]) -> str:
 
 def export_review_script(output_root: Path) -> dict[str, object]:
     """Write consolidated, per-chapter, and lossless structured exports."""
-    index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+    index = load_json_object(SOURCES / "index.json")
     chapters: list[dict[str, object]] = []
     translated = 0
     preserved = 0
     blank = 0
     for item in index["chapters"]:
         source_path = SOURCES / item["source"]
-        source = json.loads(source_path.read_text(encoding="utf-8"))
+        source = load_json_object(source_path)
         records: list[dict[str, object]] = []
         for expected_index, record in enumerate(source["records"]):
             if record["index"] != expected_index:
@@ -154,7 +156,7 @@ def export_review_script(output_root: Path) -> dict[str, object]:
         consolidated.append(chapter_markdown)
     markdown_path.write_text("\n".join(consolidated), encoding="utf-8")
 
-    reconstructed = json.loads(json_path.read_text(encoding="utf-8"))
+    reconstructed = load_json_object(json_path)
     for chapter, original in zip(reconstructed["chapters"], chapters, strict=True):
         if [
             (record["index"], record["policy"], record["text"])

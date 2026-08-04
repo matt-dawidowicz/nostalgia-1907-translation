@@ -17,8 +17,9 @@ these cells.
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
+
+from source_json import load_json_object
 
 
 HERE = Path(__file__).resolve().parent
@@ -32,7 +33,7 @@ class FontError(ValueError):
     """Raised when source text cannot be represented by the canonical font."""
 
 
-_PATTERN_DATA = json.loads(PATTERN_PATH.read_text(encoding="utf-8"))
+_PATTERN_DATA = load_json_object(PATTERN_PATH)
 CHARSET = str(_PATTERN_DATA["english_charset"])
 PATTERNS: dict[str, list[str]] = _PATTERN_DATA["patterns"]
 

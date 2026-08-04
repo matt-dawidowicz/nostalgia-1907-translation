@@ -16,6 +16,8 @@ import hashlib
 import json
 from collections import Counter, defaultdict
 from pathlib import Path
+
+from source_json import load_json_object
 from typing import Any
 
 from mes_compiler import CompileError, compile_mes
@@ -63,10 +65,7 @@ GLOBAL_RUNTIME_CHECKS = (
 
 def _load(path: Path) -> dict[str, Any]:
     """Read one canonical JSON object with a checked top-level type."""
-    value = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(value, dict):
-        raise ValueError(f"{path}: expected a JSON object")
-    return value
+    return load_json_object(path)
 
 
 def _compiled_static_summary(retail_root: Path) -> dict[str, Any]:

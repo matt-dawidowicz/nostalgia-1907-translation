@@ -22,15 +22,21 @@ See ``docs/ARCHITECTURE.md`` for pipeline ownership and
 
 from __future__ import annotations
 
-import json
 import hashlib
-import re
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
 from font_render import GLYPH_BYTES, stored_cell, validate_text
 from mes_format import DYNAMIC_PREFIX_START, MesFormatError, parse_mes
+from profile_schema import profile_text_failures
+from renderer_format import (
+    measure_literal as _measure_literal,
+    normalize_ellipsis_style,
+    normalize_semantic_text,
+    wrap_words as _wrap_words,
+    wrapped_row_failures,
+)
 from scn_layout import (
     DIALOGUE_OPENING_ANCHOR_CODE,
     LABEL_ROLES,
@@ -39,11 +45,11 @@ from scn_layout import (
     Layout,
     TEXT_BOX_LOWER_CONTINUATION,
     TEXT_BOX_LOWER_DIALOGUE,
-    infer_contracts,
     infer_layouts,
     infer_roles,
     infer_row_limits,
 )
+from source_json import load_json_object
 
 
 DYNAMIC_GLYPHS_PER_PREFIX = 0xFF
@@ -61,39 +67,6 @@ FIXED_BLANK_CELL_CODE = 0x48
 # byte-preserved and are not rewritten here.
 NATIVE_DIALOGUE_ROW_EDGE_RESERVED_CODES = frozenset(
     (0x02, 0x03, 0x04, 0x05, 0x08, 0x11)
-)
-ELLIPSIS_CAPITALIZED_FOLLOWERS = frozenset(
-    (
-        "Ashby",
-        "Bartender",
-        "Betty",
-        "Britain",
-        "Britain's",
-        "Braque's",
-        "Charlie",
-        "Chief",
-        "I",
-        "I'll",
-        "I'm",
-        "I've",
-        "Ilyu",
-        "ITO",
-        "Japanese",
-        "Japan",
-        "Kasuke",
-        "Mr",
-        "Navigator",
-        "Nostalgia",
-        "Tainui",
-        "Tsar",
-        "Voysey",
-        "Voysey's",
-        "Yamada",
-    )
-)
-ELLIPSIS_FOLLOWER = re.compile(
-    r"\.\.\.(?P<gap>[ \t]*)(?P<newline>\r?\n)?"
-    r"(?P<quote>[\"']?)(?P<word>[A-Za-z0-9][A-Za-z0-9'-]*)"
 )
 FIXED_ENGLISH_UNITS = (
     # These cells form a shared English dictionary, not a chapter-specific
@@ -304,143 +277,6 @@ def _remap_preserved(record: bytes, mapping: dict[int, int]) -> bytes:
     return bytes(output)
 
 
-def _measure_literal(text: str) -> int:
-    """Return the number of two-character cells used by one visible row."""
-    return (len(text) + 1) // 2
-
-
-def normalize_semantic_text(text: str) -> str:
-    """Remove legacy line wrapping while preserving the English wording."""
-    return re.sub(r"\s+", " ", text).strip()
-
-
-def normalize_ellipsis_style(text: str) -> str:
-    """Remove post-ellipsis spaces and lower ordinary following words.
-
-    The translation's dialogue style treats an ellipsis as an attached pause:
-    ``"Wait... What?"`` becomes ``"Wait...what?"``. Names, proper adjectives,
-    direct-address titles, acronyms, and grammatical first-person forms retain
-    their established capitalization through an explicit reviewed exception
-    set. Fixed-layout newlines and any preceding row padding are retained as
-    renderer-owned boundaries, while the following ordinary word is still
-    normalized.
-
-    Args:
-        text: Canonical English text in adaptive or explicit fixed layout.
-
-    Returns:
-        The same text with spaces after an ellipsis removed and ordinary next
-        words lowercased.
-
-    Side Effects:
-        None.
-    """
-
-    def replace(match: re.Match[str]) -> str:
-        """Rewrite one ellipsis boundary while retaining fixed row padding."""
-        gap = match.group("gap") if match.group("newline") else ""
-        newline = match.group("newline") or ""
-        quote = match.group("quote")
-        word = match.group("word")
-        follower = word if word in ELLIPSIS_CAPITALIZED_FOLLOWERS else word.lower()
-        return f"...{gap}{newline}{quote}{follower}"
-
-    return ELLIPSIS_FOLLOWER.sub(replace, text)
-
-
-def _ellipsis_atoms(source_word: str) -> tuple[str, ...]:
-    """Split one whitespace token at style-approved zero-space ellipses.
-
-    An ellipsis can join two semantic words without a literal space, yet it is
-    still a safe renderer row boundary. Each returned atom retains the
-    ellipsis on the preceding text so the compiled bitmap never gains a space.
-
-    Args:
-        source_word: One non-whitespace portion of canonical English.
-
-    Returns:
-        One or more nonempty, renderable atoms in source order.
-
-    Side Effects:
-        None.
-    """
-    parts = source_word.split("...")
-    if len(parts) == 1:
-        return (source_word,)
-    atoms = [f"{part}..." for part in parts[:-1]]
-    if parts[-1]:
-        atoms.append(parts[-1])
-    return tuple(atom for atom in atoms if atom)
-
-
-def _reconstruct_wrapped_text(rows: list[str]) -> str:
-    """Rebuild semantic prose from formatter rows without restoring ellipse gaps.
-
-    Ordinary renderer row boundaries represent a source space. A boundary
-    immediately after ``...`` instead represents the approved zero-space pause
-    style, so it must not reintroduce a space during audit reconstruction.
-
-    Args:
-        rows: Visible, unpadded formatter rows in display order.
-
-    Returns:
-        Normalized semantic English represented by the rows.
-
-    Side Effects:
-        None.
-    """
-    if not rows:
-        return ""
-    rebuilt = rows[0]
-    for row in rows[1:]:
-        rebuilt += "" if rebuilt.endswith("...") else " "
-        rebuilt += row
-    return normalize_semantic_text(rebuilt)
-
-
-def _wrap_words(text: str, layout: Layout) -> list[str]:
-    """Wrap prose at spaces or ellipses without fragmenting ordinary words.
-
-    A row break after an ellipsis is legal even though the canonical style
-    deliberately omits a following space. Any other source word remains
-    indivisible unless it exceeds a complete renderer row by itself.
-    """
-    rows: list[str] = []
-    for paragraph in text.split("\n"):
-        source_words = paragraph.split()
-        if not source_words:
-            rows.append("")
-            continue
-        current = ""
-        for word_index, source_word in enumerate(source_words):
-            atoms = _ellipsis_atoms(source_word)
-            for atom_index, atom in enumerate(atoms):
-                separator = " " if word_index and atom_index == 0 else ""
-                remainder = atom
-                while remainder:
-                    row_index = len(rows)
-                    cells = layout.visible_cells(row_index)
-                    if current:
-                        candidate = f"{current}{separator}{remainder}"
-                        if _measure_literal(candidate) <= cells:
-                            current = candidate
-                            remainder = ""
-                        else:
-                            rows.append(current)
-                            current = ""
-                        continue
-                    if _measure_literal(remainder) <= cells:
-                        current = remainder
-                        remainder = ""
-                        continue
-                    maximum_chars = cells * 2
-                    rows.append(remainder[:maximum_chars])
-                    remainder = remainder[maximum_chars:]
-        if current:
-            rows.append(current)
-    return rows
-
-
 def _compact_cluster(unit: str) -> bool:
     """Return whether three source characters safely share one cell."""
     return (
@@ -516,11 +352,37 @@ def _row_plan(record: int, line: str, prefix: tuple[Cell, ...] = ()) -> RowPlan:
     )
 
 
-def _prose_rows(text: str, layout: Layout | None) -> list[tuple[tuple[Cell, ...], str]]:
-    """Wrap prose with any native one-time lower-dialogue gutter preserved."""
+def _prose_rows(
+    text: str,
+    layout: Layout | None,
+    *,
+    source: str | None = None,
+) -> list[tuple[tuple[Cell, ...], str]]:
+    """Wrap validated prose with any native opening gutter preserved.
+
+    Args:
+        text: Normalized semantic text selected for compilation.
+        layout: Proven SCN-derived visible and runtime geometry, or ``None``
+            for an explicitly fixed record.
+        source: Optional stable record label used in compiler diagnostics.
+
+    Returns:
+        Runtime-padded rows paired with their one-time prefix cells.
+
+    Raises:
+        CompileError: If wrapping changes semantic text, fragments a token, or
+            exceeds the proven visible/runtime geometry.
+
+    Side Effects:
+        None.
+    """
     if layout is None:
         return [((), line) for line in text.split("\n")]
     rows = _wrap_words(text, layout)
+    failures = wrapped_row_failures(text, rows, layout)
+    if failures:
+        prefix = f"{source}: " if source else ""
+        raise CompileError(prefix + "; ".join(failures))
     output: list[tuple[tuple[Cell, ...], str]] = []
     for row_index, row in enumerate(rows):
         runtime_cells = layout.runtime_cells(row_index)
@@ -653,11 +515,12 @@ def _audit_emitted_renderer_contract(
 ) -> tuple[int, int, int, int]:
     """Verify compiled bytes against the native cursor contract.
 
-    The source formatter proves that its preview does not split words.  This
-    second, artifact-level gate proves that the *emitted* MES stream has the
-    same logical-cell rows the 68000 reader will consume.  It catches a future
-    mismatch between word wrapping, byte encoding, dynamic references, and
-    the one-time dialogue gutter before an image can be built.
+    The shared semantic-row contract has already proved that the selected
+    visible rows reconstruct the source without splitting tokens. This second,
+    artifact-level gate proves that the *emitted* MES stream has the same
+    logical-cell rows the 68000 reader will consume. It catches a future
+    mismatch between wrapping, byte encoding, dynamic references, and the
+    one-time dialogue gutter before an image can be built.
     """
     audited_records = 0
     audited_rows = 0
@@ -832,6 +695,19 @@ def compile_mes(
             raise CompileError(f"{chapter}: invalid record policy at {expected_index}")
     if set(range(retail.record_count)) != set(translated) | preserved:
         raise CompileError(f"{chapter}: every record must have exactly one policy")
+
+    profile = canonical.get("profile")
+    try:
+        profile_failures = profile_text_failures(
+            profile,
+            raw_records,
+            chapter=chapter,
+        )
+    except ValueError as error:
+        raise CompileError(str(error)) from error
+    if profile_failures:
+        raise CompileError("; ".join(profile_failures))
+
     if not translated and len(preserved) == retail.record_count:
         return BuildResult(
             data=retail_data,
@@ -848,9 +724,6 @@ def compile_mes(
             glyph_order="retail-preserved",
         )
 
-    profile = canonical.get("profile")
-    if profile is not None and not isinstance(profile, dict):
-        raise CompileError(f"{chapter}: embedded profile is invalid")
     if text_mode == "adaptive":
         adaptive_indexes = set(translated)
     needs_layouts = text_mode == "prose" or bool(adaptive_indexes)
@@ -895,13 +768,24 @@ def compile_mes(
             row_specs = [((), line) for line in text.split("\n")]
         else:
             working = text
+            layout = layouts.get(index)
             if adaptive_record:
                 record_roles = roles.get(index, frozenset())
-                if layouts.get(index) is not None or record_roles & (
+                non_prose_contract = record_roles & (LABEL_ROLES | {ROLE_CHOICE})
+                if layout is None and not non_prose_contract:
+                    raise CompileError(
+                        f"{chapter}:{index:03d}: adaptive text has no proven "
+                        "SCN layout or recognized non-prose renderer contract"
+                    )
+                if layout is not None or record_roles & (
                     PROSE_ROLES | LABEL_ROLES | {ROLE_CHOICE}
                 ):
                     working = normalize_ellipsis_style(normalize_semantic_text(text))
-            row_specs = _prose_rows(working, layouts.get(index))
+            row_specs = _prose_rows(
+                working,
+                layout,
+                source=f"{chapter}:{index:03d}",
+            )
         max_rows = row_limits.get(index) if adaptive_record else None
         if max_rows is not None and len(row_specs) > max_rows:
             raise CompileError(
@@ -1083,7 +967,7 @@ def compile_files(
         Creates the output parent directory and replaces ``output_path``.
         Retail and canonical inputs remain read-only.
     """
-    canonical = json.loads(canonical_path.read_text(encoding="utf-8"))
+    canonical = load_json_object(canonical_path)
     result = compile_mes(
         retail_mes_path.read_bytes(),
         retail_scn_path.read_bytes(),

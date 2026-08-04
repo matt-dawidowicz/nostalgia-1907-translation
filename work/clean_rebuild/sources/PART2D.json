@@ -71,7 +71,7 @@
   },
   "text_mode": "render-ready",
   "text_sources": [
-    "C:\\Users\\thema\\Documents\\Codex\\2026-07-12\\i\\outputs\\nostalgia1907_act2d\\PART2D_english_manifest.json"
+    "historical-provenance://2026-07-12/nostalgia1907_act2d/PART2D_english_manifest.json"
   ],
   "records": [
     {

@@ -66,6 +66,30 @@ class ManifestTests(unittest.TestCase):
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), manifest["tool"]["version"])
 
+    def test_manifest_and_local_config_reject_duplicate_keys(self) -> None:
+        """Reject last-key-wins ambiguity in root operator configuration."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / nostalgia1907.MANIFEST_NAME).write_text(
+                '{"schema_version": 1, "schema_version": 2}\n',
+                encoding="utf-8",
+                newline="\n",
+            )
+            with self.assertRaisesRegex(
+                nostalgia1907.ToolError, "duplicate JSON object key"
+            ):
+                nostalgia1907.load_manifest(root)
+
+            (root / nostalgia1907.LOCAL_CONFIG_NAME).write_text(
+                '{"track1": "a", "track1": "b"}\n',
+                encoding="utf-8",
+                newline="\n",
+            )
+            with self.assertRaisesRegex(
+                nostalgia1907.ToolError, "duplicate JSON object key"
+            ):
+                nostalgia1907.load_local_config(root)
+
     def test_validated_baseline_and_retail_track2_share_exact_audio(self) -> None:
         """Require the validated build to retain the exact retail audio track."""
         manifest = nostalgia1907.load_manifest(ROOT)
@@ -162,12 +186,90 @@ class CliContractTests(unittest.TestCase):
         manifest = nostalgia1907.load_manifest(ROOT)
         sources = nostalgia1907.operator_python_sources(ROOT, manifest)
         self.assertIn(ROOT / "nostalgia1907.py", sources)
-        self.assertIn(
-            ROOT / "work" / "audio_localization" / "audio_localization.py",
-            sources,
-        )
         self.assertTrue(all(".runtime" not in path.parts for path in sources))
-        self.assertTrue(all(".kokoro_runtime" not in path.parts for path in sources))
+
+    def test_static_source_inventory_is_recursive(self) -> None:
+        """Compile future maintained packages without entering local runtimes."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            nested = root / "work" / "clean_rebuild" / "package" / "module.py"
+            nested.parent.mkdir(parents=True)
+            nested.write_text('"""Nested."""\n', encoding="utf-8", newline="\n")
+            runtime = (
+                root
+                / "work"
+                / "clean_rebuild"
+                / ".runtime"
+                / "ignored.py"
+            )
+            runtime.parent.mkdir(parents=True)
+            runtime.write_text('"""Ignored."""\n', encoding="utf-8", newline="\n")
+            (root / "nostalgia1907.py").write_text(
+                '"""Root."""\n', encoding="utf-8", newline="\n"
+            )
+            manifest = {"paths": {"clean_rebuild": "work/clean_rebuild"}}
+            sources = nostalgia1907.operator_python_sources(root, manifest)
+            self.assertIn(nested.resolve(), sources)
+            self.assertNotIn(runtime.resolve(), sources)
+
+    def test_validate_runs_every_source_gate_before_retail_gates(self) -> None:
+        """Keep the documented complete validation sequence executable."""
+        manifest = nostalgia1907.load_manifest(ROOT)
+        events: list[str] = []
+
+        def fake_run_script(
+            _root: Path,
+            script: str,
+            *_args: str,
+            **_kwargs: object,
+        ) -> None:
+            """Record one script stage by its stable repository path."""
+            events.append(script)
+
+        def fake_run_command(
+            command: tuple[str, ...],
+            *,
+            root: Path,
+            label: str,
+        ) -> None:
+            """Record one direct Python stage by its operator label."""
+            del command, root
+            events.append(label)
+
+        with (
+            patch.object(nostalgia1907, "load_manifest", return_value=manifest),
+            patch.object(
+                nostalgia1907,
+                "require_retail_reference",
+                side_effect=lambda *_args: events.append("retail") or Path("retail"),
+            ),
+            patch.object(nostalgia1907, "run_script", side_effect=fake_run_script),
+            patch.object(nostalgia1907, "run_command", side_effect=fake_run_command),
+            patch.object(
+                nostalgia1907,
+                "command_compare",
+                side_effect=lambda *_args: events.append("comparison") or 0,
+            ),
+        ):
+            self.assertEqual(
+                nostalgia1907.command_validate(ROOT, Namespace(skip_comparison=False)),
+                0,
+            )
+
+        self.assertEqual(
+            events,
+            [
+                "tools/source_health.py",
+                "Python static compilation",
+                "Source-only unit tests",
+                "tools/style_audit.py",
+                "retail",
+                "work/clean_rebuild/translation_formatter.py",
+                "work/clean_rebuild/test_script_layout.py",
+                "comparison",
+                "work/clean_rebuild/translation_validation.py",
+            ],
+        )
 
     def test_edit_rejects_ambiguous_batch_arguments(self) -> None:
         """Reject a request that mixes batch edits with a single-record edit."""
@@ -343,11 +445,35 @@ class RepositoryPolicyTests(unittest.TestCase):
             self.assertNotIn(r"C:\Users\thema", text)
             self.assertNotIn(r"D:\Sega CD Games", text)
 
+    def test_forensic_utilities_require_explicit_portable_inputs(self) -> None:
+        """Keep retired investigation scripts free of contributor-machine paths."""
+        clean = ROOT / "work" / "clean_rebuild"
+        for name in ("export_font_patterns.py", "forensic_decode_mes.py"):
+            with self.subTest(name=name):
+                text = (clean / name).read_text(encoding="utf-8")
+                self.assertNotIn(r"C:\Users\thema", text)
+                self.assertNotIn(r"D:\Sega CD Games", text)
+                self.assertIn("required=True", text)
+                self.assertIn("FORENSIC_ONLY", text)
+
     def test_project_manifest_contains_no_machine_specific_paths(self) -> None:
         """Keep the committed project manifest portable across developer machines."""
         text = (ROOT / nostalgia1907.MANIFEST_NAME).read_text(encoding="utf-8")
         self.assertNotIn(r"C:\\Users", text)
         self.assertNotIn(r"D:\\", text)
+
+    def test_canonical_provenance_contains_no_machine_specific_paths(self) -> None:
+        """Represent historical text provenance with portable labels only."""
+        sources = ROOT / "work" / "clean_rebuild" / "sources"
+        index = json.loads((sources / "index.json").read_text(encoding="utf-8"))
+        for item in index["chapters"]:
+            canonical = json.loads(
+                (sources / item["source"]).read_text(encoding="utf-8")
+            )
+            for provenance in canonical.get("text_sources", []):
+                with self.subTest(chapter=canonical["chapter"], value=provenance):
+                    self.assertNotRegex(provenance, r"(?i)^[A-Z]:[\\/]")
+                    self.assertFalse(provenance.startswith(("/Users/", "/home/")))
 
 
 if __name__ == "__main__":

@@ -19,6 +19,8 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
+from source_json import load_json_object
+
 from mes_compiler import compile_files
 
 
@@ -70,7 +72,7 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
     retail_font = build_root / "retail_files" / "FIX_CODE.FNT"
     output_font = build_root / "FIX_CODE.FNT"
     report = build_root / "mes_report.json"
-    index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+    index = load_json_object(SOURCES / "index.json")
     output.mkdir(parents=True, exist_ok=True)
     chapters: list[dict[str, object]] = []
     font_patches: dict[int, bytes] = {}

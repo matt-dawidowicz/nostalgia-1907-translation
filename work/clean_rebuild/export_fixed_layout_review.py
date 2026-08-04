@@ -15,7 +15,8 @@ import hashlib
 import json
 from pathlib import Path
 
-from mes_compiler import _measure_literal
+from renderer_format import measure_literal
+from source_json import load_json_object
 from translation_formatter import audit_layouts
 from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 
@@ -55,11 +56,11 @@ def _sha256_bytes(data: bytes) -> str:
 
 def _load_canonical() -> dict[str, dict[str, object]]:
     """Return current canonical records keyed by stable record ID."""
-    index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+    index = load_json_object(SOURCES / "index.json")
     records: dict[str, dict[str, object]] = {}
     for item in index["chapters"]:
         chapter = item["chapter"]
-        source = json.loads((SOURCES / item["source"]).read_text(encoding="utf-8"))
+        source = load_json_object(SOURCES / item["source"])
         for record in source["records"]:
             records[f"{chapter}:{record['index']:03d}"] = record
     return records
@@ -67,7 +68,7 @@ def _load_canonical() -> dict[str, dict[str, object]]:
 
 def _comparison_records(path: Path) -> dict[str, dict[str, object]]:
     """Load exact retail source representations from one comparison JSON."""
-    comparison = json.loads(path.read_text(encoding="utf-8"))
+    comparison = load_json_object(path)
     return {
         record["id"]: record
         for chapter in comparison["chapters"]
@@ -153,7 +154,7 @@ def build_queue(
         if not isinstance(text, str):
             raise ValueError(f"{record_id}: fixed translated text is not a string")
         exact_rows = text.split("\n")
-        row_cells = [_measure_literal(row) for row in exact_rows]
+        row_cells = [measure_literal(row) for row in exact_rows]
         image_relative = str(source["japanese_image"])
         image_path = comparison_root / image_relative
         image_hash = _sha256(image_path) if image_path.is_file() else "MISSING"

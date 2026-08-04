@@ -55,7 +55,7 @@ class VerificationManifestTests(unittest.TestCase):
             bindings,
             track1=track1,
             track2=track2,
-            build_profile={"name": "unit-test", "baseline": "v7"},
+            build_profile={"name": "unit-test", "baseline": "reference"},
             command=["python", "work/clean_rebuild/rebuild.py", "<TRACKS>"],
             runtime={
                 "python": {"implementation": "CPython", "version": "test"},
@@ -115,7 +115,7 @@ class VerificationManifestTests(unittest.TestCase):
                 bindings,
                 track1=track1,
                 track2=track2,
-                build_profile={"name": "unit-test", "baseline": "v7"},
+                build_profile={"name": "unit-test", "baseline": "reference"},
                 command=["python", "work/clean_rebuild/rebuild.py", "<TRACKS>"],
                 runtime={
                     "python": {"implementation": "CPython", "version": "changed"},

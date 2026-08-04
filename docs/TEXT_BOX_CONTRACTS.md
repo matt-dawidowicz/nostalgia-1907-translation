@@ -4,8 +4,11 @@
 
 Canonical English records are semantic text only. They must not contain
 hand-inserted row padding or screenshot-specific line breaks. `scn_layout.py`
-derives a named text-box contract from the hash-locked retail SCN, then
-`mes_compiler.py` alone wraps, packs, and pads the record for that contract.
+derives a named text-box contract from the hash-locked retail SCN.
+`renderer_format.py` then provides the one shared implementation of semantic
+normalization, visible-cell wrapping, row reconstruction, and whole-token
+validation. `mes_compiler.py` packs and pads only after that shared contract
+passes.
 
 This separation means a renderer correction regenerates physical MES rows from
 the same English wording; it never requires translation prose to be rewritten
@@ -39,6 +42,11 @@ binary boundaries.
 Static checks prove source and compiler consistency. Ares evidence remains the
 release gate for visible spacing, wrapping, and stale-glyph behavior.
 
+The formatter is not the compiler's safety prerequisite. Direct
+`compile_mes()` calls repeat the shared semantic-row validation and reject a
+token fragmented across renderer rows. This prevents a lower-level build or
+test harness from bypassing the same word-boundary rule used by previews.
+
 ## Whole-game emitted-byte gate
 
 `translation_validation.py` does not stop at a source preview. It compiles all
@@ -53,3 +61,8 @@ Records with no measured prose layout remain explicitly `fixed` and are not
 silently reflowed. The emitted-byte gate therefore provides exhaustive compiler
 coverage for proven adaptive geometry, while the final Ares route samples every
 box type and state transition that could depend on unmodeled live state.
+
+Synthetic source-only tests also exercise the overlong-token rejection and the
+North American wrapper's exact sector-0-through-4 mutation boundary. They prove
+the general code paths without embedding retail MES/SCN, a BIOS, disc sectors,
+or generated builds.

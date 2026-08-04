@@ -12,6 +12,8 @@ import mes_compiler
 from font_render import GLYPH_BYTES, stored_cell
 from mes_compiler import compile_files
 from mes_format import DYNAMIC_PREFIX_START, parse_mes
+from renderer_format import measure_literal
+from source_json import load_json_object
 from scn_layout import (
     ROLE_CHOICE,
     ROLE_CONTINUATION,
@@ -40,7 +42,7 @@ def required_retail_layout_files(
     retail_root: Path = DEFAULT_RETAIL_ROOT,
 ) -> tuple[Path, ...]:
     """Return every retail MES/SCN/font fixture required by this test module."""
-    index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+    index = load_json_object(SOURCES / "index.json")
     files = [retail_root / "retail_files" / "FIX_CODE.FNT"]
     for item in index["chapters"]:
         chapter = item["chapter"]
@@ -75,7 +77,7 @@ def require_retail_layout_fixtures(
 
 def source(chapter: str) -> dict[str, object]:
     """Load one canonical chapter object by its production identifier."""
-    return json.loads((SOURCES / f"{chapter}.json").read_text(encoding="utf-8"))
+    return load_json_object(SOURCES / f"{chapter}.json")
 
 
 def contracts(chapter: str) -> dict[int, object]:
@@ -232,7 +234,7 @@ class ScriptLayoutTests(unittest.TestCase):
         self.assertEqual(row_specs[0][0], (mes_compiler.BLANK_CELL,))
         self.assertEqual(
             [
-                len(prefix) + mes_compiler._measure_literal(line)
+                len(prefix) + measure_literal(line)
                 for prefix, line in row_specs[:7]
             ],
             [12, 11, 11, 11, 11, 11, 11],
@@ -346,7 +348,7 @@ class ScriptLayoutTests(unittest.TestCase):
                 self.assertTrue(all(not prefix for prefix, _line in row_specs))
                 self.assertEqual(
                     [
-                        mes_compiler._measure_literal(line)
+                        measure_literal(line)
                         for _prefix, line in row_specs
                     ],
                     [contract.layout.runtime_cells(row) for row in range(len(rows))],
@@ -383,7 +385,7 @@ class ScriptLayoutTests(unittest.TestCase):
 
     def test_compiled_lower_dialogue_keeps_only_the_initial_blank_anchor(self) -> None:
         """Verify native quote gutters are emitted once, never at page resets."""
-        source_index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+        source_index = load_json_object(SOURCES / "index.json")
         retail_font = (
             DEFAULT_RETAIL_ROOT / "retail_files" / "FIX_CODE.FNT"
         ).read_bytes()
@@ -521,7 +523,7 @@ class ScriptLayoutTests(unittest.TestCase):
 
     def test_every_chapter_compiles_from_hash_locked_inputs(self) -> None:
         """Compile all chapters while preserving record and glyph limits."""
-        index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+        index = load_json_object(SOURCES / "index.json")
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary)
             for item in index["chapters"]:

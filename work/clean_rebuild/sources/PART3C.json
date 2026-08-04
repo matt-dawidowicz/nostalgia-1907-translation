@@ -244,7 +244,7 @@
   },
   "text_mode": "render-ready",
   "text_sources": [
-    "C:\\Users\\thema\\Documents\\Codex\\2026-07-12\\i\\outputs\\nostalgia1907_act3c_000_223_visualfix3\\PART3C_000_223_visualfix3_build_config.json",
+    "historical-provenance://2026-07-12/nostalgia1907_act3c_000_223_visualfix3/PART3C_000_223_visualfix3_build_config.json",
     "record 194 speaker corrected from record 146"
   ],
   "records": [

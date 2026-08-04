@@ -34,6 +34,7 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 from mes_format import read_mes
+from source_json import load_json_object
 
 
 HERE = Path(__file__).resolve().parent
@@ -581,7 +582,7 @@ def validate_comparison_package(output_root: Path) -> dict[str, object]:
             "member_count": 0,
         }
     try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest = load_json_object(manifest_path)
     except (OSError, json.JSONDecodeError) as error:
         return {
             "status": "FAIL",
@@ -700,7 +701,7 @@ def validate_comparison_package(output_root: Path) -> dict[str, object]:
     comparison_path = output_root / JSON_NAME
     if comparison_path.is_file():
         try:
-            comparison = json.loads(comparison_path.read_text(encoding="utf-8"))
+            comparison = load_json_object(comparison_path)
             image_paths = [
                 record["japanese_image"]
                 for chapter in comparison["chapters"]
@@ -776,7 +777,7 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
         fixed_data[offset : offset + GLYPH_BYTES]
         for offset in range(0, len(fixed_data), GLYPH_BYTES)
     )
-    index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+    index = load_json_object(SOURCES / "index.json")
     chapters: list[dict[str, object]] = []
     expected_members = {"README.md", HTML_NAME, MARKDOWN_NAME, JSON_NAME}
     total = 0
@@ -784,7 +785,7 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
     control_records = 0
     for item in index["chapters"]:
         name = item["chapter"]
-        canonical = json.loads((SOURCES / item["source"]).read_text(encoding="utf-8"))
+        canonical = load_json_object(SOURCES / item["source"])
         mes_path = retail_root / "retail_unpacked" / name / f"{name}.MES"
         if (
             mes_path.stat().st_size != canonical["retail_mes"]["size"]
@@ -885,7 +886,7 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
     )
     _write_text_lf(staging / "README.md", readme)
 
-    reconstructed = json.loads(json_path.read_text(encoding="utf-8"))
+    reconstructed = load_json_object(json_path)
     if reconstructed["record_count"] != total:
         raise AssertionError("comparison JSON did not round-trip")
     for chapter in reconstructed["chapters"]:

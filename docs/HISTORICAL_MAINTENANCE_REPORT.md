@@ -1,38 +1,40 @@
-# v26 maintenance, verification, rollback, and cleanup report
+# Historical maintenance, verification, rollback, and cleanup report
 
 Date: 2026-08-02
 
 Comparison base: commit `a2fca0c` (`Publish revised translation and tooling`)
 
-Retained candidate: `Nostalgia1907_CleanRebuild_v26_NorthAmerica`
+Retained candidate: North American maintenance reference
 
-Architectural baseline: `Nostalgia1907_CleanRebuild_v7`
+Architectural baseline: validated clean-rebuild architecture
 
 ## Release decision
 
-v26 is the retained North American playtest candidate. The experimental v27
-revision produced additional runtime layout regressions during manual testing.
-Its source experiment and generated image were therefore retired rather than
-promoted. Nothing in this maintenance state depends on v27, and no v27 BIN/CUE
-or run directory is retained.
+The maintenance reference was retained as the North American playtest
+candidate. A later renderer experiment produced additional runtime layout
+regressions during manual testing. Its source experiment and generated image
+were therefore retired rather than promoted. Nothing in this maintenance state
+depends on the rejected experiment, and none of its BIN/CUE or run directories
+is retained.
 
-This decision does not declare v26 a final release. Manual testing established
-that the stale-letter clearing problem and the earlier leading-indentation
-problem were fixed in v26, while some inter-word/apostrophe-adjacent spacing
-still needed runtime review. Static success is not being presented as proof that
+This decision did not declare the maintenance reference a final release. Manual
+testing established that the stale-letter clearing problem and the earlier
+leading-indentation problem were fixed, while some inter-word/apostrophe-adjacent spacing still needed
+runtime review. Static success is not being presented as proof that
 every scene is visually final.
 
 North America remains the default region for all new normal builds. The
 Japanese-region output is available only through the explicit
 `--region japan` diagnostic override.
 
-## v26 provenance and retained hashes
+## Retained-candidate provenance and hashes
 
 Before removing older artifacts, the maintained source was compared with the
-input records embedded in v26's clean-delivery verification manifest. All 52
-workspace source, configuration, production, and validation files checked in
-that comparison matched byte-for-byte. The full v26 input manifest records 115
-files after original-disc and prepared-retail fixtures are included.
+input records embedded in the retained candidate's clean-delivery verification
+manifest. All 52 workspace source, configuration, production, and validation
+files checked in that comparison matched byte-for-byte. The full
+retained-candidate input manifest records 115 files after original-disc and
+prepared-retail fixtures are included.
 
 | Evidence | Value |
 | --- | --- |
@@ -146,9 +148,11 @@ chapter-specific patch:
 - ISO and MES parsers gained strict bounds, duplicate-record, padding,
   terminator, and extent validation.
 - `tools/source_health.py` enforces UTF-8/LF text hygiene, strict JSON keys,
-  parseable maintained source, and a media-free source checkout. It uses the
-  standard-library TOML parser on Python 3.11+ and the conditional `tomli`
-  backport on the supported Python 3.10 minimum.
+  parseable maintained source, and a media-free source checkout. Its strict
+  release mode audits the exact Git-tracked or unpacked-package inventory so
+  ignored directory names cannot conceal retail media, local configuration,
+  screenshots, or emulator states. It uses the standard-library TOML parser on
+  Python 3.11+ and the conditional `tomli` backport on Python 3.10.
 - New focused test modules cover build reports, comparison determinism,
   ellipsis style, renderer boundaries, review exports, source health, and
   verification-manifest binding.
@@ -157,12 +161,13 @@ chapter-specific patch:
 
 The cleanup was intentionally split between generated delivery state and the
 maintained Git checkout. Required original Japanese tracks, the prepared retail
-reference, canonical sources, tests, and v26 provenance were preserved.
+reference, canonical sources, tests, and retained-candidate provenance were preserved.
 
-- The active delivery workspace removed v27, obsolete v15-v25 delivery copies,
-  pre-v26 run directories, a forgotten v22 retry directory, and obsolete build
-  logs. Only the v26 North American delivery and v26 provenance remain there.
-- The Git checkout removed 13 ignored v7-v13 output/run directories, 175 loose
+- The active delivery workspace removed the rejected renderer experiment,
+  obsolete earlier delivery copies and run directories, a forgotten retry
+  directory, and obsolete build logs. Only the retained North American
+  delivery and its provenance remain there.
+- The Git checkout removed 13 ignored legacy output/run directories, 175 loose
   ignored generated media files, three ignored generated build/dump trees, and
   three empty probe directories. This removed 5,844,392,056 bytes from that
   checkout before the final validation run.
@@ -185,14 +190,15 @@ The following checks completed successfully with CPython 3.12.13 on Windows:
 | Source-health audit | PASS; 201 files checked, zero forbidden media or failures |
 | Python static compilation | PASS |
 | Maintained unit-test discovery | PASS; 95 tests |
-| Audio companion unit tests | PASS; 19 tests |
-| Operator `doctor` | PASS for Python, canonical inventory, both original tracks, and prepared retail reference; optional BIOS/FFmpeg skipped because not configured |
+| Operator `doctor` | PASS for Python, canonical inventory, both original tracks, and prepared retail reference; optional BIOS skipped because not configured |
 | Full `validate` command | PASS |
 | Renderer-aware corpus audit | PASS; 2,759 adaptive and 123 fixed records, zero failures/warnings/legacy issues |
 | Script-layout suite inside validation | PASS; 13 tests |
 | Deterministic comparison package | PASS; 2,905 images and 2,928 exact package members |
 | Semantic/generated-artifact validation | PASS; zero failures |
 
-The final manual gate remains an Ares playthrough of v26, especially scene
-transitions and lower-box spacing. Static and deterministic checks protect the
-build contract; they do not substitute for runtime visual evidence.
+The project maintainer subsequently playtested the byte-identical
+runtime-reviewed reference in Ares, including the targeted dialogue renderer,
+page advances, and dialogue transitions, with no defect reported in the tested
+coverage. Static and deterministic checks protect the build contract; they do
+not expand that recorded coverage into a whole-game certification.

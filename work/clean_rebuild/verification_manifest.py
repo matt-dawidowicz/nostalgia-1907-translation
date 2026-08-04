@@ -25,6 +25,8 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import Mapping, Sequence
 
+from source_json import load_json_object
+
 
 SCHEMA_VERSION = 1
 INPUT_KIND = "nostalgia1907-input-manifest"
@@ -286,7 +288,7 @@ def validate_input_manifest(manifest: Mapping[str, object]) -> dict[str, object]
 
 def _safe_chapter_list(index_path: Path) -> list[tuple[str, str]]:
     """Load validated ``(chapter, source JSON)`` pairs from the source index."""
-    index = json.loads(index_path.read_text(encoding="utf-8"))
+    index = load_json_object(index_path)
     items = index.get("chapters")
     if not isinstance(items, list):
         raise ValueError("canonical source index has no chapters list")
@@ -610,7 +612,7 @@ def validate_bound_verification(
     """Reopen a bound manifest and verify its input and current output hashes."""
     failures: list[str] = []
     try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest = load_json_object(manifest_path)
     except (OSError, json.JSONDecodeError) as error:
         return {
             "status": "FAIL",

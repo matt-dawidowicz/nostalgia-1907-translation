@@ -17,6 +17,8 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
+from source_json import load_json_object
+
 from mes_format import DYNAMIC_GLYPHS_PER_PREFIX, DYNAMIC_PREFIX_START, read_mes
 
 
@@ -37,10 +39,7 @@ def _sha256(data: bytes) -> str:
 
 def _load_json(path: Path) -> dict[str, object]:
     """Load one UTF-8 JSON object or reject an incompatible top level."""
-    value = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(value, dict):
-        raise ValueError(f"{path}: expected a JSON object")
-    return value
+    return load_json_object(path)
 
 
 def _glyphs(

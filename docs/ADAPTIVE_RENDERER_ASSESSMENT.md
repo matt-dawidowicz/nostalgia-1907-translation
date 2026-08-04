@@ -13,7 +13,7 @@ playback rejected the earlier assumptions for ordinary lower dialogue:
 The down-arrow was visible in the captures. These are not typewriter-animation
 frames.
 
-The parser-safe v30 candidate removed the fixed-byte edge corruption (`o`/`e`),
+The parser-safe prototype removed the fixed-byte edge corruption (`o`/`e`),
 but completed Ares pages still split `Neithe`/`r`, `si`/`x`, and `re`/`veal`.
 Those pages prove a second global contract: after row zero, a three-line page
 clear does not restore the wider opening X-coordinate or width.
@@ -37,13 +37,13 @@ Runtime-test records illustrate why a visual-cell-only model is insufficient:
 
 | Record | Candidate | Visual cells | Encoded data bytes | Result |
 | --- | --- | ---: | ---: | --- |
-| `PART1A:003` | flat-12 v28 | 36 | 46 | completed page splits `more` |
-| `PART1A:010` | flat-12 v28 | 96 | 117 | completed page splits `one`, `show` |
-| `PART1A:010` | v26/v29 cadence | 102 | 122 | completed page splits `show`/`ow` |
+| `PART1A:003` | flat-12 prototype | 36 | 46 | completed page splits `more` |
+| `PART1A:010` | flat-12 prototype | 96 | 117 | completed page splits `one`, `show` |
+| `PART1A:010` | maintenance-cadence prototypes | 102 | 122 | completed page splits `show`/`ow` |
 
 ## Native decoder evidence
 
-Static 68000 disassembly of the v26-equivalent `MAIN.BIN` identifies the
+Static 68000 disassembly of the maintenance-reference-equivalent `MAIN.BIN` identifies the
 lower-dialogue cell reader at `$FF1D64`. It reads one fixed byte or, for an
 `F0-FF` prefix, consumes the following byte too. Both forms then call the same
 glyph writer and advance the cursor by 12 pixels: they are one decoded display
@@ -57,8 +57,8 @@ values are therefore parser-reserved at a lower-dialogue row edge even though
 they are ordinary fixed-font slots elsewhere.
 
 The old shared English dictionary assigned those exact values to common cells
-such as `on`, `,`, and leading-space pairs. In the failing v26/v29
-`PART1A:010`, the first twelve decoded cells are followed by fixed `05` (`on`).
+such as `on`, `,`, and leading-space pairs. In the failing maintenance-cadence
+`PART1A:010` prototype, the first twelve decoded cells are followed by fixed `05` (`on`).
 That is the native special path, matching the captured `o` at the right edge
 followed by `e` on the next row. This establishes a renderer-wide encoding
 contract defect; it is not stale translation wording or an animation frame.
@@ -69,7 +69,7 @@ generated fixed-font compression and emit their identical glyphs as dynamic
 `PART3C` is 16,094 bytes, still 289 bytes below its `0x3FFF` boundary. Japanese
 records, SCN, IDs, order, English prose, and executable bytes remain unchanged.
 
-The v30 captures also establish that `page_rows=3` is vertical state only for
+The parser-safe prototype captures also establish that `page_rows=3` is vertical state only for
 `lower_dialogue`: it clears/reveals a new page but leaves the native reader at
 the 11-cell continuation X-coordinate. The compiler now represents page cadence
 and first-row repetition as separate properties. `lower_dialogue` and

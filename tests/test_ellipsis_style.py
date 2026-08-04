@@ -13,10 +13,10 @@ CLEAN = ROOT / "work" / "clean_rebuild"
 if str(CLEAN) not in sys.path:
     sys.path.insert(0, str(CLEAN))
 
-from mes_compiler import (  # noqa: E402
-    _reconstruct_wrapped_text,
-    _wrap_words,
+from renderer_format import (  # noqa: E402
     normalize_ellipsis_style,
+    reconstruct_wrapped_text,
+    wrap_words,
 )
 from scn_layout import Layout  # noqa: E402
 from translation_formatter import _renderer_boundary_failures  # noqa: E402
@@ -61,10 +61,12 @@ class EllipsisStyleTests(unittest.TestCase):
             runtime_first=8,
             runtime_continuation=8,
         )
-        rows = _wrap_words("premeditated...we continue", layout)
+        rows = wrap_words("premeditated...we continue", layout)
 
         self.assertEqual(rows, ["premeditated...", "we continue"])
-        self.assertEqual(_reconstruct_wrapped_text(rows), "premeditated...we continue")
+        self.assertEqual(
+            reconstruct_wrapped_text(rows), "premeditated...we continue"
+        )
 
     def test_terminal_punctuation_may_follow_an_ellipsis_on_the_next_row(self) -> None:
         """Treat ``...?`` as an ellipsis edge, not a broken source token."""
@@ -73,7 +75,7 @@ class EllipsisStyleTests(unittest.TestCase):
             layout=Layout(10, 10, 10, 10),
             max_rows=2,
         )
-        rows = _wrap_words("What are you plotting...?", contract.layout)
+        rows = wrap_words("What are you plotting...?", contract.layout)
 
         self.assertEqual(
             _renderer_boundary_failures("What are you plotting...?", rows, contract), []

@@ -19,9 +19,12 @@ import json
 import re
 from pathlib import Path
 
+from source_json import load_json_object
+
 from bomb_audit import run_audit as run_bomb_audit
 from export_bilingual_comparison import validate_comparison_package
 from mes_compiler import CompileError, compile_mes
+from profile_schema import profile_text_failures, validate_profile
 from translation_formatter import audit_layouts
 from translation_audit import (
     DEFAULT_RETAIL_ROOT,
@@ -47,11 +50,8 @@ EXPECTED_RECORDS = 2905
 
 
 def _load(path: Path) -> dict[str, object]:
-    """Load a tracked UTF-8 JSON object used by semantic validation."""
-    value = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(value, dict):
-        raise ValueError(f"{path}: expected JSON object")
-    return value
+    """Load one strict UTF-8 JSON object used by semantic validation."""
+    return load_json_object(path)
 
 
 def _audit_compiled_renderer_contracts() -> dict[str, object]:
@@ -246,6 +246,7 @@ def validate(
     index = _load(SOURCES / "index.json")
     canonical_text_by_id: dict[str, object] = {}
     expected_ids: list[str] = []
+    legacy_profile_fields: set[str] = set()
     for chapter_item in index["chapters"]:
         chapter = chapter_item["chapter"]
         source = _load(SOURCES / chapter_item["source"])
@@ -253,6 +254,17 @@ def validate(
         if not isinstance(records, list) or len(records) != source.get("record_count"):
             failures.append(f"{chapter}: canonical record table is incomplete")
             continue
+        try:
+            legacy_profile_fields.update(
+                validate_profile(source.get("profile"), chapter=chapter)
+            )
+            failures.extend(
+                profile_text_failures(
+                    source.get("profile"), records, chapter=chapter
+                )
+            )
+        except ValueError as error:
+            failures.append(str(error))
         if any(
             record.get("index") != position for position, record in enumerate(records)
         ):
@@ -371,6 +383,7 @@ def validate(
         "comparison_package_status": comparison_package["status"],
         "comparison_package_member_count": comparison_package["member_count"],
         "comparison_package_failure_count": comparison_package["failure_count"],
+        "legacy_profile_fields_present": sorted(legacy_profile_fields),
     }
 
 
