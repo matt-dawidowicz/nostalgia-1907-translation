@@ -12,6 +12,7 @@ from pathlib import Path
 from font_render import CHARSET, FontError, stored_cell
 from mes_compiler import FIXED_ENGLISH_UNITS
 from mes_format import DYNAMIC_PREFIX_START, read_mes
+from source_json import load_json_object
 from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 
 
@@ -32,11 +33,11 @@ def _fixed_codes(record: bytes) -> set[int]:
 
 def _preserved_code_usage(retail_root: Path) -> Counter[int]:
     """Count fixed codes that must retain retail glyphs in preserved records."""
-    index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+    index = load_json_object(SOURCES / "index.json")
     usage: Counter[int] = Counter()
     for item in index["chapters"]:
         chapter = item["chapter"]
-        canonical = json.loads((SOURCES / item["source"]).read_text(encoding="utf-8"))
+        canonical = load_json_object(SOURCES / item["source"])
         retail = read_mes(retail_root / "retail_unpacked" / chapter / f"{chapter}.MES")
         for record in canonical["records"]:
             if record["policy"] != "preserve":

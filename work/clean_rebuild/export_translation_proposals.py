@@ -19,7 +19,9 @@ from pathlib import Path
 
 from iso9660 import read_entries, unique_file
 from lz_format import parse_archive
-from mes_compiler import _measure_literal, compile_mes
+from mes_compiler import compile_mes
+from renderer_format import measure_literal
+from source_json import load_json_object
 from mes_format import changed_record_indexes, parse_mes
 from translation_formatter import _contracts, _record_audit, _rules_by_role
 from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
@@ -60,11 +62,11 @@ def _sha256_bytes(payload: bytes) -> str:
 
 def _canonical_chapters() -> dict[str, tuple[Path, dict[str, object]]]:
     """Load canonical chapter files in index order without modifying them."""
-    index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+    index = load_json_object(SOURCES / "index.json")
     return {
         item["chapter"]: (
             SOURCES / item["source"],
-            json.loads((SOURCES / item["source"]).read_text(encoding="utf-8")),
+            load_json_object(SOURCES / item["source"]),
         )
         for item in index["chapters"]
     }
@@ -72,7 +74,7 @@ def _canonical_chapters() -> dict[str, tuple[Path, dict[str, object]]]:
 
 def _comparison_records(path: Path) -> dict[str, dict[str, object]]:
     """Return comparison records keyed by exact stable ID."""
-    payload = json.loads(path.read_text(encoding="utf-8"))
+    payload = load_json_object(path)
     return {
         record["id"]: record
         for chapter in payload["chapters"]
@@ -193,7 +195,7 @@ def build_proposals(
     comparison_json: Path,
 ) -> dict[str, object]:
     """Compile and measure every proposal while leaving canonical sources intact."""
-    evidence = json.loads(EVIDENCE.read_text(encoding="utf-8"))
+    evidence = load_json_object(EVIDENCE)
     expectations = evidence["record_expectations"]
     evidence_hash = _sha256(EVIDENCE)
     reports: list[dict[str, object]] = []
@@ -270,8 +272,8 @@ def build_proposals(
             )
         current_rows = list(current_audit["preview_rows"])
         proposed_rows = list(proposed_audit["preview_rows"])
-        current_cells = [_measure_literal(row) for row in current_rows]
-        proposed_cells = [_measure_literal(row) for row in proposed_rows]
+        current_cells = [measure_literal(row) for row in current_rows]
+        proposed_cells = [measure_literal(row) for row in proposed_rows]
         image_path = comparison_root / comparison_record["japanese_image"]
         archive_impact = _archive_boundary_context(
             retail_root,

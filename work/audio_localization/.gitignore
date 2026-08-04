@@ -1,8 +1,0 @@
-.cuda/
-.kokoro_models/
-.kokoro_runtime/
-.models/
-.runtime/
-.tts_runtime/
-__pycache__/
-*.log

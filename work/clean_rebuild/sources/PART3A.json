@@ -325,7 +325,7 @@
   },
   "text_mode": "render-ready",
   "text_sources": [
-    "C:\\Users\\thema\\Documents\\Codex\\2026-07-12\\i\\outputs\\nostalgia1907_act3a_000_251\\PART3A_000_251_manifest.json"
+    "historical-provenance://2026-07-12/nostalgia1907_act3a_000_251/PART3A_000_251_manifest.json"
   ],
   "records": [
     {

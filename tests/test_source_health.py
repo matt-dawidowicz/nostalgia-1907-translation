@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -23,7 +24,7 @@ SPEC.loader.exec_module(source_health)
 
 
 class SourceHealthTests(unittest.TestCase):
-    """Keep structural checks strict without inspecting ignored local state."""
+    """Keep development and public-release source inventories fail-closed."""
 
     def test_python_310_toml_backport_is_declared(self) -> None:
         """Keep source-health TOML parsing available at the supported minimum."""
@@ -48,6 +49,27 @@ class SourceHealthTests(unittest.TestCase):
             self.assertEqual(report["status"], "PASS")
             self.assertEqual(report["failure_count"], 0)
 
+    def test_repository_root_passes(self) -> None:
+        """Cover development mode and a clean package-shaped source inventory."""
+        report = source_health.audit(ROOT)
+        self.assertEqual(report["status"], "PASS", report["failures"])
+        if (ROOT / ".git").exists():
+            strict_report = source_health.audit(ROOT, strict_release=True)
+        else:
+            with tempfile.TemporaryDirectory() as temporary:
+                clean_root = Path(temporary)
+                for source in source_health.iter_source_files(ROOT):
+                    relative = source.relative_to(ROOT)
+                    target = clean_root / relative
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copyfile(source, target)
+                strict_report = source_health.audit(
+                    clean_root, strict_release=True
+                )
+        self.assertEqual(
+            strict_report["status"], "PASS", strict_report["failures"]
+        )
+
     def test_duplicate_json_and_forbidden_media_fail(self) -> None:
         """Reject duplicate keys and game media in a source checkout."""
         with tempfile.TemporaryDirectory() as temporary:
@@ -61,19 +83,86 @@ class SourceHealthTests(unittest.TestCase):
             self.assertEqual(report["forbidden_media_count"], 1)
             self.assertTrue(any("duplicate key" in item for item in report["failures"]))
 
-    def test_generated_and_retail_directories_are_ignored(self) -> None:
-        """Do not treat excluded local state as tracked source content."""
+    def test_retired_recovery_outputs_fail(self) -> None:
+        """Keep historical generated recovery reports out of source releases."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            retired = root / "work" / "clean_rebuild" / "recover_bonus_2.json"
+            retired.parent.mkdir(parents=True)
+            retired.write_text("{}\n", encoding="utf-8", newline="\n")
+            report = source_health.audit(root)
+            self.assertEqual(report["status"], "FAIL")
+            self.assertTrue(any("retired generated recovery" in item for item in report["failures"]))
+
+    def test_development_mode_ignores_documented_local_state(self) -> None:
+        """Keep private fixtures usable without weakening publication checks."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             ignored = root / "work" / "clean_rebuild" / "retail_reference"
             ignored.mkdir(parents=True)
             (ignored / "retail.iso").write_bytes(b"local-only")
+            metadata = root / "nostalgia1907_tools.egg-info"
+            metadata.mkdir()
+            (metadata / "generated.bin").write_bytes(b"setuptools metadata")
+            (root / "nostalgia1907.local.json").write_text(
+                "{}\n", encoding="utf-8", newline="\n"
+            )
             (root / "ok.py").write_text(
                 '"""Example."""\n', encoding="utf-8", newline="\n"
             )
             report = source_health.audit(root)
             self.assertEqual(report["status"], "PASS")
             self.assertEqual(report["forbidden_media_count"], 0)
+
+    def test_strict_release_scans_normally_excluded_directories(self) -> None:
+        """Reject retail media even when it uses a development-only directory."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            retail = root / "work" / "clean_rebuild" / "retail_reference"
+            retail.mkdir(parents=True)
+            (retail / "retail.iso").write_bytes(b"local-only")
+            report = source_health.audit(root, strict_release=True)
+            self.assertEqual(report["status"], "FAIL")
+            self.assertEqual(report["inventory_mode"], "package-members")
+            self.assertTrue(
+                any("retail.iso" in failure for failure in report["failures"])
+            )
+
+    def test_strict_release_rejects_local_config_images_and_states(self) -> None:
+        """Cover the release-gate false negatives found during source review."""
+        forbidden = (
+            "nostalgia1907.local.json",
+            "review.jpg",
+            "comparison.webp",
+            "state.state",
+            "slot.ss0",
+            "__pycache__/module.pyc",
+            "runtime.dll",
+            "model.onnx",
+        )
+        for filename in forbidden:
+            with self.subTest(filename=filename):
+                with tempfile.TemporaryDirectory() as temporary:
+                    root = Path(temporary)
+                    path = root / filename
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    if path.suffix == ".json":
+                        path.write_text("{}\n", encoding="utf-8", newline="\n")
+                    else:
+                        path.write_bytes(b"fixture")
+                    report = source_health.audit(root, strict_release=True)
+                    self.assertEqual(report["status"], "FAIL")
+                    self.assertTrue(
+                        any(filename in failure for failure in report["failures"])
+                    )
+
+    def test_ci_uses_the_strict_release_inventory(self) -> None:
+        """Keep public CI from falling back to the development-filtered audit."""
+        workflow = (ROOT / ".github" / "workflows" / "source-checks.yml")
+        text = workflow.read_text(encoding="utf-8")
+        self.assertIn(
+            "python tools/source_health.py --root . --strict-release", text
+        )
 
 
 if __name__ == "__main__":

@@ -50,13 +50,7 @@ nostalgia1907.local.json
 /work/**/*_extract/
 /work/**/*_part3c/
 
-# Audio-localization models, vendored runtimes, and generated data
-/work/audio_localization/.cuda/
-/work/audio_localization/.kokoro_models/
-/work/audio_localization/.kokoro_runtime/
-/work/audio_localization/.models/
-/work/audio_localization/.runtime/
-/work/audio_localization/.tts_runtime/
+# Optional native tooling and generated binary data
 *.onnx
 *.dll
 *.pyd

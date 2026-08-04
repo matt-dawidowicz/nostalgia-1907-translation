@@ -9,22 +9,21 @@ editable mode:
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-python -m pip install -e ".[test]"
+python -m pip install -e .
 ```
 
-For a formatting pass, install the isolated style extra and run Black:
+For a formatting pass, install the isolated style extra and run the pinned
+Black version:
 
 ```powershell
 python -m pip install -e ".[style]"
-python -m black nostalgia1907.py tools tests work/clean_rebuild work/region_variant work/audio_localization
+python -m black nostalgia1907.py tools tests work/clean_rebuild work/region_variant
 ```
 
 The supported production and comparison path uses only the Python standard
-library. The `test` extra adds NumPy for the audio codec/synthesis companion
-tests. Speech recognition and synthesis packages are isolated behind the audio
-extras.
+library. The optional style extra supplies the pinned Black formatter.
 
-Machine-specific retail, BIOS, and FFmpeg paths belong in the ignored
+Machine-specific retail and BIOS paths belong in the ignored
 `nostalgia1907.local.json`, never in tracked source.
 
 ## Command layers
@@ -38,7 +37,7 @@ Use `nostalgia1907.py` for normal work:
 | `edit` preview | source and retail SCN | nothing | renderer-aware proposal review |
 | `edit --apply` | source and retail SCN | canonical chapter JSON | validated English edit |
 | `compare` | source and retail reference | ignored comparison package | bilingual human review |
-| `validate` | source, retail reference, comparison | ignored reports/comparison | complete automated gate |
+| `validate` | source, retail reference, comparison | ignored reports/comparison | complete pre-build automated validation gate |
 | `build --dry-run` | hashes and path state | nothing | resolved build plan |
 | `build` | original tracks, canonical source, U.S. BIOS | isolated clean/region runs and delivery | deterministic North American BIN/CUE by default |
 | `build --region japan` | original tracks and canonical source | isolated runs and delivery | explicit unwrapped diagnostic build |
@@ -51,25 +50,35 @@ are bypassing.
 
 Validation is layered so a failure can be localized:
 
-1. **Python compilation** catches syntax and import-time source mistakes.
-2. **Source-only unit tests** cover CLI contracts, manifests, repository
+1. **Source health** rejects invalid UTF-8/LF policy, duplicate JSON keys,
+   malformed structured source, forbidden media, and stale generated assets.
+2. **Python compilation** recursively covers maintained Python while excluding
+   untracked native runtimes and generated/retail directories.
+3. **Source-only unit tests** cover CLI contracts, manifests, repository
    policy, documentation inventory, and the maintained-code style audit.
-3. **Audio companion unit tests** cover the reversible PCM/WAV codec and SCN
-   audio mapping without changing the game.
-4. **Renderer audit** classifies every translated record and checks adaptive or
+4. **Maintained-source style audit** enforces the repository's standard-library
+   PEP 8/257 policy independently of Black.
+5. **Renderer audit** classifies every translated record and checks adaptive or
    fixed ownership.
-5. **Layout tests** compile every chapter from hash-locked inputs and cover
+6. **Layout tests** compile every chapter from hash-locked inputs and cover
    known renderer edge cases.
-6. **Comparison regeneration** creates the complete Japanese/English review
+7. **Comparison regeneration** creates the complete Japanese/English review
    package.
-7. **Semantic validation** checks source fingerprints, duplicate consistency,
+8. **Semantic validation** checks source fingerprints, duplicate consistency,
    glossary rules, exemptions, bomb terminology, ID order, comparison
-   freshness, and the package manifest against exact disk and ZIP inventories.
-8. **Build regression** checks MES/font capacity, LZ contents, fixed ISO
+   freshness, active/legacy profile schema, profile-owned text locks, and the
+   package manifest against exact disk and ZIP inventories.
+9. **Build regression** checks MES/font capacity, LZ contents, fixed ISO
    extents, unchanged ISO regions, raw sectors, Track 2, and CUE formatting.
-9. **Two-run comparison** proves deterministic output.
-10. **Manual playtesting** remains the release gate for visual and branching
+10. **Two-run comparison** proves deterministic output.
+11. **Manual playtesting** remains the release gate for visual and branching
     behavior.
+
+`python nostalgia1907.py validate` runs stages 1 through 9 in that order. The
+source-only stages run before the command requires prepared retail fixtures, so
+repository defects fail with their own diagnostics instead of being hidden by a
+missing local disc. Black's mechanical formatting check remains an explicit
+contributor-review command when the optional style dependencies are installed.
 
 For a reproducible complete-corpus static check plus an explicit runtime
 certification log, use `docs/WHOLE_GAME_TESTING.md`. The log is candidate-hash
@@ -101,18 +110,42 @@ staleness; do not edit them to satisfy a check.
 Run tests that do not require retail media:
 
 ```powershell
-python -m compileall -q nostalgia1907.py work tests
+python tools/source_health.py --root . --strict-release
+python -m compileall -q nostalgia1907.py tools work tests
 python -m unittest discover -s tests -v
-python work/audio_localization/test_audio_localization.py
-python tools/style_audit.py
-python -m black --check nostalgia1907.py tools tests work/clean_rebuild work/region_variant work/audio_localization
+python tools/style_audit.py --root .
+python -m black --check nostalgia1907.py tools tests work/clean_rebuild work/region_variant
 ```
 
+The strict release mode audits the exact Git-tracked inventory in a checkout,
+or every package member when `.git` is absent. Unlike the normal development
+mode, it does not exempt files merely because they are under an ignored retail,
+output, or run directory. It also rejects local configuration, generated image
+formats, and emulator save states. Use the normal mode only while working with
+private untracked fixtures; CI and source publication must use
+`--strict-release`.
+
+The source-only suite includes synthetic compiler-row and North American
+wrapper tests; those fixtures contain no game, BIOS, or generated build data.
 `work/clean_rebuild/test_script_layout.py` is retail-backed integration
 coverage. In a media-free checkout it reports one explicit skipped prerequisite
 with the missing prepared-fixture inventory instead of emitting layout test
 errors. `python nostalgia1907.py validate` still requires the complete prepared
 retail reference and remains the release gate.
+
+## Profile schema and tool boundaries
+
+`profile_schema.py` classifies every embedded chapter-profile key. Active
+renderer fields are consumed by `scn_layout.py`; exact-text, prefix, and
+forbidden-pattern fields are enforced by both direct MES compilation and
+semantic validation. Known historical migration flags are reported as legacy
+no-ops. Unknown fields fail closed.
+
+`rebuild.py:PRODUCTION_MODULES` is the exact clean-build dependency boundary.
+The CLI validation scripts and modules covered by `tools/style_audit.py` are
+maintained review tooling. Other one-off scripts may document past forensic
+work, but they are not build dependencies and their outputs cannot enter a clean
+rebuild.
 
 Run the retail-backed validation gate:
 

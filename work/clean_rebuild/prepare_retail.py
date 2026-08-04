@@ -19,6 +19,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from source_json import load_json_object
+
 from iso9660 import extract_file, read_entries, unique_file
 from lz_format import parse_archive, read_member
 from raw_cd import raw_to_iso
@@ -83,7 +85,7 @@ def prepare_retail(track1: Path, build_root: Path) -> dict[str, object]:
     if retail_iso.stat().st_size != RETAIL_ISO_SIZE or iso_hash != RETAIL_ISO_SHA256:
         raise ValueError("retail ISO extraction does not match its frozen size/hash")
 
-    source_index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+    source_index = load_json_object(SOURCES / "index.json")
     iso_entries = read_entries(retail_iso)
     archive_root = build_root / "retail_archives"
     unpacked_root = build_root / "retail_unpacked"
@@ -94,7 +96,7 @@ def prepare_retail(track1: Path, build_root: Path) -> dict[str, object]:
     chapters: list[dict[str, object]] = []
     for item in source_index["chapters"]:
         chapter = item["chapter"]
-        canonical = json.loads((SOURCES / item["source"]).read_text(encoding="utf-8"))
+        canonical = load_json_object(SOURCES / item["source"])
         archive_name = f"{chapter}.LZ"
         archive_entry = unique_file(iso_entries, archive_name)
         archive_path = archive_root / archive_name

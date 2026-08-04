@@ -19,6 +19,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from source_json import load_json_object
+
 from iso9660 import extract_file, read_entries, unique_file
 from lz_format import (
     LzError,
@@ -58,7 +60,7 @@ def build_archives(build_root: Path) -> dict[str, object]:
     source_root = build_root / "retail_archives"
     output_root = build_root / "archives"
     report = build_root / "archive_report.json"
-    source_index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+    source_index = load_json_object(SOURCES / "index.json")
     source_root.mkdir(parents=True, exist_ok=True)
     output_root.mkdir(parents=True, exist_ok=True)
     iso_entries = read_entries(retail_iso)

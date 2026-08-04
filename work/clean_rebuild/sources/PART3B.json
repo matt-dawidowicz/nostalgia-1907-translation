@@ -273,7 +273,7 @@
   },
   "text_mode": "prose",
   "text_sources": [
-    "C:\\Users\\thema\\Documents\\Codex\\2026-07-12\\i\\outputs\\nostalgia1907_translation_profiles\\PART3B.json"
+    "historical-provenance://2026-07-12/nostalgia1907_translation_profiles/PART3B.json"
   ],
   "records": [
     {

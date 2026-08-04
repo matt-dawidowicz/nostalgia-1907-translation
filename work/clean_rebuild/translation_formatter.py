@@ -30,14 +30,16 @@ from collections import Counter
 from collections.abc import Mapping
 from pathlib import Path
 
-from mes_compiler import (
-    _measure_literal,
-    _reconstruct_wrapped_text,
-    _wrap_words,
+from mes_format import parse_mes
+from profile_schema import validate_profile
+from renderer_format import (
+    measure_literal,
     normalize_ellipsis_style,
     normalize_semantic_text,
+    renderer_tokens,
+    wrap_words,
+    wrapped_row_failures,
 )
-from mes_format import parse_mes
 from scn_layout import (
     DIALOGUE_OPENING_ANCHOR_CODE,
     LABEL_ROLES,
@@ -45,6 +47,7 @@ from scn_layout import (
     RecordContract,
     infer_contracts,
 )
+from source_json import load_json_object
 from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 
 
@@ -61,34 +64,9 @@ DEFAULT_REPORT = (
 RECORD_ID = re.compile(r"^(?P<chapter>[A-Z0-9_]+):(?P<index>[0-9]{3})$")
 
 
-class DuplicateJsonKeyError(ValueError):
-    """Raised when a JSON object repeats a key before object construction."""
-
-
-def _object_without_duplicate_keys(
-    pairs: list[tuple[str, object]],
-) -> dict[str, object]:
-    """Build one JSON object while rejecting every repeated source key."""
-    value: dict[str, object] = {}
-    for key, item in pairs:
-        if key in value:
-            raise DuplicateJsonKeyError(f"duplicate JSON object key: {key!r}")
-        value[key] = item
-    return value
-
-
 def _load(path: Path) -> dict[str, object]:
-    """Load one UTF-8 JSON object or reject an incompatible top level."""
-    try:
-        value = json.loads(
-            path.read_text(encoding="utf-8"),
-            object_pairs_hook=_object_without_duplicate_keys,
-        )
-    except DuplicateJsonKeyError as error:
-        raise ValueError(f"{path}: {error}") from error
-    if not isinstance(value, dict):
-        raise ValueError(f"{path}: expected a JSON object")
-    return value
+    """Load one UTF-8 JSON object through the shared strict parser."""
+    return load_json_object(path)
 
 
 def _json_source_bytes(source: dict[str, object]) -> bytes:
@@ -300,10 +278,13 @@ def _contracts(
     persists beside main dialogue across continuation rows.
 
     Raises:
+        ValueError: If the embedded renderer profile is malformed.
         FileNotFoundError: If the hash-locked retail SCN is unavailable.
         ScnLayoutError: If the SCN evidence is malformed or contradictory.
     """
     chapter = source["chapter"]
+    records = source["records"]
+    validate_profile(source.get("profile"), chapter=chapter, records=records)
     retail = retail_root / "retail_unpacked" / chapter
     scn = retail / f"{chapter}.SCN"
     mes = retail / f"{chapter}.MES"
@@ -313,7 +294,7 @@ def _contracts(
         raise FileNotFoundError(f"missing hash-locked retail MES: {mes}")
     translated = {
         record["index"]
-        for record in source["records"]
+        for record in records
         if record.get("policy") == "translate"
     }
     return infer_contracts(
@@ -363,29 +344,12 @@ def format_preview(text: str, contract: RecordContract | None) -> list[str]:
     semantic = normalize_ellipsis_style(normalize_semantic_text(text))
     if contract is None or contract.layout is None:
         return [semantic]
-    return _wrap_words(semantic, contract.layout)
+    return wrap_words(semantic, contract.layout)
 
 
 def _renderer_tokens(text: str) -> list[str]:
-    """Return lexical formatter tokens while treating ``...`` as a soft edge.
-
-    The canonical style removes the space after an ellipsis, but the formatter
-    may still wrap at that pause without splitting a normal word. This helper
-    makes the boundary audit compare that representation instead of mistaking a
-    legal ellipse wrap for a fragmented source token.
-
-    Args:
-        text: Canonical semantic English or visible formatter text.
-
-    Returns:
-        Ordered tokens with a virtual boundary after an ellipsis when text
-        immediately follows it. This includes terminal punctuation because
-        the renderer may legally place that punctuation on the next row.
-
-    Side Effects:
-        None.
-    """
-    return re.sub(r"\.\.\.(?=\S)", "... ", text).split()
+    """Return renderer tokens through the shared formatting contract."""
+    return renderer_tokens(text)
 
 
 def _renderer_boundary_failures(
@@ -393,61 +357,10 @@ def _renderer_boundary_failures(
     rows: list[str],
     contract: RecordContract,
 ) -> list[str]:
-    """Return formatter failures that would fragment a token at a row edge.
-
-    The renderer consumes one packed two-character cell at a time, while the
-    canonical text is stored as ordinary semantic prose.  A row may therefore
-    end only after a complete whitespace-delimited source token; otherwise the
-    renderer can expose pieces of a word on separate visual lines.  This check
-    deliberately compares tokens, rather than relying solely on reconstructed
-    text, so an inserted row boundary is reported as the specific regression it
-    represents.
-
-    Args:
-        semantic: Normalized canonical English for the record.
-        rows: Unpadded visible rows emitted by :func:`format_preview`.
-        contract: SCN-derived geometry for the record's renderer.
-
-    Returns:
-        Human-readable violations. An empty list means every source token is
-        present whole in order and every row fits its proven visible cell span.
-
-    Side Effects:
-        None. The helper does not modify canonical text or compiled MES data.
-    """
-    failures: list[str] = []
-    source_tokens = _renderer_tokens(semantic)
-    rendered_tokens = [token for row in rows for token in _renderer_tokens(row)]
-    if source_tokens != rendered_tokens:
-        mismatch = next(
-            (
-                index
-                for index, (source, rendered) in enumerate(
-                    zip(source_tokens, rendered_tokens, strict=False)
-                )
-                if source != rendered
-            ),
-            min(len(source_tokens), len(rendered_tokens)),
-        )
-        source_token = (
-            source_tokens[mismatch] if mismatch < len(source_tokens) else "<end>"
-        )
-        rendered_token = (
-            rendered_tokens[mismatch] if mismatch < len(rendered_tokens) else "<end>"
-        )
-        failures.append(
-            "renderer row boundary splits or alters source token "
-            f"{mismatch + 1}: {source_token!r} -> {rendered_token!r}"
-        )
-    for row_index, row in enumerate(rows):
-        permitted_cells = contract.layout.visible_cells(row_index)
-        used_cells = _measure_literal(row)
-        if used_cells > permitted_cells:
-            failures.append(
-                f"row {row_index + 1} uses {used_cells} visible cells; "
-                f"renderer permits {permitted_cells}"
-            )
-    return failures
+    """Return shared semantic-row failures for one SCN-derived contract."""
+    if contract.layout is None:
+        return []
+    return wrapped_row_failures(semantic, rows, contract.layout)
 
 
 def _record_audit(
@@ -470,9 +383,6 @@ def _record_audit(
     failures: list[str] = []
     warnings: list[str] = []
     if contract is not None and contract.layout is not None:
-        rebuilt = _reconstruct_wrapped_text(rows)
-        if rebuilt != semantic:
-            failures.append("wrapped rows do not reconstruct the semantic text")
         failures.extend(_renderer_boundary_failures(semantic, rows, contract))
         if contract.max_rows is not None and len(rows) > contract.max_rows:
             failures.append(
@@ -867,7 +777,7 @@ def normalize_ellipsis_sources(
             if after == before:
                 continue
             record_id = f"{chapter}:{record['index']:03d}"
-            if _measure_literal(after) > _measure_literal(before):
+            if measure_literal(after) > measure_literal(before):
                 raise ValueError(
                     f"{record_id}: ellipsis normalization increased rendered cells"
                 )

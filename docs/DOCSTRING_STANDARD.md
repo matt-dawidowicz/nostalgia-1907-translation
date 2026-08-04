@@ -12,8 +12,7 @@ The contract applies to:
 - the unified `nostalgia1907.py` command-line interface;
 - the production modules in `work/clean_rebuild/`;
 - translation analysis, comparison, and validation modules;
-- the US BIOS-language test variant builder;
-- the optional audio-localization analysis tool; and
+- the US BIOS-language test variant builder; and
 - maintained tests for those components.
 
 Historical investigation scripts are evidence from earlier reverse-engineering

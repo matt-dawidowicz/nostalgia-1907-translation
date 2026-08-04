@@ -25,7 +25,6 @@ MAINTAINED_DIRECTORIES = (
     "tests",
     "work/clean_rebuild",
     "work/region_variant",
-    "work/audio_localization",
 )
 
 

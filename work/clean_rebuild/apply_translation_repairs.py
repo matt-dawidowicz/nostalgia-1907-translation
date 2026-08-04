@@ -8,7 +8,9 @@ import re
 import textwrap
 from pathlib import Path
 
-from mes_compiler import normalize_ellipsis_style
+from source_json import load_json_object
+
+from renderer_format import normalize_ellipsis_style
 from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES, audit
 
 
@@ -19,10 +21,7 @@ REPAIRS = HERE / "translation_repairs.json"
 
 def _load(path: Path) -> dict[str, object]:
     """Load one canonical JSON object while rejecting incompatible roots."""
-    value = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(value, dict):
-        raise ValueError(f"{path}: expected a JSON object")
-    return value
+    return load_json_object(path)
 
 
 def _normalized(value: str) -> str:

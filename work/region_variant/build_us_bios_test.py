@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -89,6 +90,29 @@ WRAPPER_TEMPLATE = bytes.fromhex(
 
 class RegionVariantError(ValueError):
     """Raised when the input or output violates the guarded region recipe."""
+
+
+SAFE_BASENAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\Z")
+
+
+def _validate_basename(basename: str) -> str:
+    """Return a portable artifact stem or reject path-like release names."""
+    if not isinstance(basename, str) or not SAFE_BASENAME.fullmatch(basename):
+        raise RegionVariantError("basename must be a portable non-path filename stem")
+    return basename
+
+
+def _expected_cue(track1_name: str, track2_name: str) -> bytes:
+    """Return the exact two-track CUE recipe for one artifact pair."""
+    return (
+        f'FILE "{track1_name}" BINARY\r\n'
+        "  TRACK 01 MODE1/2352\r\n"
+        "    INDEX 01 00:00:00\r\n"
+        f'FILE "{track2_name}" BINARY\r\n'
+        "  TRACK 02 AUDIO\r\n"
+        "    INDEX 00 00:00:00\r\n"
+        "    INDEX 01 00:02:00\r\n"
+    ).encode("ascii")
 
 
 def sha256(path: Path) -> str:
@@ -403,6 +427,7 @@ def _build_once(
         Creates Track 1, Track 2, CUE, and ``verification.json`` under
         ``product_root``. Inputs are read-only.
     """
+    basename = _validate_basename(basename)
     _ensure_empty(product_root)
     input_boot = _read_boot(baseline_track1)
     us_security = _derive_us_security(us_bios)
@@ -418,15 +443,7 @@ def _build_once(
     track1_report = _validate_track_delta(baseline_track1, output_track1, output_boot)
     if sha256(output_track2) != EXPECTED_TRACK2_SHA256:
         raise RegionVariantError("output Track 2 differs from retail")
-    expected_cue = (
-        f'FILE "{output_track1.name}" BINARY\r\n'
-        "  TRACK 01 MODE1/2352\r\n"
-        "    INDEX 01 00:00:00\r\n"
-        f'FILE "{output_track2.name}" BINARY\r\n'
-        "  TRACK 02 AUDIO\r\n"
-        "    INDEX 00 00:00:00\r\n"
-        "    INDEX 01 00:02:00\r\n"
-    ).encode("ascii")
+    expected_cue = _expected_cue(output_track1.name, output_track2.name)
     if output_cue.read_bytes() != expected_cue:
         raise RegionVariantError("output CUE contents differ from the recipe")
 
@@ -450,56 +467,78 @@ def _build_once(
     return report
 
 
-def publish_existing(
+def _publish_verified_runs(
+    baseline_track1: Path,
+    baseline_track2: Path,
+    us_bios: Path,
     runs_root: Path,
     delivery_root: Path,
     basename: str,
+    expected_track1_sha256: str,
 ) -> dict[str, object]:
-    """Validate two completed staging products and publish run A.
+    """Independently revalidate two staged products and publish run A.
 
-    Both reports and every staged artifact are rehashed before publication.
-    The destination must be absent or empty; no prior release is overwritten.
+    This is intentionally private to the two-pass builder.  It accepts the
+    hash-locked baseline and BIOS again, reconstructs the expected wrapped
+    boot in memory, and validates bytes from both staged products.  Staged
+    JSON reports are not evidence of preservation and are never trusted as
+    authority to publish an arbitrary existing directory.
 
     Side Effects:
         Copies the verified run-A BIN/CUE files and writes final verification
         and manual test notes under ``delivery_root``.
     """
+    basename = _validate_basename(basename)
+    expected_track1_sha256 = expected_track1_sha256.upper()
+    if sha256(baseline_track1) != expected_track1_sha256:
+        raise RegionVariantError("Track 1 does not match the selected validated baseline")
+    if sha256(baseline_track2) != EXPECTED_TRACK2_SHA256:
+        raise RegionVariantError("Track 2 is not the exact retail audio track")
+    expected_boot = build_wrapped_boot(
+        _read_boot(baseline_track1), _derive_us_security(us_bios)
+    )
     run_a = runs_root / "run_a" / "product"
     run_b = runs_root / "run_b" / "product"
-    first = json.loads((run_a / "verification.json").read_text(encoding="utf-8"))
-    second = json.loads((run_b / "verification.json").read_text(encoding="utf-8"))
-    if first.get("status") != "PASS" or second.get("status") != "PASS":
-        raise RegionVariantError("a staged region build did not pass")
-    report_hashes = {
-        f"{basename}_Track1.bin": (
-            first["track1"]["sha256"],
-            second["track1"]["sha256"],
-        ),
-        f"{basename}_Track2.bin": (
-            first["track2"]["sha256"],
-            second["track2"]["sha256"],
-        ),
-        f"{basename}.cue": (
-            first["cue"]["sha256"],
-            second["cue"]["sha256"],
-        ),
-    }
+    artifact_names = (
+        f"{basename}_Track1.bin",
+        f"{basename}_Track2.bin",
+        f"{basename}.cue",
+    )
     compared: dict[str, str] = {}
-    for name, (left, right) in report_hashes.items():
+    staged_reports: list[dict[str, object]] = []
+    for product in (run_a, run_b):
+        track1 = product / artifact_names[0]
+        track2 = product / artifact_names[1]
+        cue = product / artifact_names[2]
+        if not all(path.is_file() for path in (track1, track2, cue)):
+            raise RegionVariantError(f"staged product is incomplete: {product}")
+        track1_report = _validate_track_delta(baseline_track1, track1, expected_boot)
+        if sha256(track2) != EXPECTED_TRACK2_SHA256:
+            raise RegionVariantError(f"staged Track 2 differs from retail: {track2}")
+        if cue.read_bytes() != _expected_cue(track1.name, track2.name):
+            raise RegionVariantError(f"staged CUE contents differ from the recipe: {cue}")
+        staged_reports.append(
+            {
+                "status": "PASS",
+                "baseline_track1_sha256": expected_track1_sha256,
+                "us_bios_sha256": EXPECTED_US_BIOS_SHA256,
+                "track1": track1_report,
+                "track2": {"size": track2.stat().st_size, "sha256": sha256(track2)},
+                "cue": {"size": cue.stat().st_size, "sha256": sha256(cue)},
+            }
+        )
+    first, second = staged_reports
+    for name in artifact_names:
+        left = sha256(run_a / name)
+        right = sha256(run_b / name)
         if left != right:
             raise RegionVariantError(
                 f"two region builds differ for {name}: {left} != {right}"
             )
-        for staged in (run_a / name, run_b / name):
-            actual = sha256(staged)
-            if actual != left:
-                raise RegionVariantError(
-                    f"staged artifact hash changed for {staged}: " f"{actual} != {left}"
-                )
         compared[name] = left
 
     _ensure_empty(delivery_root)
-    for name in compared:
+    for name in artifact_names:
         shutil.copyfile(run_a / name, delivery_root / name)
     report = {
         "status": "PASS",
@@ -511,7 +550,7 @@ def publish_existing(
             "from supplied BIOS -> fixed-geometry BIN/CUE"
         ),
         "two_clean_region_builds_byte_identical": True,
-        "source_track1_sha256": first["baseline_track1_sha256"],
+        "source_track1_sha256": expected_track1_sha256,
         "source_track2_sha256": EXPECTED_TRACK2_SHA256,
         "us_bios_sha256": EXPECTED_US_BIOS_SHA256,
         "us_security_sha256": EXPECTED_US_SECURITY_SHA256,
@@ -567,13 +606,14 @@ def build_twice(
     """Build twice, compare binary artifacts, and publish one delivery set.
 
     Input hashes are checked before either run begins. Each build uses an
-    independent product directory, and ``publish_existing`` requires exact
-    agreement before copying the delivery artifacts.
+    independent product directory, then the private publication step derives
+    its own verification from the hash-locked inputs before copying artifacts.
 
     Side Effects:
         Creates two staging products and one delivery directory. Existing
         non-empty directories are rejected and never cleaned automatically.
     """
+    basename = _validate_basename(basename)
     expected_track1_sha256 = expected_track1_sha256.upper()
     if len(expected_track1_sha256) != 64 or any(
         character not in "0123456789ABCDEF" for character in expected_track1_sha256
@@ -606,11 +646,19 @@ def build_twice(
         basename,
         expected_track1_sha256,
     )
-    return publish_existing(runs_root, delivery_root, basename)
+    return _publish_verified_runs(
+        baseline_track1,
+        baseline_track2,
+        us_bios,
+        runs_root,
+        delivery_root,
+        basename,
+        expected_track1_sha256,
+    )
 
 
 def main() -> None:
-    """Run a fresh two-pass build or publish two prevalidated staging runs."""
+    """Run a fresh, hash-locked two-pass North American build."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("baseline_track1", type=Path)
     parser.add_argument("baseline_track2", type=Path)
@@ -629,24 +677,16 @@ def main() -> None:
     parser.add_argument(
         "--basename", default="Nostalgia1907_CleanRebuild_NorthAmerica"
     )
-    parser.add_argument(
-        "--publish-existing",
-        action="store_true",
-        help="publish two already validated run_a/run_b staging products",
-    )
     args = parser.parse_args()
-    if args.publish_existing:
-        result = publish_existing(args.runs_root, args.delivery_root, args.basename)
-    else:
-        result = build_twice(
-            args.baseline_track1,
-            args.baseline_track2,
-            args.us_bios,
-            args.runs_root,
-            args.delivery_root,
-            args.basename,
-            args.expected_track1_sha256,
-        )
+    result = build_twice(
+        args.baseline_track1,
+        args.baseline_track2,
+        args.us_bios,
+        args.runs_root,
+        args.delivery_root,
+        args.basename,
+        args.expected_track1_sha256,
+    )
     print(
         json.dumps(
             {

@@ -8,6 +8,8 @@ untouched.
 
 Start with these references:
 
+- [Getting started](docs/GETTING_STARTED.md) identifies the supported
+  contributor paths and the first commands that are safe without retail media.
 - [Architecture](docs/ARCHITECTURE.md) explains the trust model, production
   pipeline, and module ownership.
 - [Translation editing](docs/TRANSLATION_EDITING.md) explains stable record
@@ -74,21 +76,32 @@ Historical investigation directories are evidence, not production
 dependencies. Do not import from them or copy their generated binaries into the
 clean rebuild.
 
+Embedded chapter profiles are schema-checked. Add only a documented active
+field; unknown keys fail validation, while specifically enumerated historical
+keys are retained as legacy no-op provenance. Historical `text_sources` values
+must be portable labels, never contributor-machine paths.
+
 ## Before requesting review
 
 Run:
 
 ```powershell
+python tools/source_health.py --root . --strict-release
+python -m compileall -q nostalgia1907.py tools tests work
 python -m unittest discover -s tests -v
-python work/audio_localization/test_audio_localization.py
-python tools/style_audit.py
-python -m black --check nostalgia1907.py tools tests work/clean_rebuild work/region_variant work/audio_localization
+python tools/style_audit.py --root .
+python -m black --check nostalgia1907.py tools tests work/clean_rebuild work/region_variant
 python nostalgia1907.py validate
 ```
 
 Then verify that `git diff -- work/clean_rebuild/sources` contains only the
 intended canonical records, and that no BIN, CUE, ISO, WAV, extracted archive,
 or generated comparison package is staged.
+
+A contributor without retail media can still run every source-only command and
+the synthetic renderer/region tests. The retail-backed validator, deterministic
+build, and Ares playtest must be completed by a maintainer before release; a
+green public CI run is not visual-runtime evidence.
 
 Documentation is part of the implementation. New or changed Python callables
 must describe their contract at the level required by

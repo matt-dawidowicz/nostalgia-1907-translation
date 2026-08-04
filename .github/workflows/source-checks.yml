@@ -20,10 +20,12 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install tool
-        run: python -m pip install -e ".[test]"
+        run: python -m pip install -e .
+      - name: Audit source checkout
+        run: python tools/source_health.py --root . --strict-release
       - name: Compile tracked Python
-        run: python -m compileall -q nostalgia1907.py work tests
+        run: python -m compileall -q nostalgia1907.py tools work tests
       - name: Run source-only tests
         run: python -m unittest discover -s tests -v
-      - name: Run audio companion tests
-        run: python work/audio_localization/test_audio_localization.py
+      - name: Audit maintained source style
+        run: python tools/style_audit.py --root .

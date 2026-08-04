@@ -8,11 +8,11 @@ translated BIN as an input. That distinction is the central architectural
 rule: retail data supplies structure and preserved bytes; tracked JSON supplies
 reviewed English; code derives every output.
 
-The current build line is
-`Nostalgia1907_CleanRebuild_v33_EdgeCases_NorthAmerica`. It is a product of the
-current canonical sources, not an input to a later build. Every future build
-starts from verified Japanese retail tracks and tracked source; it must never
-restore an earlier translated image.
+The North American artifact with Track 1 SHA-256
+`1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17` is the
+runtime-reviewed reference for the current renderer contracts. It is not a
+source input. Every future candidate starts from verified Japanese retail
+tracks and tracked source; it must never restore an earlier translated image.
 
 Three classes of data are intentionally separated:
 
@@ -63,7 +63,6 @@ archival/diagnostic override rather than the project default.
 | `work/clean_rebuild/sources/` | Canonical per-chapter English records |
 | `work/clean_rebuild/` | Production formats, compiler, builders, audits, and tests |
 | `work/region_variant/` | Guarded North American BIOS-region wrapper |
-| `work/audio_localization/` | Review-only audio extraction/transcription experiments |
 | `work/clean_rebuild/retired_workspace_register.json` | Portable record of retired pre-clean-rebuild workspaces and their replacements |
 | `tests/` | Source-only CLI, policy, and documentation tests |
 | `outputs/` | Ignored generated reports, comparisons, and playable products |
@@ -78,9 +77,12 @@ doctor -> prepare -> edit/compare -> validate -> build
 ```
 
 The lower-level scripts remain importable because they are useful for format
-analysis and focused testing. Direct invocation does not relax their guards,
-but it can omit higher-level preflight checks. Use it only when investigating a
-specific stage.
+analysis and focused testing. Each production module enforces the invariants it
+owns; for example, direct MES compilation now rejects semantic token splits as
+well as byte-level row errors. Direct invocation can still omit repository,
+cross-chapter, comparison, deterministic-build, and runtime gates. Use it only
+when investigating a specific stage, and never treat one lower-level success as
+release proof.
 
 ## Production module ownership
 
@@ -99,9 +101,12 @@ cross-layer regression. The modules have deliberately narrow responsibilities:
 | `iso9660.py` | Directory records, extents, logical sizes | Archive/member interpretation |
 | `lz_format.py` | Archive table and backward LZ codec | MES semantics |
 | `mes_format.py` | MES parsing and structural validation | English layout decisions |
+| `source_json.py` | Strict UTF-8 JSON loading with duplicate-key rejection | Canonical policy or renderer inference |
 | `font_render.py` | 12x12 glyph bitmap generation | Record ordering or SCN roles |
 | `scn_layout.py` | Renderer role, width, stride, row inference | Translation wording |
-| `mes_compiler.py` | Canonical records to MES bytes | ISO/raw-disc mutation |
+| `renderer_format.py` | Shared semantic normalization, wrapping, row reconstruction, and token-boundary validation | MES encoding or SCN inference |
+| `profile_schema.py` | Active profile schema, legacy-field classification, and canonical text locks | Renderer geometry implementation |
+| `mes_compiler.py` | Canonical records to MES bytes, including compiler-local semantic-row enforcement | ISO/raw-disc mutation |
 | `prepare_retail.py` | Exact retail verification and extraction | Reuse of translated artifacts |
 | `build_mes_set.py` | Compile all chapters and assemble font | Archive placement |
 | `build_archives.py` | Install MES members within guarded archive capacity | SCN modification |
@@ -175,6 +180,13 @@ indexes. Thus SCN text ID `4` refers to source record `003`.
 The compiler never discovers a record by matching English. IDs and order remain
 authoritative even if the wording changes completely.
 
+`profile_schema.py` makes the embedded profile executable. Live fields are
+validated and consumed by renderer inference or canonical text validation.
+Known migration-era fields are accepted only as legacy provenance and have no
+production effect. An unknown field is an error rather than a silently ignored
+setting. `text_sources` contains portable historical-provenance labels only; it
+is not a path dependency or a build input.
+
 ## Renderer ownership
 
 The game has several text renderers, not one universal box. `scn_layout.py`
@@ -187,9 +199,12 @@ classifies records from original SCN command structure:
 - menu choices;
 - reviewed narration exceptions.
 
-`translation_formatter.py` uses the same inferred `RecordContract` as
-`mes_compiler.py`. A successful preview therefore exercises the same width,
-stride, role, and row-limit data used at build time.
+`translation_formatter.py` and `mes_compiler.py` use the same inferred
+`RecordContract` and the same public `renderer_format.py` functions. A preview
+and direct compilation therefore share semantic normalization, wrapping,
+visible-cell measurement, row reconstruction, and whole-token enforcement.
+The compiler repeats the authoritative semantic-row check before encoding, so
+the lower-level API cannot rely on a formatter having run first.
 
 Adaptive records store semantic text without manual wrapping. Fixed records
 retain reviewer-controlled spacing because no safe general reflow geometry has
@@ -216,7 +231,16 @@ directory-size fields remain unchanged.
 
 Historical scripts explain how formats and edge cases were discovered. They are
 not imported by `rebuild.py`, and their outputs are not permitted as clean-build
-inputs. Use them as research notes only.
+inputs. `PRODUCTION_MODULES` is the exact binary-build allowlist. Maintained
+review tools are the modules called by `nostalgia1907.py validate` and the files
+covered by `tools/style_audit.py`; other one-off scripts in
+`work/clean_rebuild/` are forensic notes unless this document and a test promote
+them explicitly. Use forensic scripts as research notes only.
+
+`export_font_patterns.py` and `forensic_decode_mes.py` are retained provenance
+utilities, not supported build commands. They have no contributor-machine
+defaults and run only when their historical renderer and extracted-data paths
+are supplied explicitly. Their outputs remain forbidden as clean-build inputs.
 
 When promoting a discovery:
 

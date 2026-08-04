@@ -56,7 +56,7 @@
   },
   "text_mode": "prose",
   "text_sources": [
-    "C:\\Users\\thema\\Documents\\Codex\\2026-07-21\\in-c-users-thema-documents-codex\\work\\clean_rebuild\\part3b_translation.json"
+    "historical-provenance://2026-07-21/work/clean_rebuild/part3b_translation.json"
   ],
   "records": [
     {

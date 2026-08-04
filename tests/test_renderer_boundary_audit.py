@@ -8,6 +8,7 @@ the formatter's public audit path incorporates the guard.
 
 from __future__ import annotations
 
+import hashlib
 import sys
 import unittest
 from pathlib import Path
@@ -20,6 +21,7 @@ if str(CLEAN) not in sys.path:
     sys.path.insert(0, str(CLEAN))
 
 from scn_layout import Layout, RecordContract  # noqa: E402
+import mes_compiler  # noqa: E402
 import translation_formatter  # noqa: E402
 
 
@@ -86,6 +88,142 @@ class RendererBoundaryUnitTests(unittest.TestCase):
 
         self.assertEqual(len(failures), 1)
         self.assertIn("uses 7 visible cells", failures[0])
+
+    def test_compile_mes_rejects_an_overlong_unbreakable_token(self) -> None:
+        """Keep semantic token integrity mandatory in the compiler itself."""
+        retail_mes = b"\x00\x06\x00\x04\x01\x00"
+        retail_scn = b"\x21\x00\x01\x00\x01"
+        canonical = {
+            "schema_version": 1,
+            "chapter": "TEST",
+            "record_count": 1,
+            "retail_mes": {
+                "size": len(retail_mes),
+                "sha256": hashlib.sha256(retail_mes).hexdigest().upper(),
+            },
+            "retail_scn": {
+                "size": len(retail_scn),
+                "sha256": hashlib.sha256(retail_scn).hexdigest().upper(),
+            },
+            "profile": {"schema_version": 1, "name": "TEST"},
+            "text_mode": "adaptive",
+            "records": [
+                {
+                    "index": 0,
+                    "policy": "translate",
+                    "text": "x" * 50,
+                    "layout_policy": "adaptive",
+                }
+            ],
+        }
+
+        with self.assertRaisesRegex(
+            mes_compiler.CompileError,
+            "renderer row boundary splits or alters source token",
+        ):
+            mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
+
+    def test_compile_mes_rejects_adaptive_text_without_a_renderer_contract(
+        self,
+    ) -> None:
+        """Do not encode adaptive prose when SCN and profile prove no renderer."""
+        retail_mes = b"\x00\x06\x00\x04\x01\x00"
+        retail_scn = b""
+        canonical = {
+            "schema_version": 1,
+            "chapter": "TEST",
+            "record_count": 1,
+            "retail_mes": {
+                "size": len(retail_mes),
+                "sha256": hashlib.sha256(retail_mes).hexdigest().upper(),
+            },
+            "retail_scn": {
+                "size": len(retail_scn),
+                "sha256": hashlib.sha256(retail_scn).hexdigest().upper(),
+            },
+            "profile": {"schema_version": 1, "name": "TEST"},
+            "text_mode": "adaptive",
+            "records": [
+                {
+                    "index": 0,
+                    "policy": "translate",
+                    "text": "No proven renderer",
+                    "layout_policy": "adaptive",
+                }
+            ],
+        }
+
+        with self.assertRaisesRegex(mes_compiler.CompileError, "no proven SCN layout"):
+            mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
+
+    def test_compile_mes_enforces_profile_text_rules_directly(self) -> None:
+        """Keep canonical text locks active in lower-level compilation."""
+        retail_mes = b"\x00\x06\x00\x04\x01\x00"
+        retail_scn = b"\x21\x00\x01\x00\x01"
+        canonical = {
+            "schema_version": 1,
+            "chapter": "TEST",
+            "record_count": 1,
+            "retail_mes": {
+                "size": len(retail_mes),
+                "sha256": hashlib.sha256(retail_mes).hexdigest().upper(),
+            },
+            "retail_scn": {
+                "size": len(retail_scn),
+                "sha256": hashlib.sha256(retail_scn).hexdigest().upper(),
+            },
+            "profile": {
+                "schema_version": 1,
+                "name": "TEST",
+                "required_text_exact": {"0": "Locked text"},
+            },
+            "text_mode": "adaptive",
+            "records": [
+                {
+                    "index": 0,
+                    "policy": "translate",
+                    "text": "Changed text",
+                    "layout_policy": "adaptive",
+                }
+            ],
+        }
+
+        with self.assertRaisesRegex(mes_compiler.CompileError, "Locked text"):
+            mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
+
+    def test_compile_mes_validates_profiles_for_preserve_only_input(self) -> None:
+        """Do not let the unchanged-retail fast path bypass profile schema."""
+        retail_mes = b"\x00\x06\x00\x04\x01\x00"
+        retail_scn = b""
+        canonical = {
+            "schema_version": 1,
+            "chapter": "TEST",
+            "record_count": 1,
+            "retail_mes": {
+                "size": len(retail_mes),
+                "sha256": hashlib.sha256(retail_mes).hexdigest().upper(),
+            },
+            "retail_scn": {
+                "size": len(retail_scn),
+                "sha256": hashlib.sha256(retail_scn).hexdigest().upper(),
+            },
+            "profile": {
+                "schema_version": 1,
+                "name": "TEST",
+                "unknown_renderer_switch": True,
+            },
+            "text_mode": "adaptive",
+            "records": [
+                {
+                    "index": 0,
+                    "policy": "preserve",
+                    "text": None,
+                }
+            ],
+        }
+
+        with self.assertRaisesRegex(mes_compiler.CompileError, "unknown fields"):
+            mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
 
     def test_record_audit_includes_boundary_guard_failures(self) -> None:
         """Prove the public audit route cannot omit the lower-level guard."""

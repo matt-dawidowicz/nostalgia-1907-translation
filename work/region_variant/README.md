@@ -28,7 +28,7 @@ New releases use this stage automatically because North America is the project
 default:
 
 ```powershell
-python nostalgia1907.py build --name v34
+python nostalgia1907.py build
 ```
 
 The selected Track 1, Track 2, and supplied U.S. BIOS are SHA-256 guarded. The

@@ -33,7 +33,6 @@ import argparse
 import hashlib
 import json
 import re
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -50,6 +49,38 @@ DEFAULT_RUNS_DIRECTORY = "runs_current"
 
 class ToolError(RuntimeError):
     """Report an actionable operator error without a Python traceback."""
+
+
+class DuplicateJsonKeyError(ValueError):
+    """Report a repeated object key in tracked or local JSON input."""
+
+
+def _reject_duplicate_json_keys(
+    pairs: list[tuple[str, Any]],
+) -> dict[str, Any]:
+    """Build one JSON object while rejecting last-key-wins ambiguity."""
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise DuplicateJsonKeyError(f"duplicate JSON object key: {key!r}")
+        result[key] = value
+    return result
+
+
+def load_json_object(path: Path, *, label: str) -> dict[str, Any]:
+    """Load one UTF-8 JSON object with duplicate-key rejection."""
+    try:
+        payload = json.loads(
+            path.read_text(encoding="utf-8"),
+            object_pairs_hook=_reject_duplicate_json_keys,
+        )
+    except FileNotFoundError as error:
+        raise ToolError(f"missing {label}: {path}") from error
+    except (json.JSONDecodeError, DuplicateJsonKeyError) as error:
+        raise ToolError(f"invalid {label}: {error}") from error
+    if not isinstance(payload, dict):
+        raise ToolError(f"{label} must contain a JSON object")
+    return payload
 
 
 # Project discovery, configuration, and immutable input guards.
@@ -90,12 +121,7 @@ def load_manifest(root: Path) -> dict[str, Any]:
             use so diagnostics retain operator context.
     """
     path = root / MANIFEST_NAME
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except FileNotFoundError as exc:
-        raise ToolError(f"missing project manifest: {path}") from exc
-    except json.JSONDecodeError as exc:
-        raise ToolError(f"invalid project manifest: {exc}") from exc
+    payload = load_json_object(path, label="project manifest")
     if payload.get("schema_version") != 1:
         raise ToolError(
             f"unsupported project manifest schema: {payload.get('schema_version')}"
@@ -108,13 +134,7 @@ def load_local_config(root: Path) -> dict[str, Any]:
     path = root / LOCAL_CONFIG_NAME
     if not path.exists():
         return {}
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
-        raise ToolError(f"invalid {LOCAL_CONFIG_NAME}: {exc}") from exc
-    if not isinstance(payload, dict):
-        raise ToolError(f"{LOCAL_CONFIG_NAME} must contain a JSON object")
-    return payload
+    return load_json_object(path, label=LOCAL_CONFIG_NAME)
 
 
 def rooted(root: Path, value: str | Path) -> Path:
@@ -239,7 +259,16 @@ def source_index_check(root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
                 f"expected {expected_hash}, got {actual_hash}"
             ),
         }
-    payload = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        payload = load_json_object(path, label="canonical source index")
+    except ToolError as error:
+        return {
+            "name": "canonical source index",
+            "status": "FAIL",
+            "required": True,
+            "path": str(path),
+            "detail": str(error),
+        }
     chapter_count = payload.get("chapter_count")
     record_count = sum(
         item.get("record_count", 0) for item in payload.get("chapters", [])
@@ -285,14 +314,14 @@ def retail_reference_check(root: Path, manifest: dict[str, Any]) -> dict[str, An
             "detail": "not prepared; run `python nostalgia1907.py prepare`",
         }
     try:
-        report = json.loads(report_path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
+        report = load_json_object(report_path, label="prepared retail report")
+    except ToolError as error:
         return {
             "name": "prepared retail reference",
             "status": "FAIL",
             "required": True,
             "path": str(report_path),
-            "detail": f"invalid report: {exc}",
+            "detail": str(error),
         }
     retail = manifest["retail_inputs"]
     expected = (
@@ -328,8 +357,8 @@ def doctor_report(root: Path, args: argparse.Namespace) -> dict[str, Any]:
     """Inspect whether the checkout is ready to prepare, validate, and build.
 
     Required Python, canonical-source, and original-track checks determine
-    the overall status. Prepared retail data, BIOS, and FFmpeg are
-    reported according to whether their optional workflows were configured.
+    the overall status. Prepared retail data and BIOS are reported according
+    to whether their optional workflows were configured.
 
     Returns:
         A machine-readable report without modifying the checkout.
@@ -382,33 +411,6 @@ def doctor_report(root: Path, args: argparse.Namespace) -> dict[str, Any]:
             }
         )
 
-    ffmpeg_value = args.ffmpeg or local.get("ffmpeg") or shutil.which("ffmpeg")
-    if ffmpeg_value:
-        ffmpeg_path = rooted(root, ffmpeg_value)
-        checks.append(
-            {
-                "name": "optional FFmpeg",
-                "status": "PASS" if ffmpeg_path.is_file() else "WARN",
-                "required": False,
-                "path": str(ffmpeg_path),
-                "detail": (
-                    "available"
-                    if ffmpeg_path.is_file()
-                    else "configured path not found"
-                ),
-            }
-        )
-    else:
-        checks.append(
-            {
-                "name": "optional FFmpeg",
-                "status": "SKIP",
-                "required": False,
-                "path": "",
-                "detail": "needed only for English audio-review synthesis",
-            }
-        )
-
     failures = [check for check in checks if check["status"] == "FAIL"]
     warnings = [check for check in checks if check["status"] == "WARN"]
     return {
@@ -426,7 +428,7 @@ def print_doctor(report: dict[str, Any]) -> None:
     """Render the doctor report for a human operator."""
     print(
         f"Nostalgia 1907 tool {report['tool_version']} "
-        f"(validated baseline {report['validated_baseline']})"
+        f"(runtime reference {report['validated_baseline']})"
     )
     print(f"Project: {report['project_root']}")
     for check in report["checks"]:
@@ -602,17 +604,37 @@ def comparison_paths(root: Path, manifest: dict[str, Any]) -> tuple[Path, Path]:
 
 
 def operator_python_sources(root: Path, manifest: dict[str, Any]) -> list[Path]:
-    """List project-owned Python sources without entering vendored local runtimes."""
+    """List maintained Python under one normalized root without local runtimes."""
+    root = root.resolve()
     directories = (
         rooted(root, manifest["paths"]["clean_rebuild"]),
         root / "work" / "region_variant",
-        root / "work" / "audio_localization",
+        root / "tools",
         root / "tests",
     )
-    sources = [root / "nostalgia1907.py"]
+    excluded = {
+        ".agents",
+        ".codex",
+        ".git",
+        ".runtime",
+        ".venv",
+        "__pycache__",
+        "build",
+        "dist",
+        "outputs",
+        "retail_input",
+        "retail_reference",
+    }
+    sources = {root / "nostalgia1907.py"}
     for directory in directories:
-        sources.extend(sorted(directory.glob("*.py")))
-    return sources
+        if not directory.is_dir():
+            continue
+        for path in directory.rglob("*.py"):
+            relative = path.relative_to(directory)
+            if any(part in excluded or part.startswith("runs") for part in relative.parts):
+                continue
+            sources.add(root / directory.relative_to(root) / relative)
+    return sorted(sources, key=lambda path: path.relative_to(root).as_posix())
 
 
 def command_compare(root: Path, args: argparse.Namespace) -> int:
@@ -639,15 +661,23 @@ def command_compare(root: Path, args: argparse.Namespace) -> int:
 
 
 def command_validate(root: Path, args: argparse.Namespace) -> int:
-    """Run static, audio, renderer, comparison, and semantic validation.
+    """Run the complete source-only and retail-backed validation gate.
 
-    Stages run sequentially so the first failing layer retains its native
-    diagnostic. Comparison regeneration is the only material output unless the
-    caller explicitly skips it; audit scripts may also refresh ignored reports.
+    Source hygiene, static compilation, repository tests, and the style policy
+    run before retail inputs are required. Retail-backed renderer, comparison,
+    and semantic stages then run sequentially so the first failing layer
+    retains its native diagnostic. Comparison regeneration is the only material
+    output unless the caller explicitly skips it.
     """
     manifest = load_manifest(root)
-    retail = require_retail_reference(root, manifest)
     python_sources = operator_python_sources(root, manifest)
+    run_script(
+        root,
+        "tools/source_health.py",
+        "--root",
+        str(root),
+        label="Source-tree health audit",
+    )
     run_command(
         (
             sys.executable,
@@ -658,11 +688,27 @@ def command_validate(root: Path, args: argparse.Namespace) -> int:
         root=root,
         label="Python static compilation",
     )
+    run_command(
+        (
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests",
+            "-v",
+        ),
+        root=root,
+        label="Source-only unit tests",
+    )
     run_script(
         root,
-        "work/audio_localization/test_audio_localization.py",
-        label="Audio companion unit tests",
+        "tools/style_audit.py",
+        "--root",
+        str(root),
+        label="Maintained-source style audit",
     )
+    retail = require_retail_reference(root, manifest)
     run_script(
         root,
         "work/clean_rebuild/translation_formatter.py",
@@ -883,7 +929,6 @@ def parser() -> argparse.ArgumentParser:
     doctor.add_argument("--track1", type=Path)
     doctor.add_argument("--track2", type=Path)
     doctor.add_argument("--us-bios", type=Path)
-    doctor.add_argument("--ffmpeg", type=Path)
     doctor.add_argument(
         "--json", action="store_true", help="emit machine-readable JSON"
     )

@@ -19,6 +19,7 @@ if str(CLEAN) not in sys.path:
 import iso9660  # noqa: E402
 import mes_compiler  # noqa: E402
 import mes_format  # noqa: E402
+import renderer_format  # noqa: E402
 import rebuild as clean_rebuild  # noqa: E402
 import scn_layout  # noqa: E402
 import test_script_layout as layout_tests  # noqa: E402
@@ -201,7 +202,7 @@ class RowPackingTests(unittest.TestCase):
             page_rows=3,
             opening_anchor_cells=1,
         )
-        rows = mes_compiler._prose_rows("one two three four five six seven", layout)
+        rows = mes_compiler._prose_rows("one two four five six ten nine", layout)
         self.assertEqual(
             [len(prefix) for prefix, _line in rows[:7]],
             [1, 0, 0, 0, 0, 0, 0],
@@ -217,7 +218,7 @@ class RowPackingTests(unittest.TestCase):
         self.assertEqual(rows[0][0], (mes_compiler.BLANK_CELL,))
         self.assertEqual(
             [
-                len(prefix) + mes_compiler._measure_literal(line)
+                len(prefix) + renderer_format.measure_literal(line)
                 for prefix, line in rows[:7]
             ],
             [3, 2, 2, 2, 2, 2, 2],
@@ -390,6 +391,59 @@ class TranslationFormatterTests(unittest.TestCase):
             self.assertEqual(
                 translation_formatter._changes(path),
                 {"PART1A:003": "one"},
+            )
+
+    def test_apply_rejects_malformed_profile_before_retail_lookup(self) -> None:
+        """Fail before source mutation when an embedded profile is invalid."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source_path = root / "TEST.json"
+            source = {
+                "chapter": "TEST",
+                "record_count": 1,
+                "records": [
+                    {
+                        "index": 0,
+                        "policy": "translate",
+                        "text": "Before",
+                        "layout_policy": "fixed",
+                    }
+                ],
+                "profile": {
+                    "schema_version": 1,
+                    "mystery_renderer_patch": True,
+                },
+            }
+            source_path.write_text(
+                json.dumps(source) + "\n", encoding="utf-8", newline="\n"
+            )
+            before = source_path.read_bytes()
+            changes = root / "changes.json"
+            changes.write_text(
+                json.dumps({"TEST:000": "After"}) + "\n",
+                encoding="utf-8",
+                newline="\n",
+            )
+            chapters = {"TEST": (source_path, source)}
+            with patch.object(
+                translation_formatter,
+                "_chapter_sources",
+                return_value=({}, chapters),
+            ):
+                with self.assertRaisesRegex(ValueError, "unknown fields"):
+                    translation_formatter.apply_changes(changes, root)
+            self.assertEqual(source_path.read_bytes(), before)
+
+    def test_row_limit_inference_rejects_noncanonical_indexes(self) -> None:
+        """Keep direct SCN inference from accepting aliases such as ``01``."""
+        with self.assertRaisesRegex(
+            scn_layout.ScnLayoutError, "invalid row-limit record"
+        ):
+            scn_layout.infer_row_limits(
+                b"",
+                2,
+                {1},
+                {"row_limit_overrides": {"01": 2}},
             )
 
     def test_serialization_failure_leaves_every_target_untouched(self) -> None:
@@ -704,8 +758,8 @@ class RebuildSafetyTests(unittest.TestCase):
     def test_direct_basename_validation_rejects_path_syntax(self) -> None:
         """Reject traversal, absolute forms, separators, dot segments, and empties."""
         self.assertEqual(
-            clean_rebuild._validate_basename("Nostalgia1907_CleanRebuild_v8"),
-            "Nostalgia1907_CleanRebuild_v8",
+            clean_rebuild._validate_basename("Nostalgia1907_CleanRebuild_Example"),
+            "Nostalgia1907_CleanRebuild_Example",
         )
         invalid = (
             "../escape",

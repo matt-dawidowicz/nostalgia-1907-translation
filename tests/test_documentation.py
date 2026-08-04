@@ -22,8 +22,11 @@ MAINTAINED_PYTHON = (
     ROOT / "work" / "clean_rebuild" / "iso9660.py",
     ROOT / "work" / "clean_rebuild" / "lz_format.py",
     ROOT / "work" / "clean_rebuild" / "mes_format.py",
+    ROOT / "work" / "clean_rebuild" / "source_json.py",
     ROOT / "work" / "clean_rebuild" / "font_render.py",
     ROOT / "work" / "clean_rebuild" / "scn_layout.py",
+    ROOT / "work" / "clean_rebuild" / "renderer_format.py",
+    ROOT / "work" / "clean_rebuild" / "profile_schema.py",
     ROOT / "work" / "clean_rebuild" / "mes_compiler.py",
     ROOT / "work" / "clean_rebuild" / "prepare_retail.py",
     ROOT / "work" / "clean_rebuild" / "build_mes_set.py",
@@ -41,7 +44,6 @@ MAINTAINED_PYTHON = (
     ROOT / "work" / "clean_rebuild" / "export_translation_proposals.py",
     ROOT / "work" / "clean_rebuild" / "test_script_layout.py",
     ROOT / "work" / "region_variant" / "build_us_bios_test.py",
-    ROOT / "work" / "audio_localization" / "audio_localization.py",
 )
 
 

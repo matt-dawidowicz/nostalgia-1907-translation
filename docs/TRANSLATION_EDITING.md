@@ -83,7 +83,11 @@ Top-level `text_mode` is retained for compiler compatibility. Per-record
 ### Profile fields
 
 The embedded `profile` records reviewed structural exceptions and regression
-requirements. Common fields include:
+requirements. `profile_schema.py` validates the object before compilation and
+semantic validation. Unknown keys are errors: a setting cannot look active
+while being silently ignored.
+
+Active fields include:
 
 | Field | Purpose |
 | --- | --- |
@@ -95,11 +99,25 @@ requirements. Common fields include:
 | `row_limit_overrides` | Reviewed vertical capacity |
 | `role_overrides` | Renderer role for a structurally exceptional record |
 
+`required_text_exact`, `required_text_prefixes`, and
+`forbidden_text_patterns` are executable source-only rules. They are checked
+against stable zero-based record indexes before direct MES compilation and
+during semantic validation. Geometry and role fields are consumed by
+`scn_layout.py`.
+
+Some existing profiles retain named migration-era switches such as
+`validate_wrapped_text_integrity`, `infer_scn_layouts`, and
+`choice_render_cell_limit`. Those keys are explicitly classified as legacy
+provenance and have no production effect. Do not add new legacy keys. Remove an
+old one only in a dedicated source-policy change whose tests and documentation
+show that its history is no longer needed.
+
 Do not add an override merely to make one screenshot pass. First show why the
 original SCN selects a renderer that the shared inference does not yet model.
 
-Paths in `text_sources` are historical provenance metadata. They are not
-production dependencies and should not be copied into new logic.
+Values in `text_sources` are portable historical-provenance labels. They are
+not machine paths, production dependencies, recoverable source files, or a
+license to copy historical generated text into current logic.
 
 ## Find a record
 
@@ -250,9 +268,11 @@ Run:
 python nostalgia1907.py validate
 ```
 
-This compiles Python, runs audio companion unit tests, audits every renderer
+This first audits the actual source tree, recursively compiles maintained
+Python, runs source-only tests, and runs the maintained-source style
+audit. It then requires the prepared retail reference, audits every renderer
 contract, runs layout compilation tests, regenerates the comparison package,
-and checks semantic/generated-artifact consistency.
+and checks semantic/profile/generated-artifact consistency.
 
 Validation does not prove that prose is elegant or that every branch was
 visited. Manual playtesting remains the final release gate.

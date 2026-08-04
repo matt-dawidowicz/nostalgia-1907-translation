@@ -64,20 +64,22 @@ records have different contracts.
 
 The project therefore derived layout from SCN structure and preserved fixed
 records where no safe general reflow rule had been proven. The formatter and
-compiler share those contracts so a preview and a build use the same geometry.
+compiler share those contracts and the public `renderer_format.py`
+implementation, so a preview and a build use the same geometry, wrapping, row
+reconstruction, and whole-token checks.
 
-### 3. The v26 maintenance baseline and rejected experiment
+### 3. The retained maintenance baseline and rejected experiment
 
-The v26 maintenance pass established North America as the normal build target,
-proved two clean rebuilds and two North American wrappers byte-identical, and
-removed obsolete generated images. It also fixed stale-letter clearing and an
-earlier leading-indentation defect.
+The retained maintenance pass established North America as the normal build
+target, proved two clean rebuilds and two North American wrappers
+byte-identical, and removed obsolete generated images. It also fixed
+stale-letter clearing and an earlier leading-indentation defect.
 
-An experimental v27 change then introduced runtime layout regressions. It was
+A later renderer experiment introduced runtime layout regressions. It was
 retired rather than promoted. This was a useful discipline point: a static
 check or a promising local patch is never enough to override observed emulator
 behavior. The complete evidence and decision are retained in
-[the v26 maintenance report](docs/V26_MAINTENANCE_REPORT.md).
+[the historical maintenance report](docs/HISTORICAL_MAINTENANCE_REPORT.md).
 
 ### 4. Runtime-led dialogue repair
 
@@ -93,60 +95,77 @@ formatter/compiler logic now:
 - applies the lower dialogue renderer's native 12/11/11 cell cadence;
 - emits a single blank anchor only when the retail dialogue stream requires it;
 - keeps continuation pages free of a second anchor;
-- rejects row overflow, broken words, and unintended leading blanks; and
+- rejects row overflow, broken words, and unintended leading blanks in both
+  preview and direct compiler entry points; and
 - handles compact ellipses as a shared formatting rule.
 
 This was the decisive change: translation entries remain semantic English,
 while renderer-aware code chooses safe rows. Future renderer fixes should be
 shared and evidence-led, never speculative chapter patches.
 
-### 5. Current verified candidate and public-source cleanup
+### 5. Historical runtime reference and public-source cleanup
 
-The historical North American candidate
-`Nostalgia1907_CleanRebuild_v33_EdgeCases_NorthAmerica` is the current
-runtime-reviewed reference. It was produced by two independent byte-identical
-clean builds followed by two independent byte-identical North American region
-builds. Its Track 1 SHA-256 is
-`1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17` and
-its unchanged Track 2 SHA-256 is
-`F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991`.
+The North American artifact identified by the hashes below is the historical
+runtime-reviewed reference for the current renderer contracts. It is not a
+source input and its former internal build number is intentionally omitted
+because the exact hashes, not a private numbering sequence, are the durable
+identity. It was produced by two independent byte-identical clean builds
+followed by two independent byte-identical North American region builds.
 
-After the runtime work, the repository was prepared for public collaboration:
+- Track 1 SHA-256:
+  `1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`
+- Unchanged Track 2 SHA-256:
+  `F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991`
+
+The project maintainer playtested that exact Track 1 in Ares. The recorded
+coverage includes targeted dialogue-renderer checks, page advances, and
+dialogue transitions, with no defect reported in the tested coverage. This is
+runtime evidence for those exercised paths, not a claim that every scene,
+branch, save/reload path, or audio transition received whole-game coverage.
+
+After the runtime work, the repository was prepared for source collaboration:
 obsolete forensic workspaces and generated recovery products were removed,
 their retirement is recorded in
 [`retired_workspace_register.json`](work/clean_rebuild/retired_workspace_register.json),
 the active code was documented to PEP 257 standards, and source health/style
-checks were added. Historical candidate labels remain only as evidence; new
-build output uses the neutral name above.
+checks were added. Every new candidate must be rebuilt from verified retail
+inputs and tracked source, and new build output uses the neutral name above.
+Public source CI can prove source and synthetic contracts, but a maintainer
+must still run the retail-backed gates and record Ares evidence for any changed
+playable bytes.
 
 ## What is proven, and what is not
 
-The automated build gate proves input hashes, canonical-source validation,
+When run with the required verified local inputs, the automated build gate
+proves input hashes, canonical-source validation,
 deterministic clean reconstruction, deterministic North American wrapping,
 fixed binary boundaries, exact Track 2 preservation, and direct hashes for the
 published artifacts.
 
 It does **not** prove that every scene, branch, or text box has been played in
-an emulator. The current candidate passed targeted Ares checks of the dialogue
-renderer, including page advances and transitions. A whole-game playthrough
-remains a separate, explicit task. See [release and playtest policy](docs/RELEASE.md)
-and [whole-game testing](docs/WHOLE_GAME_TESTING.md).
+an emulator. The exact North American artifact identified above was playtested
+in Ares by the project maintainer and passed the recorded targeted dialogue,
+page-advance, and transition checks. A whole-game playthrough remains a
+separate, explicit task. See [release and playtest policy](docs/RELEASE.md) and
+[whole-game testing](docs/WHOLE_GAME_TESTING.md).
 
 ## Start here
 
 Read these documents in order:
 
-1. [Architecture](docs/ARCHITECTURE.md) - authoritative inputs, module
+1. [Getting started](docs/GETTING_STARTED.md) - choose the right contributor
+   path, learn the safety rules, and make a first safe change.
+2. [Architecture](docs/ARCHITECTURE.md) - authoritative inputs, module
    boundaries, and the rebuild graph.
-2. [Translation editing](docs/TRANSLATION_EDITING.md) - safe ID-keyed English
+3. [Translation editing](docs/TRANSLATION_EDITING.md) - safe ID-keyed English
    changes and record policies.
-3. [Text-box contracts](docs/TEXT_BOX_CONTRACTS.md) - the renderer categories
+4. [Text-box contracts](docs/TEXT_BOX_CONTRACTS.md) - the renderer categories
    and formatting responsibilities.
-4. [Development and validation](docs/DEVELOPMENT.md) - commands and test
+5. [Development and validation](docs/DEVELOPMENT.md) - commands and test
    layers.
-5. [Binary formats](docs/BINARY_FORMATS.md) - MES, LZ, ISO, raw CD, font, and
+6. [Binary formats](docs/BINARY_FORMATS.md) - MES, LZ, ISO, raw CD, font, and
    SCN boundaries.
-6. [Adaptive renderer assessment](docs/ADAPTIVE_RENDERER_ASSESSMENT.md) - why
+7. [Adaptive renderer assessment](docs/ADAPTIVE_RENDERER_ASSESSMENT.md) - why
    the project retains the native renderer instead of inventing a new one.
 
 For contribution rules and required checks, read
@@ -160,7 +179,7 @@ Use Python 3.10 or newer. From a fresh Windows clone:
 ```powershell
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install -e ".[test]"
+python -m pip install -e .
 ```
 
 Provide legally obtained Japanese Track 1 and Track 2, plus the verified U.S.
@@ -192,6 +211,12 @@ python nostalgia1907.py build --dry-run
 The actual build refuses nonempty staging or delivery directories. After it
 passes, play the generated CUE in Ares and complete the relevant runtime checks
 before publishing anything.
+
+In a source-only clone, run `python tools/source_health.py --root . --strict-release` and the
+source test commands in [development and validation](docs/DEVELOPMENT.md). The
+retail-backed portion of `validate` remains unavailable until the legally
+obtained local reference has been prepared; this is expected and must not be
+worked around by committing fixtures.
 
 ## Making a safe change
 
@@ -230,7 +255,6 @@ file extents, and Track 2 exactly.
 | `work/clean_rebuild/sources/` | Canonical per-chapter English records. |
 | `work/clean_rebuild/` | Compiler, formats, deterministic builders, and validators. |
 | `work/region_variant/` | Guarded North American BIOS-security wrapper. |
-| `work/audio_localization/` | Optional review-only audio tooling. |
 | `tests/` | Source-only CLI, policy, documentation, and regression tests. |
 | `tools/` | Source-health and style audits. |
 | `docs/` | Architecture, contributor, format, testing, and release guides. |

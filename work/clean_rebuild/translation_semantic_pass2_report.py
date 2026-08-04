@@ -7,10 +7,12 @@ import hashlib
 import json
 from pathlib import Path
 
+from source_json import load_json_object
+
 
 ROOT = Path(__file__).resolve().parents[2]
 AUDIT = ROOT / "outputs" / "Nostalgia1907_Translation_Audit"
-DELIVERY = ROOT / "outputs" / "Nostalgia1907_CleanRebuild_v5"
+DELIVERY = ROOT / "outputs" / "Nostalgia1907_CleanRebuild_SemanticReview"
 COMPARISON = ROOT / "outputs" / "Nostalgia1907_Bilingual_Comparison"
 EXPECTED_CHANGED_IDS = {
     "PART2B:087",
@@ -29,7 +31,7 @@ EXPECTED_CHANGED_IDS = {
 
 def load(path: Path) -> dict:
     """Load one historical semantic-pass JSON payload."""
-    return json.loads(path.read_text(encoding="utf-8"))
+    return load_json_object(path)
 
 
 def file_sha256(path: Path) -> str:
@@ -96,9 +98,9 @@ def main() -> None:
 
     products = []
     for name in (
-        "Nostalgia1907_CleanRebuild_v5.cue",
-        "Nostalgia1907_CleanRebuild_v5_Track1.bin",
-        "Nostalgia1907_CleanRebuild_v5_Track2.bin",
+        "Nostalgia1907_CleanRebuild_SemanticReview.cue",
+        "Nostalgia1907_CleanRebuild_SemanticReview_Track1.bin",
+        "Nostalgia1907_CleanRebuild_SemanticReview_Track2.bin",
     ):
         path = DELIVERY / name
         products.append(

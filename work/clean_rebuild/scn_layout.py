@@ -25,6 +25,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from profile_schema import canonical_profile_index
+
 
 FLOATING_WIDTHS = {
     0x07: 4,
@@ -272,8 +274,10 @@ def _indexed_pairs(profile: dict[str, object], key: str) -> dict[int, tuple[int,
     output: dict[int, tuple[int, int]] = {}
     for raw_index, raw_layout in raw.items():
         try:
-            index = int(raw_index)
-        except (TypeError, ValueError) as exc:
+            index = canonical_profile_index(
+                raw_index, field=key, chapter="SCN profile"
+            )
+        except ValueError as exc:
             raise ScnLayoutError(
                 f"profile {key} has invalid record {raw_index!r}"
             ) from exc
@@ -302,8 +306,10 @@ def _indexed_text_boxes(profile: dict[str, object]) -> dict[int, str]:
     output: dict[int, str] = {}
     for raw_index, text_box in raw.items():
         try:
-            index = int(raw_index)
-        except (TypeError, ValueError) as exc:
+            index = canonical_profile_index(
+                raw_index, field="text_box_overrides", chapter="SCN profile"
+            )
+        except ValueError as exc:
             raise ScnLayoutError(
                 f"profile text_box_overrides has invalid record {raw_index!r}"
             ) from exc
@@ -415,8 +421,10 @@ def _role_overrides(profile: dict[str, object]) -> dict[int, frozenset[str]]:
     allowed = LABEL_ROLES | PROSE_ROLES | {ROLE_CHOICE}
     for raw_index, raw_roles in raw.items():
         try:
-            index = int(raw_index)
-        except (TypeError, ValueError) as exc:
+            index = canonical_profile_index(
+                raw_index, field="role_overrides", chapter="SCN profile"
+            )
+        except ValueError as exc:
             raise ScnLayoutError(f"invalid role override record {raw_index!r}") from exc
         values = [raw_roles] if isinstance(raw_roles, str) else raw_roles
         if (
@@ -730,8 +738,10 @@ def infer_row_limits(
         raise ScnLayoutError("profile row_limit_overrides is not an object")
     for raw_index, raw_limit in raw_overrides.items():
         try:
-            index = int(raw_index)
-        except (TypeError, ValueError) as exc:
+            index = canonical_profile_index(
+                raw_index, field="row_limit_overrides", chapter="SCN profile"
+            )
+        except ValueError as exc:
             raise ScnLayoutError(f"invalid row-limit record {raw_index!r}") from exc
         if not isinstance(raw_limit, int) or raw_limit <= 0:
             raise ScnLayoutError(f"invalid row limit for record {raw_index!r}")

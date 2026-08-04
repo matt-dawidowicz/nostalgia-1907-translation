@@ -29,6 +29,7 @@ from pathlib import Path
 from build_archives import build_archives
 from build_mes_set import build_mes_set
 from iso9660 import patch_fixed_extent_files
+from source_json import load_json_object
 from main_patch import patch_main
 from prepare_retail import prepare_retail
 from raw_cd import iso_to_raw_fixed, write_two_track_cue
@@ -55,8 +56,11 @@ PRODUCTION_MODULES = (
     "iso9660.py",
     "lz_format.py",
     "mes_format.py",
+    "source_json.py",
     "font_render.py",
     "scn_layout.py",
+    "renderer_format.py",
+    "profile_schema.py",
     "mes_compiler.py",
     "prepare_retail.py",
     "build_mes_set.py",
@@ -101,7 +105,7 @@ def _production_data_files(root: Path) -> tuple[Path, ...]:
     """Resolve every tracked static data file consumed by production modules."""
     sources = root / "sources"
     index_path = sources / "index.json"
-    index = json.loads(index_path.read_text(encoding="utf-8"))
+    index = load_json_object(index_path)
     chapters = index.get("chapters")
     if not isinstance(chapters, list):
         raise ValueError("production source index has no chapters list")
@@ -236,7 +240,7 @@ def _verify_production_independence(
 
 def _canonical_coverage(sources: Path = SOURCES) -> dict[str, object]:
     """Derive release-note coverage directly from canonical source JSON."""
-    index = json.loads((sources / "index.json").read_text(encoding="utf-8"))
+    index = load_json_object(sources / "index.json")
     items = index.get("chapters")
     if not isinstance(items, list):
         raise ValueError("canonical source index has no chapters list")
@@ -261,7 +265,7 @@ def _canonical_coverage(sources: Path = SOURCES) -> dict[str, object]:
             raise ValueError(
                 f"{chapter}: canonical source path is unsafe: {source_name!r}"
             )
-        source = json.loads((sources / source_name).read_text(encoding="utf-8"))
+        source = load_json_object(sources / source_name)
         records = source.get("records")
         if not isinstance(records, list) or source.get("record_count") != len(records):
             raise ValueError(f"{chapter}: canonical record count is inconsistent")
@@ -367,7 +371,7 @@ def _render_test_notes(
 
 def _chapter_names(sources: Path = SOURCES) -> tuple[str, ...]:
     """Return canonical chapter names in their declared build order."""
-    index = json.loads((sources / "index.json").read_text(encoding="utf-8"))
+    index = load_json_object(sources / "index.json")
     chapters = index.get("chapters")
     if not isinstance(chapters, list):
         raise ValueError("canonical source index has no chapters list")
@@ -388,9 +392,7 @@ def _run_input_manifest(
     basename: str,
 ) -> dict[str, object]:
     """Fingerprint every declared source and prepared Japanese build fixture."""
-    project_manifest = json.loads(
-        (WORKSPACE / "nostalgia1907.project.json").read_text(encoding="utf-8")
-    )
+    project_manifest = load_json_object(WORKSPACE / "nostalgia1907.project.json")
     translation = project_manifest.get("translation")
     baseline = (
         translation.get("validated_baseline") if isinstance(translation, dict) else None
@@ -453,7 +455,7 @@ def _build_once(
     patched_main = build_root / "MAIN.BIN"
     patched_main.write_bytes(patch_main(retail_main.read_bytes()))
 
-    index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+    index = load_json_object(SOURCES / "index.json")
     replacements = {
         f"{item['chapter']}.LZ": build_root / "archives" / f"{item['chapter']}.LZ"
         for item in index["chapters"]
@@ -592,9 +594,7 @@ def rebuild(
         shutil.copyfile(run_a_product / name, delivery_root / name)
     delivery_artifacts = expected_delivery_artifacts(delivery_root, basename)
     delivery_snapshot = snapshot_artifacts(delivery_artifacts)
-    run_manifest = json.loads(
-        (run_a_product / "verification_manifest.json").read_text(encoding="utf-8")
-    )
+    run_manifest = load_json_object(run_a_product / "verification_manifest.json")
     report = {
         "status": "PASS",
         "pipeline": "retail Japanese Track 1 -> clean extraction -> canonical translation -> fixed extents -> BIN/CUE",

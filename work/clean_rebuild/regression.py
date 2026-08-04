@@ -15,14 +15,14 @@ hashes before publishing.
 from __future__ import annotations
 
 import hashlib
-import json
 from pathlib import Path
 
 from iso9660 import SECTOR_SIZE, extract_file, read_entries, unique_file
-from lz_format import member_bytes, parse_archive, read_member
+from lz_format import parse_archive, read_member
 from main_patch import PATCHED_SHA256, RETAIL_SHA256
 from mes_compiler import FIXED_ENGLISH_UNITS
 from mes_format import read_mes
+from source_json import load_json_array, load_json_object
 from raw_cd import verify_track
 
 
@@ -102,18 +102,12 @@ def validate_build(
     Raises immediately on the first unsafe boundary or stale report. The return
     value contains review metrics and hashes only after every layer passes.
     """
-    index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
+    index = load_json_object(SOURCES / "index.json")
     if index["chapter_count"] != EXPECTED_CHAPTERS:
         raise ValueError("canonical chapter count changed")
-    mes_report = json.loads(
-        (build_root / "mes_report.json").read_text(encoding="utf-8")
-    )
-    archive_report = json.loads(
-        (build_root / "archive_report.json").read_text(encoding="utf-8")
-    )
-    patch_report = json.loads(
-        (build_root / "iso_patch_report.json").read_text(encoding="utf-8")
-    )
+    mes_report = load_json_object(build_root / "mes_report.json")
+    archive_report = load_json_object(build_root / "archive_report.json")
+    patch_report = load_json_array(build_root / "iso_patch_report.json")
     if mes_report["status"] != "PASS" or archive_report["status"] != "PASS":
         raise ValueError("a prerequisite build report did not pass")
 
@@ -123,7 +117,7 @@ def validate_build(
     mes_report_by_chapter = {item["chapter"]: item for item in mes_report["chapters"]}
     for item in index["chapters"]:
         chapter = item["chapter"]
-        canonical = json.loads((SOURCES / item["source"]).read_text(encoding="utf-8"))
+        canonical = load_json_object(SOURCES / item["source"])
         records = canonical.get("records")
         if not isinstance(records, list) or len(records) != canonical["record_count"]:
             raise ValueError(f"{chapter}: canonical record coverage is incomplete")
@@ -198,7 +192,7 @@ def validate_build(
         raise ValueError(f"total record count changed: {total_records}")
 
     part3c = read_mes(build_root / "mes" / "PART3C.MES")
-    part3c_source = json.loads((SOURCES / "PART3C.json").read_text(encoding="utf-8"))
+    part3c_source = load_json_object(SOURCES / "PART3C.json")
     if part3c_source["records"][194].get("text") != "Ashby":
         raise ValueError(
             "PART3C record 194 no longer follows source アッシュビー -> Ashby"

@@ -1,17 +1,32 @@
 # Release and playtest policy
 
-## Current build line
+## Runtime-reviewed reference
 
-`Nostalgia1907_CleanRebuild_v33_EdgeCases_NorthAmerica` is the current North
-American build line. It was created from the canonical source through two
+The North American artifact with Track 1 SHA-256
+`1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`
+is the runtime-reviewed reference for the current renderer contracts. Its
+unchanged Track 2 SHA-256 is
+`F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991`.
+The exact hashes are the durable identity; former private build-number labels
+are deliberately not used in public-facing documentation.
+
+Prior verification reports state that the artifact was created through two
 independent byte-identical clean rebuilds followed by two byte-identical North
-American region builds.
+American region builds. The current source-hardening build produced the same
+playable Track 1 bytes.
 
-The v33 candidate has passed targeted runtime review of the dialogue renderer,
-including page advances and dialogue transitions. This is strong evidence for
-the shared formatter, not a claim that every scene and branch has been played.
-Future issues belong in a new version with their own source change, tests,
-clean staging directory, build hashes, and runtime evidence.
+The project maintainer playtested this exact Track 1 in Ares. The recorded
+coverage includes targeted dialogue-renderer checks, page advances, and
+dialogue transitions, with no defect reported in the tested coverage. This is
+strong runtime evidence for the shared formatter on the exercised paths. It is
+not a claim that every scene and branch was played, and it does not certify
+save/reload, every audio transition, or a complete ending route unless those
+items are separately recorded in a candidate-bound runtime log.
+
+A source-only checkout cannot independently replay the emulator session or
+re-prove the excluded artifact hashes. Every candidate whose playable bytes
+change must generate fresh verification reports and new runtime evidence tied
+to its exact hashes.
 
 ## What a release proves
 
@@ -26,31 +41,41 @@ A successful `nostalgia1907.py build` proves that:
   intact; and
 - the final verification manifest binds the delivery files to those inputs.
 
-It does not prove visual behavior in an emulator. Manual playtesting is still
-required before public release.
+It does not prove visual behavior in an emulator. Manual playtesting remains
+required whenever playable bytes change or a release claims broader runtime
+coverage than the reference above.
 
 ## Required manual checks
 
-For every candidate, use the generated `.cue` file in Ares with the verified
-U.S. Sega CD BIOS. Check the affected scenes and at least one representative of
-each text-box type:
+For every changed candidate, use the generated `.cue` file in Ares with the
+verified U.S. Sega CD BIOS. Check the affected scenes and at least one
+representative of each text-box type:
 
 1. Advance every page in a multi-page lower dialogue box.
 2. Cross at least one speaker or dialogue transition.
 3. Inspect adaptive, fixed, compact-label, and anchor text records.
 4. Save and reload once, then confirm normal progression and audio.
-5. Capture a screenshot and record the chapter/record IDs for any defect.
+5. Record the candidate Track 1 hash, Ares version, route or chapter coverage,
+   and the chapter/record IDs for any defect.
 
 Use [whole-game testing](WHOLE_GAME_TESTING.md) when scheduling a broader
-playthrough. Do not treat static validation as runtime proof.
+playthrough. Do not treat static validation as runtime proof, and do not claim
+untested runtime coverage merely because the reference artifact passed its
+recorded checks.
 
 ## Publishing checklist
 
 Before publishing a build or patch:
 
-1. Run source-only tests, source health, and `nostalgia1907.py validate`.
+1. Run `python tools/source_health.py --root . --strict-release`, the source-only test suite,
+   the style/Black checks, and `python nostalgia1907.py validate`.
 2. Build from a new, empty staging directory.
 3. Confirm the final verification manifest reports both deterministic stages.
-4. Complete the affected Ares checks above.
-5. Publish only source, documentation, checksums, and legal instructions—not
-   a BIOS or copyrighted game image.
+4. Complete and record the required Ares checks for any changed playable bytes.
+5. Publish only source, documentation, checksums, and legal instructions, not a
+   BIOS or copyrighted game image.
+
+Public source collaboration can review and test synthetic/compiler changes
+without retail media. Only a maintainer with the hash-verified retail tracks
+and licensed BIOS can certify the retail-backed and region-build gates, and
+only recorded Ares evidence can certify visible runtime behavior.

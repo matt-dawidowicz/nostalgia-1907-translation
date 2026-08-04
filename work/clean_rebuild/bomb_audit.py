@@ -14,6 +14,8 @@ import json
 import re
 from pathlib import Path
 
+from source_json import load_json_object
+
 from mes_format import read_mes
 from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES, _glyphs, _trim_blank
 
@@ -32,11 +34,8 @@ GLYPH_BYTES = 18
 
 
 def _load(path: Path) -> dict[str, object]:
-    """Load one UTF-8 JSON object used by the bomb semantic rules."""
-    value = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(value, dict):
-        raise ValueError(f"{path}: expected JSON object")
-    return value
+    """Load one strict UTF-8 JSON object used by bomb semantic rules."""
+    return load_json_object(path)
 
 
 def _normalize(text: object) -> str:

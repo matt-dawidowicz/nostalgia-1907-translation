@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Decode compiled English MES glyph cells for source-recovery purposes only.
+"""Decode historical compiled MES glyph cells for forensic provenance only.
 
-The clean rebuild will consume recovered Unicode text, not this historical
-renderer.  Importing the old renderer here is intentional: its only role is to
-prove which text cell produced each bitmap already present in the playable MES.
+This retired investigation utility is not imported by the clean rebuild. It
+requires explicit paths to a historical renderer and historical extracted
+artifacts, preventing contributor-machine locations from becoming hidden build
+dependencies. Its output is never a source input.
 """
 
 from __future__ import annotations
@@ -21,16 +22,13 @@ from mes_format import DYNAMIC_PREFIX_START, read_mes
 
 
 HERE = Path(__file__).resolve().parent
-WORKSPACE = HERE.parents[1]
-OLD_TOOLS = Path(
-    r"C:\Users\thema\Documents\Codex\2026-07-12\i\outputs" r"\nostalgia1907_tools"
-)
-GOLDEN = WORKSPACE / "outputs" / "Nostalgia1907_Act4_firstpass_credits" / "regression"
 
 
-def load_historical_renderer() -> ModuleType:
-    """Load the bitmap renderer without adding the old tool tree to sys.path."""
-    path = OLD_TOOLS / "mes_probe.py"
+def load_historical_renderer(renderer_path: Path) -> ModuleType:
+    """Load an explicitly supplied renderer without changing ``sys.path``."""
+    path = renderer_path
+    if not path.is_file():
+        raise FileNotFoundError(f"historical renderer is unavailable: {path}")
     spec = importlib.util.spec_from_file_location("historical_mes_probe", path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"cannot import {path}")
@@ -99,10 +97,13 @@ def choose_unit(options: list[tuple[str, str]]) -> tuple[str, str] | None:
 def decode_chapter(
     chapter: str,
     candidates: dict[bytes, list[tuple[str, str]]],
+    historical_root: Path,
 ) -> dict[str, object]:
-    """Decode one playable chapter and retain all ambiguous alternatives."""
-    mes_path = GOLDEN / "unpacked" / chapter / f"001_{chapter}.MES.unpacked"
-    font_path = GOLDEN / "iso_files" / "FIX_CODE.FNT"
+    """Decode one historical chapter and retain ambiguous alternatives."""
+    mes_path = (
+        historical_root / "unpacked" / chapter / f"001_{chapter}.MES.unpacked"
+    )
+    font_path = historical_root / "iso_files" / "FIX_CODE.FNT"
     mes = read_mes(mes_path)
     font_data = font_path.read_bytes()
     fixed_glyphs = tuple(
@@ -214,18 +215,33 @@ def decode_chapter(
 
 
 def main() -> None:
-    """Decode selected chapters into a machine-readable forensic report."""
+    """Decode selected chapters from explicitly supplied historical inputs."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("chapters", nargs="+", help="chapter names such as PART2F")
+    parser.add_argument(
+        "--renderer",
+        type=Path,
+        required=True,
+        help="explicit path to the retired historical mes_probe.py",
+    )
+    parser.add_argument(
+        "--historical-root",
+        type=Path,
+        required=True,
+        help="explicit root containing unpacked/ and iso_files/ forensic data",
+    )
     parser.add_argument("--output", type=Path, default=HERE / "forensic_decode.json")
     args = parser.parse_args()
 
-    renderer = load_historical_renderer()
+    renderer = load_historical_renderer(args.renderer)
     candidates = candidate_units(renderer)
     payload = {
         "status": "FORENSIC_ONLY",
         "candidate_bitmap_count": len(candidates),
-        "chapters": [decode_chapter(name, candidates) for name in args.chapters],
+        "chapters": [
+            decode_chapter(name, candidates, args.historical_root)
+            for name in args.chapters
+        ],
     }
     args.output.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     print(

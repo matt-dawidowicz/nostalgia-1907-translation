@@ -13,19 +13,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = [
-  "numpy>=1.26"
-]
 style = [
   "black==24.10.0"
-]
-audio-asr = [
-  "faster-whisper==1.1.1",
-  "requests==2.32.5",
-  "chardet==5.2.0"
-]
-audio-tts = [
-  "kokoro-onnx==0.5.0"
 ]
 
 [tool.black]
