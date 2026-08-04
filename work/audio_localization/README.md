@@ -38,7 +38,7 @@ The output contains:
   canonical English, transcription, and voice-preview status.
 - `transcripts.csv` and `transcripts.jsonl`: flat Japanese/English transcript
   exports for editing or reuse. They keep raw Japanese ASR, raw ASR English,
-  canonical v7 English, and the exact English voice script in separate fields.
+  canonical English, and the exact English voice script in separate fields.
 - `voice_fit_warnings.csv`: only the English deliveries that required unusually
   strong acceleration and should be reviewed first.
 - `review.html`: browser-based A/B review.

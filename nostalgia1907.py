@@ -14,7 +14,6 @@ hash-locked, ignored retail reference. ``edit`` changes canonical English by
 stable record ID. ``compare`` and ``validate`` produce review evidence.
 ``build`` performs full validation, delegates the deterministic two-run clean
 build, and defaults to a second deterministic North American region stage.
-``build-us`` remains available for wrapping an older validated baseline.
 
 Safety model
 ------------
@@ -45,6 +44,8 @@ from typing import Any, Sequence
 MANIFEST_NAME = "nostalgia1907.project.json"
 LOCAL_CONFIG_NAME = "nostalgia1907.local.json"
 RELEASE_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
+DEFAULT_BUILD_BASENAME = "Nostalgia1907_CleanRebuild"
+DEFAULT_RUNS_DIRECTORY = "runs_current"
 
 
 class ToolError(RuntimeError):
@@ -96,7 +97,9 @@ def load_manifest(root: Path) -> dict[str, Any]:
     except json.JSONDecodeError as exc:
         raise ToolError(f"invalid project manifest: {exc}") from exc
     if payload.get("schema_version") != 1:
-        raise ToolError(f"unsupported project manifest schema: {payload.get('schema_version')}")
+        raise ToolError(
+            f"unsupported project manifest schema: {payload.get('schema_version')}"
+        )
     return payload
 
 
@@ -186,7 +189,9 @@ def file_check(
             detail=f"SHA-256 mismatch: expected {expected_hash}, got {actual_hash}",
         )
         return result
-    result.update(status="PASS", detail=f"verified {actual_size} bytes", sha256=actual_hash)
+    result.update(
+        status="PASS", detail=f"verified {actual_size} bytes", sha256=actual_hash
+    )
     return result
 
 
@@ -236,7 +241,9 @@ def source_index_check(root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
         }
     payload = json.loads(path.read_text(encoding="utf-8"))
     chapter_count = payload.get("chapter_count")
-    record_count = sum(item.get("record_count", 0) for item in payload.get("chapters", []))
+    record_count = sum(
+        item.get("record_count", 0) for item in payload.get("chapters", [])
+    )
     expected_chapters = manifest["translation"]["chapter_count"]
     expected_records = manifest["translation"]["record_count"]
     if (chapter_count, record_count) != (expected_chapters, expected_records):
@@ -343,9 +350,14 @@ def doctor_report(root: Path, args: argparse.Namespace) -> dict[str, Any]:
         },
         source_index_check(root, manifest),
     ]
-    for key, label in (("track1", "original Japanese Track 1"), ("track2", "original Japanese Track 2")):
+    for key, label in (
+        ("track1", "original Japanese Track 1"),
+        ("track2", "original Japanese Track 2"),
+    ):
         path = default_input_path(root, manifest, local, key, getattr(args, key))
-        checks.append(file_check(label, path, manifest["retail_inputs"][key], required=True))
+        checks.append(
+            file_check(label, path, manifest["retail_inputs"][key], required=True)
+        )
     checks.append(retail_reference_check(root, manifest))
 
     bios_value = args.us_bios or local.get("us_bios")
@@ -379,7 +391,11 @@ def doctor_report(root: Path, args: argparse.Namespace) -> dict[str, Any]:
                 "status": "PASS" if ffmpeg_path.is_file() else "WARN",
                 "required": False,
                 "path": str(ffmpeg_path),
-                "detail": "available" if ffmpeg_path.is_file() else "configured path not found",
+                "detail": (
+                    "available"
+                    if ffmpeg_path.is_file()
+                    else "configured path not found"
+                ),
             }
         )
     else:
@@ -424,7 +440,9 @@ def print_doctor(report: dict[str, Any]) -> None:
         if retail_ready:
             print("Ready to validate or build.")
         else:
-            print("Original inputs verified. Run `python nostalgia1907.py prepare` next.")
+            print(
+                "Original inputs verified. Run `python nostalgia1907.py prepare` next."
+            )
     else:
         print("Not ready. Resolve the failed required checks above.")
 
@@ -483,7 +501,9 @@ def command_prepare(root: Path, args: argparse.Namespace) -> int:
     manifest = load_manifest(root)
     local = load_local_config(root)
     track1 = default_input_path(root, manifest, local, "track1", args.track1)
-    require_file("original Japanese Track 1", track1, manifest["retail_inputs"]["track1"])
+    require_file(
+        "original Japanese Track 1", track1, manifest["retail_inputs"]["track1"]
+    )
     reference = rooted(root, manifest["paths"]["retail_reference"])
     run_script(
         root,
@@ -672,8 +692,10 @@ def command_validate(root: Path, args: argparse.Namespace) -> int:
     return 0
 
 
-def release_basename(name: str) -> str:
-    """Normalize a short release label without accepting path traversal."""
+def release_basename(name: str | None) -> str:
+    """Return the neutral basename or normalize an optional output label."""
+    if name is None:
+        return DEFAULT_BUILD_BASENAME
     if not RELEASE_RE.fullmatch(name):
         raise ToolError(
             "release name must start with a letter or digit and contain only "
@@ -681,7 +703,7 @@ def release_basename(name: str) -> str:
         )
     if name.startswith("Nostalgia1907_"):
         return name
-    return f"Nostalgia1907_CleanRebuild_{name}"
+    return f"{DEFAULT_BUILD_BASENAME}_{name}"
 
 
 # Build-output guards are intentionally checked before the expensive
@@ -729,16 +751,18 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
     local = load_local_config(root)
     track1 = default_input_path(root, manifest, local, "track1", args.track1)
     track2 = default_input_path(root, manifest, local, "track2", args.track2)
-    require_file("original Japanese Track 1", track1, manifest["retail_inputs"]["track1"])
-    require_file("original Japanese Track 2", track2, manifest["retail_inputs"]["track2"])
+    require_file(
+        "original Japanese Track 1", track1, manifest["retail_inputs"]["track1"]
+    )
+    require_file(
+        "original Japanese Track 2", track2, manifest["retail_inputs"]["track2"]
+    )
     region = getattr(args, "region", None) or manifest["build"]["default_region"]
     if region not in {"north-america", "japan"}:
         raise ToolError(f"unsupported build region: {region!r}")
     base_basename = release_basename(args.name)
     basename = (
-        f"{base_basename}_NorthAmerica"
-        if region == "north-america"
-        else base_basename
+        f"{base_basename}_NorthAmerica" if region == "north-america" else base_basename
     )
     bios: Path | None = None
     if region == "north-america":
@@ -753,7 +777,7 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
     runs = (
         args.runs_root.expanduser().resolve()
         if args.runs_root
-        else root / "work" / "clean_rebuild" / f"runs_{args.name}"
+        else root / "work" / "clean_rebuild" / DEFAULT_RUNS_DIRECTORY
     )
     delivery = (
         args.output.expanduser().resolve()
@@ -842,91 +866,6 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
     return 0
 
 
-def command_build_us(root: Path, args: argparse.Namespace) -> int:
-    """Build the separate U.S.-BIOS test derivative from a validated baseline.
-
-    Baseline Track 1/2 and the licensed BIOS are hash-guarded through the
-    manifest. This command does not invoke an emulator; it only delegates the
-    deterministic derivative build after fresh-directory preflight.
-    """
-    manifest = load_manifest(root)
-    local = load_local_config(root)
-    baseline = args.baseline or manifest["translation"]["validated_baseline"]
-    build_spec = manifest["validated_builds"].get(baseline)
-    if build_spec is None:
-        raise ToolError(f"no validated build contract for baseline {baseline!r}")
-    baseline_dir = rooted(root, manifest["paths"]["outputs"]) / build_spec["basename"]
-    track1 = (
-        args.baseline_track1.expanduser().resolve()
-        if args.baseline_track1
-        else baseline_dir / f"{build_spec['basename']}_Track1.bin"
-    )
-    track2 = (
-        args.baseline_track2.expanduser().resolve()
-        if args.baseline_track2
-        else baseline_dir / f"{build_spec['basename']}_Track2.bin"
-    )
-    bios_value = args.us_bios or local.get("us_bios")
-    if not bios_value:
-        raise ToolError(
-            f"U.S. BIOS path is required; pass --us-bios or set it in {LOCAL_CONFIG_NAME}"
-        )
-    bios = rooted(root, bios_value)
-    require_file(f"validated {baseline} Track 1", track1, build_spec["track1"])
-    require_file(f"validated {baseline} Track 2", track2, build_spec["track2"])
-    require_file("U.S. BIOS", bios, manifest["us_bios_test"]["bios"])
-    basename = (
-        release_basename(args.name)
-        if args.name
-        else f"{build_spec['basename']}_US_BIOS_Test"
-    )
-    runs = (
-        args.runs_root.expanduser().resolve()
-        if args.runs_root
-        else root / "work" / "region_variant" / f"runs_{baseline}"
-    )
-    delivery = (
-        args.output.expanduser().resolve()
-        if args.output
-        else rooted(root, manifest["paths"]["outputs"]) / basename
-    )
-    require_separate_build_directories(runs, delivery)
-    plan = {
-        "baseline": baseline,
-        "baseline_track1": str(track1),
-        "baseline_track2": str(track2),
-        "us_bios": str(bios),
-        "basename": basename,
-        "runs_root": str(runs),
-        "runs_root_state": directory_state(runs),
-        "delivery_root": str(delivery),
-        "delivery_root_state": directory_state(delivery),
-        "independent_builds": 2,
-    }
-    if args.dry_run:
-        print(json.dumps(plan, indent=2))
-        return 0
-    require_fresh_build_directory("runs root", runs)
-    require_fresh_build_directory("delivery root", delivery)
-    run_script(
-        root,
-        "work/region_variant/build_us_bios_test.py",
-        str(track1),
-        str(track2),
-        str(bios),
-        "--runs-root",
-        str(runs),
-        "--delivery-root",
-        str(delivery),
-        "--basename",
-        basename,
-        "--expected-track1-sha256",
-        build_spec["track1"]["sha256"],
-        label=f"U.S.-BIOS test derivative from {baseline}",
-    )
-    return 0
-
-
 # CLI grammar and process-level error translation.
 
 
@@ -945,25 +884,37 @@ def parser() -> argparse.ArgumentParser:
     doctor.add_argument("--track2", type=Path)
     doctor.add_argument("--us-bios", type=Path)
     doctor.add_argument("--ffmpeg", type=Path)
-    doctor.add_argument("--json", action="store_true", help="emit machine-readable JSON")
+    doctor.add_argument(
+        "--json", action="store_true", help="emit machine-readable JSON"
+    )
     doctor.set_defaults(handler=command_doctor)
 
-    prepare = commands.add_parser("prepare", help="prepare the hash-locked retail reference")
+    prepare = commands.add_parser(
+        "prepare", help="prepare the hash-locked retail reference"
+    )
     prepare.add_argument("--track1", type=Path)
     prepare.set_defaults(handler=command_prepare)
 
-    edit = commands.add_parser("edit", help="preview or apply canonical wording changes")
+    edit = commands.add_parser(
+        "edit", help="preview or apply canonical wording changes"
+    )
     edit.add_argument("record", nargs="?", help="stable CHAPTER:NNN record ID")
     edit.add_argument("--text", help="proposed canonical English")
     edit.add_argument("--changes", type=Path, help="reviewed ID-keyed JSON change file")
-    edit.add_argument("--apply", action="store_true", help="write RECORD/--text after validation")
+    edit.add_argument(
+        "--apply", action="store_true", help="write RECORD/--text after validation"
+    )
     edit.set_defaults(handler=command_edit)
 
-    compare = commands.add_parser("compare", help="regenerate the bilingual review package")
+    compare = commands.add_parser(
+        "compare", help="regenerate the bilingual review package"
+    )
     compare.add_argument("--output", type=Path)
     compare.set_defaults(handler=command_compare)
 
-    validate = commands.add_parser("validate", help="run static, layout, comparison, and semantic checks")
+    validate = commands.add_parser(
+        "validate", help="run static, layout, comparison, and semantic checks"
+    )
     validate.add_argument(
         "--skip-comparison",
         action="store_true",
@@ -975,7 +926,10 @@ def parser() -> argparse.ArgumentParser:
         "build",
         help="build deterministic BIN/CUE; North America is the default region",
     )
-    build.add_argument("--name", required=True, help="release label, such as v8")
+    build.add_argument(
+        "--name",
+        help="optional descriptive output label; omit for the neutral release name",
+    )
     build.add_argument("--track1", type=Path)
     build.add_argument("--track2", type=Path)
     build.add_argument(
@@ -986,19 +940,11 @@ def parser() -> argparse.ArgumentParser:
     build.add_argument("--us-bios", type=Path)
     build.add_argument("--runs-root", type=Path)
     build.add_argument("--output", type=Path)
-    build.add_argument("--dry-run", action="store_true", help="show resolved inputs/outputs only")
+    build.add_argument(
+        "--dry-run", action="store_true", help="show resolved inputs/outputs only"
+    )
     build.set_defaults(handler=command_build)
 
-    build_us = commands.add_parser("build-us", help="build the separate U.S.-BIOS test derivative")
-    build_us.add_argument("--baseline", help="validated baseline key; defaults to the manifest")
-    build_us.add_argument("--baseline-track1", type=Path)
-    build_us.add_argument("--baseline-track2", type=Path)
-    build_us.add_argument("--us-bios", type=Path)
-    build_us.add_argument("--name", help="optional full or short release label")
-    build_us.add_argument("--runs-root", type=Path)
-    build_us.add_argument("--output", type=Path)
-    build_us.add_argument("--dry-run", action="store_true", help="show resolved inputs/outputs only")
-    build_us.set_defaults(handler=command_build_us)
     return result
 
 

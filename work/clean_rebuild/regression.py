@@ -105,20 +105,22 @@ def validate_build(
     index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
     if index["chapter_count"] != EXPECTED_CHAPTERS:
         raise ValueError("canonical chapter count changed")
-    mes_report = json.loads((build_root / "mes_report.json").read_text(encoding="utf-8"))
+    mes_report = json.loads(
+        (build_root / "mes_report.json").read_text(encoding="utf-8")
+    )
     archive_report = json.loads(
         (build_root / "archive_report.json").read_text(encoding="utf-8")
     )
-    patch_report = json.loads((build_root / "iso_patch_report.json").read_text(encoding="utf-8"))
+    patch_report = json.loads(
+        (build_root / "iso_patch_report.json").read_text(encoding="utf-8")
+    )
     if mes_report["status"] != "PASS" or archive_report["status"] != "PASS":
         raise ValueError("a prerequisite build report did not pass")
 
     total_records = 0
     max_dynamic = 0
     mes_results: list[dict[str, object]] = []
-    mes_report_by_chapter = {
-        item["chapter"]: item for item in mes_report["chapters"]
-    }
+    mes_report_by_chapter = {item["chapter"]: item for item in mes_report["chapters"]}
     for item in index["chapters"]:
         chapter = item["chapter"]
         canonical = json.loads((SOURCES / item["source"]).read_text(encoding="utf-8"))
@@ -127,16 +129,18 @@ def validate_build(
             raise ValueError(f"{chapter}: canonical record coverage is incomplete")
         if any(record.get("index") != index for index, record in enumerate(records)):
             raise ValueError(f"{chapter}: canonical record indexes are not contiguous")
-        if any(record.get("policy") not in {"translate", "preserve"} for record in records):
+        if any(
+            record.get("policy") not in {"translate", "preserve"} for record in records
+        ):
             raise ValueError(f"{chapter}: canonical record policy is invalid")
         translated_count = sum(
             record.get("policy") == "translate" for record in records
         )
-        preserved_count = sum(
-            record.get("policy") == "preserve" for record in records
-        )
+        preserved_count = sum(record.get("policy") == "preserve" for record in records)
         if canonical.get("text_mode") == "preserve":
-            raise ValueError(f"{chapter}: a playable script reverted to preserve-only mode")
+            raise ValueError(
+                f"{chapter}: a playable script reverted to preserve-only mode"
+            )
         if (
             item.get("translated_records") != translated_count
             or item.get("preserved_records") != preserved_count
@@ -147,7 +151,9 @@ def validate_build(
             reported.get("translated_records") != translated_count
             or reported.get("preserved_records") != preserved_count
         ):
-            raise ValueError(f"{chapter}: compiler policy counts do not match canonical source")
+            raise ValueError(
+                f"{chapter}: compiler policy counts do not match canonical source"
+            )
         if chapter == "PART3B_":
             preserved_indexes = {
                 index
@@ -155,13 +161,17 @@ def validate_build(
                 if record.get("policy") == "preserve"
             }
             if canonical.get("text_mode") != "prose":
-                raise ValueError("PART3B_ unexpectedly reverted to retail-preserve mode")
+                raise ValueError(
+                    "PART3B_ unexpectedly reverted to retail-preserve mode"
+                )
             if preserved_indexes != {4, 15}:
                 raise ValueError(
                     f"PART3B_ preserve scope changed: {sorted(preserved_indexes)}"
                 )
             if translated_count != 209:
-                raise ValueError("PART3B_ does not contain all 209 translated text records")
+                raise ValueError(
+                    "PART3B_ does not contain all 209 translated text records"
+                )
 
         mes_path = build_root / "mes" / f"{chapter}.MES"
         mes = read_mes(mes_path)
@@ -190,7 +200,9 @@ def validate_build(
     part3c = read_mes(build_root / "mes" / "PART3C.MES")
     part3c_source = json.loads((SOURCES / "PART3C.json").read_text(encoding="utf-8"))
     if part3c_source["records"][194].get("text") != "Ashby":
-        raise ValueError("PART3C record 194 no longer follows source アッシュビー -> Ashby")
+        raise ValueError(
+            "PART3C record 194 no longer follows source アッシュビー -> Ashby"
+        )
     if part3c.records[194] in {part3c.records[146], part3c.records[147]}:
         raise ValueError("PART3C Ashby speaker label collapsed into Yamada or Dunant")
 
@@ -251,7 +263,9 @@ def validate_build(
         ]
         if not records:
             raise ValueError(f"{target}: no retail directory record")
-        allowed.extend((entry.record_offset + 10, entry.record_offset + 18) for entry in records)
+        allowed.extend(
+            (entry.record_offset + 10, entry.record_offset + 18) for entry in records
+        )
     _assert_unchanged_outside(retail_iso, output_iso, allowed)
 
     for item in index["chapters"]:
@@ -265,14 +279,22 @@ def validate_build(
         rebuilt = output_archive.read_bytes()
         original_entries = parse_archive(original, source=str(retail_archive))
         rebuilt_entries = parse_archive(rebuilt, source=str(output_archive))
-        if [entry.name for entry in original_entries] != [entry.name for entry in rebuilt_entries]:
+        if [entry.name for entry in original_entries] != [
+            entry.name for entry in rebuilt_entries
+        ]:
             raise ValueError(f"{chapter}: archive member order/names changed")
         mes_name = f"{chapter}.MES"
-        if read_member(output_archive, mes_name) != (build_root / "mes" / mes_name).read_bytes():
+        if (
+            read_member(output_archive, mes_name)
+            != (build_root / "mes" / mes_name).read_bytes()
+        ):
             raise ValueError(f"{chapter}: compressed MES round-trip differs")
-        if read_member(output_archive, f"{chapter}.SCN") != (
-            build_root / "retail_unpacked" / chapter / f"{chapter}.SCN"
-        ).read_bytes():
+        if (
+            read_member(output_archive, f"{chapter}.SCN")
+            != (
+                build_root / "retail_unpacked" / chapter / f"{chapter}.SCN"
+            ).read_bytes()
+        ):
             raise ValueError(f"{chapter}: SCN payload changed")
         for old_entry, new_entry in zip(original_entries, rebuilt_entries, strict=True):
             if old_entry.name == mes_name:
@@ -293,7 +315,10 @@ def validate_build(
     main_bin = build_root / "MAIN.BIN"
     if sha256(build_root / "retail_files" / "MAIN.BIN") != RETAIL_SHA256:
         raise ValueError("retail MAIN.BIN hash changed")
-    if sha256(main_bin) != PATCHED_SHA256 or extract_file(output_iso, "MAIN.BIN") != main_bin.read_bytes():
+    if (
+        sha256(main_bin) != PATCHED_SHA256
+        or extract_file(output_iso, "MAIN.BIN") != main_bin.read_bytes()
+    ):
         raise ValueError("guarded MAIN.BIN patch did not install exactly")
     if extract_file(output_iso, "FIX_CODE.FNT") != output_font.read_bytes():
         raise ValueError("rebuilt fixed font did not install exactly")
@@ -306,7 +331,10 @@ def validate_build(
         raise ValueError("raw Track 1 sector geometry changed")
     if track2.stat().st_size != TRACK2_SIZE or sha256(track2) != TRACK2_SHA256:
         raise ValueError("output Track 2 is not the exact retail audio track")
-    if sha256(retail_track2) != TRACK2_SHA256 or retail_track2.stat().st_size != TRACK2_SIZE:
+    if (
+        sha256(retail_track2) != TRACK2_SHA256
+        or retail_track2.stat().st_size != TRACK2_SIZE
+    ):
         raise ValueError("input Track 2 is not the expected retail audio track")
     expected_cue = (
         f'FILE "{track1.name}" BINARY\r\n'
@@ -326,7 +354,8 @@ def validate_build(
         "total_records": total_records,
         "max_dynamic_glyphs": max_dynamic,
         "part3c_size": (build_root / "mes" / "PART3C.MES").stat().st_size,
-        "part3c_headroom": PART3C_LIMIT - (build_root / "mes" / "PART3C.MES").stat().st_size,
+        "part3c_headroom": PART3C_LIMIT
+        - (build_root / "mes" / "PART3C.MES").stat().st_size,
         "fixed_font_codes_changed": len(changed_codes),
         "iso_size": output_iso.stat().st_size,
         "iso_sha256": sha256(output_iso),

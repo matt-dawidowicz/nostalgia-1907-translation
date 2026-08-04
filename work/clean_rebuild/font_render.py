@@ -64,14 +64,9 @@ def _bytes_matrix(data: bytes) -> list[list[int]]:
     """Unpack one native glyph into a 12x12 matrix."""
     if len(data) != GLYPH_BYTES:
         raise FontError(f"glyph is {len(data)} bytes, expected {GLYPH_BYTES}")
-    bits = [
-        (byte >> shift) & 1
-        for byte in data
-        for shift in range(7, -1, -1)
-    ]
+    bits = [(byte >> shift) & 1 for byte in data for shift in range(7, -1, -1)]
     return [
-        bits[row * GLYPH_WIDTH : (row + 1) * GLYPH_WIDTH]
-        for row in range(GLYPH_HEIGHT)
+        bits[row * GLYPH_WIDTH : (row + 1) * GLYPH_WIDTH] for row in range(GLYPH_HEIGHT)
     ]
 
 
@@ -172,8 +167,7 @@ def render_compact_cluster(unit: str) -> bytes:
     x_base = 0
     for index, (pattern, width) in enumerate(zip(patterns, widths)):
         copied = [
-            _resample_row(row, width) if len(row) != width else row
-            for row in pattern
+            _resample_row(row, width) if len(row) != width else row for row in pattern
         ]
         for row_index, row in enumerate(copied):
             y = 2 + row_index
@@ -210,6 +204,8 @@ def validate_text(text: str) -> None:
     Newlines are layout separators and are ignored. Every other character must
     have an exact source pattern; no lossy Unicode fallback is permitted.
     """
-    unsupported = sorted({char for char in text if char not in CHARSET and char != "\n"})
+    unsupported = sorted(
+        {char for char in text if char not in CHARSET and char != "\n"}
+    )
     if unsupported:
         raise FontError(f"unsupported source characters: {unsupported}")

@@ -86,6 +86,11 @@
         "reason": "Speaker label uses the lower renderer's continuation stride."
       }
     },
+    "text_box_overrides": {
+      "0": "scene_label",
+      "1": "scene_label",
+      "3": "scene_label"
+    },
     "required_text_exact": {
       "0": "Second-Class Cabin",
       "1": "Kasuke",

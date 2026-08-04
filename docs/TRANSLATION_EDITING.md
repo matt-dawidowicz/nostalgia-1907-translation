@@ -73,6 +73,7 @@ A chapter source has four conceptual sections:
 | `policy: "translate"` | Record is generated from canonical English | Edit only through the reviewed workflow |
 | `policy: "preserve"` | Retail record bytes are semantically non-prose or intentionally retained | Keep `text` null; do not translate casually |
 | `text` | Canonical English | Adaptive records store normalized semantic text |
+| `display_text` | Optional renderer-only compact label | Keep `text` as the full semantic translation; use only when runtime evidence proves a constrained label cannot display it |
 | `layout_policy: "adaptive"` | SCN proves a shared renderer contract | Do not add manual line breaks or padding |
 | `layout_policy: "fixed"` | No safe reflow geometry is proven | Exact spaces/lines are part of the reviewed layout |
 

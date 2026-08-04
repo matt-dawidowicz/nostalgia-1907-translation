@@ -33,7 +33,16 @@ def main() -> None:
         "patterns": module.BITMAP_GLYPHS,
     }
     OUTPUT.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"status": "PASS", "output": str(OUTPUT), "glyphs": len(module.BITMAP_GLYPHS)}, indent=2))
+    print(
+        json.dumps(
+            {
+                "status": "PASS",
+                "output": str(OUTPUT),
+                "glyphs": len(module.BITMAP_GLYPHS),
+            },
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":

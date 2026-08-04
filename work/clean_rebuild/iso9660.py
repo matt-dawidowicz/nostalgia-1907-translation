@@ -290,15 +290,17 @@ def patch_fixed_extent_files(
             padding = output.read(entry.allocated_size - len(payload))
         if installed_payload != payload or any(padding):
             raise IsoError(f"{target}: installed payload or zero padding differs")
-        report.append({
-            "target": target,
-            "extent": entry.extent,
-            "retail_size": entry.size,
-            "output_size": len(payload),
-            "allocated_size": entry.allocated_size,
-            "headroom": entry.allocated_size - len(payload),
-            "directory_records_updated": len(records),
-        })
+        report.append(
+            {
+                "target": target,
+                "extent": entry.extent,
+                "retail_size": entry.size,
+                "output_size": len(payload),
+                "allocated_size": entry.allocated_size,
+                "headroom": entry.allocated_size - len(payload),
+                "directory_records_updated": len(records),
+            }
+        )
     return report
 
 

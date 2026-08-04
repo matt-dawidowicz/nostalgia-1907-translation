@@ -63,9 +63,6 @@ OUTPUT_HEADER_FIELDS = {
     0x44: 0x7800,
 }
 
-EXPECTED_V7_TRACK1_SHA256 = (
-    "E8B30EA76E02656B5349898AF35FB3CF597C9E766FB8AEDDEAED617DFFD7EDC7"
-)
 EXPECTED_TRACK2_SHA256 = (
     "F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991"
 )
@@ -141,11 +138,7 @@ def _read_boot(raw_path: Path) -> bytes:
                 raise RegionVariantError(
                     f"{raw_path}: sector {sector_index} has invalid EDC/ECC"
                 )
-            boot.extend(
-                sector[
-                    USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE
-                ]
-            )
+            boot.extend(sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE])
     if len(boot) != BOOT_SIZE:
         raise RegionVariantError(f"{raw_path}: incomplete 32 KiB boot area")
     return bytes(boot)
@@ -191,10 +184,10 @@ def _wrapper(input_boot: bytes) -> bytes:
 
 
 def build_wrapped_boot(input_boot: bytes, us_security: bytes) -> bytes:
-    """Build the canonical U.S.-security wrapper around the intact v7 boot.
+    """Build the canonical U.S.-security wrapper around one clean-build boot.
 
     Args:
-        input_boot: First 32 KiB of logical user data from validated v7.
+        input_boot: First 32 KiB of logical user data from a verified clean build.
         us_security: Licensed security program derived from the guarded BIOS.
 
     Returns:
@@ -228,13 +221,9 @@ def build_wrapped_boot(input_boot: bytes, us_security: bytes) -> bytes:
             "validated relocation capacity is no longer zero-filled"
         )
 
-    last_nonzero = max(
-        index for index, value in enumerate(input_boot) if value != 0
-    )
+    last_nonzero = max(index for index, value in enumerate(input_boot) if value != 0)
     if last_nonzero != ORIGINAL_USED_END - 1:
-        raise RegionVariantError(
-            f"unexpected last used boot byte: 0x{last_nonzero:X}"
-        )
+        raise RegionVariantError(f"unexpected last used boot byte: 0x{last_nonzero:X}")
 
     output = bytearray(input_boot)
     for offset, value in OUTPUT_HEADER_FIELDS.items():
@@ -244,9 +233,7 @@ def build_wrapped_boot(input_boot: bytes, us_security: bytes) -> bytes:
     if len(CONVERSION_TAG) != TAG_END - TAG_START:
         raise RegionVariantError("conversion tag has the wrong size")
     output[TAG_START:TAG_END] = CONVERSION_TAG
-    output[TAG_END:RELOCATION_START] = b"\0" * (
-        RELOCATION_START - TAG_END
-    )
+    output[TAG_END:RELOCATION_START] = b"\0" * (RELOCATION_START - TAG_END)
     output[RELOCATION_START:RELOCATION_END] = input_boot[:ORIGINAL_USED_END]
 
     if output[0x1F0:0x200] != input_boot[0x1F0:0x200]:
@@ -279,15 +266,13 @@ def _write_region_track(
                 start = sector_index * ISO_SECTOR_SIZE
                 replacement = output_boot[start : start + ISO_SECTOR_SIZE]
                 current = bytes(
-                    sector[
-                        USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE
-                    ]
+                    sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE]
                 )
                 if replacement != current:
                     changed.append(sector_index)
-                    sector[
-                        USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE
-                    ] = replacement
+                    sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE] = (
+                        replacement
+                    )
                     regenerate_checksums(sector)
             output.write(sector)
     if changed != [0, 1, 2, 3, 4]:
@@ -306,11 +291,7 @@ def iso_user_sha256(raw_path: Path) -> str:
                 raise RegionVariantError(
                     f"{raw_path}: sector {sector_index} has invalid EDC/ECC"
                 )
-            digest.update(
-                sector[
-                    USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE
-                ]
-            )
+            digest.update(sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE])
             sector_index += 1
     return digest.hexdigest().upper()
 
@@ -342,9 +323,7 @@ def _validate_track_delta(
                 )
             raw_digest.update(right)
             logical_digest.update(
-                right[
-                    USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE
-                ]
+                right[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE]
             )
             if left != right:
                 changed_sectors.append(sector_index)
@@ -360,9 +339,7 @@ def _validate_track_delta(
         if output.read(1):
             raise RegionVariantError("region variant has trailing raw data")
     if changed_sectors != [0, 1, 2, 3, 4]:
-        raise RegionVariantError(
-            f"unexpected changed sector set: {changed_sectors}"
-        )
+        raise RegionVariantError(f"unexpected changed sector set: {changed_sectors}")
 
     input_boot = _read_boot(input_track)
     output_boot = _read_boot(output_track)
@@ -372,9 +349,7 @@ def _validate_track_delta(
         raise RegionVariantError("relocated original boot bytes differ")
     if output_boot[RELOCATION_END:] != input_boot[RELOCATION_END:]:
         raise RegionVariantError("post-wrapper boot bytes differ")
-    if output_boot[TAG_END:RELOCATION_START] != b"\0" * (
-        RELOCATION_START - TAG_END
-    ):
+    if output_boot[TAG_END:RELOCATION_START] != b"\0" * (RELOCATION_START - TAG_END):
         raise RegionVariantError("post-tag padding is not canonical zero")
     if _bytes_sha256(output_boot[SECURITY_START:SECURITY_END]) != (
         EXPECTED_US_SECURITY_SHA256
@@ -440,9 +415,7 @@ def _build_once(
     shutil.copyfile(baseline_track2, output_track2)
     write_two_track_cue(output_cue, output_track1, output_track2)
 
-    track1_report = _validate_track_delta(
-        baseline_track1, output_track1, output_boot
-    )
+    track1_report = _validate_track_delta(baseline_track1, output_track1, output_boot)
     if sha256(output_track2) != EXPECTED_TRACK2_SHA256:
         raise RegionVariantError("output Track 2 differs from retail")
     expected_cue = (
@@ -493,12 +466,8 @@ def publish_existing(
     """
     run_a = runs_root / "run_a" / "product"
     run_b = runs_root / "run_b" / "product"
-    first = json.loads(
-        (run_a / "verification.json").read_text(encoding="utf-8")
-    )
-    second = json.loads(
-        (run_b / "verification.json").read_text(encoding="utf-8")
-    )
+    first = json.loads((run_a / "verification.json").read_text(encoding="utf-8"))
+    second = json.loads((run_b / "verification.json").read_text(encoding="utf-8"))
     if first.get("status") != "PASS" or second.get("status") != "PASS":
         raise RegionVariantError("a staged region build did not pass")
     report_hashes = {
@@ -525,8 +494,7 @@ def publish_existing(
             actual = sha256(staged)
             if actual != left:
                 raise RegionVariantError(
-                    f"staged artifact hash changed for {staged}: "
-                    f"{actual} != {left}"
+                    f"staged artifact hash changed for {staged}: " f"{actual} != {left}"
                 )
         compared[name] = left
 
@@ -594,7 +562,7 @@ def build_twice(
     runs_root: Path,
     delivery_root: Path,
     basename: str,
-    expected_track1_sha256: str = EXPECTED_V7_TRACK1_SHA256,
+    expected_track1_sha256: str,
 ) -> dict[str, object]:
     """Build twice, compare binary artifacts, and publish one delivery set.
 
@@ -610,21 +578,33 @@ def build_twice(
     if len(expected_track1_sha256) != 64 or any(
         character not in "0123456789ABCDEF" for character in expected_track1_sha256
     ):
-        raise RegionVariantError("expected Track 1 SHA-256 is not a 64-digit hexadecimal value")
+        raise RegionVariantError(
+            "expected Track 1 SHA-256 is not a 64-digit hexadecimal value"
+        )
     if sha256(baseline_track1) != expected_track1_sha256:
-        raise RegionVariantError("Track 1 does not match the selected validated baseline")
+        raise RegionVariantError(
+            "Track 1 does not match the selected validated baseline"
+        )
     if sha256(baseline_track2) != EXPECTED_TRACK2_SHA256:
         raise RegionVariantError("Track 2 is not the exact retail audio track")
 
     run_a = runs_root / "run_a" / "product"
     run_b = runs_root / "run_b" / "product"
     _build_once(
-        baseline_track1, baseline_track2, us_bios, run_a, basename,
-        expected_track1_sha256
+        baseline_track1,
+        baseline_track2,
+        us_bios,
+        run_a,
+        basename,
+        expected_track1_sha256,
     )
     _build_once(
-        baseline_track1, baseline_track2, us_bios, run_b, basename,
-        expected_track1_sha256
+        baseline_track1,
+        baseline_track2,
+        us_bios,
+        run_b,
+        basename,
+        expected_track1_sha256,
     )
     return publish_existing(runs_root, delivery_root, basename)
 
@@ -637,19 +617,17 @@ def main() -> None:
     parser.add_argument("us_bios", type=Path)
     parser.add_argument(
         "--expected-track1-sha256",
-        default=EXPECTED_V7_TRACK1_SHA256,
+        required=True,
         help="hash from the selected clean-build verification contract",
     )
     parser.add_argument("--runs-root", type=Path, default=HERE / "runs")
     parser.add_argument(
         "--delivery-root",
         type=Path,
-        default=WORKSPACE
-        / "outputs"
-        / "Nostalgia1907_CleanRebuild_v7_US_BIOS_Test",
+        default=WORKSPACE / "outputs" / "Nostalgia1907_CleanRebuild_NorthAmerica",
     )
     parser.add_argument(
-        "--basename", default="Nostalgia1907_CleanRebuild_v7_US_BIOS_Test"
+        "--basename", default="Nostalgia1907_CleanRebuild_NorthAmerica"
     )
     parser.add_argument(
         "--publish-existing",
@@ -658,9 +636,7 @@ def main() -> None:
     )
     args = parser.parse_args()
     if args.publish_existing:
-        result = publish_existing(
-            args.runs_root, args.delivery_root, args.basename
-        )
+        result = publish_existing(args.runs_root, args.delivery_root, args.basename)
     else:
         result = build_twice(
             args.baseline_track1,

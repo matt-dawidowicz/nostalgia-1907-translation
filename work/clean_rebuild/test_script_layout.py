@@ -21,6 +21,7 @@ from scn_layout import (
     ROLE_OVERLAY,
     ROLE_PERSPECTIVE,
     ROLE_THOUGHT,
+    TEXT_BOX_LOWER_DIALOGUE,
     infer_contracts,
 )
 from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
@@ -29,6 +30,7 @@ from translation_formatter import (
     audit_layouts,
     format_preview,
 )
+from whole_game_test import build_plan, verify_runtime_log
 
 
 HERE = Path(__file__).resolve().parent
@@ -56,7 +58,9 @@ def require_retail_layout_fixtures(
     retail_root: Path = DEFAULT_RETAIL_ROOT,
 ) -> None:
     """Skip layout integration tests when prepared retail fixtures are absent."""
-    missing = [path for path in required_retail_layout_files(retail_root) if not path.is_file()]
+    missing = [
+        path for path in required_retail_layout_files(retail_root) if not path.is_file()
+    ]
     if not missing:
         return
     examples = ", ".join(str(path) for path in missing[:3])
@@ -78,9 +82,7 @@ def contracts(chapter: str) -> dict[int, object]:
     """Infer renderer contracts from hash-locked SCN and MES evidence."""
     canonical = source(chapter)
     retail = DEFAULT_RETAIL_ROOT / "retail_unpacked" / chapter
-    scn = (
-        retail / f"{chapter}.SCN"
-    ).read_bytes()
+    scn = (retail / f"{chapter}.SCN").read_bytes()
     translated = {
         record["index"]
         for record in canonical["records"]
@@ -145,7 +147,9 @@ def expected_prose_bitmaps(
     )
     cells: list[bytes] = []
     anchor_offsets: list[int] = []
-    for row_index, (prefix, line) in enumerate(mes_compiler._prose_rows(working, layout)):
+    for row_index, (prefix, line) in enumerate(
+        mes_compiler._prose_rows(working, layout)
+    ):
         if prefix:
             anchor_offsets.append(len(cells))
         cells.extend(
@@ -200,19 +204,23 @@ class ScriptLayoutTests(unittest.TestCase):
         rows = format_preview(canonical["records"][6]["text"], inferred[6])
         self.assertEqual(rows, ["How about Indian", "poker? Know the rules?"])
 
-    def test_lower_dialogue_combines_initial_anchor_with_page_cycle(self) -> None:
-        """Combine the one-time gutter with the native three-row page cycle."""
+    def test_lower_dialogue_keeps_continuation_width_after_page_cycle(self) -> None:
+        """Keep lower-dialogue page clears separate from X-coordinate geometry."""
         canonical = source("PART1A")
         contract = contracts("PART1A")[10]
         self.assertEqual(contract.layout.page_rows, 3)
+        self.assertFalse(contract.layout.repeat_first_row_on_page)
         self.assertEqual(contract.layout.opening_anchor_cells, 1)
+        self.assertEqual(contract.layout.text_box, TEXT_BOX_LOWER_DIALOGUE)
+        self.assertEqual(contract.layout.visible_cadence(), (11, 11, 11))
+        self.assertEqual(contract.layout.physical_cadence(), (12, 11, 11))
         self.assertEqual(
             [contract.layout.visible_cells(index) for index in range(7)],
-            [11, 11, 11, 12, 11, 11, 12],
+            [11, 11, 11, 11, 11, 11, 11],
         )
         self.assertEqual(
             [contract.layout.physical_cells(index) for index in range(7)],
-            [12, 11, 11, 12, 11, 11, 12],
+            [12, 11, 11, 11, 11, 11, 11],
         )
         row_specs = mes_compiler._prose_rows(
             canonical["records"][10]["text"], contract.layout
@@ -227,7 +235,7 @@ class ScriptLayoutTests(unittest.TestCase):
                 len(prefix) + mes_compiler._measure_literal(line)
                 for prefix, line in row_specs[:7]
             ],
-            [12, 11, 11, 12, 11, 11, 12],
+            [12, 11, 11, 11, 11, 11, 11],
         )
         self.assertEqual(
             format_preview(canonical["records"][10]["text"], contract),
@@ -235,16 +243,18 @@ class ScriptLayoutTests(unittest.TestCase):
                 "First, we each draw",
                 "one card. Then you",
                 "show me your card, and",
-                "I show you mine. Neither",
-                "of us can look at our",
-                "own card. We bet by",
-                "judging the strength of",
-                "the other person's",
-                "card.",
+                "I show you mine.",
+                "Neither of us can look",
+                "at our own card. We",
+                "bet by judging the",
+                "strength of the other",
+                "person's card.",
             ],
         )
 
-    def test_opening_anchor_follows_retail_byte_evidence_and_profile_geometry(self) -> None:
+    def test_opening_anchor_follows_retail_byte_evidence_and_profile_geometry(
+        self,
+    ) -> None:
         """Anchor only quote-bearing dialogue without flattening its profile."""
         cases = (
             ("PART1D", 84, 0x01, (11, 11, 11, 11, 0)),
@@ -335,7 +345,10 @@ class ScriptLayoutTests(unittest.TestCase):
                 self.assertEqual(len(row_specs), len(rows))
                 self.assertTrue(all(not prefix for prefix, _line in row_specs))
                 self.assertEqual(
-                    [mes_compiler._measure_literal(line) for _prefix, line in row_specs],
+                    [
+                        mes_compiler._measure_literal(line)
+                        for _prefix, line in row_specs
+                    ],
                     [contract.layout.runtime_cells(row) for row in range(len(rows))],
                 )
 
@@ -397,6 +410,7 @@ class ScriptLayoutTests(unittest.TestCase):
                 contract = chapter_contracts.get(record_index)
                 if (
                     record["policy"] != "translate"
+                    or record.get("layout_policy") == "anchor"
                     or contract is None
                     or contract.layout is None
                     or ROLE_DIALOGUE not in contract.roles
@@ -445,7 +459,9 @@ class ScriptLayoutTests(unittest.TestCase):
         for index, rows in expected.items():
             with self.subTest(index=index):
                 self.assertEqual(
-                    format_preview(canonical["records"][index]["text"], inferred[index]),
+                    format_preview(
+                        canonical["records"][index]["text"], inferred[index]
+                    ),
                     rows,
                 )
 
@@ -478,12 +494,30 @@ class ScriptLayoutTests(unittest.TestCase):
         report = audit_layouts()
         self.assertEqual(report["status"], "PASS")
         self.assertEqual(report["adaptive_record_count"], 2759)
-        self.assertEqual(report["classified_record_count"], 2759)
+        self.assertEqual(report["classified_record_count"], 2760)
         self.assertEqual(report["fixed_record_count"], 123)
+        self.assertEqual(report["anchor_record_count"], 1)
         self.assertEqual(report["undeclared_record_count"], 0)
         self.assertEqual(report["unmigrated_classified_count"], 0)
         self.assertEqual(report["failure_count"], 0)
         self.assertEqual(report["legacy_issue_count"], 0)
+
+    def test_whole_game_certification_plan_covers_static_and_runtime_scope(
+        self,
+    ) -> None:
+        """Inventory every chapter while keeping runtime proof explicitly pending."""
+        plan = build_plan()
+        static = plan["static"]
+        self.assertEqual(static["layout"]["status"], "PASS")
+        self.assertEqual(static["emitted_renderer"]["status"], "pass")
+        self.assertEqual(static["emitted_renderer"]["chapters"], 19)
+        self.assertEqual(static["emitted_renderer"]["records"], 2905)
+        self.assertEqual(static["emitted_renderer"]["renderer_contract_records"], 2490)
+        self.assertEqual(len(plan["runtime"]["chapters"]), 19)
+        self.assertEqual(len(plan["runtime"]["fixed_layout_record_ids"]), 123)
+        runtime = verify_runtime_log(plan)
+        self.assertEqual(runtime["status"], "PENDING_RUNTIME")
+        self.assertGreater(runtime["pending_count"], 19)
 
     def test_every_chapter_compiles_from_hash_locked_inputs(self) -> None:
         """Compile all chapters while preserving record and glyph limits."""
@@ -524,7 +558,7 @@ class ScriptLayoutTests(unittest.TestCase):
         # leave a meaningful safety margin rather than merely crossing the
         # hard boundary by a few bytes.
         self.assertLess(len(after.data), len(before.data))
-        self.assertLessEqual(len(after.data), 0x3DFF)
+        self.assertLessEqual(len(after.data), hard_limit - 0x100)
 
         retail_font = (retail_root / "retail_files" / "FIX_CODE.FNT").read_bytes()
         before_font = patched_font(retail_font, before.fixed_font_patches)
@@ -533,6 +567,110 @@ class ScriptLayoutTests(unittest.TestCase):
             bitmap_records(before.data, before_font),
             bitmap_records(after.data, after_font),
         )
+
+    def test_fixed_english_dictionary_excludes_native_row_edge_codes(self) -> None:
+        """Never emit a generated fixed byte with special row-edge semantics."""
+        dictionary_codes = {
+            code for code, _style, _unit in mes_compiler.FIXED_ENGLISH_UNITS
+        }
+        self.assertFalse(
+            dictionary_codes & mes_compiler.NATIVE_DIALOGUE_ROW_EDGE_RESERVED_CODES
+        )
+
+        chapter = "PART1A"
+        retail = DEFAULT_RETAIL_ROOT / "retail_unpacked" / chapter
+        result = mes_compiler.compile_mes(
+            (retail / f"{chapter}.MES").read_bytes(),
+            (retail / f"{chapter}.SCN").read_bytes(),
+            source(chapter),
+        )
+        record = parse_mes(result.data).records[10]
+        cells: list[bytes] = []
+        offset = 0
+        while record[offset]:
+            size = 2 if record[offset] >= DYNAMIC_PREFIX_START else 1
+            cells.append(record[offset : offset + size])
+            offset += size
+        # The first faulty boundary was the "on" cell after twelve decoded
+        # cells. It must now be dynamic so MAIN.BIN cannot take its fixed-byte
+        # lookahead path at that edge.
+        self.assertGreaterEqual(cells[12][0], DYNAMIC_PREFIX_START)
+
+        # The compiled-byte audit is independent from the dictionary's static
+        # allowlist. Reintroducing the old ``on`` byte must fail because this
+        # record places it exactly after a native lower-dialogue row stride.
+        dictionary = mes_compiler.FIXED_ENGLISH_UNITS
+        try:
+            mes_compiler.FIXED_ENGLISH_UNITS = dictionary + ((0x05, "literal", "on"),)
+            with self.assertRaisesRegex(
+                mes_compiler.CompileError,
+                r"PART1A:010 emits native row-edge code 0x05",
+            ):
+                mes_compiler.compile_mes(
+                    (retail / f"{chapter}.MES").read_bytes(),
+                    (retail / f"{chapter}.SCN").read_bytes(),
+                    source(chapter),
+                )
+        finally:
+            mes_compiler.FIXED_ENGLISH_UNITS = dictionary
+
+    def test_compact_display_labels_preserve_canonical_translation(self) -> None:
+        """Render compact nameplate text without weakening glossary authority."""
+        cases = (
+            ("PART2D", 145, "Chief Engineer", "Chief Eng.", 5),
+            ("PART2E", 47, "Chief Engineer", "Chief Eng.", 5),
+            ("PART2E", 26, "Royal Suite B", "Royal Suite B", 7),
+        )
+        for chapter, record_index, canonical_text, display_text, cell_count in cases:
+            with self.subTest(chapter=chapter, record=record_index):
+                retail = DEFAULT_RETAIL_ROOT / "retail_unpacked" / chapter
+                canonical = source(chapter)
+                record = canonical["records"][record_index]
+                self.assertEqual(record["text"], canonical_text)
+                self.assertEqual(record["display_text"], display_text)
+                result = mes_compiler.compile_mes(
+                    (retail / f"{chapter}.MES").read_bytes(),
+                    (retail / f"{chapter}.SCN").read_bytes(),
+                    canonical,
+                )
+                font = patched_font(
+                    (DEFAULT_RETAIL_ROOT / "retail_files" / "FIX_CODE.FNT").read_bytes(),
+                    result.fixed_font_patches,
+                )
+                rendered = bitmap_records(result.data, font)[record_index]
+                expected = tuple(
+                    stored_cell(*cell)
+                    for cell in mes_compiler._row_plan(
+                        record_index,
+                        display_text,
+                        (),
+                    ).cells()
+                )
+                self.assertEqual(rendered, expected)
+                self.assertEqual(len(rendered), cell_count)
+
+    def test_standalone_quote_fragment_compiles_to_one_blank_cell(self) -> None:
+        """Replace the visible Japanese quote marker without changing record order."""
+        chapter = "PART2E"
+        record_index = 28
+        retail = DEFAULT_RETAIL_ROOT / "retail_unpacked" / chapter
+        canonical = source(chapter)
+        record = canonical["records"][record_index]
+        self.assertEqual(record["policy"], "translate")
+        self.assertEqual(record["text"], "")
+        self.assertEqual(record["display_text"], "  ")
+        self.assertEqual(record["layout_policy"], "anchor")
+        result = mes_compiler.compile_mes(
+            (retail / f"{chapter}.MES").read_bytes(),
+            (retail / f"{chapter}.SCN").read_bytes(),
+            canonical,
+        )
+        font = patched_font(
+            (DEFAULT_RETAIL_ROOT / "retail_files" / "FIX_CODE.FNT").read_bytes(),
+            result.fixed_font_patches,
+        )
+        rendered = bitmap_records(result.data, font)[record_index]
+        self.assertEqual(rendered, (stored_cell("literal", "  "),))
 
 
 if __name__ == "__main__":

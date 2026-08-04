@@ -28,10 +28,12 @@ EXPECTED_CHANGED_IDS = {
 
 
 def load(path: Path) -> dict:
+    """Load one historical semantic-pass JSON payload."""
     return json.loads(path.read_text(encoding="utf-8"))
 
 
 def file_sha256(path: Path) -> str:
+    """Return an uppercase SHA-256 digest for one evidence file."""
     digest = hashlib.sha256()
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
@@ -40,16 +42,20 @@ def file_sha256(path: Path) -> str:
 
 
 def relative(path: Path) -> str:
+    """Render an evidence path relative to the project root."""
     return path.relative_to(ROOT).as_posix()
 
 
 def main() -> None:
+    """Generate the focused second-pass semantic QA report."""
     before = load(AUDIT / "translation_semantic_pass2_before.json")
     after = load(AUDIT / "translation_conflicts.json")
     verification = load(DELIVERY / "final_verification.json")
     before_records = before["records"]
     after_records = after["records"]
-    if [item["id"] for item in before_records] != [item["id"] for item in after_records]:
+    if [item["id"] for item in before_records] != [
+        item["id"] for item in after_records
+    ]:
         raise ValueError("record IDs or ordering changed during semantic pass 2")
 
     changed = []

@@ -8,12 +8,11 @@ translated BIN as an input. That distinction is the central architectural
 rule: retail data supplies structure and preserved bytes; tracked JSON supplies
 reviewed English; code derives every output.
 
-`Nostalgia1907_CleanRebuild_v7` is the validated architectural baseline. It
-is not a source dependency for a new clean rebuild.
-`Nostalgia1907_CleanRebuild_v26_NorthAmerica` is the retained playtest
-candidate. The experimental v27 revision was rejected after manual testing and
-is not a supported source or artifact baseline. The canonical source can move
-ahead of v26 without becoming a replacement architectural baseline.
+The current build line is
+`Nostalgia1907_CleanRebuild_v33_EdgeCases_NorthAmerica`. It is a product of the
+current canonical sources, not an input to a later build. Every future build
+starts from verified Japanese retail tracks and tracked source; it must never
+restore an earlier translated image.
 
 Three classes of data are intentionally separated:
 
@@ -65,9 +64,9 @@ archival/diagnostic override rather than the project default.
 | `work/clean_rebuild/` | Production formats, compiler, builders, audits, and tests |
 | `work/region_variant/` | Guarded North American BIOS-region wrapper |
 | `work/audio_localization/` | Review-only audio extraction/transcription experiments |
+| `work/clean_rebuild/retired_workspace_register.json` | Portable record of retired pre-clean-rebuild workspaces and their replacements |
 | `tests/` | Source-only CLI, policy, and documentation tests |
 | `outputs/` | Ignored generated reports, comparisons, and playable products |
-| historical `work/*translation` and `work/part3c_*` folders | Investigation evidence; excluded from the production graph |
 
 ## Supported entry point
 

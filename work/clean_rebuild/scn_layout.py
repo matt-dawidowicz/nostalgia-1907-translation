@@ -51,6 +51,28 @@ ROLE_OVERLAY = "overlay_text"
 ROLE_NARRATION = "narration"
 ROLE_CHOICE = "menu_choice"
 
+# Text-box identity is as important as its measured width.  The compiler must
+# never make a floating window, selector, or continuation record inherit the
+# lower-dialogue cadence just because both happen to contain English prose.
+TEXT_BOX_UNCLASSIFIED = "unclassified"
+TEXT_BOX_LOWER_DIALOGUE = "lower_dialogue"
+TEXT_BOX_LOWER_CONTINUATION = "lower_continuation"
+TEXT_BOX_FLOATING = "floating_window"
+TEXT_BOX_FULL_SCREEN_NARRATION = "full_screen_narration"
+TEXT_BOX_LOWER_CAPTION = "lower_caption"
+TEXT_BOX_SCENE_LABEL = "scene_label"
+TEXT_BOX_IDS = frozenset(
+    (
+        TEXT_BOX_UNCLASSIFIED,
+        TEXT_BOX_LOWER_DIALOGUE,
+        TEXT_BOX_LOWER_CONTINUATION,
+        TEXT_BOX_FLOATING,
+        TEXT_BOX_FULL_SCREEN_NARRATION,
+        TEXT_BOX_LOWER_CAPTION,
+        TEXT_BOX_SCENE_LABEL,
+    )
+)
+
 # Retail lower dialogue begins with this fixed Japanese opening-quote cell in
 # almost every ordinary ``0x21`` dialogue record.  MAIN.BIN renders that first
 # cell at X=$4A, then renders every later row at X=$56.  English must retain a
@@ -74,11 +96,12 @@ class Layout:
 
     ``visible_*`` limits word wrapping. ``runtime_*`` controls padding in the
     flattened MES record and must never be smaller than its visible partner.
-    ``page_rows`` repeats the first-row geometry when the renderer advances to
-    a later page of the same MES record. A normal dialogue record may reserve
-    ``opening_anchor_cells`` once at the beginning of its stream. That anchor
-    consumes part of row zero only; later page starts retain the full native
-    first-row width.
+    ``page_rows`` describes the renderer's vertical page cadence. It does not
+    imply that an X-coordinate/width reset happens at a later page start;
+    ``repeat_first_row_on_page`` records that separately when native evidence
+    proves it. A normal dialogue record may reserve ``opening_anchor_cells``
+    once at the beginning of its stream. That anchor consumes part of row zero
+    only.
     """
 
     visible_first: int
@@ -86,7 +109,9 @@ class Layout:
     runtime_first: int
     runtime_continuation: int
     page_rows: int | None = None
+    repeat_first_row_on_page: bool = False
     opening_anchor_cells: int = 0
+    text_box: str = TEXT_BOX_UNCLASSIFIED
 
     def __post_init__(self) -> None:
         """Reject invalid cell geometry before layout inference uses it."""
@@ -106,8 +131,12 @@ class Layout:
             )
         if self.page_rows is not None and self.page_rows <= 0:
             raise ScnLayoutError("layout page_rows must be positive")
+        if not isinstance(self.repeat_first_row_on_page, bool):
+            raise ScnLayoutError("layout page-repeat flag must be boolean")
         if self.opening_anchor_cells < 0:
             raise ScnLayoutError("layout opening anchor cells must not be negative")
+        if self.text_box not in TEXT_BOX_IDS:
+            raise ScnLayoutError(f"unknown layout text-box identity {self.text_box!r}")
         if (
             self.opening_anchor_cells >= self.visible_first
             or self.opening_anchor_cells >= self.runtime_first
@@ -120,7 +149,9 @@ class Layout:
         """Return whether ``row_index`` uses the renderer's first-row geometry."""
         if row_index < 0:
             raise ScnLayoutError("layout row index must not be negative")
-        return row_index == 0 or self.is_page_start(row_index)
+        return row_index == 0 or (
+            self.repeat_first_row_on_page and self.is_page_start(row_index)
+        )
 
     def is_page_start(self, row_index: int) -> bool:
         """Return whether ``row_index`` begins a later renderer page."""
@@ -141,6 +172,18 @@ class Layout:
     def physical_cells(self, row_index: int) -> int:
         """Return all emitted cells, including a one-time opening gutter."""
         return self.runtime_cells(row_index) + self.anchor_cells(row_index)
+
+    def cadence_rows(self) -> int:
+        """Return the number of row shapes in one renderer page cycle."""
+        return self.page_rows or 1
+
+    def physical_cadence(self) -> tuple[int, ...]:
+        """Return the emitted-cell cadence for one complete renderer cycle."""
+        return tuple(self.physical_cells(row) for row in range(self.cadence_rows()))
+
+    def visible_cadence(self) -> tuple[int, ...]:
+        """Return prose capacities for one complete renderer cycle."""
+        return tuple(self.visible_cells(row) for row in range(self.cadence_rows()))
 
     def visible_cells(self, row_index: int) -> int:
         """Return the proven visible capacity for one flattened row index."""
@@ -166,19 +209,23 @@ class Layout:
         The caller establishes from retail MES bytes that the original record
         begins with the opening-quote anchor. Its row-zero body therefore loses
         the same number of visible/runtime cells while its physical row length
-        and every later page-start width remain unchanged.
+        and every later row retains its independently declared geometry.
         """
         if cells <= 0:
             raise ScnLayoutError("layout opening anchor cells must be positive")
         if self.visible_first <= cells or self.runtime_first <= cells:
-            raise ScnLayoutError("layout opening anchor leaves no first-row prose cells")
+            raise ScnLayoutError(
+                "layout opening anchor leaves no first-row prose cells"
+            )
         return Layout(
             self.visible_first,
             self.visible_continuation,
             self.runtime_first,
             self.runtime_continuation,
             page_rows=self.page_rows,
+            repeat_first_row_on_page=self.repeat_first_row_on_page,
             opening_anchor_cells=cells,
+            text_box=self.text_box,
         )
 
 
@@ -196,7 +243,9 @@ class RecordContract:
     max_rows: int | None
 
 
-def _pair(profile: dict[str, object], key: str, default: tuple[int, int]) -> tuple[int, int]:
+def _pair(
+    profile: dict[str, object], key: str, default: tuple[int, int]
+) -> tuple[int, int]:
     """Read a positive first/continuation layout object."""
     raw = profile.get(key)
     if raw is None:
@@ -205,7 +254,12 @@ def _pair(profile: dict[str, object], key: str, default: tuple[int, int]) -> tup
         raise ScnLayoutError(f"profile {key} is not an object")
     first = raw.get("first")
     continuation = raw.get("continuation")
-    if not isinstance(first, int) or not isinstance(continuation, int) or first <= 0 or continuation <= 0:
+    if (
+        not isinstance(first, int)
+        or not isinstance(continuation, int)
+        or first <= 0
+        or continuation <= 0
+    ):
         raise ScnLayoutError(f"profile {key} must contain positive widths")
     return first, continuation
 
@@ -220,7 +274,9 @@ def _indexed_pairs(profile: dict[str, object], key: str) -> dict[int, tuple[int,
         try:
             index = int(raw_index)
         except (TypeError, ValueError) as exc:
-            raise ScnLayoutError(f"profile {key} has invalid record {raw_index!r}") from exc
+            raise ScnLayoutError(
+                f"profile {key} has invalid record {raw_index!r}"
+            ) from exc
         if index < 0 or not isinstance(raw_layout, dict):
             raise ScnLayoutError(f"profile {key} has invalid record {raw_index!r}")
         first = raw_layout.get("first")
@@ -235,6 +291,27 @@ def _indexed_pairs(profile: dict[str, object], key: str) -> dict[int, tuple[int,
                 f"profile {key} record {index} must contain positive widths"
             )
         output[index] = (first, continuation)
+    return output
+
+
+def _indexed_text_boxes(profile: dict[str, object]) -> dict[int, str]:
+    """Read reviewed identity overrides for nonstandard but known layouts."""
+    raw = profile.get("text_box_overrides", {})
+    if not isinstance(raw, dict):
+        raise ScnLayoutError("profile text_box_overrides is not an object")
+    output: dict[int, str] = {}
+    for raw_index, text_box in raw.items():
+        try:
+            index = int(raw_index)
+        except (TypeError, ValueError) as exc:
+            raise ScnLayoutError(
+                f"profile text_box_overrides has invalid record {raw_index!r}"
+            ) from exc
+        if index < 0 or text_box not in TEXT_BOX_IDS - {TEXT_BOX_UNCLASSIFIED}:
+            raise ScnLayoutError(
+                f"profile text_box_overrides has invalid text box for record {raw_index!r}"
+            )
+        output[index] = text_box
     return output
 
 
@@ -302,9 +379,7 @@ def _selector_window_commands(
         cursor = offset + 1
         display_targets: list[int] = []
         while cursor + 6 <= len(scn) and scn[cursor] == 0x43:
-            display_targets.append(
-                int.from_bytes(scn[cursor + 4 : cursor + 6], "big")
-            )
+            display_targets.append(int.from_bytes(scn[cursor + 4 : cursor + 6], "big"))
             cursor += 6
         if not display_targets or cursor >= len(scn) or scn[cursor] != 0x44:
             offset += 1
@@ -374,17 +449,20 @@ def infer_layouts(
     conflicting SCN evidence silently.
     """
     settings = profile or {}
+    # This is a native lower-dialogue contract, not a generic English width:
+    # physical cells repeat 12/11/11, with an optional quote gutter in the
+    # first 12-cell row.  Runtime screenshots of PART1A:003 confirm the
+    # 11-cell continuation boundary ("more" must not be packed as 12 cells).
     dialogue_visible = _pair(settings, "scn_dialogue_layout", (12, 11))
     continuation_visible = _pair(settings, "scn_continuation_layout", (12, 10))
-    dialogue_runtime = _pair(
-        settings, "scn_dialogue_runtime_layout", dialogue_visible
-    )
+    dialogue_runtime = _pair(settings, "scn_dialogue_runtime_layout", dialogue_visible)
     continuation_runtime = _pair(
         settings, "scn_continuation_runtime_layout", continuation_visible
     )
     window_subtypes = _window_subtypes(settings)
     visible_overrides = _indexed_pairs(settings, "layout_overrides")
     runtime_overrides = _indexed_pairs(settings, "runtime_layout_overrides")
+    text_box_overrides = _indexed_text_boxes(settings)
     layouts: dict[int, Layout] = {}
     if retail_records is not None and len(retail_records) != record_count:
         raise ScnLayoutError("retail MES record count does not match SCN layout input")
@@ -400,8 +478,13 @@ def infer_layouts(
                 f"record {index} receives conflicting layouts at {source}: "
                 f"{previous} versus {layout}"
             )
-        if layout.runtime_first < layout.visible_first or layout.runtime_continuation < layout.visible_continuation:
-            raise ScnLayoutError(f"record {index}: runtime stride is smaller than visible width")
+        if (
+            layout.runtime_first < layout.visible_first
+            or layout.runtime_continuation < layout.visible_continuation
+        ):
+            raise ScnLayoutError(
+                f"record {index}: runtime stride is smaller than visible width"
+            )
         layouts[index] = layout
 
     for offset, opcode in enumerate(scn):
@@ -412,12 +495,17 @@ def infer_layouts(
                 index = second_id - 1
                 add(
                     index,
-                    Layout(*dialogue_visible, *dialogue_runtime, page_rows=3),
+                    Layout(
+                        *dialogue_visible,
+                        *dialogue_runtime,
+                        page_rows=3,
+                        repeat_first_row_on_page=False,
+                        text_box=TEXT_BOX_LOWER_DIALOGUE,
+                    ),
                     f"0x21 dialogue at 0x{offset:X}",
                 )
-                if (
-                    retail_records is not None
-                    and retail_records[index][:1] == bytes((DIALOGUE_OPENING_ANCHOR_CODE,))
+                if retail_records is not None and retail_records[index][:1] == bytes(
+                    (DIALOGUE_OPENING_ANCHOR_CODE,)
                 ):
                     dialogue_anchor_indexes.add(index)
             elif second_id == 0 and 1 <= first_id <= record_count:
@@ -427,6 +515,8 @@ def infer_layouts(
                         *continuation_visible,
                         *continuation_runtime,
                         page_rows=3,
+                        repeat_first_row_on_page=False,
+                        text_box=TEXT_BOX_LOWER_CONTINUATION,
                     ),
                     f"0x21 continuation at 0x{offset:X}",
                 )
@@ -449,7 +539,7 @@ def infer_layouts(
         for chain_position, index in enumerate(indexes):
             add(
                 index,
-                Layout(cells, cells, cells, cells),
+                Layout(cells, cells, cells, cells, text_box=TEXT_BOX_FLOATING),
                 (
                     f"0x24 window at 0x{offset:X}"
                     if chain_position == 0
@@ -468,11 +558,17 @@ def infer_layouts(
         for index in indexes:
             add(
                 index,
-                Layout(cells, cells, cells, cells),
+                # Selector tables target the same 0x24 window renderer as
+                # ordinary floating text.  The record can also retain the
+                # menu_choice role, but its cell contract must not conflict
+                # with an identical floating-window use elsewhere in SCN.
+                Layout(cells, cells, cells, cells, text_box=TEXT_BOX_FLOATING),
                 f"0x42/0x43 selector window at 0x{offset:X}",
             )
 
-    for index in sorted(set(visible_overrides) | set(runtime_overrides)):
+    for index in sorted(
+        set(visible_overrides) | set(runtime_overrides) | set(text_box_overrides)
+    ):
         if index not in translated_indexes:
             continue
         previous = layouts.get(index)
@@ -498,8 +594,15 @@ def infer_layouts(
             *visible,
             *runtime,
             page_rows=previous.page_rows if previous is not None else None,
+            repeat_first_row_on_page=(
+                previous.repeat_first_row_on_page if previous is not None else False
+            ),
             opening_anchor_cells=(
                 previous.opening_anchor_cells if previous is not None else 0
+            ),
+            text_box=text_box_overrides.get(
+                index,
+                previous.text_box if previous is not None else TEXT_BOX_UNCLASSIFIED,
             ),
         )
         if (
@@ -549,11 +652,7 @@ def infer_roles(
                 add(second_id - 1, ROLE_DIALOGUE)
             elif second_id == 0 and 1 <= first_id <= record_count:
                 add(first_id - 1, ROLE_CONTINUATION)
-        elif (
-            opcode == 0x22
-            and offset + 6 <= len(scn)
-            and scn[offset + 3] == 0x23
-        ):
+        elif opcode == 0x22 and offset + 6 <= len(scn) and scn[offset + 3] == 0x23:
             location_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
             perspective_id = int.from_bytes(scn[offset + 4 : offset + 6], "big")
             if 1 <= location_id <= record_count and 1 <= perspective_id <= record_count:
@@ -603,29 +702,29 @@ def infer_row_limits(
     ):
         max_rows = (28 - raw_y - 2) // 2
         if max_rows <= 0:
-            raise ScnLayoutError(
-                f"floating window at 0x{offset:X} has no visible rows"
-            )
+            raise ScnLayoutError(f"floating window at 0x{offset:X} has no visible rows")
         for index in indexes:
             if index not in translated_indexes:
                 continue
             previous = limits.get(index)
             # A record may be reused by windows at different Y positions.  It
             # must satisfy the tightest of those real renderers.
-            limits[index] = min(previous, max_rows) if previous is not None else max_rows
+            limits[index] = (
+                min(previous, max_rows) if previous is not None else max_rows
+            )
     for offset, _subtype, _width_byte, raw_y, indexes in _selector_window_commands(
         scn, record_count
     ):
         max_rows = (28 - raw_y - 2) // 2
         if max_rows <= 0:
-            raise ScnLayoutError(
-                f"selector window at 0x{offset:X} has no visible rows"
-            )
+            raise ScnLayoutError(f"selector window at 0x{offset:X} has no visible rows")
         for index in indexes:
             if index not in translated_indexes:
                 continue
             previous = limits.get(index)
-            limits[index] = min(previous, max_rows) if previous is not None else max_rows
+            limits[index] = (
+                min(previous, max_rows) if previous is not None else max_rows
+            )
     raw_overrides = settings.get("row_limit_overrides", {})
     if not isinstance(raw_overrides, dict):
         raise ScnLayoutError("profile row_limit_overrides is not an object")

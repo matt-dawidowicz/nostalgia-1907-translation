@@ -18,11 +18,12 @@ The width used to choose words and the runtime row stride are separate. Before
 encoding, adaptive prose is normalized, word-wrapped, and padded to the exact
 runtime stride. Most retail main-dialogue records begin with a Japanese
 opening-quote gutter. For those records only, the compiler emits one shared
-blank cell at the start. Lower dialogue then follows its repeating 12/11/11
-physical row cadence: the gutter leaves 11 prose cells on row zero, while rows
-3, 6, and later page starts retain all 12 prose cells. No artificial cell is
-emitted at a page transition. Floating windows also have an SCN-derived maximum
-row count.
+blank cell at the start. Lower dialogue uses the named `lower_dialogue`
+contract with one initial 12-cell physical row and an 11-cell continuation
+stride thereafter. The gutter leaves 11 prose cells on row zero; a visual page
+advance clears vertically but does not restore the wider X-coordinate. No
+artificial cell is emitted at a page transition. Floating
+windows also have an SCN-derived maximum row count.
 Every translated record has one explicit policy:
 
 - `adaptive` when SCN proves the renderer geometry; the compiler owns wrapping.
@@ -46,9 +47,15 @@ renderer, and the whole-game audit fails if a classified record is not adaptive
 or a non-reflowable record is not explicitly fixed. The same audit also checks
 every SCN-derived adaptive row for its visible packed-cell limit and verifies
 that each whitespace-delimited canonical token remains whole across renderer
-row boundaries. This catches a future formatter regression that would expose
-parts of one word on adjacent lines; it cannot replace scene playtesting for a
-renderer behavior that static SCN evidence does not describe.
+row boundaries. The validation gate then compiles all 19 chapters in memory
+and decodes every emitted MES reference as the native reader does: a one-byte
+fixed reference and a two-byte `F0xx` dynamic reference are both one cursor
+cell. It checks 12/11 lower-box cadence, one-time gutters, logical-cell counts,
+and every lower-dialogue row edge against the native reserved-byte set. This
+catches a future formatter or encoder regression that would expose parts of
+one word on adjacent lines without relying on a screenshot of that line. It
+cannot replace a final representative playtest for behavior that static SCN
+and `MAIN.BIN` evidence do not describe, such as window clearing or overlays.
 
 ## Preview a wording change
 

@@ -21,7 +21,12 @@ from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES, _glyphs, _trim_blank
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
 SEMANTICS = HERE / "bomb_semantics.json"
-BEFORE_AUDIT = WORKSPACE / "outputs" / "Nostalgia1907_Translation_Audit" / "translation_conflicts_before.json"
+BEFORE_AUDIT = (
+    WORKSPACE
+    / "outputs"
+    / "Nostalgia1907_Translation_Audit"
+    / "translation_conflicts_before.json"
+)
 OUTPUT = WORKSPACE / "outputs" / "Nostalgia1907_Translation_Audit"
 GLYPH_BYTES = 18
 
@@ -65,7 +70,9 @@ def run_audit() -> dict[str, object]:
     """
     config = _load(SEMANTICS)
     fixed_data = (DEFAULT_RETAIL_ROOT / "retail_files" / "FIX_CODE.FNT").read_bytes()
-    fixed = tuple(fixed_data[i : i + GLYPH_BYTES] for i in range(0, len(fixed_data), GLYPH_BYTES))
+    fixed = tuple(
+        fixed_data[i : i + GLYPH_BYTES] for i in range(0, len(fixed_data), GLYPH_BYTES)
+    )
     index = _load(SOURCES / "index.json")
     canonical_by_id: dict[str, str] = {}
     glyphs_by_id: dict[str, tuple[bytes, ...]] = {}
@@ -73,11 +80,17 @@ def run_audit() -> dict[str, object]:
     for chapter_item in index["chapters"]:
         chapter = chapter_item["chapter"]
         canonical = _load(SOURCES / chapter_item["source"])
-        mes = read_mes(DEFAULT_RETAIL_ROOT / "retail_unpacked" / chapter / f"{chapter}.MES")
-        for number, (source_record, english_record) in enumerate(zip(mes.records, canonical["records"], strict=True)):
+        mes = read_mes(
+            DEFAULT_RETAIL_ROOT / "retail_unpacked" / chapter / f"{chapter}.MES"
+        )
+        for number, (source_record, english_record) in enumerate(
+            zip(mes.records, canonical["records"], strict=True)
+        ):
             record_id = f"{chapter}:{number:03d}"
             canonical_by_id[record_id] = _normalize(english_record.get("text"))
-            glyphs_by_id[record_id] = _trim_blank(_glyphs(source_record, fixed, mes.glyphs))
+            glyphs_by_id[record_id] = _trim_blank(
+                _glyphs(source_record, fixed, mes.glyphs)
+            )
             source_hex_by_id[record_id] = source_record.hex().upper()
 
     patterns: list[dict[str, object]] = []
@@ -90,7 +103,9 @@ def run_audit() -> dict[str, object]:
 
     old_by_id: dict[str, str] = {}
     if BEFORE_AUDIT.exists():
-        old_by_id = {item["id"]: item["english"] for item in _load(BEFORE_AUDIT)["records"]}
+        old_by_id = {
+            item["id"]: item["english"] for item in _load(BEFORE_AUDIT)["records"]
+        }
 
     failures: list[str] = []
     table: list[dict[str, object]] = []
@@ -116,21 +131,57 @@ def run_audit() -> dict[str, object]:
             for term in matched:
                 semantic = term["semantic"]
                 if record_id not in expectations:
-                    if semantic in {"upper", "lower", "left", "right", "red", "blue"} and not action_signal:
+                    if (
+                        semantic in {"upper", "lower", "left", "right", "red", "blue"}
+                        and not action_signal
+                    ):
                         continue
-                    if semantic == "white" and not {"red", "blue"}.issubset(matched_names):
+                    if semantic == "white" and not {"red", "blue"}.issubset(
+                        matched_names
+                    ):
                         continue
-                    if semantic in {"cut", "open", "wire", "bypass"} and len(matched_names & {"wire", "cut", "open", "bypass", "upper", "lower", "left", "right", "red", "blue", "white"}) < 2:
+                    if (
+                        semantic in {"cut", "open", "wire", "bypass"}
+                        and len(
+                            matched_names
+                            & {
+                                "wire",
+                                "cut",
+                                "open",
+                                "bypass",
+                                "upper",
+                                "lower",
+                                "left",
+                                "right",
+                                "red",
+                                "blue",
+                                "white",
+                            }
+                        )
+                        < 2
+                    ):
                         continue
                 required = term.get("required_english")
                 forbidden = term.get("forbidden_english")
-                required_missing = isinstance(required, str) and not re.search(required, english, re.IGNORECASE)
+                required_missing = isinstance(required, str) and not re.search(
+                    required, english, re.IGNORECASE
+                )
                 if required_missing:
-                    failures.append(f"{record_id}: Japanese {term['semantic']} missing in English {english!r}")
-                if required_missing and isinstance(forbidden, str) and re.search(forbidden, english, re.IGNORECASE):
-                    failures.append(f"{record_id}: Japanese {term['semantic']} reversed by English {english!r}")
+                    failures.append(
+                        f"{record_id}: Japanese {term['semantic']} missing in English {english!r}"
+                    )
+                if (
+                    required_missing
+                    and isinstance(forbidden, str)
+                    and re.search(forbidden, english, re.IGNORECASE)
+                ):
+                    failures.append(
+                        f"{record_id}: Japanese {term['semantic']} reversed by English {english!r}"
+                    )
 
-    for record_id in sorted(candidate_ids, key=lambda value: (value.split(":")[0], int(value.split(":")[1]))):
+    for record_id in sorted(
+        candidate_ids, key=lambda value: (value.split(":")[0], int(value.split(":")[1]))
+    ):
         expectation = expectations.get(record_id, {})
         english = canonical_by_id[record_id]
         expected = expectation.get("corrected_english")
@@ -138,9 +189,15 @@ def run_audit() -> dict[str, object]:
             failures.append(f"{record_id}: {english!r} != expected {expected!r}")
         for pattern in expectation.get("required_english", []):
             if not re.search(pattern, english, re.IGNORECASE):
-                failures.append(f"{record_id}: English fails semantic requirement {pattern!r}")
+                failures.append(
+                    f"{record_id}: English fails semantic requirement {pattern!r}"
+                )
         matched_semantics = sorted(
-            {item["semantic"] for item in patterns if _contains(glyphs_by_id[record_id], item["pattern"])}
+            {
+                item["semantic"]
+                for item in patterns
+                if _contains(glyphs_by_id[record_id], item["pattern"])
+            }
         )
         table.append(
             {
@@ -148,8 +205,13 @@ def run_audit() -> dict[str, object]:
                 "japanese_source": expectation.get("japanese"),
                 "japanese_bitmap": f"../Nostalgia1907_Bilingual_Comparison/images/{record_id.split(':')[0]}/{int(record_id.split(':')[1]):03d}.png",
                 "source_record_hex": source_hex_by_id[record_id],
-                "source_record_sha256": hashlib.sha256(bytes.fromhex(source_hex_by_id[record_id])).hexdigest().upper(),
-                "literal_semantic_interpretation": expectation.get("literal") or "; ".join(matched_semantics),
+                "source_record_sha256": hashlib.sha256(
+                    bytes.fromhex(source_hex_by_id[record_id])
+                )
+                .hexdigest()
+                .upper(),
+                "literal_semantic_interpretation": expectation.get("literal")
+                or "; ".join(matched_semantics),
                 "semantic_terms": matched_semantics,
                 "english_before": old_by_id.get(record_id),
                 "corrected_english": english,
@@ -180,14 +242,25 @@ def _markdown(payload: dict[str, object]) -> str:
         "|---|---|---|---|---|---|",
     ]
     for item in payload["records"]:
-        source = item["japanese_source"] or f"[retail bitmap]({item['japanese_bitmap']})"
+        source = (
+            item["japanese_source"] or f"[retail bitmap]({item['japanese_bitmap']})"
+        )
         values = [
-            item["record_id"], source, item["literal_semantic_interpretation"],
-            item["english_before"] or "", item["corrected_english"], item["branch_or_consequence"] or "",
+            item["record_id"],
+            source,
+            item["literal_semantic_interpretation"],
+            item["english_before"] or "",
+            item["corrected_english"],
+            item["branch_or_consequence"] or "",
         ]
-        lines.append("| " + " | ".join(str(value).replace("|", "\\|") for value in values) + " |")
+        lines.append(
+            "| " + " | ".join(str(value).replace("|", "\\|") for value in values) + " |"
+        )
     if payload["semantic_failures"]:
-        lines.extend(["", "## Failures", ""] + [f"- {failure}" for failure in payload["semantic_failures"]])
+        lines.extend(
+            ["", "## Failures", ""]
+            + [f"- {failure}" for failure in payload["semantic_failures"]]
+        )
     return "\n".join(lines) + "\n"
 
 
@@ -195,9 +268,19 @@ def main() -> None:
     """Write bomb-audit reports and exit nonzero on semantic failure."""
     payload = run_audit()
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    (OUTPUT / "bomb_sequence_audit.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (OUTPUT / "bomb_sequence_audit.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     (OUTPUT / "bomb_sequence_audit.md").write_text(_markdown(payload), encoding="utf-8")
-    print(json.dumps({k: payload[k] for k in ("status", "audited_record_count", "semantic_failure_count")}, indent=2))
+    print(
+        json.dumps(
+            {
+                k: payload[k]
+                for k in ("status", "audited_record_count", "semantic_failure_count")
+            },
+            indent=2,
+        )
+    )
     if payload["status"] != "PASS":
         raise SystemExit(1)
 

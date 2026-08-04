@@ -87,14 +87,9 @@ def _glyph_matrix(stored: bytes) -> list[list[int]]:
     """Decode and rotate one native stored glyph into upright screen order."""
     if len(stored) != GLYPH_BYTES:
         raise ValueError(f"glyph has {len(stored)} bytes, expected {GLYPH_BYTES}")
-    bits = [
-        (byte >> shift) & 1
-        for byte in stored
-        for shift in range(7, -1, -1)
-    ]
+    bits = [(byte >> shift) & 1 for byte in stored for shift in range(7, -1, -1)]
     source = [
-        bits[row * GLYPH_WIDTH : (row + 1) * GLYPH_WIDTH]
-        for row in range(GLYPH_HEIGHT)
+        bits[row * GLYPH_WIDTH : (row + 1) * GLYPH_WIDTH] for row in range(GLYPH_HEIGHT)
     ]
     # Retail glyphs are stored clockwise relative to the visible screen glyph.
     return [
@@ -176,8 +171,7 @@ def _stored_zlib_stream(payload: bytes) -> bytes:
         blocks = (b"",)
     else:
         blocks = tuple(
-            payload[offset : offset + 65535]
-            for offset in range(0, len(payload), 65535)
+            payload[offset : offset + 65535] for offset in range(0, len(payload), 65535)
         )
     for index, block in enumerate(blocks):
         output.append(0x01 if index == len(blocks) - 1 else 0x00)
@@ -279,9 +273,7 @@ def _render_record(
     return width, height
 
 
-def _chapter_markdown(
-    chapter: dict[str, object], *, image_prefix: str = ""
-) -> str:
+def _chapter_markdown(chapter: dict[str, object], *, image_prefix: str = "") -> str:
     """Return one image-and-text comparison chapter."""
     lines = [f"# {chapter['chapter']}", ""]
     for record in chapter["records"]:
@@ -312,7 +304,9 @@ def _comparison_html(chapters: list[dict[str, object]]) -> str:
     options = ['<option value="">All chapters</option>']
     for chapter in chapters:
         name = str(chapter["chapter"])
-        options.append(f'<option value="{html.escape(name)}">{html.escape(name)}</option>')
+        options.append(
+            f'<option value="{html.escape(name)}">{html.escape(name)}</option>'
+        )
         records: list[str] = []
         for record in chapter["records"]:
             english = record["english"]
@@ -328,17 +322,17 @@ def _comparison_html(chapters: list[dict[str, object]]) -> str:
                 else ""
             )
             records.append(
-                f'''<article class="record" data-chapter="{html.escape(name)}" data-search="{search}">
+                f"""<article class="record" data-chapter="{html.escape(name)}" data-search="{search}">
 <div class="record-id"><a href="#{html.escape(record['id'])}" id="{html.escape(record['id'])}">{html.escape(record['id'])}</a></div>
 <div class="jp"><div class="label">Japanese — original retail bitmap glyphs</div>
 <img src="{html.escape(record['japanese_image'])}" alt="Original Japanese glyphs for {html.escape(record['id'])}" loading="lazy"></div>
 <div class="en"><div class="label">English — canonical translation</div><pre>{english_display}</pre>{controls}</div>
-</article>'''
+</article>"""
             )
         sections.append(
             f'<section class="chapter" data-chapter-section="{html.escape(name)}"><h2>{html.escape(name)}</h2>{"".join(records)}</section>'
         )
-    return f'''<!doctype html>
+    return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nostalgia 1907 Japanese / English Comparison</title>
@@ -374,7 +368,7 @@ function filter(){{let shown=0;const query=q.value.trim().toLowerCase(), chapter
 document.querySelectorAll('.record').forEach(r=>{{const ok=(!query||r.dataset.search.includes(query))&&(!chapter||r.dataset.chapter===chapter);r.classList.toggle('hidden',!ok);if(ok)shown++;}});
 document.querySelectorAll('.chapter').forEach(s=>s.classList.toggle('hidden',!s.querySelector('.record:not(.hidden)')));n.textContent=shown+' records';}}
 q.addEventListener('input',filter);c.addEventListener('change',filter);filter();
-</script></body></html>'''
+</script></body></html>"""
 
 
 def _normalized_member_path(value: str) -> str:
@@ -382,7 +376,11 @@ def _normalized_member_path(value: str) -> str:
     if "\\" in value:
         raise ValueError(f"archive member uses a backslash: {value!r}")
     path = PurePosixPath(value)
-    if path.is_absolute() or not path.parts or any(part in {"", ".", ".."} for part in path.parts):
+    if (
+        path.is_absolute()
+        or not path.parts
+        or any(part in {"", ".", ".."} for part in path.parts)
+    ):
         raise ValueError(f"archive member is not a normalized relative path: {value!r}")
     normalized = path.as_posix()
     if normalized != value:
@@ -393,9 +391,7 @@ def _normalized_member_path(value: str) -> str:
 def _inventory(root: Path) -> set[str]:
     """Return every regular file under a staging or published root."""
     return {
-        path.relative_to(root).as_posix()
-        for path in root.rglob("*")
-        if path.is_file()
+        path.relative_to(root).as_posix() for path in root.rglob("*") if path.is_file()
     }
 
 
@@ -440,8 +436,13 @@ def _write_deterministic_zip(
             relative = _normalized_member_path(str(member["path"]))
             name = relative.encode("utf-8")
             payload = (root / relative).read_bytes()
-            if len(payload) != member["size"] or _sha256_bytes(payload) != member["sha256"]:
-                raise ValueError(f"package member changed after manifesting: {relative}")
+            if (
+                len(payload) != member["size"]
+                or _sha256_bytes(payload) != member["sha256"]
+            ):
+                raise ValueError(
+                    f"package member changed after manifesting: {relative}"
+                )
             crc = binascii.crc32(payload) & 0xFFFFFFFF
             local = struct.pack(
                 "<IHHHHHIIIHH",
@@ -614,7 +615,9 @@ def validate_comparison_package(output_root: Path) -> dict[str, object]:
         if not isinstance(digest, str) or not re_full_sha256(digest):
             failures.append(f"manifest member has invalid SHA-256: {relative}")
             continue
-        members.append({"path": relative, "size": item["size"], "sha256": digest.upper()})
+        members.append(
+            {"path": relative, "size": item["size"], "sha256": digest.upper()}
+        )
     paths = [str(item["path"]) for item in members]
     if paths != sorted(paths):
         failures.append("manifest members are not in lexicographic path order")
@@ -624,9 +627,7 @@ def validate_comparison_package(output_root: Path) -> dict[str, object]:
     archive_spec = manifest.get("archive")
     package_name = manifest.get("package")
     if package_name != ZIP_NAME:
-        failures.append(
-            f"package manifest names unexpected archive: {package_name!r}"
-        )
+        failures.append(f"package manifest names unexpected archive: {package_name!r}")
     archive_path = output_root / ZIP_NAME
     expected_disk = set(paths) | {PACKAGE_MANIFEST_NAME, archive_path.name}
     actual_disk = _inventory(output_root) if output_root.is_dir() else set()
@@ -660,22 +661,38 @@ def validate_comparison_package(output_root: Path) -> dict[str, object]:
                 if len(names) != len(set(names)):
                     failures.append("archive contains duplicate member names")
                 if names != paths:
-                    failures.append("archive member inventory/order differs from manifest")
+                    failures.append(
+                        "archive member inventory/order differs from manifest"
+                    )
                 entries = {str(item["path"]): item for item in members}
                 for info in infos:
                     entry = entries.get(info.filename)
                     if entry is None:
                         continue
                     if info.compress_type != zipfile.ZIP_STORED:
-                        failures.append(f"archive member is compressed: {info.filename}")
+                        failures.append(
+                            f"archive member is compressed: {info.filename}"
+                        )
                     if info.date_time != (1980, 1, 1, 0, 0, 0):
-                        failures.append(f"archive timestamp is not fixed: {info.filename}")
-                    if info.create_system != 3 or info.external_attr != ZIP_EXTERNAL_FILE_ATTR:
-                        failures.append(f"archive permissions/platform metadata differ: {info.filename}")
+                        failures.append(
+                            f"archive timestamp is not fixed: {info.filename}"
+                        )
+                    if (
+                        info.create_system != 3
+                        or info.external_attr != ZIP_EXTERNAL_FILE_ATTR
+                    ):
+                        failures.append(
+                            f"archive permissions/platform metadata differ: {info.filename}"
+                        )
                     if info.extra or info.comment:
-                        failures.append(f"archive member has extra metadata: {info.filename}")
+                        failures.append(
+                            f"archive member has extra metadata: {info.filename}"
+                        )
                     payload = archive.read(info)
-                    if len(payload) != entry["size"] or _sha256_bytes(payload) != entry["sha256"]:
+                    if (
+                        len(payload) != entry["size"]
+                        or _sha256_bytes(payload) != entry["sha256"]
+                    ):
                         failures.append(f"archive member bytes differ: {info.filename}")
         except (OSError, zipfile.BadZipFile, RuntimeError) as error:
             failures.append(f"archive cannot be validated: {error}")
@@ -689,11 +706,15 @@ def validate_comparison_package(output_root: Path) -> dict[str, object]:
                 for chapter in comparison["chapters"]
                 for record in chapter["records"]
             ]
-            expected_images = sorted(path for path in paths if path.startswith("images/"))
+            expected_images = sorted(
+                path for path in paths if path.startswith("images/")
+            )
             if len(image_paths) != len(set(image_paths)):
                 failures.append("comparison JSON repeats Japanese image references")
             if sorted(image_paths) != expected_images:
-                failures.append("comparison JSON image references differ from exact image inventory")
+                failures.append(
+                    "comparison JSON image references differ from exact image inventory"
+                )
         except (KeyError, TypeError, json.JSONDecodeError) as error:
             failures.append(f"comparison JSON cannot be cross-checked: {error}")
 
@@ -710,14 +731,18 @@ def validate_comparison_package(output_root: Path) -> dict[str, object]:
 
 def re_full_sha256(value: str) -> bool:
     """Return whether a string is exactly one hexadecimal SHA-256 digest."""
-    return len(value) == 64 and all(character in "0123456789abcdefABCDEF" for character in value)
+    return len(value) == 64 and all(
+        character in "0123456789abcdefABCDEF" for character in value
+    )
 
 
 def _publish_staging(staging: Path, output_root: Path) -> None:
     """Atomically publish a validated staging tree and remove the prior output."""
     output_root.parent.mkdir(parents=True, exist_ok=True)
     if output_root.exists() and not output_root.is_dir():
-        raise ValueError(f"comparison output exists but is not a directory: {output_root}")
+        raise ValueError(
+            f"comparison output exists but is not a directory: {output_root}"
+        )
     previous: Path | None = None
     if output_root.exists():
         previous = Path(
@@ -741,7 +766,10 @@ def _publish_staging(staging: Path, output_root: Path) -> None:
 def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
     """Generate and validate one complete comparison package in fresh staging."""
     fixed_path = retail_root / "retail_files" / "FIX_CODE.FNT"
-    if fixed_path.stat().st_size != FIXED_FONT_SIZE or sha256(fixed_path) != FIXED_FONT_SHA256:
+    if (
+        fixed_path.stat().st_size != FIXED_FONT_SIZE
+        or sha256(fixed_path) != FIXED_FONT_SHA256
+    ):
         raise ValueError("retail fixed font failed its frozen size/hash guard")
     fixed_data = fixed_path.read_bytes()
     fixed_glyphs = tuple(
@@ -758,10 +786,16 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
         name = item["chapter"]
         canonical = json.loads((SOURCES / item["source"]).read_text(encoding="utf-8"))
         mes_path = retail_root / "retail_unpacked" / name / f"{name}.MES"
-        if mes_path.stat().st_size != canonical["retail_mes"]["size"] or sha256(mes_path) != canonical["retail_mes"]["sha256"]:
+        if (
+            mes_path.stat().st_size != canonical["retail_mes"]["size"]
+            or sha256(mes_path) != canonical["retail_mes"]["sha256"]
+        ):
             raise ValueError(f"{name}: retail MES failed its canonical guard")
         mes = read_mes(mes_path)
-        if mes.record_count != canonical["record_count"] or len(canonical["records"]) != mes.record_count:
+        if (
+            mes.record_count != canonical["record_count"]
+            or len(canonical["records"]) != mes.record_count
+        ):
             raise ValueError(f"{name}: Japanese/English record counts disagree")
         chapter_markdown_path = f"chapters/{name}.md"
         expected_members.add(chapter_markdown_path)
@@ -834,7 +868,9 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
     ]
     for chapter in chapters:
         chapter_markdown = _chapter_markdown(chapter, image_prefix="../")
-        _write_text_lf(staging / "chapters" / f"{chapter['chapter']}.md", chapter_markdown)
+        _write_text_lf(
+            staging / "chapters" / f"{chapter['chapter']}.md", chapter_markdown
+        )
         markdown_parts.append(_chapter_markdown(chapter))
     _write_text_lf(markdown_path, "\n".join(markdown_parts))
     readme = (
@@ -876,7 +912,10 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
     )
     validation = validate_comparison_package(staging)
     if validation["status"] != "PASS":
-        raise ValueError("generated comparison package failed self-validation: " + "; ".join(validation["failures"]))
+        raise ValueError(
+            "generated comparison package failed self-validation: "
+            + "; ".join(validation["failures"])
+        )
     return {
         "status": "PASS",
         "chapter_count": len(chapters),
@@ -917,7 +956,9 @@ def export_comparison(retail_root: Path, output_root: Path) -> dict[str, object]
     output_root = output_root.expanduser().resolve()
     output_root.parent.mkdir(parents=True, exist_ok=True)
     if output_root.exists() and not output_root.is_dir():
-        raise ValueError(f"comparison output exists but is not a directory: {output_root}")
+        raise ValueError(
+            f"comparison output exists but is not a directory: {output_root}"
+        )
     previous_files = sorted(_inventory(output_root)) if output_root.is_dir() else []
     abandoned_staging = sorted(
         path

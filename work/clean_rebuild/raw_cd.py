@@ -122,16 +122,18 @@ def regenerate_checksums(sector: bytearray) -> None:
         Replaces only the checksum/reserved ranges of ``sector``. Header and
         2,048-byte user data are not altered.
     """
-    if len(sector) != RAW_SECTOR_SIZE or sector[:12] != SYNC or sector[MODE_OFFSET] != 1:
+    if (
+        len(sector) != RAW_SECTOR_SIZE
+        or sector[:12] != SYNC
+        or sector[MODE_OFFSET] != 1
+    ):
         raise RawCdError("cannot checksum a non-MODE1/2352 sector")
     sector[EDC_OFFSET:ZERO_OFFSET] = edc(sector[:EDC_OFFSET]).to_bytes(4, "little")
     sector[ZERO_OFFSET:ECC_P_OFFSET] = b"\0" * (ECC_P_OFFSET - ZERO_OFFSET)
     sector[ECC_P_OFFSET:ECC_Q_OFFSET] = ecc_plane(
         sector[0x0C:ECC_P_OFFSET], 86, 24, 2, 86
     )
-    sector[ECC_Q_OFFSET:ECC_END] = ecc_plane(
-        sector[0x0C:ECC_Q_OFFSET], 52, 43, 86, 88
-    )
+    sector[ECC_Q_OFFSET:ECC_END] = ecc_plane(sector[0x0C:ECC_Q_OFFSET], 52, 43, 86, 88)
 
 
 def _bcd(value: int) -> int:
@@ -235,7 +237,9 @@ def iso_to_raw_fixed(
     return raw_sectors
 
 
-def verify_track(raw_path: Path, *, compare_boot_to: Path | None = None) -> dict[str, object]:
+def verify_track(
+    raw_path: Path, *, compare_boot_to: Path | None = None
+) -> dict[str, object]:
     """Validate all raw sectors, boot signature, and optional boot equality.
 
     Args:
@@ -297,7 +301,10 @@ def write_two_track_cue(cue_path: Path, data_track: Path, audio_track: Path) -> 
     names rather than machine-specific paths. Track 2 retains the retail
     two-second pregap represented by INDEX 00 and INDEX 01.
     """
-    if cue_path.parent.resolve() != data_track.parent.resolve() or cue_path.parent.resolve() != audio_track.parent.resolve():
+    if (
+        cue_path.parent.resolve() != data_track.parent.resolve()
+        or cue_path.parent.resolve() != audio_track.parent.resolve()
+    ):
         raise RawCdError("CUE and both track files must share one directory")
     text = (
         f'FILE "{data_track.name}" BINARY\r\n'

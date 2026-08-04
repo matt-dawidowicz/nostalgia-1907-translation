@@ -32,10 +32,13 @@ from pathlib import Path
 from font_render import GLYPH_BYTES, stored_cell, validate_text
 from mes_format import DYNAMIC_PREFIX_START, MesFormatError, parse_mes
 from scn_layout import (
+    DIALOGUE_OPENING_ANCHOR_CODE,
     LABEL_ROLES,
     PROSE_ROLES,
     ROLE_CHOICE,
     Layout,
+    TEXT_BOX_LOWER_CONTINUATION,
+    TEXT_BOX_LOWER_DIALOGUE,
     infer_contracts,
     infer_layouts,
     infer_roles,
@@ -47,6 +50,18 @@ DYNAMIC_GLYPHS_PER_PREFIX = 0xFF
 RUNTIME_DYNAMIC_GLYPH_LIMIT = 1020
 PART3C_HARD_LIMIT = 0x3FFF
 FIXED_BLANK_CELL_CODE = 0x48
+# MAIN.BIN's lower-dialogue parser has a row-edge lookahead path for these
+# otherwise ordinary fixed-font byte values.  It consumes them differently
+# only when they are the next cell after a full row.  Generated English must
+# therefore use the dynamic form for their bitmaps; a dynamic F0-FF reference
+# is still exactly one renderer cell but cannot enter that legacy path.
+#
+# This is a native parser contract, derived from MAIN.BIN $FF1DAA-$FF1DE0, not
+# a record- or chapter-specific exception. Retail-preserved records remain
+# byte-preserved and are not rewritten here.
+NATIVE_DIALOGUE_ROW_EDGE_RESERVED_CODES = frozenset(
+    (0x02, 0x03, 0x04, 0x05, 0x08, 0x11)
+)
 ELLIPSIS_CAPITALIZED_FOLLOWERS = frozenset(
     (
         "Ashby",
@@ -87,65 +102,114 @@ FIXED_ENGLISH_UNITS = (
     # retain a left-aligned pair phase without paying a two-byte dynamic
     # reference for common cells.  The chosen codes are checked against every
     # preserved retail record by the integration suite before a build is made.
-    (0x02, "literal", " c"), (0x03, "literal", " s"),
-    (0x04, "literal", " o"), (0x05, "literal", "on"),
-    (0x06, "literal", "li"), (0x08, "literal", ","),
-    (0x84, "literal", "nd"), (0x47, "literal", "ss"),
+    (0x06, "literal", "li"),
+    (0x84, "literal", "nd"),
+    (0x47, "literal", "ss"),
     (0x23, "literal", "in"),
     # Shared opaque-position spacer. The compiler verifies that translated
     # chapters do not collide with a byte-preserved retail use of this slot.
     (FIXED_BLANK_CELL_CODE, "literal", "  "),
-    (0x40, "literal", " y"), (0x1F, "literal", "ou"),
-    (0x19, "literal", "no"), (0x36, "literal", "an"),
-    (0x1B, "literal", "ng"), (0x41, "literal", "t "),
-    (0x2D, "literal", " a"), (0x0A, "literal", " t"),
-    (0x44, "literal", "he"), (0x8D, "literal", " i"),
-    (0xB6, "literal", "it"), (0x1A, "literal", "s"),
-    (0x4B, "literal", "ar"), (0x87, "literal", "e "),
-    (0x8A, "literal", "is"), (0x50, "literal", "er"),
-    (0x2E, "literal", ". "), (0x4E, "literal", "Th"),
-    (0x43, "literal", "th"), (0x25, "literal", "en"),
-    (0xE4, "literal", "r "), (0x51, "literal", "d "),
-    (0x33, "literal", "yo"), (0x4A, "literal", "u "),
-    (0x3B, "literal", "ri"), (0x46, "literal", "me"),
-    (0x3E, "literal", "? "), (0xBE, "literal", " I"),
-    (0x3A, "literal", " w"), (0x3F, "literal", "n "),
-    (0x45, "literal", "wi"), (0xA5, "literal", "I "),
-    (0xD2, "literal", "st"), (0x35, "compact", "..."),
-    (0x0D, "literal", "at"), (0x37, "literal", "ll"),
-    (0x4F, "literal", " m"), (0x42, "literal", "y "),
-    (0xBC, "literal", "ve"), (0x39, "literal", "re"),
-    (0x27, "literal", "te"), (0x3D, "literal", "o "),
-    (0x09, "literal", "g"), (0x0B, "literal", ".."),
-    (0x0C, "literal", "hi"), (0x0E, "literal", "le"),
-    (0x0F, "literal", "ha"), (0x11, "literal", "to"),
-    (0x12, "literal", "co"), (0x13, "literal", "l"),
-    (0x14, "literal", "be"), (0x15, "literal", "or"),
-    (0x16, "literal", "de"), (0x17, "literal", "ot"),
-    (0x18, "literal", "Yo"), (0x1C, "literal", "ca"),
-    (0x1D, "literal", "si"), (0x1E, "literal", "ed"),
-    (0x20, "literal", " n"), (0x21, "literal", "Ru"),
-    (0x22, "literal", "ia"), (0x24, "literal", "as"),
-    (0x26, "literal", "es"), (0x28, "literal", " b"),
-    (0x29, "literal", "a"), (0x2A, "literal", "se"),
-    (0x2B, "literal", "ow"), (0x2C, "literal", "e."),
-    (0x2F, "literal", "el"), (0x30, "literal", "sh"),
-    (0x31, "literal", "fe"), (0x32, "literal", "nt"),
-    (0x34, "literal", "ti"), (0x38, "literal", "ct"),
-    (0x3C, "literal", "ly"), (0x49, "literal", "al"),
-    (0x4C, "literal", "ea"), (0x4D, "literal", " e"),
-    (0x52, "literal", "io"), (0x53, "literal", "ry"),
-    (0x54, "literal", "Wh"), (0x55, "literal", "wh"),
-    (0x56, "literal", "rs"), (0x57, "literal", " f"),
-    (0x58, "literal", "Fo"), (0x59, "literal", " l"),
-    (0x5A, "literal", "wa"), (0x5B, "literal", "do"),
-    (0x5C, "literal", "il"), (0x5D, "literal", "tr"),
-    (0x5E, "literal", " k"), (0x5F, "literal", "w"),
-    (0x60, "literal", "ur"), (0x61, "literal", "ne"),
-    (0x62, "literal", "us"), (0x63, "literal", "pe"),
-    (0x64, "literal", " d"), (0x65, "literal", "ab"),
-    (0x66, "literal", "ce"), (0x67, "literal", "ke"),
-    (0x68, "literal", "ai"), (0x69, "literal", "am"),
+    (0x40, "literal", " y"),
+    (0x1F, "literal", "ou"),
+    (0x19, "literal", "no"),
+    (0x36, "literal", "an"),
+    (0x1B, "literal", "ng"),
+    (0x41, "literal", "t "),
+    (0x2D, "literal", " a"),
+    (0x0A, "literal", " t"),
+    (0x44, "literal", "he"),
+    (0x8D, "literal", " i"),
+    (0xB6, "literal", "it"),
+    (0x1A, "literal", "s"),
+    (0x4B, "literal", "ar"),
+    (0x87, "literal", "e "),
+    (0x8A, "literal", "is"),
+    (0x50, "literal", "er"),
+    (0x2E, "literal", ". "),
+    (0x4E, "literal", "Th"),
+    (0x43, "literal", "th"),
+    (0x25, "literal", "en"),
+    (0xE4, "literal", "r "),
+    (0x51, "literal", "d "),
+    (0x33, "literal", "yo"),
+    (0x4A, "literal", "u "),
+    (0x3B, "literal", "ri"),
+    (0x46, "literal", "me"),
+    (0x3E, "literal", "? "),
+    (0xBE, "literal", " I"),
+    (0x3A, "literal", " w"),
+    (0x3F, "literal", "n "),
+    (0x45, "literal", "wi"),
+    (0xA5, "literal", "I "),
+    (0xD2, "literal", "st"),
+    (0x35, "compact", "..."),
+    (0x0D, "literal", "at"),
+    (0x37, "literal", "ll"),
+    (0x4F, "literal", " m"),
+    (0x42, "literal", "y "),
+    (0xBC, "literal", "ve"),
+    (0x39, "literal", "re"),
+    (0x27, "literal", "te"),
+    (0x3D, "literal", "o "),
+    (0x09, "literal", "g"),
+    (0x0B, "literal", ".."),
+    (0x0C, "literal", "hi"),
+    (0x0E, "literal", "le"),
+    (0x0F, "literal", "ha"),
+    (0x12, "literal", "co"),
+    (0x13, "literal", "l"),
+    (0x14, "literal", "be"),
+    (0x15, "literal", "or"),
+    (0x16, "literal", "de"),
+    (0x17, "literal", "ot"),
+    (0x18, "literal", "Yo"),
+    (0x1C, "literal", "ca"),
+    (0x1D, "literal", "si"),
+    (0x1E, "literal", "ed"),
+    (0x20, "literal", " n"),
+    (0x21, "literal", "Ru"),
+    (0x22, "literal", "ia"),
+    (0x24, "literal", "as"),
+    (0x26, "literal", "es"),
+    (0x28, "literal", " b"),
+    (0x29, "literal", "a"),
+    (0x2A, "literal", "se"),
+    (0x2B, "literal", "ow"),
+    (0x2C, "literal", "e."),
+    (0x2F, "literal", "el"),
+    (0x30, "literal", "sh"),
+    (0x31, "literal", "fe"),
+    (0x32, "literal", "nt"),
+    (0x34, "literal", "ti"),
+    (0x38, "literal", "ct"),
+    (0x3C, "literal", "ly"),
+    (0x49, "literal", "al"),
+    (0x4C, "literal", "ea"),
+    (0x4D, "literal", " e"),
+    (0x52, "literal", "io"),
+    (0x53, "literal", "ry"),
+    (0x54, "literal", "Wh"),
+    (0x55, "literal", "wh"),
+    (0x56, "literal", "rs"),
+    (0x57, "literal", " f"),
+    (0x58, "literal", "Fo"),
+    (0x59, "literal", " l"),
+    (0x5A, "literal", "wa"),
+    (0x5B, "literal", "do"),
+    (0x5C, "literal", "il"),
+    (0x5D, "literal", "tr"),
+    (0x5E, "literal", " k"),
+    (0x5F, "literal", "w"),
+    (0x60, "literal", "ur"),
+    (0x61, "literal", "ne"),
+    (0x62, "literal", "us"),
+    (0x63, "literal", "pe"),
+    (0x64, "literal", " d"),
+    (0x65, "literal", "ab"),
+    (0x66, "literal", "ce"),
+    (0x67, "literal", "ke"),
+    (0x68, "literal", "ai"),
+    (0x69, "literal", "am"),
 )
 
 
@@ -169,6 +233,10 @@ class BuildResult:
     fixed_spill_occurrences: int
     fixed_font_patches: tuple[tuple[int, str], ...]
     glyph_order: str
+    renderer_contract_records: int = 0
+    renderer_contract_rows: int = 0
+    renderer_contract_cells: int = 0
+    renderer_contract_row_edges: int = 0
 
 
 Cell = tuple[str, str]
@@ -267,6 +335,7 @@ def normalize_ellipsis_style(text: str) -> str:
     Side Effects:
         None.
     """
+
     def replace(match: re.Match[str]) -> str:
         """Rewrite one ellipsis boundary while retaining fixed row padding."""
         gap = match.group("gap") if match.group("newline") else ""
@@ -549,6 +618,121 @@ def _optimize_phases(
         row.selected_alternate = selected
 
 
+def _decode_emitted_cells(record: bytes) -> tuple[bytes, ...]:
+    """Decode one emitted MES record into the renderer's logical cells.
+
+    A dynamic ``F0``--``FF`` reference occupies two storage bytes but exactly
+    one runtime cell.  The distinction is the heart of this audit: byte
+    length is not a safe proxy for the dialogue cursor's X advance.
+    """
+    cells: list[bytes] = []
+    offset = 0
+    while offset < len(record):
+        value = record[offset]
+        if value == 0:
+            if offset != len(record) - 1:
+                raise CompileError("emitted MES record has data after its terminator")
+            return tuple(cells)
+        width = 2 if value >= DYNAMIC_PREFIX_START else 1
+        if offset + width > len(record):
+            raise CompileError("emitted MES record has a truncated dynamic reference")
+        cell = record[offset : offset + width]
+        if width == 2 and cell[1] == 0:
+            raise CompileError("emitted MES record has a zero dynamic reference")
+        cells.append(cell)
+        offset += width
+    raise CompileError("emitted MES record is missing its terminator")
+
+
+def _audit_emitted_renderer_contract(
+    chapter: str,
+    output_records: list[bytes],
+    rows_by_record: dict[int, list[RowPlan]],
+    adaptive_indexes: set[int],
+    layouts: dict[int, Layout],
+) -> tuple[int, int, int, int]:
+    """Verify compiled bytes against the native cursor contract.
+
+    The source formatter proves that its preview does not split words.  This
+    second, artifact-level gate proves that the *emitted* MES stream has the
+    same logical-cell rows the 68000 reader will consume.  It catches a future
+    mismatch between word wrapping, byte encoding, dynamic references, and
+    the one-time dialogue gutter before an image can be built.
+    """
+    audited_records = 0
+    audited_rows = 0
+    audited_cells = 0
+    audited_row_edges = 0
+    lower_boxes = frozenset((TEXT_BOX_LOWER_DIALOGUE, TEXT_BOX_LOWER_CONTINUATION))
+
+    for index in sorted(adaptive_indexes):
+        layout = layouts.get(index)
+        if layout is None:
+            # Labels and selectors without a measured prose layout remain
+            # covered by their explicit policy checks, not cursor simulation.
+            continue
+        plans = rows_by_record.get(index)
+        if plans is None:
+            raise CompileError(f"{chapter}:{index:03d} has no emitted row plan")
+        cells = _decode_emitted_cells(output_records[index])
+        expected_cells = sum(len(plan.cells()) for plan in plans)
+        if len(cells) != expected_cells:
+            raise CompileError(
+                f"{chapter}:{index:03d} emits {len(cells)} logical cells; "
+                f"renderer contract requires {expected_cells}"
+            )
+
+        cell_offset = 0
+        for row_index, plan in enumerate(plans):
+            row_cells = len(plan.cells())
+            physical_cells = layout.physical_cells(row_index)
+            if row_cells != physical_cells:
+                raise CompileError(
+                    f"{chapter}:{index:03d} row {row_index + 1} emits "
+                    f"{row_cells} cells; native cursor requires {physical_cells}"
+                )
+            row = cells[cell_offset : cell_offset + row_cells]
+            if len(row) != row_cells:
+                raise CompileError(
+                    f"{chapter}:{index:03d} row {row_index + 1} ends before "
+                    "its native cursor stride"
+                )
+            if layout.anchor_cells(row_index):
+                expected_anchor = bytes((FIXED_BLANK_CELL_CODE,))
+                fixed_anchor_enabled = any(
+                    code == FIXED_BLANK_CELL_CODE
+                    for code, _style, _unit in FIXED_ENGLISH_UNITS
+                )
+                if fixed_anchor_enabled and row[: layout.anchor_cells(row_index)] != (
+                    expected_anchor,
+                ) * layout.anchor_cells(row_index):
+                    raise CompileError(
+                        f"{chapter}:{index:03d} does not preserve its one-time "
+                        "dialogue gutter"
+                    )
+            cell_offset += row_cells
+            if cell_offset >= len(cells):
+                continue
+            if layout.text_box in lower_boxes:
+                next_code = cells[cell_offset][0]
+                if next_code in NATIVE_DIALOGUE_ROW_EDGE_RESERVED_CODES:
+                    raise CompileError(
+                        f"{chapter}:{index:03d} emits native row-edge code "
+                        f"0x{next_code:02X} before row {row_index + 2}"
+                    )
+            audited_row_edges += 1
+
+        if cell_offset != len(cells):
+            raise CompileError(
+                f"{chapter}:{index:03d} leaves unaccounted emitted cells"
+            )
+        audited_records += 1
+        audited_rows += len(plans)
+        audited_cells += len(cells)
+
+    return audited_records, audited_rows, audited_cells, audited_row_edges
+
+
 def compile_mes(
     retail_data: bytes,
     scn_data: bytes,
@@ -574,10 +758,20 @@ def compile_mes(
         raise CompileError(f"{chapter}: canonical retail hash guards are missing")
     actual_mes_hash = hashlib.sha256(retail_data).hexdigest().upper()
     actual_scn_hash = hashlib.sha256(scn_data).hexdigest().upper()
-    if retail_guard.get("size") != len(retail_data) or retail_guard.get("sha256") != actual_mes_hash:
-        raise CompileError(f"{chapter}: retail MES does not match the canonical hash guard")
-    if scn_guard.get("size") != len(scn_data) or scn_guard.get("sha256") != actual_scn_hash:
-        raise CompileError(f"{chapter}: retail SCN does not match the canonical hash guard")
+    if (
+        retail_guard.get("size") != len(retail_data)
+        or retail_guard.get("sha256") != actual_mes_hash
+    ):
+        raise CompileError(
+            f"{chapter}: retail MES does not match the canonical hash guard"
+        )
+    if (
+        scn_guard.get("size") != len(scn_data)
+        or scn_guard.get("sha256") != actual_scn_hash
+    ):
+        raise CompileError(
+            f"{chapter}: retail SCN does not match the canonical hash guard"
+        )
     if canonical.get("record_count") != retail.record_count:
         raise CompileError(f"{chapter}: canonical and retail record counts disagree")
     raw_records = canonical.get("records")
@@ -592,18 +786,46 @@ def compile_mes(
     preserved: set[int] = set()
     for expected_index, record in enumerate(raw_records):
         if not isinstance(record, dict) or record.get("index") != expected_index:
-            raise CompileError(f"{chapter}: canonical record indexes are not contiguous")
+            raise CompileError(
+                f"{chapter}: canonical record indexes are not contiguous"
+            )
         policy = record.get("policy")
         if policy == "translate" and isinstance(record.get("text"), str):
-            translated[expected_index] = record["text"]
-            validate_text(record["text"])
+            canonical_text = record["text"]
+            display_text = record.get("display_text", canonical_text)
+            if not isinstance(display_text, str):
+                raise CompileError(
+                    f"{chapter}:{expected_index:03d} has a non-string display_text"
+                )
+            translated[expected_index] = display_text
+            validate_text(canonical_text)
+            validate_text(display_text)
             layout_policy = record.get("layout_policy")
-            if layout_policy not in {None, "legacy", "fixed", "adaptive"}:
+            if layout_policy not in {
+                None,
+                "legacy",
+                "fixed",
+                "adaptive",
+                "anchor",
+            }:
                 raise CompileError(
                     f"{chapter}:{expected_index:03d} has invalid layout policy"
                 )
             if layout_policy == "adaptive":
                 adaptive_indexes.add(expected_index)
+            elif layout_policy == "anchor":
+                if canonical_text != "" or display_text != "  ":
+                    raise CompileError(
+                        f"{chapter}:{expected_index:03d} has an invalid "
+                        "standalone dialogue-anchor translation"
+                    )
+                if retail.records[expected_index] != bytes(
+                    (DIALOGUE_OPENING_ANCHOR_CODE, 0)
+                ):
+                    raise CompileError(
+                        f"{chapter}:{expected_index:03d} is not a retail "
+                        "standalone dialogue anchor"
+                    )
         elif policy == "preserve" and record.get("text") is None:
             preserved.add(expected_index)
         else:
@@ -666,7 +888,10 @@ def compile_mes(
     rows_by_record: dict[int, list[RowPlan]] = {index: [] for index in translated}
     for index, text in sorted(translated.items()):
         adaptive_record = index in adaptive_indexes
-        if text_mode == "render-ready" and not adaptive_record:
+        layout_policy = raw_records[index].get("layout_policy")
+        if layout_policy == "anchor":
+            row_specs = [((), "  ")]
+        elif text_mode == "render-ready" and not adaptive_record:
             row_specs = [((), line) for line in text.split("\n")]
         else:
             working = text
@@ -768,6 +993,18 @@ def compile_mes(
             f"{chapter}: {len(glyphs)} dynamic glyphs exceed the runtime limit "
             f"of {RUNTIME_DYNAMIC_GLYPH_LIMIT}"
         )
+    (
+        renderer_contract_records,
+        renderer_contract_rows,
+        renderer_contract_cells,
+        renderer_contract_row_edges,
+    ) = _audit_emitted_renderer_contract(
+        chapter,
+        output_records,
+        rows_by_record,
+        adaptive_indexes,
+        layouts,
+    )
     first_pointer = 2 + retail.record_count * 2
     pointers: list[int] = []
     cursor = first_pointer
@@ -806,6 +1043,10 @@ def compile_mes(
         fixed_spill_occurrences=fixed_spill_occurrences,
         fixed_font_patches=fixed_font_patches,
         glyph_order=glyph_order,
+        renderer_contract_records=renderer_contract_records,
+        renderer_contract_rows=renderer_contract_rows,
+        renderer_contract_cells=renderer_contract_cells,
+        renderer_contract_row_edges=renderer_contract_row_edges,
     )
 
 

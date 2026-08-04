@@ -57,6 +57,9 @@
         "reason": "Opcode 0x28 uses the lower renderer's 11-cell continuation stride."
       }
     },
+    "text_box_overrides": {
+      "93": "lower_caption"
+    },
     "required_text_prefixes": {
       "1": "ACT 2:"
     },

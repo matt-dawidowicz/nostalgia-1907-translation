@@ -20,6 +20,17 @@ Historical investigation scripts are evidence from earlier reverse-engineering
 work. They are not production dependencies and are not retroactively rewritten
 to this standard.
 
+## Formatting profile
+
+Maintained Python uses Black 24.10.0 with its 88-column profile and Python 3.10
+target. This is the project's current PEP 8 profile: four-space indentation,
+standardized whitespace, a final newline, and no trailing whitespace. The
+repository's dependency-free style audit enforces 88-column executable lines
+and PEP 257 coverage; Black is the mechanical formatter used before review.
+Atomic serialized strings (such as generated HTML, CSS, hashes, and fixture
+data) remain intact when splitting them would reduce auditability or risk
+changing generated evidence.
+
 ## Docstrings
 
 Use PEP 257 conventions for every maintained module, class, function, method,

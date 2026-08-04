@@ -10,8 +10,8 @@
       "expected_policy": "preserve"
     },
     "PART2E:028": {
-      "reason": "Punctuation-only opening-quote fragment; retail bytes are intentionally preserved.",
-      "expected_policy": "preserve"
+      "reason": "Standalone opening-quote fragment; its one-cell record is intentionally rendered as a fixed English blank.",
+      "expected_policy": "translate"
     },
     "PART3B:161": {
       "reason": "Punctuation-only opening-quote fragment; retail bytes are intentionally preserved.",

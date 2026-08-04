@@ -288,6 +288,7 @@
       "index": 26,
       "policy": "translate",
       "text": "Royal Suite B",
+      "display_text": "Royal Suite B",
       "layout_policy": "fixed"
     },
     {
@@ -298,8 +299,10 @@
     },
     {
       "index": 28,
-      "policy": "preserve",
-      "text": null
+      "policy": "translate",
+      "text": "",
+      "display_text": "  ",
+      "layout_policy": "anchor"
     },
     {
       "index": 29,
@@ -413,6 +416,7 @@
       "index": 47,
       "policy": "translate",
       "text": "Chief Engineer",
+      "display_text": "Chief Eng.",
       "layout_policy": "adaptive"
     },
     {

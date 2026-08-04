@@ -29,13 +29,7 @@ class BuildReportTests(unittest.TestCase):
             sources = root / "sources"
             sources.mkdir()
             (sources / "index.json").write_text(
-                json.dumps(
-                    {
-                        "chapters": [
-                            {"chapter": "TEST", "source": "TEST.json"}
-                        ]
-                    }
-                )
+                json.dumps({"chapters": [{"chapter": "TEST", "source": "TEST.json"}]})
                 + "\n",
                 encoding="utf-8",
             )
@@ -49,6 +43,7 @@ class BuildReportTests(unittest.TestCase):
                 *,
                 glyph_order: str,
             ) -> BuildResult:
+                """Emit a deterministic in-memory compile result for this test."""
                 self.assertTrue(retail_mes.is_file())
                 self.assertTrue(retail_scn.is_file())
                 self.assertEqual(source, sources / "TEST.json")
@@ -71,8 +66,9 @@ class BuildReportTests(unittest.TestCase):
 
             reports = []
             report_bytes = []
-            with patch.object(mes_set, "SOURCES", sources), patch.object(
-                mes_set, "compile_files", fake_compile_files
+            with (
+                patch.object(mes_set, "SOURCES", sources),
+                patch.object(mes_set, "compile_files", fake_compile_files),
             ):
                 for name in ("independent_a", "independent_b"):
                     build = root / name

@@ -169,9 +169,7 @@ def _archive_boundary_context(
         "proposed_compiled_mes_size": len(proposed_mes),
         "uncompressed_mes_delta": len(proposed_mes) - len(current_mes),
         "fixed_slot_fit_without_compression": fixed_raw_fit,
-        "fixed_slot_headroom_if_stored_uncompressed": (
-            slot_size - len(proposed_mes)
-        ),
+        "fixed_slot_headroom_if_stored_uncompressed": (slot_size - len(proposed_mes)),
         "conservative_reflow_payload_end": conservative_payload_end,
         "conservative_reflow_archive_size_upper_bound": conservative_archive_size,
         "guarded_reflow_fit_without_compression": reflow_raw_fit,
@@ -228,10 +226,14 @@ def build_proposals(
         if not isinstance(authoritative, dict):
             raise ValueError(f"{record_id}: reviewed Japanese evidence is missing")
         if authoritative.get("corrected_english") != current:
-            raise ValueError(f"{record_id}: evidence no longer matches canonical English")
+            raise ValueError(
+                f"{record_id}: evidence no longer matches canonical English"
+            )
         comparison_record = comparison.get(record_id)
         if comparison_record is None:
-            raise ValueError(f"{record_id}: exact retail comparison evidence is missing")
+            raise ValueError(
+                f"{record_id}: exact retail comparison evidence is missing"
+            )
 
         retail_mes_path = retail_root / "retail_unpacked" / chapter / f"{chapter}.MES"
         retail_scn_path = retail_root / "retail_unpacked" / chapter / f"{chapter}.SCN"
@@ -306,7 +308,9 @@ def build_proposals(
                     ),
                     "visible_glyphs": comparison_record["japanese_visible_glyphs"],
                     "preview_path": comparison_record["japanese_image"],
-                    "preview_sha256": _sha256(image_path) if image_path.is_file() else "MISSING",
+                    "preview_sha256": (
+                        _sha256(image_path) if image_path.is_file() else "MISSING"
+                    ),
                     "retail_mes_sha256": _sha256(retail_mes_path),
                     "retail_scn_sha256": _sha256(retail_scn_path),
                 },
@@ -489,7 +493,9 @@ def main() -> None:
     args = parser.parse_args()
     payload = build_proposals(args.retail_root, args.comparison_json)
     args.json.parent.mkdir(parents=True, exist_ok=True)
-    args.json.write_bytes((json.dumps(payload, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
+    args.json.write_bytes(
+        (json.dumps(payload, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    )
     write_markdown(args.markdown, payload)
     print(
         json.dumps(

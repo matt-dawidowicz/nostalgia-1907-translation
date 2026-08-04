@@ -67,7 +67,9 @@ def export_review_script(output_root: Path) -> dict[str, object]:
             elif policy == "preserve":
                 preserved += 1
             else:
-                raise ValueError(f"{source['chapter']}:{expected_index}: invalid policy")
+                raise ValueError(
+                    f"{source['chapter']}:{expected_index}: invalid policy"
+                )
             text = record["text"]
             if text is not None and not isinstance(text, str):
                 raise ValueError(
@@ -124,7 +126,9 @@ def export_review_script(output_root: Path) -> dict[str, object]:
     chapter_root.mkdir(parents=True, exist_ok=True)
     json_path = output_root / "Nostalgia1907_English_Script.json"
     markdown_path = output_root / "Nostalgia1907_English_Script.md"
-    json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    json_path.write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
 
     consolidated = [
         "# Nostalgia 1907 English Translation Review Script",
@@ -177,7 +181,9 @@ def export_review_script(output_root: Path) -> dict[str, object]:
         json_path,
         *sorted(chapter_root.glob("*.md")),
     ]
-    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+    with zipfile.ZipFile(
+        zip_path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
+    ) as archive:
         for path in package_files:
             relative = path.relative_to(output_root).as_posix()
             info = zipfile.ZipInfo(relative, date_time=(1980, 1, 1, 0, 0, 0))

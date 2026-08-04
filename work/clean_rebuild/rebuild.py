@@ -246,6 +246,7 @@ def _canonical_coverage(sources: Path = SOURCES) -> dict[str, object]:
         "preserved_record_count": 0,
         "adaptive_record_count": 0,
         "fixed_record_count": 0,
+        "anchor_record_count": 0,
     }
     part3b_preserved: list[int] = []
     part3b_translated = 0
@@ -257,7 +258,9 @@ def _canonical_coverage(sources: Path = SOURCES) -> dict[str, object]:
         if not isinstance(chapter, str) or not isinstance(source_name, str):
             raise ValueError("canonical source index contains an invalid chapter entry")
         if not SOURCE_JSON_NAME.fullmatch(source_name):
-            raise ValueError(f"{chapter}: canonical source path is unsafe: {source_name!r}")
+            raise ValueError(
+                f"{chapter}: canonical source path is unsafe: {source_name!r}"
+            )
         source = json.loads((sources / source_name).read_text(encoding="utf-8"))
         records = source.get("records")
         if not isinstance(records, list) or source.get("record_count") != len(records):
@@ -266,7 +269,9 @@ def _canonical_coverage(sources: Path = SOURCES) -> dict[str, object]:
         preserved = 0
         for index_value, record in enumerate(records):
             if not isinstance(record, dict) or record.get("index") != index_value:
-                raise ValueError(f"{chapter}: canonical record ordering is inconsistent")
+                raise ValueError(
+                    f"{chapter}: canonical record ordering is inconsistent"
+                )
             policy = record.get("policy")
             if policy == "translate":
                 translated += 1
@@ -275,6 +280,8 @@ def _canonical_coverage(sources: Path = SOURCES) -> dict[str, object]:
                     totals["adaptive_record_count"] += 1
                 elif layout_policy == "fixed":
                     totals["fixed_record_count"] += 1
+                elif layout_policy == "anchor":
+                    totals["anchor_record_count"] += 1
                 else:
                     raise ValueError(
                         f"{chapter}:{index_value:03d}: translated record has no "
@@ -303,7 +310,9 @@ def _canonical_coverage(sources: Path = SOURCES) -> dict[str, object]:
     if index.get("chapter_count") != len(items):
         raise ValueError("canonical source-index chapter count is stale")
     if (
-        totals["adaptive_record_count"] + totals["fixed_record_count"]
+        totals["adaptive_record_count"]
+        + totals["fixed_record_count"]
+        + totals["anchor_record_count"]
         != totals["translated_record_count"]
     ):
         raise ValueError("canonical translated layout-policy counts are incomplete")
@@ -343,7 +352,10 @@ def _render_test_notes(
         f"The canonical source declares {coverage['adaptive_record_count']:,} "
         "translated records with adaptive renderer-aware wrapping and "
         f"{coverage['fixed_record_count']:,} translated records with explicit "
-        "fixed-layout ownership; no translated record is undeclared.\n\n"
+        "fixed-layout ownership. "
+        f"{coverage['anchor_record_count']:,} standalone dialogue-anchor "
+        "records are rendered as one blank cell; no translated record is "
+        "undeclared.\n\n"
         f"PART3B_ contains {coverage['part3b_translated_record_count']:,} "
         f"translated records. Retail records {preserved_indexes} remain "
         "retail-preserved without translation or reflow because they are "
@@ -381,9 +393,7 @@ def _run_input_manifest(
     )
     translation = project_manifest.get("translation")
     baseline = (
-        translation.get("validated_baseline")
-        if isinstance(translation, dict)
-        else None
+        translation.get("validated_baseline") if isinstance(translation, dict) else None
     )
     profile = {
         "name": "clean-rebuild-single-run",
@@ -445,9 +455,7 @@ def _build_once(
 
     index = json.loads((SOURCES / "index.json").read_text(encoding="utf-8"))
     replacements = {
-        f"{item['chapter']}.LZ": build_root
-        / "archives"
-        / f"{item['chapter']}.LZ"
+        f"{item['chapter']}.LZ": build_root / "archives" / f"{item['chapter']}.LZ"
         for item in index["chapters"]
     }
     replacements.update(
@@ -471,9 +479,7 @@ def _build_once(
     iso_to_raw_fixed(track1, build_root / "translated.iso", output_track1)
     shutil.copyfile(track2, output_track2)
     write_two_track_cue(output_cue, output_track1, output_track2)
-    verification = validate_build(
-        build_root, product_root, track1, track2, basename
-    )
+    verification = validate_build(build_root, product_root, track1, track2, basename)
 
     chapters = _chapter_names()
     assert_exact_managed_inventory(
@@ -520,10 +526,8 @@ def _manifest(
         _chapter_names(),
     )
     return {
-        str(item["path"]): str(item["sha256"])
-        for item in snapshot_artifacts(artifacts)
+        str(item["path"]): str(item["sha256"]) for item in snapshot_artifacts(artifacts)
     }
-
 
 
 # Two-run determinism proof and publication.

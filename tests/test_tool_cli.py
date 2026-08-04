@@ -19,7 +19,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class ManifestTests(unittest.TestCase):
+    """Verify project metadata remains synchronized with canonical inputs."""
+
     def test_manifest_matches_canonical_source_inventory(self) -> None:
+        """Match declared chapter and record totals to the canonical index."""
         manifest = nostalgia1907.load_manifest(ROOT)
         index_path = ROOT / "work" / "clean_rebuild" / "sources" / "index.json"
         index = json.loads(index_path.read_text(encoding="utf-8"))
@@ -43,6 +46,7 @@ class ManifestTests(unittest.TestCase):
         )
 
     def test_source_index_hash_is_independent_of_line_endings(self) -> None:
+        """Keep manifest hashes stable across permitted text line endings."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             lf = root / "lf.json"
@@ -55,6 +59,7 @@ class ManifestTests(unittest.TestCase):
             )
 
     def test_package_and_manifest_versions_match(self) -> None:
+        """Require packaging metadata to match the operator manifest version."""
         manifest = nostalgia1907.load_manifest(ROOT)
         pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
         match = re.search(r'(?m)^version = "([^"]+)"$', pyproject)
@@ -62,6 +67,7 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual(match.group(1), manifest["tool"]["version"])
 
     def test_validated_baseline_and_retail_track2_share_exact_audio(self) -> None:
+        """Require the validated build to retain the exact retail audio track."""
         manifest = nostalgia1907.load_manifest(ROOT)
         baseline = manifest["translation"]["validated_baseline"]
         built_track2 = manifest["validated_builds"][baseline]["track2"]
@@ -71,7 +77,10 @@ class ManifestTests(unittest.TestCase):
 
 
 class CliContractTests(unittest.TestCase):
+    """Verify command registration and side-effect safety for the operator CLI."""
+
     def test_all_operator_commands_are_registered(self) -> None:
+        """Expose every supported operator command through the root parser."""
         tool_parser = nostalgia1907.parser()
         subparsers_action = next(
             action
@@ -80,30 +89,38 @@ class CliContractTests(unittest.TestCase):
         )
         self.assertEqual(
             set(subparsers_action.choices),
-            {"doctor", "prepare", "edit", "compare", "validate", "build", "build-us"},
+            {"doctor", "prepare", "edit", "compare", "validate", "build"},
         )
 
     def test_project_defaults_new_builds_to_north_america(self) -> None:
+        """Keep North America as the implicit region for normal builds."""
         manifest = nostalgia1907.load_manifest(ROOT)
         self.assertEqual(manifest["build"]["default_region"], "north-america")
-        args = nostalgia1907.parser().parse_args(["build", "--name", "test"])
+        args = nostalgia1907.parser().parse_args(["build"])
         self.assertIsNone(args.region)
+        self.assertIsNone(args.name)
 
     def test_release_names_are_normalized_without_paths(self) -> None:
+        """Reject path-like release labels before output construction."""
         self.assertEqual(
-            nostalgia1907.release_basename("v8"),
-            "Nostalgia1907_CleanRebuild_v8",
+            nostalgia1907.release_basename(None),
+            "Nostalgia1907_CleanRebuild",
+        )
+        self.assertEqual(
+            nostalgia1907.release_basename("candidate"),
+            "Nostalgia1907_CleanRebuild_candidate",
         )
         self.assertEqual(
             nostalgia1907.release_basename("Nostalgia1907_Custom"),
             "Nostalgia1907_Custom",
         )
-        for invalid in ("../v8", "v8/test", "v8 test", ""):
+        for invalid in ("../candidate", "candidate/test", "candidate test", ""):
             with self.subTest(invalid=invalid):
                 with self.assertRaises(nostalgia1907.ToolError):
                     nostalgia1907.release_basename(invalid)
 
     def test_file_guard_reports_hash_and_size_failures(self) -> None:
+        """Report invalid required artifacts instead of accepting partial matches."""
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / "input.bin"
             path.write_bytes(b"retail fixture")
@@ -131,6 +148,7 @@ class CliContractTests(unittest.TestCase):
             self.assertEqual(wrong_hash["status"], "FAIL")
 
     def test_missing_optional_file_is_skip(self) -> None:
+        """Mark an absent optional dependency as skipped rather than failed."""
         result = nostalgia1907.file_check(
             "optional",
             ROOT / "does-not-exist.bin",
@@ -140,6 +158,7 @@ class CliContractTests(unittest.TestCase):
         self.assertEqual(result["status"], "SKIP")
 
     def test_static_source_inventory_excludes_vendored_runtimes(self) -> None:
+        """Exclude installed analysis runtimes from the reviewed source inventory."""
         manifest = nostalgia1907.load_manifest(ROOT)
         sources = nostalgia1907.operator_python_sources(ROOT, manifest)
         self.assertIn(ROOT / "nostalgia1907.py", sources)
@@ -151,6 +170,7 @@ class CliContractTests(unittest.TestCase):
         self.assertTrue(all(".kokoro_runtime" not in path.parts for path in sources))
 
     def test_edit_rejects_ambiguous_batch_arguments(self) -> None:
+        """Reject a request that mixes batch edits with a single-record edit."""
         with self.assertRaises(nostalgia1907.ToolError):
             nostalgia1907.validate_edit_request(
                 Namespace(
@@ -162,6 +182,7 @@ class CliContractTests(unittest.TestCase):
             )
 
     def test_build_directory_state_and_collision_guard(self) -> None:
+        """Allow only absent or empty build roots before a new run begins."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             absent = root / "absent"
@@ -179,6 +200,7 @@ class CliContractTests(unittest.TestCase):
                 nostalgia1907.require_fresh_build_directory("test", occupied)
 
     def test_build_roots_must_not_overlap(self) -> None:
+        """Reject nested or identical run and delivery roots."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             nostalgia1907.require_separate_build_directories(
@@ -195,6 +217,7 @@ class CliContractTests(unittest.TestCase):
                         nostalgia1907.require_separate_build_directories(runs, delivery)
 
     def test_normal_build_runs_full_validation_before_builder(self) -> None:
+        """Require validation to finish before any normal build subprocess starts."""
         with tempfile.TemporaryDirectory() as temporary:
             temporary_root = Path(temporary)
             args = Namespace(
@@ -225,6 +248,7 @@ class CliContractTests(unittest.TestCase):
             self.assertEqual(events, ["validate", "build"])
 
     def test_north_american_build_wraps_only_a_proven_clean_stage(self) -> None:
+        """Pass only a hash-proven clean stage into the U.S. wrapper."""
         with tempfile.TemporaryDirectory() as temporary:
             temporary_root = Path(temporary)
             args = Namespace(
@@ -246,6 +270,7 @@ class CliContractTests(unittest.TestCase):
                 *script_args: str,
                 **_kwargs: object,
             ) -> None:
+                """Simulate clean and region builders while recording invocation order."""
                 scripts.append((script, script_args))
                 if script.endswith("clean_rebuild/rebuild.py"):
                     events.append("clean")
@@ -293,7 +318,10 @@ class CliContractTests(unittest.TestCase):
 
 
 class RepositoryPolicyTests(unittest.TestCase):
+    """Protect production modules and manifests from local-machine assumptions."""
+
     def test_production_modules_do_not_reference_historical_workspaces(self) -> None:
+        """Reject hard-coded paths to retired forensic workspaces."""
         clean = ROOT / "work" / "clean_rebuild"
         rebuild_path = clean / "rebuild.py"
         tree = ast.parse(rebuild_path.read_text(encoding="utf-8"))
@@ -316,6 +344,7 @@ class RepositoryPolicyTests(unittest.TestCase):
             self.assertNotIn(r"D:\Sega CD Games", text)
 
     def test_project_manifest_contains_no_machine_specific_paths(self) -> None:
+        """Keep the committed project manifest portable across developer machines."""
         text = (ROOT / nostalgia1907.MANIFEST_NAME).read_text(encoding="utf-8")
         self.assertNotIn(r"C:\\Users", text)
         self.assertNotIn(r"D:\\", text)

@@ -20,7 +20,12 @@ import json
 from pathlib import Path
 
 from iso9660 import extract_file, read_entries, unique_file
-from lz_format import LzError, parse_archive, replace_members_fixed, replace_members_reflow
+from lz_format import (
+    LzError,
+    parse_archive,
+    replace_members_fixed,
+    replace_members_reflow,
+)
 
 
 HERE = Path(__file__).resolve().parent
@@ -84,12 +89,19 @@ def build_archives(build_root: Path) -> dict[str, object]:
             replacement_report = reflow["replacements"]
             archive_mode = "guarded-reflow"
             archive_headroom = reflow["headroom"]
-        if archive_mode == "fixed-slot" and output_path.stat().st_size != retail_path.stat().st_size:
+        if (
+            archive_mode == "fixed-slot"
+            and output_path.stat().st_size != retail_path.stat().st_size
+        ):
             raise ValueError(f"{chapter}: fixed-slot archive size changed")
         if output_path.stat().st_size > iso_entry.allocated_size:
             raise ValueError(f"{chapter}: archive exceeds its retail ISO allocation")
-        retail_entries = parse_archive(retail_path.read_bytes(), source=str(retail_path))
-        output_entries = parse_archive(output_path.read_bytes(), source=str(output_path))
+        retail_entries = parse_archive(
+            retail_path.read_bytes(), source=str(retail_path)
+        )
+        output_entries = parse_archive(
+            output_path.read_bytes(), source=str(output_path)
+        )
         if [entry.name for entry in output_entries] != [
             entry.name for entry in retail_entries
         ]:
@@ -141,9 +153,7 @@ def main() -> None:
                 "minimum_archive_headroom": payload["minimum_archive_headroom"],
                 "modes": {
                     mode: sum(
-                        1
-                        for chapter in payload["chapters"]
-                        if chapter["mode"] == mode
+                        1 for chapter in payload["chapters"] if chapter["mode"] == mode
                     )
                     for mode in sorted(
                         {chapter["mode"] for chapter in payload["chapters"]}

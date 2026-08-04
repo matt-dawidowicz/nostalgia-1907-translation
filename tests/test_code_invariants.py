@@ -155,7 +155,9 @@ class MesFormatTests(unittest.TestCase):
 
     def test_missing_record_terminator_is_rejected(self) -> None:
         """Reject a bounded record whose final byte is not the 00 terminator."""
-        with self.assertRaisesRegex(mes_format.MesFormatError, "lacks its 00 terminator"):
+        with self.assertRaisesRegex(
+            mes_format.MesFormatError, "lacks its 00 terminator"
+        ):
             mes_format.parse_mes(mes_bytes((4,), b"AB"))
 
     def test_multiple_terminated_records_remain_valid(self) -> None:
@@ -180,7 +182,9 @@ class RowPackingTests(unittest.TestCase):
                 self.assertFalse(row.selected_alternate)
                 self.assertEqual(row.cells()[0], ("literal", text[:2]))
 
-    def test_prose_rows_without_an_anchor_never_reserve_a_leading_blank_cell(self) -> None:
+    def test_prose_rows_without_an_anchor_never_reserve_a_leading_blank_cell(
+        self,
+    ) -> None:
         """Keep non-dialogue adaptive rows aligned to their renderer's first cell."""
         layout = mes_compiler.Layout(4, 4, 4, 4)
         rows = mes_compiler._prose_rows("left aligned", layout)
@@ -188,7 +192,7 @@ class RowPackingTests(unittest.TestCase):
         self.assertTrue(rows[0][1].startswith("left"))
 
     def test_opening_anchor_is_emitted_once_for_the_full_dialogue_stream(self) -> None:
-        """Keep one gutter while restoring every later page's first stride."""
+        """Keep one gutter while every later row uses the continuation stride."""
         layout = mes_compiler.Layout(
             3,
             2,
@@ -204,11 +208,11 @@ class RowPackingTests(unittest.TestCase):
         )
         self.assertEqual(
             [layout.visible_cells(index) for index in range(7)],
-            [2, 2, 2, 3, 2, 2, 3],
+            [2, 2, 2, 2, 2, 2, 2],
         )
         self.assertEqual(
             [layout.physical_cells(index) for index in range(7)],
-            [3, 2, 2, 3, 2, 2, 3],
+            [3, 2, 2, 2, 2, 2, 2],
         )
         self.assertEqual(rows[0][0], (mes_compiler.BLANK_CELL,))
         self.assertEqual(
@@ -216,7 +220,7 @@ class RowPackingTests(unittest.TestCase):
                 len(prefix) + mes_compiler._measure_literal(line)
                 for prefix, line in rows[:7]
             ],
-            [3, 2, 2, 3, 2, 2, 3],
+            [3, 2, 2, 2, 2, 2, 2],
         )
 
     def test_layout_rejects_invalid_cell_geometry_and_row_indexes(self) -> None:
@@ -250,7 +254,8 @@ class RowPackingTests(unittest.TestCase):
         )
         self.assertEqual(main[1].page_rows, 3)
         self.assertEqual(main[1].visible_cells(0), 11)
-        self.assertEqual(main[1].visible_cells(3), 12)
+        self.assertFalse(main[1].repeat_first_row_on_page)
+        self.assertEqual(main[1].visible_cells(3), 11)
         continuation = scn_layout.infer_layouts(
             b"\x21\x00\x02\x00\x00",
             2,
@@ -277,7 +282,9 @@ class IsoFormatTests(unittest.TestCase):
         even = directory_record(b"AB", 1, 1)
         self.assertEqual(iso9660._parse_record(odd, 0)[0], "A")
         self.assertEqual(iso9660._parse_record(even, 0)[0], "AB")
-        self.assertEqual(iso9660._parse_record(directory_record(b"\0", 1, 1), 0)[0], ".")
+        self.assertEqual(
+            iso9660._parse_record(directory_record(b"\0", 1, 1), 0)[0], "."
+        )
 
         missing_padding = bytearray(even[:-1])
         missing_padding[0] = len(missing_padding)
@@ -294,7 +301,9 @@ class IsoFormatTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             iso_path = Path(temporary) / "bad.iso"
             write_test_iso(iso_path, file_extent=22, file_size=1)
-            with self.assertRaisesRegex(iso9660.IsoError, "file FILE.BIN logical extent"):
+            with self.assertRaisesRegex(
+                iso9660.IsoError, "file FILE.BIN logical extent"
+            ):
                 iso9660.read_entries(iso_path)
 
     def test_last_sector_exact_fit_is_valid(self) -> None:
@@ -339,7 +348,9 @@ class TranslationFormatterTests(unittest.TestCase):
             for payload in payloads:
                 with self.subTest(payload=payload):
                     path.write_text(payload, encoding="utf-8")
-                    with self.assertRaisesRegex(ValueError, "duplicate JSON object key"):
+                    with self.assertRaisesRegex(
+                        ValueError, "duplicate JSON object key"
+                    ):
                         translation_formatter._changes(path)
 
     def test_unique_object_and_list_change_forms_remain_supported(self) -> None:
@@ -453,7 +464,9 @@ class TranslationFormatterTests(unittest.TestCase):
             real_replace = os.replace
             new_replacements = 0
 
-            def failing_replace(source: str | bytes | Path, target: str | bytes | Path) -> None:
+            def failing_replace(
+                source: str | bytes | Path, target: str | bytes | Path
+            ) -> None:
                 """Fail only the second staged-new replacement."""
                 nonlocal new_replacements
                 if str(source).endswith(".new"):
@@ -489,7 +502,9 @@ class TranslationFormatterTests(unittest.TestCase):
             second.write_bytes(b"before B")
             real_replace = os.replace
 
-            def failing_replace(source: str | bytes | Path, target: str | bytes | Path) -> None:
+            def failing_replace(
+                source: str | bytes | Path, target: str | bytes | Path
+            ) -> None:
                 """Fail the first staged-new replacement and allow cleanup."""
                 if str(source).endswith(".new"):
                     raise OSError("simulated first replacement failure")
@@ -523,7 +538,9 @@ class TranslationFormatterTests(unittest.TestCase):
             real_replace = os.replace
             new_replacements = 0
 
-            def failing_replace(source: str | bytes | Path, target: str | bytes | Path) -> None:
+            def failing_replace(
+                source: str | bytes | Path, target: str | bytes | Path
+            ) -> None:
                 """Fail the second commit and the subsequent first-file rollback."""
                 nonlocal new_replacements
                 source_text = str(source)
@@ -585,7 +602,9 @@ class TranslationFormatterTests(unittest.TestCase):
             first = root / "A.json"
             second = root / "B.json"
             first.write_text(json.dumps(canonical_source("before A")), encoding="utf-8")
-            second.write_text(json.dumps(canonical_source("before B")), encoding="utf-8")
+            second.write_text(
+                json.dumps(canonical_source("before B")), encoding="utf-8"
+            )
             before_first = first.read_bytes()
             before_second = second.read_bytes()
             changes = root / "changes.json"
@@ -600,7 +619,9 @@ class TranslationFormatterTests(unittest.TestCase):
             real_replace = os.replace
             new_replacements = 0
 
-            def failing_replace(source: str | bytes | Path, target: str | bytes | Path) -> None:
+            def failing_replace(
+                source: str | bytes | Path, target: str | bytes | Path
+            ) -> None:
                 """Fail the second canonical replacement and permit rollback."""
                 nonlocal new_replacements
                 if str(source).endswith(".new"):
@@ -646,7 +667,9 @@ class TranslationFormatterTests(unittest.TestCase):
             real_replace = os.replace
             new_replacements = 0
 
-            def failing_replace(source: str | bytes | Path, target: str | bytes | Path) -> None:
+            def failing_replace(
+                source: str | bytes | Path, target: str | bytes | Path
+            ) -> None:
                 """Fail the second migration replacement and permit rollback."""
                 nonlocal new_replacements
                 if str(source).endswith(".new"):
@@ -720,7 +743,9 @@ class RebuildSafetyTests(unittest.TestCase):
         """Report the exact bounded scope of the real static dependency audit."""
         report = clean_rebuild._verify_production_independence()
         self.assertEqual(report["status"], "PASS")
-        self.assertEqual(report["modules_scanned"], len(clean_rebuild.PRODUCTION_MODULES))
+        self.assertEqual(
+            report["modules_scanned"], len(clean_rebuild.PRODUCTION_MODULES)
+        )
         self.assertEqual(report["unapproved_local_import_count"], 0)
         self.assertEqual(report["known_historical_marker_hit_count"], 0)
 
@@ -791,6 +816,7 @@ class RebuildSafetyTests(unittest.TestCase):
         self.assertEqual(coverage["record_count"], 2905)
         self.assertEqual(coverage["adaptive_record_count"], 2759)
         self.assertEqual(coverage["fixed_record_count"], 123)
+        self.assertEqual(coverage["anchor_record_count"], 1)
         self.assertEqual(coverage["part3b_translated_record_count"], 209)
         self.assertEqual(coverage["part3b_preserved_record_indexes"], [4, 15])
 

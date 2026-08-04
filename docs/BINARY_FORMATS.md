@@ -157,6 +157,14 @@ must end in `0x00`. Preserved retail records otherwise remain
 byte-authoritative except that their dynamic references may be remapped when
 unused retail glyphs are removed.
 
+`MAIN.BIN` lower-dialogue code at `$FF1DAA-$FF1DE0` has an additional
+row-edge lookahead path for the next one-byte values `02`, `03`, `04`, `05`,
+`08`, and `11`. They are valid retail fixed-font values, but are not
+interchangeable with arbitrary generated English cells at a full-row boundary.
+Generated English must encode bitmaps assigned to those values dynamically
+(`F0xx`); preserved retail bytes are not changed. A fixed and a dynamic
+reference otherwise each advance the native dialogue cursor by one cell.
+
 The runtime permits at most 1,020 dynamic glyphs. All MES pointers must fit
 16-bit offsets. PART3C also has a proven hard file boundary at `0x3FFF`.
 
@@ -180,15 +188,20 @@ otherwise unused fixed-font slots. Every chapter may reference that dictionary;
 it is a storage encoding, not a scene-specific formatting rule. Regression
 checks prove the dictionary is unused by all byte-preserved retail records,
 changes only its declared fixed-font cells, and produces the same bitmap
-sequences as an all-dynamic encoding. This avoids using a visible leading blank
-to alter pair phase while retaining PART3C's hard-boundary safety margin. The
+sequences as an all-dynamic encoding. The six lower-dialogue row-edge values
+listed above are deliberately excluded from that dictionary. This avoids using
+a visible leading blank to alter pair phase while retaining PART3C's
+hard-boundary safety margin. The
 lower-dialogue renderer is separate: its retail main-dialogue records normally
 begin with fixed code `0x10`, a Japanese opening-quote cell drawn in the left
 gutter. The English compiler replaces that one initial cell with the shared
-blank fixed cell. The physical row cadence is 12/11/11 cells and repeats every
-three rows; the initial gutter uses one cell of row zero, while later page
-starts retain their full 12-cell prose stride. No extra cell is emitted at a
-page transition.
+blank fixed cell. This is the named `lower_dialogue` renderer contract: its
+physical geometry is one initial 12-cell row followed by an 11-cell
+continuation stride. The initial gutter uses one cell of row zero; later visual
+page starts retain the continuation X-coordinate and width. No extra cell is
+emitted at a page transition.
+The complete contract catalogue and evidence rules are in
+[`TEXT_BOX_CONTRACTS.md`](TEXT_BOX_CONTRACTS.md).
 
 
 ## SCN renderer references

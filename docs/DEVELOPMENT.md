@@ -12,11 +12,17 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[test]"
 ```
 
+For a formatting pass, install the isolated style extra and run Black:
+
+```powershell
+python -m pip install -e ".[style]"
+python -m black nostalgia1907.py tools tests work/clean_rebuild work/region_variant work/audio_localization
+```
+
 The supported production and comparison path uses only the Python standard
 library. The `test` extra adds NumPy for the audio codec/synthesis companion
-tests. Pillow is available only through the optional `legacy-render` extra for
-historical research utilities; the comparison exporter does not import it.
-Speech recognition and synthesis packages are isolated behind the audio extras.
+tests. Speech recognition and synthesis packages are isolated behind the audio
+extras.
 
 Machine-specific retail, BIOS, and FFmpeg paths belong in the ignored
 `nostalgia1907.local.json`, never in tracked source.
@@ -36,7 +42,6 @@ Use `nostalgia1907.py` for normal work:
 | `build --dry-run` | hashes and path state | nothing | resolved build plan |
 | `build` | original tracks, canonical source, U.S. BIOS | isolated clean/region runs and delivery | deterministic North American BIN/CUE by default |
 | `build --region japan` | original tracks and canonical source | isolated runs and delivery | explicit unwrapped diagnostic build |
-| `build-us` | older validated baseline and BIOS | separate derivative | compatibility wrapper for older builds |
 
 The lower-level modules are intentionally importable for focused analysis. Run
 them directly only when you understand which higher-level preflight stages you
@@ -48,7 +53,7 @@ Validation is layered so a failure can be localized:
 
 1. **Python compilation** catches syntax and import-time source mistakes.
 2. **Source-only unit tests** cover CLI contracts, manifests, repository
-   policy, and documentation inventory.
+   policy, documentation inventory, and the maintained-code style audit.
 3. **Audio companion unit tests** cover the reversible PCM/WAV codec and SCN
    audio mapping without changing the game.
 4. **Renderer audit** classifies every translated record and checks adaptive or
@@ -65,6 +70,11 @@ Validation is layered so a failure can be localized:
 9. **Two-run comparison** proves deterministic output.
 10. **Manual playtesting** remains the release gate for visual and branching
     behavior.
+
+For a reproducible complete-corpus static check plus an explicit runtime
+certification log, use `docs/WHOLE_GAME_TESTING.md`. The log is candidate-hash
+bound and remains pending until every declared chapter, box type, and runtime
+state has human evidence.
 
 ## Generated reports
 
@@ -94,6 +104,8 @@ Run tests that do not require retail media:
 python -m compileall -q nostalgia1907.py work tests
 python -m unittest discover -s tests -v
 python work/audio_localization/test_audio_localization.py
+python tools/style_audit.py
+python -m black --check nostalgia1907.py tools tests work/clean_rebuild work/region_variant work/audio_localization
 ```
 
 `work/clean_rebuild/test_script_layout.py` is retail-backed integration
@@ -111,7 +123,7 @@ python nostalgia1907.py validate
 Inspect a build plan without creating output:
 
 ```powershell
-python nostalgia1907.py build --name v8 --dry-run
+python nostalgia1907.py build --dry-run
 ```
 
 The dry run hashes both original tracks and the U.S. BIOS, reports the selected

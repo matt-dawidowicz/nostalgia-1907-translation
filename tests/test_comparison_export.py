@@ -96,7 +96,9 @@ class ComparisonExportTests(unittest.TestCase):
             patch.object(comparison, "EXPECTED_CHAPTERS", 1),
             patch.object(comparison, "EXPECTED_RECORDS", 2),
             patch.object(comparison, "FIXED_FONT_SIZE", fixed_path.stat().st_size),
-            patch.object(comparison, "FIXED_FONT_SHA256", comparison.sha256(fixed_path)),
+            patch.object(
+                comparison, "FIXED_FONT_SHA256", comparison.sha256(fixed_path)
+            ),
             patch.object(comparison, "read_mes", return_value=fake_mes),
         ):
             return comparison.export_comparison(retail, output)
@@ -178,7 +180,9 @@ class ComparisonExportTests(unittest.TestCase):
             unexpected.write_text("unexpected", encoding="utf-8")
             validation = comparison.validate_comparison_package(output)
             self.assertEqual(validation["status"], "FAIL")
-            self.assertTrue(any("unexpected" in item for item in validation["failures"]))
+            self.assertTrue(
+                any("unexpected" in item for item in validation["failures"])
+            )
             unexpected.unlink()
             (output / "README.md").write_text("tampered\n", encoding="utf-8")
             validation = comparison.validate_comparison_package(output)

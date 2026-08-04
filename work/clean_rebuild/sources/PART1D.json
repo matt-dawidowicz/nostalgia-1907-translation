@@ -150,6 +150,7 @@
       "index": 16,
       "policy": "translate",
       "text": "Chief Engineer",
+      "display_text": "Chief Eng.",
       "layout_policy": "adaptive"
     },
     {

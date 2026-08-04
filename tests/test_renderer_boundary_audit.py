@@ -104,7 +104,10 @@ class RendererBoundaryUnitTests(unittest.TestCase):
             )
 
         self.assertTrue(
-            any("renderer row boundary splits" in failure for failure in audit["failures"])
+            any(
+                "renderer row boundary splits" in failure
+                for failure in audit["failures"]
+            )
         )
 
 
@@ -125,6 +128,9 @@ class RendererBoundaryCorpusTests(unittest.TestCase):
         ]
         self.assertEqual(report["status"], "PASS")
         self.assertEqual(report["adaptive_record_count"], 2759)
+        self.assertEqual(report["unclassified_layout_count"], 0)
+        self.assertGreater(report["text_box_counts"].get("lower_dialogue", 0), 0)
+        self.assertGreater(report["text_box_counts"].get("floating_window", 0), 0)
         self.assertEqual(boundary_failures, [])
 
 

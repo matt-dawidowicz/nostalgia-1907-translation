@@ -27,7 +27,9 @@ from raw_cd import raw_to_iso
 HERE = Path(__file__).resolve().parent
 SOURCES = HERE / "sources"
 RETAIL_TRACK1_SIZE = 192_649_968
-RETAIL_TRACK1_SHA256 = "EFE9A453849F52DC72B7E72EE98D8644882655536E59991C2C85C5A35A41D0E5"
+RETAIL_TRACK1_SHA256 = (
+    "EFE9A453849F52DC72B7E72EE98D8644882655536E59991C2C85C5A35A41D0E5"
+)
 RETAIL_ISO_SIZE = 167_749_632
 RETAIL_ISO_SHA256 = "7944AF20FD802A43BEFBFA97734993EB63A3803F76D4AFBCEF315E41D4459ECC"
 
@@ -99,7 +101,11 @@ def prepare_retail(track1: Path, build_root: Path) -> dict[str, object]:
         archive_path.write_bytes(extract_file(retail_iso, archive_name))
         members = parse_archive(archive_path.read_bytes(), source=str(archive_path))
         duplicate_names = sorted(
-            {entry.name for entry in members if sum(x.name == entry.name for x in members) > 1}
+            {
+                entry.name
+                for entry in members
+                if sum(x.name == entry.name for x in members) > 1
+            }
         )
         chapter_root = unpacked_root / chapter
         chapter_root.mkdir(parents=True, exist_ok=True)

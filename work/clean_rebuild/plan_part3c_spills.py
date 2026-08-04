@@ -37,9 +37,7 @@ def _preserved_code_usage(retail_root: Path) -> Counter[int]:
     for item in index["chapters"]:
         chapter = item["chapter"]
         canonical = json.loads((SOURCES / item["source"]).read_text(encoding="utf-8"))
-        retail = read_mes(
-            retail_root / "retail_unpacked" / chapter / f"{chapter}.MES"
-        )
+        retail = read_mes(retail_root / "retail_unpacked" / chapter / f"{chapter}.MES")
         for record in canonical["records"]:
             if record["policy"] != "preserve":
                 continue
@@ -119,6 +117,7 @@ def plan(candidate: Path, retail_root: Path) -> dict[str, object]:
 
 
 def main() -> None:
+    """Write a ranked fixed-code spill plan for one compiled PART3C candidate."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("candidate", type=Path)
     parser.add_argument("--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT)

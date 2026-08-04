@@ -2,19 +2,19 @@
   "schema_version": 1,
   "tool": {
     "name": "nostalgia1907-tools",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "python_minimum": "3.10"
   },
   "build": {
     "default_region": "north-america"
   },
   "translation": {
-    "validated_baseline": "v7",
+    "validated_baseline": "v33",
     "chapter_count": 19,
     "record_count": 2905,
-    "translated_record_count": 2882,
-    "preserved_record_count": 23,
-    "source_index_text_sha256": "F6A5813A28FC7B6C85C1A97A0FC9B7DE26047FA5FCEB28B30ADF4BA74FA4A48E"
+    "translated_record_count": 2883,
+    "preserved_record_count": 22,
+    "source_index_text_sha256": "55B33F41C28086B0602BC5CB0BE2754D9550D3A6BD3776C5091071FE933A0B77"
   },
   "retail_inputs": {
     "track1": {
@@ -33,29 +33,17 @@
     }
   },
   "validated_builds": {
-    "v7": {
-      "basename": "Nostalgia1907_CleanRebuild_v7",
+    "v33": {
+      "basename": "Nostalgia1907_CleanRebuild_v33_EdgeCases_NorthAmerica",
       "track1": {
         "size": 192649968,
-        "sha256": "E8B30EA76E02656B5349898AF35FB3CF597C9E766FB8AEDDEAED617DFFD7EDC7"
+        "sha256": "1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17"
       },
       "track2": {
         "size": 24710112,
         "sha256": "F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991"
       },
-      "logical_iso_sha256": "D013704CC64B1A4129A7742AEFCFA23772A1C00ECB37F4F2225B57A7CF38D183"
-    },
-    "v22": {
-      "basename": "Nostalgia1907_CleanRebuild_v22",
-      "track1": {
-        "size": 192649968,
-        "sha256": "481409A9A90271F997D33100F35FF6E49A3DE127E7183A764B749BBF270E2C02"
-      },
-      "track2": {
-        "size": 24710112,
-        "sha256": "F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991"
-      },
-      "logical_iso_sha256": "7996ECE4B45A44DCE413BBC50E9F9E1626F8CEC3722D0B992651698C716DF45A"
+      "logical_iso_sha256": "44585688DB0795E0C2C0A964B04B5493AB1B63C6EDBFFA5BF1D9AC376AD30753"
     }
   },
   "us_bios_test": {

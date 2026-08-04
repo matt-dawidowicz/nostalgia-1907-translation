@@ -277,7 +277,11 @@ def _pack_stream(bits: list[int], unpacked_size: int) -> bytes:
     checksum = 0
     for word in words:
         checksum ^= word
-    return b"".join(word.to_bytes(4, "big") for word in reversed(words)) + checksum.to_bytes(4, "big") + unpacked_size.to_bytes(4, "big")
+    return (
+        b"".join(word.to_bytes(4, "big") for word in reversed(words))
+        + checksum.to_bytes(4, "big")
+        + unpacked_size.to_bytes(4, "big")
+    )
 
 
 def compress(data: bytes) -> bytes:
@@ -380,7 +384,11 @@ def member_bytes(data: bytes, entry: Entry) -> bytes:
 def read_member(archive_path: Path, member_name: str) -> bytes:
     """Read an archive member by its exact table name."""
     data = archive_path.read_bytes()
-    matches = [entry for entry in parse_archive(data, source=str(archive_path)) if entry.name == member_name]
+    matches = [
+        entry
+        for entry in parse_archive(data, source=str(archive_path))
+        if entry.name == member_name
+    ]
     if len(matches) != 1:
         raise LzError(f"{archive_path}: expected one member named {member_name!r}")
     return member_bytes(data, matches[0])
@@ -436,13 +444,17 @@ def replace_members_fixed(
         payload = encoded if len(encoded) < len(unpacked) else unpacked
         compressed_size = len(payload)
         unpacked_size = len(unpacked) if payload is encoded else len(payload)
-        slot_end = entries[entry.index + 1].offset if entry.index + 1 < len(entries) else len(data)
+        slot_end = (
+            entries[entry.index + 1].offset
+            if entry.index + 1 < len(entries)
+            else len(data)
+        )
         slot_size = slot_end - entry.offset
         if len(payload) > slot_size:
             raise LzError(
                 f"{name}: encoded payload is {len(payload)} bytes but retail slot is {slot_size}"
             )
-        data[entry.offset:slot_end] = payload + b"\0" * (slot_size - len(payload))
+        data[entry.offset : slot_end] = payload + b"\0" * (slot_size - len(payload))
         table_offset = 4 + entry.index * ENTRY_SIZE
         data[table_offset + 18 : table_offset + 22] = compressed_size.to_bytes(4, "big")
         data[table_offset + 22 : table_offset + 26] = unpacked_size.to_bytes(4, "big")
@@ -538,7 +550,9 @@ def replace_members_reflow(
     for entry, (payload, compressed_size, unpacked_size) in zip(entries, payloads):
         table_offset = 4 + entry.index * ENTRY_SIZE
         output[table_offset + 14 : table_offset + 18] = cursor.to_bytes(4, "big")
-        output[table_offset + 18 : table_offset + 22] = compressed_size.to_bytes(4, "big")
+        output[table_offset + 18 : table_offset + 22] = compressed_size.to_bytes(
+            4, "big"
+        )
         output[table_offset + 22 : table_offset + 26] = unpacked_size.to_bytes(4, "big")
         output[cursor : cursor + len(payload)] = payload
         cursor += len(payload)

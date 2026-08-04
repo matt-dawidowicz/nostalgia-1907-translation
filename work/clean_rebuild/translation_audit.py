@@ -43,7 +43,9 @@ def _load_json(path: Path) -> dict[str, object]:
     return value
 
 
-def _glyphs(record: bytes, fixed: tuple[bytes, ...], dynamic: tuple[bytes, ...]) -> tuple[bytes, ...]:
+def _glyphs(
+    record: bytes, fixed: tuple[bytes, ...], dynamic: tuple[bytes, ...]
+) -> tuple[bytes, ...]:
     """Resolve one retail record to its exact visible glyph bitmap sequence."""
     output: list[bytes] = []
     offset = 0
@@ -132,7 +134,9 @@ def audit(retail_root: Path) -> dict[str, object]:
     exemptions = _load_json(EXEMPTIONS)
     visible_exemptions = exemptions["reviewed_visible_translation_exemptions"]
     control_exemptions = exemptions["reviewed_control_records"]
-    if not isinstance(visible_exemptions, dict) or not isinstance(control_exemptions, dict):
+    if not isinstance(visible_exemptions, dict) or not isinstance(
+        control_exemptions, dict
+    ):
         raise ValueError("translation exemption tables are invalid")
 
     fixed_path = retail_root / "retail_files" / "FIX_CODE.FNT"
@@ -152,7 +156,9 @@ def audit(retail_root: Path) -> dict[str, object]:
         chapter_order.append(chapter)
         canonical = _load_json(SOURCES / chapter_item["source"])
         records = canonical.get("records")
-        if not isinstance(records, list) or len(records) != canonical.get("record_count"):
+        if not isinstance(records, list) or len(records) != canonical.get(
+            "record_count"
+        ):
             raise ValueError(f"{chapter}: incomplete canonical record table")
         mes_path = retail_root / "retail_unpacked" / chapter / f"{chapter}.MES"
         mes = read_mes(mes_path)
@@ -186,7 +192,9 @@ def audit(retail_root: Path) -> dict[str, object]:
                 "visible_glyph_count": len(resolved),
                 "normalized_visible_glyph_count": len(normalized),
                 "english": english,
-                "english_rendered": rendered_english if isinstance(rendered_english, str) else "",
+                "english_rendered": (
+                    rendered_english if isinstance(rendered_english, str) else ""
+                ),
                 "category": _category(len(normalized), english, policy),
             }
             all_records.append(item)
@@ -206,8 +214,11 @@ def audit(retail_root: Path) -> dict[str, object]:
                 "record_ids": [member["id"] for member in members],
                 "english_values": english_values,
                 "conflict": len(english_values) > 1,
-                "formatting_only_variants": len(english_values) == 1 and len(rendered_values) > 1,
-                "category": categories[0] if len(categories) == 1 else "mixed_or_unresolved",
+                "formatting_only_variants": len(english_values) == 1
+                and len(rendered_values) > 1,
+                "category": (
+                    categories[0] if len(categories) == 1 else "mixed_or_unresolved"
+                ),
                 "records": [
                     {
                         "id": member["id"],
@@ -249,7 +260,9 @@ def audit(retail_root: Path) -> dict[str, object]:
         "chapter_order": chapter_order,
         "record_count": len(all_records),
         "duplicate_source_group_count": len(duplicate_groups),
-        "conflicting_duplicate_group_count": sum(group["conflict"] for group in duplicate_groups),
+        "conflicting_duplicate_group_count": sum(
+            group["conflict"] for group in duplicate_groups
+        ),
         "formatting_only_duplicate_group_count": sum(
             group["formatting_only_variants"] for group in duplicate_groups
         ),
@@ -281,9 +294,11 @@ def _markdown(payload: dict[str, object]) -> str:
         conflict = (
             "CONFLICT"
             if group["conflict"]
-            else "formatting variants only"
-            if group["formatting_only_variants"]
-            else "consistent"
+            else (
+                "formatting variants only"
+                if group["formatting_only_variants"]
+                else "consistent"
+            )
         )
         lines.extend(
             [
@@ -297,9 +312,7 @@ def _markdown(payload: dict[str, object]) -> str:
         )
         for record in group["records"]:
             english = (
-                str(record["english_rendered"])
-                .replace("\n", " ↵ ")
-                .replace("|", "\\|")
+                str(record["english_rendered"]).replace("\n", " ↵ ").replace("|", "\\|")
                 or "[missing]"
             )
             lines.append(f"| {record['id']} | {english} |")
@@ -318,7 +331,9 @@ def main() -> None:
     args.output_root.mkdir(parents=True, exist_ok=True)
     json_path = args.output_root / f"{args.label}.json"
     md_path = args.output_root / f"{args.label}.md"
-    json_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    json_path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     md_path.write_text(_markdown(payload), encoding="utf-8")
     print(
         json.dumps(
@@ -326,10 +341,18 @@ def main() -> None:
                 "status": payload["status"],
                 "record_count": payload["record_count"],
                 "duplicate_source_group_count": payload["duplicate_source_group_count"],
-                "conflicting_duplicate_group_count": payload["conflicting_duplicate_group_count"],
-                "formatting_only_duplicate_group_count": payload["formatting_only_duplicate_group_count"],
-                "missing_visible_translation_count": payload["missing_visible_translation_count"],
-                "blank_source_marked_translate_count": payload["blank_source_marked_translate_count"],
+                "conflicting_duplicate_group_count": payload[
+                    "conflicting_duplicate_group_count"
+                ],
+                "formatting_only_duplicate_group_count": payload[
+                    "formatting_only_duplicate_group_count"
+                ],
+                "missing_visible_translation_count": payload[
+                    "missing_visible_translation_count"
+                ],
+                "blank_source_marked_translate_count": payload[
+                    "blank_source_marked_translate_count"
+                ],
                 "json": str(json_path),
                 "markdown": str(md_path),
             },

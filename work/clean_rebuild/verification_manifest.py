@@ -46,7 +46,7 @@ CONFIGURATION_FILES = (
     "translation_repairs.json",
     "translation_exemptions.json",
     "bomb_semantics.json",
-    "source_provenance.json",
+    "retired_workspace_register.json",
 )
 
 
@@ -88,12 +88,12 @@ def _logical_path(value: str) -> str:
     if "\\" in value:
         raise ValueError(f"logical path uses a backslash: {value!r}")
     path = PurePosixPath(value)
-    if path.is_absolute() or not path.parts or any(
-        part in {"", ".", ".."} for part in path.parts
+    if (
+        path.is_absolute()
+        or not path.parts
+        or any(part in {"", ".", ".."} for part in path.parts)
     ):
-        raise ValueError(
-            f"logical path is not normalized and relative: {value!r}"
-        )
+        raise ValueError(f"logical path is not normalized and relative: {value!r}")
     normalized = path.as_posix()
     if normalized != value:
         raise ValueError(f"logical path is not normalized: {value!r}")
@@ -144,9 +144,7 @@ def _file_entry(binding: FileBinding) -> dict[str, object]:
     if not binding.group or binding.group.strip() != binding.group:
         raise ValueError(f"invalid input group name: {binding.group!r}")
     if not binding.path.is_file():
-        raise ValueError(
-            f"manifest input is missing: {logical} -> {binding.path}"
-        )
+        raise ValueError(f"manifest input is missing: {logical} -> {binding.path}")
     return {
         "group": binding.group,
         "path": logical,
@@ -221,9 +219,7 @@ def create_input_manifest(
     manifest = dict(core)
     manifest["aggregate_input_fingerprint"] = _aggregate_fingerprint(core)
     manifest["input_file_count"] = len(entries)
-    manifest["input_group_count"] = len(
-        {str(entry["group"]) for entry in entries}
-    )
+    manifest["input_group_count"] = len({str(entry["group"]) for entry in entries})
     return manifest
 
 
@@ -257,12 +253,12 @@ def validate_input_manifest(manifest: Mapping[str, object]) -> dict[str, object]
         if not isinstance(size, int) or size < 0:
             failures.append("input manifest contains an invalid byte size")
         digest = entry.get("sha256")
-        if not isinstance(digest, str) or len(digest) != 64 or any(
-            character not in "0123456789ABCDEF" for character in digest
+        if (
+            not isinstance(digest, str)
+            or len(digest) != 64
+            or any(character not in "0123456789ABCDEF" for character in digest)
         ):
-            failures.append(
-                f"input manifest contains an invalid SHA-256: {digest!r}"
-            )
+            failures.append(f"input manifest contains an invalid SHA-256: {digest!r}")
     sortable = [
         (str(entry.get("group", "")), str(entry.get("path", "")))
         for entry in inputs
@@ -283,9 +279,7 @@ def validate_input_manifest(manifest: Mapping[str, object]) -> dict[str, object]
         "status": "PASS" if not failures else "FAIL",
         "failure_count": len(failures),
         "failures": failures,
-        "aggregate_input_fingerprint": manifest.get(
-            "aggregate_input_fingerprint"
-        ),
+        "aggregate_input_fingerprint": manifest.get("aggregate_input_fingerprint"),
         "input_file_count": len(inputs),
     }
 
@@ -352,18 +346,12 @@ def collect_build_bindings(
                 FileBinding(
                     "japanese_source_fixtures",
                     f"prepared_retail/retail_unpacked/{chapter}/{chapter}.MES",
-                    build_root
-                    / "retail_unpacked"
-                    / chapter
-                    / f"{chapter}.MES",
+                    build_root / "retail_unpacked" / chapter / f"{chapter}.MES",
                 ),
                 FileBinding(
                     "japanese_source_fixtures",
                     f"prepared_retail/retail_unpacked/{chapter}/{chapter}.SCN",
-                    build_root
-                    / "retail_unpacked"
-                    / chapter
-                    / f"{chapter}.SCN",
+                    build_root / "retail_unpacked" / chapter / f"{chapter}.SCN",
                 ),
             )
         )
@@ -433,18 +421,13 @@ def expected_build_artifacts(
         "build/reports/retail_report.json": build_root / "retail_report.json",
         "build/reports/mes_report.json": build_root / "mes_report.json",
         "build/reports/archive_report.json": build_root / "archive_report.json",
-        "build/reports/iso_patch_report.json": build_root
-        / "iso_patch_report.json",
-        f"product/{basename}_Track1.bin": product_root
-        / f"{basename}_Track1.bin",
-        f"product/{basename}_Track2.bin": product_root
-        / f"{basename}_Track2.bin",
+        "build/reports/iso_patch_report.json": build_root / "iso_patch_report.json",
+        f"product/{basename}_Track1.bin": product_root / f"{basename}_Track1.bin",
+        f"product/{basename}_Track2.bin": product_root / f"{basename}_Track2.bin",
         f"product/{basename}.cue": product_root / f"{basename}.cue",
     }
     for chapter in chapters:
-        artifacts[f"build/mes/{chapter}.MES"] = (
-            build_root / "mes" / f"{chapter}.MES"
-        )
+        artifacts[f"build/mes/{chapter}.MES"] = build_root / "mes" / f"{chapter}.MES"
         artifacts[f"build/archives/{chapter}.LZ"] = (
             build_root / "archives" / f"{chapter}.LZ"
         )
@@ -458,10 +441,8 @@ def expected_delivery_artifacts(
     """Return the exact three game artifacts published by a clean release."""
     return {
         f"delivery/{basename}.cue": delivery_root / f"{basename}.cue",
-        f"delivery/{basename}_Track1.bin": delivery_root
-        / f"{basename}_Track1.bin",
-        f"delivery/{basename}_Track2.bin": delivery_root
-        / f"{basename}_Track2.bin",
+        f"delivery/{basename}_Track1.bin": delivery_root / f"{basename}_Track1.bin",
+        f"delivery/{basename}_Track2.bin": delivery_root / f"{basename}_Track2.bin",
     }
 
 
@@ -470,9 +451,7 @@ def _directory_files(root: Path) -> set[str]:
     if not root.is_dir():
         return set()
     return {
-        path.relative_to(root).as_posix()
-        for path in root.rglob("*")
-        if path.is_file()
+        path.relative_to(root).as_posix() for path in root.rglob("*") if path.is_file()
     }
 
 
@@ -519,9 +498,7 @@ def assert_exact_managed_inventory(
     if missing_required:
         problems.append(f"build missing {missing_required}")
     if problems:
-        raise ValueError(
-            "managed artifact inventory failed: " + "; ".join(problems)
-        )
+        raise ValueError("managed artifact inventory failed: " + "; ".join(problems))
 
 
 def snapshot_artifacts(
@@ -555,9 +532,7 @@ def _bound_core(manifest: Mapping[str, object]) -> dict[str, object]:
         "schema_version": manifest.get("schema_version"),
         "kind": manifest.get("kind"),
         "report_kind": manifest.get("report_kind"),
-        "aggregate_input_fingerprint": manifest.get(
-            "aggregate_input_fingerprint"
-        ),
+        "aggregate_input_fingerprint": manifest.get("aggregate_input_fingerprint"),
         "input_manifest": manifest.get("input_manifest"),
         "outputs": manifest.get("outputs"),
     }
@@ -593,9 +568,7 @@ def write_bound_verification(
         "schema_version": SCHEMA_VERSION,
         "kind": BOUND_KIND,
         "report_kind": report_kind,
-        "aggregate_input_fingerprint": input_manifest[
-            "aggregate_input_fingerprint"
-        ],
+        "aggregate_input_fingerprint": input_manifest["aggregate_input_fingerprint"],
         "input_manifest": dict(input_manifest),
         "outputs": expected_snapshot,
     }
@@ -608,9 +581,7 @@ def write_bound_verification(
     report = dict(verification)
     report["provenance"] = {
         "explanation": explanation,
-        "aggregate_input_fingerprint": input_manifest[
-            "aggregate_input_fingerprint"
-        ],
+        "aggregate_input_fingerprint": input_manifest["aggregate_input_fingerprint"],
         "input_file_count": input_manifest["input_file_count"],
         "input_group_count": input_manifest["input_group_count"],
         "build_profile": input_manifest["build_profile"],
@@ -655,9 +626,7 @@ def validate_bound_verification(
         failures.append("bound manifest has no input manifest")
     else:
         input_check = validate_input_manifest(input_manifest)
-        failures.extend(
-            f"input: {failure}" for failure in input_check["failures"]
-        )
+        failures.extend(f"input: {failure}" for failure in input_check["failures"])
         if manifest.get("aggregate_input_fingerprint") != input_manifest.get(
             "aggregate_input_fingerprint"
         ):
@@ -676,9 +645,7 @@ def validate_bound_verification(
         "status": "PASS" if not failures else "FAIL",
         "failure_count": len(failures),
         "failures": failures,
-        "aggregate_input_fingerprint": manifest.get(
-            "aggregate_input_fingerprint"
-        ),
+        "aggregate_input_fingerprint": manifest.get("aggregate_input_fingerprint"),
         "output_fingerprint": manifest.get("output_fingerprint"),
         "output_count": len(current),
     }

@@ -35,7 +35,9 @@ class EllipsisStyleTests(unittest.TestCase):
             "Wait...what happened...the door?",
         )
 
-    def test_names_titles_acronyms_and_first_person_forms_remain_capitalized(self) -> None:
+    def test_names_titles_acronyms_and_first_person_forms_remain_capitalized(
+        self,
+    ) -> None:
         """Preserve reviewed exceptions while still removing their pause space."""
         self.assertEqual(
             normalize_ellipsis_style(
@@ -73,7 +75,9 @@ class EllipsisStyleTests(unittest.TestCase):
         )
         rows = _wrap_words("What are you plotting...?", contract.layout)
 
-        self.assertEqual(_renderer_boundary_failures("What are you plotting...?", rows, contract), [])
+        self.assertEqual(
+            _renderer_boundary_failures("What are you plotting...?", rows, contract), []
+        )
 
     def test_repair_application_cannot_restore_the_legacy_ellipsis_style(self) -> None:
         """Apply the same no-space rule to editable repair-table prose."""

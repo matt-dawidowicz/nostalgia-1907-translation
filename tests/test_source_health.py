@@ -35,9 +35,15 @@ class SourceHealthTests(unittest.TestCase):
         """Accept valid UTF-8 Python, JSON, and TOML source files."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            (root / "module.py").write_text('"""Example."""\n', encoding="utf-8", newline="\n")
-            (root / "data.json").write_text('{"value": 1}\n', encoding="utf-8", newline="\n")
-            (root / "pyproject.toml").write_text('[project]\nname = "x"\n', encoding="utf-8", newline="\n")
+            (root / "module.py").write_text(
+                '"""Example."""\n', encoding="utf-8", newline="\n"
+            )
+            (root / "data.json").write_text(
+                '{"value": 1}\n', encoding="utf-8", newline="\n"
+            )
+            (root / "pyproject.toml").write_text(
+                '[project]\nname = "x"\n', encoding="utf-8", newline="\n"
+            )
             report = source_health.audit(root)
             self.assertEqual(report["status"], "PASS")
             self.assertEqual(report["failure_count"], 0)
@@ -46,7 +52,9 @@ class SourceHealthTests(unittest.TestCase):
         """Reject duplicate keys and game media in a source checkout."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            (root / "bad.json").write_text('{"x": 1, "x": 2}\n', encoding="utf-8", newline="\n")
+            (root / "bad.json").write_text(
+                '{"x": 1, "x": 2}\n', encoding="utf-8", newline="\n"
+            )
             (root / "disc.bin").write_bytes(b"not a real disc")
             report = source_health.audit(root)
             self.assertEqual(report["status"], "FAIL")
@@ -60,7 +68,9 @@ class SourceHealthTests(unittest.TestCase):
             ignored = root / "work" / "clean_rebuild" / "retail_reference"
             ignored.mkdir(parents=True)
             (ignored / "retail.iso").write_bytes(b"local-only")
-            (root / "ok.py").write_text('"""Example."""\n', encoding="utf-8", newline="\n")
+            (root / "ok.py").write_text(
+                '"""Example."""\n', encoding="utf-8", newline="\n"
+            )
             report = source_health.audit(root)
             self.assertEqual(report["status"], "PASS")
             self.assertEqual(report["forbidden_media_count"], 0)

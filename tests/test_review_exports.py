@@ -40,7 +40,9 @@ class ReviewExportTests(unittest.TestCase):
         """Bind both contextual revisions to reviewed Japanese and canonical text."""
         evidence = json.loads(proposals.EVIDENCE.read_text(encoding="utf-8"))
         expectations = evidence["record_expectations"]
-        source = json.loads((proposals.SOURCES / "PART2E.json").read_text(encoding="utf-8"))
+        source = json.loads(
+            (proposals.SOURCES / "PART2E.json").read_text(encoding="utf-8")
+        )
         canonical = {
             f"PART2E:{record['index']:03d}": record["text"]
             for record in source["records"]

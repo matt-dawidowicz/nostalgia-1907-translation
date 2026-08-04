@@ -92,7 +92,10 @@ def clean_text(text: str | None) -> str:
 def load_clean_rebuild(clean_rebuild: Path) -> tuple[Any, Any]:
     """Load only the validated ISO/MES helpers from the active clean rebuild."""
     resolved = clean_rebuild.resolve()
-    if not (resolved / "iso9660.py").is_file() or not (resolved / "mes_format.py").is_file():
+    if (
+        not (resolved / "iso9660.py").is_file()
+        or not (resolved / "mes_format.py").is_file()
+    ):
         raise AudioLocalizationError(
             f"{resolved} is not a Nostalgia 1907 clean_rebuild directory"
         )
@@ -343,7 +346,9 @@ def record_metadata(
         {
             "record_index": command["record_index"],
             "record_id": f"{chapter}:{command['record_index']:03d}",
-            "canonical_english": clean_text(records[command["record_index"]].get("text")),
+            "canonical_english": clean_text(
+                records[command["record_index"]].get("text")
+            ),
             "record_policy": records[command["record_index"]].get("policy"),
             "scn_text_offset": command["offset"],
             "text_command": command["command"],
@@ -351,9 +356,7 @@ def record_metadata(
         for command in commands
     ]
     canonical_lines = [
-        item["canonical_english"]
-        for item in line_records
-        if item["canonical_english"]
+        item["canonical_english"] for item in line_records if item["canonical_english"]
     ]
     return {
         "chapter": chapter,
@@ -410,7 +413,9 @@ def map_chapter_audio(
             )
             continue
         previous_end = audios[position - 1]["end_offset"] if position else 0
-        next_start = audios[position + 1]["offset"] if position + 1 < len(audios) else len(scn)
+        next_start = (
+            audios[position + 1]["offset"] if position + 1 < len(audios) else len(scn)
+        )
         following = [
             item for item in texts if audio["end_offset"] <= item["offset"] < next_start
         ]
@@ -574,7 +579,9 @@ def build_manifest(
             raw = extract_entry(iso_stream, entry, iso9660.SECTOR_SIZE)
             if write_audio:
                 (raw_dir / name).write_bytes(raw)
-                write_wav(wav_dir / f"{Path(name).stem}.wav", decode_sign_magnitude(raw))
+                write_wav(
+                    wav_dir / f"{Path(name).stem}.wav", decode_sign_magnitude(raw)
+                )
             occurrences = sorted(
                 occurrences_by_pcm.get(name, []),
                 key=lambda item: (item["chapter"], item["scn_audio_offset"]),
@@ -619,11 +626,15 @@ def build_manifest(
                     "asr_english_translation": None,
                     "asr_english_segments": [],
                     "asr_model": None,
-                    "asr_status": "pending" if name != "BAKUHATU.PCM" else "skipped_sfx",
+                    "asr_status": (
+                        "pending" if name != "BAKUHATU.PCM" else "skipped_sfx"
+                    ),
                     "voice": None,
                     "english_voice_path": None,
                     "game_rate_voice_path": None,
-                    "voice_status": "pending" if canonical_values else "no_canonical_text",
+                    "voice_status": (
+                        "pending" if canonical_values else "no_canonical_text"
+                    ),
                 }
             )
 
@@ -803,9 +814,7 @@ def run_refresh(args: argparse.Namespace) -> None:
     """
     previous = load_manifest(args.output)
     generated = {
-        asset["pcm"]: {
-            key: asset[key] for key in GENERATED_FIELDS if key in asset
-        }
+        asset["pcm"]: {key: asset[key] for key in GENERATED_FIELDS if key in asset}
         for asset in previous["assets"]
     }
     manifest = build_manifest(args.clean_rebuild, args.output, write_audio=False)
@@ -966,9 +975,7 @@ def speech_text_from_lines(lines: Iterable[str]) -> str:
     return clean_text(" ".join(output))
 
 
-def choose_english_text(
-    asset: dict[str, Any], cast: dict[str, Any]
-) -> tuple[str, str]:
+def choose_english_text(asset: dict[str, Any], cast: dict[str, Any]) -> tuple[str, str]:
     """Select a voice script and provenance using explicit precedence.
 
     Per-asset cast text wins, followed by completed ASR translation with
@@ -1343,9 +1350,7 @@ def synthesize_all(args: argparse.Namespace) -> None:
                     language,
                 )
                 review_wav = (
-                    args.output
-                    / "english_voice_wav"
-                    / f"{Path(asset['pcm']).stem}.wav"
+                    args.output / "english_voice_wav" / f"{Path(asset['pcm']).stem}.wav"
                 )
                 game_wav = (
                     args.output
@@ -1360,9 +1365,7 @@ def synthesize_all(args: argparse.Namespace) -> None:
                     )
                 natural_duration = len(natural_data) / 2 / natural_rate
                 target_duration = asset["duration_seconds"]
-                leading_seconds = (
-                    asset["leading_silence_samples"] / WAV_SAMPLE_RATE
-                )
+                leading_seconds = asset["leading_silence_samples"] / WAV_SAMPLE_RATE
                 available_speech_seconds = max(
                     target_duration - leading_seconds,
                     1 / WAV_SAMPLE_RATE,
@@ -1392,9 +1395,7 @@ def synthesize_all(args: argparse.Namespace) -> None:
                 asset["voice_voices_sha256"] = voices_sha256
                 asset["voice_text"] = text
                 asset["voice_text_source"] = text_source
-                asset["voice_natural_duration_seconds"] = round(
-                    natural_duration, 6
-                )
+                asset["voice_natural_duration_seconds"] = round(natural_duration, 6)
                 asset["voice_tempo_factor"] = round(tempo_factor, 8)
                 asset["voice_time_fit_backend"] = time_fit_backend
                 asset["voice_fit_warning"] = (

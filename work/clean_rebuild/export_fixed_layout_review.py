@@ -130,7 +130,9 @@ def build_queue(
     """Build all fixed-layout review rows without changing project sources."""
     layout = audit_layouts(retail_root)
     if layout["status"] != "PASS":
-        raise ValueError("layout audit must pass before creating the fixed-layout queue")
+        raise ValueError(
+            "layout audit must pass before creating the fixed-layout queue"
+        )
     canonical = _load_canonical()
     comparison = _comparison_records(comparison_json)
     comparison_root = comparison_json.parent
@@ -140,7 +142,9 @@ def build_queue(
             continue
         record_id = str(item["id"])
         if item.get("roles") or item.get("layout"):
-            raise ValueError(f"{record_id}: fixed queue unexpectedly has proven geometry")
+            raise ValueError(
+                f"{record_id}: fixed queue unexpectedly has proven geometry"
+            )
         source = comparison.get(record_id)
         record = canonical.get(record_id)
         if source is None or record is None:
@@ -192,7 +196,9 @@ def build_queue(
                 ),
                 "static_preview": " | ".join(exact_rows),
                 "measured_exact_rows": len(exact_rows),
-                "measured_row_characters": ",".join(str(len(row)) for row in exact_rows),
+                "measured_row_characters": ",".join(
+                    str(len(row)) for row in exact_rows
+                ),
                 "measured_row_two_character_cells": ",".join(
                     str(value) for value in row_cells
                 ),
@@ -271,13 +277,9 @@ def write_markdown(path: Path, rows: list[dict[str, object]]) -> None:
     ]
     for row in rows:
         lines.append(
-            "| {priority} | `{record_id}` | {english} | {cells} | {risk} |".format(
-                priority=row["priority"],
-                record_id=row["record_id"],
-                english=_escape_table(row["current_english"]),
-                cells=row["measured_row_two_character_cells"],
-                risk=row["risk"],
-            )
+            f"| {row['priority']} | `{row['record_id']}` | "
+            f"{_escape_table(row['current_english'])} | "
+            f"{row['measured_row_two_character_cells']} | {row['risk']} |"
         )
     lines.extend(["", "## Complete record details", ""])
     for row in rows:

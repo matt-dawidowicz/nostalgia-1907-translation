@@ -16,6 +16,8 @@ Start with these references:
   font, and SCN structures enforced by the code.
 - [Development and validation](docs/DEVELOPMENT.md) explains the test layers,
   generated reports, debugging sequence, and extension rules.
+- [Release and playtest policy](docs/RELEASE.md) defines what automated proof
+  establishes and which Ares checks still require human evidence.
 - [Python documentation standard](docs/DOCSTRING_STANDARD.md) defines the
   PEP 257 docstring and PEP 8 explanatory-comment contract for maintained code.
 
@@ -79,6 +81,8 @@ Run:
 ```powershell
 python -m unittest discover -s tests -v
 python work/audio_localization/test_audio_localization.py
+python tools/style_audit.py
+python -m black --check nostalgia1907.py tools tests work/clean_rebuild work/region_variant work/audio_localization
 python nostalgia1907.py validate
 ```
 

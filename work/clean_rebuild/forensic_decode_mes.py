@@ -23,15 +23,9 @@ from mes_format import DYNAMIC_PREFIX_START, read_mes
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
 OLD_TOOLS = Path(
-    r"C:\Users\thema\Documents\Codex\2026-07-12\i\outputs"
-    r"\nostalgia1907_tools"
+    r"C:\Users\thema\Documents\Codex\2026-07-12\i\outputs" r"\nostalgia1907_tools"
 )
-GOLDEN = (
-    WORKSPACE
-    / "outputs"
-    / "Nostalgia1907_Act4_firstpass_credits"
-    / "regression"
-)
+GOLDEN = WORKSPACE / "outputs" / "Nostalgia1907_Act4_firstpass_credits" / "regression"
 
 
 def load_historical_renderer() -> ModuleType:
@@ -63,8 +57,7 @@ def candidate_units(renderer: ModuleType) -> dict[bytes, list[tuple[str, str]]]:
     for style in ("packed", "packed-compact"):
         units.update((style, char) for char in visible)
         units.update(
-            (style, "".join(chars))
-            for chars in itertools.product(visible, repeat=2)
+            (style, "".join(chars)) for chars in itertools.product(visible, repeat=2)
         )
         units.update(
             (style, f" {left}{right}")
@@ -224,9 +217,7 @@ def main() -> None:
     """Decode selected chapters into a machine-readable forensic report."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("chapters", nargs="+", help="chapter names such as PART2F")
-    parser.add_argument(
-        "--output", type=Path, default=HERE / "forensic_decode.json"
-    )
+    parser.add_argument("--output", type=Path, default=HERE / "forensic_decode.json")
     args = parser.parse_args()
 
     renderer = load_historical_renderer()

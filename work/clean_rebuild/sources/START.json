@@ -41,6 +41,9 @@
         "reason": "Verified against the six visible START narration rows."
       }
     },
+    "text_box_overrides": {
+      "0": "full_screen_narration"
+    },
     "role_overrides": {
       "0": "narration"
     },

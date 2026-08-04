@@ -4,7 +4,7 @@
   "preserve_records": [
     "PART1B:000", "PART1C:000", "PART1C:122", "PART1D:062", "PART1D:088",
     "PART2A:000", "PART2B:015", "PART2C:059", "PART2D:004", "PART2E:025",
-    "PART2E:028", "PART2F:016", "PART3A:000", "PART3B:161", "PART3C:037",
+    "PART2F:016", "PART3A:000", "PART3B:161", "PART3C:037",
     "PART4A:000", "PART4B:034", "PART4C:019"
   ],
   "record_replacements": {

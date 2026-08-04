@@ -77,9 +77,7 @@ class MesFile:
                         f"record {record_index} uses forbidden dynamic value 00"
                     )
                 indexes.add(
-                    (value - DYNAMIC_PREFIX_START) * DYNAMIC_GLYPHS_PER_PREFIX
-                    + low
-                    - 1
+                    (value - DYNAMIC_PREFIX_START) * DYNAMIC_GLYPHS_PER_PREFIX + low - 1
                 )
                 offset += 2
         return frozenset(indexes)
@@ -115,9 +113,7 @@ def parse_mes(data: bytes, *, source: str = "<bytes>") -> MesFile:
     split_offset = _u16be(data, 0)
     first_pointer = _u16be(data, 2)
     if first_pointer < 4 or first_pointer % 2:
-        raise MesFormatError(
-            f"{source}: invalid first pointer 0x{first_pointer:04X}"
-        )
+        raise MesFormatError(f"{source}: invalid first pointer 0x{first_pointer:04X}")
     pointer_count = (first_pointer - 2) // 2
     if pointer_count <= 0 or 2 + pointer_count * 2 != first_pointer:
         raise MesFormatError(f"{source}: inconsistent pointer-table length")
@@ -126,22 +122,16 @@ def parse_mes(data: bytes, *, source: str = "<bytes>") -> MesFile:
             f"{source}: split 0x{split_offset:04X} is outside the data region"
         )
 
-    pointers = tuple(
-        _u16be(data, 2 + index * 2) for index in range(pointer_count)
-    )
+    pointers = tuple(_u16be(data, 2 + index * 2) for index in range(pointer_count))
     if pointers[0] != first_pointer:
         raise MesFormatError(f"{source}: first pointer does not end the table")
     if any(pointer < first_pointer or pointer >= split_offset for pointer in pointers):
         raise MesFormatError(f"{source}: record pointer outside the script region")
     if any(left >= right for left, right in zip(pointers, pointers[1:])):
-        raise MesFormatError(
-            f"{source}: record pointers are not strictly increasing"
-        )
+        raise MesFormatError(f"{source}: record pointers are not strictly increasing")
 
     boundaries = (*pointers, split_offset)
-    records = tuple(
-        data[start:end] for start, end in zip(boundaries, boundaries[1:])
-    )
+    records = tuple(data[start:end] for start, end in zip(boundaries, boundaries[1:]))
     for record_index, record in enumerate(records):
         if not record:
             raise MesFormatError(f"{source}: record {record_index} is empty")

@@ -49,6 +49,7 @@ class DocumentationTests(unittest.TestCase):
     """Keep contributor guides synchronized with production structure."""
 
     def test_contributor_documents_exist_and_are_linked(self) -> None:
+        """Keep required contributor guides discoverable from entry documents."""
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
         for name, path in DOCS.items():
@@ -67,6 +68,7 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("DOCSTRING_STANDARD.md", development)
 
     def test_architecture_lists_every_production_module(self) -> None:
+        """Require architecture documentation for every active production module."""
         rebuild = ROOT / "work" / "clean_rebuild" / "rebuild.py"
         tree = ast.parse(rebuild.read_text(encoding="utf-8"))
         modules: tuple[str, ...] | None = None
@@ -86,6 +88,7 @@ class DocumentationTests(unittest.TestCase):
                 self.assertIn(f"`{module}`", architecture)
 
     def test_editing_guide_documents_the_canonical_record_contract(self) -> None:
+        """Keep canonical record ownership explicit in the editor guide."""
         editing = DOCS["editing"].read_text(encoding="utf-8")
         for token in (
             "CHAPTER:NNN",
@@ -100,6 +103,7 @@ class DocumentationTests(unittest.TestCase):
                 self.assertIn(token, editing)
 
     def test_format_guide_documents_all_binary_layers(self) -> None:
+        """Keep the binary-format guide aligned with every supported layer."""
         formats = DOCS["formats"].read_text(encoding="utf-8")
         for heading in (
             "Raw Track 1",
@@ -112,7 +116,6 @@ class DocumentationTests(unittest.TestCase):
         ):
             with self.subTest(heading=heading):
                 self.assertRegex(formats, rf"(?m)^## .*{re.escape(heading)}")
-
 
     def test_determinism_and_binding_scope_is_documented(self) -> None:
         """Keep package determinism and report-binding limitations explicit."""
@@ -129,6 +132,7 @@ class DocumentationTests(unittest.TestCase):
                 self.assertIn(token, development + architecture)
 
     def test_guides_contain_no_machine_specific_absolute_paths(self) -> None:
+        """Reject local Windows paths from portable contributor documentation."""
         documents = [ROOT / "CONTRIBUTING.md", *DOCS.values(), DOCSTRING_GUIDE]
         windows_absolute = re.compile(r"(?i)\b[A-Z]:[\\/]")
         for path in documents:

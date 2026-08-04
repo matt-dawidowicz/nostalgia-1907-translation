@@ -87,7 +87,9 @@ def _is_excluded(path: Path) -> bool:
 
 def iter_source_files(root: Path) -> Iterable[Path]:
     """Yield source-tree files in deterministic relative-path order."""
-    for path in sorted(root.rglob("*"), key=lambda item: item.relative_to(root).as_posix()):
+    for path in sorted(
+        root.rglob("*"), key=lambda item: item.relative_to(root).as_posix()
+    ):
         if path.is_file() and not _is_excluded(path.relative_to(root)):
             yield path
 
@@ -103,7 +105,9 @@ def _check_text(path: Path, relative: str, failures: list[str]) -> None:
     if b"\r" in data and path.suffix.lower() != ".ps1":
         failures.append(f"{relative}: contains CR characters; source must use LF")
     if path.suffix.lower() == ".ps1" and b"\n" in data.replace(b"\r\n", b""):
-        failures.append(f"{relative}: PowerShell source must use consistent CRLF endings")
+        failures.append(
+            f"{relative}: PowerShell source must use consistent CRLF endings"
+        )
     if data and not data.endswith(b"\n"):
         failures.append(f"{relative}: missing final newline")
     for line_number, line in enumerate(text.splitlines(), start=1):
@@ -121,7 +125,12 @@ def _check_structured_source(path: Path, relative: str, failures: list[str]) -> 
             json.loads(text, object_pairs_hook=_reject_duplicate_json_keys)
         elif path.suffix == ".toml":
             tomllib.loads(text)
-    except (SyntaxError, json.JSONDecodeError, DuplicateJsonKeyError, tomllib.TOMLDecodeError) as exc:
+    except (
+        SyntaxError,
+        json.JSONDecodeError,
+        DuplicateJsonKeyError,
+        tomllib.TOMLDecodeError,
+    ) as exc:
         failures.append(f"{relative}: parse failure: {exc}")
 
 

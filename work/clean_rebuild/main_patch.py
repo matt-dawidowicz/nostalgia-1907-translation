@@ -85,7 +85,9 @@ def patch_main(retail: bytes) -> bytes:
     if len(result) != len(retail) or sha256(result) != PATCHED_SHA256:
         raise AssertionError("MAIN.BIN patch output does not match its frozen result")
 
-    changed = {index for index, pair in enumerate(zip(retail, result)) if pair[0] != pair[1]}
+    changed = {
+        index for index, pair in enumerate(zip(retail, result)) if pair[0] != pair[1]
+    }
     expected = {STATUS_PANEL_OFFSET} | {offset + 1 for offset in MARKER_X_OFFSETS}
     if changed != expected:
         raise AssertionError("MAIN.BIN patch touched unexpected byte offsets")
