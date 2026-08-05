@@ -52,6 +52,12 @@ release claims, and any errors that remain.
 
 ## What the project is now
 
+The current public source release is **1.0.2**. It documents and packages the
+same hash-identified North American runtime reference; it does not introduce a
+new playable candidate or change the canonical translation corpus. The release
+record and the limits of that evidence are described in
+[release and playtest policy](docs/RELEASE.md).
+
 The project has a single supported workflow:
 
 ```text
@@ -174,12 +180,13 @@ Public source CI can prove source and synthetic contracts, but a maintainer
 must still run the retail-backed gates and record Ares evidence for any changed
 playable bytes.
 
-### 6. 1.0.1 full-playtest record
+### 6. 1.0.2 release and full-playtest record
 
-Version 1.0.1 is a documentation and metadata maintenance release: it records
-the completed full Ares playtest of the hash-identified North American
-reference. It does not change translation records, renderer behavior, or
-playable bytes. Further independent and regression playtesting is welcome.
+Version 1.0.2 is a source, documentation, and metadata maintenance release. It
+records the completed full Ares playtest of the hash-identified North American
+reference without claiming a new playable candidate. It does not change
+translation records, renderer behavior, or the reviewed reference's playable
+bytes. Further independent and regression playtesting is welcome.
 
 ## What is proven, and what is not
 

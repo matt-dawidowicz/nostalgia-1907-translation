@@ -19,8 +19,8 @@ Start with these references:
 - [Development and validation](docs/DEVELOPMENT.md) explains the test layers,
   generated reports, debugging sequence, and extension rules.
 - [Release and playtest policy](docs/RELEASE.md) defines what automated proof
-  establishes, records the completed 1.0.1 Ares playtest, and defines the Ares
-  evidence required for changed playable bytes.
+  establishes, records the completed 1.0.2 Ares playtest reference, and
+  defines the Ares evidence required for changed playable bytes.
 - [Python documentation standard](docs/DOCSTRING_STANDARD.md) defines the
   PEP 257 docstring and PEP 8 explanatory-comment contract for maintained code.
 

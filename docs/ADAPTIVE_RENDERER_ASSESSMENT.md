@@ -2,6 +2,14 @@
 
 ## Status
 
+This is a historical engineering assessment. It documents the runtime defects
+that led to the shared parser-safe encoding and continuation-width correction;
+it is not evidence that the current source release still exhibits those
+defects. The hash-identified North American reference later completed the
+recorded full maintainer Ares playtest with no reported defects. See
+[release policy](RELEASE.md) for the exact reference and the limits of that
+runtime evidence.
+
 Do not publish a new dialogue-layout candidate from a width-only change. Ares
 playback rejected the earlier assumptions for ordinary lower dialogue:
 
@@ -88,13 +96,16 @@ the equivalence of storage length to logical-cell count. A deliberate test that
 restores fixed byte `05` for `on` fails at `PART1A:010` before a build begins.
 
 This eliminates per-line screenshot repair. It is not a claim that static work
-can prove every live state: the final playtest must still cover one route for
-each text-box type, page clearing, dialogue transitions, and save/load.
+can prove every live state. The recorded reference later completed the required
+maintainer playtest; any candidate with changed playable bytes must again cover
+one route for each text-box type, page clearing, dialogue transitions, and
+save/load.
 
 ## Remaining native trace
 
-Before changing executable renderer code or publishing another candidate,
-establish the remaining items below from `MAIN.BIN` or a working GDB trace:
+No native trace is pending for the unchanged runtime reference. Before changing
+executable renderer code or publishing a different candidate, establish the
+items below from `MAIN.BIN` or a working GDB trace:
 
 1. The routine and state that perform page advance/clear, and whether it
    restarts a record pointer or continues a flat stream.
@@ -124,9 +135,9 @@ stock speaker/window/page behavior. All chapters would use this one contract;
 SCN, record IDs/order, Japanese preserved records, and binary extents would
 remain untouched unless a separately proven relocation is required.
 
-This remains a future option only if the parser-safe encoder fails Ares runtime
-tests. It requires a narrow live trace and executable-patch safety proof before
-implementation.
+This remains a future option only if a new, candidate-bound Ares test disproves
+the selected encoder contract. It requires a narrow live trace and
+executable-patch safety proof before implementation.
 
 ### 3. Uniform-token encoding
 
@@ -138,7 +149,7 @@ a candidate solution.
 
 ## Decision gate
 
-No record-specific rewraps or chapter-specific patches are authorized. The
-next action is a clean staged build using both parser-safe tokens and the
-continuation-width contract, then the same affected Ares pages and transitions
-that exposed the defect.
+No record-specific rewraps or chapter-specific patches are authorized. If a
+future defect justifies a renderer change, rebuild cleanly with the shared
+parser-safe and continuation-width contracts, then replay the affected Ares
+pages and transitions against that candidate's exact hash.

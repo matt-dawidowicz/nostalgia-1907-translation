@@ -8,6 +8,12 @@ Retained candidate: North American maintenance reference
 
 Architectural baseline: validated clean-rebuild architecture
 
+> Historical status: this report records the maintenance decision made on the
+> date above. Its then-pending runtime questions were subsequently addressed by
+> the full maintainer Ares playtest of the hash-identified North American
+> reference. The current public source release is 1.0.2; use
+> [release policy](RELEASE.md) for current release evidence and requirements.
+
 ## Release decision
 
 The maintenance reference was retained as the North American playtest

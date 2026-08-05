@@ -4,6 +4,15 @@ This guide is the shortest safe route into the project. It is for contributors
 who have not worked with Mega-CD images, SCN programs, or the earlier
 translation history. Start here before reading the deeper format documents.
 
+## Current release status
+
+The current public source release is 1.0.2. Its hash-identified North American
+reference completed the recorded full maintainer Ares playtest with no reported
+defects. That evidence belongs to the unchanged reference only: a future
+candidate with changed playable bytes must complete its own clean build and
+candidate-bound runtime checks. Read [release policy](RELEASE.md) before
+preparing a build for publication.
+
 ## Pick a contributor path
 
 Choose the smallest path that matches your task.

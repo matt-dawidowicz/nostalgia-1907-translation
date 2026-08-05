@@ -72,7 +72,9 @@ Validation is layered so a failure can be localized:
    extents, unchanged ISO regions, raw sectors, Track 2, and CUE formatting.
 10. **Two-run comparison** proves deterministic output.
 11. **Manual playtesting** remains the release gate for visual and branching
-    behavior.
+    behavior of every changed playable candidate. The unchanged 1.0.2 runtime
+    reference has completed its recorded maintainer playtest; see
+    [release policy](RELEASE.md).
 
 `python nostalgia1907.py validate` runs stages 1 through 9 in that order. The
 source-only stages run before the command requires prepared retail fixtures, so
@@ -82,8 +84,9 @@ contributor-review command when the optional style dependencies are installed.
 
 For a reproducible complete-corpus static check plus an explicit runtime
 certification log, use `docs/WHOLE_GAME_TESTING.md`. The log is candidate-hash
-bound and remains pending until every declared chapter, box type, and runtime
-state has human evidence.
+bound. A new candidate remains pending until every declared chapter, box type,
+and runtime state has human evidence; it must not borrow the reference
+candidate's result.
 
 ## Generated reports
 

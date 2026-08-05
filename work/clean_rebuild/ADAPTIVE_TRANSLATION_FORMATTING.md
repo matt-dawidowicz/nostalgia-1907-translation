@@ -54,8 +54,10 @@ cell. It checks 12/11 lower-box cadence, one-time gutters, logical-cell counts,
 and every lower-dialogue row edge against the native reserved-byte set. This
 catches a future formatter or encoder regression that would expose parts of
 one word on adjacent lines without relying on a screenshot of that line. It
-cannot replace a final representative playtest for behavior that static SCN
-and `MAIN.BIN` evidence do not describe, such as window clearing or overlays.
+cannot replace a representative playtest for behavior that static SCN and
+`MAIN.BIN` evidence do not describe, such as window clearing or overlays. The
+hash-identified 1.0.2 reference completed its recorded maintainer playtest; any
+candidate with changed playable bytes requires new candidate-bound evidence.
 
 ## Preview a wording change
 

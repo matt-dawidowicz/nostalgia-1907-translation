@@ -17,6 +17,10 @@ The reference completed a full maintainer Ares playtest with no reported
 defects; independent regression playtests remain welcome and are required anew
 for any candidate with changed playable bytes.
 
+The current public source release is 1.0.2. It does not designate a different
+runtime artifact; source metadata points to the same reference and its recorded
+playtest evidence in [the release policy](RELEASE.md).
+
 Three classes of data are intentionally separated:
 
 | Class | Examples | Authority |
