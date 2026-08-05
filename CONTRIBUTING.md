@@ -24,6 +24,21 @@ Start with these references:
 - [Python documentation standard](docs/DOCSTRING_STANDARD.md) defines the
   PEP 257 docstring and PEP 8 explanatory-comment contract for maintained code.
 
+## Contribution licensing
+
+By submitting an original contribution, you license the contribution to this
+project under the license that applies to its subject:
+
+- code, tests, build tooling, and technical documentation: [MIT](LICENSE);
+- reviewed English translation prose, glossary text, and translation-editing
+  notes: [CC BY-NC-SA 4.0](LICENSE-TRANSLATION.md).
+
+Contributions must not add original game files, BIOS files, extracted assets,
+or any other third-party material without explicit authorization from its
+rightsholder. The project can license only its contributors' original work;
+see [the third-party materials notice](THIRD_PARTY_NOTICE.md) for the full
+boundary.
+
 ## Non-negotiable invariants
 
 Every contribution must preserve:
