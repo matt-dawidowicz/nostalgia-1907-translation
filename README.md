@@ -11,6 +11,21 @@ format documentation, automated checks, and playtest procedures. It does
 **not** contain a playable disc image, BIOS, original game files, extracted
 assets, or generated build products.
 
+## Licensing and original-game materials
+
+This is a mixed-license source repository:
+
+- The original software tooling, tests, and technical documentation are
+  licensed under the [MIT License](LICENSE).
+- The reviewed English translation contributions are licensed under
+  [CC BY-NC-SA 4.0](LICENSE-TRANSLATION.md): attribution required,
+  non-commercial use only, and adaptations must remain under the same terms.
+
+Both licenses apply only to rights held by this project's contributors. They
+do not grant rights to the original game, its Japanese script, or any other
+third-party material. Read [the third-party materials notice](THIRD_PARTY_NOTICE.md)
+before using the source or contributing changes.
+
 ## Who this project may interest
 
 This project may be useful or interesting to:
