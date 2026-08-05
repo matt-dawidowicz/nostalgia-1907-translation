@@ -117,11 +117,12 @@ followed by two independent byte-identical North American region builds.
 - Unchanged Track 2 SHA-256:
   `F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991`
 
-The project maintainer playtested that exact Track 1 in Ares. The recorded
-coverage includes targeted dialogue-renderer checks, page advances, and
-dialogue transitions, with no defect reported in the tested coverage. This is
-runtime evidence for those exercised paths, not a claim that every scene,
-branch, save/reload path, or audio transition received whole-game coverage.
+The project maintainer completed a full playtest of that exact Track 1 in
+Ares, including the previously targeted dialogue-renderer checks, page
+advances, and dialogue transitions. No defect was reported during that
+playthrough. Independent and future regression playtesting remain welcome:
+they are useful confirmation, and they are required again for any candidate
+whose playable bytes change.
 
 After the runtime work, the repository was prepared for source collaboration:
 obsolete forensic workspaces and generated recovery products were removed,
@@ -134,6 +135,13 @@ Public source CI can prove source and synthetic contracts, but a maintainer
 must still run the retail-backed gates and record Ares evidence for any changed
 playable bytes.
 
+### 6. 1.0.1 full-playtest record
+
+Version 1.0.1 is a documentation and metadata maintenance release: it records
+the completed full Ares playtest of the hash-identified North American
+reference. It does not change translation records, renderer behavior, or
+playable bytes. Further independent and regression playtesting is welcome.
+
 ## What is proven, and what is not
 
 When run with the required verified local inputs, the automated build gate
@@ -142,11 +150,12 @@ deterministic clean reconstruction, deterministic North American wrapping,
 fixed binary boundaries, exact Track 2 preservation, and direct hashes for the
 published artifacts.
 
-It does **not** prove that every scene, branch, or text box has been played in
-an emulator. The exact North American artifact identified above was playtested
-in Ares by the project maintainer and passed the recorded targeted dialogue,
-page-advance, and transition checks. A whole-game playthrough remains a
-separate, explicit task. See [release and playtest policy](docs/RELEASE.md) and
+It does **not** replace independent regression testing or prove behavior on
+different emulator versions, hardware, or unvisited alternate choices. The
+exact North American artifact identified above completed a full maintainer
+playtest in Ares with no reported defects. Future reports are welcome, and any
+candidate with changed playable bytes needs fresh candidate-bound Ares
+evidence. See [release and playtest policy](docs/RELEASE.md) and
 [whole-game testing](docs/WHOLE_GAME_TESTING.md).
 
 ## Start here
