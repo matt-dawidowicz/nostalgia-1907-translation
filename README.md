@@ -11,6 +11,45 @@ format documentation, automated checks, and playtest procedures. It does
 **not** contain a playable disc image, BIOS, original game files, extracted
 assets, or generated build products.
 
+## Who this project may interest
+
+This project may be useful or interesting to:
+
+- players curious about an obscure Japanese Mega-CD adventure game that was
+  never officially released in English;
+- fan translators and localization editors studying long-form script work;
+- reverse engineers working with MES containers, LZ archives, ISO 9660, raw
+  MODE1/2352 sectors, or Sega CD region wrapping;
+- preservation-minded developers interested in deterministic rebuilds and
+  source-only release practices; and
+- emulator testers willing to report reproducible runtime behavior.
+
+You do not need to contribute code to help. Independent playtesting, wording
+feedback, documentation corrections, and reproducible bug reports are welcome.
+
+## AI assistance and human responsibility
+
+Artificial-intelligence tools, including ChatGPT and Codex, were used
+substantially during this project. They assisted with tasks such as translation
+comparison, wording proposals, code generation and refactoring, documentation,
+test design, repository review, and analysis of reverse-engineering evidence.
+The project does not present that work as unaided human authorship.
+
+AI output was never treated as proof that a translation, renderer rule, binary
+change, or release candidate was correct. Proposed work was repeatedly reviewed
+against the Japanese source, record context, binary structure, automated tests,
+deterministic build results, and observed emulator behavior. Incorrect or
+regressive approaches were rejected, including an entire later renderer
+experiment that failed runtime testing.
+
+The finished release required extensive human direction and judgment: inspecting
+thousands of records, identifying contextual and formatting failures, debugging
+multiple renderer classes, reproducing defects in Ares, revising shared tooling,
+checking preservation-sensitive boundaries, running repeated clean rebuilds, and
+completing a full playthrough of the exact hash-identified North American build.
+The maintainer remains responsible for the accepted English, code, documentation,
+release claims, and any errors that remain.
+
 ## What the project is now
 
 The project has a single supported workflow:
