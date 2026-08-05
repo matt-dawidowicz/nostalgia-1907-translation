@@ -3,8 +3,9 @@
 I am attaching `Nostalgia1907_Source_Review.zip`, a source-only review package
 for the Nostalgia 1907 English fan-translation project. This is the final
 independent review before source publication. The hash-identified runtime
-reference has already received maintainer Ares testing; assess the recorded
-coverage without treating it as exhaustive whole-game certification.
+reference completed a full maintainer Ares playtest; assess that evidence while
+welcoming independent regression testing and preserving the requirement for
+fresh runtime evidence whenever playable bytes change.
 
 First, extract the archive and read these files in order:
 
@@ -83,16 +84,16 @@ Audit these areas:
    - `SOURCE RELEASE: HOLD`
 
    State the decisive evidence. Separately assess playable-release confidence
-   from the exact hash-bound Ares evidence and identify only genuinely unrecorded
-   runtime scope.
+   from the exact hash-bound full Ares playtest and identify only genuinely
+   unrecorded independent or changed-candidate runtime scope.
 3. **Findings** — ordered P0 through P3. Include only actionable findings with
    exact code/doc references.
 4. **Preservation audit** — confirm or challenge the corpus/binary boundaries,
    default region, and retired-audio removal.
-5. **Recorded and remaining runtime evidence** — confirm the exact candidate
-   hash and the Ares coverage already documented, then list only unrecorded items
-   such as save/reload, broader routes, or audio transitions. Do not restate
-   completed checks as pending.
+5. **Recorded and future runtime evidence** — confirm the exact candidate hash
+   and completed full Ares playtest, then identify only independent regression
+   opportunities or fresh checks required by changed playable bytes. Do not
+   restate completed checks as pending.
 6. **Minimal next action** — one concrete action only. If no source blocker is
    found, say: `Commit, merge, and publish the source release.`
 

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "tool": {
     "name": "nostalgia1907-tools",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "python_minimum": "3.10"
   },
   "build": {
@@ -46,13 +46,15 @@
       "label": "North American runtime-reviewed reference",
       "runtime_evidence": {
         "emulator": "Ares",
-        "result": "pass_no_defects_reported_in_tested_coverage",
+        "result": "pass_no_defects_reported_in_full_maintainer_playtest",
         "coverage": [
+          "full_game_playthrough",
           "targeted_dialogue_renderer_checks",
           "page_advances",
           "dialogue_transitions"
         ],
-        "whole_game_certified": false,
+        "whole_game_certified": true,
+        "independent_regression_playtests_welcome": true,
         "emulator_version_recorded": false
       }
     }

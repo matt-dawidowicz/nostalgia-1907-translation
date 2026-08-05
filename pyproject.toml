@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nostalgia1907-tools"
-version = "1.0.0"
+version = "1.0.1"
 description = "Operator tooling for the Nostalgia 1907 English translation project"
 readme = "README.md"
 requires-python = ">=3.10"

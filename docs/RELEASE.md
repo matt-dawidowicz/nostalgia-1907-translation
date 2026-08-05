@@ -15,13 +15,12 @@ independent byte-identical clean rebuilds followed by two byte-identical North
 American region builds. The current source-hardening build produced the same
 playable Track 1 bytes.
 
-The project maintainer playtested this exact Track 1 in Ares. The recorded
-coverage includes targeted dialogue-renderer checks, page advances, and
-dialogue transitions, with no defect reported in the tested coverage. This is
-strong runtime evidence for the shared formatter on the exercised paths. It is
-not a claim that every scene and branch was played, and it does not certify
-save/reload, every audio transition, or a complete ending route unless those
-items are separately recorded in a candidate-bound runtime log.
+The project maintainer completed a full playtest of this exact Track 1 in
+Ares. It included the targeted dialogue-renderer checks, page advances, and
+dialogue transitions; no defect was reported during the playthrough. This is
+the current runtime evidence for the release reference. Independent and future
+regression playtests are welcome, especially for alternate choices, emulator
+versions, hardware, and newly reported routes.
 
 A source-only checkout cannot independently replay the emulator session or
 re-prove the excluded artifact hashes. Every candidate whose playable bytes
@@ -58,10 +57,10 @@ representative of each text-box type:
 5. Record the candidate Track 1 hash, Ares version, route or chapter coverage,
    and the chapter/record IDs for any defect.
 
-Use [whole-game testing](WHOLE_GAME_TESTING.md) when scheduling a broader
-playthrough. Do not treat static validation as runtime proof, and do not claim
-untested runtime coverage merely because the reference artifact passed its
-recorded checks.
+Use [whole-game testing](WHOLE_GAME_TESTING.md) when scheduling an independent
+or regression playthrough. Do not treat static validation as runtime proof, and
+do not reuse the reference playtest as evidence for a candidate whose playable
+bytes have changed.
 
 ## Publishing checklist
 

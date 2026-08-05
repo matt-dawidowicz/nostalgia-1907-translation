@@ -56,11 +56,12 @@ runtime certification.
 
 The earlier build-comparison evidence showed that the preceding hardening
 changed failure and verification behavior without changing playable bytes. The
-project maintainer playtested that exact Track 1 in Ares. The recorded coverage
-includes targeted dialogue-renderer checks, page advances, and dialogue
-transitions, with no defect reported in the tested coverage. The source package
-cannot independently replay that session or certify untested scenes, branches,
-save/reload paths, or audio transitions.
+project maintainer subsequently completed a full Ares playtest of that exact
+Track 1, including targeted dialogue-renderer checks, page advances, and
+dialogue transitions, with no reported defects. The source package cannot
+independently replay that session; independent and future regression playtests
+remain welcome, and changed playable bytes require fresh candidate-bound
+evidence.
 
 ## Recent review corrections
 

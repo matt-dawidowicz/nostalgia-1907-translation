@@ -13,6 +13,9 @@ The North American artifact with Track 1 SHA-256
 runtime-reviewed reference for the current renderer contracts. It is not a
 source input. Every future candidate starts from verified Japanese retail
 tracks and tracked source; it must never restore an earlier translated image.
+The reference completed a full maintainer Ares playtest with no reported
+defects; independent regression playtests remain welcome and are required anew
+for any candidate with changed playable bytes.
 
 Three classes of data are intentionally separated:
 

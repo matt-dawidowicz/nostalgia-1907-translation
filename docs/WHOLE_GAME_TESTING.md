@@ -4,6 +4,14 @@
 evidence that only an emulator playthrough can provide. It never modifies
 translation text, Japanese data, SCN controls, or a disc image.
 
+## 1.0.1 release evidence
+
+The hash-identified North American reference completed a full maintainer
+playtest in Ares with no reported defects. That completed playthrough is release
+evidence for the unchanged reference, not a reason to discourage further
+testing. Independent and regression playtests are welcome, and every candidate
+with changed playable bytes requires fresh, candidate-bound runtime evidence.
+
 ## Automatic gate
 
 The plan compiles all 19 chapters against their hash-locked retail MES/SCN
