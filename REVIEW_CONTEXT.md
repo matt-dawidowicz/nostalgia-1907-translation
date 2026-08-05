@@ -1,9 +1,11 @@
-# Final source-release review context
+# Source-release review context
 
-This is a source-only final review package for the Nostalgia 1907 English
-fan-translation project. It contains the current corrected working tree,
-including source-integration corrections, contributor documentation, retirement of the
-failed audio-localization experiment, and hardening after independent review.
+This document records the source-only review context for the Nostalgia 1907
+English fan-translation project. It was used for the final source review and
+remains useful when auditing the current 1.0.2 source release. The release
+contains the corrected working tree, source-integration corrections,
+contributor documentation, retirement of the failed audio-localization
+experiment, and hardening after independent review.
 
 ## Read first
 
@@ -48,11 +50,12 @@ and test notes were byte-identical to the preceding tested candidate. Track 1
 SHA-256:
 `1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`.
 
-The current corrections tighten source-release inventory and invalid-input
+The recorded corrections tighten source-release inventory and invalid-input
 failures without changing canonical translation records. The private
-retail-backed build was not rerun in this source-only review environment, so
-the historical deterministic-build evidence is not represented as a new
-runtime certification.
+retail-backed build was not rerun in the source-only review environment, so
+the historical deterministic-build evidence is not represented as a new runtime
+certification. The public release is now version 1.0.2; it does not claim a
+different playable artifact from the hash-identified reference below.
 
 The earlier build-comparison evidence showed that the preceding hardening
 changed failure and verification behavior without changing playable bytes. The

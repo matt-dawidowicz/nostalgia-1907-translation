@@ -1,11 +1,12 @@
-# Nostalgia 1907 final release review prompt
+# Nostalgia 1907 source-release review prompt
 
-I am attaching `Nostalgia1907_Source_Review.zip`, a source-only review package
-for the Nostalgia 1907 English fan-translation project. This is the final
-independent review before source publication. The hash-identified runtime
-reference completed a full maintainer Ares playtest; assess that evidence while
-welcoming independent regression testing and preserving the requirement for
-fresh runtime evidence whenever playable bytes change.
+I am attaching a source-only review package for the Nostalgia 1907 English
+fan-translation project. Use this prompt for an independent source-release
+review of the current 1.0.2 source tree or a future source-only candidate. The
+hash-identified runtime reference completed a full maintainer Ares playtest;
+assess that evidence while welcoming independent regression testing and
+preserving the requirement for fresh runtime evidence whenever playable bytes
+change.
 
 First, extract the archive and read these files in order:
 
@@ -95,7 +96,8 @@ Audit these areas:
    opportunities or fresh checks required by changed playable bytes. Do not
    restate completed checks as pending.
 6. **Minimal next action** — one concrete action only. If no source blocker is
-   found, say: `Commit, merge, and publish the source release.`
+   found in the current public release, say: `No source change is required.` If
+   reviewing a new release candidate, state the next candidate-specific action.
 
 Do not provide a broad redesign proposal. The goal is a trustworthy final
 release decision with clear separation between source evidence and emulator

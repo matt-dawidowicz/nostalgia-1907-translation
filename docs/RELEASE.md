@@ -2,6 +2,10 @@
 
 ## Runtime-reviewed reference
 
+The current public source release is 1.0.2. It is a source, documentation, and
+metadata maintenance release: it identifies the existing runtime-reviewed
+reference rather than claiming a new playable artifact.
+
 The North American artifact with Track 1 SHA-256
 `1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`
 is the runtime-reviewed reference for the current renderer contracts. Its
@@ -20,7 +24,9 @@ Ares. It included the targeted dialogue-renderer checks, page advances, and
 dialogue transitions; no defect was reported during the playthrough. This is
 the current runtime evidence for the release reference. Independent and future
 regression playtests are welcome, especially for alternate choices, emulator
-versions, hardware, and newly reported routes.
+versions, hardware, and newly reported routes. The historical record does not
+include an Ares version number, so future reports must record their own version
+rather than supplying one retroactively.
 
 A source-only checkout cannot independently replay the emulator session or
 re-prove the excluded artifact hashes. Every candidate whose playable bytes

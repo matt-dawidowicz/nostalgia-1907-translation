@@ -4,13 +4,18 @@
 evidence that only an emulator playthrough can provide. It never modifies
 translation text, Japanese data, SCN controls, or a disc image.
 
-## 1.0.1 release evidence
+## 1.0.2 release evidence
 
 The hash-identified North American reference completed a full maintainer
 playtest in Ares with no reported defects. That completed playthrough is release
 evidence for the unchanged reference, not a reason to discourage further
 testing. Independent and regression playtests are welcome, and every candidate
 with changed playable bytes requires fresh, candidate-bound runtime evidence.
+
+The published source metadata identifies this as the 1.0.2 release. The exact
+reference Track 1 hash and the recorded scope belong in
+[the release policy](RELEASE.md). The Ares version was not recorded, so do not
+invent a version number when reporting this historical evidence.
 
 ## Automatic gate
 
@@ -20,9 +25,10 @@ adaptive wrapping, physical cursor cadence, lower-dialogue opening gutters,
 dynamic references, native row-edge bytes, pointer bounds, glyph capacity, and
 the PART3C binary boundary. A failure blocks plan generation.
 
-## Runtime certification
+## Runtime certification for a new candidate
 
-The generated log remains `PENDING_RUNTIME` until the tester records:
+For a newly built candidate, the generated log remains `PENDING_RUNTIME` until
+the tester records:
 
 - boot and a fresh-game start;
 - multi-page dialogue, box/speaker transitions, choices, save/reload, and the
@@ -51,5 +57,7 @@ After the log has been filled, verify it without modifying it:
 python work\clean_rebuild\whole_game_test.py --verify whole_game_runtime_log.json
 ```
 
-`PASS` means the static corpus gate and all declared runtime evidence are
-complete. It is not a substitute for investigating a reported defect.
+`PASS` means the static corpus gate and all declared runtime evidence for that
+candidate are complete. It is not a substitute for investigating a reported
+defect, and it cannot be inherited by a candidate with different playable
+bytes.
