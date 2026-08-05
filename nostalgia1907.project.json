@@ -2,7 +2,7 @@
   "schema_version": 1,
   "tool": {
     "name": "nostalgia1907-tools",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "python_minimum": "3.10"
   },
   "build": {
