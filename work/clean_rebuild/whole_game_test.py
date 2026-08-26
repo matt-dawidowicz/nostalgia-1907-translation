@@ -16,11 +16,10 @@ import hashlib
 import json
 from collections import Counter, defaultdict
 from pathlib import Path
-
-from source_json import load_json_object
 from typing import Any
 
 from mes_compiler import CompileError, compile_mes
+from source_json import load_json_object
 from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 from translation_formatter import audit_layouts
 
@@ -289,37 +288,159 @@ def bind_build_identity(plan: dict[str, Any], cue: Path, track1: Path) -> None:
     }
 
 
+def _bound_candidate(identity: object) -> bool:
+    """Return whether runtime identity names and hashes bind one exact candidate."""
+    if not isinstance(identity, dict):
+        return False
+    for key in ("cue_filename", "track1_filename"):
+        value = identity.get(key)
+        if not isinstance(value, str) or not value or Path(value).name != value:
+            return False
+    for key in ("cue_sha256", "track1_sha256"):
+        value = identity.get(key)
+        if (
+            not isinstance(value, str)
+            or len(value) != 64
+            or any(character not in "0123456789ABCDEF" for character in value)
+        ):
+            return False
+    return True
+
+
+def _require_runtime_evidence(
+    item: dict[str, Any],
+    *,
+    state_key: str,
+    evidence_key: str,
+    label: str,
+    pending: list[str],
+    failed: list[str],
+) -> None:
+    """Validate one runtime state and require evidence for completed scopes."""
+    state = item.get(state_key)
+    if state not in VALID_RUNTIME_STATES:
+        raise ValueError(f"invalid {label} runtime state: {state!r}")
+    if state == "fail":
+        failed.append(label)
+    elif state == PENDING:
+        pending.append(label)
+    elif not isinstance(item.get(evidence_key), str) or not item[evidence_key].strip():
+        pending.append(f"{label}:evidence")
+
+
 def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
-    """Return pass only when the generated runtime certification is complete."""
+    """Return pass only for a bound, statically valid runtime certification."""
+    if plan.get("schema_version") != PLAN_SCHEMA_VERSION:
+        raise ValueError("runtime log schema version is missing or unsupported")
+    static = plan.get("static")
     runtime = plan.get("runtime")
+    if not isinstance(static, dict):
+        raise ValueError("static certification summary is missing")
     if not isinstance(runtime, dict):
         raise ValueError("runtime plan is missing")
+    layout = static.get("layout")
+    emitted = static.get("emitted_renderer")
+    if not isinstance(layout, dict) or not isinstance(emitted, dict):
+        raise ValueError("static layout or emitted-renderer summary is missing")
+
     pending: list[str] = []
     failed: list[str] = []
-    for check in runtime.get("global_checks", []):
-        state = check.get("status")
-        if state not in VALID_RUNTIME_STATES:
-            raise ValueError(f"invalid global runtime state: {state!r}")
-        if state == "fail":
-            failed.append(f"global:{check.get('id')}")
-        elif state != PASS:
-            pending.append(f"global:{check.get('id')}")
-    for chapter in runtime.get("chapters", []):
-        state = chapter.get("runtime_status")
-        if state not in VALID_RUNTIME_STATES:
-            raise ValueError(f"invalid chapter runtime state: {state!r}")
-        if state == "fail":
-            failed.append(f"chapter:{chapter.get('chapter')}")
-        elif state != PASS:
-            pending.append(f"chapter:{chapter.get('chapter')}")
-    for text_box in runtime.get("text_boxes", []):
-        state = text_box.get("runtime_status")
-        if state not in VALID_RUNTIME_STATES:
-            raise ValueError(f"invalid text-box runtime state: {state!r}")
-        if state == "fail":
-            failed.append(f"text_box:{text_box.get('text_box')}")
-        elif state != PASS:
-            pending.append(f"text_box:{text_box.get('text_box')}")
+    if layout.get("status") != "PASS":
+        failed.append("static:layout")
+    if emitted.get("status") != PASS:
+        failed.append("static:emitted_renderer")
+    if not _bound_candidate(runtime.get("build_identity")):
+        pending.append("build_identity")
+
+    global_checks = runtime.get("global_checks")
+    chapters = runtime.get("chapters")
+    text_boxes = runtime.get("text_boxes")
+    fixed_records = runtime.get("fixed_layout_record_ids")
+    issues = runtime.get("issues")
+    if not isinstance(global_checks, list):
+        raise ValueError("global runtime checks are missing")
+    if not isinstance(chapters, list) or not chapters:
+        raise ValueError("runtime chapter inventory is missing")
+    if not isinstance(text_boxes, list) or not text_boxes:
+        raise ValueError("runtime text-box inventory is missing")
+    if not isinstance(fixed_records, list):
+        raise ValueError("fixed-layout runtime inventory is missing")
+    if not isinstance(issues, list):
+        raise ValueError("runtime issue inventory is missing")
+
+    expected_global_ids = [item_id for item_id, _requirement in GLOBAL_RUNTIME_CHECKS]
+    actual_global_ids = [
+        check.get("id") if isinstance(check, dict) else None for check in global_checks
+    ]
+    if actual_global_ids != expected_global_ids:
+        raise ValueError("global runtime checks do not match the generated contract")
+
+    emitted_chapters = emitted.get("chapters")
+    if not isinstance(emitted_chapters, int) or emitted_chapters != len(chapters):
+        raise ValueError("runtime chapter inventory differs from static coverage")
+    chapter_names = [
+        chapter.get("chapter") if isinstance(chapter, dict) else None
+        for chapter in chapters
+    ]
+    if any(not isinstance(name, str) or not name for name in chapter_names):
+        raise ValueError("runtime chapter entry is malformed")
+    if len(chapter_names) != len(set(chapter_names)):
+        raise ValueError("runtime chapter inventory contains duplicates")
+
+    static_box_counts = layout.get("text_box_counts")
+    if not isinstance(static_box_counts, dict):
+        raise ValueError("static text-box inventory is missing")
+    text_box_names = [
+        text_box.get("text_box") if isinstance(text_box, dict) else None
+        for text_box in text_boxes
+    ]
+    if any(not isinstance(name, str) or not name for name in text_box_names):
+        raise ValueError("runtime text-box entry is malformed")
+    if len(text_box_names) != len(set(text_box_names)):
+        raise ValueError("runtime text-box inventory contains duplicates")
+    if set(text_box_names) != {str(name) for name in static_box_counts}:
+        raise ValueError("runtime text-box inventory differs from static coverage")
+
+    if any(not isinstance(record_id, str) or not record_id for record_id in fixed_records):
+        raise ValueError("fixed-layout runtime inventory contains an invalid record ID")
+    if len(fixed_records) != len(set(fixed_records)):
+        raise ValueError("fixed-layout runtime inventory contains duplicates")
+    if issues:
+        failed.append("runtime:issues")
+
+    for check in global_checks:
+        if not isinstance(check, dict):
+            raise ValueError("global runtime check is malformed")
+        _require_runtime_evidence(
+            check,
+            state_key="status",
+            evidence_key="evidence",
+            label=f"global:{check['id']}",
+            pending=pending,
+            failed=failed,
+        )
+    for chapter in chapters:
+        if not isinstance(chapter, dict):
+            raise ValueError("runtime chapter entry is malformed")
+        _require_runtime_evidence(
+            chapter,
+            state_key="runtime_status",
+            evidence_key="runtime_evidence",
+            label=f"chapter:{chapter['chapter']}",
+            pending=pending,
+            failed=failed,
+        )
+    for text_box in text_boxes:
+        if not isinstance(text_box, dict):
+            raise ValueError("runtime text-box entry is malformed")
+        _require_runtime_evidence(
+            text_box,
+            state_key="runtime_status",
+            evidence_key="runtime_evidence",
+            label=f"text_box:{text_box['text_box']}",
+            pending=pending,
+            failed=failed,
+        )
     return {
         "status": PASS if not pending and not failed else "PENDING_RUNTIME",
         "pending_count": len(pending),
