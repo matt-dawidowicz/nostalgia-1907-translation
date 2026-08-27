@@ -4,6 +4,15 @@
 evidence that only an emulator playthrough can provide. It never modifies
 translation text, Japanese data, SCN controls, or a disc image.
 
+## Current post-1.0.2 source status
+
+The 2026-08-27 source revision changes canonical English and therefore cannot
+reuse the 1.0.2 runtime result. Its source and retail-backed static gates are
+green, but its runtime log remains pending. In particular, replay
+PART4C:051-PART4C:059 in one uninterrupted ending sequence because those fixed
+records have no statically proven SCN geometry. See
+[the revision record](TRANSLATION_REVISION_20260827.md).
+
 ## 1.0.2 release evidence
 
 The hash-identified North American reference completed a full maintainer
@@ -12,7 +21,7 @@ evidence for the unchanged reference, not a reason to discourage further
 testing. Independent and regression playtests are welcome, and every candidate
 with changed playable bytes requires fresh, candidate-bound runtime evidence.
 
-The published source metadata identifies this as the 1.0.2 release. The exact
+The historical published metadata identifies that reference as the 1.0.2 release. The exact
 reference Track 1 hash and the recorded scope belong in
 [the release policy](RELEASE.md). The Ares version was not recorded, so do not
 invent a version number when reporting this historical evidence.

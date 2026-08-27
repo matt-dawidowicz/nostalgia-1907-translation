@@ -1,10 +1,24 @@
 # Release and playtest policy
 
+## Current source status
+
+Version **1.0.2 remains the latest runtime-certified published reference**. The
+current source tree also contains the post-1.0.2 2026-08-27 translation
+revision. That revision changes canonical English and playable bytes. It has
+passed source CI plus retail-backed layout, MES-capacity, and archive-fit gates,
+but it has not completed a fresh candidate-bound Ares playthrough and is not a
+new runtime-certified release. See
+[the revision record](TRANSLATION_REVISION_20260827.md).
+
+Do not use the 1.0.2 playtest as evidence for the current source revision. A
+successor release must complete the build and runtime requirements below with
+its own hashes.
+
 ## Runtime-reviewed reference
 
-The current public source release is 1.0.2. It is a source, documentation, and
-metadata maintenance release: it identifies the existing runtime-reviewed
-reference rather than claiming a new playable artifact.
+Version 1.0.2 is a source, documentation, and metadata maintenance release: it
+identifies the existing runtime-reviewed reference rather than claiming a new
+playable artifact.
 
 The North American artifact with Track 1 SHA-256
 `1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`

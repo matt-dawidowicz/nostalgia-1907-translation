@@ -42,8 +42,10 @@ binary boundaries.
 Static checks prove source and compiler consistency. Ares evidence remains the
 release gate for visible spacing, wrapping, and stale-glyph behavior of changed
 playable candidates. The hash-identified 1.0.2 reference completed the recorded
-maintainer playtest; see [release policy](RELEASE.md) for its scope and the
-requirements for future candidates.
+maintainer playtest; the post-1.0.2 translation revision does not inherit that
+result. Its retail-backed static validation and fixed-ending runtime obligation
+are recorded in [the revision record](TRANSLATION_REVISION_20260827.md). See
+[release policy](RELEASE.md) for publication requirements.
 
 The formatter is not the compiler's safety prerequisite. Direct
 `compile_mes()` calls repeat the shared semantic-row validation and reject a

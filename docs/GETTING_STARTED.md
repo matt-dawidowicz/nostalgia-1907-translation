@@ -6,12 +6,14 @@ translation history. Start here before reading the deeper format documents.
 
 ## Current release status
 
-The current public source release is 1.0.2. Its hash-identified North American
-reference completed the recorded full maintainer Ares playtest with no reported
-defects. That evidence belongs to the unchanged reference only: a future
-candidate with changed playable bytes must complete its own clean build and
-candidate-bound runtime checks. Read [release policy](RELEASE.md) before
-preparing a build for publication.
+Version 1.0.2 remains the latest runtime-certified published reference; its
+hash-identified North American build completed the recorded full maintainer Ares
+playtest with no reported defects. The current source tree contains a later
+2026-08-27 translation revision whose playable bytes change. Its source and
+retail-backed static gates are green, but it still needs a fresh deterministic
+release build and candidate-bound runtime checks. Read [the revision
+record](TRANSLATION_REVISION_20260827.md) and [release policy](RELEASE.md)
+before preparing a build for publication.
 
 ## Pick a contributor path
 
