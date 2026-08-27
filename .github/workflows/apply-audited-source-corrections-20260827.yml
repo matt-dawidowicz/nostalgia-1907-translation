@@ -54,4 +54,4 @@ jobs:
           git commit -m 'translation: apply audited Japanese source corrections'
           git push origin HEAD:translation-source-corrections-20260827
 
-# Retrigger after verified payload transport repair.
+# Retrigger after verified payload transport and heading-lock repairs.
