@@ -1,0 +1,116 @@
+name: Apply semantic validator repairs 20260827
+
+on:
+  push:
+    branches:
+      - translation-source-corrections-20260827
+    paths:
+      - .github/workflows/apply-semantic-validator-repairs-20260827.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: translation-source-corrections-20260827
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install project tooling
+        run: python -m pip install -e .
+      - name: Apply exact-match semantic validator repairs
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          changes = {
+              "PART1C": {
+                  2: ("Pilot House", "Navigation Control Room"),
+                  52: (
+                      "Go get eaten by the Reds! The passengers can no longer abandon ship...Chief Engineer! What's the damage to the engine room?",
+                      "Go get eaten by sharks! We can't evacuate the passengers now...Chief Engineer! What's the damage in the engine room?",
+                  ),
+                  94: ("B-but...sir...", "But...sir..."),
+              },
+              "PART1D": {
+                  15: (
+                      "May the sharks eat him! The passengers can no longer abandon ship...Chief Engineer! What is the damage to the engine room?",
+                      "Go get eaten by sharks! We can't evacuate the passengers now...Chief Engineer! What's the damage in the engine room?",
+                  ),
+                  57: ("But...that would be terrible...", "But...sir..."),
+                  132: ("A clever fellow.", "A clever dog."),
+              },
+              "PART2A": {64: ("Pilot House", "Navigation Control Room")},
+              "PART2E": {
+                  205: (
+                      "Cut white and we're dead! Red or blue: one runs from the timer to the detonator, the other's a dummy. Cut the dummy and we're done for. Cut the real one and we're clear!",
+                      "Cut white and we're dead! Red or blue: one wire runs from the timer to the detonator, the other's a dummy. Cut the dummy and we're done for. Cut the real wire and we're clear!",
+                  ),
+              },
+          }
+          for chapter, chapter_changes in changes.items():
+              path = Path("work/clean_rebuild/sources") / f"{chapter}.json"
+              payload = json.loads(path.read_text(encoding="utf-8"))
+              records = {record["index"]: record for record in payload["records"]}
+              required = (payload.get("profile") or {}).get("required_text_exact") or {}
+              for index, (before, after) in chapter_changes.items():
+                  current = records[index].get("text")
+                  if current != before:
+                      raise SystemExit(
+                          f"{chapter}:{index:03d}: expected {before!r}, got {current!r}"
+                      )
+                  records[index]["text"] = after
+                  if str(index) in required:
+                      required[str(index)] = after
+              path.write_text(
+                  json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+                  encoding="utf-8",
+              )
+
+          # Stale exact bomb-semantic expectation: canonical "Check" is source-correct.
+          path = Path("work/clean_rebuild/bomb_semantics.json")
+          text = path.read_text(encoding="utf-8")
+          before = '    "PART2E:199":{"japanese":"「接続管をあたる・・・」","literal":"Touch the connector tube...","corrected_english":"Touch the connector tube..."},'
+          after = '    "PART2E:199":{"japanese":"「接続管をあたる・・・」","literal":"Check/examine the connector tube...","corrected_english":"Check the connector tube..."},'
+          if text.count(before) != 1:
+              raise SystemExit("PART2E:199 bomb semantics expectation not found exactly once")
+          path.write_text(text.replace(before, after, 1), encoding="utf-8")
+
+          # Keep the historical repair table from restoring obsolete bomb prose.
+          path = Path("work/clean_rebuild/translation_repairs.json")
+          text = path.read_text(encoding="utf-8")
+          old199 = '    "PART2E:199": {"text":"Touch the connector tube..."},'
+          new199 = '    "PART2E:199": {"text":"Check the connector tube..."},'
+          old205 = '    "PART2E:205": {"text":"Cut white and we die!\\nRed or blue: one wire\\nlinks timer to bomb.\\nOther one is a dummy.\\nCut dummy: boom!\\nCut real wire and\\nwe are safe!","preserve_render_shape":false,"render_width":21},'
+          new205 = '    "PART2E:205": {"text":"Cut white and we\'re dead! Red or blue: one wire runs from the timer to the detonator, the other\'s a dummy. Cut the dummy and we\'re done for. Cut the real wire and we\'re clear!","preserve_render_shape":false,"render_width":21},'
+          for before, after, label in ((old199,new199,"199"),(old205,new205,"205")):
+              if text.count(before) != 1:
+                  raise SystemExit(f"PART2E:{label} repair entry not found exactly once")
+              text = text.replace(before, after, 1)
+          path.write_text(text, encoding="utf-8")
+          print("Applied 8 canonical semantic repairs and synchronized bomb rule tables")
+          PY
+          expected=$'work/clean_rebuild/bomb_semantics.json\nwork/clean_rebuild/sources/PART1C.json\nwork/clean_rebuild/sources/PART1D.json\nwork/clean_rebuild/sources/PART2A.json\nwork/clean_rebuild/sources/PART2E.json\nwork/clean_rebuild/translation_repairs.json'
+          test "$(git diff --name-only | sort)" = "$expected"
+      - name: Validate source tree
+        run: |
+          python tools/source_health.py --root . --strict-release
+          python -m compileall -q nostalgia1907.py tools work tests
+          python -m unittest discover -s tests -v
+          python tools/style_audit.py --root .
+      - name: Commit canonical semantic validator repairs
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add work/clean_rebuild/bomb_semantics.json work/clean_rebuild/translation_repairs.json work/clean_rebuild/sources/PART1C.json work/clean_rebuild/sources/PART1D.json work/clean_rebuild/sources/PART2A.json work/clean_rebuild/sources/PART2E.json
+          git diff --cached --quiet && { echo "No canonical changes to commit"; exit 1; }
+          git commit -m "translation: apply final semantic validator repairs"
+          git push origin HEAD:translation-source-corrections-20260827
