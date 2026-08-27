@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "purpose": "Retail-backed layout/reserve fixes discovered by the full renderer integration gate after the source-faithful voice pass.",
+  "changes": [
+    {
+      "id": "START:000",
+      "before": "The past blurs into fantasy just as easily as we imagine one possible future. The moment I noticed the faint scar in her left eye is not here...not now.",
+      "after": "The past blurs into fantasy just as easily as we imagine one possible future. The moment I noticed the faint scar in her left eye was not here, in this fleeting instant.",
+      "reason": "Retail SCN proves START narration is a six-row full-screen box. The revised wording remains source-faithful to いま一瞬のここではない and naturally occupies all six proven rows."
+    }
+  ],
+  "fixed_english_dictionary_additions": [
+    ["0x6A", "literal", ", "],
+    ["0x6B", "literal", "to"],
+    ["0x6C", "literal", " s"],
+    ["0x6D", "literal", " o"],
+    ["0x6E", "literal", " c"],
+    ["0x6F", "literal", " h"],
+    ["0x70", "literal", "un"]
+  ],
+  "dictionary_reason": "The post-audit PART3C corpus still fit under 0x3FFF but failed the integration contract requiring a 0x100 reserve. These globally unused, non-row-edge fixed-font slots encode recurring English cells in one byte instead of a two-byte dynamic reference. The retail-backed bitmap-identity test proves the displayed glyph stream is unchanged.",
+  "retail_evidence": {
+    "track1_sha256": "EFE9A453849F52DC72B7E72EE98D8644882655536E59991C2C85C5A35A41D0E5",
+    "part3c_before_dictionary_expansion": 16353,
+    "part3c_after_dictionary_expansion": 16073,
+    "part3c_hard_limit": 16383,
+    "required_reserve": 256,
+    "actual_reserve": 310,
+    "part3c_dynamic_glyphs": 388,
+    "whole_game_max_dynamic_glyphs": 469,
+    "all_19_chapters_compile": true,
+    "bitmap_identity_test": "PASS",
+    "native_row_edge_safety_test": "PASS",
+    "start_six_row_contract_test": "PASS"
+  }
+}
