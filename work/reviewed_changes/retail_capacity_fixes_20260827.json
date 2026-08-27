@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "purpose": "Retail-backed capacity fixes discovered after the source/voice pass. Preserve Japanese meaning while restoring proven runtime limits.",
+  "retail_track1_sha256": "EFE9A453849F52DC72B7E72EE98D8644882655536E59991C2C85C5A35A41D0E5",
+  "changes": [
+    {
+      "id": "PART2A:078",
+      "before": "From first class to the captain's cabin. Good. I can retrace the route.",
+      "after": "First class to the captain's cabin. Good. I can retrace it.",
+      "reason": "Retail SCN compile proved the expanded voice-pass wording needs 5 rows in a 4-row floating window. The earlier wording was already source-aligned and preserves the same meaning."
+    },
+    {
+      "id": "PART3C:017",
+      "before": "General Intelligence and Internal Security are completely separate sections, so even aboard the same ship I couldn't identify them.",
+      "after": "General Intelligence and Internal Security are separate, so even aboard the same ship I couldn't identify them.",
+      "reason": "Source-faithful tightening for the PART3C hard MES boundary; preserves the Japanese causal clause and organizational distinction."
+    },
+    {
+      "id": "PART3C:114",
+      "before": "The person offering you sanctuary may be behind the bombing, an agent of a third country. If so, does your destination for defection really have to be Britain?",
+      "after": "The person offering sanctuary may be the bomber, an agent of a third country. If so, must you really defect to Britain?",
+      "reason": "Source-faithful tightening for the PART3C hard MES boundary; preserves the corrected question that Britain need not be the defection destination."
+    },
+    {
+      "id": "PART3C:132",
+      "before": "The culprit won't disarm the bomb. This ship is evidence of the theft, so he can't let it reach Southampton. At 7:00 p.m. the bomb will destroy it. Our only move is to catch the culprit, tie him up in front of the bomb, and make him disarm it himself.",
+      "after": "The culprit won't disarm it. This ship proves the theft, so he can't let it reach Southampton. At 7 p.m. the bomb destroys it. We must catch him, tie him before it, and force him to disarm it.",
+      "reason": "Source-faithful tightening for the PART3C hard MES boundary. Retains 7 p.m., destruction of the ship, capture of the culprit, tying him before the bomb, and forcing him to disarm it."
+    },
+    {
+      "id": "PART3C:189",
+      "before": "The accomplice is Dunant. Because I kept pressing my suspicion of Ashby, Ashby had Dunant write the second claim statement. It was rushed and lacked planning.",
+      "after": "The accomplice is Dunant. I kept pressing Ashby, so he had Dunant write the second claim statement in a rush. It lacked planning.",
+      "reason": "Source-faithful tightening for the PART3C hard MES boundary; retains Ashby's direction, Dunant as writer, the second claim statement, and its rushed/unplanned nature."
+    }
+  ],
+  "retail_compile_evidence": {
+    "before_part3c_size": 16476,
+    "before_part3c_hex": "0x405C",
+    "hard_limit": 16383,
+    "hard_limit_hex": "0x3FFF",
+    "after_part3c_size": 16353,
+    "after_part3c_hex": "0x3FE1",
+    "headroom_bytes": 30,
+    "full_mes_set": "PASS: 19 chapters, 2905 records"
+  }
+}
