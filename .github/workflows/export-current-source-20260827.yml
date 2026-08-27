@@ -1,0 +1,27 @@
+name: Export current source 20260827
+
+on:
+  push:
+    branches:
+      - translation-source-corrections-20260827
+    paths:
+      - .github/workflows/export-current-source-20260827.yml
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: translation-source-corrections-20260827
+          fetch-depth: 1
+      - name: Archive exact tracked source tree
+        run: git archive --format=zip --output=nostalgia1907-current-source.zip HEAD
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nostalgia1907-current-source-20260827
+          path: nostalgia1907-current-source.zip
+          retention-days: 1
