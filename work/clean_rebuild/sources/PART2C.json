@@ -182,7 +182,7 @@
     {
       "index": 17,
       "policy": "translate",
-      "text": "Transatlantic. The ship was newly built at a Philadelphia yard in 1905.",
+      "text": "Trans-Atlantic. The ship was newly built at a Philadelphia yard in 1905.",
       "layout_policy": "adaptive"
     },
     {
@@ -445,7 +445,7 @@
     {
       "index": 61,
       "policy": "translate",
-      "text": "Cabin B is beside Cabin A, where I found the radio. I'll start there.",
+      "text": "Cabin B is beside Cabin A, where I found the wireless set. I'll start there.",
       "layout_policy": "adaptive"
     },
     {
@@ -619,7 +619,7 @@
     {
       "index": 90,
       "policy": "translate",
-      "text": "A familiar scent...sharp enough to bite...",
+      "text": "What the hell? Don't bite my head off out of nowhere...",
       "layout_policy": "adaptive"
     },
     {
@@ -751,19 +751,19 @@
     {
       "index": 112,
       "policy": "translate",
-      "text": "You...you must be an assassin sent by Li Bai!",
+      "text": "You...you're a spy sent by the Chancellor!",
       "layout_policy": "adaptive"
     },
     {
       "index": 113,
       "policy": "translate",
-      "text": "So you caused the explosion! I won't surrender the princess. Tell Li Bai: while Princess Tianon, the rightful heir, lives, this country will never be his!",
+      "text": "So that explosion was your doing too! I won't hand the princess over to anyone! Go back and tell the Chancellor: as long as Princess Tianon, the rightful heir to the throne, lives, this country will never be yours! Get out!",
       "layout_policy": "adaptive"
     },
     {
       "index": 114,
       "policy": "translate",
-      "text": "Never!",
+      "text": "Of course!",
       "layout_policy": "adaptive"
     },
     {
@@ -865,13 +865,13 @@
     {
       "index": 131,
       "policy": "translate",
-      "text": "What do you mean? I am a specially invited passenger, and a victim! Do not insult me. You are not even a real detective. Why should I trust you?",
+      "text": "What do you mean?! I'm a specially invited passenger, and a victim of this incident! What are you saying to me?! Are you in your right mind?!",
       "layout_policy": "adaptive"
     },
     {
       "index": 132,
       "policy": "translate",
-      "text": "Definitely suspicious...",
+      "text": "Maybe I am crazy...that is strange.",
       "layout_policy": "adaptive"
     },
     {

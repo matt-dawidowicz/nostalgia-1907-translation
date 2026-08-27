@@ -106,8 +106,8 @@
       "181": "The wire is unnecessary.",
       "182": "Look under the floor.",
       "183": "Cut this and remove the platform.",
-      "198": "Touch the timer unit...",
-      "199": "Touch the connector tube...",
+      "198": "Check the timer unit...",
+      "199": "Check the connector tube...",
       "200": "Red, blue, and white wires.",
       "212": "I've got the cutters on the red wire...I'm cutting it.",
       "213": "I've got the cutters on the blue wire...I'm cutting it.",
@@ -150,13 +150,13 @@
     {
       "index": 3,
       "policy": "translate",
-      "text": "I have heard of the Russian Fog. It is a secret intelligence service organized by the Russian Empire.",
+      "text": "I've heard of the Russian Fog. The ultimate secret weapon developed by the Russian Army.",
       "layout_policy": "adaptive"
     },
     {
       "index": 4,
       "policy": "translate",
-      "text": "A secret service...",
+      "text": "A secret weapon...",
       "layout_policy": "adaptive"
     },
     {
@@ -174,19 +174,19 @@
     {
       "index": 7,
       "policy": "translate",
-      "text": "Can anyone who knows so many secrets really be trusted?",
+      "text": "Something that bundles several guns together and fires them in rapid succession?",
       "layout_policy": "adaptive"
     },
     {
       "index": 8,
       "policy": "translate",
-      "text": "A secret society? No. Something far more frightening.",
+      "text": "A machine gun? No, not that. Something far more extraordinary.",
       "layout_policy": "adaptive"
     },
     {
       "index": 9,
       "policy": "translate",
-      "text": "A secret service, he says. Aren't you embarrassed listening to this?",
+      "text": "A secret weapon, he says. Aren't you embarrassed listening to this?",
       "layout_policy": "adaptive"
     },
     {
@@ -204,7 +204,7 @@
     {
       "index": 12,
       "policy": "translate",
-      "text": "A secret weapon was lost on the ocean floor. If it were ever rebuilt,",
+      "text": "A weapon used by the secret police to suppress popular uprisings. If it were mass-produced,",
       "layout_policy": "adaptive"
     },
     {
@@ -216,7 +216,7 @@
     {
       "index": 14,
       "policy": "translate",
-      "text": "Too much secrecy can be frightening in its own way.",
+      "text": "Too much imagination can be a problem too.",
       "layout_policy": "adaptive"
     },
     {
@@ -228,7 +228,7 @@
     {
       "index": 16,
       "policy": "translate",
-      "text": "I once served at the Japanese embassy in St. Petersburg! Kuropatkin told me himself!",
+      "text": "I have! I've been invited to perform for the court aristocracy in St. Petersburg! I even performed before General Kuropatkin...",
       "layout_policy": "adaptive"
     },
     {
@@ -246,13 +246,13 @@
     {
       "index": 19,
       "policy": "translate",
-      "text": "The Russian general...",
+      "text": "The Emperor's...",
       "layout_policy": "adaptive"
     },
     {
       "index": 20,
       "policy": "translate",
-      "text": "In the fog...I never want to go near it again.",
+      "text": "The city of fog...I never want to go near it again.",
       "layout_policy": "adaptive"
     },
     {
@@ -270,7 +270,7 @@
     {
       "index": 23,
       "policy": "translate",
-      "text": "A secret service...",
+      "text": "A secret weapon...",
       "layout_policy": "adaptive"
     },
     {
@@ -325,7 +325,7 @@
     {
       "index": 32,
       "policy": "translate",
-      "text": "You really are vile. You mean to frame Black for the murder and escape the ship?",
+      "text": "You really are vile. You mean to frame Braque for the murder and escape the ship?",
       "layout_policy": "adaptive"
     },
     {
@@ -343,13 +343,13 @@
     {
       "index": 35,
       "policy": "translate",
-      "text": "That trollop? Who would believe a woman who sells her bare flesh?",
+      "text": "A hussy! How can you trust a woman who cuts her hair short?!",
       "layout_policy": "adaptive"
     },
     {
       "index": 36,
       "policy": "translate",
-      "text": "And what about a man in a woman's cravat? What does that make me, wearing a skirt?",
+      "text": "Then what about a guy wearing a bow-tied necktie?! What does that make me, wearing a skirt?!",
       "layout_policy": "adaptive"
     },
     {
@@ -379,7 +379,7 @@
     {
       "index": 41,
       "policy": "translate",
-      "text": "Ilyusha Grancelius, the lady in the cabin next to yours. She had a secret pact with Black.",
+      "text": "Ilyusha Grancelius, the passenger in the cabin next to yours. She's trying to sell herself to Braque. Investigate her.",
       "layout_policy": "adaptive"
     },
     {
@@ -409,7 +409,7 @@
     {
       "index": 46,
       "policy": "translate",
-      "text": "I got the lid off...nasty-looking thing. No mechanism, just an iron cover held down by screws.",
+      "text": "I'm face-to-face with the lid...an unfriendly-looking thing. Nothing special, just an iron lid held by screws at all four corners. One-inch slotted heads...",
       "layout_policy": "adaptive"
     },
     {
@@ -428,7 +428,7 @@
     {
       "index": 49,
       "policy": "translate",
-      "text": "I cannot see one...it is a sealed trick. I want to find a way in.",
+      "text": "Can't find it...it's my lifelong companion. I want to give this one a name.",
       "layout_policy": "adaptive"
     },
     {
@@ -662,7 +662,7 @@
     {
       "index": 88,
       "policy": "translate",
-      "text": "So much for caution. Burn well, Charlie Muffin. This woman is worth a hundred million pounds.",
+      "text": "The current flows like this...think carefully, Charlie Muffin. This lady could blow at the slightest touch.",
       "layout_policy": "adaptive"
     },
     {
@@ -902,7 +902,7 @@
     {
       "index": 128,
       "policy": "translate",
-      "text": "West German adhesive. Quick-setting, reliable, and very expensive.",
+      "text": "You don't take a hint, do you? Must be that western accent...I like you, Chief. I'll say it now: I chose this ship and you over her.",
       "layout_policy": "adaptive"
     },
     {
@@ -956,25 +956,25 @@
     {
       "index": 137,
       "policy": "translate",
-      "text": "Do not make such a fuss. If you had listened to me, this would not have happened.",
+      "text": "Take it easy! Once we're ashore, there'll be plenty of women!",
       "layout_policy": "adaptive"
     },
     {
       "index": 138,
       "policy": "translate",
-      "text": "What happened?",
+      "text": "Plenty of women?",
       "layout_policy": "adaptive"
     },
     {
       "index": 139,
       "policy": "translate",
-      "text": "Adhesive on a detonator...I learned that trick from a Californian.",
+      "text": "Chief, I grew up in the East. I can't make sense of that crazy California accent of yours...'plenty of women'...you mean you'll buy me one?",
       "layout_policy": "adaptive"
     },
     {
       "index": 140,
       "policy": "translate",
-      "text": "I remember a man in East Germany. Dudley Slayman...or was it Jerry?",
+      "text": "Where was it...east Town Street. Right, Dada Sleiman's place. There was a knockout named Sherry, if I remember. Think you can get her for me?",
       "layout_policy": "adaptive"
     },
     {
@@ -1052,13 +1052,13 @@
     {
       "index": 153,
       "policy": "translate",
-      "text": "How is it? Is it working?",
+      "text": "How is it? Do I pass?",
       "layout_policy": "adaptive"
     },
     {
       "index": 154,
       "policy": "translate",
-      "text": "Yes, Charlie. Perfect.",
+      "text": "No problem. Charlie, you're an honor student.",
       "layout_policy": "adaptive"
     },
     {
@@ -1196,7 +1196,7 @@
     {
       "index": 177,
       "policy": "translate",
-      "text": "Let me see...there must be a cylinder hidden somewhere.",
+      "text": "No...never mind. So you're the sort of thing you can find lying around anywhere...uh...",
       "layout_policy": "adaptive"
     },
     {
@@ -1238,7 +1238,7 @@
     {
       "index": 184,
       "policy": "translate",
-      "text": "Another panel. Why are you fidgeting, Betty?",
+      "text": "Well, another door farther in. Betty, why are you like this?",
       "layout_policy": "adaptive"
     },
     {
@@ -1250,7 +1250,7 @@
     {
       "index": 186,
       "policy": "translate",
-      "text": "I cannot see it. We go in from here...carefully.",
+      "text": "I can't see it. Seems she really wants us to enter from here...let's accept the invitation.",
       "layout_policy": "adaptive"
     },
     {
@@ -1304,7 +1304,7 @@
     {
       "index": 195,
       "policy": "translate",
-      "text": "Two thousand seconds. Plenty of time, Betty...is that what you think?",
+      "text": "Heat: 2,000 degrees...i'd melt in an instant...Betty, are you serious? Can you kill me? Both the counter body and connector tube have screw-fastened covers...",
       "layout_policy": "adaptive"
     },
     {
@@ -1322,13 +1322,13 @@
     {
       "index": 198,
       "policy": "translate",
-      "text": "Touch the timer unit...",
+      "text": "Check the timer unit...",
       "layout_policy": "adaptive"
     },
     {
       "index": 199,
       "policy": "translate",
-      "text": "Touch the connector tube...",
+      "text": "Check the connector tube...",
       "layout_policy": "adaptive"
     },
     {

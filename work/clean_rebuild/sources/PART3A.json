@@ -63,7 +63,7 @@
     "layout_overrides": {},
     "runtime_layout_overrides": {},
     "required_text_exact": {
-      "1": "Act 3: \"The Witch\"",
+      "1": "ACTION 3: \"The Witch\"",
       "2": "Captain's Cabin",
       "3": "Yamada Kasuke",
       "4": "Kasuke",
@@ -73,9 +73,9 @@
       "8": "They know the Fog is a Russian spy, but not which person it is.",
       "9": "If the culprit were a Russian agent watching the Fog, they would know what the Fog looks like.",
       "10": "So the culprit is an agent of a third country.",
-      "11": "The culprit stopped the ship, bombed the boats, and destroyed the radio room.",
+      "11": "The culprit stopped the ship, bombed the boats, and destroyed the wireless room.",
       "12": "Why? If the ship sinks now, no one else will ever know what happened aboard.",
-      "13": "The Board of Trade will blame a terrorist attack. America will call it the work of German U-boats. A perfect tragedy for propaganda.",
+      "13": "The shipping authorities will call it an indiscriminate terrorist attack. The U.S. government will call it an outrage by a German U-boat squadron. A tragedy tailor-made for propaganda.",
       "14": "No one will realize the \"Russian Fog\" was abducted.",
       "15": "For a third country, the prize could not be sweeter. They can seize a person carrying a vast store of intelligence without Britain or Russia even noticing.",
       "16": "Cowardly.",
@@ -105,7 +105,7 @@
       "40": "Every record of that war has been erased from Russian history.",
       "41": "Our children will not even know your people existed. I look forward to thirty years from now...hmph!",
       "42": "Get angrier. Do not think calmly.",
-      "43": "Do you know how to use a saw?",
+      "43": "Can you hear the sound of the saw?",
       "44": "Siberia has no use for saws. My tool is the axe.",
       "45": "'Russkis' are known as country bumpkins...everyone in Europe looks down on you.",
       "46": "The Far East is the end of the world.",
@@ -172,7 +172,7 @@
       "107": "What?! Are you threatening me? I reject violence! It is the enemy of world peace!",
       "108": "You could not compose in Russia, could you?",
       "109": "A genius chooses his surroundings.",
-      "110": "That makes perfect sense.",
+      "110": "I'd like to choose too.",
       "111": "You said yourself that you are fleeing Russia.",
       "112": "...the Russian secret police are aboard this ship? No! I will not go back to that country! Help me! I want asylum in America! Take me to the captain!",
       "113": "Chanel",
@@ -182,7 +182,7 @@
       "117": "If you survive until tomorrow, I'll take you to the captain.",
       "118": "Really?",
       "119": "Whatever.",
-      "120": "Wait...aren't we already bound for America?",
+      "120": "Wait...america? Not Britain?",
       "121": "The London Philharmonic?! Ugh, it makes me sick! Only the Detroit Symphony will do! They alone can perform my daring new work. That explosion inspired me: The Firebird!",
       "122": "Ooh! How wonderful!",
       "123": "How about the second movement?! Ta ri ra re, ra ri ru, ra ra ra, re ro re ro, ra ro...",
@@ -207,16 +207,16 @@
       "142": "It's my nature. Ruthie, Ashby, Tianon, and Lumeranka...in other words, none of those four could have written the second manifesto.",
       "143": "Kasuke, you're the only one without a clear alibi.",
       "144": "Damn it.",
-      "145": "Tianon's alibi seems deliberately contrived. The culprit is among them. This proves they went on the defensive after your attack.",
+      "145": "Tianon and her party are acting deliberately. The culprit is among them. Their defensiveness against our attack proves it.",
       "146": "Stubborn, aren't you? Tianon and Lumeranka. Start with those two.",
       "147": "Tianon",
       "148": "...the least suspicious person is the most suspicious...how's that for a theory?",
       "149": "In an ordinary detective novel, perhaps...",
-      "150": "Who taught you?",
-      "151": "Do you enjoy it?",
-      "152": "Not my thing...",
+      "150": "Wait...",
+      "151": "This child...",
+      "152": "That much...",
       "153": "Who taught you fortune-telling?",
-      "154": "My aunt...she always gazed at the slopes of Krufostel through the evening mist...my silent aunt...a poison sweetened with happiness took her voice. Before that, she often foretold my happiness...",
+      "154": "From my grandmother...she always gazed at the foothills of Kuru Fostel in the evening mist. My silent grandmother...a poison laced with happiness took her voice. Before she lost the power of speech, she often told my fortune...",
       "155": "How sad...",
       "156": "Do you like fortune-telling?",
       "157": "...far away, beyond the drifting mist...something sometimes glints. What is it? Can you not sense it?",
@@ -237,7 +237,7 @@
       "172": "Please, tell me.",
       "173": "Swear you will tell no one!",
       "174": "All right.",
-      "175": "The truth is, Princess Tianon is daughter to the Maharaja of Renan, in India. His name is Kasamara Hatoz Tos Harandoil Kurumayubi Agero Kyuryo Kokoron Urero Yunna Uappa...",
+      "175": "The truth is, Princess Tianon is the third daughter of the Maharaja of Renan, in India. His name is Kasamara Hatoz Tos Harandoil Kurumayubi Agero Kyuryo Kokoron Urero Yunna Uappa...",
       "176": "Dawn will break first.",
       "177": "Keep the name short, please.",
       "178": "That was the short version!",
@@ -259,29 +259,29 @@
       "194": "And you.",
       "195": "I'm sick of this.",
       "196": "Still complaining?",
-      "197": "Question Ruthie. She was the first to discover Black's murder. Black was obsessed with the \"Russian Fog.\" If she killed him, she may well be a Russian spy.",
+      "197": "Question Ruthie. She was the first to discover Braque's murder. Braque was obsessed with the \"Russian Fog.\" If she killed him, she may well be a Russian spy.",
       "198": "Adjoining Room C",
       "199": "Ruthie",
-      "200": "...you suspect me, don't you? Because Black died that way...",
+      "200": "...you suspect me, don't you? Because Braque died that way...",
       "201": "...may I be a little cruel?",
       "202": "Go ahead...hee hee. You're a strange detective.",
       "203": "I hate what this job is turning me into...",
       "204": "...it isn't you I doubt. I doubt my own first impression of you...",
       "205": "So your first impression of me wasn't entirely bad? I'm flattered.",
       "206": "Anyone would feel that way...",
-      "207": "When did you meet Black?",
-      "208": "Two years ago. I was a sales clerk at a trading company. I was good with figures, so Black noticed me and recruited me.",
+      "207": "When did you meet Braque?",
+      "208": "Two years ago. I was a sales clerk at a trading company. I was good with figures, so Braque noticed me and recruited me.",
       "209": "I was so happy. I grew up in a small town in southern France and dreamed of Paris: the Metro, boulevard cafes, and becoming a woman whose talent no one could match.",
       "210": "That faraway look...",
-      "211": "I thought women were finally being recognized. But Black only wanted a pretty woman he could take anywhere.",
-      "212": "...that gave her reason to kill him.",
+      "211": "I thought women were finally being recognized. But Braque only wanted a pretty woman he could take anywhere.",
+      "212": "...that's why you can kill him.",
       "213": "Is that what you think?",
       "214": "Too soft, Kasuke. You're letting her charm win you over...",
       "215": "Women are demons, remember? You're a full-fledged detective now! Do it!",
-      "216": "Here is my theory. You and Black conspired to hijack the ship. Partway through, you tired of working with him, killed your partner, and meant to finish the plan alone.",
+      "216": "Here is my theory. You and Braque conspired to hijack the ship. Partway through, you tired of working with him, killed your partner, and meant to finish the plan alone.",
       "217": "Reality is ambiguous. People interpret it only as they wish to see it. Is that how it appears to you?",
       "218": "...that theory is a stretch...",
-      "219": "Your motive is weak, but you hated Black.",
+      "219": "Your motive is weak, but you hated Braque.",
       "220": "With enough passion to kill him?",
       "221": "...no. She's as conflicted as any city dweller...",
       "222": "Come on! Spit it out! Talk, damn you! Say anything!",
@@ -336,7 +336,7 @@
     {
       "index": 1,
       "policy": "translate",
-      "text": "Act 3: \"The Witch\"",
+      "text": "ACTION 3: \"The Witch\"",
       "layout_policy": "fixed"
     },
     {
@@ -396,7 +396,7 @@
     {
       "index": 11,
       "policy": "translate",
-      "text": "The culprit stopped the ship, bombed the boats, and destroyed the radio room.",
+      "text": "The culprit stopped the ship, bombed the boats, and destroyed the wireless room.",
       "layout_policy": "adaptive"
     },
     {
@@ -408,7 +408,7 @@
     {
       "index": 13,
       "policy": "translate",
-      "text": "The Board of Trade will blame a terrorist attack. America will call it the work of German U-boats. A perfect tragedy for propaganda.",
+      "text": "The shipping authorities will call it an indiscriminate terrorist attack. The U.S. government will call it an outrage by a German U-boat squadron. A tragedy tailor-made for propaganda.",
       "layout_policy": "adaptive"
     },
     {
@@ -588,7 +588,7 @@
     {
       "index": 43,
       "policy": "translate",
-      "text": "Do you know how to use a saw?",
+      "text": "Can you hear the sound of the saw?",
       "layout_policy": "adaptive"
     },
     {
@@ -990,7 +990,7 @@
     {
       "index": 110,
       "policy": "translate",
-      "text": "That makes perfect sense.",
+      "text": "I'd like to choose too.",
       "layout_policy": "adaptive"
     },
     {
@@ -1050,7 +1050,7 @@
     {
       "index": 120,
       "policy": "translate",
-      "text": "Wait...aren't we already bound for America?",
+      "text": "Wait...america? Not Britain?",
       "layout_policy": "adaptive"
     },
     {
@@ -1200,7 +1200,7 @@
     {
       "index": 145,
       "policy": "translate",
-      "text": "Tianon's alibi seems deliberately contrived. The culprit is among them. This proves they went on the defensive after your attack.",
+      "text": "Tianon and her party are acting deliberately. The culprit is among them. Their defensiveness against our attack proves it.",
       "layout_policy": "adaptive"
     },
     {
@@ -1230,19 +1230,19 @@
     {
       "index": 150,
       "policy": "translate",
-      "text": "Who taught you?",
+      "text": "Wait...",
       "layout_policy": "adaptive"
     },
     {
       "index": 151,
       "policy": "translate",
-      "text": "Do you enjoy it?",
+      "text": "This child...",
       "layout_policy": "adaptive"
     },
     {
       "index": 152,
       "policy": "translate",
-      "text": "Not my thing...",
+      "text": "That much...",
       "layout_policy": "adaptive"
     },
     {
@@ -1254,7 +1254,7 @@
     {
       "index": 154,
       "policy": "translate",
-      "text": "My aunt...she always gazed at the slopes of Krufostel through the evening mist...my silent aunt...a poison sweetened with happiness took her voice. Before that, she often foretold my happiness...",
+      "text": "From my grandmother...she always gazed at the foothills of Kuru Fostel in the evening mist. My silent grandmother...a poison laced with happiness took her voice. Before she lost the power of speech, she often told my fortune...",
       "layout_policy": "adaptive"
     },
     {
@@ -1380,7 +1380,7 @@
     {
       "index": 175,
       "policy": "translate",
-      "text": "The truth is, Princess Tianon is daughter to the Maharaja of Renan, in India. His name is Kasamara Hatoz Tos Harandoil Kurumayubi Agero Kyuryo Kokoron Urero Yunna Uappa...",
+      "text": "The truth is, Princess Tianon is the third daughter of the Maharaja of Renan, in India. His name is Kasamara Hatoz Tos Harandoil Kurumayubi Agero Kyuryo Kokoron Urero Yunna Uappa...",
       "layout_policy": "adaptive"
     },
     {
@@ -1512,7 +1512,7 @@
     {
       "index": 197,
       "policy": "translate",
-      "text": "Question Ruthie. She was the first to discover Black's murder. Black was obsessed with the \"Russian Fog.\" If she killed him, she may well be a Russian spy.",
+      "text": "Question Ruthie. She was the first to discover Braque's murder. Braque was obsessed with the \"Russian Fog.\" If she killed him, she may well be a Russian spy.",
       "layout_policy": "adaptive"
     },
     {
@@ -1530,7 +1530,7 @@
     {
       "index": 200,
       "policy": "translate",
-      "text": "...you suspect me, don't you? Because Black died that way...",
+      "text": "...you suspect me, don't you? Because Braque died that way...",
       "layout_policy": "adaptive"
     },
     {
@@ -1572,13 +1572,13 @@
     {
       "index": 207,
       "policy": "translate",
-      "text": "When did you meet Black?",
+      "text": "When did you meet Braque?",
       "layout_policy": "adaptive"
     },
     {
       "index": 208,
       "policy": "translate",
-      "text": "Two years ago. I was a sales clerk at a trading company. I was good with figures, so Black noticed me and recruited me.",
+      "text": "Two years ago. I was a sales clerk at a trading company. I was good with figures, so Braque noticed me and recruited me.",
       "layout_policy": "adaptive"
     },
     {
@@ -1596,13 +1596,13 @@
     {
       "index": 211,
       "policy": "translate",
-      "text": "I thought women were finally being recognized. But Black only wanted a pretty woman he could take anywhere.",
+      "text": "I thought women were finally being recognized. But Braque only wanted a pretty woman he could take anywhere.",
       "layout_policy": "adaptive"
     },
     {
       "index": 212,
       "policy": "translate",
-      "text": "...that gave her reason to kill him.",
+      "text": "...that's why you can kill him.",
       "layout_policy": "adaptive"
     },
     {
@@ -1626,7 +1626,7 @@
     {
       "index": 216,
       "policy": "translate",
-      "text": "Here is my theory. You and Black conspired to hijack the ship. Partway through, you tired of working with him, killed your partner, and meant to finish the plan alone.",
+      "text": "Here is my theory. You and Braque conspired to hijack the ship. Partway through, you tired of working with him, killed your partner, and meant to finish the plan alone.",
       "layout_policy": "adaptive"
     },
     {
@@ -1644,7 +1644,7 @@
     {
       "index": 219,
       "policy": "translate",
-      "text": "Your motive is weak, but you hated Black.",
+      "text": "Your motive is weak, but you hated Braque.",
       "layout_policy": "adaptive"
     },
     {

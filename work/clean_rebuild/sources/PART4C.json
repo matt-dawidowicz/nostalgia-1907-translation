@@ -22,7 +22,7 @@
     {
       "index": 0,
       "policy": "translate",
-      "text": "Rear Deck",
+      "text": "Aft Deck",
       "layout_policy": "adaptive"
     },
     {
@@ -100,7 +100,7 @@
     {
       "index": 13,
       "policy": "translate",
-      "text": "Yeah. He will definitely come back before the ship reaches port.",
+      "text": "Yeah. He will definitely attack before the ship reaches port.",
       "layout_policy": "adaptive"
     },
     {
@@ -112,7 +112,7 @@
     {
       "index": 15,
       "policy": "translate",
-      "text": "The assassin's identity has been found, though.",
+      "text": "I've got a good idea who the assassin is, though.",
       "layout_policy": "adaptive"
     },
     {
@@ -177,7 +177,7 @@
     {
       "index": 26,
       "policy": "translate",
-      "text": "Medea races through the land of mist and lakes...fleet-footed beyond pursuit...and beyond, the curtain.",
+      "text": "Medea races through the land of forests and lakes...fleet-footed beyond pursuit...and beyond, the curtain.",
       "layout_policy": "adaptive"
     },
     {
@@ -189,7 +189,7 @@
     {
       "index": 28,
       "policy": "translate",
-      "text": "Rear Deck",
+      "text": "Aft Deck",
       "layout_policy": "adaptive"
     },
     {
@@ -201,19 +201,19 @@
     {
       "index": 30,
       "policy": "translate",
-      "text": "Voysey? I killed him. Black was a slight miscalculation.",
+      "text": "Voysey? I killed him. Braque was a slight miscalculation.",
       "layout_policy": "adaptive"
     },
     {
       "index": 31,
       "policy": "translate",
-      "text": "There is one more. I will kill him too. I have laid hands on him again and again.",
+      "text": "There's one more thing. You tried to kill me too, didn't you? You kept me close at hand the whole time.",
       "layout_policy": "adaptive"
     },
     {
       "index": 32,
       "policy": "translate",
-      "text": "You were close to Ilyusha. Anyone approaching the Russian Fog would suspect a man from British Intelligence. I am Times Adjell, a professional assassin of the Imperial Russian execution bureau.",
+      "text": "You were close to Ilyusha. Anyone approaching the Russian Fog would suspect a man from British Intelligence. I'm a professional assassin of Tainui Adjell, the Imperial Russian execution organization.",
       "layout_policy": "adaptive"
     },
     {
@@ -231,7 +231,7 @@
     {
       "index": 35,
       "policy": "translate",
-      "text": "It is fiction. Reality. There is no need to bind yourself to a role assigned in a few minutes.",
+      "text": "Reality is fiction. There's no need to bind yourself to a role assigned in a few minutes.",
       "layout_policy": "adaptive"
     },
     {
@@ -243,7 +243,7 @@
     {
       "index": 37,
       "policy": "translate",
-      "text": "You told Ashby that he was British Intelligence. He believed I was a mediocre detective.",
+      "text": "After you told me Ashby was with British Intelligence, he believed I was only an ordinary detective.",
       "layout_policy": "adaptive"
     },
     {
@@ -261,7 +261,7 @@
     {
       "index": 40,
       "policy": "translate",
-      "text": "In Paris, I had you assigned to a dreary background investigation, did I not?",
+      "text": "In Paris, I had you assigned to a dreary infidelity investigation, did I not?",
       "layout_policy": "adaptive"
     },
     {
@@ -297,7 +297,7 @@
     {
       "index": 46,
       "policy": "translate",
-      "text": "You handed Kirikov to Ashby as a source of disinformation so he could infiltrate the Japanese Empire. Excellent.",
+      "text": "You handed Kirikov to Ashby as a source of disinformation so Kirikov could infiltrate the Japanese Empire. Excellent.",
       "layout_policy": "adaptive"
     },
     {
@@ -315,7 +315,7 @@
     {
       "index": 49,
       "policy": "translate",
-      "text": "Fool. I am the last samurai of this century.",
+      "text": "I'm the son of this century's last samurai.",
       "layout_policy": "adaptive"
     },
     {

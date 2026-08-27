@@ -95,7 +95,7 @@
     {
       "index": 3,
       "policy": "translate",
-      "text": "Braque is not doing well...I'll check Royal Suite A.",
+      "text": "Braque looks suspicious...I'll check Royal Suite A.",
       "layout_policy": "adaptive"
     },
     {
@@ -136,7 +136,7 @@
     {
       "index": 10,
       "policy": "translate",
-      "text": "Did Dunant put him up to this?",
+      "text": "Dunant's client?",
       "layout_policy": "adaptive"
     },
     {
@@ -148,25 +148,25 @@
     {
       "index": 12,
       "policy": "translate",
-      "text": "Calm down. A detective cannot afford to lose his temper.",
+      "text": "Don't get so worked up. Aren't we citizens of allied nations?",
       "layout_policy": "adaptive"
     },
     {
       "index": 13,
       "policy": "translate",
-      "text": "What a roundabout way to give an order.",
+      "text": "The Anglo-Japanese Alliance...an alliance with an overwhelming imbalance of power, though.",
       "layout_policy": "adaptive"
     },
     {
       "index": 14,
       "policy": "translate",
-      "text": "Am I being paid for this seabed investigation?",
+      "text": "Do I get paid for this investigation too?",
       "layout_policy": "adaptive"
     },
     {
       "index": 15,
       "policy": "translate",
-      "text": "Investigation is a battle of wits. Remember: the culprit set this task. A poor inquiry will only play into his hands.",
+      "text": "Your reward is surviving the blast. Isn't that enough? Everyone aboard is fighting for their lives. How can you ask about money at a time like this?",
       "layout_policy": "adaptive"
     },
     {
@@ -184,49 +184,49 @@
     {
       "index": 18,
       "policy": "translate",
-      "text": "So what?",
+      "text": "Ridiculous.",
       "layout_policy": "adaptive"
     },
     {
       "index": 19,
       "policy": "translate",
-      "text": "What does that have to do with me?",
+      "text": "How's the culprit investigation going?",
       "layout_policy": "adaptive"
     },
     {
       "index": 20,
       "policy": "translate",
-      "text": "Braque is...stable, for now.",
+      "text": "So-so.",
       "layout_policy": "adaptive"
     },
     {
       "index": 21,
       "policy": "translate",
-      "text": "Is he sulking?",
+      "text": "So they are relying on me?",
       "layout_policy": "adaptive"
     },
     {
       "index": 22,
       "policy": "translate",
-      "text": "He is unconscious, you idiot!",
+      "text": "That's the privilege of a rank-and-file worker!",
       "layout_policy": "adaptive"
     },
     {
       "index": 23,
       "policy": "translate",
-      "text": "We are in trouble. The investigation has hit a reef, and everyone is getting desperate.",
+      "text": "I'm having trouble. Everyone is so eager to get involved that they're all too cooperative.",
       "layout_policy": "adaptive"
     },
     {
       "index": 24,
       "policy": "translate",
-      "text": "Does only Braque know why the culprit wants this search?",
+      "text": "Do you think you're the only one having a hard time?",
       "layout_policy": "adaptive"
     },
     {
       "index": 25,
       "policy": "translate",
-      "text": "What a nuisance.",
+      "text": "Damn right!",
       "layout_policy": "adaptive"
     },
     {
@@ -238,13 +238,13 @@
     {
       "index": 27,
       "policy": "translate",
-      "text": "Me?!",
+      "text": "Are you out of your mind?!",
       "layout_policy": "adaptive"
     },
     {
       "index": 28,
       "policy": "translate",
-      "text": "Your mouth moves faster than your mind!",
+      "text": "Like hell! Don't sit back and say whatever you please!",
       "layout_policy": "adaptive"
     },
     {
@@ -256,43 +256,43 @@
     {
       "index": 30,
       "policy": "translate",
-      "text": "You always twist everything into a lecture.",
+      "text": "Don't think you can keep up that gentleman act forever.",
       "layout_policy": "adaptive"
     },
     {
       "index": 31,
       "policy": "translate",
-      "text": "The manners of the newly rich are always strange. You are a guest, are you not?",
+      "text": "Western tableware always feels cold. I don't care for it. It's too stark...",
       "layout_policy": "adaptive"
     },
     {
       "index": 32,
       "policy": "translate",
-      "text": "Royal Doulton bone china. Its design embodies the history of the British Empire. Even you should recognize its value.",
+      "text": "Royal Doulton bone china. It bears a royal warrant, but its design was influenced by Japanese ceramics. If you think the fault is always outside yourself, you're badly mistaken.",
       "layout_policy": "adaptive"
     },
     {
       "index": 33,
       "policy": "translate",
-      "text": "A German copied the glaze from Meissen and introduced it to Britain.",
+      "text": "How very English. The history of English tea was built on the exploitation of Asia.",
       "layout_policy": "adaptive"
     },
     {
       "index": 34,
       "policy": "translate",
-      "text": "Who do you think I am, Yamada?",
+      "text": "You're uncouth, Mr. Yamada.",
       "layout_policy": "adaptive"
     },
     {
       "index": 35,
       "policy": "translate",
-      "text": "I do not care for rank.",
+      "text": "And you don't even know Ogasawara-style etiquette!",
       "layout_policy": "adaptive"
     },
     {
       "index": 36,
       "policy": "translate",
-      "text": "Earl Grey tea...Britain even claims the flavors of other lands as its own.",
+      "text": "Earl Grey, is it? You English certainly know how to live. Even with ruin at your doorstep, you're calm.",
       "layout_policy": "adaptive"
     },
     {
@@ -310,7 +310,7 @@
     {
       "index": 39,
       "policy": "translate",
-      "text": "Then this is no conversation. It is a quarrel.",
+      "text": "Don't get carried away. This is a warning.",
       "layout_policy": "adaptive"
     },
     {
@@ -322,55 +322,55 @@
     {
       "index": 41,
       "policy": "translate",
-      "text": "Perhaps I should explain it another way.",
+      "text": "Of course. How could I possibly defy you, my lord?",
       "layout_policy": "adaptive"
     },
     {
       "index": 42,
       "policy": "translate",
-      "text": "You do wander, Yamada. Consider this a lesson.",
+      "text": "You're roundabout, Mr. Yamada. And unpleasant.",
       "layout_policy": "adaptive"
     },
     {
       "index": 43,
       "policy": "translate",
-      "text": "It was not Japan's war alone. Britain used your nation to keep Russia in check.",
+      "text": "I see. Then I'll ignore your order to fabricate a culprit from among the crew. That's not very gentlemanly.",
       "layout_policy": "adaptive"
     },
     {
       "index": 44,
       "policy": "translate",
-      "text": "When Japan fought Russia, Britain watched from afar. Have you forgotten whose interests your victory served?",
+      "text": "When the Great Japanese Empire went to war with Russia, did you not cry to Britain and Her Majesty the Queen for help because you could not win alone?",
       "layout_policy": "adaptive"
     },
     {
       "index": 45,
       "policy": "translate",
-      "text": "Britain stood behind that war.",
+      "text": "And even now, you are under my control.",
       "layout_policy": "adaptive"
     },
     {
       "index": 46,
       "policy": "translate",
-      "text": "Do you understand why Britain could not allow Russia to push farther into Asia?",
+      "text": "Now I understand why Englishmen only love dogs.",
       "layout_policy": "adaptive"
     },
     {
       "index": 47,
       "policy": "translate",
-      "text": "It was not Britain's war, but Britain still had interests to protect.",
+      "text": "Your trainer must have been lousy. You still haven't learned the etiquette between master and servant.",
       "layout_policy": "adaptive"
     },
     {
       "index": 48,
       "policy": "translate",
-      "text": "No country can preserve peace forever.",
+      "text": "The English always have to be on top these days.",
       "layout_policy": "adaptive"
     },
     {
       "index": 49,
       "policy": "translate",
-      "text": "A nation arms itself because even the weak understand what lies beyond peace.",
+      "text": "Managing the whole world is hard work. I wonder whether even the savages under our protection can understand that.",
       "layout_policy": "adaptive"
     },
     {
@@ -382,13 +382,13 @@
     {
       "index": 51,
       "policy": "translate",
-      "text": "Even now, I cannot forgive being used.",
+      "text": "Even now, you are not permitted to defy me.",
       "layout_policy": "adaptive"
     },
     {
       "index": 52,
       "policy": "translate",
-      "text": "Banzai! Long live Japan! Banzai!",
+      "text": "Banzai, British Empire! Banzai, Japanese Empire! Banzai, bomber!",
       "layout_policy": "adaptive"
     },
     {
@@ -412,7 +412,7 @@
     {
       "index": 56,
       "policy": "translate",
-      "text": "The empty cabin across from yours. The room beside it is unused. Braque's secret may be waiting there.",
+      "text": "That's the attendant's room across the hall. The one beside it is unused. The room at the far end is used by Braque's secretary.",
       "layout_policy": "adaptive"
     },
     {
@@ -430,19 +430,19 @@
     {
       "index": 59,
       "policy": "translate",
-      "text": "I cannot make tea like that. Excuse me.",
+      "text": "A gentleman does not gulp tea like that. Excuse me.",
       "layout_policy": "adaptive"
     },
     {
       "index": 60,
       "policy": "translate",
-      "text": "What a fool. One compliment and he is pleased.",
+      "text": "As long as you can drink it, who cares?",
       "layout_policy": "adaptive"
     },
     {
       "index": 61,
       "policy": "translate",
-      "text": "Ignore him.",
+      "text": "I'll study it.",
       "layout_policy": "adaptive"
     },
     {
@@ -460,7 +460,7 @@
     {
       "index": 64,
       "policy": "translate",
-      "text": "Braque collects material on secret societies active across Europe. I have heard of the Russian Fog.",
+      "text": "Braque has an abnormal obsession with art. I've heard about the Russian Fog too.",
       "layout_policy": "adaptive"
     },
     {
@@ -472,19 +472,19 @@
     {
       "index": 66,
       "policy": "translate",
-      "text": "How frightening...I feel as though someone is watching me.",
+      "text": "Scary voice...I feel like I'm being scolded...",
       "layout_policy": "adaptive"
     },
     {
       "index": 67,
       "policy": "translate",
-      "text": "Georges Braque is like a wolf. Why is he interested in a secret society?",
+      "text": "Georges Braque is like a tyrant. Why did you become his secretary?",
       "layout_policy": "adaptive"
     },
     {
       "index": 68,
       "policy": "translate",
-      "text": "And why would he hide its secrets in a private cabin?",
+      "text": "So...are you interested in my private life?",
       "layout_policy": "adaptive"
     },
     {
@@ -496,13 +496,13 @@
     {
       "index": 70,
       "policy": "translate",
-      "text": "How much did Braque know about this society?",
+      "text": "What do you mean by Braque's abnormal obsession?",
       "layout_policy": "adaptive"
     },
     {
       "index": 71,
       "policy": "translate",
-      "text": "If he truly pursued it, someone aboard must know more.",
+      "text": "With him...if getting what he wanted required murder, I think he might even kill.",
       "layout_policy": "adaptive"
     },
     {
@@ -538,7 +538,7 @@
     {
       "index": 77,
       "policy": "translate",
-      "text": "You are very observant. Does staring at a woman make you happy?",
+      "text": "What, even an artist's wife? Honestly, I'd rather be scrubbing with a rag and have a passerby whistle, 'Hey, beautiful.' Sorry. I hate having my work judged by my looks...",
       "layout_policy": "adaptive"
     },
     {
@@ -616,7 +616,7 @@
     {
       "index": 90,
       "policy": "translate",
-      "text": "I should not tell you any more. It may interfere with your diagnosis.",
+      "text": "I want this frightening incident solved as quickly as possible...",
       "layout_policy": "adaptive"
     },
     {
@@ -628,7 +628,7 @@
     {
       "index": 92,
       "policy": "translate",
-      "text": "Must we continue this conversation?",
+      "text": "Do you despise a secretary like me?",
       "layout_policy": "adaptive"
     },
     {
@@ -640,7 +640,7 @@
     {
       "index": 94,
       "policy": "translate",
-      "text": "You are not one of his people, are you?",
+      "text": "Considering who your boss is, I can't blame you.",
       "layout_policy": "adaptive"
     },
     {
@@ -676,25 +676,25 @@
     {
       "index": 100,
       "policy": "translate",
-      "text": "You hung something in the center hall, didn't you?",
+      "text": "You drew a picture in Center Hall, did you not?",
       "layout_policy": "adaptive"
     },
     {
       "index": 101,
       "policy": "translate",
-      "text": "An Alphonse Mucha poster. Braque called it a portrait of the most beautiful woman in Paris.",
+      "text": "I copied an Alphonse Mucha poster. I told you I was a student at an art school in Paris, didn't I?",
       "layout_policy": "adaptive"
     },
     {
       "index": 102,
       "policy": "translate",
-      "text": "Braque was pursuing that woman with his patron's backing. You would not understand their secrets...",
+      "text": "Braque bought my talent and offered to be my patron. He has a weakness for young women who paint...",
       "layout_policy": "adaptive"
     },
     {
       "index": 103,
       "policy": "translate",
-      "text": "Do not overplay the helpless act...",
+      "text": "He's just adding another slave...",
       "layout_policy": "adaptive"
     },
     {
@@ -718,19 +718,19 @@
     {
       "index": 107,
       "policy": "translate",
-      "text": "It was only part of the investigation.",
+      "text": "That's just how the business works.",
       "layout_policy": "adaptive"
     },
     {
       "index": 108,
       "policy": "translate",
-      "text": "Still, it is strange...Ilyu was investigating the secret society too.",
+      "text": "Still, I didn't expect Ilyusha to be an art-school student...",
       "layout_policy": "adaptive"
     },
     {
       "index": 109,
       "policy": "translate",
-      "text": "Do you know its secret?",
+      "text": "Do you know her?",
       "layout_policy": "adaptive"
     },
     {
@@ -742,13 +742,13 @@
     {
       "index": 111,
       "policy": "translate",
-      "text": "A secret? What secret? That rude man merely beat me at cards.",
+      "text": "She's in the cabin next to mine, in second class on the port side. She absolutely cleaned me out at cards.",
       "layout_policy": "adaptive"
     },
     {
       "index": 112,
       "policy": "translate",
-      "text": "Your real concern is not the society. Stop prying. Investigate the secret itself, not Braque's misfortune.",
+      "text": "I see...second class really is the way to travel. You make companions. I'm jealous. You'd better warn her: Braque isn't interested in her artistic talent, but in her legs.",
       "layout_policy": "adaptive"
     },
     {
@@ -856,13 +856,13 @@
     {
       "index": 130,
       "policy": "translate",
-      "text": "He was terrified. When I mentioned the secret, he panicked. When I pressed him, he screamed, 'Those words are cursed! A world tainted by them will perish!'",
+      "text": "He was terrified. When I mentioned the secret, he panicked. When I pressed him, he screamed, 'Those are cursed words! Anyone pursued by them will perish!'",
       "layout_policy": "adaptive"
     },
     {
       "index": 131,
       "policy": "translate",
-      "text": "I did not want to become involved with that sort of man.",
+      "text": "I don't want to get too involved with Russians these days.",
       "layout_policy": "adaptive"
     },
     {
@@ -880,7 +880,7 @@
     {
       "index": 134,
       "policy": "translate",
-      "text": "...understood.",
+      "text": "...guess I don't have a choice.",
       "layout_policy": "adaptive"
     },
     {
@@ -965,19 +965,19 @@
     {
       "index": 148,
       "policy": "translate",
-      "text": "At this rate she will capsize! What do we do?",
+      "text": "If we leave the bomb alone, it'll explode sooner or later! What do we do?",
       "layout_policy": "adaptive"
     },
     {
       "index": 149,
       "policy": "translate",
-      "text": "We have no choice but to shift the cargo.",
+      "text": "We'll have to dismantle it right here.",
       "layout_policy": "adaptive"
     },
     {
       "index": 150,
       "policy": "translate",
-      "text": "Engine Crew",
+      "text": "Engine Room",
       "layout_policy": "fixed"
     },
     {
@@ -989,7 +989,7 @@
     {
       "index": 152,
       "policy": "translate",
-      "text": "Understood. We'll do what we can. We're heading down there now.",
+      "text": "Understood. We'll do what we can. We're coming up there now.",
       "layout_policy": "adaptive"
     }
   ]

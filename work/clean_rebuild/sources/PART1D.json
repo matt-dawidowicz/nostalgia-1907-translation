@@ -300,7 +300,7 @@
     {
       "index": 41,
       "policy": "translate",
-      "text": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the radio room, cutting us off from shore...in other words, we are completely under his control.",
+      "text": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the wireless room, cutting us off from shore...in other words, we are completely under his control.",
       "layout_policy": "adaptive"
     },
     {
@@ -736,7 +736,7 @@
     {
       "index": 114,
       "policy": "translate",
-      "text": "First Officer",
+      "text": "Chief Officer",
       "layout_policy": "adaptive"
     },
     {
@@ -754,7 +754,7 @@
     {
       "index": 117,
       "policy": "translate",
-      "text": "Ship's Dr.",
+      "text": "Surgeon",
       "layout_policy": "adaptive"
     },
     {
@@ -796,13 +796,13 @@
     {
       "index": 124,
       "policy": "translate",
-      "text": "I want to ask about the bomb. The first officer was downwind of the blast when he collapsed. Correct?",
+      "text": "I want to ask about the bomb. The chief officer was downwind of the blast when he collapsed. Correct?",
       "layout_policy": "adaptive"
     },
     {
       "index": 125,
       "policy": "translate",
-      "text": "The first officer died of asphyxiation.",
+      "text": "The chief officer died of asphyxiation.",
       "layout_policy": "adaptive"
     },
     {
@@ -820,7 +820,7 @@
     {
       "index": 128,
       "policy": "translate",
-      "text": "Nonsense! First Officer Clevans was on the starboard bridge wing, far from the blast.",
+      "text": "Nonsense! Chief Officer Clevans was on the starboard bridge wing, far from the blast.",
       "layout_policy": "adaptive"
     },
     {

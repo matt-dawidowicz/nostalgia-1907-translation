@@ -58,19 +58,19 @@
       "0": "Center Hall",
       "1": "Yamada Kasuke",
       "2": "Chanel",
-      "3": "...none of the men you brought were here...this place has been ransacked...",
+      "3": "When I entered the room, nobody was there...Voysey was lying collapsed...there was so much blood...is he dead?",
       "4": "Kasuke",
       "5": "Voysey!",
       "6": "Voysey",
       "7": "...Yamada...th-that man is...",
       "8": "One of Tainui Adjell's men...damn it...I still have more to tell you...",
-      "9": "Listen carefully!",
+      "9": "Call the surgeon!",
       "10": "...Mr. Yamada...",
       "11": "I learned the secret of \"Mede\"...",
       "12": "That woman is Salome...everyone involved with her dies...",
-      "13": "Run! You still have...Voysey!",
+      "13": "Don't die! You can't die yet...Voysey!",
       "14": "...what's wrong? Hey, what's wrong? Come on...what happened...",
-      "15": "...aah! He's dead! Aah! Somebody's dead!",
+      "15": "Aah! He's dead! Aah! I saw someone die!",
       "17": "Voysey had deciphered what \"Mede\" meant. He learned who the Russian Fog was. Didn't he tell you?",
       "18": "Calm down, Kasuke! Tell me...",
       "19": "Ashby",
@@ -79,12 +79,12 @@
       "22": "Who is Tainui Adjell?",
       "23": "He belongs to a Russian secret-assassination organization.",
       "24": "Was the Deputy Chief killed by them...?",
-      "25": "An assassination ring!? Even this island has one?",
+      "25": "An assassination organization?! Even this ship has one?!",
       "26": "Why weren't you at Genkai's funeral? You were his partner!",
       "27": "I was only his liaison! Genkai alone investigated Mede.",
       "28": "Don't play innocent!",
-      "29": "You skipped his funeral without a care!",
-      "30": "Nonsense! You said the Royal Suite and the cabin beside First Class were suspicious!",
+      "29": "You were leisurely having a tea party!",
+      "30": "You were the one who said the Royal Suite and First-Class passengers were suspicious in the bomber investigation!",
       "31": "What a joke!",
       "32": "Enough. What did you learn?",
       "33": "Tianon and Lumeranka are clean. Lumeranka spoke to me alone. They...",
@@ -96,25 +96,25 @@
       "39": "I don't care anymore!",
       "40": "If you want the Russian Fog, shut up and watch! I'll bring them to you neatly wrapped in gift paper. If they sell gift paper here.",
       "41": "Unpleasant. I will be in my room.",
-      "42": "I will get only you aboard the steamer!",
-      "43": "Then strike at the tiger's den!",
+      "42": "I'll send just you to the seabed!",
+      "43": "Buy a kotatsu too!",
       "44": "Second-Class Cabin",
       "45": "Calm down...think it through. There has to be a way.",
       "46": "Aft Deck",
       "47": "What in the world is happening here...? Who is setting whom up?",
       "48": "Ashby boarded with Voysey to protect the Russian Fog's defection...Voysey is dead, and Ashby still hasn't identified the Russian Fog.",
       "49": "With the bomb threatening to kill everyone, why does Ashby still want to learn the Russian Fog's identity now?",
-      "50": "The evidence points to a state intelligence service...Britain, perhaps...or Germany, as Voysey suspected...",
+      "50": "The ship will sink, yet he's sure he can escape. Isn't that confidence only the culprit could have? Voysey said it might be a third country's work...",
       "51": "Is Ashby truly the British agent Voysey said he was?",
       "52": "Wait...if Ashby is the culprit, it all fits. He tried to make the crew find the Russian Fog after he couldn't get the identity out of Voysey...",
       "53": "No...I can't stand it anymore!",
-      "54": "I'll beat him senseless!",
+      "54": "I'll hang him!",
       "55": "Royal Suite A",
       "56": "He isn't a Russian spy. He's clearly working for a third country. He plans to steal the Russian Fog while Britain and Russia fight over it.",
       "57": "Suppose he is?",
       "58": "Then hear me out!",
       "59": "Open your ears and listen carefully.",
-      "60": "If you'll spare me the grand speech.",
+      "60": "Could you stop with that barbaric pronunciation?",
       "61": "I picked that up in London.",
       "62": "May I?",
       "63": "Briefly, please.",
@@ -123,12 +123,12 @@
       "66": "Why sink the ship as well?",
       "67": "That's the point.",
       "68": "A spy from a third country is aboard this ship.",
-      "69": "And what does that have to do with your profession?",
+      "69": "And what does that have to do with sinking the ship?",
       "70": "Everything!",
       "71": "That third country has a reason to want me dead!",
-      "72": "...fascinating, Yamada. Then lay out your case logically.",
+      "72": "...you look disgraceful, Yamada. Calm down and explain it logically.",
       "73": "Shut up!",
-      "74": "Why would they need to kill you?",
+      "74": "Why does he need to sink the ship?",
       "75": "I'm the one being targeted.",
       "76": "Exactly. He must make the Nostalgia vanish without a trace.",
       "77": "But why?",
@@ -138,7 +138,7 @@
       "81": "British Intelligence Action...Britain's foremost intelligence agency.",
       "82": "Even among spies, they're elite.",
       "83": "British Intelligence has thrown everything into capturing the Russian Fog. Its number-two man even came out in person.",
-      "84": "He heads their operations. Nothing escapes him.",
+      "84": "This is the greatest defection case of the century. Failure is not permitted.",
       "85": "Such dedication.",
       "86": "...are you following me?",
       "87": "Listen. British Intelligence agents are swarming Southampton, waiting for Voysey to bring back the Russian Fog. Once they reach British soil, every Russian spy will be arrested and the Russian Fog hidden deep in London. Am I wrong?",
@@ -153,13 +153,13 @@
       "96": "So he would sink the ship and make it look like an accident...",
       "97": "But, Mr. Yamada, he never made contact with the Russian Fog.",
       "98": "Exactly.",
-      "99": "That's an absurd accusation!",
+      "99": "Stop talking in that mocking tone!",
       "100": "Shall we work it out together?",
-      "101": "Your delusions have become pathological.",
+      "101": "Looks like your brain's no use at all.",
       "102": "Things do not always go according to plan.",
-      "103": "Voysey still had not caught Mede...even at the last moment before sailing.",
+      "103": "Voysey hadn't deciphered 'Mede' even immediately before the incident.",
       "104": "Who hadn't?!",
-      "105": "He hadn't.",
+      "105": "The culprit.",
       "106": "...what were we talking about again...?",
       "107": "Voysey couldn't decipher \"Mede\"! So what?!",
       "108": "Exactly. That's why the culprit needed a written claim of responsibility. It gave us time to think carefully about what was about to happen.",
@@ -168,7 +168,7 @@
       "111": "That was the finishing touch.",
       "112": "We...",
       "113": "had nowhere left to run.",
-      "114": "Then he destroyed the communications room.",
+      "114": "Then he destroyed the wireless room.",
       "115": "No one ashore knows exactly what happened after that.",
       "116": "Only then did the culprit get moving and start carving up the ship like a whale laid out on a cutting board. He demanded that we produce the person Voysey had failed to contact:",
       "117": "the Russian Fog,",
@@ -206,7 +206,7 @@
       "149": "Shall we review it once more?",
       "150": "The culprit's actions...",
       "151": "center on Voysey's operation to recover the Russian Fog.",
-      "152": "Not Voysey himself! Everything centers on the Wing.",
+      "152": "Not the Deputy Chief! Everything revolves around the Fog.",
       "153": "My sense is the Russian spies never realized Voysey's true identity.",
       "154": "Did you ask the Russian spies? Did those doomed criminals politely admit they knew nothing?!",
       "155": "They as good as said it.",
@@ -252,10 +252,10 @@
       "196": "Very well. I shall forgive your insolence as a sign of fighting spirit...",
       "197": "...",
       "198": "If the culprit sinks the ship, both you and the Russian Fog die! Why is a mere victim so eager to obtain the Russian Fog now...? Almost as if you were the culprit...",
-      "199": "The deputy chief died for the Wing.",
+      "199": "The Deputy Chief died for the Fog.",
       "200": "You misunderstand me. You make no effort to understand. I have professional pride, spirit, and a burning drive. Identifying the Russian Fog may be the only way to honor the Deputy Chief. When this is over, am I not the only man who can take the Fog back to Britain in his place?",
       "201": "Damn it...a gentlemanly culprit would not keep making excuses when cornered...",
-      "202": "Proof, then. If we live to see tomorrow morning, present it then.",
+      "202": "That's sophistry. Fine. If we make it safely to tomorrow morning, do as you please.",
       "203": "What if the culprit gets there first?! Find the Russian Fog! The Deputy Chief said 'that woman.' Either the Russian Fog or the killer is a woman! You said you would settle this as the man on the ground, Mr. Yamada. Those work clothes suit you. Get to work!",
       "204": "No...Ashby, you are starting to slip. You have set off my instincts.",
       "205": "Is that a threat from the culprit?",
@@ -297,7 +297,7 @@
     {
       "index": 3,
       "policy": "translate",
-      "text": "...none of the men you brought were here...this place has been ransacked...",
+      "text": "When I entered the room, nobody was there...Voysey was lying collapsed...there was so much blood...is he dead?",
       "layout_policy": "adaptive"
     },
     {
@@ -333,7 +333,7 @@
     {
       "index": 9,
       "policy": "translate",
-      "text": "Listen carefully!",
+      "text": "Call the surgeon!",
       "layout_policy": "adaptive"
     },
     {
@@ -357,7 +357,7 @@
     {
       "index": 13,
       "policy": "translate",
-      "text": "Run! You still have...Voysey!",
+      "text": "Don't die! You can't die yet...Voysey!",
       "layout_policy": "adaptive"
     },
     {
@@ -369,7 +369,7 @@
     {
       "index": 15,
       "policy": "translate",
-      "text": "...aah! He's dead! Aah! Somebody's dead!",
+      "text": "Aah! He's dead! Aah! I saw someone die!",
       "layout_policy": "adaptive"
     },
     {
@@ -428,7 +428,7 @@
     {
       "index": 25,
       "policy": "translate",
-      "text": "An assassination ring!? Even this island has one?",
+      "text": "An assassination organization?! Even this ship has one?!",
       "layout_policy": "adaptive"
     },
     {
@@ -452,13 +452,13 @@
     {
       "index": 29,
       "policy": "translate",
-      "text": "You skipped his funeral without a care!",
+      "text": "You were leisurely having a tea party!",
       "layout_policy": "adaptive"
     },
     {
       "index": 30,
       "policy": "translate",
-      "text": "Nonsense! You said the Royal Suite and the cabin beside First Class were suspicious!",
+      "text": "You were the one who said the Royal Suite and First-Class passengers were suspicious in the bomber investigation!",
       "layout_policy": "adaptive"
     },
     {
@@ -530,13 +530,13 @@
     {
       "index": 42,
       "policy": "translate",
-      "text": "I will get only you aboard the steamer!",
+      "text": "I'll send just you to the seabed!",
       "layout_policy": "adaptive"
     },
     {
       "index": 43,
       "policy": "translate",
-      "text": "Then strike at the tiger's den!",
+      "text": "Buy a kotatsu too!",
       "layout_policy": "adaptive"
     },
     {
@@ -578,7 +578,7 @@
     {
       "index": 50,
       "policy": "translate",
-      "text": "The evidence points to a state intelligence service...Britain, perhaps...or Germany, as Voysey suspected...",
+      "text": "The ship will sink, yet he's sure he can escape. Isn't that confidence only the culprit could have? Voysey said it might be a third country's work...",
       "layout_policy": "adaptive"
     },
     {
@@ -602,7 +602,7 @@
     {
       "index": 54,
       "policy": "translate",
-      "text": "I'll beat him senseless!",
+      "text": "I'll hang him!",
       "layout_policy": "adaptive"
     },
     {
@@ -638,7 +638,7 @@
     {
       "index": 60,
       "policy": "translate",
-      "text": "If you'll spare me the grand speech.",
+      "text": "Could you stop with that barbaric pronunciation?",
       "layout_policy": "adaptive"
     },
     {
@@ -692,7 +692,7 @@
     {
       "index": 69,
       "policy": "translate",
-      "text": "And what does that have to do with your profession?",
+      "text": "And what does that have to do with sinking the ship?",
       "layout_policy": "adaptive"
     },
     {
@@ -710,7 +710,7 @@
     {
       "index": 72,
       "policy": "translate",
-      "text": "...fascinating, Yamada. Then lay out your case logically.",
+      "text": "...you look disgraceful, Yamada. Calm down and explain it logically.",
       "layout_policy": "adaptive"
     },
     {
@@ -722,7 +722,7 @@
     {
       "index": 74,
       "policy": "translate",
-      "text": "Why would they need to kill you?",
+      "text": "Why does he need to sink the ship?",
       "layout_policy": "adaptive"
     },
     {
@@ -782,7 +782,7 @@
     {
       "index": 84,
       "policy": "translate",
-      "text": "He heads their operations. Nothing escapes him.",
+      "text": "This is the greatest defection case of the century. Failure is not permitted.",
       "layout_policy": "adaptive"
     },
     {
@@ -872,7 +872,7 @@
     {
       "index": 99,
       "policy": "translate",
-      "text": "That's an absurd accusation!",
+      "text": "Stop talking in that mocking tone!",
       "layout_policy": "adaptive"
     },
     {
@@ -884,7 +884,7 @@
     {
       "index": 101,
       "policy": "translate",
-      "text": "Your delusions have become pathological.",
+      "text": "Looks like your brain's no use at all.",
       "layout_policy": "adaptive"
     },
     {
@@ -896,7 +896,7 @@
     {
       "index": 103,
       "policy": "translate",
-      "text": "Voysey still had not caught Mede...even at the last moment before sailing.",
+      "text": "Voysey hadn't deciphered 'Mede' even immediately before the incident.",
       "layout_policy": "adaptive"
     },
     {
@@ -908,7 +908,7 @@
     {
       "index": 105,
       "policy": "translate",
-      "text": "He hadn't.",
+      "text": "The culprit.",
       "layout_policy": "adaptive"
     },
     {
@@ -962,7 +962,7 @@
     {
       "index": 114,
       "policy": "translate",
-      "text": "Then he destroyed the communications room.",
+      "text": "Then he destroyed the wireless room.",
       "layout_policy": "adaptive"
     },
     {
@@ -1190,7 +1190,7 @@
     {
       "index": 152,
       "policy": "translate",
-      "text": "Not Voysey himself! Everything centers on the Wing.",
+      "text": "Not the Deputy Chief! Everything revolves around the Fog.",
       "layout_policy": "adaptive"
     },
     {
@@ -1471,7 +1471,7 @@
     {
       "index": 199,
       "policy": "translate",
-      "text": "The deputy chief died for the Wing.",
+      "text": "The Deputy Chief died for the Fog.",
       "layout_policy": "adaptive"
     },
     {
@@ -1489,7 +1489,7 @@
     {
       "index": 202,
       "policy": "translate",
-      "text": "Proof, then. If we live to see tomorrow morning, present it then.",
+      "text": "That's sophistry. Fine. If we make it safely to tomorrow morning, do as you please.",
       "layout_policy": "adaptive"
     },
     {
