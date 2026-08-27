@@ -81,6 +81,35 @@ def load_json(path: Path) -> dict[str, object]:
     return value
 
 
+def update_required_prefix(
+    record_id: str,
+    before: str,
+    after: str,
+    required_prefixes: dict[str, object],
+    key: str,
+) -> None:
+    """Move a stale heading-prefix lock when the audited source changes it."""
+    prefix = required_prefixes[key]
+    if not isinstance(prefix, str):
+        raise ValueError(f"{record_id}: required prefix is not text")
+    if after.startswith(prefix):
+        return
+    if not before.startswith(prefix):
+        raise ValueError(
+            f"{record_id}: current text does not satisfy its required prefix {prefix!r}"
+        )
+    if ":" not in prefix or ":" not in after:
+        raise ValueError(
+            f"{record_id}: replacement violates required prefix {prefix!r}"
+        )
+    replacement_prefix = after.split(":", 1)[0] + ":"
+    if not after.startswith(replacement_prefix):
+        raise ValueError(
+            f"{record_id}: could not derive replacement prefix from {after!r}"
+        )
+    required_prefixes[key] = replacement_prefix
+
+
 def main() -> None:
     changes = load_changes()
     if len(changes) != 345:
@@ -132,11 +161,9 @@ def main() -> None:
             if isinstance(required_exact, dict) and key in required_exact:
                 required_exact[key] = after
             if isinstance(required_prefixes, dict) and key in required_prefixes:
-                prefix = required_prefixes[key]
-                if not after.startswith(prefix):
-                    raise ValueError(
-                        f"{record_id}: replacement violates required prefix {prefix!r}"
-                    )
+                update_required_prefix(
+                    record_id, before, after, required_prefixes, key
+                )
 
             changed.append(
                 {
