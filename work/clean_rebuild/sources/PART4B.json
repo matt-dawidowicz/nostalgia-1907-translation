@@ -339,7 +339,7 @@
     {
       "index": 53,
       "policy": "translate",
-      "text": "Let us begin. The screwdriver...this one...",
+      "text": "Let's begin. The screwdriver...this one...",
       "layout_policy": "adaptive"
     },
     {
@@ -705,7 +705,7 @@
     {
       "index": 114,
       "policy": "translate",
-      "text": "Calm down. I am with you. Right?",
+      "text": "Calm down. I'm right here with you. All right?",
       "layout_policy": "adaptive"
     },
     {
@@ -807,7 +807,7 @@
     {
       "index": 131,
       "policy": "translate",
-      "text": "Let us open the box's left lid.",
+      "text": "Let's open the left lid of the box.",
       "layout_policy": "adaptive"
     },
     {
@@ -1131,7 +1131,7 @@
     {
       "index": 185,
       "policy": "translate",
-      "text": "To enter the court and uncover which courtiers secretly harbored treason against him.",
+      "text": "To enter the court and uncover which courtiers secretly harbored treasonous intentions against him.",
       "layout_policy": "adaptive"
     },
     {

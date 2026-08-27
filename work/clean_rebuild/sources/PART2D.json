@@ -124,7 +124,7 @@
     {
       "index": 8,
       "policy": "translate",
-      "text": "What is with this man? Out of nowhere...",
+      "text": "What's with this man? That came out of nowhere...",
       "layout_policy": "adaptive"
     },
     {
@@ -850,7 +850,7 @@
     {
       "index": 129,
       "policy": "translate",
-      "text": "What is with Kirikov?",
+      "text": "What's with Kirikov?",
       "layout_policy": "adaptive"
     },
     {

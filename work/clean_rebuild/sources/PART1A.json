@@ -367,7 +367,7 @@
     {
       "index": 55,
       "policy": "translate",
-      "text": "I will fold.",
+      "text": "I'll fold.",
       "layout_policy": "adaptive"
     },
     {
@@ -451,7 +451,7 @@
     {
       "index": 69,
       "policy": "translate",
-      "text": "I do not want to know! ...damn it...",
+      "text": "I don't want to know! ...damn it...",
       "layout_policy": "adaptive"
     },
     {

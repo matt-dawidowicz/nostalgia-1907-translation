@@ -297,7 +297,7 @@
     {
       "index": 36,
       "policy": "translate",
-      "text": "The window is shut exactly as it was. A careful culprit.",
+      "text": "The window is shut exactly as it was. The culprit was careful.",
       "layout_policy": "adaptive"
     },
     {
@@ -549,7 +549,7 @@
     {
       "index": 78,
       "policy": "translate",
-      "text": "First class to the captain's cabin. Good. I can retrace it.",
+      "text": "From first class to the captain's cabin. Good. I can retrace the route.",
       "layout_policy": "adaptive"
     },
     {

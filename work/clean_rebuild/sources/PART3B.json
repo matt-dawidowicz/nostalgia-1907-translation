@@ -113,7 +113,7 @@
       "56": "He isn't a Russian spy. He's clearly working for a third country. He plans to steal the Russian Fog while Britain and Russia fight over it.",
       "57": "Suppose he is?",
       "58": "Then hear me out!",
-      "59": "Open your ears and listen carefully.",
+      "59": "Listen carefully.",
       "60": "Could you stop with that barbaric pronunciation?",
       "61": "I picked that up in London.",
       "62": "May I?",
@@ -209,7 +209,7 @@
       "152": "Not the Deputy Chief! Everything revolves around the Fog.",
       "153": "My sense is the Russian spies never realized Voysey's true identity.",
       "154": "Did you ask the Russian spies? Did those doomed criminals politely admit they knew nothing?!",
-      "155": "They as good as said it.",
+      "155": "They all but said so.",
       "156": "I used every scrap of imagination I had to win this game. For the moment, it was my only asset...",
       "157": "Fantasy impairs practical judgment...",
       "158": "You have gone off track...",
@@ -632,7 +632,7 @@
     {
       "index": 59,
       "policy": "translate",
-      "text": "Open your ears and listen carefully.",
+      "text": "Listen carefully.",
       "layout_policy": "adaptive"
     },
     {
@@ -1208,7 +1208,7 @@
     {
       "index": 155,
       "policy": "translate",
-      "text": "They as good as said it.",
+      "text": "They all but said so.",
       "layout_policy": "adaptive"
     },
     {

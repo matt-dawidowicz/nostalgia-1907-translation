@@ -135,7 +135,7 @@
       "41": "You do not believe that.",
       "42": "Agh...",
       "43": "The culprit is playing you.",
-      "44": "Is that fun?",
+      "44": "Are you enjoying this?",
       "45": "...",
       "46": "...",
       "47": "Second-Class Cabin",
@@ -150,7 +150,7 @@
       "56": "Our sales director is a sly fox. Every report to him feels like an interrogation.",
       "57": "But your director would not kill you.",
       "58": "You are always trying to escape from something.",
-      "59": "Maybe. But can one person directly see what another is thinking?",
+      "59": "Maybe. But can one person see directly into another person's thoughts?",
       "60": "Sometimes. Often.",
       "61": "...",
       "62": "Ilyusha, do you have any family?",
@@ -201,7 +201,7 @@
       "107": "Not now.",
       "108": "W-why not?",
       "109": "They need me too, do they not?",
-      "110": "This is no time to leisurely list your asylum terms!",
+      "110": "This is no time to list your asylum terms at leisure!",
       "111": "...the time bomb.",
       "112": "Why are you relying on me now?",
       "113": "You bastard! You forced me to confess!",
@@ -514,7 +514,7 @@
     {
       "index": 44,
       "policy": "translate",
-      "text": "Is that fun?",
+      "text": "Are you enjoying this?",
       "layout_policy": "adaptive"
     },
     {
@@ -604,7 +604,7 @@
     {
       "index": 59,
       "policy": "translate",
-      "text": "Maybe. But can one person directly see what another is thinking?",
+      "text": "Maybe. But can one person see directly into another person's thoughts?",
       "layout_policy": "adaptive"
     },
     {
@@ -910,7 +910,7 @@
     {
       "index": 110,
       "policy": "translate",
-      "text": "This is no time to leisurely list your asylum terms!",
+      "text": "This is no time to list your asylum terms at leisure!",
       "layout_policy": "adaptive"
     },
     {
@@ -1389,7 +1389,7 @@
     {
       "index": 190,
       "policy": "translate",
-      "text": "I bet on my favorite bluff.",
+      "text": "I used my favorite bluff.",
       "layout_policy": "adaptive"
     },
     {

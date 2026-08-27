@@ -690,7 +690,7 @@
     {
       "index": 105,
       "policy": "translate",
-      "text": "You drew the picture in the Center Hall well.",
+      "text": "You did a fine job on the picture in the Center Hall.",
       "layout_policy": "adaptive"
     },
     {
@@ -846,7 +846,7 @@
     {
       "index": 131,
       "policy": "translate",
-      "text": "It is not such special work. There are any number of similar jobs.",
+      "text": "It's not such unusual work. There are plenty of jobs like it.",
       "layout_policy": "adaptive"
     },
     {
@@ -876,7 +876,7 @@
     {
       "index": 136,
       "policy": "translate",
-      "text": "The candidates are down to two: you and Kirikov. I will bet on you.",
+      "text": "There are only two candidates left: you and Kirikov. I'll bet on you.",
       "layout_policy": "adaptive"
     },
     {
@@ -930,7 +930,7 @@
     {
       "index": 145,
       "policy": "translate",
-      "text": "What is wrong? Is that bravado from moments ago gone?",
+      "text": "What is wrong? Where did all that bravado go?",
       "layout_policy": "adaptive"
     },
     {
@@ -1116,7 +1116,7 @@
     {
       "index": 176,
       "policy": "translate",
-      "text": "Are you lost about something?",
+      "text": "Do you feel lost?",
       "layout_policy": "adaptive"
     },
     {
@@ -1242,7 +1242,7 @@
     {
       "index": 197,
       "policy": "translate",
-      "text": "Either one. No doubt.",
+      "text": "It must be one of them.",
       "layout_policy": "adaptive"
     },
     {
