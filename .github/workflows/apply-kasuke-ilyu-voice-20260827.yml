@@ -1,3 +1,4 @@
+# Rerun with null-profile handling fixed.
 name: Apply Kasuke Ilyu voice pass 20260827
 
 on:
@@ -71,7 +72,7 @@ jobs:
               if len(records) != len(doc['records']):
                   raise SystemExit(f'{chapter}: duplicate record indexes')
 
-              exact_locks = doc.get('profile', {}).get('required_text_exact', {})
+              exact_locks = (doc.get('profile') or {}).get('required_text_exact', {})
               for index, item in sorted(chapter_changes):
                   stable_id = item['id']
                   record = records.get(index)
@@ -105,7 +106,6 @@ jobs:
           for path, temp in staged:
               os.replace(temp, path)
 
-          # Exact post-application verification.
           cache = {}
           failures = []
           for item in changes:
