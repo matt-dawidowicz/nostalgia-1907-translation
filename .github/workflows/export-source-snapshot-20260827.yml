@@ -1,0 +1,32 @@
+name: Export source snapshot 20260827
+
+on:
+  push:
+    branches:
+      - translation-source-corrections-20260827
+    paths:
+      - .github/workflows/export-source-snapshot-20260827.yml
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: translation-source-corrections-20260827
+          fetch-depth: 1
+      - name: Archive exact tracked source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git archive --format=zip --output=nostalgia1907-source-20260827.zip HEAD
+          sha256sum nostalgia1907-source-20260827.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nostalgia1907-source-20260827
+          path: nostalgia1907-source-20260827.zip
+          if-no-files-found: error
+          retention-days: 1
