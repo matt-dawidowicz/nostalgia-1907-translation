@@ -1,0 +1,34 @@
+{
+  "changes": [
+    {
+      "id": "PART2C:123",
+      "speaker": "Braque",
+      "before": "I am an art dealer. I am Georges Braque, a name known throughout Paris.",
+      "after": "I am Georges Braque, an art dealer known throughout Paris."
+    },
+    {
+      "id": "PART3B_:010",
+      "speaker": "Ruthie",
+      "before": "Now, Ruthie...it looks like I will not be returning to southern France...sorry.",
+      "after": "Now, Ruthie...it looks like I won't be returning to southern France...sorry."
+    },
+    {
+      "id": "PART3B_:210",
+      "speaker": "Dunant",
+      "before": "Question both of them more forcefully.",
+      "after": "Press both of them harder."
+    }
+  ],
+  "rejected_stale": [
+    "PART2B:099",
+    "PART2C:166",
+    "PART3B_:055",
+    "PART3C:052",
+    "PART4A:045"
+  ],
+  "notes": {
+    "source": "High-confidence exact-speaker recommendations from the Japanese-verified localization audit, filtered against the post-source-correction canonical branch by exact before-text match.",
+    "selection": "3 exact matches retained from 8 secondary-cast candidates; 5 stale candidates rejected to prevent overwriting later semantic corrections.",
+    "voice_policy": "Naturalize register without inventing regional accents: Braque remains pompous and self-important, Ruthie poised and conversational, Dunant terse and hard-boiled."
+  }
+}
