@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "purpose": "Retail-Japanese repairs required by the final semantic/generated-artifact validation gate after the source-faithful voice pass.",
+  "canonical_changes": [
+    {
+      "id": "PART1C:002",
+      "before": "Pilot House",
+      "after": "Navigation Control Room",
+      "japanese": "運航管制室",
+      "reason": "Exact fixed-source glossary term."
+    },
+    {
+      "id": "PART1C:052",
+      "before": "Go get eaten by the Reds! The passengers can no longer abandon ship...Chief Engineer! What's the damage to the engine room?",
+      "after": "Go get eaten by sharks! We can't evacuate the passengers now...Chief Engineer! What's the damage in the engine room?",
+      "japanese": "フカに食われろっ！船から乗客を退避させることが不可能になったわけだ・・・機関長！エンジンルームの損傷状況はどうか",
+      "reason": "フカ means shark; also identical retail source to PART1D:015, so both alternate-route copies must share English."
+    },
+    {
+      "id": "PART1C:094",
+      "before": "B-but...sir...",
+      "after": "But...sir...",
+      "japanese": "せやかて・・・あンさん・・・",
+      "reason": "Identical retail source to PART1D:057; Kansai hesitation is preserved without inventing a consonant stutter."
+    },
+    {
+      "id": "PART1D:015",
+      "before": "May the sharks eat him! The passengers can no longer abandon ship...Chief Engineer! What is the damage to the engine room?",
+      "after": "Go get eaten by sharks! We can't evacuate the passengers now...Chief Engineer! What's the damage in the engine room?",
+      "japanese": "フカに食われろっ！船から乗客を退避させることが不可能になったわけだ・・・機関長！エンジンルームの損傷状況はどうか",
+      "reason": "Converge identical retail source with PART1C:052."
+    },
+    {
+      "id": "PART1D:057",
+      "before": "But...that would be terrible...",
+      "after": "But...sir...",
+      "japanese": "せやかて・・・あンさん・・・",
+      "reason": "Converge identical retail source with PART1C:094; source addresses the other person rather than saying it would be terrible."
+    },
+    {
+      "id": "PART1D:132",
+      "before": "A clever fellow.",
+      "after": "A clever dog.",
+      "japanese": "・・・。利口な犬だ",
+      "reason": "犬 is dog; identical retail source to PART1C:166."
+    },
+    {
+      "id": "PART2A:064",
+      "before": "Pilot House",
+      "after": "Navigation Control Room",
+      "japanese": "運航管制室",
+      "reason": "Exact fixed-source glossary term."
+    },
+    {
+      "id": "PART2E:205",
+      "before": "Cut white and we're dead! Red or blue: one runs from the timer to the detonator, the other's a dummy. Cut the dummy and we're done for. Cut the real one and we're clear!",
+      "after": "Cut white and we're dead! Red or blue: one wire runs from the timer to the detonator, the other's a dummy. Cut the dummy and we're done for. Cut the real wire and we're clear!",
+      "japanese": "ともかくっ！シロは切ったらアウトだまっ！アカかアオ。どっちかが、時計と起爆装置をつないどるコード。もう片方がダミイだまっ！ダミイを切ったらドカンだまっ！起爆装置との接続コードを切りなはれっ！それで助かるっ！",
+      "reason": "Japanese explicitly repeats コード (cord/wire); restore the noun without changing the red/blue/white logic."
+    }
+  ],
+  "rule_table_changes": [
+    {
+      "file": "work/clean_rebuild/bomb_semantics.json",
+      "id": "PART2E:199",
+      "before_corrected_english": "Touch the connector tube...",
+      "after_corrected_english": "Check the connector tube...",
+      "reason": "接続管をあたる is an instruction to check/examine the connector tube in context; canonical wording is correct and the old exact expectation was stale."
+    },
+    {
+      "file": "work/clean_rebuild/translation_repairs.json",
+      "ids": ["PART2E:199", "PART2E:205"],
+      "reason": "Keep the historical repair tool from reintroducing obsolete pre-audit bomb wording."
+    }
+  ],
+  "validation_evidence": {
+    "exact_source_conflicts_before": 3,
+    "exact_source_conflicts_after": 0,
+    "bomb_semantic_failures_before": 2,
+    "bomb_semantic_failures_after": 0,
+    "final_translation_validation_status": "PASS",
+    "final_translation_validation_failures": 0,
+    "comparison_record_count": 2905,
+    "comparison_package_status": "PASS"
+  }
+}
