@@ -200,7 +200,7 @@
       "143": "L",
       "144": "I",
       "145": "MAX!",
-      "146": "You...",
+      "146": "You bastard...",
       "147": "No one knew it...Voysey's true identity.",
       "148": "Was that really so? There is no way to verify it.",
       "149": "Shall we review it once more?",
@@ -259,7 +259,7 @@
       "203": "What if the culprit gets there first?! Find the Russian Fog! The Deputy Chief said 'that woman.' Either the Russian Fog or the killer is a woman! You said you would settle this as the man on the ground, Mr. Yamada. Those work clothes suit you. Get to work!",
       "204": "No...Ashby, you are starting to slip. You have set off my instincts.",
       "205": "Is that a threat from the culprit?",
-      "206": "The logic of division of labor. I shall eat California oranges at a heated table.",
+      "206": "That's the logic of division of labor. I'll be eating California oranges at a heated table.",
       "207": "Yuko...I failed again...",
       "208": "That translation is not accurate. A kotatsu is a kotatsu."
     },
@@ -1154,7 +1154,7 @@
     {
       "index": 146,
       "policy": "translate",
-      "text": "You...",
+      "text": "You bastard...",
       "layout_policy": "adaptive"
     },
     {
@@ -1513,7 +1513,7 @@
     {
       "index": 206,
       "policy": "translate",
-      "text": "The logic of division of labor. I shall eat California oranges at a heated table.",
+      "text": "That's the logic of division of labor. I'll be eating California oranges at a heated table.",
       "layout_policy": "adaptive"
     },
     {

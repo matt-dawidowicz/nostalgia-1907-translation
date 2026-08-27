@@ -75,7 +75,7 @@
       "18": "...I'm starting to cry.",
       "19": "...Ilyu. Even so, I still have to question you.",
       "20": "You're a hopeless company man. Fine. Why not take a shower first? I'll wait in my room.",
-      "21": "Come, everyone, back to your rooms. He needs rest.",
+      "21": "Come now. Why don't the rest of you return to your rooms? He needs his rest.",
       "22": "Shower Room",
       "58": "Old geezer!"
     },
@@ -219,7 +219,7 @@
     {
       "index": 21,
       "policy": "translate",
-      "text": "Come, everyone, back to your rooms. He needs rest.",
+      "text": "Come now. Why don't the rest of you return to your rooms? He needs his rest.",
       "layout_policy": "adaptive"
     },
     {
@@ -513,7 +513,7 @@
     {
       "index": 70,
       "policy": "translate",
-      "text": "Here, the answer is a person.",
+      "text": "In this case, the answer is clearly a person, you see.",
       "layout_policy": "adaptive"
     },
     {

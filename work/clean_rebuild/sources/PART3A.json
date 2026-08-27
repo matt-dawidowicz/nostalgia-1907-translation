@@ -178,7 +178,7 @@
       "113": "Chanel",
       "114": "He needs freedom!",
       "115": "Who do you think you are?!",
-      "116": "A creator. Any complaints?",
+      "116": "A creator, that's who! Any complaints?",
       "117": "If you survive until tomorrow, I'll take you to the captain.",
       "118": "Really?",
       "119": "Whatever.",
@@ -210,7 +210,7 @@
       "145": "Tianon and her party are acting deliberately. The culprit is among them. Their defensiveness against our attack proves it.",
       "146": "Stubborn, aren't you? Tianon and Lumeranka. Start with those two.",
       "147": "Tianon",
-      "148": "...the least suspicious person is the most suspicious...how's that for a theory?",
+      "148": "...the least suspicious person is the most suspicious...that is what I see.",
       "149": "In an ordinary detective novel, perhaps...",
       "150": "Wait...",
       "151": "This child...",
@@ -1026,7 +1026,7 @@
     {
       "index": 116,
       "policy": "translate",
-      "text": "A creator. Any complaints?",
+      "text": "A creator, that's who! Any complaints?",
       "layout_policy": "adaptive"
     },
     {
@@ -1218,7 +1218,7 @@
     {
       "index": 148,
       "policy": "translate",
-      "text": "...the least suspicious person is the most suspicious...how's that for a theory?",
+      "text": "...the least suspicious person is the most suspicious...that is what I see.",
       "layout_policy": "adaptive"
     },
     {
