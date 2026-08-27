@@ -1,0 +1,43 @@
+name: Build temporary Ares v148 Linux
+
+on:
+  push:
+    branches:
+      - translation-source-corrections-20260827
+    paths:
+      - .github/workflows/build-ares-v148-temp.yml
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Install Ares Linux dependencies
+        run: |
+          sudo apt-get update -y -qq
+          sudo apt-get install -y git cmake ccache ninja-build libsdl2-dev libgtk-3-dev libao-dev libopenal-dev qt6-base-dev xvfb
+      - name: Clone Ares v148
+        run: git clone --depth 1 --branch v148 https://github.com/ares-emulator/ares.git ares
+      - name: Build Ares with upstream Ubuntu CI preset
+        working-directory: ares
+        env:
+          TARGET_PRESET: ubuntu-ci
+          ARES_BUILD_OFFICIAL: "ON"
+        run: .github/scripts/build_ubuntu.sh
+      - name: Install runtime prefix
+        run: cmake --install ares/build --prefix "$GITHUB_WORKSPACE/ares-install"
+      - name: Inspect and smoke test
+        run: |
+          find "$GITHUB_WORKSPACE/ares-install" -maxdepth 4 -type f -print | sort
+          ldd "$GITHUB_WORKSPACE/ares-install/bin/ares"
+          xvfb-run -a "$GITHUB_WORKSPACE/ares-install/bin/ares" --version
+      - name: Package Linux runtime
+        run: tar -cJf ares-v148-linux-x64.tar.xz -C "$GITHUB_WORKSPACE/ares-install" .
+      - name: Upload Ares runtime
+        uses: actions/upload-artifact@v4
+        with:
+          name: ares-v148-linux-x64
+          path: ares-v148-linux-x64.tar.xz
+          retention-days: 1
