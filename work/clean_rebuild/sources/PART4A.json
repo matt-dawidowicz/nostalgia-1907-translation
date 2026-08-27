@@ -27,7 +27,7 @@
     {
       "index": 1,
       "policy": "translate",
-      "text": "Act 4: \"A Posteriori\"",
+      "text": "ACTION 4: \"A Posteriori\"",
       "layout_policy": "fixed"
     },
     {
@@ -69,7 +69,7 @@
     {
       "index": 8,
       "policy": "translate",
-      "text": "Who killed Black and Voysey?",
+      "text": "Who killed Braque and Voysey?",
       "layout_policy": "adaptive"
     },
     {
@@ -189,7 +189,7 @@
     {
       "index": 28,
       "policy": "translate",
-      "text": "Bilge",
+      "text": "Keel Section",
       "layout_policy": "adaptive"
     },
     {
@@ -207,7 +207,7 @@
     {
       "index": 31,
       "policy": "translate",
-      "text": "Idiots! Ashby and Dunant tricked you! He is the culprit!",
+      "text": "Idiots! Ashby and Dunant tricked you! They are the culprits!",
       "layout_policy": "adaptive"
     },
     {
@@ -291,7 +291,7 @@
     {
       "index": 45,
       "policy": "translate",
-      "text": "A Japanese whaler should find us in the South Atlantic...but food will last for only two.",
+      "text": "A disguised Japanese fishing vessel should find us in the South Atlantic...but food will last for only two.",
       "layout_policy": "adaptive"
     },
     {
@@ -357,13 +357,13 @@
     {
       "index": 56,
       "policy": "translate",
-      "text": "Sink the ship and Ashby's plan dies with it.",
+      "text": "Damn. If we sink the ship now, that's exactly what Ashby wants.",
       "layout_policy": "adaptive"
     },
     {
       "index": 57,
       "policy": "translate",
-      "text": "She is not the winner.",
+      "text": "He is not the winner.",
       "layout_policy": "adaptive"
     },
     {
@@ -381,7 +381,7 @@
     {
       "index": 60,
       "policy": "translate",
-      "text": "We saw good things too.",
+      "text": "I had some good experiences too.",
       "layout_policy": "adaptive"
     },
     {

@@ -67,7 +67,7 @@ This guide supplements, but does not silently override, the tracked `translation
 | 起爆装置 / detonator context | detonator | Keep separate from timer/counter. |
 | 振り子式起爆装置 | pendulum detonator | Motion-triggered; do not describe as overcurrent. |
 | タイマー | timer | A countdown device, not a 2,000-second value unless the source explicitly supplies seconds. |
-| 接続管 | connector tube | `あたる` in PART2E:199 remains context-sensitive; do not change “Touch/Check” without review. |
+| 接続管 | connector tube | PART2E:199 is reviewed as “Check/examine the connector tube”; canonical gameplay wording uses “Check.” |
 | バイパス | bypass | Use as noun or verb only when the source action supports it. |
 | 三相電流 | three-phase current / three-phase alternating current | White is neutral; red and blue are the poles in the reviewed explanation. |
 | 白 | white | Never cut white in the reviewed three-phase branch. |
@@ -98,6 +98,35 @@ This guide supplements, but does not silently override, the tracked `translation
 - Use contractions in conversational English unless the speaker is deliberately formal. The canonical font supports straight ASCII apostrophes; do not use typographic apostrophes or other Unicode punctuation.
 - Ellipses use three periods (`...`) unless fixed-layout evidence requires a different glyph pattern. Do not multiply punctuation merely to imitate Japanese spacing.
 - Profanity should match force and character. Do not invent threats, terrorism language, or insults absent from the source.
+
+## Character-register policy from the 2026-08-27 audit
+
+- **Chief Engineer:** strong Kansai speech becomes noticeable Western/California
+  working-class English because the source itself makes an East-versus-California
+  joke. Do not use surfer, cowboy, or phonetic eye dialect.
+- **Charlie Muffin:** rough Eastern-U.S. engineer/seaman voice, blunt and
+  contracted, with jokes dropping away during his final high-stakes gamble. Do
+  not invent a specific Eastern city.
+- **Ashby / Voysey / Director:** express British class and institutional register
+  through syntax and diction, not phonetic RP. Preserve Ashby's ugly imperial
+  and racist source material rather than sanitizing it.
+- **Kasuke:** educated conversational professional who becomes blunt under
+  pressure. Rough London influence appears only where the source explicitly
+  mentions it.
+- **Ilyu / Ilyusha:** educated cosmopolitan woman with no invented Russian
+  accent; playful, professional, and then simpler/more direct as emotional
+  honesty increases.
+- Do not invent Russian, French, German, or other accents for characters whose
+  Japanese is standard.
+
+## Source-authored oddities
+
+Do not silently normalize an oddity merely because it is anachronistic or
+historically awkward. Reviewed examples to preserve include `Mayday`, `Indian
+poker`, `simulation game`, `fiction`, `Japan's king`, `satellite states`,
+Ashby's Queen reference, the salaryman joke, the Finland/Suomi framing, the
+Mede/Medea wordplay, the hard-baked Muffin joke, and the bomb/woman/chastity-belt
+metaphors. A change requires Japanese evidence, not historical preference.
 
 ## Choice, warning, and consequence style
 

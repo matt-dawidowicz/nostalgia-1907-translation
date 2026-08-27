@@ -40,7 +40,7 @@
     {
       "index": 3,
       "policy": "translate",
-      "text": "Bilge",
+      "text": "Keel Section",
       "layout_policy": "adaptive"
     },
     {
@@ -58,7 +58,7 @@
     {
       "index": 6,
       "policy": "translate",
-      "text": "I feigned my death in Britain, cut my hair short, and sent a telegram to Voysey.",
+      "text": "I decided to defect to Britain, cut my hair short, and sent a telegram to Voysey.",
       "layout_policy": "adaptive"
     },
     {
@@ -112,7 +112,7 @@
     {
       "index": 15,
       "policy": "translate",
-      "text": "Voysey could not decipher \"Mede\"...the head of British Intelligence, said to be the sharpest man in Britain, took three days to find the symbol of that place...I thought he was someone I could never understand.",
+      "text": "Voysey couldn't decipher 'Mede'...the intelligence department's number-two man, said to be the sharpest in Britain, spent three days unable to understand that symbol. I thought he was someone I could never understand.",
       "layout_policy": "adaptive"
     },
     {
@@ -148,7 +148,7 @@
     {
       "index": 21,
       "policy": "translate",
-      "text": "Who is?",
+      "text": "I'm used to it.",
       "layout_policy": "adaptive"
     },
     {
@@ -184,7 +184,7 @@
     {
       "index": 27,
       "policy": "translate",
-      "text": "Of course not. He had orders to prevent my defection. I had orders to spy on him. But I turned his plan around and intended to defect to Japan...",
+      "text": "Kirikov was cautious. He had orders to stop my defection. When the bomber made that impossible, he decided to turn my defection plan to his advantage and infiltrate Japan.",
       "layout_policy": "adaptive"
     },
     {
@@ -202,7 +202,7 @@
     {
       "index": 30,
       "policy": "translate",
-      "text": "Ilyu is the poor one. Once Foreign Affairs is notified, Ashby will be discarded.",
+      "text": "Ito only cares about himself. If the Foreign Ministry is informed, Ashby will be cut loose.",
       "layout_policy": "adaptive"
     },
     {
@@ -339,7 +339,7 @@
     {
       "index": 53,
       "policy": "translate",
-      "text": "Let us begin. The screwdriver...this one...",
+      "text": "Let's begin. The screwdriver...this one...",
       "layout_policy": "adaptive"
     },
     {
@@ -465,7 +465,7 @@
     {
       "index": 74,
       "policy": "translate",
-      "text": "That means we attached a side road to the safety circuit, right?",
+      "text": "So that means we've added a bypass to the safety circuit, right?",
       "layout_policy": "adaptive"
     },
     {
@@ -531,13 +531,13 @@
     {
       "index": 85,
       "policy": "translate",
-      "text": "Strange. The country that defeated imperial Russia in war is the only one besides Japan that does not know wire cutters.",
+      "text": "Strange. Japan is the only country to have defeated the mighty Russian Empire in war, yet you don't even know wire cutters...",
       "layout_policy": "adaptive"
     },
     {
       "index": 86,
       "policy": "translate",
-      "text": "Learn them well. You will be drafted soon enough. Japan has eight million gods on its side. Surely you will not lose.",
+      "text": "I'll learn. We'll catch up with the Great Powers soon. Japan has eight million gods. Whatever we do, we won't lose.",
       "layout_policy": "adaptive"
     },
     {
@@ -585,7 +585,7 @@
     {
       "index": 94,
       "policy": "translate",
-      "text": "The fur-handled screwdriver is big...",
+      "text": "Those hairy foreigners use huge screwdrivers...",
       "layout_policy": "adaptive"
     },
     {
@@ -633,7 +633,7 @@
     {
       "index": 102,
       "policy": "translate",
-      "text": "Why did you become a spy...no, why did you fail? Why turn against the Russian regime?",
+      "text": "Why did you become a Russian spy...no, pardon me. Why did you side with the Russian regime?",
       "layout_policy": "adaptive"
     },
     {
@@ -669,19 +669,19 @@
     {
       "index": 108,
       "policy": "translate",
-      "text": "What is this girl Yuko like?",
+      "text": "Who is Yuko?",
       "layout_policy": "adaptive"
     },
     {
       "index": 109,
       "policy": "translate",
-      "text": "You are no gentleman...truthfully, I never really talked with her. There was never much reason to. In Japan, girls like her are...what do you call it?",
+      "text": "She's not as modern as you. To tell the truth, I've never talked with her properly the way I have with you. We've never even been alone together. In Japan, well...that sort of thing isn't done.",
       "layout_policy": "adaptive"
     },
     {
       "index": 110,
       "policy": "translate",
-      "text": "But you like her?...a little strange...still, she is wonderful.",
+      "text": "But you like her? ...a little strange...but somehow, that's lovely.",
       "layout_policy": "adaptive"
     },
     {
@@ -705,7 +705,7 @@
     {
       "index": 114,
       "policy": "translate",
-      "text": "Calm down. I am with you. Right?",
+      "text": "Calm down. I'm right here with you. All right?",
       "layout_policy": "adaptive"
     },
     {
@@ -747,7 +747,7 @@
     {
       "index": 121,
       "policy": "translate",
-      "text": "I meant to obey the Emperor and train an assassination unit. Weapons training. Mountain marches. Codes. I was good with a knife. I was not an honor student.",
+      "text": "They meant to train an assassination unit that would work on the Emperor's orders. Weapons training. Mountain marches...assassination. I had a knack for it. I became an honor student.",
       "layout_policy": "adaptive"
     },
     {
@@ -807,7 +807,7 @@
     {
       "index": 131,
       "policy": "translate",
-      "text": "Let us open the box's left lid.",
+      "text": "Let's open the left lid of the box.",
       "layout_policy": "adaptive"
     },
     {
@@ -855,7 +855,7 @@
     {
       "index": 139,
       "policy": "translate",
-      "text": "If it was a trap, you are the same as me.",
+      "text": "If it's a trap, you're in the same boat.",
       "layout_policy": "adaptive"
     },
     {
@@ -873,7 +873,7 @@
     {
       "index": 142,
       "policy": "translate",
-      "text": "...one day the instructor in charge of me changed...it was unbearable. Let us stop. This is no story.",
+      "text": "One day, the instructor in charge of me changed...this is boring. Let us stop. I have nothing more to say.",
       "layout_policy": "adaptive"
     },
     {
@@ -891,7 +891,7 @@
     {
       "index": 145,
       "policy": "translate",
-      "text": "It is not a pendulum yet. We will have to remove it.",
+      "text": "That balancing arm is in the way. We'll have to remove it.",
       "layout_policy": "adaptive"
     },
     {
@@ -1065,13 +1065,13 @@
     {
       "index": 174,
       "policy": "translate",
-      "text": "So the mission was successful. Then Siberia?",
+      "text": "It really was a trap. Were you in Siberia the whole time?",
       "layout_policy": "adaptive"
     },
     {
       "index": 175,
       "policy": "translate",
-      "text": "...yes. When I turned thirteen after three years in Siberia, I was taken before the Emperor in St. Petersburg.",
+      "text": "Yes. On the day I turned thirteen in Siberia, I was taken before the Emperor in St. Petersburg.",
       "layout_policy": "adaptive"
     },
     {
@@ -1125,13 +1125,13 @@
     {
       "index": 184,
       "policy": "translate",
-      "text": "It may be another battery...what mission did the Emperor give you?",
+      "text": "Another battery again...what mission did the Emperor give you?",
       "layout_policy": "adaptive"
     },
     {
       "index": 185,
       "policy": "translate",
-      "text": "To enter the court and uncover which courtiers secretly harbored treason against him.",
+      "text": "To enter the court and uncover which courtiers secretly harbored treasonous intentions against him.",
       "layout_policy": "adaptive"
     },
     {
@@ -1143,7 +1143,7 @@
     {
       "index": 187,
       "policy": "translate",
-      "text": "I saw through more than ten. They were like dolls, mere adults with jealous hearts. With my own childish arrogance, I looked for ambition and questioned them. The old hands of Petersburg society kept giving me high marks.",
+      "text": "I was barely over ten. Who would be suspicious of a doll-like child? I already understood the absolute advantage my age gave me. I outwitted veteran Petersburg intelligence agents and always got excellent results.",
       "layout_policy": "adaptive"
     },
     {
@@ -1239,7 +1239,7 @@
     {
       "index": 203,
       "policy": "translate",
-      "text": "What has gotten into you? I know about the peace treaty, but Japan had not defeated Russia. Witte knew the war could not continue. The Emperor intoxicated the people with an eastern campaign, then could not stop it.",
+      "text": "What are you talking about? I know about the peace treaty, but the Japanese diplomat was realistic and admirable. So was Witte. War isn't a game. It isn't just about winning and losing. When he started the war, the Emperor wanted to revel in conquering the 'Eastern barbarians.' His entourage never defied him.",
       "layout_policy": "adaptive"
     },
     {
@@ -1251,7 +1251,7 @@
     {
       "index": 205,
       "policy": "translate",
-      "text": "Witte understood the realities of Russia and Japan. I was sent to him on a new mission. Japan was weak, but a great power afraid of isolation could not crush it. Russia allied with another power to isolate Japan.",
+      "text": "Witte understood the realities of Russia and Japan. He gave me a new mission. Japan was too weak to defeat Russia alone, so it would have to ally with a Great Power hostile to Russia.",
       "layout_policy": "adaptive"
     },
     {
@@ -1269,7 +1269,7 @@
     {
       "index": 208,
       "policy": "translate",
-      "text": "Those ugly onion domes. By rousing Russia's hunger for territory, Britain could watch eastern Russia from the front row. Russia sank its own fleet and plunged into war with Japan over the army's objections.",
+      "text": "Those ugly mosque-shaped onion domes. Look at Eastern Europe and you'll know how Russia treats its satellite states. Even if they cannot defy the Emperor, they are desperate. Russia was wracked by unrest and plunged into a defensive war as though prepared to kill half its own people.",
       "layout_policy": "adaptive"
     },
     {
@@ -1281,7 +1281,7 @@
     {
       "index": 210,
       "policy": "translate",
-      "text": "If they did not prevent Russia from advancing onto the Korean Peninsula, the imperial defense could not stand.",
+      "text": "Geographically, unless the Korean Peninsula serves as a defensive wall, the Empire's national defense cannot hold.",
       "layout_policy": "adaptive"
     },
     {
@@ -1383,7 +1383,7 @@
     {
       "index": 227,
       "policy": "translate",
-      "text": "Witte's plan: form a Triple Entente among Japan, Britain, and Russia and fan the Russian Revolution. To distract the Emperor from the Russo-Japanese War, I was to locate and assassinate spies of the Anglo-Japanese alliance.",
+      "text": "Witte said Anglo-Japanese agents were active all over Europe, inciting the Russian Revolution to divert the Emperor's attention from the Russo-Japanese War. My mission was to find those Anglo-Japanese agents and assassinate them.",
       "layout_policy": "adaptive"
     },
     {
@@ -1395,13 +1395,13 @@
     {
       "index": 229,
       "policy": "translate",
-      "text": "Britain's intelligence network controls the world. The Times and Morse communications stage a Japanese victory and broadcast it everywhere. Peasants and workers rose against the Emperor. The markets panicked, while Japan borrowed war funds from the world.",
+      "text": "Britain's intelligence network controls the world. The Times. Reuters...they staged Japan's victories and spread them everywhere. Inside Russia, anti-Emperor agitators cast the regime as the villain in the name of freedom. Even financial circles and the Russian court believed it. The world sympathized with Japan and lent it whatever war funds it needed. Russia was branded a country that deserved to be beaten and became hated worldwide.",
       "layout_policy": "adaptive"
     },
     {
       "index": 230,
       "policy": "translate",
-      "text": "So the Emperor's eastern front could torment the Baltic Fleet with peculiar tactics because it had no place left to return...",
+      "text": "Tch! So it wasn't because Admiral Togo's invincible fleet annihilated the Baltic Fleet with wildly ingenious tactics that we won...",
       "layout_policy": "adaptive"
     },
     {
@@ -1581,7 +1581,7 @@
     {
       "index": 260,
       "policy": "translate",
-      "text": "Thank you, Kasuke. I will not hesitate anymore. I have decided. The twenty-first century will be your century. Even if Suomi becomes a land of distrust, I can leave the Emperor. My vision of forests and lakes matters most.",
+      "text": "Thank you, Kasuke. I don't think I'll hesitate anymore. I've decided. When I was twenty-one, I realized something was wrong. The Emperor turned Suomi into a land of suspicion and brainwashed me into distrusting everyone. I can abandon him now. The forests and lakes of Suomi matter most to me.",
       "layout_policy": "adaptive"
     },
     {
@@ -1647,7 +1647,7 @@
     {
       "index": 271,
       "policy": "translate",
-      "text": "I do not know...maybe Stockholm syndrome is at work...feelings stirred by the danger of being pursued by the Emperor...",
+      "text": "I don't know...maybe my instinct as a spy to secure an escape route kicked in. Realizing the danger of continuing to follow the Emperor may have stirred these feelings...",
       "layout_policy": "adaptive"
     },
     {
@@ -1725,7 +1725,7 @@
     {
       "index": 284,
       "policy": "translate",
-      "text": "I am going to choose. If we fall, forgive me.",
+      "text": "I give up. I surrender. I apologize, so forgive me...",
       "layout_policy": "adaptive"
     },
     {
@@ -1737,7 +1737,7 @@
     {
       "index": 286,
       "policy": "translate",
-      "text": "You said earlier, Ilyu, that you had lost the ability to choose. What did you stop being able to choose?",
+      "text": "There are two choices...Ilyu, earlier you said you had to choose, right? What did you have to choose between?",
       "layout_policy": "adaptive"
     },
     {

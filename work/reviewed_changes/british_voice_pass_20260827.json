@@ -1,0 +1,30 @@
+{
+  "changes": {
+    "PART2D:034": "You are quite uncouth, Mr. Yamada.",
+    "PART2D:042": "You are remarkably roundabout, Mr. Yamada. And unpleasant.",
+    "PART2D:044": "When the Great Japanese Empire went to war with Russia, did you not come crying to Britain and Her Majesty the Queen for aid, knowing you could not prevail alone?",
+    "PART2D:045": "And even now, you remain under my control.",
+    "PART2D:047": "Your trainer must have been lamentable. You still have not learned the proper relation between master and servant.",
+    "PART2D:049": "Managing the whole world is no small burden. I wonder whether even the savages under our protection can comprehend it.",
+    "PART2D:051": "Even now, you are not at liberty to defy me.",
+    "PART2D:056": "The attendant's room is across the hall. The adjoining room is unused. The room at the far end is occupied by Braque's secretary.",
+    "PART2D:059": "A gentleman does not gulp his tea like that. Excuse me.",
+    "PART2F:141": "Regrettably, Director. Our investigation confirms that Heynwood and Burns are Russian agents.",
+    "PART2F:143": "Then every allegation made by Russian Fog was correct.",
+    "PART2F:145": "What does Russian Fog want?",
+    "PART2F:146": "Considering all the circumstances...I believe there is only one answer: defection.",
+    "PART2F:147": "A Russian spy defecting to the British Empire?",
+    "PART2F:149": "A prospective defector's calling card.",
+    "PART2F:150": "We cannot allow such a prize to escape us.",
+    "PART2F:151": "It may be bait intended to draw you out.",
+    "PART2F:152": "I accept the risk. If it comes to that, I still have nerve enough to take my own life. This is no work for a younger man. Let me have one last assignment before I retire.",
+    "PART2F:153": "Take Ashby with you. He may prove useful."
+  },
+  "notes": {
+    "Ashby": "Edwardian British establishment register: controlled, hierarchical, polished, and personally condescending. Fewer contractions and more formal syntax; no phonetic RP or caricature.",
+    "Voysey_cover": "Impeccably correct servant/valet register. Deference is conveyed by syntax and restraint, not exaggerated butler catchphrases.",
+    "Voysey_revealed": "Dry, concise senior intelligence-professional register. When reporting upward as Deputy Chief, he becomes markedly more formal and precise.",
+    "Director": "Senior institutional British voice: economical questions and orders, little ornament. His authority should contrast with Ashby's grandiosity.",
+    "source_priority": "Voice changes are layered only after the retail-Japanese semantic corrections for these records. Source-authored historical oddities, including Ashby's reference to Her Majesty the Queen, are preserved."
+  }
+}

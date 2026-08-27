@@ -88,7 +88,7 @@
     {
       "index": 11,
       "policy": "translate",
-      "text": "Chief Engineer / Head Cook / Dept. Head ",
+      "text": "Chief Engineer / Chief Cook / Dept. Head",
       "layout_policy": "fixed"
     },
     {
@@ -100,7 +100,7 @@
     {
       "index": 13,
       "policy": "translate",
-      "text": "        Old Karl / Ship's Doctor        ",
+      "text": "Old Karl / Surgeon                      ",
       "layout_policy": "fixed"
     },
     {
@@ -112,7 +112,7 @@
     {
       "index": 15,
       "policy": "translate",
-      "text": "        Black / Chief Navigator         ",
+      "text": "Braque / Chief Navigator                ",
       "layout_policy": "fixed"
     },
     {

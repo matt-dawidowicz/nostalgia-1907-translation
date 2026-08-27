@@ -1,0 +1,149 @@
+{
+  "changes": [
+    {
+      "id": "PART1A:055",
+      "speaker": "Kasuke",
+      "before": "I will fold.",
+      "after": "I'll fold."
+    },
+    {
+      "id": "PART1A:069",
+      "speaker": "Kasuke",
+      "before": "I do not want to know! ...damn it...",
+      "after": "I don't want to know! ...damn it..."
+    },
+    {
+      "id": "PART2A:036",
+      "speaker": "Kasuke",
+      "before": "The window is shut exactly as it was. A careful culprit.",
+      "after": "The window is shut exactly as it was. The culprit was careful."
+    },
+    {
+      "id": "PART2A:078",
+      "speaker": "Kasuke",
+      "before": "First class to the captain's cabin. Good. I can retrace it.",
+      "after": "From first class to the captain's cabin. Good. I can retrace the route."
+    },
+    {
+      "id": "PART2D:008",
+      "speaker": "Kasuke",
+      "before": "What is with this man? Out of nowhere...",
+      "after": "What's with this man? That came out of nowhere..."
+    },
+    {
+      "id": "PART2D:129",
+      "speaker": "Kasuke",
+      "before": "What is with Kirikov?",
+      "after": "What's with Kirikov?"
+    },
+    {
+      "id": "PART3B:059",
+      "speaker": "Kasuke",
+      "before": "Open your ears and listen carefully.",
+      "after": "Listen carefully."
+    },
+    {
+      "id": "PART3B:155",
+      "speaker": "Kasuke",
+      "before": "They as good as said it.",
+      "after": "They all but said so."
+    },
+    {
+      "id": "PART3B_:105",
+      "speaker": "Kasuke",
+      "before": "You drew the picture in the Center Hall well.",
+      "after": "You did a fine job on the picture in the Center Hall."
+    },
+    {
+      "id": "PART3B_:131",
+      "speaker": "Ilyu",
+      "before": "It is not such special work. There are any number of similar jobs.",
+      "after": "It's not such unusual work. There are plenty of jobs like it."
+    },
+    {
+      "id": "PART3B_:136",
+      "speaker": "Kasuke",
+      "before": "The candidates are down to two: you and Kirikov. I will bet on you.",
+      "after": "There are only two candidates left: you and Kirikov. I'll bet on you."
+    },
+    {
+      "id": "PART3B_:145",
+      "speaker": "Ilyu",
+      "before": "What is wrong? Is that bravado from moments ago gone?",
+      "after": "What is wrong? Where did all that bravado go?"
+    },
+    {
+      "id": "PART3B_:176",
+      "speaker": "Kasuke",
+      "before": "Are you lost about something?",
+      "after": "Do you feel lost?"
+    },
+    {
+      "id": "PART3B_:197",
+      "speaker": "Kasuke",
+      "before": "Either one. No doubt.",
+      "after": "It must be one of them."
+    },
+    {
+      "id": "PART3C:044",
+      "speaker": "Ilyu",
+      "before": "Is that fun?",
+      "after": "Are you enjoying this?"
+    },
+    {
+      "id": "PART3C:059",
+      "speaker": "Kasuke",
+      "before": "Maybe. But can one person directly see what another is thinking?",
+      "after": "Maybe. But can one person see directly into another person's thoughts?"
+    },
+    {
+      "id": "PART3C:110",
+      "speaker": "Kasuke",
+      "before": "This is no time to leisurely list your asylum terms!",
+      "after": "This is no time to list your asylum terms at leisure!"
+    },
+    {
+      "id": "PART3C:190",
+      "speaker": "Kasuke",
+      "before": "I bet on my favorite bluff.",
+      "after": "I used my favorite bluff."
+    },
+    {
+      "id": "PART4B:053",
+      "speaker": "Kasuke",
+      "before": "Let us begin. The screwdriver...this one...",
+      "after": "Let's begin. The screwdriver...this one..."
+    },
+    {
+      "id": "PART4B:114",
+      "speaker": "Ilyu",
+      "before": "Calm down. I am with you. Right?",
+      "after": "Calm down. I'm right here with you. All right?"
+    },
+    {
+      "id": "PART4B:131",
+      "speaker": "Kasuke",
+      "before": "Let us open the box's left lid.",
+      "after": "Let's open the left lid of the box."
+    },
+    {
+      "id": "PART4B:185",
+      "speaker": "Ilyu",
+      "before": "To enter the court and uncover which courtiers secretly harbored treason against him.",
+      "after": "To enter the court and uncover which courtiers secretly harbored treasonous intentions against him."
+    },
+    {
+      "id": "PART4C:003",
+      "speaker": "Kasuke",
+      "before": "...one more...Tainui Adjell's assassin is hiding aboard.",
+      "after": "...there's one more. Tainui Adjell's assassin is hiding aboard."
+    }
+  ],
+  "notes": {
+    "source": "High-confidence PROPOSED EDIT rows from the Japanese-verified localization audit, filtered against the post-source-correction canonical branch by exact before-text match.",
+    "selection": "23 exact matches retained from 75 exact-speaker Kasuke/Ilyu candidates; 52 stale candidates were rejected to prevent overwriting later semantic corrections.",
+    "Kasuke": "Natural educated conversational English, with contractions and blunt phrasing under pressure; no invented regional dialect or faux-Victorian register.",
+    "Ilyu": "Educated cosmopolitan English, playful or emotionally direct where the Japanese supports it, while retaining a more controlled intelligence-officer register when appropriate.",
+    "punctuation": "ASCII punctuation only; PART3C:059 uses a straight apostrophe for game-font compatibility."
+  }
+}

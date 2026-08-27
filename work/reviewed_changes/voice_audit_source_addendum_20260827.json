@@ -1,0 +1,18 @@
+{
+  "changes": {
+    "PART2D:111": "She's in the cabin next to mine, in second class on the port side. She absolutely cleaned me out at cards.",
+    "PART3C:211": "That would be the other Russian spy, Ilyusha. She killed Voysey, and Braque too. She mistook Braque for a British Intelligence agent. She couldn't allow Kirikov, the Russian Fog, to be taken.",
+    "PART4B:260": "Thank you, Kasuke. I don't think I'll hesitate anymore. I've decided. When I was twenty-one, I realized something was wrong. The Emperor turned Suomi into a land of suspicion and brainwashed me into distrusting everyone. I can abandon him now. The forests and lakes of Suomi matter most to me.",
+    "PART4B:271": "I don't know...maybe my instinct as a spy to secure an escape route kicked in. Realizing the danger of continuing to follow the Emperor may have stirred these feelings...",
+    "PART4C:037": "After you told me Ashby was with British Intelligence, he believed I was only an ordinary detective.",
+    "PART4C:049": "I'm the son of this century's last samurai."
+  },
+  "notes": {
+    "PART2D:111": "Retail BIN directly confirms second class (二等客室). The Japanese does not supply 'corridor'; this overrides the earlier prose-QA replacement that over-interpreted the location.",
+    "PART3C:211": "Retail Japanese explicitly identifies Ilyusha as the other Russian spy, attributes Voysey and Braque's deaths to her in this deduction, says she mistook Braque for British Intelligence, and says she did not want Kirikov/Russian Fog taken.",
+    "PART4B:260": "21才 means age twenty-one, not the twenty-first century.",
+    "PART4B:271": "スパイとしての退路確保反応 is a spy's escape-route/survival reflex, not Stockholm syndrome.",
+    "PART4C:037": "Subject/object direction confirmed: Kasuke told Dunant that Ashby was with British Intelligence.",
+    "PART4C:049": "New definite correction from voice audit: 子 means son/child. Kasuke calls himself the son of this century's last samurai, not the last samurai himself."
+  }
+}

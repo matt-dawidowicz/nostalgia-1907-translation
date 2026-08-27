@@ -67,11 +67,17 @@ release claims, and any errors that remain.
 
 ## What the project is now
 
-The current public source release is **1.0.2**. It documents and packages the
-same hash-identified North American runtime reference; it does not introduce a
-new playable candidate or change the canonical translation corpus. The release
-record and the limits of that evidence are described in
-[release and playtest policy](docs/RELEASE.md).
+The latest runtime-certified published reference remains **1.0.2** and its
+hash-identified North American build. The current source tree now contains the
+post-1.0.2 **2026-08-27 source-fidelity and character-voice revision**, which
+does change the canonical translation corpus. That newer source has passed
+source CI and retail-backed MES/layout/archive validation, but it has not yet
+completed a fresh candidate-bound Ares playthrough and is not presented as a
+new public runtime-certified release.
+
+Read [the 2026-08-27 translation revision](docs/TRANSLATION_REVISION_20260827.md)
+for the exact scope and validation record, and [release and playtest
+policy](docs/RELEASE.md) for the remaining runtime requirements.
 
 The project has a single supported workflow:
 
@@ -203,6 +209,16 @@ reference without claiming a new playable candidate. It does not change
 translation records, renderer behavior, or the reviewed reference's playable
 bytes. Further independent and regression playtesting is welcome.
 
+### 7. 2026-08-27 source-fidelity and character-voice revision
+
+The post-1.0.2 revision re-audited all 2,905 records against the retail Japanese,
+applied 345 semantic corrections, layered reviewed character voices over the
+corrected meaning, repaired the fixed PART4C ending, and addressed retail-only
+text-capacity constraints. The final source content passed the complete
+retail-layout test suite, all-chapter MES compilation, and all 19 archive
+rebuilds. It changes playable bytes, so the old 1.0.2 Ares playthrough cannot
+certify it. See [the revision record](docs/TRANSLATION_REVISION_20260827.md).
+
 ## What is proven, and what is not
 
 When run with the required verified local inputs, the automated build gate
@@ -213,11 +229,13 @@ published artifacts.
 
 It does **not** replace independent regression testing or prove behavior on
 different emulator versions, hardware, or unvisited alternate choices. The
-exact North American artifact identified above completed a full maintainer
-playtest in Ares with no reported defects. Future reports are welcome, and any
-candidate with changed playable bytes needs fresh candidate-bound Ares
-evidence. See [release and playtest policy](docs/RELEASE.md) and
-[whole-game testing](docs/WHOLE_GAME_TESTING.md).
+exact 1.0.2 North American artifact identified above completed a full
+maintainer playtest in Ares with no reported defects. The current post-1.0.2
+source changes playable bytes and therefore still needs fresh candidate-bound
+Ares evidence before it can become a runtime-certified release. See [release
+and playtest policy](docs/RELEASE.md), [whole-game
+testing](docs/WHOLE_GAME_TESTING.md), and [the 2026-08-27 revision
+record](docs/TRANSLATION_REVISION_20260827.md).
 
 ## Start here
 

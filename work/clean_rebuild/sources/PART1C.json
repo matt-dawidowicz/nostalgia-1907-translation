@@ -55,14 +55,14 @@
       }
     },
     "required_text_prefixes": {
-      "1": "ACT 1:",
+      "1": "ACTION 1:",
       "137": "...",
       "138": "...",
       "143": "...",
       "177": "The King's English"
     },
     "forbidden_text_patterns": [
-      "(?i)^ACTION\\s+1:",
+      "(?i)^ACT\\s+1:",
       "(?i)Queen of England",
       "(?i)Queen's English"
     ]
@@ -80,7 +80,7 @@
     {
       "index": 1,
       "policy": "translate",
-      "text": "ACT 1: THE MERCILESS SEA",
+      "text": "ACTION 1: THE MERCILESS SEA",
       "layout_policy": "fixed"
     },
     {
@@ -104,7 +104,7 @@
     {
       "index": 5,
       "policy": "translate",
-      "text": "An insurance man? Absolutely not! The radio is tied up with emergency traffic; we cannot spare it for a passenger. Locke! Throw this refined English gentleman out!",
+      "text": "An insurance man? Absolutely not! The wireless is tied up with emergency traffic; we cannot spare it for a passenger. Locke! Throw this refined English gentleman out!",
       "layout_policy": "adaptive"
     },
     {
@@ -146,7 +146,7 @@
     {
       "index": 12,
       "policy": "translate",
-      "text": "Britain may bully its Asian colonies, but we are on the high seas.",
+      "text": "Britain may bully empty-headed Asians, but we're on the high seas.",
       "layout_policy": "adaptive"
     },
     {
@@ -182,7 +182,7 @@
     {
       "index": 18,
       "policy": "translate",
-      "text": "Radio Room",
+      "text": "Wireless Room",
       "layout_policy": "adaptive"
     },
     {
@@ -236,7 +236,7 @@
     {
       "index": 27,
       "policy": "translate",
-      "text": "Three thousand a year! What a racket. That is three hundred years of my pay. Maybe I should quit sailing.",
+      "text": "Three thousand a year! What a racket. That's thirty years of my pay. Maybe I should quit sailing.",
       "layout_policy": "adaptive"
     },
     {
@@ -386,7 +386,7 @@
     {
       "index": 52,
       "policy": "translate",
-      "text": "May the sharks eat him! The passengers can no longer abandon ship...Chief Engineer! What is the damage to the engine room?",
+      "text": "Go get eaten by sharks! We can't evacuate the passengers now...Chief Engineer! What's the damage in the engine room?",
       "layout_policy": "adaptive"
     },
     {
@@ -543,7 +543,7 @@
     {
       "index": 78,
       "policy": "translate",
-      "text": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the radio room, cutting us off from shore...in other words, we are completely under his control.",
+      "text": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the wireless room, cutting us off from shore...in other words, we are completely under his control.",
       "layout_policy": "adaptive"
     },
     {
@@ -639,7 +639,7 @@
     {
       "index": 94,
       "policy": "translate",
-      "text": "But...that would be terrible...",
+      "text": "But...sir...",
       "layout_policy": "adaptive"
     },
     {
@@ -962,7 +962,7 @@
     {
       "index": 148,
       "policy": "translate",
-      "text": "First Officer",
+      "text": "Chief Officer",
       "layout_policy": "adaptive"
     },
     {
@@ -980,7 +980,7 @@
     {
       "index": 151,
       "policy": "translate",
-      "text": "Ship's Dr.",
+      "text": "Surgeon",
       "layout_policy": "adaptive"
     },
     {
@@ -1022,13 +1022,13 @@
     {
       "index": 158,
       "policy": "translate",
-      "text": "I want to ask about the bomb. The first officer was downwind of the blast when he collapsed. Correct?",
+      "text": "I want to ask about the bomb. The chief officer was downwind of the blast when he collapsed. Correct?",
       "layout_policy": "adaptive"
     },
     {
       "index": 159,
       "policy": "translate",
-      "text": "The first officer died of asphyxiation.",
+      "text": "The chief officer died of asphyxiation.",
       "layout_policy": "adaptive"
     },
     {
@@ -1046,7 +1046,7 @@
     {
       "index": 162,
       "policy": "translate",
-      "text": "Nonsense! First Officer Clevans was on the starboard bridge wing, far from the blast.",
+      "text": "Nonsense! Chief Officer Clevans was on the starboard bridge wing, far from the blast.",
       "layout_policy": "adaptive"
     },
     {
@@ -1070,7 +1070,7 @@
     {
       "index": 166,
       "policy": "translate",
-      "text": "A clever fellow.",
+      "text": "A clever dog.",
       "layout_policy": "adaptive"
     },
     {

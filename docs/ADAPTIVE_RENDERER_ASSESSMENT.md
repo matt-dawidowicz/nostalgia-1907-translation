@@ -6,9 +6,11 @@ This is a historical engineering assessment. It documents the runtime defects
 that led to the shared parser-safe encoding and continuation-width correction;
 it is not evidence that the current source release still exhibits those
 defects. The hash-identified North American reference later completed the
-recorded full maintainer Ares playtest with no reported defects. See
-[release policy](RELEASE.md) for the exact reference and the limits of that
-runtime evidence.
+recorded full maintainer Ares playtest with no reported defects. The later
+2026-08-27 translation revision changes playable bytes and does not inherit that
+runtime result. See [release policy](RELEASE.md) for the exact reference and
+[the revision record](TRANSLATION_REVISION_20260827.md) for current source
+status.
 
 Do not publish a new dialogue-layout candidate from a width-only change. Ares
 playback rejected the earlier assumptions for ordinary lower dialogue:
@@ -103,7 +105,9 @@ save/load.
 
 ## Remaining native trace
 
-No native trace is pending for the unchanged runtime reference. Before changing
+No native trace is pending for the historical 1.0.2 runtime reference. The
+post-1.0.2 translation revision has separate candidate-bound runtime work
+pending before release. Before changing
 executable renderer code or publishing a different candidate, establish the
 items below from `MAIN.BIN` or a working GDB trace:
 

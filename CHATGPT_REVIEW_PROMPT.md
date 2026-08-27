@@ -2,11 +2,11 @@
 
 I am attaching a source-only review package for the Nostalgia 1907 English
 fan-translation project. Use this prompt for an independent source-release
-review of the current 1.0.2 source tree or a future source-only candidate. The
-hash-identified runtime reference completed a full maintainer Ares playtest;
-assess that evidence while welcoming independent regression testing and
-preserving the requirement for fresh runtime evidence whenever playable bytes
-change.
+review of the 1.0.2 runtime-certified source tree, the post-1.0.2 2026-08-27
+translation revision, or a future source-only candidate. The hash-identified
+1.0.2 runtime reference completed a full maintainer Ares playtest; do not
+transfer that evidence to the later source revision, whose playable bytes
+change and therefore require fresh runtime evidence.
 
 First, extract the archive and read these files in order:
 
@@ -16,7 +16,8 @@ First, extract the archive and read these files in order:
 4. `docs/ARCHITECTURE.md`
 5. `docs/TEXT_BOX_CONTRACTS.md`
 6. `docs/DEVELOPMENT.md`
-7. `docs/RELEASE.md`
+7. `docs/TRANSLATION_REVISION_20260827.md`
+8. `docs/RELEASE.md`
 
 Then verify the archive's `MANIFEST.sha256`. Confirm that the package contains
 only source, tests, and documentation—no BIOS, retail game data, extracted

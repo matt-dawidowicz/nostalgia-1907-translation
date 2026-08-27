@@ -1,0 +1,66 @@
+{
+  "changes": [
+    {
+      "id": "PART3B:146",
+      "speaker": "Chanel",
+      "before": "You...",
+      "after": "You bastard...",
+      "source_note": "Japanese is the blunt insult きさまっ..., stronger and more masculine-coded than neutral 'you'."
+    },
+    {
+      "id": "PART3B:206",
+      "speaker": "Chanel",
+      "before": "The logic of division of labor. I shall eat California oranges at a heated table.",
+      "after": "That's the logic of division of labor. I'll be eating California oranges at a heated table.",
+      "source_note": "Japanese uses casual ～だよ and わたし; 'I shall' makes Chanel implausibly formal."
+    },
+    {
+      "id": "PART2F:021",
+      "speaker": "Old Karl",
+      "before": "Come, everyone, back to your rooms. He needs rest.",
+      "after": "Come now. Why don't the rest of you return to your rooms? He needs his rest.",
+      "source_note": "Japanese uses elderly みなの衆 and ～じゃ, with a gentler suggestion rather than a clipped command."
+    },
+    {
+      "id": "PART2F:070",
+      "speaker": "Old Karl",
+      "before": "Here, the answer is a person.",
+      "after": "In this case, the answer is clearly a person, you see.",
+      "source_note": "Japanese ends in elderly ～じゃの; the English gains a light old-scholar cadence without caricature."
+    },
+    {
+      "id": "PART4C:044",
+      "speaker": "Dunant",
+      "before": "Ashby was still young. A spy who used bombs was something unheard of.",
+      "after": "Ashby was still green. Who'd ever heard of a spy using bombs?",
+      "source_note": "Japanese calls Ashby 青二才 (a green youngster) and frames bomb-using spies as something one would never hear of; this restores Dunant's hard-boiled veteran register."
+    },
+    {
+      "id": "PART3A:116",
+      "speaker": "Stra",
+      "before": "A creator. Any complaints?",
+      "after": "A creator, that's who! Any complaints?",
+      "source_note": "Japanese self-grandiosely says クリエイター様だ; the stronger English matches Stra's theatrical persona without inventing an accent."
+    },
+    {
+      "id": "PART2C:068",
+      "speaker": "Tianon",
+      "before": "Oh? You seem troubled...allow me to tell your fortune.",
+      "after": "Oh? You seem troubled...allow me to divine your fortune.",
+      "source_note": "占ってしんぜましょう is gracious and slightly archaic; 'divine' preserves Tianon's elegant mystical register."
+    },
+    {
+      "id": "PART3A:148",
+      "speaker": "Tianon",
+      "before": "...the least suspicious person is the most suspicious...how's that for a theory?",
+      "after": "...the least suspicious person is the most suspicious...that is what I see.",
+      "source_note": "Japanese こんナンでましたケド presents the result of her divination; 'how's that for a theory?' makes her sound flippant rather than mystical."
+    }
+  ],
+  "notes": {
+    "method": "Direct visual review of the retail-Japanese rendered dialogue, followed by exact verification against the current post-correction canonical branch.",
+    "scope": "Only explicit register mismatches are changed. No phonetic accents, ethnic caricatures, or blanket pseudo-Edwardian rewriting.",
+    "unchanged_cast": "Lumeranka, Ruthie, Braque, Fitz, Captain, crew, Navigator, Bosun, Ship's Doctor, Fred, and Locke were reviewed and left unchanged because the current English already carries their source register adequately.",
+    "punctuation": "ASCII punctuation and the project's compact ellipsis style are preserved."
+  }
+}

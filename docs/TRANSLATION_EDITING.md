@@ -19,6 +19,20 @@ START:000
 The numeric component is the zero-based `records[index]` value formatted with
 three digits. It does not change when the sentence changes.
 
+## Current source-fidelity policy
+
+The 2026-08-27 full-corpus audit established an explicit priority order for
+translation work: exact retail Japanese meaning first, then natural English and
+period/character voice. Voice work must never restore an older mistranslation.
+Regional speech should be localized as readable social/regional English without
+phonetic eye dialect, and source-authored oddities or anachronisms must not be
+"corrected" merely because a historically smoother line is available.
+
+The complete change record and examples are in
+[the 2026-08-27 translation revision](TRANSLATION_REVISION_20260827.md), while
+character/terminology rules live in [the glossary and style
+guide](GLOSSARY_STYLE_GUIDE.md).
+
 ## Prerequisites
 
 Install the editable package, provide exact Japanese retail tracks, and prepare

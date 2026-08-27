@@ -61,7 +61,7 @@
       "93": "lower_caption"
     },
     "required_text_prefixes": {
-      "1": "ACT 2:"
+      "1": "ACTION 2:"
     },
     "required_text_exact": {
       "12": "At least call me Director.",
@@ -69,7 +69,7 @@
       "117": "Come on, not a 'Russki' at a time like this. That's dangerous."
     },
     "forbidden_text_patterns": [
-      "(?i)^ACTION\\s+2:",
+      "(?i)^ACT\\s+2:",
       "(?i)\\bDirecktor\\b",
       "(?i)^Lock$"
     ]
@@ -87,7 +87,7 @@
     {
       "index": 1,
       "policy": "translate",
-      "text": "ACT 2: THE UNDERWORLD",
+      "text": "ACTION 2: THE UNDERWORLD",
       "layout_policy": "fixed"
     },
     {
@@ -147,7 +147,7 @@
     {
       "index": 11,
       "policy": "translate",
-      "text": "The first threat came by radio. The next was written in rouge on the captain's window...so we find the radio and the rouge. Right, Manager?",
+      "text": "The first threat came by wireless. The next was written in rouge on the captain's window...so we find the wireless set and the rouge. Right, Manager?",
       "layout_policy": "adaptive"
     },
     {
@@ -171,7 +171,7 @@
     {
       "index": 15,
       "policy": "translate",
-      "text": "Your pronunciation is terrible. The first officer saw the radio thrown overboard from a first-class cabin. The vacant room is on the starboard side.",
+      "text": "Your pronunciation is terrible. The chief officer saw the wireless set thrown overboard from a first-class cabin. The vacant room is on the starboard side.",
       "layout_policy": "adaptive"
     },
     {
@@ -219,7 +219,7 @@
     {
       "index": 23,
       "policy": "translate",
-      "text": "I'm Canal Fitz, a cabin attendant. The key cabinet is at the service counter on the Promenade Deck, which is also my station.",
+      "text": "I'm Canal Fitz, a stewardess. The key cabinet is at the Inquiry Office on the Promenade Deck, which is also my station.",
       "layout_policy": "adaptive"
     },
     {
@@ -255,7 +255,7 @@
     {
       "index": 29,
       "policy": "translate",
-      "text": "...would you prefer me to panic? I...am a cabin attendant. I can still do my job.",
+      "text": "...would you prefer me to panic? I...I'm a stewardess. I can still do my job.",
       "layout_policy": "adaptive"
     },
     {
@@ -297,7 +297,7 @@
     {
       "index": 36,
       "policy": "translate",
-      "text": "The window is shut exactly as it was. A careful culprit.",
+      "text": "The window is shut exactly as it was. The culprit was careful.",
       "layout_policy": "adaptive"
     },
     {
@@ -327,7 +327,7 @@
     {
       "index": 41,
       "policy": "translate",
-      "text": "Look at the table. A square patch is clear of dust. The radio was used here.",
+      "text": "Look at the table. A square patch is clear of dust. The wireless set was used here.",
       "layout_policy": "adaptive"
     },
     {
@@ -357,7 +357,7 @@
     {
       "index": 46,
       "policy": "translate",
-      "text": "Forget the key. The culprit obtained a priceless radio and built all those bombs. One or two keys would be child's play. Am I wrong?",
+      "text": "Forget the key. The culprit obtained a priceless wireless set and built all those bombs. One or two keys would be child's play. Am I wrong?",
       "layout_policy": "adaptive"
     },
     {
@@ -501,7 +501,7 @@
     {
       "index": 70,
       "policy": "translate",
-      "text": "Around 11:15...shortly after the radio room exploded.",
+      "text": "Around 11:15...shortly after the wireless room exploded.",
       "layout_policy": "adaptive"
     },
     {
@@ -537,7 +537,7 @@
     {
       "index": 76,
       "policy": "translate",
-      "text": "After transmitting the message, the culprit threw the radio overboard.",
+      "text": "After transmitting the message, the culprit threw the wireless set overboard.",
       "layout_policy": "adaptive"
     },
     {
@@ -819,7 +819,7 @@
     {
       "index": 123,
       "policy": "translate",
-      "text": "Head Chef",
+      "text": "Chief Cook",
       "layout_policy": "adaptive"
     },
     {

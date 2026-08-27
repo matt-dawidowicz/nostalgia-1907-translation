@@ -1,0 +1,40 @@
+{
+  "changes": {
+    "PART2E:055": "Easy, Charlie Muffin. Wire cutters are for cutting wires...",
+    "PART2E:056": "Bypass wire...enough for a detour, but I don't need it yet. I know that...damn, my palms are sweating...",
+    "PART2E:057": "All right, let's begin. Screwdriver in hand...",
+    "PART2E:059": "Driver on the upper-right screw...don't look at me like that, Betty.",
+    "PART2E:063": "Charlie, mind that chastity belt. There's bound to be a defense circuit...",
+    "PART2E:074": "There, Betty. The key's in your chastity belt...easy now, won't be long...hah...hah...hah...",
+    "PART2E:077": "Men are wolves, Betty. Don't tease me.",
+    "PART2E:088": "Think it through, Charlie Muffin. This lady could blow at the slightest touch.",
+    "PART2E:091": "The chastity belt's off. She's defenseless.",
+    "PART2E:092": "Betty, you're beautiful tonight.",
+    "PART2E:094": "Come on, Betty. Show me everything...open the right box.",
+    "PART2E:103": "Then it's all over.",
+    "PART2E:117": "Let's keep going.",
+    "PART2E:128": "You don't take a hint, do you? Must be that western accent of yours...I like you, Chief. I'll say it straight: I chose this ship and you over her.",
+    "PART2E:137": "Easy there! Once we're ashore, I'll rustle you up all the women you want!",
+    "PART2E:138": "Rustle me up?",
+    "PART2E:139": "Chief, I grew up back East. I can't make head nor tail of that crazy California talk of yours. 'Rustle me up'...you mean you'll get me one?",
+    "PART2E:140": "Where was it? East Town Street. Right, Dada Sleiman's place. There was a knockout named Sherry there, if I remember right. Think you can get her for me?",
+    "PART2E:143": "Let's knock on the back door. Hello, Betty. Lovely night out.",
+    "PART2E:146": "Charlie, you can do it! You're the best sailor there is!",
+    "PART2E:186": "I can't see it. Seems she really wants us to enter from here...let's accept the invitation.",
+    "PART2E:188": "An explosive that releases heat exceeding 2,000 degrees when it detonates...",
+    "PART2E:189": "Don't you worry, Charlie. You're doing fine! But it's not time for the wire yet...",
+    "PART2E:195": "Heat: 2,000 degrees. I'd melt in an instant...Betty, are you serious? Can you kill me? Both the counter body and connector tube have screw-fastened covers...",
+    "PART2E:196": "Betty! Why didn't you wait?",
+    "PART2E:201": "First time with a white one, eh?",
+    "PART2E:203": "Don't cut white! That's the neutral in a three-phase circuit! It's tied to both red and blue!",
+    "PART2E:205": "Cut white and we're dead! Red or blue: one runs from the timer to the detonator, the other's a dummy. Cut the dummy and we're done for. Cut the real one and we're clear!",
+    "PART2E:207": "Charlie! Charlie, that's enough! Forget it! Come on up! Get out of there, you hear me? I won't let you stake your life on a fool guess! That's an order! Get out, Charlie!",
+    "PART2E:209": "Charlie! I'm serious! I ain't lying to you! This time I won't put up with your damned stubbornness! Run, Charlie!",
+    "PART2E:211": "There's another bomb aboard built the same way. If I miss, cut the other wire on that one. Then you'll know. Chief...look after the Nostalgia. She's our ship."
+  },
+  "notes": {
+    "Chief Engineer": "Render the source's strong Kansai dialect as period-readable Western/California American speech. No phonetic eye-dialect or cowboy caricature. Regional flavor may strengthen under stress, matching the Japanese.",
+    "Charlie Muffin": "Use rough Eastern-American working-man cadence, contractions, blunt mechanics vocabulary, and gallows humor. Geographic marking stays light. Strip the colorful voice down during his final self-sacrificial gamble, matching the Japanese register change.",
+    "source_priority": "These voice edits assume the retail-Japanese semantic corrections already identified for the affected records; voice never overrides source meaning."
+  }
+}

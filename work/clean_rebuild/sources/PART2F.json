@@ -75,7 +75,7 @@
       "18": "...I'm starting to cry.",
       "19": "...Ilyu. Even so, I still have to question you.",
       "20": "You're a hopeless company man. Fine. Why not take a shower first? I'll wait in my room.",
-      "21": "Come, everyone, back to your rooms. He needs rest.",
+      "21": "Come now. Why don't the rest of you return to your rooms? He needs his rest.",
       "22": "Shower Room",
       "58": "Old geezer!"
     },
@@ -219,7 +219,7 @@
     {
       "index": 21,
       "policy": "translate",
-      "text": "Come, everyone, back to your rooms. He needs rest.",
+      "text": "Come now. Why don't the rest of you return to your rooms? He needs his rest.",
       "layout_policy": "adaptive"
     },
     {
@@ -231,7 +231,7 @@
     {
       "index": 23,
       "policy": "translate",
-      "text": "I heard about Black...",
+      "text": "I heard about Braque...",
       "layout_policy": "adaptive"
     },
     {
@@ -243,7 +243,7 @@
     {
       "index": 25,
       "policy": "translate",
-      "text": "I love to paint. It lets my heart wander anywhere...to Black, though, each painting was only merchandise.",
+      "text": "I love to paint. It lets my heart wander anywhere...to Braque, though, each painting was only merchandise.",
       "layout_policy": "adaptive"
     },
     {
@@ -309,7 +309,7 @@
     {
       "index": 36,
       "policy": "translate",
-      "text": "Do not turn me into one last memory and die. Hold on! I still do not understand. The St. Petersburg treasure. Words that curse the nobility. A secret weapon that could overturn Europe's balance of power...",
+      "text": "I'm not about to die with this as my last memory of you...damn it! I still don't get it! The treasure of St. Petersburg. Cursed words that destroy the nobility. A secret weapon capable of overturning the balance of power in all Europe...",
       "layout_policy": "adaptive"
     },
     {
@@ -381,7 +381,7 @@
     {
       "index": 48,
       "policy": "translate",
-      "text": "Not yet.",
+      "text": "Your voice got quiet.",
       "layout_policy": "adaptive"
     },
     {
@@ -393,7 +393,7 @@
     {
       "index": 50,
       "policy": "translate",
-      "text": "Your voice sounds far away...",
+      "text": "What are you, Ilyu...?",
       "layout_policy": "adaptive"
     },
     {
@@ -411,7 +411,7 @@
     {
       "index": 53,
       "policy": "translate",
-      "text": "...",
+      "text": "Are you scared?",
       "layout_policy": "adaptive"
     },
     {
@@ -429,7 +429,7 @@
     {
       "index": 56,
       "policy": "translate",
-      "text": "Below Deck",
+      "text": "Probably.",
       "layout_policy": "adaptive"
     },
     {
@@ -513,13 +513,13 @@
     {
       "index": 70,
       "policy": "translate",
-      "text": "Here, the answer is a person.",
+      "text": "In this case, the answer is clearly a person, you see.",
       "layout_policy": "adaptive"
     },
     {
       "index": 71,
       "policy": "translate",
-      "text": "You mean the culprit wants to destroy one particular person?",
+      "text": "You mean the culprit wants to seize one particular person?",
       "layout_policy": "adaptive"
     },
     {
@@ -639,7 +639,7 @@
     {
       "index": 91,
       "policy": "translate",
-      "text": "That is your problem. Get moving.",
+      "text": "Figuring that out is our job! Move!",
       "layout_policy": "adaptive"
     },
     {
@@ -675,19 +675,19 @@
     {
       "index": 97,
       "policy": "translate",
-      "text": "You have been watching me.",
+      "text": "Voysey. About you.",
       "layout_policy": "adaptive"
     },
     {
       "index": 98,
       "policy": "translate",
-      "text": "Only doing my duty.",
+      "text": "That master of yours is stubborn.",
       "layout_policy": "adaptive"
     },
     {
       "index": 99,
       "policy": "translate",
-      "text": "On whose orders?",
+      "text": "Right?",
       "layout_policy": "adaptive"
     },
     {
@@ -711,7 +711,7 @@
     {
       "index": 103,
       "policy": "translate",
-      "text": "That is what he says.",
+      "text": "...what did you say?",
       "layout_policy": "adaptive"
     },
     {
@@ -783,7 +783,7 @@
     {
       "index": 115,
       "policy": "translate",
-      "text": "You knew from the start.",
+      "text": "No wonder it was confusing...",
       "layout_policy": "adaptive"
     },
     {
@@ -867,7 +867,7 @@
     {
       "index": 129,
       "policy": "translate",
-      "text": "Active in Manchuria since 1903 as an anti-British and anti-Japanese agent.",
+      "text": "Active in various foreign countries since 1903 as an anti-British and anti-Japanese agent.",
       "layout_policy": "adaptive"
     },
     {
@@ -879,7 +879,7 @@
     {
       "index": 131,
       "policy": "translate",
-      "text": "Linked to military intelligence, the police, and the Interior Ministry, with access to immense stores of information.",
+      "text": "A high-level organization directly under the Emperor, separate from Russian Army Intelligence. Its potential store of intelligence is",
       "layout_policy": "adaptive"
     },
     {
@@ -921,7 +921,7 @@
     {
       "index": 138,
       "policy": "translate",
-      "text": "Signal: CEDAR.",
+      "text": "Signal: MEDE.",
       "layout_policy": "adaptive"
     },
     {
@@ -939,7 +939,7 @@
     {
       "index": 141,
       "policy": "translate",
-      "text": "Regrettably, Director, our audit confirms Heynwood and Burns are Russian agents.",
+      "text": "Regrettably, Director. Our investigation confirms that Heynwood and Burns are Russian agents.",
       "layout_policy": "adaptive"
     },
     {
@@ -951,7 +951,7 @@
     {
       "index": 143,
       "policy": "translate",
-      "text": "Then every accusation from the Russian Fog was correct.",
+      "text": "Then every allegation made by Russian Fog was correct.",
       "layout_policy": "adaptive"
     },
     {
@@ -963,55 +963,55 @@
     {
       "index": 145,
       "policy": "translate",
-      "text": "What is the Russian Fog's goal?",
+      "text": "What does Russian Fog want?",
       "layout_policy": "adaptive"
     },
     {
       "index": 146,
       "policy": "translate",
-      "text": "There is only one answer: defection.",
+      "text": "Considering all the circumstances...I believe there is only one answer: defection.",
       "layout_policy": "adaptive"
     },
     {
       "index": 147,
       "policy": "translate",
-      "text": "A Russian spy defecting to Britain?",
+      "text": "A Russian spy defecting to the British Empire?",
       "layout_policy": "adaptive"
     },
     {
       "index": 148,
       "policy": "translate",
-      "text": "NOSTALGIA sails from New York to Britain. Its name was a signal, and those accusations proved the value of the intelligence offered.",
+      "text": "NOSTALGIA is an American passenger ship bound from New York across the North Atlantic to Britain. As for 'Mede,' London is still deciphering it. The bombing and hijacking were a perfect demonstration of the value of the intelligence being offered.",
       "layout_policy": "adaptive"
     },
     {
       "index": 149,
       "policy": "translate",
-      "text": "A defector's calling card.",
+      "text": "A prospective defector's calling card.",
       "layout_policy": "adaptive"
     },
     {
       "index": 150,
       "policy": "translate",
-      "text": "We cannot let such a prize escape.",
+      "text": "We cannot allow such a prize to escape us.",
       "layout_policy": "adaptive"
     },
     {
       "index": 151,
       "policy": "translate",
-      "text": "It could be bait to lure you out.",
+      "text": "It may be bait intended to draw you out.",
       "layout_policy": "adaptive"
     },
     {
       "index": 152,
       "policy": "translate",
-      "text": "I accept that risk. I can still take my own life. This is too much for a junior officer. Let me do one last job before I retire.",
+      "text": "I accept the risk. If it comes to that, I still have nerve enough to take my own life. This is no work for a younger man. Let me have one last assignment before I retire.",
       "layout_policy": "adaptive"
     },
     {
       "index": 153,
       "policy": "translate",
-      "text": "Take Ashby. He may prove useful.",
+      "text": "Take Ashby with you. He may prove useful.",
       "layout_policy": "adaptive"
     },
     {
@@ -1023,7 +1023,7 @@
     {
       "index": 155,
       "policy": "translate",
-      "text": "No. We could not identify the Russian Fog before the bombing and hijacking began.",
+      "text": "We don't know what 'Mede' means. Until we do, our hands are tied. Then, while we were stuck, this bomber hijacked the ship.",
       "layout_policy": "adaptive"
     },
     {
@@ -1083,13 +1083,13 @@
     {
       "index": 165,
       "policy": "translate",
-      "text": "And the Russian Fog. Seven rooms to search...",
+      "text": "And the Russian Fog...every time I start this, I regret it.",
       "layout_policy": "adaptive"
     },
     {
       "index": 166,
       "policy": "translate",
-      "text": "I should never have joined that card game.",
+      "text": "I got myself into a dangerous game...do you know how this feels?",
       "layout_policy": "adaptive"
     },
     {
@@ -1107,19 +1107,19 @@
     {
       "index": 169,
       "policy": "translate",
-      "text": "You were foolish to trust this amateur, Director.",
+      "text": "The Deputy Chief is an idiot too, trusting an amateur like you.",
       "layout_policy": "adaptive"
     },
     {
       "index": 170,
       "policy": "translate",
-      "text": "What a charming man.",
+      "text": "What a sarcastic bastard.",
       "layout_policy": "adaptive"
     },
     {
       "index": 171,
       "policy": "translate",
-      "text": "You are a poor judge of character.",
+      "text": "You've got a good eye for people.",
       "layout_policy": "adaptive"
     },
     {
@@ -1131,7 +1131,7 @@
     {
       "index": 173,
       "policy": "translate",
-      "text": "So?",
+      "text": "I'm getting sick of this.",
       "layout_policy": "adaptive"
     },
     {
@@ -1149,19 +1149,19 @@
     {
       "index": 176,
       "policy": "translate",
-      "text": "Joseph the bellboy and several others remain under suspicion.",
+      "text": "I want to ditch this...beer! Beer! I want a beer!",
       "layout_policy": "adaptive"
     },
     {
       "index": 177,
       "policy": "translate",
-      "text": "...here it comes.",
+      "text": "...not yet, right?",
       "layout_policy": "adaptive"
     },
     {
       "index": 178,
       "policy": "translate",
-      "text": "Mind your tone. Dunant is my employer and, for now, my superior.",
+      "text": "Why not? I'm the employer of Dunant, who is effectively your superior. Show some respect.",
       "layout_policy": "adaptive"
     },
     {
@@ -1173,7 +1173,7 @@
     {
       "index": 180,
       "policy": "translate",
-      "text": "The radio room and captain's cabin announcements still point to you.",
+      "text": "The wireless room and captain's cabin announcements still point to you.",
       "layout_policy": "adaptive"
     },
     {
@@ -1185,7 +1185,7 @@
     {
       "index": 182,
       "policy": "translate",
-      "text": "And yours?",
+      "text": "You...",
       "layout_policy": "adaptive"
     },
     {

@@ -60,7 +60,7 @@
     {
       "index": 0,
       "policy": "translate",
-      "text": "The past blends into fantasy with much the same feeling as imagining one possible future. It was not here, in this fleeting present, that I noticed the faint mark in her left eye.",
+      "text": "The past blurs into fantasy just as easily as we imagine one possible future. The moment I noticed the faint scar in her left eye was not here, in this fleeting instant.",
       "layout_policy": "adaptive"
     },
     {
@@ -72,25 +72,25 @@
     {
       "index": 2,
       "policy": "translate",
-      "text": "Merciless Sea",
+      "text": "ACTION 1: Merciless Sea",
       "layout_policy": "adaptive"
     },
     {
       "index": 3,
       "policy": "translate",
-      "text": "Underworld",
+      "text": "ACTION 2: Underworld",
       "layout_policy": "adaptive"
     },
     {
       "index": 4,
       "policy": "translate",
-      "text": "Witch",
+      "text": "ACTION 3: Witch",
       "layout_policy": "adaptive"
     },
     {
       "index": 5,
       "policy": "translate",
-      "text": "A Posteriori",
+      "text": "ACTION 4: A Posteriori",
       "layout_policy": "adaptive"
     },
     {

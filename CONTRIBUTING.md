@@ -21,6 +21,9 @@ Start with these references:
 - [Release and playtest policy](docs/RELEASE.md) defines what automated proof
   establishes, records the completed 1.0.2 Ares playtest reference, and
   defines the Ares evidence required for changed playable bytes.
+- [2026-08-27 translation revision](docs/TRANSLATION_REVISION_20260827.md)
+  records the post-1.0.2 semantic/voice changes, retail-backed capacity checks,
+  and the runtime evidence still required before a successor release.
 - [Python documentation standard](docs/DOCSTRING_STANDARD.md) defines the
   PEP 257 docstring and PEP 8 explanatory-comment contract for maintained code.
 

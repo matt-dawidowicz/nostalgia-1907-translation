@@ -17,9 +17,12 @@ The reference completed a full maintainer Ares playtest with no reported
 defects; independent regression playtests remain welcome and are required anew
 for any candidate with changed playable bytes.
 
-The current public source release is 1.0.2. It does not designate a different
-runtime artifact; source metadata points to the same reference and its recorded
-playtest evidence in [the release policy](RELEASE.md).
+Version 1.0.2 remains the latest runtime-certified published reference. The
+current source tree contains the later 2026-08-27 translation revision, which
+does change canonical English and therefore would produce different playable
+bytes. Its source and retail-backed static evidence is recorded in [the
+revision record](TRANSLATION_REVISION_20260827.md); it must complete fresh
+candidate-bound runtime testing before it can supersede the 1.0.2 reference.
 
 Three classes of data are intentionally separated:
 

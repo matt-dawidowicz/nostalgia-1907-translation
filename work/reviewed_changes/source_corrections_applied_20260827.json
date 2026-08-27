@@ -1,0 +1,2076 @@
+{
+  "status": "PASS",
+  "changed_record_count": 345,
+  "changed_records": [
+    {
+      "id": "PART1A:127",
+      "before": "I had a three! If I had called, I would have won...",
+      "after": "I had a three! If you'd called, you'd have won for sure...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART1B:008",
+      "before": "Crew of Nostalgia.",
+      "after": "Attention, Nostalgia crew.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART1B:010",
+      "before": "Helm",
+      "after": "Helmsman",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART1B:013",
+      "before": "Mate! Poison gas!",
+      "after": "The Chief Officer! Poison gas!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART1B:016",
+      "before": "Bow to wind!",
+      "after": "Bring her head to the wind!",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1B:018",
+      "before": "Helm stuck. Prop dead!",
+      "after": "The helm's heavy! The screw has stopped!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART1B:029",
+      "before": "Attack came with war.",
+      "after": "The attack came with the declaration of war.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART1C:001",
+      "before": "ACT 1: THE MERCILESS SEA",
+      "after": "ACTION 1: THE MERCILESS SEA",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1C:002",
+      "before": "Navigation Control Room",
+      "after": "Pilot House",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1C:005",
+      "before": "An insurance man? Absolutely not! The radio is tied up with emergency traffic; we cannot spare it for a passenger. Locke! Throw this refined English gentleman out!",
+      "after": "An insurance man? Absolutely not! The wireless is tied up with emergency traffic; we cannot spare it for a passenger. Locke! Throw this refined English gentleman out!",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1C:012",
+      "before": "Britain may bully its Asian colonies, but we are on the high seas.",
+      "after": "Britain may bully empty-headed Asians, but we're on the high seas.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART1C:018",
+      "before": "Radio Room",
+      "after": "Wireless Room",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1C:027",
+      "before": "Three thousand a year! What a racket. That is three hundred years of my pay. Maybe I should quit sailing.",
+      "after": "Three thousand a year! What a racket. That's thirty years of my pay. Maybe I should quit sailing.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART1C:052",
+      "before": "May the sharks eat him! The passengers can no longer abandon ship...Chief Engineer! What is the damage to the engine room?",
+      "after": "Go get eaten by the Reds! The passengers can no longer abandon ship...Chief Engineer! What's the damage to the engine room?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART1C:078",
+      "before": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the radio room, cutting us off from shore...in other words, we are completely under his control.",
+      "after": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the wireless room, cutting us off from shore...in other words, we are completely under his control.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1C:094",
+      "before": "But...that would be terrible...",
+      "after": "B-but...sir...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART1C:148",
+      "before": "First Officer",
+      "after": "Chief Officer",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1C:151",
+      "before": "Ship's Dr.",
+      "after": "Surgeon",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1C:158",
+      "before": "I want to ask about the bomb. The first officer was downwind of the blast when he collapsed. Correct?",
+      "after": "I want to ask about the bomb. The chief officer was downwind of the blast when he collapsed. Correct?",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1C:159",
+      "before": "The first officer died of asphyxiation.",
+      "after": "The chief officer died of asphyxiation.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1C:162",
+      "before": "Nonsense! First Officer Clevans was on the starboard bridge wing, far from the blast.",
+      "after": "Nonsense! Chief Officer Clevans was on the starboard bridge wing, far from the blast.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1C:166",
+      "before": "A clever fellow.",
+      "after": "A clever dog.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART1D:041",
+      "before": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the radio room, cutting us off from shore...in other words, we are completely under his control.",
+      "after": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the wireless room, cutting us off from shore...in other words, we are completely under his control.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1D:114",
+      "before": "First Officer",
+      "after": "Chief Officer",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1D:117",
+      "before": "Ship's Dr.",
+      "after": "Surgeon",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1D:124",
+      "before": "I want to ask about the bomb. The first officer was downwind of the blast when he collapsed. Correct?",
+      "after": "I want to ask about the bomb. The chief officer was downwind of the blast when he collapsed. Correct?",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1D:125",
+      "before": "The first officer died of asphyxiation.",
+      "after": "The chief officer died of asphyxiation.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART1D:128",
+      "before": "Nonsense! First Officer Clevans was on the starboard bridge wing, far from the blast.",
+      "after": "Nonsense! Chief Officer Clevans was on the starboard bridge wing, far from the blast.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2A:001",
+      "before": "ACT 2: THE UNDERWORLD",
+      "after": "ACTION 2: THE UNDERWORLD",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2A:011",
+      "before": "The first threat came by radio. The next was written in rouge on the captain's window...so we find the radio and the rouge. Right, Manager?",
+      "after": "The first threat came by wireless. The next was written in rouge on the captain's window...so we find the wireless set and the rouge. Right, Manager?",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2A:015",
+      "before": "Your pronunciation is terrible. The first officer saw the radio thrown overboard from a first-class cabin. The vacant room is on the starboard side.",
+      "after": "Your pronunciation is terrible. The chief officer saw the wireless set thrown overboard from a first-class cabin. The vacant room is on the starboard side.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2A:023",
+      "before": "I'm Canal Fitz, a cabin attendant. The key cabinet is at the service counter on the Promenade Deck, which is also my station.",
+      "after": "I'm Canal Fitz, a stewardess. The key cabinet is at the Inquiry Office on the Promenade Deck, which is also my station.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2A:029",
+      "before": "...would you prefer me to panic? I...am a cabin attendant. I can still do my job.",
+      "after": "...would you prefer me to panic? I...I'm a stewardess. I can still do my job.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2A:041",
+      "before": "Look at the table. A square patch is clear of dust. The radio was used here.",
+      "after": "Look at the table. A square patch is clear of dust. The wireless set was used here.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2A:046",
+      "before": "Forget the key. The culprit obtained a priceless radio and built all those bombs. One or two keys would be child's play. Am I wrong?",
+      "after": "Forget the key. The culprit obtained a priceless wireless set and built all those bombs. One or two keys would be child's play. Am I wrong?",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2A:064",
+      "before": "Navigation Control Room",
+      "after": "Pilot House",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2A:070",
+      "before": "Around 11:15...shortly after the radio room exploded.",
+      "after": "Around 11:15...shortly after the wireless room exploded.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2A:076",
+      "before": "After transmitting the message, the culprit threw the radio overboard.",
+      "after": "After transmitting the message, the culprit threw the wireless set overboard.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2A:123",
+      "before": "Head Chef",
+      "after": "Chief Cook",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2B:003",
+      "before": "I'm Aubrey Voysey. I've been sitting here all along, waiting for Lord Ashby to arrive.",
+      "after": "I'm Aubrey Voysey. I've been standing here all along, waiting for Lord Ashby to arrive.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:006",
+      "before": "Robert Ashby? The maritime-insurance solicitor?",
+      "after": "Robert Ashby? The insurance man's butler?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:009",
+      "before": "Please do not make light of him. Ahem.",
+      "after": "Don't lump me together with him. Ahem.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:010",
+      "before": "Awfully stiff for a chair!",
+      "after": "Pretty high-and-mighty for a chair!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:013",
+      "before": "What a strange gentleman...why is he so formal with a chair?",
+      "after": "What a strange gentleman...those are some sharp eyes.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:014",
+      "before": "...he hasn't noticed me either.",
+      "after": "...the culprit hasn't come this way either.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:017",
+      "before": "I heard the radio in First-Class Cabin A. From Lark Deck, these stairs are the only way up here. The culprit climbed them...and so will I!",
+      "after": "I heard a wireless set operating in First-Class Cabin A. From Lark Deck, these stairs are the only way up here. The culprit climbed them...and so will I!",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2B:019",
+      "before": "I'm back on the Promenade Deck by the Royal Suites. I'll circle around through the passage ahead.",
+      "after": "I'm back by the Royal Suites. Turn left toward the Promenade Deck.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:020",
+      "before": "Confectionery Counter",
+      "after": "Inquiry Office",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:024",
+      "before": "A question: did anyone pass this way?",
+      "after": "I'm only an apprentice, but let me ask: did anyone pass this way?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:028",
+      "before": "What a fine woman.",
+      "after": "She has sharp eyes.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:031",
+      "before": "On such a small ship, I never imagined I'd feel this lonely...",
+      "after": "When I was little? I never thought I'd end up on a ship myself...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:033",
+      "before": "Keep watch on the passage to the Promenade Deck.",
+      "after": "Block off the passage to the Promenade Deck.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:034",
+      "before": "From here there are stairs and two Royal Suite passages, A and B...heh, heh, heh!",
+      "after": "Turn right from the stairs. Royal Suites A and B are on the left; the attendants' rooms are on the right...heh, heh, heh!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:035",
+      "before": "Starboard Passage",
+      "after": "Fore Passage",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:036",
+      "before": "The path splits. I'll take the starboard side.",
+      "after": "The path splits. Turn left.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:037",
+      "before": "Side Promenade Deck",
+      "after": "Port Promenade Deck",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:038",
+      "before": "Ahead are stairs to the Boat Deck and a passage to Center Hall. Keep moving.",
+      "after": "Turn right again. Ahead are the Boat Deck stairs and the passage to Center Hall.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:040",
+      "before": "Look, Stra. There's an idiot investigating the ship.",
+      "after": "Hey, Stra. There's an idiot imitating ukiyo-e.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:044",
+      "before": "Ask about the investigation.",
+      "after": "Please cooperate with the search for the bomber.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:045",
+      "before": "Speak to them.",
+      "after": "He spoke!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:048",
+      "before": "Just chatting. I'm a chorus girl with the band. You saw my show, right? Did it move you? This is Stravinsky. He's Russian...and far too shy.",
+      "after": "We were just chatting. I'm a chorus girl with the band. You saw my show, right? Did it get you? This is Stravinsky. He's a customer, and he's just the best. Says he's a composer! An artist! I can't get enough!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:049",
+      "before": "C-Cut it out, Coco! Don't stare at me...I'm a composer. I came from Russia in search of freedom. I can't let my identity get out!",
+      "after": "C-cut it out, Coco...you're embarrassing me. I'm on the run. I fled Russia in search of freedom! I can't let my identity get out...oh, this is bad.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:051",
+      "before": "Stop! You'll expose me!",
+      "after": "Keep it up for the rest of your life! It'll all be over soon.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:054",
+      "before": "...I'll turn back and try another route.",
+      "after": "...go back and circle around on the starboard side.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:055",
+      "before": "Side Promenade Deck",
+      "after": "Starboard Promenade Deck",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:059",
+      "before": "You look awfully grim, Kasuke.",
+      "after": "Are you looking for something, Kasuke?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:062",
+      "before": "Sorrow at parting can overwhelm the heart. Tell me, has some troublesome woman ensnared you?",
+      "after": "Staying in neighboring cabins is some kind of fate. If you've gotten into trouble, I'll help you.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:065",
+      "before": "What troubles you?",
+      "after": "Oh, psychology...?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:068",
+      "before": "Bah! What a trivial question! Have you nothing worthier to ask? My psychology is the finest!",
+      "after": "What?! Nonsense! Don't you have a more serious request?! An old man's opinion is important!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:072",
+      "before": "So I asked him.",
+      "after": "Because he's short-tempered.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:074",
+      "before": "There's a door to the Boat Deck here.",
+      "after": "I just noticed there's a door to the meeting room here.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:082",
+      "before": "...I can't believe it.",
+      "after": "...this isn't a game.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:085",
+      "before": "Then the culprit must have gone through the crew block.",
+      "after": "So the culprit went through the meeting room...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:090",
+      "before": "So the culprit is somewhere between the Royal Suite and First-Class blocks.",
+      "after": "So the culprit must be among the passengers in the Royal Suite and First-Class blocks.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:091",
+      "before": "After the broadcast, the culprit left the cabin where it was sent.",
+      "after": "The culprit acted from a cabin along that route.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:092",
+      "before": "Exclude the crew. Their normal movement through crew areas would attract no suspicion.",
+      "after": "Exclude the crew, I suppose. But if we trace the route backward, it could still have been an inside job by the crew.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:093",
+      "before": "Right. The culprit could be a passenger able to move freely through crew territory.",
+      "after": "Exactly. Focus on the crew. It could even be the shipping company itself, trying to collect the insurance money.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:095",
+      "before": "Ashby is one suspect. As his solicitor, Voysey can cross between the two blocks as well.",
+      "after": "Is that an order from our client, Lord Ashby? I won't go along with an insurer protecting his own skin. Besides, Ashby himself is a suspect.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:097",
+      "before": "Don't let a single clue lead you by the nose.",
+      "after": "Don't listen to him just because he's in charge for now.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2B:099",
+      "before": "Don't be blinded by the sponsor! Question everyone who can cross between passenger and crew areas. Go!",
+      "after": "Don't defy the sponsor! Check the crew and the other passengers! Go, now!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2C:017",
+      "before": "Transatlantic. The ship was newly built at a Philadelphia yard in 1905.",
+      "after": "Trans-Atlantic. The ship was newly built at a Philadelphia yard in 1905.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2C:061",
+      "before": "Cabin B is beside Cabin A, where I found the radio. I'll start there.",
+      "after": "Cabin B is beside Cabin A, where I found the wireless set. I'll start there.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2C:090",
+      "before": "A familiar scent...sharp enough to bite...",
+      "after": "What the hell? Don't bite my head off out of nowhere...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2C:112",
+      "before": "You...you must be an assassin sent by Li Bai!",
+      "after": "You...you're a spy sent by the Chancellor!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2C:113",
+      "before": "So you caused the explosion! I won't surrender the princess. Tell Li Bai: while Princess Tianon, the rightful heir, lives, this country will never be his!",
+      "after": "So that explosion was your doing too! I won't hand the princess over to anyone! Go back and tell the Chancellor: as long as Princess Tianon, the rightful heir to the throne, lives, this country will never be yours! Get out!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2C:114",
+      "before": "Never!",
+      "after": "Of course!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2C:131",
+      "before": "What do you mean? I am a specially invited passenger, and a victim! Do not insult me. You are not even a real detective. Why should I trust you?",
+      "after": "What do you mean?! I'm a specially invited passenger, and a victim of this incident! What are you saying to me?! Are you in your right mind?!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2C:132",
+      "before": "Definitely suspicious...",
+      "after": "Maybe I am crazy...that is strange.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:003",
+      "before": "Braque is not doing well...I'll check Royal Suite A.",
+      "after": "Braque looks suspicious...I'll check Royal Suite A.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:010",
+      "before": "Did Dunant put him up to this?",
+      "after": "Dunant's client?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:012",
+      "before": "Calm down. A detective cannot afford to lose his temper.",
+      "after": "Don't get so worked up. Aren't we citizens of allied nations?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:013",
+      "before": "What a roundabout way to give an order.",
+      "after": "The Anglo-Japanese Alliance...an alliance with an overwhelming imbalance of power, though.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:014",
+      "before": "Am I being paid for this seabed investigation?",
+      "after": "Do I get paid for this investigation too?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:015",
+      "before": "Investigation is a battle of wits. Remember: the culprit set this task. A poor inquiry will only play into his hands.",
+      "after": "Your reward is surviving the blast. Isn't that enough? Everyone aboard is fighting for their lives. How can you ask about money at a time like this?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:018",
+      "before": "So what?",
+      "after": "Ridiculous.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:019",
+      "before": "What does that have to do with me?",
+      "after": "How's the culprit investigation going?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:020",
+      "before": "Braque is...stable, for now.",
+      "after": "So-so.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:021",
+      "before": "Is he sulking?",
+      "after": "So they are relying on me?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:022",
+      "before": "He is unconscious, you idiot!",
+      "after": "That's the privilege of a rank-and-file worker!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:023",
+      "before": "We are in trouble. The investigation has hit a reef, and everyone is getting desperate.",
+      "after": "I'm having trouble. Everyone is so eager to get involved that they're all too cooperative.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:024",
+      "before": "Does only Braque know why the culprit wants this search?",
+      "after": "Do you think you're the only one having a hard time?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:025",
+      "before": "What a nuisance.",
+      "after": "Damn right!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:027",
+      "before": "Me?!",
+      "after": "Are you out of your mind?!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:028",
+      "before": "Your mouth moves faster than your mind!",
+      "after": "Like hell! Don't sit back and say whatever you please!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:030",
+      "before": "You always twist everything into a lecture.",
+      "after": "Don't think you can keep up that gentleman act forever.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:031",
+      "before": "The manners of the newly rich are always strange. You are a guest, are you not?",
+      "after": "Western tableware always feels cold. I don't care for it. It's too stark...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:032",
+      "before": "Royal Doulton bone china. Its design embodies the history of the British Empire. Even you should recognize its value.",
+      "after": "Royal Doulton bone china. It bears a royal warrant, but its design was influenced by Japanese ceramics. If you think the fault is always outside yourself, you're badly mistaken.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:033",
+      "before": "A German copied the glaze from Meissen and introduced it to Britain.",
+      "after": "How very English. The history of English tea was built on the exploitation of Asia.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:034",
+      "before": "Who do you think I am, Yamada?",
+      "after": "You're uncouth, Mr. Yamada.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:035",
+      "before": "I do not care for rank.",
+      "after": "And you don't even know Ogasawara-style etiquette!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:036",
+      "before": "Earl Grey tea...Britain even claims the flavors of other lands as its own.",
+      "after": "Earl Grey, is it? You English certainly know how to live. Even with ruin at your doorstep, you're calm.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:039",
+      "before": "Then this is no conversation. It is a quarrel.",
+      "after": "Don't get carried away. This is a warning.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:041",
+      "before": "Perhaps I should explain it another way.",
+      "after": "Of course. How could I possibly defy you, my lord?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:042",
+      "before": "You do wander, Yamada. Consider this a lesson.",
+      "after": "You're roundabout, Mr. Yamada. And unpleasant.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:043",
+      "before": "It was not Japan's war alone. Britain used your nation to keep Russia in check.",
+      "after": "I see. Then I'll ignore your order to fabricate a culprit from among the crew. That's not very gentlemanly.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:044",
+      "before": "When Japan fought Russia, Britain watched from afar. Have you forgotten whose interests your victory served?",
+      "after": "When the Great Japanese Empire went to war with Russia, did you not cry to Britain and Her Majesty the Queen for help because you could not win alone?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:045",
+      "before": "Britain stood behind that war.",
+      "after": "And even now, you are under my control.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:046",
+      "before": "Do you understand why Britain could not allow Russia to push farther into Asia?",
+      "after": "Now I understand why Englishmen only love dogs.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:047",
+      "before": "It was not Britain's war, but Britain still had interests to protect.",
+      "after": "Your trainer must have been lousy. You still haven't learned the etiquette between master and servant.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:048",
+      "before": "No country can preserve peace forever.",
+      "after": "The English always have to be on top these days.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:049",
+      "before": "A nation arms itself because even the weak understand what lies beyond peace.",
+      "after": "Managing the whole world is hard work. I wonder whether even the savages under our protection can understand that.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:051",
+      "before": "Even now, I cannot forgive being used.",
+      "after": "Even now, you are not permitted to defy me.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:052",
+      "before": "Banzai! Long live Japan! Banzai!",
+      "after": "Banzai, British Empire! Banzai, Japanese Empire! Banzai, bomber!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:056",
+      "before": "The empty cabin across from yours. The room beside it is unused. Braque's secret may be waiting there.",
+      "after": "That's the attendant's room across the hall. The one beside it is unused. The room at the far end is used by Braque's secretary.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:059",
+      "before": "I cannot make tea like that. Excuse me.",
+      "after": "A gentleman does not gulp tea like that. Excuse me.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:060",
+      "before": "What a fool. One compliment and he is pleased.",
+      "after": "As long as you can drink it, who cares?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:061",
+      "before": "Ignore him.",
+      "after": "I'll study it.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:064",
+      "before": "Braque collects material on secret societies active across Europe. I have heard of the Russian Fog.",
+      "after": "Braque has an abnormal obsession with art. I've heard about the Russian Fog too.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:066",
+      "before": "How frightening...I feel as though someone is watching me.",
+      "after": "Scary voice...I feel like I'm being scolded...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:067",
+      "before": "Georges Braque is like a wolf. Why is he interested in a secret society?",
+      "after": "Georges Braque is like a tyrant. Why did you become his secretary?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:068",
+      "before": "And why would he hide its secrets in a private cabin?",
+      "after": "So...are you interested in my private life?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:070",
+      "before": "How much did Braque know about this society?",
+      "after": "What do you mean by Braque's abnormal obsession?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:071",
+      "before": "If he truly pursued it, someone aboard must know more.",
+      "after": "With him...if getting what he wanted required murder, I think he might even kill.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:077",
+      "before": "You are very observant. Does staring at a woman make you happy?",
+      "after": "What, even an artist's wife? Honestly, I'd rather be scrubbing with a rag and have a passerby whistle, 'Hey, beautiful.' Sorry. I hate having my work judged by my looks...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:090",
+      "before": "I should not tell you any more. It may interfere with your diagnosis.",
+      "after": "I want this frightening incident solved as quickly as possible...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:092",
+      "before": "Must we continue this conversation?",
+      "after": "Do you despise a secretary like me?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:094",
+      "before": "You are not one of his people, are you?",
+      "after": "Considering who your boss is, I can't blame you.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:100",
+      "before": "You hung something in the center hall, didn't you?",
+      "after": "You drew a picture in Center Hall, did you not?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:101",
+      "before": "An Alphonse Mucha poster. Braque called it a portrait of the most beautiful woman in Paris.",
+      "after": "I copied an Alphonse Mucha poster. I told you I was a student at an art school in Paris, didn't I?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:102",
+      "before": "Braque was pursuing that woman with his patron's backing. You would not understand their secrets...",
+      "after": "Braque bought my talent and offered to be my patron. He has a weakness for young women who paint...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:103",
+      "before": "Do not overplay the helpless act...",
+      "after": "He's just adding another slave...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:107",
+      "before": "It was only part of the investigation.",
+      "after": "That's just how the business works.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:108",
+      "before": "Still, it is strange...Ilyu was investigating the secret society too.",
+      "after": "Still, I didn't expect Ilyusha to be an art-school student...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:109",
+      "before": "Do you know its secret?",
+      "after": "Do you know her?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:111",
+      "before": "A secret? What secret? That rude man merely beat me at cards.",
+      "after": "She's in the cabin next to mine, in second class on the port side. She absolutely cleaned me out at cards.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:112",
+      "before": "Your real concern is not the society. Stop prying. Investigate the secret itself, not Braque's misfortune.",
+      "after": "I see...second class really is the way to travel. You make companions. I'm jealous. You'd better warn her: Braque isn't interested in her artistic talent, but in her legs.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:130",
+      "before": "He was terrified. When I mentioned the secret, he panicked. When I pressed him, he screamed, 'Those words are cursed! A world tainted by them will perish!'",
+      "after": "He was terrified. When I mentioned the secret, he panicked. When I pressed him, he screamed, 'Those are cursed words! Anyone pursued by them will perish!'",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:131",
+      "before": "I did not want to become involved with that sort of man.",
+      "after": "I don't want to get too involved with Russians these days.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:134",
+      "before": "...understood.",
+      "after": "...guess I don't have a choice.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:148",
+      "before": "At this rate she will capsize! What do we do?",
+      "after": "If we leave the bomb alone, it'll explode sooner or later! What do we do?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:149",
+      "before": "We have no choice but to shift the cargo.",
+      "after": "We'll have to dismantle it right here.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:150",
+      "before": "Engine Crew",
+      "after": "Engine Room",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2D:152",
+      "before": "Understood. We'll do what we can. We're heading down there now.",
+      "after": "Understood. We'll do what we can. We're coming up there now.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:003",
+      "before": "I have heard of the Russian Fog. It is a secret intelligence service organized by the Russian Empire.",
+      "after": "I've heard of the Russian Fog. The ultimate secret weapon developed by the Russian Army.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:004",
+      "before": "A secret service...",
+      "after": "A secret weapon...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:007",
+      "before": "Can anyone who knows so many secrets really be trusted?",
+      "after": "Something that bundles several guns together and fires them in rapid succession?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:008",
+      "before": "A secret society? No. Something far more frightening.",
+      "after": "A machine gun? No, not that. Something far more extraordinary.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:009",
+      "before": "A secret service, he says. Aren't you embarrassed listening to this?",
+      "after": "A secret weapon, he says. Aren't you embarrassed listening to this?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:012",
+      "before": "A secret weapon was lost on the ocean floor. If it were ever rebuilt,",
+      "after": "A weapon used by the secret police to suppress popular uprisings. If it were mass-produced,",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:014",
+      "before": "Too much secrecy can be frightening in its own way.",
+      "after": "Too much imagination can be a problem too.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:016",
+      "before": "I once served at the Japanese embassy in St. Petersburg! Kuropatkin told me himself!",
+      "after": "I have! I've been invited to perform for the court aristocracy in St. Petersburg! I even performed before General Kuropatkin...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:019",
+      "before": "The Russian general...",
+      "after": "The Emperor's...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:020",
+      "before": "In the fog...I never want to go near it again.",
+      "after": "The city of fog...I never want to go near it again.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:023",
+      "before": "A secret service...",
+      "after": "A secret weapon...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:032",
+      "before": "You really are vile. You mean to frame Black for the murder and escape the ship?",
+      "after": "You really are vile. You mean to frame Braque for the murder and escape the ship?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:035",
+      "before": "That trollop? Who would believe a woman who sells her bare flesh?",
+      "after": "A hussy! How can you trust a woman who cuts her hair short?!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:036",
+      "before": "And what about a man in a woman's cravat? What does that make me, wearing a skirt?",
+      "after": "Then what about a guy wearing a bow-tied necktie?! What does that make me, wearing a skirt?!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:041",
+      "before": "Ilyusha Grancelius, the lady in the cabin next to yours. She had a secret pact with Black.",
+      "after": "Ilyusha Grancelius, the passenger in the cabin next to yours. She's trying to sell herself to Braque. Investigate her.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:046",
+      "before": "I got the lid off...nasty-looking thing. No mechanism, just an iron cover held down by screws.",
+      "after": "I'm face-to-face with the lid...an unfriendly-looking thing. Nothing special, just an iron lid held by screws at all four corners. One-inch slotted heads...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:049",
+      "before": "I cannot see one...it is a sealed trick. I want to find a way in.",
+      "after": "Can't find it...it's my lifelong companion. I want to give this one a name.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:088",
+      "before": "So much for caution. Burn well, Charlie Muffin. This woman is worth a hundred million pounds.",
+      "after": "The current flows like this...think carefully, Charlie Muffin. This lady could blow at the slightest touch.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:128",
+      "before": "West German adhesive. Quick-setting, reliable, and very expensive.",
+      "after": "You don't take a hint, do you? Must be that western accent...I like you, Chief. I'll say it now: I chose this ship and you over her.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:137",
+      "before": "Do not make such a fuss. If you had listened to me, this would not have happened.",
+      "after": "Take it easy! Once we're ashore, there'll be plenty of women!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:138",
+      "before": "What happened?",
+      "after": "Plenty of women?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:139",
+      "before": "Adhesive on a detonator...I learned that trick from a Californian.",
+      "after": "Chief, I grew up in the East. I can't make sense of that crazy California accent of yours...'plenty of women'...you mean you'll buy me one?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:140",
+      "before": "I remember a man in East Germany. Dudley Slayman...or was it Jerry?",
+      "after": "Where was it...east Town Street. Right, Dada Sleiman's place. There was a knockout named Sherry, if I remember. Think you can get her for me?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:153",
+      "before": "How is it? Is it working?",
+      "after": "How is it? Do I pass?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:154",
+      "before": "Yes, Charlie. Perfect.",
+      "after": "No problem. Charlie, you're an honor student.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:177",
+      "before": "Let me see...there must be a cylinder hidden somewhere.",
+      "after": "No...never mind. So you're the sort of thing you can find lying around anywhere...uh...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:184",
+      "before": "Another panel. Why are you fidgeting, Betty?",
+      "after": "Well, another door farther in. Betty, why are you like this?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:186",
+      "before": "I cannot see it. We go in from here...carefully.",
+      "after": "I can't see it. Seems she really wants us to enter from here...let's accept the invitation.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:195",
+      "before": "Two thousand seconds. Plenty of time, Betty...is that what you think?",
+      "after": "Heat: 2,000 degrees...i'd melt in an instant...Betty, are you serious? Can you kill me? Both the counter body and connector tube have screw-fastened covers...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:198",
+      "before": "Touch the timer unit...",
+      "after": "Check the timer unit...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2E:199",
+      "before": "Touch the connector tube...",
+      "after": "Check the connector tube...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:023",
+      "before": "I heard about Black...",
+      "after": "I heard about Braque...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:025",
+      "before": "I love to paint. It lets my heart wander anywhere...to Black, though, each painting was only merchandise.",
+      "after": "I love to paint. It lets my heart wander anywhere...to Braque, though, each painting was only merchandise.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:036",
+      "before": "Do not turn me into one last memory and die. Hold on! I still do not understand. The St. Petersburg treasure. Words that curse the nobility. A secret weapon that could overturn Europe's balance of power...",
+      "after": "I'm not about to die with this as my last memory of you...damn it! I still don't get it! The treasure of St. Petersburg. Cursed words that destroy the nobility. A secret weapon capable of overturning the balance of power in all Europe...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:048",
+      "before": "Not yet.",
+      "after": "Your voice got quiet.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:050",
+      "before": "Your voice sounds far away...",
+      "after": "What are you, Ilyu...?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:053",
+      "before": "...",
+      "after": "Are you scared?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:056",
+      "before": "Below Deck",
+      "after": "Probably.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:071",
+      "before": "You mean the culprit wants to destroy one particular person?",
+      "after": "You mean the culprit wants to seize one particular person?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:091",
+      "before": "That is your problem. Get moving.",
+      "after": "Figuring that out is our job! Move!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:097",
+      "before": "You have been watching me.",
+      "after": "Voysey. About you.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:098",
+      "before": "Only doing my duty.",
+      "after": "That master of yours is stubborn.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:099",
+      "before": "On whose orders?",
+      "after": "Right?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:103",
+      "before": "That is what he says.",
+      "after": "...what did you say?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:115",
+      "before": "You knew from the start.",
+      "after": "No wonder it was confusing...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:129",
+      "before": "Active in Manchuria since 1903 as an anti-British and anti-Japanese agent.",
+      "after": "Active in various foreign countries since 1903 as an anti-British and anti-Japanese agent.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:131",
+      "before": "Linked to military intelligence, the police, and the Interior Ministry, with access to immense stores of information.",
+      "after": "A high-level organization directly under the Emperor, separate from Russian Army Intelligence. Its potential store of intelligence is",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:138",
+      "before": "Signal: CEDAR.",
+      "after": "Signal: MEDE.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:148",
+      "before": "NOSTALGIA sails from New York to Britain. Its name was a signal, and those accusations proved the value of the intelligence offered.",
+      "after": "NOSTALGIA is an American passenger ship bound from New York across the North Atlantic to Britain. As for 'Mede,' London is still deciphering it. The bombing and hijacking were a perfect demonstration of the value of the intelligence being offered.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:155",
+      "before": "No. We could not identify the Russian Fog before the bombing and hijacking began.",
+      "after": "We don't know what 'Mede' means. Until we do, our hands are tied. Then, while we were stuck, this bomber hijacked the ship.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:165",
+      "before": "And the Russian Fog. Seven rooms to search...",
+      "after": "And the Russian Fog...every time I start this, I regret it.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:166",
+      "before": "I should never have joined that card game.",
+      "after": "I got myself into a dangerous game...do you know how this feels?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:169",
+      "before": "You were foolish to trust this amateur, Director.",
+      "after": "The Deputy Chief is an idiot too, trusting an amateur like you.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:170",
+      "before": "What a charming man.",
+      "after": "What a sarcastic bastard.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:171",
+      "before": "You are a poor judge of character.",
+      "after": "You've got a good eye for people.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:173",
+      "before": "So?",
+      "after": "I'm getting sick of this.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:176",
+      "before": "Joseph the bellboy and several others remain under suspicion.",
+      "after": "I want to ditch this...beer! Beer! I want a beer!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:177",
+      "before": "...here it comes.",
+      "after": "...not yet, right?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:178",
+      "before": "Mind your tone. Dunant is my employer and, for now, my superior.",
+      "after": "Why not? I'm the employer of Dunant, who is effectively your superior. Show some respect.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART2F:180",
+      "before": "The radio room and captain's cabin announcements still point to you.",
+      "after": "The wireless room and captain's cabin announcements still point to you.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART2F:182",
+      "before": "And yours?",
+      "after": "You...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:001",
+      "before": "Act 3: \"The Witch\"",
+      "after": "ACTION 3: \"The Witch\"",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART3A:011",
+      "before": "The culprit stopped the ship, bombed the boats, and destroyed the radio room.",
+      "after": "The culprit stopped the ship, bombed the boats, and destroyed the wireless room.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART3A:013",
+      "before": "The Board of Trade will blame a terrorist attack. America will call it the work of German U-boats. A perfect tragedy for propaganda.",
+      "after": "The shipping authorities will call it an indiscriminate terrorist attack. The U.S. government will call it an outrage by a German U-boat squadron. A tragedy tailor-made for propaganda.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:043",
+      "before": "Do you know how to use a saw?",
+      "after": "Can you hear the sound of the saw?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:110",
+      "before": "That makes perfect sense.",
+      "after": "I'd like to choose too.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:120",
+      "before": "Wait...aren't we already bound for America?",
+      "after": "Wait...america? Not Britain?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:145",
+      "before": "Tianon's alibi seems deliberately contrived. The culprit is among them. This proves they went on the defensive after your attack.",
+      "after": "Tianon and her party are acting deliberately. The culprit is among them. Their defensiveness against our attack proves it.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:150",
+      "before": "Who taught you?",
+      "after": "Wait...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:151",
+      "before": "Do you enjoy it?",
+      "after": "This child...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:152",
+      "before": "Not my thing...",
+      "after": "That much...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:154",
+      "before": "My aunt...she always gazed at the slopes of Krufostel through the evening mist...my silent aunt...a poison sweetened with happiness took her voice. Before that, she often foretold my happiness...",
+      "after": "From my grandmother...she always gazed at the foothills of Kuru Fostel in the evening mist. My silent grandmother...a poison laced with happiness took her voice. Before she lost the power of speech, she often told my fortune...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:175",
+      "before": "The truth is, Princess Tianon is daughter to the Maharaja of Renan, in India. His name is Kasamara Hatoz Tos Harandoil Kurumayubi Agero Kyuryo Kokoron Urero Yunna Uappa...",
+      "after": "The truth is, Princess Tianon is the third daughter of the Maharaja of Renan, in India. His name is Kasamara Hatoz Tos Harandoil Kurumayubi Agero Kyuryo Kokoron Urero Yunna Uappa...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:197",
+      "before": "Question Ruthie. She was the first to discover Black's murder. Black was obsessed with the \"Russian Fog.\" If she killed him, she may well be a Russian spy.",
+      "after": "Question Ruthie. She was the first to discover Braque's murder. Braque was obsessed with the \"Russian Fog.\" If she killed him, she may well be a Russian spy.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:200",
+      "before": "...you suspect me, don't you? Because Black died that way...",
+      "after": "...you suspect me, don't you? Because Braque died that way...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:207",
+      "before": "When did you meet Black?",
+      "after": "When did you meet Braque?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:208",
+      "before": "Two years ago. I was a sales clerk at a trading company. I was good with figures, so Black noticed me and recruited me.",
+      "after": "Two years ago. I was a sales clerk at a trading company. I was good with figures, so Braque noticed me and recruited me.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:211",
+      "before": "I thought women were finally being recognized. But Black only wanted a pretty woman he could take anywhere.",
+      "after": "I thought women were finally being recognized. But Braque only wanted a pretty woman he could take anywhere.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:212",
+      "before": "...that gave her reason to kill him.",
+      "after": "...that's why you can kill him.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:216",
+      "before": "Here is my theory. You and Black conspired to hijack the ship. Partway through, you tired of working with him, killed your partner, and meant to finish the plan alone.",
+      "after": "Here is my theory. You and Braque conspired to hijack the ship. Partway through, you tired of working with him, killed your partner, and meant to finish the plan alone.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3A:219",
+      "before": "Your motive is weak, but you hated Black.",
+      "after": "Your motive is weak, but you hated Braque.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:003",
+      "before": "...none of the men you brought were here...this place has been ransacked...",
+      "after": "When I entered the room, nobody was there...Voysey was lying collapsed...there was so much blood...is he dead?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:009",
+      "before": "Listen carefully!",
+      "after": "Call the surgeon!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:013",
+      "before": "Run! You still have...Voysey!",
+      "after": "Don't die! You can't die yet...Voysey!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:015",
+      "before": "...aah! He's dead! Aah! Somebody's dead!",
+      "after": "Aah! He's dead! Aah! I saw someone die!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:025",
+      "before": "An assassination ring!? Even this island has one?",
+      "after": "An assassination organization?! Even this ship has one?!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:029",
+      "before": "You skipped his funeral without a care!",
+      "after": "You were leisurely having a tea party!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:030",
+      "before": "Nonsense! You said the Royal Suite and the cabin beside First Class were suspicious!",
+      "after": "You were the one who said the Royal Suite and First-Class passengers were suspicious in the bomber investigation!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:042",
+      "before": "I will get only you aboard the steamer!",
+      "after": "I'll send just you to the seabed!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:043",
+      "before": "Then strike at the tiger's den!",
+      "after": "Buy a kotatsu too!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:050",
+      "before": "The evidence points to a state intelligence service...Britain, perhaps...or Germany, as Voysey suspected...",
+      "after": "The ship will sink, yet he's sure he can escape. Isn't that confidence only the culprit could have? Voysey said it might be a third country's work...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:054",
+      "before": "I'll beat him senseless!",
+      "after": "I'll hang him!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:060",
+      "before": "If you'll spare me the grand speech.",
+      "after": "Could you stop with that barbaric pronunciation?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:069",
+      "before": "And what does that have to do with your profession?",
+      "after": "And what does that have to do with sinking the ship?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:072",
+      "before": "...fascinating, Yamada. Then lay out your case logically.",
+      "after": "...you look disgraceful, Yamada. Calm down and explain it logically.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:074",
+      "before": "Why would they need to kill you?",
+      "after": "Why does he need to sink the ship?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:084",
+      "before": "He heads their operations. Nothing escapes him.",
+      "after": "This is the greatest defection case of the century. Failure is not permitted.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:099",
+      "before": "That's an absurd accusation!",
+      "after": "Stop talking in that mocking tone!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:101",
+      "before": "Your delusions have become pathological.",
+      "after": "Looks like your brain's no use at all.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:103",
+      "before": "Voysey still had not caught Mede...even at the last moment before sailing.",
+      "after": "Voysey hadn't deciphered 'Mede' even immediately before the incident.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:105",
+      "before": "He hadn't.",
+      "after": "The culprit.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:114",
+      "before": "Then he destroyed the communications room.",
+      "after": "Then he destroyed the wireless room.",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART3B:152",
+      "before": "Not Voysey himself! Everything centers on the Wing.",
+      "after": "Not the Deputy Chief! Everything revolves around the Fog.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:199",
+      "before": "The deputy chief died for the Wing.",
+      "after": "The Deputy Chief died for the Fog.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B:202",
+      "before": "Proof, then. If we live to see tomorrow morning, present it then.",
+      "after": "That's sophistry. Fine. If we make it safely to tomorrow morning, do as you please.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B_:003",
+      "before": "Laugh, Charlie. I have him in my sights, but I cannot kill him...do not be angry...I have always been a coward. Just give me a little more time...",
+      "after": "Laugh at me, Charlie. Even though I've got the target in my sights, I can't kill him...don't be angry...I've been a coward since I was a kid. Give me a little more time...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B_:036",
+      "before": "I will be back!",
+      "after": "Sorry, later!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B_:050",
+      "before": "Human reason is not so stubborn. When desire coiled at the bottom of the heart tries to escape, it always passes through a checkpoint called 'reason' before it can be expressed.",
+      "after": "Human reason isn't that strong. When desire coiled at the bottom of the heart tries to get out, it will deceive its way through the checkpoint called 'reason' before it emerges.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B_:069",
+      "before": "The shape of distorted desire...its symbols. The 'husband' is the symbol of her 'belief'; the 'king' is 'society' or 'authority.' Killing the king's 'daughter' is the expression of rebellion. Through it we can see her true feelings, feelings even she has not noticed. When shaken, the truth behind an action that leaps beyond reason...",
+      "after": "The shape of distorted desire...its symbols. The 'husband' is the symbol of her 'belief'; the 'king' is 'society' or 'authority.' Killing the king's 'daughter' is an expression of rebellion. Through it we can see her true feelings, feelings even she has not noticed. When impulse strikes and action leaps beyond reason, the true motive is laid bare.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B_:103",
+      "before": "We cannot remain strangers forever. You are special.",
+      "after": "Some people remain strangers forever. You are special.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B_:133",
+      "before": "You make a strange 'Russian Fog.'",
+      "after": "That wouldn't be strange for the 'Russian Fog.'",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B_:159",
+      "before": "...a backlash from 'escape'?",
+      "after": "...the flip side of 'running away'?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B_:188",
+      "before": "...you are kind. With this man I can ignore my position...a composed old man and one carefree soul...buoyant and unbound, poor Kasuke...",
+      "after": "...you're kind. With him I can forget my position...a calm old man, carefree people...poor Kasuke, who can't see things through...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B_:204",
+      "before": "You are naive. This ship is one enormous piece of evidence in this whole act of plunder. Do you think a spy from a third country would leave it intact? That is what worried me from the start.",
+      "after": "You're naive. This ship is one enormous piece of evidence in this whole act of plunder. Do you think a spy from a third country would leave it intact? He meant to sink it from the start.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3B_:208",
+      "before": "Why do things always go exactly the way this man thinks?",
+      "after": "Why is this guy's thinking always so forceful?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:017",
+      "before": "Internal Security is entirely separate from General Intelligence. Even on the same ship...",
+      "after": "General Intelligence and Internal Security are completely separate sections, so even aboard the same ship I couldn't identify them.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:030",
+      "before": "What do you like?",
+      "after": "Don't underestimate me.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:097",
+      "before": "Well, Kirikov. How does it feel to make the greatest gamble of your life? Your family, or your future?",
+      "after": "Well, Kirikov. How does it feel to make the biggest gamble of your life? With a family, you couldn't possibly do this, could you?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:111",
+      "before": "...the bomber.",
+      "after": "...the time bomb.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:114",
+      "before": "The person offering you sanctuary may be behind the bombing, an agent of a third country. Then Britain is not your destination at all.",
+      "after": "The person offering you sanctuary may be behind the bombing, an agent of a third country. If so, does your destination for defection really have to be Britain?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:132",
+      "before": "The bomber will not disarm it. This ship is evidence of the theft, so it can never reach Southampton. At eight, the bomb will erase it. Our only hope is to catch the culprit and dismantle it ourselves.",
+      "after": "The culprit won't disarm the bomb. This ship is evidence of the theft, so he can't let it reach Southampton. At 7:00 p.m. the bomb will destroy it. Our only move is to catch the culprit, tie him up in front of the bomb, and make him disarm it himself.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:139",
+      "before": "Do you not understand? You can escape to a third country that will protect you. But the culprit will flee this doomed ship with you, leaving 411 innocent people behind.",
+      "after": "Don't you get it? If Britain is no longer an option, you can flee to a third country that will protect you from Russia. But can you escape this ship while the culprit controls it with bombs? Maybe you can. But what about the 300 innocent people left aboard?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:166",
+      "before": "What a fool I am...why did I not see it? Ashby has an accomplice!",
+      "after": "Maybe I'm an idiot for not noticing...if he has even one accomplice...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:174",
+      "before": "Enough...getting attached only leads to dreadful people. Such is life...",
+      "after": "Enough...get attached and you'll pay for it...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:182",
+      "before": "No feelings, then.",
+      "after": "Feelings are intuition.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:184",
+      "before": "I knew we would be found out.",
+      "after": "Just what I'd expect from a Parisian.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:189",
+      "before": "The accomplice is Dunant. When I would not abandon my suspicion of Ashby, Dunant rushed out a third claim letter. Unlike the others, it lacked planning.",
+      "after": "The accomplice is Dunant. Because I kept pressing my suspicion of Ashby, Ashby had Dunant write the second claim statement. It was rushed and lacked planning.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:204",
+      "before": "Dunant is your partner. He helped you through this affair and took every risk. Yet you mean to abandon him now?",
+      "after": "We're partners. Ever since this started, I've cooperated with you, haven't I? I've even crossed dangerous bridges. Now it's your turn!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:208",
+      "before": "Foreign Affairs",
+      "after": "Exterior",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:211",
+      "before": "That appears to be Ilyu. If she killed Voysey and Pring, Russian Intelligence would recognize the pattern and identify Kirikov as the Fog.",
+      "after": "That would be the other Russian spy, Ilyusha. She killed Voysey, and Braque too. She mistook Braque for a British Intelligence agent. She couldn't allow Kirikov, the Russian Fog, to be taken.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART3C:220",
+      "before": "Cargo Hold",
+      "after": "High Terrace",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4A:001",
+      "before": "Act 4: \"A Posteriori\"",
+      "after": "ACTION 4: \"A Posteriori\"",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART4A:008",
+      "before": "Who killed Black and Voysey?",
+      "after": "Who killed Braque and Voysey?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4A:028",
+      "before": "Bilge",
+      "after": "Keel Section",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4A:031",
+      "before": "Idiots! Ashby and Dunant tricked you! He is the culprit!",
+      "after": "Idiots! Ashby and Dunant tricked you! They are the culprits!",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4A:045",
+      "before": "A Japanese whaler should find us in the South Atlantic...but food will last for only two.",
+      "after": "A disguised Japanese fishing vessel should find us in the South Atlantic...but food will last for only two.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4A:056",
+      "before": "Sink the ship and Ashby's plan dies with it.",
+      "after": "Damn. If we sink the ship now, that's exactly what Ashby wants.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4A:057",
+      "before": "She is not the winner.",
+      "after": "He is not the winner.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4A:060",
+      "before": "We saw good things too.",
+      "after": "I had some good experiences too.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:003",
+      "before": "Bilge",
+      "after": "Keel Section",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:006",
+      "before": "I feigned my death in Britain, cut my hair short, and sent a telegram to Voysey.",
+      "after": "I decided to defect to Britain, cut my hair short, and sent a telegram to Voysey.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:015",
+      "before": "Voysey could not decipher \"Mede\"...the head of British Intelligence, said to be the sharpest man in Britain, took three days to find the symbol of that place...I thought he was someone I could never understand.",
+      "after": "Voysey couldn't decipher 'Mede'...the intelligence department's number-two man, said to be the sharpest in Britain, spent three days unable to understand that symbol. I thought he was someone I could never understand.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:021",
+      "before": "Who is?",
+      "after": "I'm used to it.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:027",
+      "before": "Of course not. He had orders to prevent my defection. I had orders to spy on him. But I turned his plan around and intended to defect to Japan...",
+      "after": "Kirikov was cautious. He had orders to stop my defection. When the bomber made that impossible, he decided to turn my defection plan to his advantage and infiltrate Japan.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:030",
+      "before": "Ilyu is the poor one. Once Foreign Affairs is notified, Ashby will be discarded.",
+      "after": "Ito only cares about himself. If the Foreign Ministry is informed, Ashby will be cut loose.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:074",
+      "before": "That means we attached a side road to the safety circuit, right?",
+      "after": "So that means we've added a bypass to the safety circuit, right?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:085",
+      "before": "Strange. The country that defeated imperial Russia in war is the only one besides Japan that does not know wire cutters.",
+      "after": "Strange. Japan is the only country to have defeated the mighty Russian Empire in war, yet you don't even know wire cutters...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:086",
+      "before": "Learn them well. You will be drafted soon enough. Japan has eight million gods on its side. Surely you will not lose.",
+      "after": "I'll learn. We'll catch up with the Great Powers soon. Japan has eight million gods. Whatever we do, we won't lose.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:094",
+      "before": "The fur-handled screwdriver is big...",
+      "after": "Those hairy foreigners use huge screwdrivers...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:102",
+      "before": "Why did you become a spy...no, why did you fail? Why turn against the Russian regime?",
+      "after": "Why did you become a Russian spy...no, pardon me. Why did you side with the Russian regime?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:108",
+      "before": "What is this girl Yuko like?",
+      "after": "Who is Yuko?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:109",
+      "before": "You are no gentleman...truthfully, I never really talked with her. There was never much reason to. In Japan, girls like her are...what do you call it?",
+      "after": "She's not as modern as you. To tell the truth, I've never talked with her properly the way I have with you. We've never even been alone together. In Japan, well...that sort of thing isn't done.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:110",
+      "before": "But you like her?...a little strange...still, she is wonderful.",
+      "after": "But you like her? ...a little strange...but somehow, that's lovely.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:121",
+      "before": "I meant to obey the Emperor and train an assassination unit. Weapons training. Mountain marches. Codes. I was good with a knife. I was not an honor student.",
+      "after": "They meant to train an assassination unit that would work on the Emperor's orders. Weapons training. Mountain marches...assassination. I had a knack for it. I became an honor student.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:139",
+      "before": "If it was a trap, you are the same as me.",
+      "after": "If it's a trap, you're in the same boat.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:142",
+      "before": "...one day the instructor in charge of me changed...it was unbearable. Let us stop. This is no story.",
+      "after": "One day, the instructor in charge of me changed...this is boring. Let us stop. I have nothing more to say.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:145",
+      "before": "It is not a pendulum yet. We will have to remove it.",
+      "after": "That balancing arm is in the way. We'll have to remove it.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:174",
+      "before": "So the mission was successful. Then Siberia?",
+      "after": "It really was a trap. Were you in Siberia the whole time?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:175",
+      "before": "...yes. When I turned thirteen after three years in Siberia, I was taken before the Emperor in St. Petersburg.",
+      "after": "Yes. On the day I turned thirteen in Siberia, I was taken before the Emperor in St. Petersburg.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:184",
+      "before": "It may be another battery...what mission did the Emperor give you?",
+      "after": "Another battery again...what mission did the Emperor give you?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:187",
+      "before": "I saw through more than ten. They were like dolls, mere adults with jealous hearts. With my own childish arrogance, I looked for ambition and questioned them. The old hands of Petersburg society kept giving me high marks.",
+      "after": "I was barely over ten. Who would be suspicious of a doll-like child? I already understood the absolute advantage my age gave me. I outwitted veteran Petersburg intelligence agents and always got excellent results.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:203",
+      "before": "What has gotten into you? I know about the peace treaty, but Japan had not defeated Russia. Witte knew the war could not continue. The Emperor intoxicated the people with an eastern campaign, then could not stop it.",
+      "after": "What are you talking about? I know about the peace treaty, but the Japanese diplomat was realistic and admirable. So was Witte. War isn't a game. It isn't just about winning and losing. When he started the war, the Emperor wanted to revel in conquering the 'Eastern barbarians.' His entourage never defied him.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:205",
+      "before": "Witte understood the realities of Russia and Japan. I was sent to him on a new mission. Japan was weak, but a great power afraid of isolation could not crush it. Russia allied with another power to isolate Japan.",
+      "after": "Witte understood the realities of Russia and Japan. He gave me a new mission. Japan was too weak to defeat Russia alone, so it would have to ally with a Great Power hostile to Russia.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:208",
+      "before": "Those ugly onion domes. By rousing Russia's hunger for territory, Britain could watch eastern Russia from the front row. Russia sank its own fleet and plunged into war with Japan over the army's objections.",
+      "after": "Those ugly mosque-shaped onion domes. Look at Eastern Europe and you'll know how Russia treats its satellite states. Even if they cannot defy the Emperor, they are desperate. Russia was wracked by unrest and plunged into a defensive war as though prepared to kill half its own people.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:210",
+      "before": "If they did not prevent Russia from advancing onto the Korean Peninsula, the imperial defense could not stand.",
+      "after": "Geographically, unless the Korean Peninsula serves as a defensive wall, the Empire's national defense cannot hold.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:227",
+      "before": "Witte's plan: form a Triple Entente among Japan, Britain, and Russia and fan the Russian Revolution. To distract the Emperor from the Russo-Japanese War, I was to locate and assassinate spies of the Anglo-Japanese alliance.",
+      "after": "Witte said Anglo-Japanese agents were active all over Europe, inciting the Russian Revolution to divert the Emperor's attention from the Russo-Japanese War. My mission was to find those Anglo-Japanese agents and assassinate them.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:229",
+      "before": "Britain's intelligence network controls the world. The Times and Morse communications stage a Japanese victory and broadcast it everywhere. Peasants and workers rose against the Emperor. The markets panicked, while Japan borrowed war funds from the world.",
+      "after": "Britain's intelligence network controls the world. The Times. Reuters...they staged Japan's victories and spread them everywhere. Inside Russia, anti-Emperor agitators cast the regime as the villain in the name of freedom. Even financial circles and the Russian court believed it. The world sympathized with Japan and lent it whatever war funds it needed. Russia was branded a country that deserved to be beaten and became hated worldwide.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:230",
+      "before": "So the Emperor's eastern front could torment the Baltic Fleet with peculiar tactics because it had no place left to return...",
+      "after": "Tch! So it wasn't because Admiral Togo's invincible fleet annihilated the Baltic Fleet with wildly ingenious tactics that we won...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:260",
+      "before": "Thank you, Kasuke. I will not hesitate anymore. I have decided. The twenty-first century will be your century. Even if Suomi becomes a land of distrust, I can leave the Emperor. My vision of forests and lakes matters most.",
+      "after": "Thank you, Kasuke. I don't think I'll hesitate anymore. I've decided. When I was twenty-one, I realized something was wrong. The Emperor turned Suomi into a land of suspicion and brainwashed me into distrusting everyone. I can abandon him now. The forests and lakes of Suomi matter most to me.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:271",
+      "before": "I do not know...maybe Stockholm syndrome is at work...feelings stirred by the danger of being pursued by the Emperor...",
+      "after": "I don't know...maybe my instinct as a spy to secure an escape route kicked in. Realizing the danger of continuing to follow the Emperor may have stirred these feelings...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:284",
+      "before": "I am going to choose. If we fall, forgive me.",
+      "after": "I give up. I surrender. I apologize, so forgive me...",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4B:286",
+      "before": "You said earlier, Ilyu, that you had lost the ability to choose. What did you stop being able to choose?",
+      "after": "There are two choices...Ilyu, earlier you said you had to choose, right? What did you have to choose between?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4C:000",
+      "before": "Rear Deck",
+      "after": "Aft Deck",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART4C:013",
+      "before": "Yeah. He will definitely come back before the ship reaches port.",
+      "after": "Yeah. He will definitely attack before the ship reaches port.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4C:015",
+      "before": "The assassin's identity has been found, though.",
+      "after": "I've got a good idea who the assassin is, though.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4C:026",
+      "before": "Medea races through the land of mist and lakes...fleet-footed beyond pursuit...and beyond, the curtain.",
+      "after": "Medea races through the land of forests and lakes...fleet-footed beyond pursuit...and beyond, the curtain.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4C:028",
+      "before": "Rear Deck",
+      "after": "Aft Deck",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "PART4C:030",
+      "before": "Voysey? I killed him. Black was a slight miscalculation.",
+      "after": "Voysey? I killed him. Braque was a slight miscalculation.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4C:031",
+      "before": "There is one more. I will kill him too. I have laid hands on him again and again.",
+      "after": "There's one more thing. You tried to kill me too, didn't you? You kept me close at hand the whole time.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4C:032",
+      "before": "You were close to Ilyusha. Anyone approaching the Russian Fog would suspect a man from British Intelligence. I am Times Adjell, a professional assassin of the Imperial Russian execution bureau.",
+      "after": "You were close to Ilyusha. Anyone approaching the Russian Fog would suspect a man from British Intelligence. I'm a professional assassin of Tainui Adjell, the Imperial Russian execution organization.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4C:035",
+      "before": "It is fiction. Reality. There is no need to bind yourself to a role assigned in a few minutes.",
+      "after": "Reality is fiction. There's no need to bind yourself to a role assigned in a few minutes.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4C:037",
+      "before": "You told Ashby that he was British Intelligence. He believed I was a mediocre detective.",
+      "after": "After you told me Ashby was with British Intelligence, he believed I was only an ordinary detective.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4C:040",
+      "before": "In Paris, I had you assigned to a dreary background investigation, did I not?",
+      "after": "In Paris, I had you assigned to a dreary infidelity investigation, did I not?",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4C:046",
+      "before": "You handed Kirikov to Ashby as a source of disinformation so he could infiltrate the Japanese Empire. Excellent.",
+      "after": "You handed Kirikov to Ashby as a source of disinformation so Kirikov could infiltrate the Japanese Empire. Excellent.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "PART4C:049",
+      "before": "Fool. I am the last samurai of this century.",
+      "after": "I'm the son of this century's last samurai.",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "STAFF:011",
+      "before": "Chief Engineer / Head Cook / Dept. Head ",
+      "after": "Chief Engineer / Chief Cook / Dept. Head",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "STAFF:013",
+      "before": "        Old Karl / Ship's Doctor        ",
+      "after": "Old Karl / Surgeon                      ",
+      "category": "ERA/NOMENCLATURE NORMALIZATION"
+    },
+    {
+      "id": "STAFF:015",
+      "before": "        Black / Chief Navigator         ",
+      "after": "Braque / Chief Navigator                ",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "START:002",
+      "before": "Merciless Sea",
+      "after": "ACTION 1: Merciless Sea",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "START:003",
+      "before": "Underworld",
+      "after": "ACTION 2: Underworld",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "START:004",
+      "before": "Witch",
+      "after": "ACTION 3: Witch",
+      "category": "SOURCE CORRECTION"
+    },
+    {
+      "id": "START:005",
+      "before": "A Posteriori",
+      "after": "ACTION 4: A Posteriori",
+      "category": "SOURCE CORRECTION"
+    }
+  ]
+}

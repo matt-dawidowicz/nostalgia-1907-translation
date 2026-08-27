@@ -1,11 +1,11 @@
 # Source-release review context
 
 This document records the source-only review context for the Nostalgia 1907
-English fan-translation project. It was used for the final source review and
-remains useful when auditing the current 1.0.2 source release. The release
-contains the corrected working tree, source-integration corrections,
-contributor documentation, retirement of the failed audio-localization
-experiment, and hardening after independent review.
+English fan-translation project. It preserves the review context for the 1.0.2
+runtime-certified source release and now also points reviewers to the later
+post-1.0.2 translation revision. The 2026-08-27 revision changes canonical
+English, so its retail-backed build evidence and remaining runtime obligations
+must be evaluated separately from the historical 1.0.2 Ares playtest.
 
 ## Read first
 
@@ -15,7 +15,8 @@ experiment, and hardening after independent review.
 4. `docs/TEXT_BOX_CONTRACTS.md`
 5. `docs/DEVELOPMENT.md`
 6. `docs/RELEASE.md`
-7. `CHATGPT_REVIEW_PROMPT.md`
+7. `docs/TRANSLATION_REVISION_20260827.md`
+8. `CHATGPT_REVIEW_PROMPT.md`
 
 ## Scope and exclusions
 
@@ -28,6 +29,22 @@ retired audio-localization experiment.
 
 `MANIFEST.sha256` lists every other archive member and its SHA-256. Verify it
 before reviewing source conclusions.
+
+
+## 2026-08-27 post-1.0.2 revision
+
+The current source tree contains a complete Japanese-semantic and character-voice
+revision that was not part of 1.0.2. The semantic application changed 345
+canonical records, followed by reviewed voice, ending, capacity, and validator
+passes. Source CI is green on Windows/Python 3.12 and Ubuntu/Python 3.10.
+Retail-backed testing of the final source content passed the 17-test layout
+suite, all 19 MES chapters, and all 19 LZ archive rebuilds; PART3C is 16,073
+bytes (`0x3EC9`) and the minimum archive headroom is 168 bytes.
+
+This is source/build evidence, not a new runtime certification. Version 1.0.2
+remains the latest runtime-certified reference until a new full two-track build
+and candidate-bound Ares playthrough are recorded. See
+`docs/TRANSLATION_REVISION_20260827.md`.
 
 ## Current source evidence
 
@@ -50,12 +67,12 @@ and test notes were byte-identical to the preceding tested candidate. Track 1
 SHA-256:
 `1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`.
 
-The recorded corrections tighten source-release inventory and invalid-input
-failures without changing canonical translation records. The private
-retail-backed build was not rerun in the source-only review environment, so
-the historical deterministic-build evidence is not represented as a new runtime
-certification. The public release is now version 1.0.2; it does not claim a
-different playable artifact from the hash-identified reference below.
+The 1.0.2 release-hardening corrections described in the historical evidence
+below tightened source-release inventory and invalid-input failures without
+changing canonical translation records. The later 2026-08-27 revision **does**
+change canonical translation records and therefore cannot inherit that older
+runtime certification. Its separate validation status is recorded above and in
+the translation-revision document.
 
 The earlier build-comparison evidence showed that the preceding hardening
 changed failure and verification behavior without changing playable bytes. The
@@ -89,7 +106,9 @@ evidence.
 - Retired generated recovery reports and their utility were removed; source
   health prevents their reintroduction.
 
-No Japanese records, record IDs/order, policies, reviewed English text, SCN
-content, archive boundaries, ISO extents, or Track 2 bytes changed in these
-corrections. A stale PART2F metadata pointer to a deleted generated report was
-removed.
+For the 1.0.2 release-hardening corrections in this historical subsection, no
+Japanese records, record IDs/order, policies, reviewed English text, SCN
+content, archive boundaries, ISO extents, or Track 2 bytes changed. A stale
+PART2F metadata pointer to a deleted generated report was removed. The later
+2026-08-27 revision intentionally changes reviewed English while preserving the
+other structural authorities.

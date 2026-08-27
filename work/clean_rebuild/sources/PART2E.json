@@ -106,8 +106,8 @@
       "181": "The wire is unnecessary.",
       "182": "Look under the floor.",
       "183": "Cut this and remove the platform.",
-      "198": "Touch the timer unit...",
-      "199": "Touch the connector tube...",
+      "198": "Check the timer unit...",
+      "199": "Check the connector tube...",
       "200": "Red, blue, and white wires.",
       "212": "I've got the cutters on the red wire...I'm cutting it.",
       "213": "I've got the cutters on the blue wire...I'm cutting it.",
@@ -150,13 +150,13 @@
     {
       "index": 3,
       "policy": "translate",
-      "text": "I have heard of the Russian Fog. It is a secret intelligence service organized by the Russian Empire.",
+      "text": "I've heard of the Russian Fog. The ultimate secret weapon developed by the Russian Army.",
       "layout_policy": "adaptive"
     },
     {
       "index": 4,
       "policy": "translate",
-      "text": "A secret service...",
+      "text": "A secret weapon...",
       "layout_policy": "adaptive"
     },
     {
@@ -174,19 +174,19 @@
     {
       "index": 7,
       "policy": "translate",
-      "text": "Can anyone who knows so many secrets really be trusted?",
+      "text": "Something that bundles several guns together and fires them in rapid succession?",
       "layout_policy": "adaptive"
     },
     {
       "index": 8,
       "policy": "translate",
-      "text": "A secret society? No. Something far more frightening.",
+      "text": "A machine gun? No, not that. Something far more extraordinary.",
       "layout_policy": "adaptive"
     },
     {
       "index": 9,
       "policy": "translate",
-      "text": "A secret service, he says. Aren't you embarrassed listening to this?",
+      "text": "A secret weapon, he says. Aren't you embarrassed listening to this?",
       "layout_policy": "adaptive"
     },
     {
@@ -204,7 +204,7 @@
     {
       "index": 12,
       "policy": "translate",
-      "text": "A secret weapon was lost on the ocean floor. If it were ever rebuilt,",
+      "text": "A weapon used by the secret police to suppress popular uprisings. If it were mass-produced,",
       "layout_policy": "adaptive"
     },
     {
@@ -216,7 +216,7 @@
     {
       "index": 14,
       "policy": "translate",
-      "text": "Too much secrecy can be frightening in its own way.",
+      "text": "Too much imagination can be a problem too.",
       "layout_policy": "adaptive"
     },
     {
@@ -228,7 +228,7 @@
     {
       "index": 16,
       "policy": "translate",
-      "text": "I once served at the Japanese embassy in St. Petersburg! Kuropatkin told me himself!",
+      "text": "I have! I've been invited to perform for the court aristocracy in St. Petersburg! I even performed before General Kuropatkin...",
       "layout_policy": "adaptive"
     },
     {
@@ -246,13 +246,13 @@
     {
       "index": 19,
       "policy": "translate",
-      "text": "The Russian general...",
+      "text": "The Emperor's...",
       "layout_policy": "adaptive"
     },
     {
       "index": 20,
       "policy": "translate",
-      "text": "In the fog...I never want to go near it again.",
+      "text": "The city of fog...I never want to go near it again.",
       "layout_policy": "adaptive"
     },
     {
@@ -270,7 +270,7 @@
     {
       "index": 23,
       "policy": "translate",
-      "text": "A secret service...",
+      "text": "A secret weapon...",
       "layout_policy": "adaptive"
     },
     {
@@ -325,7 +325,7 @@
     {
       "index": 32,
       "policy": "translate",
-      "text": "You really are vile. You mean to frame Black for the murder and escape the ship?",
+      "text": "You really are vile. You mean to frame Braque for the murder and escape the ship?",
       "layout_policy": "adaptive"
     },
     {
@@ -343,13 +343,13 @@
     {
       "index": 35,
       "policy": "translate",
-      "text": "That trollop? Who would believe a woman who sells her bare flesh?",
+      "text": "A hussy! How can you trust a woman who cuts her hair short?!",
       "layout_policy": "adaptive"
     },
     {
       "index": 36,
       "policy": "translate",
-      "text": "And what about a man in a woman's cravat? What does that make me, wearing a skirt?",
+      "text": "Then what about a guy wearing a bow-tied necktie?! What does that make me, wearing a skirt?!",
       "layout_policy": "adaptive"
     },
     {
@@ -379,7 +379,7 @@
     {
       "index": 41,
       "policy": "translate",
-      "text": "Ilyusha Grancelius, the lady in the cabin next to yours. She had a secret pact with Black.",
+      "text": "Ilyusha Grancelius, the passenger in the cabin next to yours. She's trying to sell herself to Braque. Investigate her.",
       "layout_policy": "adaptive"
     },
     {
@@ -409,7 +409,7 @@
     {
       "index": 46,
       "policy": "translate",
-      "text": "I got the lid off...nasty-looking thing. No mechanism, just an iron cover held down by screws.",
+      "text": "I'm face-to-face with the lid...an unfriendly-looking thing. Nothing special, just an iron lid held by screws at all four corners. One-inch slotted heads...",
       "layout_policy": "adaptive"
     },
     {
@@ -428,7 +428,7 @@
     {
       "index": 49,
       "policy": "translate",
-      "text": "I cannot see one...it is a sealed trick. I want to find a way in.",
+      "text": "Can't find it...it's my lifelong companion. I want to give this one a name.",
       "layout_policy": "adaptive"
     },
     {
@@ -464,19 +464,19 @@
     {
       "index": 55,
       "policy": "translate",
-      "text": "Careful, Charlie Muffin. Wire cutters are meant for cutting wires...",
+      "text": "Easy, Charlie Muffin. Wire cutters are for cutting wires...",
       "layout_policy": "adaptive"
     },
     {
       "index": 56,
       "policy": "translate",
-      "text": "Bypass wire...enough for a detour, but I do not need it yet. I know that...damn, my palms are sweating...",
+      "text": "Bypass wire...enough for a detour, but I don't need it yet. I know that...damn, my palms are sweating...",
       "layout_policy": "adaptive"
     },
     {
       "index": 57,
       "policy": "translate",
-      "text": "All right, let us begin. Screwdriver in hand...",
+      "text": "All right, let's begin. Screwdriver in hand...",
       "layout_policy": "adaptive"
     },
     {
@@ -488,7 +488,7 @@
     {
       "index": 59,
       "policy": "translate",
-      "text": "Driver on the upper-right screw...do not look at me like that, Betty.",
+      "text": "Driver on the upper-right screw...don't look at me like that, Betty.",
       "layout_policy": "adaptive"
     },
     {
@@ -512,7 +512,7 @@
     {
       "index": 63,
       "policy": "translate",
-      "text": "Charlie, mind that chastity belt. There must be a defense circuit...",
+      "text": "Charlie, mind that chastity belt. There's bound to be a defense circuit...",
       "layout_policy": "adaptive"
     },
     {
@@ -578,7 +578,7 @@
     {
       "index": 74,
       "policy": "translate",
-      "text": "There, Betty. The key is in your chastity belt...easy now, it will not be long...hah...hah...hah...",
+      "text": "There, Betty. The key's in your chastity belt...easy now, won't be long...hah...hah...hah...",
       "layout_policy": "adaptive"
     },
     {
@@ -596,7 +596,7 @@
     {
       "index": 77,
       "policy": "translate",
-      "text": "Men are wolves, Betty. Do not tease me.",
+      "text": "Men are wolves, Betty. Don't tease me.",
       "layout_policy": "adaptive"
     },
     {
@@ -662,7 +662,7 @@
     {
       "index": 88,
       "policy": "translate",
-      "text": "So much for caution. Burn well, Charlie Muffin. This woman is worth a hundred million pounds.",
+      "text": "Think it through, Charlie Muffin. This lady could blow at the slightest touch.",
       "layout_policy": "adaptive"
     },
     {
@@ -680,13 +680,13 @@
     {
       "index": 91,
       "policy": "translate",
-      "text": "I took off her chastity belt. She's defenseless.",
+      "text": "The chastity belt's off. She's defenseless.",
       "layout_policy": "adaptive"
     },
     {
       "index": 92,
       "policy": "translate",
-      "text": "Betty, you look beautiful tonight too.",
+      "text": "Betty, you're beautiful tonight.",
       "layout_policy": "adaptive"
     },
     {
@@ -698,7 +698,7 @@
     {
       "index": 94,
       "policy": "translate",
-      "text": "Come, Betty. Show me everything...open the right box.",
+      "text": "Come on, Betty. Show me everything...open the right box.",
       "layout_policy": "adaptive"
     },
     {
@@ -752,7 +752,7 @@
     {
       "index": 103,
       "policy": "translate",
-      "text": "If the dancer touches the bar, it is all over.",
+      "text": "Then it's all over.",
       "layout_policy": "adaptive"
     },
     {
@@ -836,7 +836,7 @@
     {
       "index": 117,
       "policy": "translate",
-      "text": "Forget that! There seems to be another door farther in...let us keep going, Betty...",
+      "text": "Let's keep going.",
       "layout_policy": "adaptive"
     },
     {
@@ -902,7 +902,7 @@
     {
       "index": 128,
       "policy": "translate",
-      "text": "West German adhesive. Quick-setting, reliable, and very expensive.",
+      "text": "You don't take a hint, do you? Must be that western accent of yours...I like you, Chief. I'll say it straight: I chose this ship and you over her.",
       "layout_policy": "adaptive"
     },
     {
@@ -956,25 +956,25 @@
     {
       "index": 137,
       "policy": "translate",
-      "text": "Do not make such a fuss. If you had listened to me, this would not have happened.",
+      "text": "Easy there! Once we're ashore, I'll rustle you up all the women you want!",
       "layout_policy": "adaptive"
     },
     {
       "index": 138,
       "policy": "translate",
-      "text": "What happened?",
+      "text": "Rustle me up?",
       "layout_policy": "adaptive"
     },
     {
       "index": 139,
       "policy": "translate",
-      "text": "Adhesive on a detonator...I learned that trick from a Californian.",
+      "text": "Chief, I grew up back East. I can't make head nor tail of that crazy California talk of yours. 'Rustle me up'...you mean you'll get me one?",
       "layout_policy": "adaptive"
     },
     {
       "index": 140,
       "policy": "translate",
-      "text": "I remember a man in East Germany. Dudley Slayman...or was it Jerry?",
+      "text": "Where was it? East Town Street. Right, Dada Sleiman's place. There was a knockout named Sherry there, if I remember right. Think you can get her for me?",
       "layout_policy": "adaptive"
     },
     {
@@ -992,7 +992,7 @@
     {
       "index": 143,
       "policy": "translate",
-      "text": "Let us knock on the back door. Hello, Betty. It is lovely outside.",
+      "text": "Let's knock on the back door. Hello, Betty. Lovely night out.",
       "layout_policy": "adaptive"
     },
     {
@@ -1010,7 +1010,7 @@
     {
       "index": 146,
       "policy": "translate",
-      "text": "Charlie, you can do it! You're the best sailor!",
+      "text": "Charlie, you can do it! You're the best sailor there is!",
       "layout_policy": "adaptive"
     },
     {
@@ -1052,13 +1052,13 @@
     {
       "index": 153,
       "policy": "translate",
-      "text": "How is it? Is it working?",
+      "text": "How is it? Do I pass?",
       "layout_policy": "adaptive"
     },
     {
       "index": 154,
       "policy": "translate",
-      "text": "Yes, Charlie. Perfect.",
+      "text": "No problem. Charlie, you're an honor student.",
       "layout_policy": "adaptive"
     },
     {
@@ -1196,7 +1196,7 @@
     {
       "index": 177,
       "policy": "translate",
-      "text": "Let me see...there must be a cylinder hidden somewhere.",
+      "text": "No...never mind. So you're the sort of thing you can find lying around anywhere...uh...",
       "layout_policy": "adaptive"
     },
     {
@@ -1238,7 +1238,7 @@
     {
       "index": 184,
       "policy": "translate",
-      "text": "Another panel. Why are you fidgeting, Betty?",
+      "text": "Well, another door farther in. Betty, why are you like this?",
       "layout_policy": "adaptive"
     },
     {
@@ -1250,7 +1250,7 @@
     {
       "index": 186,
       "policy": "translate",
-      "text": "I cannot see it. We go in from here...carefully.",
+      "text": "I can't see it. Seems she really wants us to enter from here...let's accept the invitation.",
       "layout_policy": "adaptive"
     },
     {
@@ -1262,13 +1262,13 @@
     {
       "index": 188,
       "policy": "translate",
-      "text": "An explosive that detonates while spewing heat of 2,000 degrees...",
+      "text": "An explosive that releases heat exceeding 2,000 degrees when it detonates...",
       "layout_policy": "adaptive"
     },
     {
       "index": 189,
       "policy": "translate",
-      "text": "Don't worry. Charlie, you're doing quite well! But it's not time for the wire yet...",
+      "text": "Don't you worry, Charlie. You're doing fine! But it's not time for the wire yet...",
       "layout_policy": "adaptive"
     },
     {
@@ -1304,13 +1304,13 @@
     {
       "index": 195,
       "policy": "translate",
-      "text": "Two thousand seconds. Plenty of time, Betty...is that what you think?",
+      "text": "Heat: 2,000 degrees. I'd melt in an instant...Betty, are you serious? Can you kill me? Both the counter body and connector tube have screw-fastened covers...",
       "layout_policy": "adaptive"
     },
     {
       "index": 196,
       "policy": "translate",
-      "text": "Betty! Why did you not wait?",
+      "text": "Betty! Why didn't you wait?",
       "layout_policy": "adaptive"
     },
     {
@@ -1322,13 +1322,13 @@
     {
       "index": 198,
       "policy": "translate",
-      "text": "Touch the timer unit...",
+      "text": "Check the timer unit...",
       "layout_policy": "adaptive"
     },
     {
       "index": 199,
       "policy": "translate",
-      "text": "Touch the connector tube...",
+      "text": "Check the connector tube...",
       "layout_policy": "adaptive"
     },
     {
@@ -1340,7 +1340,7 @@
     {
       "index": 201,
       "policy": "translate",
-      "text": "Your first time with a white one?",
+      "text": "First time with a white one, eh?",
       "layout_policy": "adaptive"
     },
     {
@@ -1352,7 +1352,7 @@
     {
       "index": 203,
       "policy": "translate",
-      "text": "Don't cut white! It's the neutral in a three-phase circuit! It's connected to both red and blue!",
+      "text": "Don't cut white! That's the neutral in a three-phase circuit! It's tied to both red and blue!",
       "layout_policy": "adaptive"
     },
     {
@@ -1364,7 +1364,7 @@
     {
       "index": 205,
       "policy": "translate",
-      "text": "Cut white and we die! Red or blue: one wire links timer to bomb. Other one is a dummy. Cut dummy: boom! Cut real wire and we are safe!",
+      "text": "Cut white and we're dead! Red or blue: one wire runs from the timer to the detonator, the other's a dummy. Cut the dummy and we're done for. Cut the real wire and we're clear!",
       "layout_policy": "adaptive"
     },
     {
@@ -1376,7 +1376,7 @@
     {
       "index": 207,
       "policy": "translate",
-      "text": "Charlie, Charlie, Charlie! Enough! Never mind! Come back up! Get out! Do it! I can't let you take such a reckless gamble! That's an order! Withdraw! Charlie!",
+      "text": "Charlie! Charlie, that's enough! Forget it! Come on up! Get out of there, you hear me? I won't let you stake your life on a fool guess! That's an order! Get out, Charlie!",
       "layout_policy": "adaptive"
     },
     {
@@ -1388,7 +1388,7 @@
     {
       "index": 209,
       "policy": "translate",
-      "text": "Charlie! I mean it! I'm not lying! This time I won't tolerate your pointless defiance! Run, Charlie!",
+      "text": "Charlie! I'm serious! I ain't lying to you! This time I won't put up with your damned stubbornness! Run, Charlie!",
       "layout_policy": "adaptive"
     },
     {
@@ -1400,7 +1400,7 @@
     {
       "index": 211,
       "policy": "translate",
-      "text": "Another matching bomb is still aboard. If I fail, cut the other wire. Then the method will be clear. Chief Engineer, guard Nostalgia, our dear ship.",
+      "text": "There's another bomb aboard built the same way. If I miss, cut the other wire on that one. Then you'll know. Chief...look after the Nostalgia. She's our ship.",
       "layout_policy": "adaptive"
     },
     {

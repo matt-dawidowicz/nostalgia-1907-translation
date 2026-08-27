@@ -84,7 +84,7 @@
     {
       "index": 8,
       "policy": "translate",
-      "text": "Crew of Nostalgia.",
+      "text": "Attention, Nostalgia crew.",
       "layout_policy": "adaptive"
     },
     {
@@ -96,7 +96,7 @@
     {
       "index": 10,
       "policy": "translate",
-      "text": "Helm",
+      "text": "Helmsman",
       "layout_policy": "adaptive"
     },
     {
@@ -114,7 +114,7 @@
     {
       "index": 13,
       "policy": "translate",
-      "text": "Mate! Poison gas!",
+      "text": "The Chief Officer! Poison gas!",
       "layout_policy": "adaptive"
     },
     {
@@ -132,7 +132,7 @@
     {
       "index": 16,
       "policy": "translate",
-      "text": "Bow to wind!",
+      "text": "Bring her head to the wind!",
       "layout_policy": "adaptive"
     },
     {
@@ -144,7 +144,7 @@
     {
       "index": 18,
       "policy": "translate",
-      "text": "Helm stuck. Prop dead!",
+      "text": "The helm's heavy! The screw has stopped!",
       "layout_policy": "adaptive"
     },
     {
@@ -211,7 +211,7 @@
     {
       "index": 29,
       "policy": "translate",
-      "text": "Attack came with war.",
+      "text": "The attack came with the declaration of war.",
       "layout_policy": "adaptive"
     },
     {

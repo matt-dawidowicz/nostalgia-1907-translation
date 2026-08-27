@@ -80,7 +80,7 @@
     {
       "index": 3,
       "policy": "translate",
-      "text": "I'm Aubrey Voysey. I've been sitting here all along, waiting for Lord Ashby to arrive.",
+      "text": "I'm Aubrey Voysey. I've been standing here all along, waiting for Lord Ashby to arrive.",
       "layout_policy": "adaptive"
     },
     {
@@ -98,7 +98,7 @@
     {
       "index": 6,
       "policy": "translate",
-      "text": "Robert Ashby? The maritime-insurance solicitor?",
+      "text": "Robert Ashby? The insurance man's butler?",
       "layout_policy": "adaptive"
     },
     {
@@ -116,13 +116,13 @@
     {
       "index": 9,
       "policy": "translate",
-      "text": "Please do not make light of him. Ahem.",
+      "text": "Don't lump me together with him. Ahem.",
       "layout_policy": "adaptive"
     },
     {
       "index": 10,
       "policy": "translate",
-      "text": "Awfully stiff for a chair!",
+      "text": "Pretty high-and-mighty for a chair!",
       "layout_policy": "adaptive"
     },
     {
@@ -140,13 +140,13 @@
     {
       "index": 13,
       "policy": "translate",
-      "text": "What a strange gentleman...why is he so formal with a chair?",
+      "text": "What a strange gentleman...those are some sharp eyes.",
       "layout_policy": "adaptive"
     },
     {
       "index": 14,
       "policy": "translate",
-      "text": "...he hasn't noticed me either.",
+      "text": "...the culprit hasn't come this way either.",
       "layout_policy": "adaptive"
     },
     {
@@ -163,7 +163,7 @@
     {
       "index": 17,
       "policy": "translate",
-      "text": "I heard the radio in First-Class Cabin A. From Lark Deck, these stairs are the only way up here. The culprit climbed them...and so will I!",
+      "text": "I heard a wireless set operating in First-Class Cabin A. From Lark Deck, these stairs are the only way up here. The culprit climbed them...and so will I!",
       "layout_policy": "adaptive"
     },
     {
@@ -175,13 +175,13 @@
     {
       "index": 19,
       "policy": "translate",
-      "text": "I'm back on the Promenade Deck by the Royal Suites. I'll circle around through the passage ahead.",
+      "text": "I'm back by the Royal Suites. Turn left toward the Promenade Deck.",
       "layout_policy": "adaptive"
     },
     {
       "index": 20,
       "policy": "translate",
-      "text": "Confectionery Counter",
+      "text": "Inquiry Office",
       "layout_policy": "adaptive"
     },
     {
@@ -205,7 +205,7 @@
     {
       "index": 24,
       "policy": "translate",
-      "text": "A question: did anyone pass this way?",
+      "text": "I'm only an apprentice, but let me ask: did anyone pass this way?",
       "layout_policy": "adaptive"
     },
     {
@@ -229,7 +229,7 @@
     {
       "index": 28,
       "policy": "translate",
-      "text": "What a fine woman.",
+      "text": "She has sharp eyes.",
       "layout_policy": "adaptive"
     },
     {
@@ -247,7 +247,7 @@
     {
       "index": 31,
       "policy": "translate",
-      "text": "On such a small ship, I never imagined I'd feel this lonely...",
+      "text": "When I was little? I never thought I'd end up on a ship myself...",
       "layout_policy": "adaptive"
     },
     {
@@ -259,37 +259,37 @@
     {
       "index": 33,
       "policy": "translate",
-      "text": "Keep watch on the passage to the Promenade Deck.",
+      "text": "Block off the passage to the Promenade Deck.",
       "layout_policy": "adaptive"
     },
     {
       "index": 34,
       "policy": "translate",
-      "text": "From here there are stairs and two Royal Suite passages, A and B...heh, heh, heh!",
+      "text": "Turn right from the stairs. Royal Suites A and B are on the left; the attendants' rooms are on the right...heh, heh, heh!",
       "layout_policy": "adaptive"
     },
     {
       "index": 35,
       "policy": "translate",
-      "text": "Starboard Passage",
+      "text": "Fore Passage",
       "layout_policy": "fixed"
     },
     {
       "index": 36,
       "policy": "translate",
-      "text": "The path splits. I'll take the starboard side.",
+      "text": "The path splits. Turn left.",
       "layout_policy": "adaptive"
     },
     {
       "index": 37,
       "policy": "translate",
-      "text": "Side Promenade Deck",
+      "text": "Port Promenade Deck",
       "layout_policy": "adaptive"
     },
     {
       "index": 38,
       "policy": "translate",
-      "text": "Ahead are stairs to the Boat Deck and a passage to Center Hall. Keep moving.",
+      "text": "Turn right again. Ahead are the Boat Deck stairs and the passage to Center Hall.",
       "layout_policy": "adaptive"
     },
     {
@@ -301,7 +301,7 @@
     {
       "index": 40,
       "policy": "translate",
-      "text": "Look, Stra. There's an idiot investigating the ship.",
+      "text": "Hey, Stra. There's an idiot imitating ukiyo-e.",
       "layout_policy": "adaptive"
     },
     {
@@ -325,13 +325,13 @@
     {
       "index": 44,
       "policy": "translate",
-      "text": "Ask about the investigation.",
+      "text": "Please cooperate with the search for the bomber.",
       "layout_policy": "adaptive"
     },
     {
       "index": 45,
       "policy": "translate",
-      "text": "Speak to them.",
+      "text": "He spoke!",
       "layout_policy": "adaptive"
     },
     {
@@ -349,13 +349,13 @@
     {
       "index": 48,
       "policy": "translate",
-      "text": "Just chatting. I'm a chorus girl with the band. You saw my show, right? Did it move you? This is Stravinsky. He's Russian...and far too shy.",
+      "text": "We were just chatting. I'm a chorus girl with the band. You saw my show, right? Did it get you? This is Stravinsky. He's a customer, and he's just the best. Says he's a composer! An artist! I can't get enough!",
       "layout_policy": "adaptive"
     },
     {
       "index": 49,
       "policy": "translate",
-      "text": "C-Cut it out, Coco! Don't stare at me...I'm a composer. I came from Russia in search of freedom. I can't let my identity get out!",
+      "text": "C-cut it out, Coco...you're embarrassing me. I'm on the run. I fled Russia in search of freedom! I can't let my identity get out...oh, this is bad.",
       "layout_policy": "adaptive"
     },
     {
@@ -367,7 +367,7 @@
     {
       "index": 51,
       "policy": "translate",
-      "text": "Stop! You'll expose me!",
+      "text": "Keep it up for the rest of your life! It'll all be over soon.",
       "layout_policy": "adaptive"
     },
     {
@@ -385,13 +385,13 @@
     {
       "index": 54,
       "policy": "translate",
-      "text": "...I'll turn back and try another route.",
+      "text": "...go back and circle around on the starboard side.",
       "layout_policy": "adaptive"
     },
     {
       "index": 55,
       "policy": "translate",
-      "text": "Side Promenade Deck",
+      "text": "Starboard Promenade Deck",
       "layout_policy": "fixed"
     },
     {
@@ -415,7 +415,7 @@
     {
       "index": 59,
       "policy": "translate",
-      "text": "You look awfully grim, Kasuke.",
+      "text": "Are you looking for something, Kasuke?",
       "layout_policy": "adaptive"
     },
     {
@@ -433,7 +433,7 @@
     {
       "index": 62,
       "policy": "translate",
-      "text": "Sorrow at parting can overwhelm the heart. Tell me, has some troublesome woman ensnared you?",
+      "text": "Staying in neighboring cabins is some kind of fate. If you've gotten into trouble, I'll help you.",
       "layout_policy": "adaptive"
     },
     {
@@ -451,7 +451,7 @@
     {
       "index": 65,
       "policy": "translate",
-      "text": "What troubles you?",
+      "text": "Oh, psychology...?",
       "layout_policy": "adaptive"
     },
     {
@@ -469,7 +469,7 @@
     {
       "index": 68,
       "policy": "translate",
-      "text": "Bah! What a trivial question! Have you nothing worthier to ask? My psychology is the finest!",
+      "text": "What?! Nonsense! Don't you have a more serious request?! An old man's opinion is important!",
       "layout_policy": "adaptive"
     },
     {
@@ -493,7 +493,7 @@
     {
       "index": 72,
       "policy": "translate",
-      "text": "So I asked him.",
+      "text": "Because he's short-tempered.",
       "layout_policy": "adaptive"
     },
     {
@@ -505,7 +505,7 @@
     {
       "index": 74,
       "policy": "translate",
-      "text": "There's a door to the Boat Deck here.",
+      "text": "I just noticed there's a door to the meeting room here.",
       "layout_policy": "adaptive"
     },
     {
@@ -553,7 +553,7 @@
     {
       "index": 82,
       "policy": "translate",
-      "text": "...I can't believe it.",
+      "text": "...this isn't a game.",
       "layout_policy": "adaptive"
     },
     {
@@ -571,7 +571,7 @@
     {
       "index": 85,
       "policy": "translate",
-      "text": "Then the culprit must have gone through the crew block.",
+      "text": "So the culprit went through the meeting room...",
       "layout_policy": "adaptive"
     },
     {
@@ -601,25 +601,25 @@
     {
       "index": 90,
       "policy": "translate",
-      "text": "So the culprit is somewhere between the Royal Suite and First-Class blocks.",
+      "text": "So the culprit must be among the passengers in the Royal Suite and First-Class blocks.",
       "layout_policy": "adaptive"
     },
     {
       "index": 91,
       "policy": "translate",
-      "text": "After the broadcast, the culprit left the cabin where it was sent.",
+      "text": "The culprit acted from a cabin along that route.",
       "layout_policy": "adaptive"
     },
     {
       "index": 92,
       "policy": "translate",
-      "text": "Exclude the crew. Their normal movement through crew areas would attract no suspicion.",
+      "text": "Exclude the crew, I suppose. But if we trace the route backward, it could still have been an inside job by the crew.",
       "layout_policy": "adaptive"
     },
     {
       "index": 93,
       "policy": "translate",
-      "text": "Right. The culprit could be a passenger able to move freely through crew territory.",
+      "text": "Exactly. Focus on the crew. It could even be the shipping company itself, trying to collect the insurance money.",
       "layout_policy": "adaptive"
     },
     {
@@ -631,7 +631,7 @@
     {
       "index": 95,
       "policy": "translate",
-      "text": "Ashby is one suspect. As his solicitor, Voysey can cross between the two blocks as well.",
+      "text": "Is that an order from our client, Lord Ashby? I won't go along with an insurer protecting his own skin. Besides, Ashby himself is a suspect.",
       "layout_policy": "adaptive"
     },
     {
@@ -643,7 +643,7 @@
     {
       "index": 97,
       "policy": "translate",
-      "text": "Don't let a single clue lead you by the nose.",
+      "text": "Don't listen to him just because he's in charge for now.",
       "layout_policy": "adaptive"
     },
     {
@@ -655,7 +655,7 @@
     {
       "index": 99,
       "policy": "translate",
-      "text": "Don't be blinded by the sponsor! Question everyone who can cross between passenger and crew areas. Go!",
+      "text": "Don't defy the sponsor! Check the crew and the other passengers! Go, now!",
       "layout_policy": "adaptive"
     },
     {

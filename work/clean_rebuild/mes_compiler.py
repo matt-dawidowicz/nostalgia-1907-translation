@@ -183,6 +183,13 @@ FIXED_ENGLISH_UNITS = (
     (0x67, "literal", "ke"),
     (0x68, "literal", "ai"),
     (0x69, "literal", "am"),
+    (0x6A, "literal", ", "),
+    (0x6B, "literal", "to"),
+    (0x6C, "literal", " s"),
+    (0x6D, "literal", " o"),
+    (0x6E, "literal", " c"),
+    (0x6F, "literal", " h"),
+    (0x70, "literal", "un"),
 )
 
 

@@ -11,8 +11,11 @@ Architectural baseline: validated clean-rebuild architecture
 > Historical status: this report records the maintenance decision made on the
 > date above. Its then-pending runtime questions were subsequently addressed by
 > the full maintainer Ares playtest of the hash-identified North American
-> reference. The current public source release is 1.0.2; use
-> [release policy](RELEASE.md) for current release evidence and requirements.
+> reference. Version 1.0.2 remains the latest runtime-certified published
+> reference, while the current source tree contains a later translation
+> revision that still requires fresh runtime evidence. Use [release
+> policy](RELEASE.md) and [the 2026-08-27 revision
+> record](TRANSLATION_REVISION_20260827.md) for current status.
 
 ## Release decision
 

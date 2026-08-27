@@ -109,7 +109,7 @@
       "14": "Always reading the flow beneath conscious thought? Intuition?",
       "15": "Or switching actions on impulse, without preparation?",
       "16": "Russia's assassination bureau...you serve the same country, don't you?",
-      "17": "Internal Security is entirely separate from General Intelligence. Even on the same ship...",
+      "17": "General Intelligence and Internal Security are separate, so even aboard the same ship I couldn't identify them.",
       "18": "Besides, there is a killer...",
       "19": "I concede the wager. What is your objective?",
       "20": "Only to finish the voyage safely and return to my old life.",
@@ -122,7 +122,7 @@
       "27": "...an opening...are you showing me a weakness?",
       "28": "What is wrong? You should be able to handle me better.",
       "29": "You are someone who can live alone.",
-      "30": "What do you like?",
+      "30": "Don't underestimate me.",
       "31": "I already have the evidence. Tell me the truth.",
       "32": "Heh. You already lost the wager.",
       "33": "Ngh...",
@@ -135,7 +135,7 @@
       "41": "You do not believe that.",
       "42": "Agh...",
       "43": "The culprit is playing you.",
-      "44": "Is that fun?",
+      "44": "Are you enjoying this?",
       "45": "...",
       "46": "...",
       "47": "Second-Class Cabin",
@@ -150,7 +150,7 @@
       "56": "Our sales director is a sly fox. Every report to him feels like an interrogation.",
       "57": "But your director would not kill you.",
       "58": "You are always trying to escape from something.",
-      "59": "Maybe. But can one person directly see what another is thinking?",
+      "59": "Maybe. But can one person see directly into another person's thoughts?",
       "60": "Sometimes. Often.",
       "61": "...",
       "62": "Ilyusha, do you have any family?",
@@ -188,7 +188,7 @@
       "94": "Ask him about Kirikov. Remind him how Russia's privileged class behaves and he will confess. He thinks every country is the same, but now he is on the receiving end.",
       "95": "Defection openly betrays the Empire. The Tsar will be humiliated. Reveal yourself publicly before his assassins silence you.",
       "96": "...shut up...",
-      "97": "Well, Kirikov. How does it feel to make the greatest gamble of your life? Your family, or your future?",
+      "97": "Well, Kirikov. How does it feel to make the biggest gamble of your life? With a family, you couldn't possibly do this, could you?",
       "98": "We captured one of the Russian agents watching you. We can make him reveal your identity. He knows you intend to defect, and he will kill you. What will you do?",
       "99": "I-it is me! I am the Russian Fog!",
       "100": "Thank you for your cooperation!",
@@ -201,11 +201,11 @@
       "107": "Not now.",
       "108": "W-why not?",
       "109": "They need me too, do they not?",
-      "110": "This is no time to leisurely list your asylum terms!",
-      "111": "...the bomber.",
+      "110": "This is no time to list your asylum terms at leisure!",
+      "111": "...the time bomb.",
       "112": "Why are you relying on me now?",
       "113": "You bastard! You forced me to confess!",
-      "114": "The person offering you sanctuary may be behind the bombing, an agent of a third country. Then Britain is not your destination at all.",
+      "114": "The person offering sanctuary may be the bomber, an agent of a third country. If so, must you really defect to Britain?",
       "115": "That is absurd...",
       "116": "Pathetic.",
       "117": "Try any little trick...",
@@ -223,14 +223,14 @@
       "129": "The bomber wants me. Hand me over, and the ship will be saved.",
       "130": "Kill me, and you will never know who wants you.",
       "131": "...I will not kill you.",
-      "132": "The bomber will not disarm it. This ship is evidence of the theft, so it can never reach Southampton. At eight, the bomb will erase it. Our only hope is to catch the culprit and dismantle it ourselves.",
+      "132": "The culprit won't disarm it. This ship proves the theft, so he can't let it reach Southampton. At 7 p.m. the bomb destroys it. We must catch him, tie him before it, and force him to disarm it.",
       "133": "The culprit must have an escape route. Hand me over.",
       "134": "So anywhere but Britain will do?",
       "135": "Anywhere outside Russia's satellite states.",
       "136": "Try Antarctica. The vodka is excellent.",
       "137": "...no.",
       "138": "Why not?",
-      "139": "Do you not understand? You can escape to a third country that will protect you. But the culprit will flee this doomed ship with you, leaving 411 innocent people behind.",
+      "139": "Don't you get it? If Britain is no longer an option, you can flee to a third country that will protect you from Russia. But can you escape this ship while the culprit controls it with bombs? Maybe you can. But what about the 300 innocent people left aboard?",
       "140": "A first-rate spy thinks first about survival.",
       "141": "Idiot! Everyone does!",
       "142": "I am disappointed, Russian Fog. You are nothing but an egoist."
@@ -353,7 +353,7 @@
     {
       "index": 17,
       "policy": "translate",
-      "text": "Internal Security is entirely separate from General Intelligence. Even on the same ship...",
+      "text": "General Intelligence and Internal Security are separate, so even aboard the same ship I couldn't identify them.",
       "layout_policy": "adaptive"
     },
     {
@@ -431,7 +431,7 @@
     {
       "index": 30,
       "policy": "translate",
-      "text": "What do you like?",
+      "text": "Don't underestimate me.",
       "layout_policy": "adaptive"
     },
     {
@@ -514,7 +514,7 @@
     {
       "index": 44,
       "policy": "translate",
-      "text": "Is that fun?",
+      "text": "Are you enjoying this?",
       "layout_policy": "adaptive"
     },
     {
@@ -604,7 +604,7 @@
     {
       "index": 59,
       "policy": "translate",
-      "text": "Maybe. But can one person directly see what another is thinking?",
+      "text": "Maybe. But can one person see directly into another person's thoughts?",
       "layout_policy": "adaptive"
     },
     {
@@ -832,7 +832,7 @@
     {
       "index": 97,
       "policy": "translate",
-      "text": "Well, Kirikov. How does it feel to make the greatest gamble of your life? Your family, or your future?",
+      "text": "Well, Kirikov. How does it feel to make the biggest gamble of your life? With a family, you couldn't possibly do this, could you?",
       "layout_policy": "adaptive"
     },
     {
@@ -910,13 +910,13 @@
     {
       "index": 110,
       "policy": "translate",
-      "text": "This is no time to leisurely list your asylum terms!",
+      "text": "This is no time to list your asylum terms at leisure!",
       "layout_policy": "adaptive"
     },
     {
       "index": 111,
       "policy": "translate",
-      "text": "...the bomber.",
+      "text": "...the time bomb.",
       "layout_policy": "adaptive"
     },
     {
@@ -934,7 +934,7 @@
     {
       "index": 114,
       "policy": "translate",
-      "text": "The person offering you sanctuary may be behind the bombing, an agent of a third country. Then Britain is not your destination at all.",
+      "text": "The person offering sanctuary may be the bomber, an agent of a third country. If so, must you really defect to Britain?",
       "layout_policy": "adaptive"
     },
     {
@@ -1042,7 +1042,7 @@
     {
       "index": 132,
       "policy": "translate",
-      "text": "The bomber will not disarm it. This ship is evidence of the theft, so it can never reach Southampton. At eight, the bomb will erase it. Our only hope is to catch the culprit and dismantle it ourselves.",
+      "text": "The culprit won't disarm it. This ship proves the theft, so he can't let it reach Southampton. At 7 p.m. the bomb destroys it. We must catch him, tie him before it, and force him to disarm it.",
       "layout_policy": "adaptive"
     },
     {
@@ -1084,7 +1084,7 @@
     {
       "index": 139,
       "policy": "translate",
-      "text": "Do you not understand? You can escape to a third country that will protect you. But the culprit will flee this doomed ship with you, leaving 411 innocent people behind.",
+      "text": "Don't you get it? If Britain is no longer an option, you can flee to a third country that will protect you from Russia. But can you escape this ship while the culprit controls it with bombs? Maybe you can. But what about the 300 innocent people left aboard?",
       "layout_policy": "adaptive"
     },
     {
@@ -1245,7 +1245,7 @@
     {
       "index": 166,
       "policy": "translate",
-      "text": "What a fool I am...why did I not see it? Ashby has an accomplice!",
+      "text": "Maybe I'm an idiot for not noticing...if he has even one accomplice...",
       "layout_policy": "adaptive"
     },
     {
@@ -1293,7 +1293,7 @@
     {
       "index": 174,
       "policy": "translate",
-      "text": "Enough...getting attached only leads to dreadful people. Such is life...",
+      "text": "Enough...get attached and you'll pay for it...",
       "layout_policy": "adaptive"
     },
     {
@@ -1341,7 +1341,7 @@
     {
       "index": 182,
       "policy": "translate",
-      "text": "No feelings, then.",
+      "text": "Feelings are intuition.",
       "layout_policy": "adaptive"
     },
     {
@@ -1353,7 +1353,7 @@
     {
       "index": 184,
       "policy": "translate",
-      "text": "I knew we would be found out.",
+      "text": "Just what I'd expect from a Parisian.",
       "layout_policy": "adaptive"
     },
     {
@@ -1383,13 +1383,13 @@
     {
       "index": 189,
       "policy": "translate",
-      "text": "The accomplice is Dunant. When I would not abandon my suspicion of Ashby, Dunant rushed out a third claim letter. Unlike the others, it lacked planning.",
+      "text": "The accomplice is Dunant. I kept pressing Ashby, so he had Dunant write the second claim statement in a rush. It lacked planning.",
       "layout_policy": "adaptive"
     },
     {
       "index": 190,
       "policy": "translate",
-      "text": "I bet on my favorite bluff.",
+      "text": "I used my favorite bluff.",
       "layout_policy": "adaptive"
     },
     {
@@ -1473,7 +1473,7 @@
     {
       "index": 204,
       "policy": "translate",
-      "text": "Dunant is your partner. He helped you through this affair and took every risk. Yet you mean to abandon him now?",
+      "text": "We're partners. Ever since this started, I've cooperated with you, haven't I? I've even crossed dangerous bridges. Now it's your turn!",
       "layout_policy": "adaptive"
     },
     {
@@ -1497,7 +1497,7 @@
     {
       "index": 208,
       "policy": "translate",
-      "text": "Foreign Affairs",
+      "text": "Exterior",
       "layout_policy": "fixed"
     },
     {
@@ -1515,7 +1515,7 @@
     {
       "index": 211,
       "policy": "translate",
-      "text": "That appears to be Ilyu. If she killed Voysey and Pring, Russian Intelligence would recognize the pattern and identify Kirikov as the Fog.",
+      "text": "That would be the other Russian spy, Ilyusha. She killed Voysey, and Braque too. She mistook Braque for a British Intelligence agent. She couldn't allow Kirikov, the Russian Fog, to be taken.",
       "layout_policy": "adaptive"
     },
     {
@@ -1569,7 +1569,7 @@
     {
       "index": 220,
       "policy": "translate",
-      "text": "Cargo Hold",
+      "text": "High Terrace",
       "layout_policy": "adaptive"
     },
     {
