@@ -1,0 +1,72 @@
+name: Apply retail layout reserve fixes 20260827
+
+on:
+  push:
+    branches:
+      - translation-source-corrections-20260827
+    paths:
+      - .github/workflows/apply-retail-layout-reserve-fixes-20260827.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: translation-source-corrections-20260827
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install project tooling
+        run: python -m pip install -e .
+      - name: Apply exact-match retail layout reserve fixes
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          # START:000 exact semantic/layout correction.
+          path = Path("work/clean_rebuild/sources/START.json")
+          payload = json.loads(path.read_text(encoding="utf-8"))
+          before = "The past blurs into fantasy just as easily as we imagine one possible future. The moment I noticed the faint scar in her left eye is not here...not now."
+          after = "The past blurs into fantasy just as easily as we imagine one possible future. The moment I noticed the faint scar in her left eye was not here, in this fleeting instant."
+          record = payload["records"][0]
+          if record.get("text") != before:
+              raise SystemExit(f"START:000 expected {before!r}, got {record.get('text')!r}")
+          record["text"] = after
+          required = (payload.get("profile") or {}).get("required_text_exact") or {}
+          if "0" in required:
+              required["0"] = after
+          path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+          # Expand the shared lossless English fixed-cell dictionary.
+          path = Path("work/clean_rebuild/mes_compiler.py")
+          text = path.read_text(encoding="utf-8")
+          needle = '    (0x69, "literal", "am"),\n)\n'
+          replacement = '''    (0x69, "literal", "am"),\n    (0x6A, "literal", ", "),\n    (0x6B, "literal", "to"),\n    (0x6C, "literal", " s"),\n    (0x6D, "literal", " o"),\n    (0x6E, "literal", " c"),\n    (0x6F, "literal", " h"),\n    (0x70, "literal", "un"),\n)\n'''
+          if needle not in text:
+              raise SystemExit("fixed English dictionary insertion point not found exactly")
+          path.write_text(text.replace(needle, replacement, 1), encoding="utf-8")
+          print("Applied START six-row wording and 7 fixed English dictionary cells")
+          PY
+          test "$(git diff --name-only | sort)" = $'work/clean_rebuild/mes_compiler.py\nwork/clean_rebuild/sources/START.json'
+      - name: Validate source tree
+        run: |
+          python tools/source_health.py --root . --strict-release
+          python -m compileall -q nostalgia1907.py tools work tests
+          python -m unittest discover -s tests -v
+          python tools/style_audit.py --root .
+      - name: Commit canonical retail layout reserve fixes
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add work/clean_rebuild/mes_compiler.py work/clean_rebuild/sources/START.json
+          git diff --cached --quiet && { echo "No canonical changes to commit"; exit 1; }
+          git commit -m "translation: apply retail layout reserve fixes"
+          git push origin HEAD:translation-source-corrections-20260827
