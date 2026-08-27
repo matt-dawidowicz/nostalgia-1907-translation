@@ -320,7 +320,7 @@
       "(?i)Russian Wolf",
       "(?i)\\bDirecktor\\b",
       "(?i)Queen's English",
-      "(?i)Action 3"
+      "(?i)^ACT\\s+3:"
     ]
   },
   "text_mode": "render-ready",

@@ -62,7 +62,7 @@
       "177": "The King's English"
     },
     "forbidden_text_patterns": [
-      "(?i)^ACTION\\s+1:",
+      "(?i)^ACT\\s+1:",
       "(?i)Queen of England",
       "(?i)Queen's English"
     ]

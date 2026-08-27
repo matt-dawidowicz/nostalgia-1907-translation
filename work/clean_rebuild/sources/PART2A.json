@@ -69,7 +69,7 @@
       "117": "Come on, not a 'Russki' at a time like this. That's dangerous."
     },
     "forbidden_text_patterns": [
-      "(?i)^ACTION\\s+2:",
+      "(?i)^ACT\\s+2:",
       "(?i)\\bDirecktor\\b",
       "(?i)^Lock$"
     ]
