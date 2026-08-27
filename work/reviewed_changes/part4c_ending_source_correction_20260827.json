@@ -1,0 +1,94 @@
+{
+  "changes": [
+    {
+      "id": "PART4C:049",
+      "before": "I'm the son of this century's last samurai.",
+      "after": "Sorry. I'm the son of this century's last samurai.",
+      "layout_policy": "adaptive",
+      "japanese": "わるいな。ぼくは今世紀最後のサムライの子でね",
+      "note": "Restores the source's opening わるいな ('Sorry')."
+    },
+    {
+      "id": "PART4C:051",
+      "before": "No one is pursuing me...",
+      "after": "No one can catch up...",
+      "layout_policy": "fixed",
+      "japanese": "だれも私に追いつけない・・・",
+      "note": "追いつけない means cannot catch up, not 'is pursuing'. The object 'with me' is explicit in Japanese but safely implicit in natural English here, keeping the fixed string shorter than the current line."
+    },
+    {
+      "id": "PART4C:052",
+      "before": "Run away with me?",
+      "after": "Can you run with me?",
+      "layout_policy": "fixed",
+      "japanese": "一緒に走れる？",
+      "note": "The source asks whether the other person can run together with her; it does not say 'run away'."
+    },
+    {
+      "id": "PART4C:054",
+      "before": "No. A spy and a salesman are a bad match.",
+      "after": "No. No spies or salesmen.",
+      "layout_policy": "fixed",
+      "japanese": "ヤだ。スパイと営業マンはお断り",
+      "note": "お断り rejects the categories/roles; the source does not say they are a bad romantic match."
+    },
+    {
+      "id": "PART4C:055",
+      "before": "You cannot challenge me...",
+      "after": "Don't challenge me...",
+      "layout_policy": "fixed",
+      "japanese": "わたしに挑んではならないのよ・・・",
+      "note": "挑んではならない is prohibition ('must not / don't challenge me'), not the previously proposed and incorrect 'you'll have to challenge me'."
+    },
+    {
+      "id": "PART4C:056",
+      "before": "You are a foolish man.",
+      "after": "Foolish men.",
+      "layout_policy": "fixed",
+      "japanese": "愚かな男たち",
+      "note": "男たち is explicitly plural."
+    },
+    {
+      "id": "PART4C:057",
+      "before": "...again, alone...",
+      "after": "...alone again...",
+      "layout_policy": "fixed",
+      "japanese": "・・・・また、ひとり・・・",
+      "note": "Natural English preserving the source's 'again, alone' meaning and pause structure."
+    },
+    {
+      "id": "PART4C:059",
+      "before": "Now, right here.",
+      "after": "Here, now.",
+      "layout_policy": "fixed",
+      "japanese": "いま、ここで",
+      "note": "Restores the compact here/now motif that echoes the opening narration."
+    }
+  ],
+  "unchanged_verified": [
+    {
+      "id": "PART4C:053",
+      "text": "...me?",
+      "japanese": "・・・ぼく？"
+    },
+    {
+      "id": "PART4C:058",
+      "text": "I survived...",
+      "japanese": "生き残った・・・"
+    }
+  ],
+  "runtime_status": {
+    "PART4C:051-059": "PENDING",
+    "reason": "All nine ending records use fixed layout and have no safe SCN-derived width, row-count, or placement contract. Static edits do not constitute runtime fit evidence.",
+    "required_evidence": "Replay PART4C:051 through PART4C:059 uninterrupted in the built candidate; capture full frames before display, at complete display, and on dismissal/advance, and compare against retail Japanese placement/clipping/timing."
+  },
+  "static_cell_comparison": {
+    "PART4C:051": {"before_cells": 12, "after_cells": 11},
+    "PART4C:052": {"before_cells": 9, "after_cells": 10},
+    "PART4C:054": {"before_cells": 21, "after_cells": 13},
+    "PART4C:055": {"before_cells": 13, "after_cells": 11},
+    "PART4C:056": {"before_cells": 11, "after_cells": 6},
+    "PART4C:057": {"before_cells": 9, "after_cells": 9},
+    "PART4C:059": {"before_cells": 8, "after_cells": 5}
+  }
+}
