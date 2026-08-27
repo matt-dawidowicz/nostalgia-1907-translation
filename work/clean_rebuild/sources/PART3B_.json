@@ -121,7 +121,7 @@
     {
       "index": 10,
       "policy": "translate",
-      "text": "Now, Ruthie...it looks like I will not be returning to southern France...sorry.",
+      "text": "Now, Ruthie...it looks like I won't be returning to southern France...sorry.",
       "layout_policy": "adaptive"
     },
     {
@@ -1320,7 +1320,7 @@
     {
       "index": 210,
       "policy": "translate",
-      "text": "Question both of them more forcefully.",
+      "text": "Press both of them harder.",
       "layout_policy": "adaptive"
     }
   ]

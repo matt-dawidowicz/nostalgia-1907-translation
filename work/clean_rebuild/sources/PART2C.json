@@ -817,7 +817,7 @@
     {
       "index": 123,
       "policy": "translate",
-      "text": "I am an art dealer. I am Georges Braque, a name known throughout Paris.",
+      "text": "I am Georges Braque, an art dealer known throughout Paris.",
       "layout_policy": "adaptive"
     },
     {
