@@ -109,7 +109,7 @@
       "14": "Always reading the flow beneath conscious thought? Intuition?",
       "15": "Or switching actions on impulse, without preparation?",
       "16": "Russia's assassination bureau...you serve the same country, don't you?",
-      "17": "General Intelligence and Internal Security are completely separate sections, so even aboard the same ship I couldn't identify them.",
+      "17": "General Intelligence and Internal Security are separate, so even aboard the same ship I couldn't identify them.",
       "18": "Besides, there is a killer...",
       "19": "I concede the wager. What is your objective?",
       "20": "Only to finish the voyage safely and return to my old life.",
@@ -205,7 +205,7 @@
       "111": "...the time bomb.",
       "112": "Why are you relying on me now?",
       "113": "You bastard! You forced me to confess!",
-      "114": "The person offering you sanctuary may be behind the bombing, an agent of a third country. If so, does your destination for defection really have to be Britain?",
+      "114": "The person offering sanctuary may be the bomber, an agent of a third country. If so, must you really defect to Britain?",
       "115": "That is absurd...",
       "116": "Pathetic.",
       "117": "Try any little trick...",
@@ -223,7 +223,7 @@
       "129": "The bomber wants me. Hand me over, and the ship will be saved.",
       "130": "Kill me, and you will never know who wants you.",
       "131": "...I will not kill you.",
-      "132": "The culprit won't disarm the bomb. This ship is evidence of the theft, so he can't let it reach Southampton. At 7:00 p.m. the bomb will destroy it. Our only move is to catch the culprit, tie him up in front of the bomb, and make him disarm it himself.",
+      "132": "The culprit won't disarm it. This ship proves the theft, so he can't let it reach Southampton. At 7 p.m. the bomb destroys it. We must catch him, tie him before it, and force him to disarm it.",
       "133": "The culprit must have an escape route. Hand me over.",
       "134": "So anywhere but Britain will do?",
       "135": "Anywhere outside Russia's satellite states.",
@@ -353,7 +353,7 @@
     {
       "index": 17,
       "policy": "translate",
-      "text": "General Intelligence and Internal Security are completely separate sections, so even aboard the same ship I couldn't identify them.",
+      "text": "General Intelligence and Internal Security are separate, so even aboard the same ship I couldn't identify them.",
       "layout_policy": "adaptive"
     },
     {
@@ -934,7 +934,7 @@
     {
       "index": 114,
       "policy": "translate",
-      "text": "The person offering you sanctuary may be behind the bombing, an agent of a third country. If so, does your destination for defection really have to be Britain?",
+      "text": "The person offering sanctuary may be the bomber, an agent of a third country. If so, must you really defect to Britain?",
       "layout_policy": "adaptive"
     },
     {
@@ -1042,7 +1042,7 @@
     {
       "index": 132,
       "policy": "translate",
-      "text": "The culprit won't disarm the bomb. This ship is evidence of the theft, so he can't let it reach Southampton. At 7:00 p.m. the bomb will destroy it. Our only move is to catch the culprit, tie him up in front of the bomb, and make him disarm it himself.",
+      "text": "The culprit won't disarm it. This ship proves the theft, so he can't let it reach Southampton. At 7 p.m. the bomb destroys it. We must catch him, tie him before it, and force him to disarm it.",
       "layout_policy": "adaptive"
     },
     {
@@ -1383,7 +1383,7 @@
     {
       "index": 189,
       "policy": "translate",
-      "text": "The accomplice is Dunant. Because I kept pressing my suspicion of Ashby, Ashby had Dunant write the second claim statement. It was rushed and lacked planning.",
+      "text": "The accomplice is Dunant. I kept pressing Ashby, so he had Dunant write the second claim statement in a rush. It lacked planning.",
       "layout_policy": "adaptive"
     },
     {
