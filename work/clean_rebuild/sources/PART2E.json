@@ -464,19 +464,19 @@
     {
       "index": 55,
       "policy": "translate",
-      "text": "Careful, Charlie Muffin. Wire cutters are meant for cutting wires...",
+      "text": "Easy, Charlie Muffin. Wire cutters are for cutting wires...",
       "layout_policy": "adaptive"
     },
     {
       "index": 56,
       "policy": "translate",
-      "text": "Bypass wire...enough for a detour, but I do not need it yet. I know that...damn, my palms are sweating...",
+      "text": "Bypass wire...enough for a detour, but I don't need it yet. I know that...damn, my palms are sweating...",
       "layout_policy": "adaptive"
     },
     {
       "index": 57,
       "policy": "translate",
-      "text": "All right, let us begin. Screwdriver in hand...",
+      "text": "All right, let's begin. Screwdriver in hand...",
       "layout_policy": "adaptive"
     },
     {
@@ -488,7 +488,7 @@
     {
       "index": 59,
       "policy": "translate",
-      "text": "Driver on the upper-right screw...do not look at me like that, Betty.",
+      "text": "Driver on the upper-right screw...don't look at me like that, Betty.",
       "layout_policy": "adaptive"
     },
     {
@@ -512,7 +512,7 @@
     {
       "index": 63,
       "policy": "translate",
-      "text": "Charlie, mind that chastity belt. There must be a defense circuit...",
+      "text": "Charlie, mind that chastity belt. There's bound to be a defense circuit...",
       "layout_policy": "adaptive"
     },
     {
@@ -578,7 +578,7 @@
     {
       "index": 74,
       "policy": "translate",
-      "text": "There, Betty. The key is in your chastity belt...easy now, it will not be long...hah...hah...hah...",
+      "text": "There, Betty. The key's in your chastity belt...easy now, won't be long...hah...hah...hah...",
       "layout_policy": "adaptive"
     },
     {
@@ -596,7 +596,7 @@
     {
       "index": 77,
       "policy": "translate",
-      "text": "Men are wolves, Betty. Do not tease me.",
+      "text": "Men are wolves, Betty. Don't tease me.",
       "layout_policy": "adaptive"
     },
     {
@@ -662,7 +662,7 @@
     {
       "index": 88,
       "policy": "translate",
-      "text": "The current flows like this...think carefully, Charlie Muffin. This lady could blow at the slightest touch.",
+      "text": "Think it through, Charlie Muffin. This lady could blow at the slightest touch.",
       "layout_policy": "adaptive"
     },
     {
@@ -680,13 +680,13 @@
     {
       "index": 91,
       "policy": "translate",
-      "text": "I took off her chastity belt. She's defenseless.",
+      "text": "The chastity belt's off. She's defenseless.",
       "layout_policy": "adaptive"
     },
     {
       "index": 92,
       "policy": "translate",
-      "text": "Betty, you look beautiful tonight too.",
+      "text": "Betty, you're beautiful tonight.",
       "layout_policy": "adaptive"
     },
     {
@@ -698,7 +698,7 @@
     {
       "index": 94,
       "policy": "translate",
-      "text": "Come, Betty. Show me everything...open the right box.",
+      "text": "Come on, Betty. Show me everything...open the right box.",
       "layout_policy": "adaptive"
     },
     {
@@ -752,7 +752,7 @@
     {
       "index": 103,
       "policy": "translate",
-      "text": "If the dancer touches the bar, it is all over.",
+      "text": "Then it's all over.",
       "layout_policy": "adaptive"
     },
     {
@@ -836,7 +836,7 @@
     {
       "index": 117,
       "policy": "translate",
-      "text": "Forget that! There seems to be another door farther in...let us keep going, Betty...",
+      "text": "Let's keep going.",
       "layout_policy": "adaptive"
     },
     {
@@ -902,7 +902,7 @@
     {
       "index": 128,
       "policy": "translate",
-      "text": "You don't take a hint, do you? Must be that western accent...I like you, Chief. I'll say it now: I chose this ship and you over her.",
+      "text": "You don't take a hint, do you? Must be that western accent of yours...I like you, Chief. I'll say it straight: I chose this ship and you over her.",
       "layout_policy": "adaptive"
     },
     {
@@ -956,25 +956,25 @@
     {
       "index": 137,
       "policy": "translate",
-      "text": "Take it easy! Once we're ashore, there'll be plenty of women!",
+      "text": "Easy there! Once we're ashore, I'll rustle you up all the women you want!",
       "layout_policy": "adaptive"
     },
     {
       "index": 138,
       "policy": "translate",
-      "text": "Plenty of women?",
+      "text": "Rustle me up?",
       "layout_policy": "adaptive"
     },
     {
       "index": 139,
       "policy": "translate",
-      "text": "Chief, I grew up in the East. I can't make sense of that crazy California accent of yours...'plenty of women'...you mean you'll buy me one?",
+      "text": "Chief, I grew up back East. I can't make head nor tail of that crazy California talk of yours. 'Rustle me up'...you mean you'll get me one?",
       "layout_policy": "adaptive"
     },
     {
       "index": 140,
       "policy": "translate",
-      "text": "Where was it...east Town Street. Right, Dada Sleiman's place. There was a knockout named Sherry, if I remember. Think you can get her for me?",
+      "text": "Where was it? East Town Street. Right, Dada Sleiman's place. There was a knockout named Sherry there, if I remember right. Think you can get her for me?",
       "layout_policy": "adaptive"
     },
     {
@@ -992,7 +992,7 @@
     {
       "index": 143,
       "policy": "translate",
-      "text": "Let us knock on the back door. Hello, Betty. It is lovely outside.",
+      "text": "Let's knock on the back door. Hello, Betty. Lovely night out.",
       "layout_policy": "adaptive"
     },
     {
@@ -1010,7 +1010,7 @@
     {
       "index": 146,
       "policy": "translate",
-      "text": "Charlie, you can do it! You're the best sailor!",
+      "text": "Charlie, you can do it! You're the best sailor there is!",
       "layout_policy": "adaptive"
     },
     {
@@ -1262,13 +1262,13 @@
     {
       "index": 188,
       "policy": "translate",
-      "text": "An explosive that detonates while spewing heat of 2,000 degrees...",
+      "text": "An explosive that releases heat exceeding 2,000 degrees when it detonates...",
       "layout_policy": "adaptive"
     },
     {
       "index": 189,
       "policy": "translate",
-      "text": "Don't worry. Charlie, you're doing quite well! But it's not time for the wire yet...",
+      "text": "Don't you worry, Charlie. You're doing fine! But it's not time for the wire yet...",
       "layout_policy": "adaptive"
     },
     {
@@ -1304,13 +1304,13 @@
     {
       "index": 195,
       "policy": "translate",
-      "text": "Heat: 2,000 degrees...i'd melt in an instant...Betty, are you serious? Can you kill me? Both the counter body and connector tube have screw-fastened covers...",
+      "text": "Heat: 2,000 degrees. I'd melt in an instant...Betty, are you serious? Can you kill me? Both the counter body and connector tube have screw-fastened covers...",
       "layout_policy": "adaptive"
     },
     {
       "index": 196,
       "policy": "translate",
-      "text": "Betty! Why did you not wait?",
+      "text": "Betty! Why didn't you wait?",
       "layout_policy": "adaptive"
     },
     {
@@ -1340,7 +1340,7 @@
     {
       "index": 201,
       "policy": "translate",
-      "text": "Your first time with a white one?",
+      "text": "First time with a white one, eh?",
       "layout_policy": "adaptive"
     },
     {
@@ -1352,7 +1352,7 @@
     {
       "index": 203,
       "policy": "translate",
-      "text": "Don't cut white! It's the neutral in a three-phase circuit! It's connected to both red and blue!",
+      "text": "Don't cut white! That's the neutral in a three-phase circuit! It's tied to both red and blue!",
       "layout_policy": "adaptive"
     },
     {
@@ -1364,7 +1364,7 @@
     {
       "index": 205,
       "policy": "translate",
-      "text": "Cut white and we die! Red or blue: one wire links timer to bomb. Other one is a dummy. Cut dummy: boom! Cut real wire and we are safe!",
+      "text": "Cut white and we're dead! Red or blue: one runs from the timer to the detonator, the other's a dummy. Cut the dummy and we're done for. Cut the real one and we're clear!",
       "layout_policy": "adaptive"
     },
     {
@@ -1376,7 +1376,7 @@
     {
       "index": 207,
       "policy": "translate",
-      "text": "Charlie, Charlie, Charlie! Enough! Never mind! Come back up! Get out! Do it! I can't let you take such a reckless gamble! That's an order! Withdraw! Charlie!",
+      "text": "Charlie! Charlie, that's enough! Forget it! Come on up! Get out of there, you hear me? I won't let you stake your life on a fool guess! That's an order! Get out, Charlie!",
       "layout_policy": "adaptive"
     },
     {
@@ -1388,7 +1388,7 @@
     {
       "index": 209,
       "policy": "translate",
-      "text": "Charlie! I mean it! I'm not lying! This time I won't tolerate your pointless defiance! Run, Charlie!",
+      "text": "Charlie! I'm serious! I ain't lying to you! This time I won't put up with your damned stubbornness! Run, Charlie!",
       "layout_policy": "adaptive"
     },
     {
@@ -1400,7 +1400,7 @@
     {
       "index": 211,
       "policy": "translate",
-      "text": "Another matching bomb is still aboard. If I fail, cut the other wire. Then the method will be clear. Chief Engineer, guard Nostalgia, our dear ship.",
+      "text": "There's another bomb aboard built the same way. If I miss, cut the other wire on that one. Then you'll know. Chief...look after the Nostalgia. She's our ship.",
       "layout_policy": "adaptive"
     },
     {

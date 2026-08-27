@@ -280,7 +280,7 @@
     {
       "index": 34,
       "policy": "translate",
-      "text": "You're uncouth, Mr. Yamada.",
+      "text": "You are quite uncouth, Mr. Yamada.",
       "layout_policy": "adaptive"
     },
     {
@@ -328,7 +328,7 @@
     {
       "index": 42,
       "policy": "translate",
-      "text": "You're roundabout, Mr. Yamada. And unpleasant.",
+      "text": "You are remarkably roundabout, Mr. Yamada. And unpleasant.",
       "layout_policy": "adaptive"
     },
     {
@@ -340,13 +340,13 @@
     {
       "index": 44,
       "policy": "translate",
-      "text": "When the Great Japanese Empire went to war with Russia, did you not cry to Britain and Her Majesty the Queen for help because you could not win alone?",
+      "text": "When the Great Japanese Empire went to war with Russia, did you not come crying to Britain and Her Majesty the Queen for aid, knowing you could not prevail alone?",
       "layout_policy": "adaptive"
     },
     {
       "index": 45,
       "policy": "translate",
-      "text": "And even now, you are under my control.",
+      "text": "And even now, you remain under my control.",
       "layout_policy": "adaptive"
     },
     {
@@ -358,7 +358,7 @@
     {
       "index": 47,
       "policy": "translate",
-      "text": "Your trainer must have been lousy. You still haven't learned the etiquette between master and servant.",
+      "text": "Your trainer must have been lamentable. You still have not learned the proper relation between master and servant.",
       "layout_policy": "adaptive"
     },
     {
@@ -370,7 +370,7 @@
     {
       "index": 49,
       "policy": "translate",
-      "text": "Managing the whole world is hard work. I wonder whether even the savages under our protection can understand that.",
+      "text": "Managing the whole world is no small burden. I wonder whether even the savages under our protection can comprehend it.",
       "layout_policy": "adaptive"
     },
     {
@@ -382,7 +382,7 @@
     {
       "index": 51,
       "policy": "translate",
-      "text": "Even now, you are not permitted to defy me.",
+      "text": "Even now, you are not at liberty to defy me.",
       "layout_policy": "adaptive"
     },
     {
@@ -412,7 +412,7 @@
     {
       "index": 56,
       "policy": "translate",
-      "text": "That's the attendant's room across the hall. The one beside it is unused. The room at the far end is used by Braque's secretary.",
+      "text": "The attendant's room is across the hall. The adjoining room is unused. The room at the far end is occupied by Braque's secretary.",
       "layout_policy": "adaptive"
     },
     {
@@ -430,7 +430,7 @@
     {
       "index": 59,
       "policy": "translate",
-      "text": "A gentleman does not gulp tea like that. Excuse me.",
+      "text": "A gentleman does not gulp his tea like that. Excuse me.",
       "layout_policy": "adaptive"
     },
     {
