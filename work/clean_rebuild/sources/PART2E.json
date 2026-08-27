@@ -1364,7 +1364,7 @@
     {
       "index": 205,
       "policy": "translate",
-      "text": "Cut white and we're dead! Red or blue: one runs from the timer to the detonator, the other's a dummy. Cut the dummy and we're done for. Cut the real one and we're clear!",
+      "text": "Cut white and we're dead! Red or blue: one wire runs from the timer to the detonator, the other's a dummy. Cut the dummy and we're done for. Cut the real wire and we're clear!",
       "layout_policy": "adaptive"
     },
     {

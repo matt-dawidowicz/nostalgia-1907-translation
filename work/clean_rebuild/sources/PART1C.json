@@ -86,7 +86,7 @@
     {
       "index": 2,
       "policy": "translate",
-      "text": "Pilot House",
+      "text": "Navigation Control Room",
       "layout_policy": "adaptive"
     },
     {
@@ -386,7 +386,7 @@
     {
       "index": 52,
       "policy": "translate",
-      "text": "Go get eaten by the Reds! The passengers can no longer abandon ship...Chief Engineer! What's the damage to the engine room?",
+      "text": "Go get eaten by sharks! We can't evacuate the passengers now...Chief Engineer! What's the damage in the engine room?",
       "layout_policy": "adaptive"
     },
     {
@@ -639,7 +639,7 @@
     {
       "index": 94,
       "policy": "translate",
-      "text": "B-but...sir...",
+      "text": "But...sir...",
       "layout_policy": "adaptive"
     },
     {

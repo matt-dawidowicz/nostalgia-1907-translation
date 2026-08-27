@@ -143,7 +143,7 @@
     {
       "index": 15,
       "policy": "translate",
-      "text": "May the sharks eat him! The passengers can no longer abandon ship...Chief Engineer! What is the damage to the engine room?",
+      "text": "Go get eaten by sharks! We can't evacuate the passengers now...Chief Engineer! What's the damage in the engine room?",
       "layout_policy": "adaptive"
     },
     {
@@ -396,7 +396,7 @@
     {
       "index": 57,
       "policy": "translate",
-      "text": "But...that would be terrible...",
+      "text": "But...sir...",
       "layout_policy": "adaptive"
     },
     {
@@ -844,7 +844,7 @@
     {
       "index": 132,
       "policy": "translate",
-      "text": "A clever fellow.",
+      "text": "A clever dog.",
       "layout_policy": "adaptive"
     },
     {

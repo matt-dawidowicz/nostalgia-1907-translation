@@ -31,7 +31,7 @@
     "PART2E:150":{"japanese":"「下、青を切る」","literal":"Cut the lower blue wire.","corrected_english":"Cut the lower blue wire."},
     "PART2E:168":{"japanese":"「フロアを取り除く・・・」","literal":"Remove the floor...","corrected_english":"Remove the floor..."},
     "PART2E:181":{"japanese":"「コードは不要だ」","literal":"The wire is unnecessary.","corrected_english":"The wire is unnecessary."},
-    "PART2E:199":{"japanese":"「接続管をあたる・・・」","literal":"Touch the connector tube...","corrected_english":"Touch the connector tube..."},
+    "PART2E:199":{"japanese":"「接続管をあたる・・・」","literal":"Check/examine the connector tube...","corrected_english":"Check the connector tube..."},
     "PART2E:212":{"japanese":"「あかのコードに、今、ニッパーを噛ませた・・・。切る」","literal":"I have now clamped the cutters onto the red wire... I am cutting it.","corrected_english":"I've got the cutters on the red wire...I'm cutting it."},
     "PART2E:213":{"japanese":"「あおのコードに、今、ニッパーを噛ませた・・・。切る」","literal":"I have now clamped the cutters onto the blue wire... I am cutting it.","corrected_english":"I've got the cutters on the blue wire...I'm cutting it."},
     "PART4B:097":{"japanese":"「赤いコード、切るよ」","literal":"I'll cut the red wire.","corrected_english":"I'll cut the red wire."},
