@@ -1,4 +1,4 @@
-# Rerun with null-profile handling fixed.
+# Rerun after temporary candidate-ledger cleanup.
 name: Apply Kasuke Ilyu voice pass 20260827
 
 on:
