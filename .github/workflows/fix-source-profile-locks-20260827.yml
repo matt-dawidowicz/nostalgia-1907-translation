@@ -1,3 +1,4 @@
+# Rerun after reviewed ellipsis-style cleanup.
 name: Apply reviewed voice passes 20260827
 
 on:
