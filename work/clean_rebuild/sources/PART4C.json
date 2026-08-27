@@ -315,7 +315,7 @@
     {
       "index": 49,
       "policy": "translate",
-      "text": "I'm the son of this century's last samurai.",
+      "text": "Sorry. I'm the son of this century's last samurai.",
       "layout_policy": "adaptive"
     },
     {
@@ -327,13 +327,13 @@
     {
       "index": 51,
       "policy": "translate",
-      "text": "No one is pursuing me...",
+      "text": "No one can catch up...",
       "layout_policy": "fixed"
     },
     {
       "index": 52,
       "policy": "translate",
-      "text": "Run away with me?",
+      "text": "Can you run with me?",
       "layout_policy": "fixed"
     },
     {
@@ -345,25 +345,25 @@
     {
       "index": 54,
       "policy": "translate",
-      "text": "No. A spy and a salesman are a bad match.",
+      "text": "No. No spies or salesmen.",
       "layout_policy": "fixed"
     },
     {
       "index": 55,
       "policy": "translate",
-      "text": "You cannot challenge me...",
+      "text": "Don't challenge me...",
       "layout_policy": "fixed"
     },
     {
       "index": 56,
       "policy": "translate",
-      "text": "You are a foolish man.",
+      "text": "Foolish men.",
       "layout_policy": "fixed"
     },
     {
       "index": 57,
       "policy": "translate",
-      "text": "...again, alone...",
+      "text": "...alone again...",
       "layout_policy": "fixed"
     },
     {
@@ -375,7 +375,7 @@
     {
       "index": 59,
       "policy": "translate",
-      "text": "Now, right here.",
+      "text": "Here, now.",
       "layout_policy": "fixed"
     }
   ]
