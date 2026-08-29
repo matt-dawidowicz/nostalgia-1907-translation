@@ -447,10 +447,10 @@ class RepositoryPolicyTests(unittest.TestCase):
 
     def test_forensic_utilities_require_explicit_portable_inputs(self) -> None:
         """Keep retired investigation scripts free of contributor-machine paths."""
-        clean = ROOT / "work" / "clean_rebuild"
-        for name in ("export_font_patterns.py", "forensic_decode_mes.py"):
+        forensic = ROOT / "tools" / "forensic"
+        for name in ("decode_mes.py", "export_font_patterns.py"):
             with self.subTest(name=name):
-                text = (clean / name).read_text(encoding="utf-8")
+                text = (forensic / name).read_text(encoding="utf-8")
                 self.assertNotIn(r"C:\Users\thema", text)
                 self.assertNotIn(r"D:\Sega CD Games", text)
                 self.assertIn("required=True", text)

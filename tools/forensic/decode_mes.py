@@ -18,10 +18,15 @@ from collections import defaultdict
 from pathlib import Path
 from types import ModuleType
 
-from mes_format import DYNAMIC_PREFIX_START, read_mes
+ROOT = Path(__file__).resolve().parents[2]
+CLEAN_REBUILD = ROOT / "work" / "clean_rebuild"
+if str(CLEAN_REBUILD) not in sys.path:
+    sys.path.insert(0, str(CLEAN_REBUILD))
+
+from mes_format import DYNAMIC_PREFIX_START, read_mes  # noqa: E402
 
 
-HERE = Path(__file__).resolve().parent
+DEFAULT_OUTPUT = CLEAN_REBUILD / "forensic_decode.json"
 
 
 def load_historical_renderer(renderer_path: Path) -> ModuleType:
@@ -230,7 +235,7 @@ def main() -> None:
         required=True,
         help="explicit root containing unpacked/ and iso_files/ forensic data",
     )
-    parser.add_argument("--output", type=Path, default=HERE / "forensic_decode.json")
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
 
     renderer = load_historical_renderer(args.renderer)

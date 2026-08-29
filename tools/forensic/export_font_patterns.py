@@ -17,8 +17,8 @@ import sys
 from pathlib import Path
 
 
-HERE = Path(__file__).resolve().parent
-DEFAULT_OUTPUT = HERE / "font_patterns.json"
+ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_OUTPUT = ROOT / "work" / "clean_rebuild" / "font_patterns.json"
 
 
 def export_patterns(source: Path, output: Path) -> dict[str, object]:

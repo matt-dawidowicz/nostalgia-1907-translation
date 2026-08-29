@@ -75,6 +75,7 @@ archival/diagnostic override rather than the project default.
 | `work/region_variant/` | Guarded North American BIOS-region wrapper |
 | `work/clean_rebuild/retired_workspace_register.json` | Portable record of retired pre-clean-rebuild workspaces and their replacements |
 | `tests/` | Source-only CLI, policy, and documentation tests |
+| `tools/forensic/` | Explicit-input historical provenance utilities |
 | `outputs/` | Ignored generated reports, comparisons, and playable products |
 
 ## Supported entry point
@@ -243,14 +244,16 @@ Historical scripts explain how formats and edge cases were discovered. They are
 not imported by `rebuild.py`, and their outputs are not permitted as clean-build
 inputs. `PRODUCTION_MODULES` is the exact binary-build allowlist. Maintained
 review tools are the modules called by `nostalgia1907.py validate` and the files
-covered by `tools/style_audit.py`; other one-off scripts in
-`work/clean_rebuild/` are forensic notes unless this document and a test promote
-them explicitly. Use forensic scripts as research notes only.
+covered by `tools/style_audit.py`. Explicit-input historical provenance utilities
+live under `tools/forensic/`; other one-off scripts in `work/clean_rebuild/` are
+forensic notes unless this document and a test promote them explicitly. Use
+forensic scripts as research notes only.
 
-`export_font_patterns.py` and `forensic_decode_mes.py` are retained provenance
-utilities, not supported build commands. They have no contributor-machine
-defaults and run only when their historical renderer and extracted-data paths
-are supplied explicitly. Their outputs remain forbidden as clean-build inputs.
+`tools/forensic/export_font_patterns.py` and `tools/forensic/decode_mes.py` are
+retained provenance utilities, not supported build commands. They have no
+contributor-machine input defaults and run only when their historical renderer
+and extracted-data paths are supplied explicitly. Their outputs remain forbidden
+as clean-build inputs.
 
 When promoting a discovery:
 

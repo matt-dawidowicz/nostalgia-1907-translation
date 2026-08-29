@@ -148,9 +148,9 @@ no-ops. Unknown fields fail closed.
 
 `rebuild.py:PRODUCTION_MODULES` is the exact clean-build dependency boundary.
 The CLI validation scripts and modules covered by `tools/style_audit.py` are
-maintained review tooling. Other one-off scripts may document past forensic
-work, but they are not build dependencies and their outputs cannot enter a clean
-rebuild.
+maintained review tooling. Explicit-input provenance utilities live under
+`tools/forensic/`. Other one-off scripts may document past forensic work, but
+they are not build dependencies and their outputs cannot enter a clean rebuild.
 
 Run the retail-backed validation gate:
 
