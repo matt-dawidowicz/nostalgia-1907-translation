@@ -401,7 +401,10 @@ def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
     if set(text_box_names) != {str(name) for name in static_box_counts}:
         raise ValueError("runtime text-box inventory differs from static coverage")
 
-    if any(not isinstance(record_id, str) or not record_id for record_id in fixed_records):
+    if any(
+        not isinstance(record_id, str) or not record_id
+        for record_id in fixed_records
+    ):
         raise ValueError("fixed-layout runtime inventory contains an invalid record ID")
     if len(fixed_records) != len(set(fixed_records)):
         raise ValueError("fixed-layout runtime inventory contains duplicates")
