@@ -14,8 +14,19 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_NAME = "MANIFEST.sha256"
 HEADER = (
     "# SHA-256 inventory for the source-only review bundle.\n"
-    "# MANIFEST.sha256 itself is intentionally excluded from this list.\n"
+    "# Text line endings are normalized to LF; MANIFEST.sha256 is excluded.\n"
 )
+TEXT_SUFFIXES = {
+    ".json",
+    ".md",
+    ".ps1",
+    ".py",
+    ".toml",
+    ".txt",
+    ".yaml",
+    ".yml",
+}
+TEXT_NAMES = {".editorconfig", ".gitattributes", ".gitignore", "LICENSE"}
 
 
 class ManifestInventoryError(RuntimeError):
@@ -81,13 +92,17 @@ def manifest_files(root: Path) -> tuple[Path, ...]:
     )
 
 
+def _manifest_bytes(path: Path) -> bytes:
+    """Return stable bytes for hashing across equivalent text checkouts."""
+    data = path.read_bytes()
+    if path.name in TEXT_NAMES or path.suffix.lower() in TEXT_SUFFIXES:
+        return data.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return data
+
+
 def sha256(path: Path) -> str:
-    """Return the uppercase SHA-256 digest of one file."""
-    digest = hashlib.sha256()
-    with path.open("rb") as source:
-        while block := source.read(1024 * 1024):
-            digest.update(block)
-    return digest.hexdigest().upper()
+    """Return the uppercase manifest SHA-256 digest of one source file."""
+    return hashlib.sha256(_manifest_bytes(path)).hexdigest().upper()
 
 
 def render_manifest(root: Path) -> str:

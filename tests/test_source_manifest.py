@@ -48,6 +48,19 @@ class SourceManifestTests(unittest.TestCase):
             self.assertIn(f"{expected_hash}  source.txt\n", rendered)
             self.assertEqual(expected_hash, expected_hash.upper())
 
+    def test_text_hash_is_line_ending_independent(self) -> None:
+        """Treat LF and CRLF materializations as the same reviewed text source."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            lf = root / "lf.py"
+            crlf = root / "crlf.py"
+            lf.write_bytes(b'"""Source."""\nvalue = 1\n')
+            crlf.write_bytes(b'"""Source."""\r\nvalue = 1\r\n')
+            self.assertEqual(
+                source_manifest.sha256(lf),
+                source_manifest.sha256(crlf),
+            )
+
     def test_check_manifest_detects_changed_source(self) -> None:
         """Reject a manifest after any represented source byte changes."""
         with tempfile.TemporaryDirectory() as temporary:
