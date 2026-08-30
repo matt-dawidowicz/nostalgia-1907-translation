@@ -6,17 +6,22 @@ on:
       - refactor/production-architecture-efficiency-20260830
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   render:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Render target manifest
+        with:
+          ref: refactor/production-architecture-efficiency-20260830
+      - name: Regenerate and commit source manifest
         shell: bash
         run: |
-          git rm --cached .github/workflows/regenerate-manifest-temp.yml
-          rm .github/workflows/regenerate-manifest-temp.yml
+          git rm .github/workflows/regenerate-manifest-temp.yml
           python tools/source_manifest.py --root . --write
-          cat MANIFEST.sha256
+          git add MANIFEST.sha256
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Refresh source manifest after efficiency refactor"
+          git push
