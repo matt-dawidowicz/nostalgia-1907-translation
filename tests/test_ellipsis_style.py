@@ -21,7 +21,6 @@ from renderer_format import (  # noqa: E402
 from scn_layout import Layout  # noqa: E402
 from translation_formatter import _renderer_boundary_failures  # noqa: E402
 from scn_layout import RecordContract  # noqa: E402
-from apply_translation_repairs import _canonical_text  # noqa: E402
 from font_render import _bytes_matrix, render_compact_cluster  # noqa: E402
 
 
@@ -79,17 +78,6 @@ class EllipsisStyleTests(unittest.TestCase):
 
         self.assertEqual(
             _renderer_boundary_failures("What are you plotting...?", rows, contract), []
-        )
-
-    def test_repair_application_cannot_restore_the_legacy_ellipsis_style(self) -> None:
-        """Apply the same no-space rule to editable repair-table prose."""
-        self.assertEqual(
-            _canonical_text("Two... Calling again.", adaptive=True),
-            "Two...calling again.",
-        )
-        self.assertEqual(
-            _canonical_text("Line one...\nThe next line.", adaptive=False),
-            "Line one...\nthe next line.",
         )
 
     def test_compact_ellipsis_does_not_leave_a_blank_cell_tail(self) -> None:

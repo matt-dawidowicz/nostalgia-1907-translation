@@ -1,268 +1,58 @@
 # Nostalgia 1907 English translation
 
-Nostalgia 1907 is a Japanese Mega-CD adventure game. This repository is the
-source-only preservation and fan-translation project that rebuilds its English
-script from a verified original disc. It is intended to be understandable and
-maintainable by a future translator, reverse engineer, or preservation-minded
-contributor - not just by the people who worked through the original defects.
+This repository is the source-only English fan-translation and preservation
+project for **Nostalgia 1907**, a Japanese Mega-CD adventure game. It contains
+the reviewed English corpus, deterministic rebuild tooling, binary-format
+validation, source checks, and runtime-test procedures needed to reproduce a
+candidate from legally obtained original media.
 
-The repository contains reviewed English records, deterministic build tools,
-format documentation, automated checks, and playtest procedures. It does
-**not** contain a playable disc image, BIOS, original game files, extracted
-assets, or generated build products.
+It does **not** contain a game image, BIOS, extracted retail assets, generated
+BIN/CUE files, screenshots, or other copyrighted game media.
 
-## Licensing and original-game materials
+## Project status
 
-This is a mixed-license source repository:
+The latest runtime-certified published reference remains **1.0.2**. Its exact
+North American Track 1 completed a full maintainer Ares playthrough and is
+identified by SHA-256:
 
-- The original software tooling, tests, and technical documentation are
-  licensed under the [MIT License](LICENSE).
-- The reviewed English translation contributions are licensed under
-  [CC BY-NC-SA 4.0](LICENSE-TRANSLATION.md): attribution required,
-  non-commercial use only, and adaptations must remain under the same terms.
+`1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`
 
-Both licenses apply only to rights held by this project's contributors. They
-do not grant rights to the original game, its Japanese script, or any other
-third-party material. Read [the third-party materials notice](THIRD_PARTY_NOTICE.md)
-before using the source or contributing changes.
+The current source tree contains the later **2026-08-27 source-fidelity and
+character-voice revision**. That revision re-audited the 2,905-record corpus and
+changes playable bytes. It has source and retail-backed static validation, but
+it does not inherit the 1.0.2 runtime certification. A fresh deterministic
+candidate and candidate-bound Ares playthrough are still required before it can
+become a successor release.
 
-## Who this project may interest
+See [the revision record](docs/TRANSLATION_REVISION_20260827.md) and
+[release policy](docs/RELEASE.md) for the exact evidence boundary.
 
-This project may be useful or interesting to:
+## Supported workflow
 
-- players curious about an obscure Japanese Mega-CD adventure game that was
-  never officially released in English;
-- fan translators and localization editors studying long-form script work;
-- reverse engineers working with MES containers, LZ archives, ISO 9660, raw
-  MODE1/2352 sectors, or Sega CD region wrapping;
-- preservation-minded developers interested in deterministic rebuilds and
-  source-only release practices; and
-- emulator testers willing to report reproducible runtime behavior.
-
-You do not need to contribute code to help. Independent playtesting, wording
-feedback, documentation corrections, and reproducible bug reports are welcome.
-
-## AI assistance and human responsibility
-
-Artificial-intelligence tools, including ChatGPT and Codex, were used
-substantially during this project. They assisted with tasks such as translation
-comparison, wording proposals, code generation and refactoring, documentation,
-test design, repository review, and analysis of reverse-engineering evidence.
-The project does not present that work as unaided human authorship.
-
-AI output was never treated as proof that a translation, renderer rule, binary
-change, or release candidate was correct. Proposed work was repeatedly reviewed
-against the Japanese source, record context, binary structure, automated tests,
-deterministic build results, and observed emulator behavior. Incorrect or
-regressive approaches were rejected, including an entire later renderer
-experiment that failed runtime testing.
-
-The finished release required extensive human direction and judgment: inspecting
-thousands of records, identifying contextual and formatting failures, debugging
-multiple renderer classes, reproducing defects in Ares, revising shared tooling,
-checking preservation-sensitive boundaries, running repeated clean rebuilds, and
-completing a full playthrough of the exact hash-identified North American build.
-The maintainer remains responsible for the accepted English, code, documentation,
-release claims, and any errors that remain.
-
-## What the project is now
-
-The latest runtime-certified published reference remains **1.0.2** and its
-hash-identified North American build. The current source tree now contains the
-post-1.0.2 **2026-08-27 source-fidelity and character-voice revision**, which
-does change the canonical translation corpus. That newer source has passed
-source CI and retail-backed MES/layout/archive validation, but it has not yet
-completed a fresh candidate-bound Ares playthrough and is not presented as a
-new public runtime-certified release.
-
-Read [the 2026-08-27 translation revision](docs/TRANSLATION_REVISION_20260827.md)
-for the exact scope and validation record, and [release and playtest
-policy](docs/RELEASE.md) for the remaining runtime requirements.
-
-The project has a single supported workflow:
+Normal work uses one operator-facing command surface:
 
 ```text
 doctor -> prepare -> edit/compare -> validate -> build -> Ares playtest
 ```
 
-It rebuilds from the original Japanese Track 1 and Track 2 supplied locally by
-the user. The translation source is organized as 19 canonical chapter files
-with 2,905 stable records: 2,883 translated records and 22 deliberately
-preserved records. Record IDs, order, Japanese source data, SCN/control bytes,
-disc boundaries, and the original audio track are protected by validation.
+- `doctor` checks Python, source identity, and configured local inputs.
+- `prepare` verifies the original Japanese Track 1 and creates an ignored,
+  hash-locked retail reference.
+- `edit` previews or applies an English change by stable record ID.
+- `compare` regenerates the bilingual human-review package.
+- `validate` runs source, renderer, semantic, compilation, and retail-backed
+  regression gates.
+- `build` performs two independent clean rebuilds and, by default, two guarded
+  North American region-wrapper runs before publication.
+- Ares playtesting remains the final gate for behavior static analysis cannot
+  prove.
 
-North America is the default build region. The normal build name is deliberately
-neutral and stable:
-
-```text
-Nostalgia1907_CleanRebuild_NorthAmerica
-```
-
-It has no version suffix. A Japanese-region build remains an explicit
-diagnostic option; a European build is not currently supported or claimed.
-
-## Development history
-
-This project reached its current form through several distinct phases. The
-important lesson is that English wording, text storage, and the game's native
-renderers cannot be treated as independent problems.
-
-### 1. From disc archaeology to a reproducible source tree
-
-Early work identified the binary layers needed to rebuild the game without
-depending on a previously translated disc: raw MODE1/2352 sectors, ISO 9660,
-chapter LZ archives, MES script containers, font cells, and SCN renderer
-commands. The project then separated these concerns into small modules and
-made the original Japanese disc the only binary authority.
-
-Canonical English was moved into ID-keyed JSON chapter files. Generated MES,
-LZ, ISO, BIN/CUE, previews, reports, and temporary extracted data were made
-disposable. This is why a future contributor edits a canonical record instead
-of hex-editing a disc image.
-
-### 2. The first shared renderer model
-
-English exposed layout behavior that Japanese text did not make obvious. The
-initial clean-rebuild work established that there are several renderer classes,
-not one universal text box. In particular, lower dialogue, speaker labels,
-fixed overlays, compact labels, floating windows, and a small number of anchor
-records have different contracts.
-
-The project therefore derived layout from SCN structure and preserved fixed
-records where no safe general reflow rule had been proven. The formatter and
-compiler share those contracts and the public `renderer_format.py`
-implementation, so a preview and a build use the same geometry, wrapping, row
-reconstruction, and whole-token checks.
-
-### 3. The retained maintenance baseline and rejected experiment
-
-The retained maintenance pass established North America as the normal build
-target, proved two clean rebuilds and two North American wrappers
-byte-identical, and removed obsolete generated images. It also fixed
-stale-letter clearing and an earlier leading-indentation defect.
-
-A later renderer experiment introduced runtime layout regressions. It was
-retired rather than promoted. This was a useful discipline point: a static
-check or a promising local patch is never enough to override observed emulator
-behavior. The complete evidence and decision are retained in
-[the historical maintenance report](docs/HISTORICAL_MAINTENANCE_REPORT.md).
-
-### 4. Runtime-led dialogue repair
-
-Subsequent Ares playtesting found recurring lower-box defects: a visible
-leading shift, split words at renderer row boundaries, inappropriate spacing
-around ellipses, and incorrect continuation behavior after page advances.
-
-The solution was not a collection of chapter-specific rewrites. The shared
-formatter/compiler logic now:
-
-- validates SCN-derived cell geometry before compiling;
-- distinguishes physical runtime cells from prose-visible cells;
-- applies the lower dialogue renderer's native 12/11/11 cell cadence;
-- emits a single blank anchor only when the retail dialogue stream requires it;
-- keeps continuation pages free of a second anchor;
-- rejects row overflow, broken words, and unintended leading blanks in both
-  preview and direct compiler entry points; and
-- handles compact ellipses as a shared formatting rule.
-
-This was the decisive change: translation entries remain semantic English,
-while renderer-aware code chooses safe rows. Future renderer fixes should be
-shared and evidence-led, never speculative chapter patches.
-
-### 5. Historical runtime reference and public-source cleanup
-
-The North American artifact identified by the hashes below is the historical
-runtime-reviewed reference for the current renderer contracts. It is not a
-source input and its former internal build number is intentionally omitted
-because the exact hashes, not a private numbering sequence, are the durable
-identity. It was produced by two independent byte-identical clean builds
-followed by two independent byte-identical North American region builds.
-
-- Track 1 SHA-256:
-  `1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`
-- Unchanged Track 2 SHA-256:
-  `F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991`
-
-The project maintainer completed a full playtest of that exact Track 1 in
-Ares, including the previously targeted dialogue-renderer checks, page
-advances, and dialogue transitions. No defect was reported during that
-playthrough. Independent and future regression playtesting remain welcome:
-they are useful confirmation, and they are required again for any candidate
-whose playable bytes change.
-
-After the runtime work, the repository was prepared for source collaboration:
-obsolete forensic workspaces and generated recovery products were removed,
-their retirement is recorded in
-[`retired_workspace_register.json`](work/clean_rebuild/retired_workspace_register.json),
-the active code was documented to PEP 257 standards, and source health/style
-checks were added. Every new candidate must be rebuilt from verified retail
-inputs and tracked source, and new build output uses the neutral name above.
-Public source CI can prove source and synthetic contracts, but a maintainer
-must still run the retail-backed gates and record Ares evidence for any changed
-playable bytes.
-
-### 6. 1.0.2 release and full-playtest record
-
-Version 1.0.2 is a source, documentation, and metadata maintenance release. It
-records the completed full Ares playtest of the hash-identified North American
-reference without claiming a new playable candidate. It does not change
-translation records, renderer behavior, or the reviewed reference's playable
-bytes. Further independent and regression playtesting is welcome.
-
-### 7. 2026-08-27 source-fidelity and character-voice revision
-
-The post-1.0.2 revision re-audited all 2,905 records against the retail Japanese,
-applied 345 semantic corrections, layered reviewed character voices over the
-corrected meaning, repaired the fixed PART4C ending, and addressed retail-only
-text-capacity constraints. The final source content passed the complete
-retail-layout test suite, all-chapter MES compilation, and all 19 archive
-rebuilds. It changes playable bytes, so the old 1.0.2 Ares playthrough cannot
-certify it. See [the revision record](docs/TRANSLATION_REVISION_20260827.md).
-
-## What is proven, and what is not
-
-When run with the required verified local inputs, the automated build gate
-proves input hashes, canonical-source validation,
-deterministic clean reconstruction, deterministic North American wrapping,
-fixed binary boundaries, exact Track 2 preservation, and direct hashes for the
-published artifacts.
-
-It does **not** replace independent regression testing or prove behavior on
-different emulator versions, hardware, or unvisited alternate choices. The
-exact 1.0.2 North American artifact identified above completed a full
-maintainer playtest in Ares with no reported defects. The current post-1.0.2
-source changes playable bytes and therefore still needs fresh candidate-bound
-Ares evidence before it can become a runtime-certified release. See [release
-and playtest policy](docs/RELEASE.md), [whole-game
-testing](docs/WHOLE_GAME_TESTING.md), and [the 2026-08-27 revision
-record](docs/TRANSLATION_REVISION_20260827.md).
-
-## Start here
-
-Read these documents in order:
-
-1. [Getting started](docs/GETTING_STARTED.md) - choose the right contributor
-   path, learn the safety rules, and make a first safe change.
-2. [Architecture](docs/ARCHITECTURE.md) - authoritative inputs, module
-   boundaries, and the rebuild graph.
-3. [Translation editing](docs/TRANSLATION_EDITING.md) - safe ID-keyed English
-   changes and record policies.
-4. [Text-box contracts](docs/TEXT_BOX_CONTRACTS.md) - the renderer categories
-   and formatting responsibilities.
-5. [Development and validation](docs/DEVELOPMENT.md) - commands and test
-   layers.
-6. [Binary formats](docs/BINARY_FORMATS.md) - MES, LZ, ISO, raw CD, font, and
-   SCN boundaries.
-7. [Adaptive renderer assessment](docs/ADAPTIVE_RENDERER_ASSESSMENT.md) - why
-   the project retains the native renderer instead of inventing a new one.
-
-For contribution rules and required checks, read
-[CONTRIBUTING.md](CONTRIBUTING.md). For Python docstrings and inline comments,
-use [the documentation standard](docs/DOCSTRING_STANDARD.md).
+North America is the default build target. Japan is an explicit diagnostic
+option. Europe is not currently supported.
 
 ## Quick start
 
-Use Python 3.10 or newer. From a fresh Windows clone:
+Use Python 3.10 or newer. From a fresh clone:
 
 ```powershell
 py -3.12 -m venv .venv
@@ -270,50 +60,58 @@ py -3.12 -m venv .venv
 python -m pip install -e .
 ```
 
-Provide legally obtained Japanese Track 1 and Track 2, plus the verified U.S.
-BIOS for a North American build, through the ignored
-`nostalgia1907.local.json` file:
+Put machine-specific paths only in the ignored `nostalgia1907.local.json`:
 
 ```json
 {
-  "track1": "D:/Games/Nostalgia 1907/Nostalgia 1907 (Japan) (Track 1).bin",
-  "track2": "D:/Games/Nostalgia 1907/Nostalgia 1907 (Japan) (Track 2).bin",
-  "us_bios": "D:/Emulation/Sega CD (U) - Model 2 v2.00w (1993).bin"
+  "track1": "D:/path/to/Nostalgia 1907 (Japan) (Track 1).bin",
+  "track2": "D:/path/to/Nostalgia 1907 (Japan) (Track 2).bin",
+  "us_bios": "D:/path/to/verified-us-sega-cd-bios.bin"
 }
 ```
 
-Then prepare and check the local retail reference:
+Then:
 
 ```powershell
 python nostalgia1907.py doctor
 python nostalgia1907.py prepare
 python nostalgia1907.py validate
-```
-
-To inspect a neutral North American build plan without creating files:
-
-```powershell
 python nostalgia1907.py build --dry-run
 ```
 
-The actual build refuses nonempty staging or delivery directories. After it
-passes, play the generated CUE in Ares and complete the relevant runtime checks
-before publishing anything.
+The real build refuses occupied or overlapping staging/delivery roots. Do not
+weaken an input hash or boundary check to accept a different retail revision.
 
-In a source-only clone, run `python tools/source_health.py --root . --strict-release` and the
-source test commands in [development and validation](docs/DEVELOPMENT.md). The
-retail-backed portion of `validate` remains unavailable until the legally
-obtained local reference has been prepared; this is expected and must not be
-worked around by committing fixtures.
+## Source-only development
 
-## Making a safe change
+No game media is needed for the public source checks:
 
-Canonical translation lives in
-`work/clean_rebuild/sources/<CHAPTER>.json` under stable `CHAPTER:NNN` record
-IDs. Do not edit compiled MES/LZ/ISO/BIN/CUE data, and do not use screenshots
-as sufficient evidence for a renderer change.
+```powershell
+python tools/source_health.py --root . --strict-release
+python tools/source_manifest.py --root .
+python -m compileall -q nostalgia1907.py tools tests work
+python -m unittest discover -s tests -v
+python tools/style_audit.py --root .
+```
 
-Preview a wording change first, then apply it only after review:
+`MANIFEST.sha256` is the deterministic inventory for the source-only review
+bundle. Regenerate it only after intentional tracked-source changes:
+
+```powershell
+python tools/source_manifest.py --root . --write
+```
+
+CI verifies the manifest, so a source change cannot leave the review inventory
+silently stale.
+
+## Translation source
+
+Canonical English lives under `work/clean_rebuild/sources/` as 19 chapter files
+containing 2,905 stable records. The build never discovers a record by matching
+mutable English text. Record IDs, order, preserve/translate policy, retail
+MES/SCN identity, and renderer ownership are checked independently.
+
+Preview before applying a wording change:
 
 ```powershell
 python nostalgia1907.py edit PART1A:003 --text "Reviewed wording"
@@ -321,40 +119,74 @@ python nostalgia1907.py edit PART1A:003 --text "Reviewed wording" --apply
 python nostalgia1907.py validate
 ```
 
-The safe escalation path is:
+Preserve Japanese records, stable IDs, record order, SCN/control bytes, archive
+member order, ISO extents, Track 2, and the distinction between semantic English
+and generated wrapping.
 
-1. Correct source wording in the canonical record when the issue is wording.
-2. Correct a shared SCN-derived layout or compiler rule when the issue repeats
-   across the same renderer type.
-3. Add a regression test and run the full validator.
-4. Build in a fresh staging directory.
-5. Reproduce the affected scene in Ares, including page advances and dialogue
-   transitions.
+## Renderer and binary safety
 
-Preserve Japanese records, IDs, record order, policy fields, SCN/control bytes,
-file extents, and Track 2 exactly.
+The game has multiple native text renderers. The project derives roles and
+geometry from original SCN structure and shares that contract between preview
+and compilation. Adaptive records store semantic English; fixed records retain
+reviewer-owned spacing where safe general reflow has not been proven.
+
+The rebuild also preserves the original binary envelope: MES record structure,
+archive allocations, fixed ISO extents, raw MODE1/2352 geometry, and Track 2.
+Deterministic hashes and static regression prove those boundaries, but they do
+not prove on-screen clearing, timing, transitions, branch behavior, or emulator
+compatibility. Those remain runtime-test responsibilities.
 
 ## Repository map
 
 | Path | Purpose |
 | --- | --- |
-| `nostalgia1907.py` | Supported command-line entry point and safety preflight. |
-| `nostalgia1907.project.json` | Project policy, hash guards, and source inventory. |
-| `work/clean_rebuild/sources/` | Canonical per-chapter English records. |
-| `work/clean_rebuild/` | Compiler, formats, deterministic builders, and validators. |
-| `work/region_variant/` | Guarded North American BIOS-security wrapper. |
-| `tests/` | Source-only CLI, policy, documentation, and regression tests. |
-| `tools/` | Source-health and style audits. |
-| `docs/` | Architecture, contributor, format, testing, and release guides. |
-| `outputs/` | Ignored local reports, comparisons, and playable products. |
+| `nostalgia1907.py` | Supported CLI and safety preflight |
+| `nostalgia1907.project.json` | Frozen project policy, hashes, paths, corpus counts |
+| `work/clean_rebuild/sources/` | Canonical English records |
+| `work/clean_rebuild/` | Active compiler, formats, builders, validators, review helpers |
+| `work/region_variant/` | Guarded North American security/region wrapper |
+| `provenance/2026-08-27/` | Reviewed change ledgers for the post-1.0.2 revision |
+| `tests/` | Source-only, synthetic, and regression tests |
+| `tools/` | Source health, manifest, and style audits |
+| `docs/` | Architecture, formats, editing, testing, and release policy |
+| `outputs/` | Ignored generated reports and build products |
 
-## License and game materials
+Historical reverse-engineering outcomes are retained as documentation or small
+declarative provenance records. One-off applicators, forensic decoders,
+intermediate snapshots, and ad-hoc capacity/report scripts are intentionally not
+part of the maintained code surface.
 
-Contributor-created code and documentation are under the
-[MIT License](LICENSE). That license does not grant rights to the original
-game, its assets, story, characters, text, music, trademarks, or BIOS. See
-[THIRD_PARTY_NOTICE.md](THIRD_PARTY_NOTICE.md).
+## Read next
 
-Contributors must supply their own legally obtained game files and must not
-commit a BIOS, retail image, rebuilt image, extracted game media, or generated
-playable product to this repository.
+1. [Getting started](docs/GETTING_STARTED.md)
+2. [Architecture](docs/ARCHITECTURE.md)
+3. [Translation editing](docs/TRANSLATION_EDITING.md)
+4. [Text-box contracts](docs/TEXT_BOX_CONTRACTS.md)
+5. [Development and validation](docs/DEVELOPMENT.md)
+6. [Binary formats](docs/BINARY_FORMATS.md)
+7. [Whole-game testing](docs/WHOLE_GAME_TESTING.md)
+8. [Release policy](docs/RELEASE.md)
+
+For contribution requirements, read [CONTRIBUTING.md](CONTRIBUTING.md). Python
+callables and explanatory comments follow
+[the documentation standard](docs/DOCSTRING_STANDARD.md).
+
+## AI assistance and responsibility
+
+AI tools, including ChatGPT and Codex, were used substantially for translation
+comparison, code generation/refactoring, documentation, test design, and
+reverse-engineering analysis. Their output was not treated as evidence by
+itself. Accepted changes were reviewed against source context, deterministic
+checks, binary boundaries, and observed emulator behavior where runtime claims
+were involved. The maintainer remains responsible for the accepted English,
+code, documentation, release claims, and remaining errors.
+
+## Licensing and third-party materials
+
+Contributor-created code, tests, and technical documentation are licensed under
+the [MIT License](LICENSE). Reviewed English translation contributions are
+licensed under [CC BY-NC-SA 4.0](LICENSE-TRANSLATION.md).
+
+Those licenses apply only to rights held by project contributors. They do not
+grant rights to the original game, Japanese script, music, artwork, trademarks,
+or BIOS. See [THIRD_PARTY_NOTICE.md](THIRD_PARTY_NOTICE.md).

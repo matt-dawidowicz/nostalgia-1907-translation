@@ -445,17 +445,6 @@ class RepositoryPolicyTests(unittest.TestCase):
             self.assertNotIn(r"C:\Users\thema", text)
             self.assertNotIn(r"D:\Sega CD Games", text)
 
-    def test_forensic_utilities_require_explicit_portable_inputs(self) -> None:
-        """Keep retired investigation scripts free of contributor-machine paths."""
-        clean = ROOT / "work" / "clean_rebuild"
-        for name in ("export_font_patterns.py", "forensic_decode_mes.py"):
-            with self.subTest(name=name):
-                text = (clean / name).read_text(encoding="utf-8")
-                self.assertNotIn(r"C:\Users\thema", text)
-                self.assertNotIn(r"D:\Sega CD Games", text)
-                self.assertIn("required=True", text)
-                self.assertIn("FORENSIC_ONLY", text)
-
     def test_project_manifest_contains_no_machine_specific_paths(self) -> None:
         """Keep the committed project manifest portable across developer machines."""
         text = (ROOT / nostalgia1907.MANIFEST_NAME).read_text(encoding="utf-8")

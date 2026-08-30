@@ -1,4 +1,4 @@
-"""Repository documentation contracts for new contributors."""
+"""Repository documentation and maintained-surface contracts."""
 
 from __future__ import annotations
 
@@ -9,6 +9,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+CLEAN = ROOT / "work" / "clean_rebuild"
+REGION = ROOT / "work" / "region_variant"
 DOCS = {
     "architecture": ROOT / "docs" / "ARCHITECTURE.md",
     "editing": ROOT / "docs" / "TRANSLATION_EDITING.md",
@@ -16,39 +18,19 @@ DOCS = {
     "development": ROOT / "docs" / "DEVELOPMENT.md",
 }
 DOCSTRING_GUIDE = ROOT / "docs" / "DOCSTRING_STANDARD.md"
-MAINTAINED_PYTHON = (
-    ROOT / "nostalgia1907.py",
-    ROOT / "work" / "clean_rebuild" / "raw_cd.py",
-    ROOT / "work" / "clean_rebuild" / "iso9660.py",
-    ROOT / "work" / "clean_rebuild" / "lz_format.py",
-    ROOT / "work" / "clean_rebuild" / "mes_format.py",
-    ROOT / "work" / "clean_rebuild" / "source_json.py",
-    ROOT / "work" / "clean_rebuild" / "font_render.py",
-    ROOT / "work" / "clean_rebuild" / "scn_layout.py",
-    ROOT / "work" / "clean_rebuild" / "renderer_format.py",
-    ROOT / "work" / "clean_rebuild" / "profile_schema.py",
-    ROOT / "work" / "clean_rebuild" / "mes_compiler.py",
-    ROOT / "work" / "clean_rebuild" / "prepare_retail.py",
-    ROOT / "work" / "clean_rebuild" / "build_mes_set.py",
-    ROOT / "work" / "clean_rebuild" / "build_archives.py",
-    ROOT / "work" / "clean_rebuild" / "main_patch.py",
-    ROOT / "work" / "clean_rebuild" / "regression.py",
-    ROOT / "work" / "clean_rebuild" / "verification_manifest.py",
-    ROOT / "work" / "clean_rebuild" / "rebuild.py",
-    ROOT / "work" / "clean_rebuild" / "translation_formatter.py",
-    ROOT / "work" / "clean_rebuild" / "translation_validation.py",
-    ROOT / "work" / "clean_rebuild" / "translation_audit.py",
-    ROOT / "work" / "clean_rebuild" / "bomb_audit.py",
-    ROOT / "work" / "clean_rebuild" / "export_bilingual_comparison.py",
-    ROOT / "work" / "clean_rebuild" / "export_fixed_layout_review.py",
-    ROOT / "work" / "clean_rebuild" / "export_translation_proposals.py",
-    ROOT / "work" / "clean_rebuild" / "test_script_layout.py",
-    ROOT / "work" / "region_variant" / "build_us_bios_test.py",
-)
+
+
+def maintained_python() -> tuple[Path, ...]:
+    """Return the active non-test Python surface that requires full docstrings."""
+    paths = [ROOT / "nostalgia1907.py"]
+    paths.extend(sorted((ROOT / "tools").glob("*.py")))
+    paths.extend(sorted(CLEAN.glob("*.py")))
+    paths.extend(sorted(REGION.glob("*.py")))
+    return tuple(paths)
 
 
 class DocumentationTests(unittest.TestCase):
-    """Keep contributor guides synchronized with production structure."""
+    """Keep contributor guides synchronized with the maintained repository."""
 
     def test_contributor_documents_exist_and_are_linked(self) -> None:
         """Keep required contributor guides discoverable from entry documents."""
@@ -70,8 +52,8 @@ class DocumentationTests(unittest.TestCase):
         self.assertIn("DOCSTRING_STANDARD.md", development)
 
     def test_architecture_lists_every_production_module(self) -> None:
-        """Require architecture documentation for every active production module."""
-        rebuild = ROOT / "work" / "clean_rebuild" / "rebuild.py"
+        """Require architecture documentation for every production dependency."""
+        rebuild = CLEAN / "rebuild.py"
         tree = ast.parse(rebuild.read_text(encoding="utf-8"))
         modules: tuple[str, ...] | None = None
         for node in tree.body:
@@ -88,6 +70,17 @@ class DocumentationTests(unittest.TestCase):
         for module in modules or ():
             with self.subTest(module=module):
                 self.assertIn(f"`{module}`", architecture)
+
+    def test_work_root_contains_only_active_workspaces(self) -> None:
+        """Keep historical ledgers out of the operator-facing work directory."""
+        directories = {
+            path.name for path in (ROOT / "work").iterdir() if path.is_dir()
+        }
+        self.assertEqual(directories, {"clean_rebuild", "region_variant"})
+
+    def test_clean_rebuild_has_no_loose_historical_documentation(self) -> None:
+        """Keep maintained code/data separate from historical prose artifacts."""
+        self.assertEqual(list(CLEAN.glob("*.md")), [])
 
     def test_editing_guide_documents_the_canonical_record_contract(self) -> None:
         """Keep canonical record ownership explicit in the editor guide."""
@@ -149,7 +142,7 @@ class DocumentationTests(unittest.TestCase):
             ast.FunctionDef,
             ast.AsyncFunctionDef,
         )
-        for path in MAINTAINED_PYTHON:
+        for path in maintained_python():
             tree = ast.parse(path.read_text(encoding="utf-8"))
             nodes = [tree, *ast.walk(tree)]
             for node in nodes:
