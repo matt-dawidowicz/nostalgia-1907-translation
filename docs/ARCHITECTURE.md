@@ -1,280 +1,231 @@
 # Architecture
 
-## Purpose and trust model
+## Trust model
 
-The project rebuilds an English Mega-CD disc from a verified original Japanese
-disc plus tracked canonical translation data. It does not use an older
-translated BIN as an input. That distinction is the central architectural
-rule: retail data supplies structure and preserved bytes; tracked JSON supplies
-reviewed English; code derives every output.
+Nostalgia 1907 is rebuilt from verified Japanese retail media plus tracked
+translation source. A previously translated disc, generated MES/LZ files, or a
+runtime-reviewed BIN is never a build input.
 
-The North American artifact with Track 1 SHA-256
-`1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17` is the
-runtime-reviewed reference for the current renderer contracts. It is not a
-source input. Every future candidate starts from verified Japanese retail
-tracks and tracked source; it must never restore an earlier translated image.
-The reference completed a full maintainer Ares playtest with no reported
-defects; independent regression playtests remain welcome and are required anew
-for any candidate with changed playable bytes.
-
-Version 1.0.2 remains the latest runtime-certified published reference. The
-current source tree contains the later 2026-08-27 translation revision, which
-does change canonical English and therefore would produce different playable
-bytes. Its source and retail-backed static evidence is recorded in [the
-revision record](TRANSLATION_REVISION_20260827.md); it must complete fresh
-candidate-bound runtime testing before it can supersede the 1.0.2 reference.
-
-Three classes of data are intentionally separated:
+The repository has three trust classes:
 
 | Class | Examples | Authority |
 | --- | --- | --- |
-| Retail input | Japanese Track 1, Track 2, extracted MES/SCN | Read-only structural and binary authority |
-| Canonical source | `sources/*.json`, glossary, exemptions, layout rules | Human-reviewed translation and policy authority |
-| Generated output | MES, LZ, ISO, BIN/CUE, reports, comparison package | Disposable products that must be reproducible |
+| Retail input | Japanese Track 1/2, extracted MES/SCN | Read-only binary and structural authority |
+| Canonical source | `work/clean_rebuild/sources/*.json`, glossary and layout policy | Human-reviewed English and translation policy |
+| Generated output | MES, LZ, ISO, BIN/CUE, reports and review packages | Disposable products that must be reproducible |
 
-## End-to-end flow
+Version 1.0.2 remains the latest runtime-certified published reference. The
+current source tree contains the later 2026-08-27 translation revision, which
+changes playable bytes and therefore requires fresh candidate-bound runtime
+evidence before it can supersede 1.0.2. See
+[the revision record](TRANSLATION_REVISION_20260827.md) and
+[release policy](RELEASE.md).
 
-```mermaid
-flowchart TD
-    A["Verified Japanese Track 1<br/>MODE1/2352"] --> B["prepare_retail.py<br/>raw sectors to retail.iso"]
-    B --> C["ISO 9660 extraction<br/>chapter LZ, MAIN.BIN, FIX_CODE.FNT"]
-    C --> D["LZ extraction<br/>retail MES and SCN"]
-    E["Canonical sources/*.json"] --> F["mes_compiler.py<br/>SCN-aware text and glyph compilation"]
-    D --> F
-    F --> G["build_archives.py<br/>replace MES, preserve SCN and other members"]
-    G --> H["iso9660.py<br/>fixed-extent ISO patch"]
-    I["Guarded MAIN.BIN adjustment"] --> H
-    J["Generated fixed font"] --> H
-    H --> K["raw_cd.py<br/>restore MODE1/2352 sectors and EDC/ECC"]
-    L["Original Japanese Track 2"] --> M["Two-track BIN/CUE delivery"]
-    K --> M
-    M --> N["regression.py<br/>binary boundaries and content proofs"]
-    N --> O["verification_manifest.py<br/>input fingerprint and direct output binding"]
-    O --> P["Two identical clean builds"]
-    Q["Licensed U.S. BIOS"] --> R["North American security wrapper"]
-    P --> R
-    R --> S["Two identical region builds<br/>default published BIN/CUE"]
-```
+## Supported flow
 
-`rebuild.py` performs the clean flow twice in independent directories. The
-default operator build then applies the guarded North American region wrapper
-twice to the proven clean result. Publication occurs only if every explicitly
-named binary artifact agrees across both runs of its stage and both clean runs
-report the same aggregate input fingerprint. Each run writes a machine-readable
-input/output binding before publication. `--region japan` is an explicit
-archival/diagnostic override rather than the project default.
-
-## Repository map
-
-| Path | Role |
-| --- | --- |
-| `nostalgia1907.py` | Supported operator CLI and safety preflight |
-| `nostalgia1907.project.json` | Version, hash, inventory, and path contract |
-| `work/clean_rebuild/sources/` | Canonical per-chapter English records |
-| `work/clean_rebuild/` | Production formats, compiler, builders, audits, and tests |
-| `work/region_variant/` | Guarded North American BIOS-region wrapper |
-| `work/clean_rebuild/retired_workspace_register.json` | Portable record of retired pre-clean-rebuild workspaces and their replacements |
-| `tests/` | Source-only CLI, policy, and documentation tests |
-| `outputs/` | Ignored generated reports, comparisons, and playable products |
-
-## Supported entry point
-
-Contributors should call the unified CLI instead of invoking build stages
-manually:
+Normal work goes through the top-level CLI:
 
 ```text
-doctor -> prepare -> edit/compare -> validate -> build
+doctor -> prepare -> edit/compare -> validate -> build -> runtime test
 ```
 
-The lower-level scripts remain importable because they are useful for format
-analysis and focused testing. Each production module enforces the invariants it
-owns; for example, direct MES compilation now rejects semantic token splits as
-well as byte-level row errors. Direct invocation can still omit repository,
-cross-chapter, comparison, deterministic-build, and runtime gates. Use it only
-when investigating a specific stage, and never treat one lower-level success as
-release proof.
+`nostalgia1907.py` owns operator-facing path resolution, input guards, command
+composition, and safe error reporting. `nostalgia1907.project.json` owns the
+frozen project contract: retail hashes, corpus counts, default region, and
+repository-relative paths.
 
-## Production module ownership
+The build path is deliberately staged:
 
-`rebuild.py` contains `PRODUCTION_MODULES`, the executable production boundary.
-Before a build, a bounded static audit verifies that all local imports stay in
-that allowlist, canonical source paths remain direct children of `sources/`,
-tracked production data exists, and production code contains no known
-historical-workspace marker. The final report describes that exact scope rather
-than claiming a universal absence of every possible legacy dependency. Retail
-inputs and generated artifacts remain independently protected by hashes and
-cross-layer regression. The modules have deliberately narrow responsibilities:
+1. `prepare_retail.py` verifies Track 1 and derives a hash-locked retail
+   reference.
+2. `mes_compiler.py` combines canonical English with the original MES/SCN
+   structure and shared renderer rules.
+3. `build_archives.py` replaces MES members within guarded archive capacity.
+4. `iso9660.py`, `main_patch.py`, and `font_render.py` create the logical disc
+   payload without relocating unrelated files.
+5. `raw_cd.py` reconstructs MODE1/2352 Track 1 and copies Track 2 exactly.
+6. `regression.py` checks cross-layer preservation invariants.
+7. `verification_manifest.py` binds declared inputs and direct output hashes.
+8. `rebuild.py` repeats the clean build independently and publishes only when
+   both runs agree.
+9. The North American wrapper under `work/region_variant/` repeats its guarded
+   region stage independently before publication.
 
-| Module | Owns | Must not own |
-| --- | --- | --- |
-| `raw_cd.py` | MODE1/2352 headers, user data, EDC/ECC, CUE | Translation or ISO file placement |
-| `iso9660.py` | Directory records, extents, logical sizes | Archive/member interpretation |
-| `lz_format.py` | Archive table and backward LZ codec | MES semantics |
-| `mes_format.py` | MES parsing and structural validation | English layout decisions |
-| `source_json.py` | Strict UTF-8 JSON loading with duplicate-key rejection | Canonical policy or renderer inference |
-| `font_render.py` | 12x12 glyph bitmap generation | Record ordering or SCN roles |
-| `scn_layout.py` | Renderer role, width, stride, row inference | Translation wording |
-| `renderer_format.py` | Shared semantic normalization, wrapping, row reconstruction, and token-boundary validation | MES encoding or SCN inference |
-| `profile_schema.py` | Active profile schema, legacy-field classification, and canonical text locks | Renderer geometry implementation |
-| `mes_compiler.py` | Canonical records to MES bytes, including compiler-local semantic-row enforcement | ISO/raw-disc mutation |
-| `prepare_retail.py` | Exact retail verification and extraction | Reuse of translated artifacts |
-| `build_mes_set.py` | Compile all chapters and assemble font | Archive placement |
-| `build_archives.py` | Install MES members within guarded archive capacity | SCN modification |
-| `main_patch.py` | One frozen, hash-guarded executable UI adjustment | General patching |
-| `regression.py` | Cross-layer invariant proofs | Product generation |
-| `verification_manifest.py` | Stable input fingerprints, explicit artifact snapshots, report binding | Disc generation or file discovery by glob |
-| `rebuild.py` | Orchestration, determinism proof, publication | Format-specific logic |
+## Repository boundaries
 
-Analysis and review modules such as `translation_formatter.py`,
-`translation_audit.py`, `translation_validation.py`,
-`export_bilingual_comparison.py`, `export_fixed_layout_review.py`, and
-`export_translation_proposals.py` run before the binary build. They do not
-become inputs by copying generated game bytes; they validate or report on the
-tracked source. The comparison exporter uses a fresh run-specific staging tree,
-an explicit expected-file manifest, a metadata-free one-bit PNG encoder, and a
-fully specified stored-entry ZIP writer. It never packages files by directory
-glob.
+| Path | Responsibility |
+| --- | --- |
+| `nostalgia1907.py` | Supported operator CLI and preflight |
+| `nostalgia1907.project.json` | Project policy, hashes, corpus counts, paths |
+| `work/clean_rebuild/sources/` | Canonical per-chapter translation records |
+| `work/clean_rebuild/` | Active compiler, binary formats, builders, validators, review helpers |
+| `work/region_variant/` | Guarded North American region wrapper |
+| `provenance/2026-08-27/` | Historical reviewed-change ledgers; never a build input |
+| `tests/` | Source-only and synthetic regression tests |
+| `tools/` | Repository health, source-manifest, and style checks |
+| `docs/` | Contributor, format, testing, revision, and release documentation |
+| `outputs/` | Ignored generated reports, comparisons, and playable products |
 
-## Cryptographic verification binding
+`work/clean_rebuild/retired_workspace_register.json` is a small retained
+provenance record for pre-clean-rebuild workspaces. It is not executable legacy
+code or generated media.
 
-A build report is not accepted merely because it contains hashes.
-`verification_manifest.py` fingerprints the exact canonical chapter files,
-prepared Japanese MES/SCN/archive fixtures, production and verification Python,
-layout rules, glossary/repair/exemption configuration, project configuration,
-original Track 1 and Track 2, normalized build profile and command, and runtime
-identity. Absolute workspace paths and undeclared scratch files are excluded.
+`MANIFEST.sha256` describes the complete source-only review tree. The maintained
+`tools/source_manifest.py` generator/checker makes that inventory reproducible
+instead of relying on manual hash edits.
 
-The aggregate input fingerprint is computed over one canonical manifest that
-contains the complete declared input and runtime inventory. Every expected MES,
-LZ, font, executable, ISO, report, Track 1, Track 2, and CUE artifact is then
-named explicitly and hashed. The report writer rehashes
-those paths immediately before writing the machine and human reports and rejects
-a missing, replaced, or stale artifact. Product directories are also checked
-for unexpected files before report creation.
+## Production module boundary
 
-This binds a report to the bytes it actually describes. It does not prove that
-static previews render correctly at runtime; playtesting remains a separate
-release gate.
+`rebuild.py` defines `PRODUCTION_MODULES`. That tuple is the exact local Python
+allowlist for the byte-producing clean build. The production-independence audit
+rejects a missing module, an undeclared local import, a canonical source path
+that escapes `sources/`, or a known historical-workspace marker.
 
-## Comparison determinism contract
+Each production module has one primary responsibility:
 
-The comparison ZIP is byte-identical across machines and operating systems when
-all retail/canonical input bytes, exporter source, and the CPython major/minor
-runtime are identical. The exporter fixes UTF-8/LF text, normalized POSIX member
-paths, lexicographic ordering, metadata-free one-bit PNG bytes, stored DEFLATE
-blocks, ZIP timestamps, permissions, flags, compression method, extras, and
-comments. No Pillow or platform ZIP encoder participates.
+| Module | Owns |
+| --- | --- |
+| `raw_cd.py` | MODE1/2352 sectors, EDC/ECC, CUE writing |
+| `iso9660.py` | ISO directory records, extents, logical sizes |
+| `lz_format.py` | Chapter archive parsing and compression |
+| `mes_format.py` | MES parsing and structural validation |
+| `source_json.py` | Strict UTF-8 JSON loading and duplicate-key rejection |
+| `font_render.py` | Fixed and generated glyph bitmaps |
+| `scn_layout.py` | SCN-derived renderer roles and geometry |
+| `renderer_format.py` | Shared text normalization, wrapping, and row reconstruction |
+| `profile_schema.py` | Chapter-profile schema and active/legacy field classification |
+| `mes_compiler.py` | Canonical records to guarded MES bytes |
+| `prepare_retail.py` | Exact retail verification and extraction |
+| `build_mes_set.py` | Whole-corpus MES compilation and font assembly |
+| `build_archives.py` | MES installation within original archive allocation |
+| `main_patch.py` | Frozen hash-guarded executable adjustment |
+| `regression.py` | Cross-layer binary preservation proofs |
+| `verification_manifest.py` | Input fingerprints and explicit output binding |
+| `rebuild.py` | Orchestration, two-run determinism, publication |
 
-Every invocation uses a fresh, run-specific staging directory and an expected
-member manifest derived from that invocation. Missing or unexpected staging
-files abort publication; the ZIP contains only manifest-listed members. The
-external package manifest records the final archive SHA-256 and every member's
-path, size, and SHA-256. Different CPython major/minor versions and later
-third-party archive/image rewrites remain outside the guarantee.
+Production code expresses general format or renderer rules. Chapter-specific
+forensic experiments and one-time migration scripts do not belong in this
+boundary.
 
-## Canonical source ownership
+## Validation and review boundary
+
+Validation code is maintained separately from the byte-producing allowlist. The
+supported `validate` path uses `translation_formatter.py`,
+`translation_audit.py`, `translation_validation.py`, `bomb_audit.py`,
+`export_bilingual_comparison.py`, and the retail-backed
+`test_script_layout.py` suite. `export_fixed_layout_review.py` and
+`whole_game_test.py` support runtime-evidence planning.
+
+`export_translation_proposals.py` now represents only the explicit completed
+queue state. Its older active proposal-analysis machinery was a one-off review
+path and was removed after the queue reached zero. New canonical changes use the
+supported edit/validate/build path instead.
+
+Public CI deliberately runs source-only checks without copyrighted retail
+fixtures. Retail-backed layout, semantic, archive, deterministic-build, and
+runtime gates remain maintainer operations with verified local inputs.
+
+## Canonical source contract
 
 `sources/index.json` fixes chapter order and per-chapter counts. Each chapter
-file contains:
+contains a contiguous zero-based record table with an explicit translation
+policy and layout ownership.
 
-- retail MES and SCN size/hash guards;
-- an embedded renderer profile for reviewed exceptions;
-- a contiguous zero-based record table;
-- one policy per record;
-- canonical English for translated records;
-- explicit adaptive or fixed layout ownership.
+Important invariants are:
 
-SCN operands use one-based MES IDs. Source JSON and stable IDs use zero-based
-indexes. Thus SCN text ID `4` refers to source record `003`.
+- stable `CHAPTER:NNN` IDs and record order;
+- `policy: "translate"` versus `policy: "preserve"`;
+- `layout_policy: "adaptive"` only where SCN proves safe renderer geometry;
+- `layout_policy: "fixed"` where reviewers still own exact spacing;
+- Japanese retail MES/SCN hashes as source-side guards; and
+- no discovery by matching mutable English text.
 
-The compiler never discovers a record by matching English. IDs and order remain
-authoritative even if the wording changes completely.
-
-`profile_schema.py` makes the embedded profile executable. Live fields are
-validated and consumed by renderer inference or canonical text validation.
-Known migration-era fields are accepted only as legacy provenance and have no
-production effect. An unknown field is an error rather than a silently ignored
-setting. `text_sources` contains portable historical-provenance labels only; it
-is not a path dependency or a build input.
+SCN text IDs are one-based while canonical record indexes are zero-based. That
+conversion is explicit and tested.
 
 ## Renderer ownership
 
-The game has several text renderers, not one universal box. `scn_layout.py`
-classifies records from original SCN command structure:
+The game has multiple text renderers. `scn_layout.py` classifies lower dialogue,
+speaker labels, continuation rows, floating thoughts/overlays, compact labels,
+choices, and reviewed narration cases from original SCN structure.
 
-- lower-window dialogue and its speaker label;
-- dialogue continuation rows;
-- floating thought and overlay windows;
-- location and perspective labels;
-- menu choices;
-- reviewed narration exceptions.
+`translation_formatter.py` and `mes_compiler.py` share the public
+`renderer_format.py` behavior. Adaptive source stores semantic English while the
+compiler derives safe rows. Fixed source retains reviewer-controlled spacing.
+The compiler repeats authoritative row/token checks before encoding so direct
+low-level compilation cannot bypass the formatter's safety model.
 
-`translation_formatter.py` and `mes_compiler.py` use the same inferred
-`RecordContract` and the same public `renderer_format.py` functions. A preview
-and direct compilation therefore share semantic normalization, wrapping,
-visible-cell measurement, row reconstruction, and whole-token enforcement.
-The compiler repeats the authoritative semantic-row check before encoding, so
-the lower-level API cannot rely on a formatter having run first.
+Static geometry is not a runtime claim. Window clearing, transitions, timing,
+branch behavior, and emulator-visible redraw still require candidate-bound
+playtesting.
 
-Adaptive records store semantic text without manual wrapping. Fixed records
-retain reviewer-controlled spacing because no safe general reflow geometry has
-been proven for their renderer.
+## Binary preservation boundaries
 
-## Binary boundary strategy
+The build avoids relocating disc structures:
 
-The project avoids relocating disc structures:
+1. MES record count and order stay fixed.
+2. Compiled MES data must fit pointer and runtime glyph limits.
+3. LZ replacement uses the original member slot when possible and guarded
+   reflow only inside the original archive allocation.
+4. ISO file extents stay fixed; only declared payload bytes and logical sizes
+   may change.
+5. Raw Track 1 preserves sector count and non-user-data geometry.
+6. Track 2 is copied byte-for-byte.
+7. The North American wrapper modifies only its explicitly guarded boot/security
+   region.
 
-1. MES record count and order never change.
-2. A rebuilt MES must fit pointer and runtime glyph limits.
-3. A chapter LZ is replaced in its original member slot when possible.
-4. If a member slot is too small, archive members may reflow only inside the
-   archive's existing ISO allocation.
-5. ISO files retain their original extents; only logical sizes and allocated
-   payload bytes change.
-6. Raw Track 1 retains its sector count and non-user-data geometry.
-7. Track 2 is copied exactly.
+`regression.py` verifies these boundaries against the retail reference rather
+than trusting a previous translated product.
 
-`regression.py` proves that ISO bytes outside declared file allocations and
-directory-size fields remain unchanged.
+## Determinism and cryptographic binding
 
-## Historical workspaces
+A clean run fingerprints declared canonical source, retail fixtures, production
+and validation code, configuration, original tracks, normalized command/build
+profile, and runtime identity. The resulting **aggregate input fingerprint** is
+recorded with explicit hashes for every managed output.
 
-Historical scripts explain how formats and edge cases were discovered. They are
-not imported by `rebuild.py`, and their outputs are not permitted as clean-build
-inputs. `PRODUCTION_MODULES` is the exact binary-build allowlist. Maintained
-review tools are the modules called by `nostalgia1907.py validate` and the files
-covered by `tools/style_audit.py`; other one-off scripts in
-`work/clean_rebuild/` are forensic notes unless this document and a test promote
-them explicitly. Use forensic scripts as research notes only.
+`verification_manifest.py` never discovers release products by an unrestricted
+output glob. Expected artifacts are named, snapshotted, rehashed immediately
+before report creation, and checked for missing or unexpected files. Two clean
+runs must agree before publication; the region wrapper has its own independent
+repeatability check.
 
-`export_font_patterns.py` and `forensic_decode_mes.py` are retained provenance
-utilities, not supported build commands. They have no contributor-machine
-defaults and run only when their historical renderer and extracted-data paths
-are supplied explicitly. Their outputs remain forbidden as clean-build inputs.
+This proves reproducibility and direct report-to-byte binding. It does not turn
+static success into a **runtime claim**.
 
-When promoting a discovery:
+## Historical provenance policy
 
-1. restate it as a general format or renderer rule;
-2. implement it in a production or validation module;
-3. add a focused regression test;
-4. verify it across every affected chapter;
-5. keep the historical script outside the production dependency graph.
+Historical outcomes belong in `docs/` or `provenance/`, not as executable
+one-off scripts beside production code. Once a discovery is promoted, the
+durable form is a general implementation rule plus a focused regression test.
+Obsolete forensic decoders, migration applicators, ad-hoc capacity planners,
+generated review-bundle scaffolding, and intermediate translation snapshots are
+removed rather than kept on the maintained Python surface.
 
-## Where to make a change
+When promoting a new reverse-engineering discovery:
+
+1. record the evidence and scope;
+2. express the behavior as a general parser/renderer/build rule;
+3. add malformed-input and regression coverage;
+4. run complete affected-corpus validation; and
+5. keep generated evidence outside tracked source.
+
+## Where changes belong
 
 | Goal | Primary location |
 | --- | --- |
-| Correct English wording | `sources/<CHAPTER>.json` through `nostalgia1907.py edit` |
-| Correct a repeated name/term | canonical records plus `translation_glossary.json` when it must stay locked |
-| Fix wrapping for a known renderer class | `scn_layout.py` or shared compiler formatting |
-| Add a semantic invariant | `translation_validation.py` and its data tables |
-| Analyze MES structure | `mes_format.py` |
-| Analyze archive compression/capacity | `lz_format.py` |
-| Analyze ISO placement | `iso9660.py` |
-| Analyze sector checksums | `raw_cd.py` |
-| Change production orchestration | `rebuild.py`, with determinism tests |
+| Correct English wording | `sources/<CHAPTER>.json` via `nostalgia1907.py edit` |
+| Lock a repeated term | Canonical records plus `translation_glossary.json` when required |
+| Fix a renderer rule | `scn_layout.py` or shared `renderer_format.py`/compiler logic |
+| Add a semantic invariant | `translation_validation.py` and its tracked rule data |
+| Change MES parsing | `mes_format.py` |
+| Change archive handling | `lz_format.py` / `build_archives.py` |
+| Change ISO placement | `iso9660.py` |
+| Change sector handling | `raw_cd.py` |
+| Change orchestration | `rebuild.py`, with deterministic regression coverage |
+| Change repository policy | top-level CLI/project manifest plus source-only tests |
 
-If the proposed solution starts with a chapter name or screenshot coordinate,
-pause and determine whether the actual rule belongs to canonical wording,
-renderer classification, or a binary format. Production code should express
-the general rule.
+A proposed fix that starts from one screenshot coordinate or one chapter name
+should first be reduced to the underlying renderer, format, or canonical-source
+rule. That is how the project avoids rebuilding another layer of historical
+special cases.

@@ -1,7 +1,9 @@
-# Local Codex state
+# Local tooling and editor state
 /.agents/
 /.codex/
-.venv/
+/.venv/
+/.idea/
+/.vscode/
 *.egg-info/
 /build/
 /dist/
@@ -30,25 +32,19 @@ nostalgia1907.local.json
 *.DMY
 *.unpacked
 
-# Generated packages and archives
+# Generated review packages and build output
 /outputs/
 *.zip
 *.7z
 *.png
 *.gif
 
-# Rebuild inputs, scratch trees, and deterministic run products
-/work/clean_rebuild/build/
+# Active local rebuild state
 /work/clean_rebuild/retail_input/
 /work/clean_rebuild/retail_reference/
 /work/clean_rebuild/runs*/
 /work/clean_rebuild/test-output/
-/work/clean_rebuild/forensic_decode.json
 /work/region_variant/runs*/
-/work/**/built/
-/work/**/dump/
-/work/**/*_extract/
-/work/**/*_part3c/
 
 # Optional native tooling and generated binary data
 *.onnx
@@ -66,11 +62,12 @@ __pycache__/
 .coverage
 htmlcov/
 
-# Local logs and temporary files
+# Local logs, temporary files, and OS metadata
 *.log
 *.tmp
 *.temp
 *.bak
 *.swp
+.DS_Store
 Thumbs.db
 Desktop.ini

@@ -1,11 +1,13 @@
 # Source-release review context
 
-This document records the source-only review context for the Nostalgia 1907
-English fan-translation project. It preserves the review context for the 1.0.2
-runtime-certified source release and now also points reviewers to the later
-post-1.0.2 translation revision. The 2026-08-27 revision changes canonical
-English, so its retail-backed build evidence and remaining runtime obligations
-must be evaluated separately from the historical 1.0.2 Ares playtest.
+This document gives reviewers the current source-only context for the Nostalgia
+1907 English fan-translation project. It separates three things that must not be
+conflated:
+
+1. the runtime-certified 1.0.2 reference;
+2. the later 2026-08-27 translation revision, which changes playable bytes; and
+3. source-only repository maintenance that changes organization/tooling without
+   changing canonical English or the byte-producing production modules.
 
 ## Read first
 
@@ -14,101 +16,97 @@ must be evaluated separately from the historical 1.0.2 Ares playtest.
 3. `docs/ARCHITECTURE.md`
 4. `docs/TEXT_BOX_CONTRACTS.md`
 5. `docs/DEVELOPMENT.md`
-6. `docs/RELEASE.md`
-7. `docs/TRANSLATION_REVISION_20260827.md`
+6. `docs/TRANSLATION_REVISION_20260827.md`
+7. `docs/RELEASE.md`
 8. `CHATGPT_REVIEW_PROMPT.md`
+
+Verify `MANIFEST.sha256` before source review:
+
+```text
+python tools/source_manifest.py --root .
+```
 
 ## Scope and exclusions
 
-Included: canonical source JSON, renderer/compiler/validation code, tests,
-documentation, project policy, and GitHub source-check workflow.
+Included: canonical source JSON, active renderer/compiler/validation code,
+source tests, documentation, project policy, GitHub source checks, and historical
+review provenance under `provenance/`.
 
 Excluded: retail or rebuilt images, CUE files, BIOS files, extracted retail
 members, comparison images, generated reports, local configuration, and the
 retired audio-localization experiment.
 
-`MANIFEST.sha256` lists every other archive member and its SHA-256. Verify it
-before reviewing source conclusions.
+The source manifest lists every other tracked review-bundle member and excludes
+only itself.
 
+## 2026-08-30 repository-maintenance pass
 
-## 2026-08-27 post-1.0.2 revision
+The maintenance pass intentionally does **not** change canonical records,
+production-module code, binary formats, renderer behavior, project hashes, or
+release/runtime claims. Its scope is repository hygiene:
 
-The current source tree contains a complete Japanese-semantic and character-voice
-revision that was not part of 1.0.2. The semantic application changed 345
-canonical records, followed by reviewed voice, ending, capacity, and validator
-passes. Source CI is green on Windows/Python 3.12 and Ubuntu/Python 3.10.
-Retail-backed testing of the final source content passed the 17-test layout
-suite, all 19 MES chapters, and all 19 LZ archive rebuilds; PART3C is 16,073
-bytes (`0x3EC9`) and the minimum archive headroom is 168 bytes.
+- one-off translation applicators, forensic decoders, capacity planners,
+  intermediate snapshots, and obsolete report/export scripts were removed from
+  `work/clean_rebuild/`;
+- the completed translation-proposal exporter was reduced to its explicit
+  no-pending status contract instead of retaining the old active-analysis
+  machinery;
+- reviewed 2026-08-27 change ledgers were moved out of the active `work/`
+  namespace into `provenance/2026-08-27/`;
+- the README, architecture, development guide, and ignore rules were tightened
+  around the supported surfaces;
+- documentation coverage now derives the maintained Python surface rather than
+  hard-coding a long file list; and
+- `tools/source_manifest.py` plus CI coverage now make `MANIFEST.sha256` a
+  generated-and-verified contract instead of a manual inventory.
 
-This is source/build evidence, not a new runtime certification. Version 1.0.2
-remains the latest runtime-certified reference until a new full two-track build
-and candidate-bound Ares playthrough are recorded. See
+This pass therefore requires source-only regression evidence but does not, by
+itself, trigger a new Ares playthrough. Any later change to canonical English or
+byte-producing code remains subject to the normal candidate-bound runtime rule.
+
+## 2026-08-27 post-1.0.2 translation revision
+
+The current canonical source contains the complete Japanese-semantic and
+character-voice revision that was not part of 1.0.2. The semantic application
+changed 345 canonical records, followed by reviewed voice, ending, capacity,
+and validator passes.
+
+The final revision was reported green on Windows/Python 3.12 and Ubuntu/Python
+3.10 source CI. Retail-backed validation passed the 17-test layout suite, all 19
+MES chapters, and all 19 LZ archive rebuilds; PART3C was 16,073 bytes (`0x3EC9`)
+and minimum archive headroom was 168 bytes. Those results are recorded in
 `docs/TRANSLATION_REVISION_20260827.md`.
 
-## Current source evidence
+That is source/build evidence, not runtime certification. The playable bytes
+changed, so the historical 1.0.2 Ares evidence cannot be inherited.
 
-This source-review package passed the following source-only checks after the
-release-hardening corrections in this package:
+## Historical 1.0.2 runtime reference
 
-- `python -m unittest discover -s tests -v`: 132 tests passed, with 1
-  retail-fixture integration test skipped as designed.
-- `python tools/source_health.py --root . --strict-release`: PASS, zero
-  failures across the complete unpacked-package inventory.
-- `python tools/style_audit.py --root .`: PASS, zero violations.
-- `python -m compileall -q nostalgia1907.py tools tests work`: PASS.
+The latest runtime-certified North American Track 1 remains:
 
-The immediately preceding candidate source line was also validated on Windows
-with Python 3.12.13 and privately prepared retail fixtures. That run completed
-the full renderer, layout, comparison, compilation, semantic, deterministic
-clean-build, and North American region-wrapper gates for all 19 chapters and
-2,905 records. The resulting Track 1, Track 2, CUE, final verification report,
-and test notes were byte-identical to the preceding tested candidate. Track 1
-SHA-256:
-`1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`.
+`1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`
 
-The 1.0.2 release-hardening corrections described in the historical evidence
-below tightened source-release inventory and invalid-input failures without
-changing canonical translation records. The later 2026-08-27 revision **does**
-change canonical translation records and therefore cannot inherit that older
-runtime certification. Its separate validation status is recorded above and in
-the translation-revision document.
+Its unchanged Track 2 SHA-256 is:
 
-The earlier build-comparison evidence showed that the preceding hardening
-changed failure and verification behavior without changing playable bytes. The
-project maintainer subsequently completed a full Ares playtest of that exact
-Track 1, including targeted dialogue-renderer checks, page advances, and
-dialogue transitions, with no reported defects. The source package cannot
-independently replay that session; independent and future regression playtests
-remain welcome, and changed playable bytes require fresh candidate-bound
-evidence.
+`F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991`
 
-## Recent review corrections
+That exact 1.0.2 Track 1 completed a full maintainer Ares playthrough, including
+targeted lower-dialogue checks, page advances, and dialogue transitions, with no
+reported defect. The current post-1.0.2 source revision still needs its own
+fresh deterministic two-track build and candidate-bound Ares evidence before it
+can become a runtime-certified successor.
 
-- Public CI now audits the exact Git-tracked inventory, while unpacked source
-  packages audit every member. Ignored retail/output directory names no longer
-  conceal release contamination.
-- The strict release audit rejects local configuration, generated images,
-  emulator states, Python caches, and private/generated directory contents.
-- The translation editor validates the complete embedded profile before retail
-  lookup or canonical mutation, and direct row-limit inference rejects
-  noncanonical aliases such as `"01"`.
-- Retained forensic utilities require explicit historical input paths and no
-  longer contain a contributor-machine default.
-- Adaptive records without SCN geometry or a recognized non-prose renderer
-  contract fail compilation before bytes are emitted.
-- Indexed renderer profile fields reject aliases, stale/out-of-range indexes,
-  preserve-record targets, and invalid values.
-- The North American wrapper has no report-only publication path. Publication
-  re-derives the expected boot from locked inputs and revalidates both staged
-  products directly.
-- Wrapper basenames reject path-like values.
-- Retired generated recovery reports and their utility were removed; source
-  health prevents their reintroduction.
+## Preservation boundary
 
-For the 1.0.2 release-hardening corrections in this historical subsection, no
-Japanese records, record IDs/order, policies, reviewed English text, SCN
-content, archive boundaries, ISO extents, or Track 2 bytes changed. A stale
-PART2F metadata pointer to a deleted generated report was removed. The later
-2026-08-27 revision intentionally changes reviewed English while preserving the
-other structural authorities.
+Reviewers should confirm that current source work preserves:
+
+- all 19 chapter names and 2,905 record positions;
+- Japanese records, stable IDs/order, and preserve/translate policy;
+- SCN/control bytes and non-MES archive members;
+- fixed ISO extents and raw Track 1 geometry;
+- Track 2 byte-for-byte;
+- North America as the default supported build region; and
+- the distinction between static/deterministic proof and runtime evidence.
+
+Historical ledgers under `provenance/` are evidence only. They must never be
+imported by production code or treated as alternate canonical source.

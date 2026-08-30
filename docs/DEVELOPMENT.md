@@ -2,8 +2,10 @@
 
 ## Environment
 
-The supported runtime is Python 3.10 or newer. Install the repository in
-editable mode:
+The supported runtime is Python 3.10 or newer. The production build and review
+pipeline use only the standard library; Python 3.10 installs `tomli` for TOML
+parsing. The optional `style` extra supplies the pinned Black version used for
+mechanical formatting checks.
 
 ```powershell
 python -m venv .venv
@@ -12,323 +14,224 @@ python -m pip install --upgrade pip
 python -m pip install -e .
 ```
 
-For a formatting pass, install the isolated style extra and run the pinned
-Black version:
+For Black:
 
 ```powershell
 python -m pip install -e ".[style]"
 python -m black nostalgia1907.py tools tests work/clean_rebuild work/region_variant
 ```
 
-The supported production and comparison path uses only the Python standard
-library. The optional style extra supplies the pinned Black formatter.
-
-Machine-specific retail and BIOS paths belong in the ignored
-`nostalgia1907.local.json`, never in tracked source.
+Machine-specific retail and BIOS paths belong only in the ignored
+`nostalgia1907.local.json`.
 
 ## Command layers
 
-Use `nostalgia1907.py` for normal work:
+Use `nostalgia1907.py` for normal work. Lower-level modules are importable for
+focused analysis, but invoking them directly can bypass preflight or evidence
+steps owned by the CLI.
 
-| Command | Reads | Writes | Purpose |
-| --- | --- | --- | --- |
-| `doctor` | manifest, config, input hashes | nothing | readiness diagnosis |
-| `prepare` | original Track 1 | ignored retail reference | strict extraction |
-| `edit` preview | source and retail SCN | nothing | renderer-aware proposal review |
-| `edit --apply` | source and retail SCN | canonical chapter JSON | validated English edit |
-| `compare` | source and retail reference | ignored comparison package | bilingual human review |
-| `validate` | source, retail reference, comparison | ignored reports/comparison | complete pre-build automated validation gate |
-| `build --dry-run` | hashes and path state | nothing | resolved build plan |
-| `build` | original tracks, canonical source, U.S. BIOS | isolated clean/region runs and delivery | deterministic North American BIN/CUE by default |
-| `build --region japan` | original tracks and canonical source | isolated runs and delivery | explicit unwrapped diagnostic build |
+| Command | Purpose |
+| --- | --- |
+| `doctor` | Diagnose Python, canonical source, original tracks, retail preparation, and optional BIOS readiness |
+| `prepare` | Verify original Track 1 and create the ignored retail reference |
+| `edit` | Preview or apply one validated canonical English change |
+| `compare` | Regenerate the complete bilingual review package |
+| `validate` | Run source, renderer, semantic, compilation, archive, and regression gates |
+| `build --dry-run` | Show the resolved region, inputs, hashes, and output-root state |
+| `build` | Validate, perform two clean rebuilds, then publish only agreeing products |
+| `build --region japan` | Produce the explicit diagnostic Japanese-region variant |
 
-The lower-level modules are intentionally importable for focused analysis. Run
-them directly only when you understand which higher-level preflight stages you
-are bypassing.
+North America is the manifest default. The guarded region stage runs twice
+independently just like the clean build.
 
-## Validation layers
+## Source-only checks
 
-Validation is layered so a failure can be localized:
-
-1. **Source health** rejects invalid UTF-8/LF policy, duplicate JSON keys,
-   malformed structured source, forbidden media, and stale generated assets.
-2. **Python compilation** recursively covers maintained Python while excluding
-   untracked native runtimes and generated/retail directories.
-3. **Source-only unit tests** cover CLI contracts, manifests, repository
-   policy, documentation inventory, and the maintained-code style audit.
-4. **Maintained-source style audit** enforces the repository's standard-library
-   PEP 8/257 policy independently of Black.
-5. **Renderer audit** classifies every translated record and checks adaptive or
-   fixed ownership.
-6. **Layout tests** compile every chapter from hash-locked inputs and cover
-   known renderer edge cases.
-7. **Comparison regeneration** creates the complete Japanese/English review
-   package.
-8. **Semantic validation** checks source fingerprints, duplicate consistency,
-   glossary rules, exemptions, bomb terminology, ID order, comparison
-   freshness, active/legacy profile schema, profile-owned text locks, and the
-   package manifest against exact disk and ZIP inventories.
-9. **Build regression** checks MES/font capacity, LZ contents, fixed ISO
-   extents, unchanged ISO regions, raw sectors, Track 2, and CUE formatting.
-10. **Two-run comparison** proves deterministic output.
-11. **Manual playtesting** remains the release gate for visual and branching
-    behavior of every changed playable candidate. The 1.0.2 runtime reference
-    completed its recorded maintainer playtest, but the current post-1.0.2
-    translation revision changes playable bytes and still requires fresh
-    candidate-bound runtime evidence; see [release policy](RELEASE.md) and
-    [the revision record](TRANSLATION_REVISION_20260827.md).
-
-`python nostalgia1907.py validate` runs stages 1 through 9 in that order. The
-source-only stages run before the command requires prepared retail fixtures, so
-repository defects fail with their own diagnostics instead of being hidden by a
-missing local disc. Black's mechanical formatting check remains an explicit
-contributor-review command when the optional style dependencies are installed.
-
-For a reproducible complete-corpus static check plus an explicit runtime
-certification log, use `docs/WHOLE_GAME_TESTING.md`. The log is candidate-hash
-bound. A new candidate remains pending until every declared chapter, box type,
-and runtime state has human evidence; it must not borrow the reference
-candidate's result.
-
-## Generated reports
-
-Useful ignored artifacts include:
-
-| Artifact | Produced by | Use |
-| --- | --- | --- |
-| `retail_report.json` | `prepare_retail.py` | retail Track/ISO and extracted-member evidence |
-| `script_layout_audit.json` | `translation_formatter.py` | per-ID role, width, rows, and failures |
-| comparison JSON/HTML/images/ZIP plus `.manifest.json` | `export_bilingual_comparison.py` | Japanese/English review and exact package inventory |
-| `fixed_layout_runtime_review.tsv` / `.md` | `export_fixed_layout_review.py` | all fixed records awaiting runtime geometry evidence |
-| `translation_polish_proposals.json` / `.md` | `export_translation_proposals.py` | non-applied wording proposals with source, layout, and encoded-size evidence |
-| `mes_report.json` | `build_mes_set.py` | per-chapter size, glyph, and spill metrics |
-| `archive_report.json` | `build_archives.py` | slot mode and remaining archive capacity |
-| `iso_patch_report.json` | `iso9660.py` caller | extents, sizes, allocations, headroom |
-| `verification_manifest.json` / `verification.json` | `verification_manifest.py` and `rebuild.py` | one run's exact input fingerprint and direct output hashes |
-| `final_verification_manifest.json` / `final_verification.json` | `verification_manifest.py` and `rebuild.py` | delivery hashes bound to the two-run input fingerprint |
-
-Reports are evidence, not source. Delete and regenerate them when investigating
-staleness; do not edit them to satisfy a check.
-
-## Focused source checks
-
-Run tests that do not require retail media:
+These commands require no game media and are the public CI contract:
 
 ```powershell
 python tools/source_health.py --root . --strict-release
-python -m compileall -q nostalgia1907.py tools work tests
+python tools/source_manifest.py --root .
+python -m compileall -q nostalgia1907.py tools tests work
 python -m unittest discover -s tests -v
 python tools/style_audit.py --root .
-python -m black --check nostalgia1907.py tools tests work/clean_rebuild work/region_variant
 ```
 
-The strict release mode audits the exact Git-tracked inventory in a checkout,
-or every package member when `.git` is absent. Unlike the normal development
-mode, it does not exempt files merely because they are under an ignored retail,
-output, or run directory. It also rejects local configuration, generated image
-formats, and emulator save states. Use the normal mode only while working with
-private untracked fixtures; CI and source publication must use
-`--strict-release`.
+The checks have separate responsibilities:
 
-The source-only suite includes synthetic compiler-row and North American
-wrapper tests; those fixtures contain no game, BIOS, or generated build data.
-`work/clean_rebuild/test_script_layout.py` is retail-backed integration
-coverage. In a media-free checkout it reports one explicit skipped prerequisite
-with the missing prepared-fixture inventory instead of emitting layout test
-errors. `python nostalgia1907.py validate` still requires the complete prepared
-retail reference and remains the release gate.
+1. **Source health** validates UTF-8/LF policy, Python/JSON/TOML structure,
+   duplicate JSON keys, source-only publication rules, and the absence of game
+   media or generated/private state.
+2. **Source manifest** proves that `MANIFEST.sha256` describes the exact tracked
+   review tree. After intentional source changes, update it with
+   `python tools/source_manifest.py --root . --write`.
+3. **Compilation** parses every maintained Python surface, including tests.
+4. **Unit tests** cover CLI contracts, format parsers, renderer rules,
+   transactions, source/release policy, comparison packaging, documentation,
+   deterministic reports, and synthetic region-wrapper behavior.
+5. **Style audit** enforces the repository's standard-library PEP 8/257 policy.
 
-## Profile schema and tool boundaries
+Black remains an optional contributor check rather than the semantic style
+authority.
 
-`profile_schema.py` classifies every embedded chapter-profile key. Active
-renderer fields are consumed by `scn_layout.py`; exact-text, prefix, and
-forbidden-pattern fields are enforced by both direct MES compilation and
-semantic validation. Known historical migration flags are reported as legacy
-no-ops. Unknown fields fail closed.
+## Retail-backed validation
 
-`rebuild.py:PRODUCTION_MODULES` is the exact clean-build dependency boundary.
-The CLI validation scripts and modules covered by `tools/style_audit.py` are
-maintained review tooling. Other one-off scripts may document past forensic
-work, but they are not build dependencies and their outputs cannot enter a clean
-rebuild.
+`python nostalgia1907.py validate` starts with the source-only gates, then
+requires the prepared retail reference and runs the evidence that public CI
+cannot legally carry:
 
-Run the retail-backed validation gate:
+1. whole-corpus renderer/layout audit;
+2. retail-backed layout integration tests;
+3. bilingual comparison regeneration;
+4. semantic, duplicate-consistency, glossary, exemption, bomb, and profile
+   validation;
+5. all-chapter MES compilation and font-capacity checks;
+6. chapter archive replacement and allocation checks; and
+7. ISO/raw-track/Track-2 regression checks.
 
-```powershell
-python nostalgia1907.py validate
-```
+The retail-backed layout suite remains under `work/clean_rebuild` because it is
+an executable integration gate that imports the same local module surface as the
+compiler. It reports an explicit skip when prepared fixtures do not exist. The
+CLI invokes it again only after retail prerequisites are satisfied.
 
-Inspect a build plan without creating output:
+A successful `validate` proves static and deterministic contracts. It is not a
+runtime claim about window clearing, transitions, timing, branch behavior,
+save/reload behavior, hardware, or emulator compatibility.
 
-```powershell
-python nostalgia1907.py build --dry-run
-```
+## Generated evidence
 
-The dry run hashes both original tracks and the U.S. BIOS, reports the selected
-region, and reports whether the selected run and delivery roots are absent,
-empty, or occupied. A real build rejects occupied, equal, or nested roots and
-performs full validation before its first build. North America is the manifest
-default; the build publishes only after two clean runs and two region-wrapper
-runs independently agree.
+Generated reports are disposable evidence, never source inputs. Important
+outputs include:
 
-## Fixed-layout and proposal review exports
+| Artifact | Producer | Purpose |
+| --- | --- | --- |
+| `retail_report.json` | `prepare_retail.py` | Retail Track/ISO/member identity |
+| `script_layout_audit.json` | `translation_formatter.py` | Per-record renderer/layout classification |
+| bilingual JSON/HTML/images/ZIP + package manifest | `export_bilingual_comparison.py` | Human Japanese/English review |
+| fixed-layout TSV/Markdown | `export_fixed_layout_review.py` | Runtime geometry review queue |
+| translation proposal JSON/Markdown | `export_translation_proposals.py` | Explicit no-pending proposal status |
+| `mes_report.json` | `build_mes_set.py` | Chapter size/glyph/spill measurements |
+| `archive_report.json` | `build_archives.py` | Archive slot/reflow mode and headroom |
+| ISO patch report | ISO build stage | Extents, logical sizes, allocations, headroom |
+| verification/final verification JSON | `verification_manifest.py` / `rebuild.py` | Input binding and direct product hashes |
 
-`export_fixed_layout_review.py` creates TSV and Markdown queues for every
-translated record whose `layout_policy` is `fixed`. Unknown width, row count,
-placement, centering, clear/redraw behavior, and timing remain explicitly
-unknown; the queue never converts a static preview into a runtime claim.
-`PART4C:051` through `PART4C:059` are the first capture priority.
+Delete and regenerate reports when diagnosing staleness. Never edit a generated
+report to satisfy validation.
 
-`export_translation_proposals.py` exports the current approval queue without
-writing canonical JSON. When the queue is empty, it produces an explicit
-source-only `NO_PENDING_PROPOSALS` report and does not require retail fixtures.
-For an active proposal, Japanese wording is accepted only from the tracked
-human-reviewed `bomb_semantics.json`; retail MES record, token-stream, and
-preview hashes bind that evidence to the exact record without embedding raw
-retail records or generated preview images. The tool compiles proposed MES
-bytes in memory and reports exact record/MES deltas plus conservative retail
-slot and ISO-allocation bounds. It does not run production recompression, does
-not claim final archive fit when the uncompressed upper bound is insufficient,
-and writes no archive or BIN/CUE. Human approval remains mandatory before any
-canonical edit.
+The old active translation-proposal analysis was a one-off review tool and has
+been retired now that the queue is empty. The remaining exporter deliberately
+fails if code reintroduces a pending proposal. New wording goes through
+`nostalgia1907.py edit`, normal validation, a clean build, and runtime review.
 
-## Debugging by failure stage
+## Production and validation boundaries
 
-### `doctor` fails
+`rebuild.py:PRODUCTION_MODULES` is the exact local dependency allowlist for the
+byte-producing clean build. The production-independence audit rejects undeclared
+local imports, missing dependencies, canonical source paths that escape
+`sources/`, and known historical workspace markers.
 
-Check the exact path, size, and SHA-256 in the JSON report. Do not disable a hash
-guard to accept a different disc revision. Add explicit support only after
-analyzing the revision and defining a separate contract.
+Validation/review modules are maintained separately. They may reject a bad
+candidate, but they do not become an alternate source of game bytes.
+Historical forensic scripts and one-time migration/applicator code are not kept
+beside production modules after their conclusions have been promoted into
+shared code, tests, or documentation.
 
-### Retail preparation fails
+Reviewed change ledgers for the 2026-08-27 translation revision live under
+`provenance/2026-08-27/`. They are historical evidence and never build inputs.
 
-The problem is below translation: raw sector header/checksum, ISO hash, file
-extent, archive table, or canonical retail MES/SCN guard. Inspect the earliest
-failing layer.
+## Determinism and binding
 
-### Edit preview fails
+Game builds must use **fresh output roots**. Generated bytes must not depend on
+filesystem enumeration order, hash/set order, timestamps, temporary absolute
+paths, a previous output tree, or a prior translated image.
 
-Read the record's roles, layout, row limit, and message. Shorten or improve the
-wording if it genuinely exceeds a proven box. If the inferred renderer is
-wrong, analyze the SCN command shape and fix the shared inference with tests.
+`verification_manifest.py` records declared canonical source, prepared retail
+fixtures, production/validation code, configuration, original tracks, build
+profile, and runtime identity. It derives one stable **aggregate input
+fingerprint** and binds each managed output to an explicit SHA-256 immediately
+before report creation. Two clean runs must agree before publication.
 
-### Semantic validation fails
+The bilingual comparison package independently fixes member paths, ordering,
+ZIP metadata, PNG generation, and text line endings. Its byte-identity guarantee
+is scoped to the same input bytes, exporter source, and **CPython major/minor**
+runtime; it does not claim archive identity after another program rewrites the
+ZIP or across an unspecified Python runtime.
 
-Use the stable ID in the error. Determine whether a glossary invariant,
-preserve policy, source fingerprint, duplicate translation, or generated
-comparison is stale. Do not blanket-replace common words across unrelated
-contexts.
+Determinism proves reproducibility. It does not convert static evidence into a
+runtime claim.
 
-### MES compilation fails
+## Editing and transaction rules
 
-Classify the constraint:
+Canonical edits are ID-keyed and transactional. Multi-file edit/migration paths
+stage same-directory temporary files, create recovery backups, and either commit
+all replacements or restore already-replaced targets. A process-visible failure
+must never leave a silently half-applied corpus.
 
-- unsupported source character;
-- record policy/index mismatch;
-- runtime row or glyph limit;
-- 16-bit pointer overflow;
-- PART3C hard boundary;
-- preserved dynamic-glyph reference.
+Parsers validate before returning structured data. Writers accept validated
+structures and verify their own output. Deterministic order is explicit whenever
+a set, mapping, directory listing, or glyph collection becomes serialized.
 
-Prefer canonical wording or a general renderer/compiler improvement. Do not
-move records or silently truncate text.
+Expected operator mistakes should become concise domain errors. Low-level build
+entry points repeat critical basename/path validation rather than assuming the
+CLI was used.
 
-### Archive or ISO placement fails
+## Changing formats or renderers
 
-Read the reported stored size and headroom. Compression and guarded archive
-reflow may use existing allocation, but ISO extents and total size remain
-fixed. A change that requires moving files is outside the current production
-contract.
+For a binary-format change, add:
 
-### Raw-track regression fails
-
-Treat it as a release blocker. Sector address, EDC/ECC, boot payload, track
-geometry, Track 2, and CUE failures must not be waived.
-
-## Adding or changing code
-
-Keep boundaries narrow:
-
-- parsing functions validate before returning structured data;
-- writing functions accept validated structures and verify their own output;
-- orchestration calls format modules rather than duplicating format logic;
-- reports include measurements needed to review capacity and boundaries;
-- deterministic order is explicit whenever sets, mappings, files, or glyphs
-  become serialized output;
-- expected operator mistakes raise concise domain errors, not partial output.
-
-Multi-file canonical edits and layout migration use same-directory staged files
-and prepared backups. A process-visible failure must restore every target that
-was already replaced or raise an explicit incomplete-rollback error while
-retaining the affected recovery backup. Direct low-level rebuild calls validate
-their artifact basename again rather than
-trusting the higher-level CLI.
-
-All maintained Python follows the
-[Python documentation standard](DOCSTRING_STANDARD.md). Every module, class,
-function, method, property, and nested helper has a PEP 257 docstring.
-Non-trivial APIs document meaningful inputs, outputs, side effects, failure
-conditions, assumptions, and design choices. PEP 8 block comments explain why
-reverse-engineered or preservation-sensitive steps exist.
-
-For a format change, add:
-
-1. a documented observation;
+1. documented structural evidence;
 2. a strict read path;
 3. malformed-input tests;
 4. a round-trip or independent verification;
-5. a boundary proof for the write path;
-6. integration coverage in `regression.py` when it affects the disc.
+5. a boundary proof for the write path; and
+6. integration coverage in `regression.py` when disc bytes are affected.
 
 For a renderer change, add:
 
-1. the SCN command evidence;
-2. a general inference rule;
-3. at least one focused layout test;
-4. a whole-game renderer audit;
-5. comparison regeneration and playtesting.
+1. the SCN evidence;
+2. a general inference rule rather than a chapter-specific patch;
+3. focused synthetic coverage;
+4. whole-game renderer/layout validation;
+5. retail-backed compilation/comparison evidence; and
+6. candidate-bound runtime testing of the affected behavior.
 
-## Determinism checklist
+A screenshot can identify a symptom; it cannot by itself establish a renderer
+rule.
 
-Generated bytes must not depend on:
+## Debugging by failure stage
 
-- directory enumeration order;
-- hash/set iteration order;
-- temporary absolute paths;
-- timestamps;
-- a prior output directory;
-- an older translated build;
-- environment-specific line endings;
-- Pillow or compression-library heuristics;
-- network services.
+**`doctor`** — fix the earliest size/hash/path mismatch. Do not relax a frozen
+hash guard to accept another retail revision.
 
-The comparison exporter guarantees a byte-identical ZIP when the input bytes,
-exporter source, and CPython major/minor runtime are identical. The guarantee
-covers Windows/Linux/macOS filesystem differences because text line endings,
-member paths, member order, ZIP timestamps/platform/permissions, PNG metadata,
-PNG filtering, and DEFLATE blocks are specified by the exporter. It deliberately
-does not promise identity across different CPython major/minor versions or after
-a third-party program rewrites the archive. The external package manifest records
-the exact member inventory and hashes.
+**`prepare`** — investigate raw-sector, ISO, archive, MES/SCN, or fixed-font
+identity before translation logic.
 
-Each comparison run uses a newly created staging directory. The expected file
-set is built from that invocation's canonical chapter/record inventory. Missing
-files fail; unexpected files fail; the ZIP receives only manifest-listed files.
-No incremental comparison output is reused.
+**`edit` / renderer audit** — check stable ID, inferred role, cell geometry,
+row limits, and whole-token boundaries. Correct semantic English when wording is
+wrong; correct a shared renderer rule when the behavior repeats structurally.
 
-For game builds, `verification_manifest.py` records one canonical declared-input
-manifest and a stable aggregate input fingerprint. It then binds direct output
-hashes to that fingerprint. Two clean runs in one recorded environment
-prove same-environment determinism; cross-environment game-build identity still
-requires independent runs in those environments.
+**semantic validation** — inspect the exact stable ID and the named glossary,
+profile, duplicate, exemption, or source-fingerprint rule. Do not blanket-replace
+words across unrelated contexts.
 
-Sort serialized collections, use fresh output roots, hash guarded inputs, and
-run the complete build twice.
+**MES/archive/ISO regression** — treat pointer overflow, fixed boundaries,
+allocation failures, changed extents, raw-sector changes, Track 2 changes, or
+unexpected output inventory as release blockers.
 
-## Repository hygiene
+**runtime** — reproduce the exact candidate, scene/branch, transitions, and
+page advances in Ares. Static checks cannot waive an observed runtime defect.
 
-Never commit original or generated game media, BIOS files, extracted members,
-runtime models, comparison images, or local configuration. Before committing:
+## Documentation standard
+
+Maintained Python follows [the documentation standard](DOCSTRING_STANDARD.md).
+Every module, class, function, method, property, and nested helper has a PEP 257
+docstring. Non-trivial APIs document meaningful inputs, outputs, side effects,
+failure conditions, assumptions, and design choices. Comments explain why a
+preservation-sensitive or reverse-engineered step exists rather than translating
+individual Python statements into English.
+
+## Before committing
+
+Run the source-only checks above, then inspect:
 
 ```powershell
 git status --short
@@ -336,5 +239,7 @@ git diff --check
 git diff -- work/clean_rebuild/sources
 ```
 
-Confirm that every source diff is intentional and that no ignored binary was
-force-added.
+Confirm that every canonical-source diff is intentional and that no retail,
+BIOS, generated comparison, or playable artifact is tracked. If playable bytes
+changed, complete the retail-backed gates and candidate-bound runtime evidence
+before making release claims.
