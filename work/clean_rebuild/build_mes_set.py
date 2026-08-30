@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """Compile the complete canonical script and assemble its generated font.
 
-This orchestration layer iterates ``sources/index.json`` in canonical chapter
-order, calls ``mes_compiler.compile_files`` with each hash-locked retail MES and
-SCN, writes derived MES files, and collects capacity metrics. It also applies
-the compiler's declared fixed-font spill bitmaps to a copy of the retail fixed
-font while rejecting conflicting or out-of-range codes.
+This orchestration layer compiles independent chapters concurrently while
+preserving ``sources/index.json`` order in every emitted report. Each worker
+calls ``mes_compiler.compile_files`` with hash-locked retail MES/SCN inputs and
+writes only its chapter-specific output path.
 
 The emitted ``mes_report.json`` is generated evidence for regression and
-capacity review; it is never a source input.
+capacity review; it is never a source input. Hashes and sizes are derived from
+the already-returned compile bytes so successful chapters are not reread from
+disk solely for reporting.
 """
 
 from __future__ import annotations
@@ -16,21 +17,17 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
 from pathlib import Path
 
 from source_json import load_json_object
 
-from mes_compiler import compile_files
+from mes_compiler import BuildResult, compile_files
 
 
 HERE = Path(__file__).resolve().parent
 SOURCES = HERE / "sources"
-
-
-def sha256(path: Path) -> str:
-    """Return an uppercase SHA-256 digest."""
-    return hashlib.sha256(path.read_bytes()).hexdigest().upper()
 
 
 def report_path(build_root: Path, path: Path) -> str:
@@ -48,6 +45,40 @@ def report_path(build_root: Path, path: Path) -> str:
             f"report artifact escapes build root: {path} is not below {build_root}"
         ) from error
     return relative.as_posix()
+
+
+def _compile_chapter(
+    build_root: Path,
+    original: Path,
+    output: Path,
+    item: dict[str, object],
+) -> tuple[dict[str, object], tuple[tuple[int, str], ...]]:
+    """Compile one independent chapter and return deterministic report data."""
+    chapter = item["chapter"]
+    source = item["source"]
+    if not isinstance(chapter, str) or not isinstance(source, str):
+        raise ValueError("source index contains an invalid chapter entry")
+    retail_dir = original / chapter
+    output_path = output / f"{chapter}.MES"
+    result: BuildResult = compile_files(
+        retail_dir / f"{chapter}.MES",
+        retail_dir / f"{chapter}.SCN",
+        SOURCES / source,
+        output_path,
+        glyph_order="first-use",
+    )
+    details = asdict(result)
+    compiled = details.pop("data")
+    raw_patches = details.pop("fixed_font_patches")
+    details.update(
+        {
+            "chapter": chapter,
+            "path": report_path(build_root, output_path),
+            "size": len(compiled),
+            "sha256": hashlib.sha256(compiled).hexdigest().upper(),
+        }
+    )
+    return details, tuple(raw_patches)
 
 
 def build_mes_set(build_root: Path) -> dict[str, object]:
@@ -73,38 +104,34 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
     output_font = build_root / "FIX_CODE.FNT"
     report = build_root / "mes_report.json"
     index = load_json_object(SOURCES / "index.json")
+    raw_items = index.get("chapters")
+    if not isinstance(raw_items, list) or not raw_items:
+        raise ValueError("source index has no chapters")
+    items = list(raw_items)
+    if not all(isinstance(item, dict) for item in items):
+        raise ValueError("source index contains a non-object chapter entry")
+
     output.mkdir(parents=True, exist_ok=True)
+    worker_count = min(32, len(items))
+    with ThreadPoolExecutor(max_workers=worker_count) as executor:
+        compiled = list(
+            executor.map(
+                lambda item: _compile_chapter(build_root, original, output, item),
+                items,
+            )
+        )
+
     chapters: list[dict[str, object]] = []
     font_patches: dict[int, bytes] = {}
-    for item in index["chapters"]:
-        chapter = item["chapter"]
-        retail_dir = original / chapter
-        output_path = output / f"{chapter}.MES"
-        result = compile_files(
-            retail_dir / f"{chapter}.MES",
-            retail_dir / f"{chapter}.SCN",
-            SOURCES / item["source"],
-            output_path,
-            glyph_order="first-use",
-        )
-        details = asdict(result)
-        details.pop("data")
-        raw_patches = details.pop("fixed_font_patches")
+    for details, raw_patches in compiled:
         for code, glyph_hex in raw_patches:
             glyph = bytes.fromhex(glyph_hex)
             previous = font_patches.get(code)
             if previous is not None and previous != glyph:
                 raise ValueError(f"conflicting fixed-font patch for code 0x{code:02X}")
             font_patches[code] = glyph
-        details.update(
-            {
-                "chapter": chapter,
-                "path": report_path(build_root, output_path),
-                "size": output_path.stat().st_size,
-                "sha256": sha256(output_path),
-            }
-        )
         chapters.append(details)
+
     font = bytearray(retail_font.read_bytes())
     if len(font) % 18:
         raise ValueError("retail fixed font has a partial glyph")
@@ -115,6 +142,7 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
         font[offset : offset + 18] = glyph
     output_font.parent.mkdir(parents=True, exist_ok=True)
     output_font.write_bytes(font)
+    font_bytes = bytes(font)
     payload = {
         "status": "PASS",
         "chapter_count": len(chapters),
@@ -122,8 +150,8 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
         "max_dynamic_glyphs": max(int(item["dynamic_glyphs"]) for item in chapters),
         "fixed_font": {
             "path": report_path(build_root, output_font),
-            "size": output_font.stat().st_size,
-            "sha256": sha256(output_font),
+            "size": len(font_bytes),
+            "sha256": hashlib.sha256(font_bytes).hexdigest().upper(),
             "patched_codes": [f"0x{code:02X}" for code in sorted(font_patches)],
         },
         "chapters": chapters,
