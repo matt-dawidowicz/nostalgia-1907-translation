@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Install generated MES files into retail chapter-archive allocations.
 
-Each chapter archive is re-extracted from the verified retail ISO. The writer
-first attempts an exact member-slot replacement. Only when the generated MES
-does not fit may it reflow member payloads, and that fallback is bounded by the
-archive's existing ISO sector allocation.
+Each chapter archive is extracted directly from the already-indexed retail ISO.
+The writer first attempts an exact member-slot replacement. Only when the
+generated MES does not fit may it reflow member payloads, and that fallback is
+bounded by the archive's existing ISO sector allocation.
 
 Member names and order always remain retail-authored. Fixed-slot mode also
 preserves offsets and archive size; guarded-reflow mode preserves every
@@ -21,7 +21,7 @@ from pathlib import Path
 
 from source_json import load_json_object
 
-from iso9660 import extract_file, read_entries, unique_file
+from iso9660 import SECTOR_SIZE, read_entries, unique_file
 from lz_format import (
     LzError,
     parse_archive,
@@ -34,9 +34,9 @@ HERE = Path(__file__).resolve().parent
 SOURCES = HERE / "sources"
 
 
-def sha256(path: Path) -> str:
-    """Return an uppercase SHA-256 digest."""
-    return hashlib.sha256(path.read_bytes()).hexdigest().upper()
+def _sha256(data: bytes) -> str:
+    """Return an uppercase SHA-256 digest for in-memory bytes."""
+    return hashlib.sha256(data).hexdigest().upper()
 
 
 def build_archives(build_root: Path) -> dict[str, object]:
@@ -52,7 +52,7 @@ def build_archives(build_root: Path) -> dict[str, object]:
         remaining allocation headroom for every chapter.
 
     Side Effects:
-        Re-extracts retail archives and writes rebuilt archives plus
+        Extracts retail archives and writes rebuilt archives plus
         ``archive_report.json`` below ``build_root``.
     """
     retail_iso = build_root / "retail.iso"
@@ -65,68 +65,75 @@ def build_archives(build_root: Path) -> dict[str, object]:
     output_root.mkdir(parents=True, exist_ok=True)
     iso_entries = read_entries(retail_iso)
     chapters: list[dict[str, object]] = []
-    for item in source_index["chapters"]:
-        chapter = item["chapter"]
-        archive_name = f"{chapter}.LZ"
-        iso_entry = unique_file(iso_entries, archive_name)
-        retail_path = source_root / archive_name
-        retail_path.write_bytes(extract_file(retail_iso, archive_name))
-        output_path = output_root / archive_name
-        replacements = {f"{chapter}.MES": mes_root / f"{chapter}.MES"}
-        try:
-            replacement_report = replace_members_fixed(
-                retail_path, output_path, replacements
+
+    with retail_iso.open("rb") as iso:
+        for item in source_index["chapters"]:
+            chapter = item["chapter"]
+            archive_name = f"{chapter}.LZ"
+            iso_entry = unique_file(iso_entries, archive_name)
+            iso.seek(iso_entry.extent * SECTOR_SIZE)
+            retail_data = iso.read(iso_entry.size)
+            if len(retail_data) != iso_entry.size:
+                raise ValueError(f"{chapter}: short read from retail ISO")
+
+            retail_path = source_root / archive_name
+            retail_path.write_bytes(retail_data)
+            output_path = output_root / archive_name
+            replacements = {f"{chapter}.MES": mes_root / f"{chapter}.MES"}
+            try:
+                replacement_report = replace_members_fixed(
+                    retail_path, output_path, replacements
+                )
+                archive_mode = "fixed-slot"
+                archive_headroom = replacement_report[0]["headroom"]
+            except LzError as error:
+                if "but retail slot is" not in str(error):
+                    raise
+                reflow = replace_members_reflow(
+                    retail_path,
+                    output_path,
+                    replacements,
+                    maximum_archive_size=iso_entry.allocated_size,
+                )
+                replacement_report = reflow["replacements"]
+                archive_mode = "guarded-reflow"
+                archive_headroom = reflow["headroom"]
+
+            output_data = output_path.read_bytes()
+            if archive_mode == "fixed-slot" and len(output_data) != len(retail_data):
+                raise ValueError(f"{chapter}: fixed-slot archive size changed")
+            if len(output_data) > iso_entry.allocated_size:
+                raise ValueError(f"{chapter}: archive exceeds its retail ISO allocation")
+
+            retail_entries = parse_archive(retail_data, source=str(retail_path))
+            output_entries = parse_archive(output_data, source=str(output_path))
+            if [entry.name for entry in output_entries] != [
+                entry.name for entry in retail_entries
+            ]:
+                raise ValueError(f"{chapter}: member order or names changed")
+            if archive_mode != "guarded-reflow" and [
+                entry.offset for entry in output_entries
+            ] != [entry.offset for entry in retail_entries]:
+                raise ValueError(f"{chapter}: fixed-slot member offsets moved")
+
+            retail_hash = _sha256(retail_data)
+            output_hash = _sha256(output_data)
+            chapters.append(
+                {
+                    "chapter": chapter,
+                    "archive": archive_name,
+                    "size": len(output_data),
+                    "iso_allocated_size": iso_entry.allocated_size,
+                    "retail_sha256": retail_hash,
+                    "output_sha256": output_hash,
+                    "byte_identical_to_retail": retail_hash == output_hash,
+                    "members": len(output_entries),
+                    "mode": archive_mode,
+                    "headroom": archive_headroom,
+                    "replacement": replacement_report,
+                }
             )
-            archive_mode = "fixed-slot"
-            archive_headroom = replacement_report[0]["headroom"]
-        except LzError as error:
-            if "but retail slot is" not in str(error):
-                raise
-            reflow = replace_members_reflow(
-                retail_path,
-                output_path,
-                replacements,
-                maximum_archive_size=iso_entry.allocated_size,
-            )
-            replacement_report = reflow["replacements"]
-            archive_mode = "guarded-reflow"
-            archive_headroom = reflow["headroom"]
-        if (
-            archive_mode == "fixed-slot"
-            and output_path.stat().st_size != retail_path.stat().st_size
-        ):
-            raise ValueError(f"{chapter}: fixed-slot archive size changed")
-        if output_path.stat().st_size > iso_entry.allocated_size:
-            raise ValueError(f"{chapter}: archive exceeds its retail ISO allocation")
-        retail_entries = parse_archive(
-            retail_path.read_bytes(), source=str(retail_path)
-        )
-        output_entries = parse_archive(
-            output_path.read_bytes(), source=str(output_path)
-        )
-        if [entry.name for entry in output_entries] != [
-            entry.name for entry in retail_entries
-        ]:
-            raise ValueError(f"{chapter}: member order or names changed")
-        if archive_mode != "guarded-reflow" and [
-            entry.offset for entry in output_entries
-        ] != [entry.offset for entry in retail_entries]:
-            raise ValueError(f"{chapter}: fixed-slot member offsets moved")
-        chapters.append(
-            {
-                "chapter": chapter,
-                "archive": archive_name,
-                "size": output_path.stat().st_size,
-                "iso_allocated_size": iso_entry.allocated_size,
-                "retail_sha256": sha256(retail_path),
-                "output_sha256": sha256(output_path),
-                "byte_identical_to_retail": sha256(retail_path) == sha256(output_path),
-                "members": len(output_entries),
-                "mode": archive_mode,
-                "headroom": archive_headroom,
-                "replacement": replacement_report,
-            }
-        )
+
     payload = {
         "status": "PASS",
         "archive_count": len(chapters),
