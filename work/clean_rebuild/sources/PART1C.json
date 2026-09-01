@@ -290,7 +290,7 @@
     {
       "index": 36,
       "policy": "translate",
-      "text": "You murdered Fred! How many more do you mean to kill? You have seized my ship, haven't you? If you have demands, come out and say them, you bastard!",
+      "text": "You murdered Fred! How many more do you mean to kill? You've seized my ship, haven't you? If you have demands, then say them, you bastard!",
       "layout_policy": "adaptive"
     },
     {
@@ -314,7 +314,7 @@
     {
       "index": 40,
       "policy": "translate",
-      "text": "This emergency meeting is now in session. Time is short, so spare us foolish questions that waste it. We have a great deal of real work ahead.",
+      "text": "This emergency meeting is now in session. Time is short, so spare me any foolish questions. We have work to do.",
       "layout_policy": "adaptive"
     },
     {
@@ -344,7 +344,7 @@
     {
       "index": 45,
       "policy": "translate",
-      "text": "The boat deck was the center of the blast. Each lifeboat appears to have been rigged with a bomb and a precisely timed detonator. We lost all eight lifeboats.",
+      "text": "The boat deck was the center of the blast. Each lifeboat appears to have been rigged with a bomb and a timed detonator. We lost all eight.",
       "layout_policy": "adaptive"
     },
     {
@@ -423,7 +423,7 @@
     {
       "index": 58,
       "policy": "translate",
-      "text": "Only Charlie, the second engineer, survived the blast down there! Impossible is impossible! I will not invent some padded repair schedule just to please you. Besides, this is no sailing ship like those we knew. It is a triumph of civilization driven by an advanced steam engine. The mast is decoration. It cannot catch so much as a breath of wind...",
+      "text": "Only Charlie, the second engineer, survived the blast down there! Impossible means impossible! I won't make up some padded repair schedule just to please you. Besides, this is no sailing ship like those we knew. It is a triumph of civilization driven by an advanced steam engine. The mast is decoration. It cannot catch so much as a breath of wind...",
       "layout_policy": "adaptive"
     },
     {
@@ -435,7 +435,7 @@
     {
       "index": 60,
       "policy": "translate",
-      "text": "That is madness! She is a 2,700-ton steel ship! She handles nothing like those old wooden tubs!",
+      "text": "That's madness! She is a 2,700-ton steel ship! She handles nothing like those old wooden tubs!",
       "layout_policy": "adaptive"
     },
     {
@@ -453,7 +453,7 @@
     {
       "index": 63,
       "policy": "translate",
-      "text": "We are presently at the exact midpoint of the North Atlantic route.",
+      "text": "We're at the exact midpoint of the North Atlantic route.",
       "layout_policy": "adaptive"
     },
     {
@@ -477,7 +477,7 @@
     {
       "index": 67,
       "policy": "translate",
-      "text": "According to the British Shipping Office's timetable, the next vessel to pass here is the British freighter Mary Star. In three days.",
+      "text": "According to the British Shipping Office timetable, the next vessel due through here is the British freighter Mary Star. In three days.",
       "layout_policy": "adaptive"
     },
     {
@@ -543,7 +543,7 @@
     {
       "index": 78,
       "policy": "translate",
-      "text": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the wireless room, cutting us off from shore...in other words, we are completely under his control.",
+      "text": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the wireless room, cutting us off from shore...in other words, we're completely under his control.",
       "layout_policy": "adaptive"
     },
     {
