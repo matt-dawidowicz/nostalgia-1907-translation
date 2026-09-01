@@ -64,6 +64,12 @@ class VerificationManifestTests(unittest.TestCase):
             },
         )
 
+    def test_declared_verification_inputs_exist(self) -> None:
+        """Keep retired maintenance artifacts out of the build fingerprint."""
+        declared = (*provenance.VERIFICATION_MODULES, *provenance.CONFIGURATION_FILES)
+        missing = [name for name in declared if not (CLEAN / name).is_file()]
+        self.assertEqual(missing, [])
+
     def test_canonical_change_changes_input_fingerprint(self) -> None:
         """Changing canonical translation bytes must alter the aggregate digest."""
         with tempfile.TemporaryDirectory() as temporary:
