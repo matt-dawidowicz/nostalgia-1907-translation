@@ -206,7 +206,7 @@
     {
       "index": 22,
       "policy": "translate",
-      "text": "Me...I and a dozen fellow underwriters back home would have to cover it. I would be ruined.",
+      "text": "Me...and a dozen fellow underwriters back home. We would all be ruined.",
       "layout_policy": "adaptive"
     },
     {
@@ -759,7 +759,7 @@
     {
       "index": 114,
       "policy": "translate",
-      "text": "An inquiry, then.",
+      "text": "So you want an investigation.",
       "layout_policy": "adaptive"
     },
     {
@@ -777,7 +777,7 @@
     {
       "index": 117,
       "policy": "translate",
-      "text": "The captain showed me the passenger list. A Frenchman living in Paris.",
+      "text": "The captain showed me the passenger list. French, lives in Paris.",
       "layout_policy": "adaptive"
     },
     {
@@ -818,7 +818,7 @@
     {
       "index": 124,
       "policy": "translate",
-      "text": "Hm. He does not dodge the point. A good sign.",
+      "text": "Hm. Straight to the point. Good.",
       "layout_policy": "adaptive"
     },
     {
@@ -836,7 +836,7 @@
     {
       "index": 127,
       "policy": "translate",
-      "text": "If you cannot find the culprit, fabricate one from among the crew.",
+      "text": "If you cannot find the culprit, frame one of the crew.",
       "layout_policy": "adaptive"
     },
     {
@@ -860,7 +860,7 @@
     {
       "index": 131,
       "policy": "translate",
-      "text": "Perfectly! Think! If the culprit sinks this ship, we are finished...",
+      "text": "Perfectly sane! Think! If the culprit sinks this ship, we're finished...",
       "layout_policy": "adaptive"
     },
     {
@@ -890,7 +890,7 @@
     {
       "index": 136,
       "policy": "translate",
-      "text": "I accept that. But if it happens, every friend back home who shares this liability will be ruined! Do you know how much this ship is insured for? I cannot drag them down with me!",
+      "text": "I accept the risk. But if that happens, every friend back home who shares this liability will be ruined! Do you know how much this ship is insured for? I cannot drag them down with me!",
       "layout_policy": "adaptive"
     },
     {
@@ -938,19 +938,19 @@
     {
       "index": 144,
       "policy": "translate",
-      "text": "If the culprit is one of the crew, the insurance contract is void...understood. If it comes to that, we will do it.",
+      "text": "If one of the crew is the culprit, the insurance contract is void...I see. If it comes to that, we'll do it.",
       "layout_policy": "adaptive"
     },
     {
       "index": 145,
       "policy": "translate",
-      "text": "Good. He has no tiresome moral scruples.",
+      "text": "Good. No tiresome moral scruples.",
       "layout_policy": "adaptive"
     },
     {
       "index": 146,
       "policy": "translate",
-      "text": "But no case is beyond me. Leave it to me. I will find 'The Russian Fog' and unmask the culprit.",
+      "text": "No case is beyond me. Leave it to me. I'll find 'The Russian Fog' and unmask the culprit.",
       "layout_policy": "adaptive"
     },
     {
