@@ -205,7 +205,7 @@ class Layout:
         )
         return cells - self.anchor_cells(row_index)
 
-    def with_opening_anchor(self, cells: int = 1) -> "Layout":
+    def with_opening_anchor(self, cells: int = 1) -> Layout:
         """Return a body-width layout with a one-time native dialogue gutter.
 
         The caller establishes from retail MES bytes that the original record
