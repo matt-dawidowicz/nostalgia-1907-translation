@@ -21,9 +21,9 @@ import json
 import platform
 import sys
 import zlib
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
-from typing import Mapping, Sequence
 
 from source_json import load_json_object
 
@@ -38,7 +38,6 @@ VERIFICATION_MODULES = (
     "bomb_audit.py",
     "export_bilingual_comparison.py",
     "export_fixed_layout_review.py",
-    "export_translation_proposals.py",
     "test_script_layout.py",
 )
 CONFIGURATION_FILES = (
@@ -48,7 +47,6 @@ CONFIGURATION_FILES = (
     "translation_repairs.json",
     "translation_exemptions.json",
     "bomb_semantics.json",
-    "retired_workspace_register.json",
 )
 
 
