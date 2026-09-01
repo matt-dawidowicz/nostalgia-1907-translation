@@ -12,6 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_NAME = "MANIFEST.sha256"
+MAX_DIFF_LINES = 100
 HEADER = (
     "# SHA-256 inventory for the source-only review bundle.\n"
     "# Text line endings are normalized to LF; MANIFEST.sha256 is excluded.\n"
@@ -158,10 +159,10 @@ def main() -> None:
         print(f"{MANIFEST_NAME}: PASS")
         return
     print(f"{MANIFEST_NAME}: FAIL")
-    for difference in differences[:20]:
+    for difference in differences[:MAX_DIFF_LINES]:
         print(f"- {difference}")
-    if len(differences) > 20:
-        print(f"- ... and {len(differences) - 20} more differences")
+    if len(differences) > MAX_DIFF_LINES:
+        print(f"- ... and {len(differences) - MAX_DIFF_LINES} more differences")
     print(f"Run: python tools/source_manifest.py --root {root} --write")
     raise SystemExit(1)
 
