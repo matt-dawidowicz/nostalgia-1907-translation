@@ -52,12 +52,20 @@ option. Europe is not currently supported.
 
 ## Quick start
 
-Use Python 3.10 or newer. From a fresh clone:
+Use Python 3.11 or newer. From a fresh clone:
 
 ```powershell
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -e .
+```
+
+The production and operator tooling has no third-party runtime dependencies.
+Contributors who run the full source-quality suite should install the `dev`
+extra, which currently pins Ruff:
+
+```powershell
+python -m pip install -e ".[dev]"
 ```
 
 Put machine-specific paths only in the ignored `nostalgia1907.local.json`:
@@ -91,6 +99,7 @@ python tools/source_health.py --root . --strict-release
 python tools/source_manifest.py --root .
 python -m compileall -q nostalgia1907.py tools tests work
 python -m unittest discover -s tests -v
+python -m ruff check nostalgia1907.py tools tests work
 python tools/style_audit.py --root .
 ```
 
