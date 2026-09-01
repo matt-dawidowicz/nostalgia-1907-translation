@@ -71,7 +71,7 @@
     {
       "index": 3,
       "policy": "translate",
-      "text": "This emergency meeting is now in session. Time is short, so spare us foolish questions that waste it. We have a great deal of real work ahead.",
+      "text": "This emergency meeting is now in session. Time is short, so spare me any foolish questions. We have work to do.",
       "layout_policy": "adaptive"
     },
     {
@@ -101,7 +101,7 @@
     {
       "index": 8,
       "policy": "translate",
-      "text": "The boat deck was the center of the blast. Each lifeboat appears to have been rigged with a bomb and a precisely timed detonator. We lost all eight lifeboats.",
+      "text": "The boat deck was the center of the blast. Each lifeboat appears to have been rigged with a bomb and a timed detonator. We lost all eight.",
       "layout_policy": "adaptive"
     },
     {
@@ -180,7 +180,7 @@
     {
       "index": 21,
       "policy": "translate",
-      "text": "Only Charlie, the second engineer, survived the blast down there! Impossible is impossible! I will not invent some padded repair schedule just to please you. Besides, this is no sailing ship like those we knew. It is a triumph of civilization driven by an advanced steam engine. The mast is decoration. It cannot catch so much as a breath of wind...",
+      "text": "Only Charlie, the second engineer, survived the blast down there! Impossible means impossible! I won't make up some padded repair schedule just to please you. Besides, this is no sailing ship like those we knew. It is a triumph of civilization driven by an advanced steam engine. The mast is decoration. It cannot catch so much as a breath of wind...",
       "layout_policy": "adaptive"
     },
     {
@@ -192,7 +192,7 @@
     {
       "index": 23,
       "policy": "translate",
-      "text": "That is madness! She is a 2,700-ton steel ship! She handles nothing like those old wooden tubs!",
+      "text": "That's madness! She is a 2,700-ton steel ship! She handles nothing like those old wooden tubs!",
       "layout_policy": "adaptive"
     },
     {
@@ -210,7 +210,7 @@
     {
       "index": 26,
       "policy": "translate",
-      "text": "We are presently at the exact midpoint of the North Atlantic route.",
+      "text": "We're at the exact midpoint of the North Atlantic route.",
       "layout_policy": "adaptive"
     },
     {
@@ -234,7 +234,7 @@
     {
       "index": 30,
       "policy": "translate",
-      "text": "According to the British Shipping Office's timetable, the next vessel to pass here is the British freighter Mary Star. In three days.",
+      "text": "According to the British Shipping Office timetable, the next vessel due through here is the British freighter Mary Star. In three days.",
       "layout_policy": "adaptive"
     },
     {
@@ -300,7 +300,7 @@
     {
       "index": 41,
       "policy": "translate",
-      "text": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the wireless room, cutting us off from shore...in other words, we are completely under his control.",
+      "text": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the wireless room, cutting us off from shore...in other words, we're completely under his control.",
       "layout_policy": "adaptive"
     },
     {
@@ -354,7 +354,7 @@
     {
       "index": 50,
       "policy": "translate",
-      "text": "The culprit ordered us to find 'The Russian Fog.' I have no idea what those words mean.",
+      "text": "The culprit ordered us to find 'The Russian Fog.' I don't know what those words mean.",
       "layout_policy": "adaptive"
     },
     {
@@ -384,13 +384,13 @@
     {
       "index": 55,
       "policy": "translate",
-      "text": "If that is true...",
+      "text": "If that's true...",
       "layout_policy": "adaptive"
     },
     {
       "index": 56,
       "policy": "translate",
-      "text": "That California drawl of yours makes me sick! This is not a comedy! Shut your mouth!",
+      "text": "That California drawl of yours makes me sick! This isn't a comedy! Shut your mouth!",
       "layout_policy": "adaptive"
     },
     {
@@ -408,19 +408,19 @@
     {
       "index": 59,
       "policy": "translate",
-      "text": "Damn it...these are seasoned officers, yet look at them. What is happening...",
+      "text": "Damn it...these are seasoned officers, and look at them. What's happening...",
       "layout_policy": "adaptive"
     },
     {
       "index": 60,
       "policy": "translate",
-      "text": "The situation is too dire...we will not survive it by standing on ceremony.",
+      "text": "The situation is too dire...we won't survive by standing on ceremony.",
       "layout_policy": "adaptive"
     },
     {
       "index": 61,
       "policy": "translate",
-      "text": "The culprit says he will sink this ship. But not so fast! We are sailors to the bone, men of the sea! Wipe off those gloomy faces! Remember the storm in the Caribbean! It tore away our mast, yet we made it home alive! You know what to do at a time like this. You know it well! Now get to work!",
+      "text": "The culprit says he'll sink this ship. But not so fast! We're sailors to the bone, men of the sea! Wipe those gloomy looks off your faces! Remember the storm in the Caribbean! It tore away our mast, but we still made it home alive! You know what to do at a time like this. You know it! Now get to work!",
       "layout_policy": "adaptive"
     },
     {
@@ -473,13 +473,13 @@
     {
       "index": 70,
       "policy": "translate",
-      "text": "Do you know the odds that passengers survive when a ship of this size sinks?",
+      "text": "Do you know the odds of surviving when a ship this size sinks?",
       "layout_policy": "adaptive"
     },
     {
       "index": 71,
       "policy": "translate",
-      "text": "It depends on how she sinks, but without lifeboats almost everyone will perish. Half will remain trapped in the hull, and half will be caught in the vortex. Even if they escape it, no one can endure drifting on the open sea, least of all after a disaster. Within half a day they will die of exhaustion. At this time of year, sharks ride the currents into these waters and finish the rest. If you underwrote the passengers' lives as well, you have my sympathy.",
+      "text": "It depends on how she sinks, but without lifeboats almost everyone will perish. Half will be trapped in the hull, and half caught in the vortex. Even if they escape it, no one can last long adrift on the open sea after a disaster. Within half a day, exhaustion will kill them. At this time of year, sharks ride the currents into these waters and finish off the rest. If you've underwritten the passengers' lives as well, you have my sympathy.",
       "layout_policy": "adaptive"
     },
     {
@@ -491,7 +491,7 @@
     {
       "index": 73,
       "policy": "translate",
-      "text": "That is my strong suit.",
+      "text": "That's my strong suit.",
       "layout_policy": "adaptive"
     },
     {
@@ -533,7 +533,7 @@
     {
       "index": 80,
       "policy": "translate",
-      "text": "An inquiry, then.",
+      "text": "So you want an investigation.",
       "layout_policy": "adaptive"
     },
     {
@@ -551,7 +551,7 @@
     {
       "index": 83,
       "policy": "translate",
-      "text": "The captain showed me the passenger list. A Frenchman living in Paris.",
+      "text": "The captain showed me the passenger list. French, lives in Paris.",
       "layout_policy": "adaptive"
     },
     {
@@ -592,7 +592,7 @@
     {
       "index": 90,
       "policy": "translate",
-      "text": "Hm. He does not dodge the point. A good sign.",
+      "text": "Hm. Straight to the point. Good.",
       "layout_policy": "adaptive"
     },
     {
@@ -610,7 +610,7 @@
     {
       "index": 93,
       "policy": "translate",
-      "text": "If you cannot find the culprit, fabricate one from among the crew.",
+      "text": "If you cannot find the culprit, frame one of the crew.",
       "layout_policy": "adaptive"
     },
     {
@@ -634,7 +634,7 @@
     {
       "index": 97,
       "policy": "translate",
-      "text": "Perfectly! Think! If the culprit sinks this ship, we are finished...",
+      "text": "Perfectly sane! Think! If the culprit sinks this ship, we're finished...",
       "layout_policy": "adaptive"
     },
     {
@@ -664,7 +664,7 @@
     {
       "index": 102,
       "policy": "translate",
-      "text": "I accept that. But if it happens, every friend back home who shares this liability will be ruined! Do you know how much this ship is insured for? I cannot drag them down with me!",
+      "text": "I accept the risk. But if that happens, every friend back home who shares this liability will be ruined! Do you know how much this ship is insured for? I cannot drag them down with me!",
       "layout_policy": "adaptive"
     },
     {
@@ -712,19 +712,19 @@
     {
       "index": 110,
       "policy": "translate",
-      "text": "If the culprit is one of the crew, the insurance contract is void...understood. If it comes to that, we will do it.",
+      "text": "If one of the crew is the culprit, the insurance contract is void...I see. If it comes to that, we'll do it.",
       "layout_policy": "adaptive"
     },
     {
       "index": 111,
       "policy": "translate",
-      "text": "Good. He has no tiresome moral scruples.",
+      "text": "Good. No tiresome moral scruples.",
       "layout_policy": "adaptive"
     },
     {
       "index": 112,
       "policy": "translate",
-      "text": "But no case is beyond me. Leave it to me. I will find 'The Russian Fog' and unmask the culprit.",
+      "text": "No case is beyond me. Leave it to me. I'll find 'The Russian Fog' and unmask the culprit.",
       "layout_policy": "adaptive"
     },
     {
