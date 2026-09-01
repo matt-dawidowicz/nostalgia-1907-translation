@@ -52,5 +52,5 @@ jobs:
       - name: Run Ruff lint checks
         run: python -m ruff check nostalgia1907.py tools tests work
 
-      - name: Audit Python style and documentation
+      - name: Audit project docstring policy
         run: python tools/style_audit.py --root .
