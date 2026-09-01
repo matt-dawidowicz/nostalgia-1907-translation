@@ -6,8 +6,8 @@ conflated:
 
 1. the runtime-certified 1.0.2 reference;
 2. the later 2026-08-27 translation revision, which changes playable bytes; and
-3. source-only repository maintenance that changes organization/tooling without
-   changing canonical English or byte-generating behavior.
+3. source-only repository maintenance and validation hardening that do not
+   change canonical English or byte-generating behavior.
 
 ## Read first
 
@@ -39,13 +39,14 @@ retired audio-localization experiment.
 The source manifest lists every other tracked review-bundle member and excludes
 only itself.
 
-## 2026-09-01 maintenance modernization
+## 2026-09-01 maintenance modernization and validation hardening
 
 This maintenance pass does **not** change canonical translation records,
 binary-format behavior, renderer behavior, frozen retail hashes, playable-byte
-algorithms, or runtime/release claims. It does make narrowly scoped mechanical
-changes inside maintained modules where those changes remove obsolete Python
-syntax or stale verification bookkeeping.
+algorithms, or historical runtime/release claims. It does make narrowly scoped
+mechanical changes inside maintained modules where those changes remove obsolete
+Python syntax or stale verification bookkeeping, and it makes future runtime
+certification fail closed against incomplete or hand-edited evidence.
 
 - the supported Python floor moves from 3.10 to 3.12;
 - the Python 3.10-only `tomli` compatibility dependency and fallback code are
@@ -62,13 +63,20 @@ syntax or stale verification bookkeeping.
 - obsolete standalone report-writing CLIs are removed from validation libraries;
 - generic hand-written lint rules are replaced by Ruff while the project-specific
   docstring contract remains enforced by `tools/style_audit.py`;
-- `scn_layout.py` receives only a Python-3.12-safe annotation modernization; and
+- `scn_layout.py` receives only a Python-3.12-safe annotation modernization;
 - `verification_manifest.py` drops references to the retired files so a real
-  build cannot attempt to fingerprint maintenance artifacts that no longer exist.
+  build cannot attempt to fingerprint maintenance artifacts that no longer exist;
+- `whole_game_test.py` now requires the supported schema, successful static
+  summaries, exact candidate filename/hash binding, intact generated runtime
+  inventories, evidence notes for completed scopes, and an empty runtime issue
+  list before certification can pass; and
+- regression tests explicitly reject unbound candidates, missing evidence,
+  failed static coverage, and deleted certification scopes.
 
 Because canonical English and byte-generating behavior are unchanged, this pass
 requires source-only CI evidence and does not itself require a new Ares
-playthrough.
+playthrough. The stricter verifier applies to future candidate certification; it
+does not retroactively invent or change historical 1.0.2 evidence.
 
 ## 2026-08-30 repository-maintenance pass
 
