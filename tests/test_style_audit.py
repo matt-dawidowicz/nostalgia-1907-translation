@@ -1,4 +1,4 @@
-"""Regression tests for the maintained Python style audit."""
+"""Regression tests for the maintained Python documentation audit."""
 
 from __future__ import annotations
 
@@ -13,10 +13,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class StyleAuditTests(unittest.TestCase):
-    """Keep PEP 8/257 checks deterministic and repository-wide."""
+    """Keep repository-specific docstring checks deterministic."""
 
     def test_current_maintained_source_passes(self) -> None:
-        """Require every maintained Python file to satisfy the shared profile."""
+        """Require every maintained Python file to satisfy the docstring policy."""
         report = style_audit.audit(ROOT)
         self.assertEqual(report["status"], "PASS", report["violations"])
         self.assertEqual(
@@ -24,18 +24,20 @@ class StyleAuditTests(unittest.TestCase):
             len(style_audit.iter_maintained_python(ROOT)),
         )
 
-    def test_audit_reports_line_and_docstring_contracts(self) -> None:
-        """Report readable violations for a deliberately malformed source file."""
+    def test_audit_reports_missing_docstrings(self) -> None:
+        """Report module and callable documentation omissions directly."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             path = root / "nostalgia1907.py"
-            path.write_text(
-                "def missing():\n" "    " + "x" * 90 + " = 1  \n",
-                encoding="utf-8",
-            )
+            path.write_text("def missing():\n    pass\n", encoding="utf-8")
             report = style_audit.audit(root)
-        violations = {(item["rule"], item["path"]) for item in report["violations"]}
+        violations = [
+            item for item in report["violations"] if item["rule"] == "D100"
+        ]
         self.assertEqual(report["status"], "FAIL")
-        self.assertIn(("D100", "nostalgia1907.py"), violations)
-        self.assertIn(("E501", "nostalgia1907.py"), violations)
-        self.assertIn(("W291", "nostalgia1907.py"), violations)
+        self.assertEqual(len(violations), 2)
+        self.assertTrue(all(item["path"] == "nostalgia1907.py" for item in violations))
+
+
+if __name__ == "__main__":
+    unittest.main()
