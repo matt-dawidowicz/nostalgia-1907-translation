@@ -46,14 +46,17 @@ editing anything.
 
 ## First session: source-only checkout
 
-These commands are safe in a public clone and require no game media or BIOS:
+Use Python 3.11 or newer and install the development checks:
 
 ```powershell
+python -m pip install -e ".[dev]"
 python tools/source_health.py --root . --strict-release
 python -m unittest discover -s tests -v
+python -m ruff check nostalgia1907.py tools tests work
 python tools/style_audit.py --root .
 ```
 
+These commands are safe in a public clone and require no game media or BIOS.
 Read failures from top to bottom. Do not remove a check, relax a hash, or add a
 generated file merely to make the command pass. A contributor without private
 retail fixtures can still improve documentation, tests, parsing, and synthetic
