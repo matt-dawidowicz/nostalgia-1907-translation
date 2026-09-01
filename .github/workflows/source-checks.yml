@@ -20,7 +20,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            python-version: "3.11"
+            python-version: "3.12"
           - os: windows-latest
             python-version: "3.14"
 
