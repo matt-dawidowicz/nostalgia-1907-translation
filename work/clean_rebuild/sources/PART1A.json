@@ -361,7 +361,7 @@
     {
       "index": 54,
       "policy": "translate",
-      "text": "I accept. Will you call or fold?",
+      "text": "All right. Will you call or fold?",
       "layout_policy": "adaptive"
     },
     {
@@ -445,7 +445,7 @@
     {
       "index": 68,
       "policy": "translate",
-      "text": "I had a seven! Hee hee, you are such a fool! If you knew what your card was, you would want to jump overboard! Curious? I won't tell. It's a secret. Hee hee!",
+      "text": "I had a seven! Hee hee, you're such a fool! If you knew what your card was, you'd want to jump overboard! Curious? I won't tell. It's a secret. Hee hee!",
       "layout_policy": "adaptive"
     },
     {
@@ -457,7 +457,7 @@
     {
       "index": 70,
       "policy": "translate",
-      "text": "I had a seven. You had an ace. Feel good, beating a little girl like me?",
+      "text": "I had a seven. You had an ace. Feel good about beating a little girl like me?",
       "layout_policy": "adaptive"
     },
     {
