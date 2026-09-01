@@ -2,10 +2,9 @@
 
 ## Environment
 
-The supported runtime is Python 3.10 or newer. The production build and review
-pipeline use only the standard library; Python 3.10 installs `tomli` for TOML
-parsing. The optional `style` extra supplies the pinned Black version used for
-mechanical formatting checks.
+The supported runtime is Python 3.11 or newer. The production build and review
+pipeline use only the Python standard library. The optional `dev` extra supplies
+the pinned Ruff version used by CI for fast static lint checks.
 
 ```powershell
 python -m venv .venv
@@ -14,11 +13,11 @@ python -m pip install --upgrade pip
 python -m pip install -e .
 ```
 
-For Black:
+For the complete contributor toolchain:
 
 ```powershell
-python -m pip install -e ".[style]"
-python -m black nostalgia1907.py tools tests work/clean_rebuild work/region_variant
+python -m pip install -e ".[dev]"
+python -m ruff check nostalgia1907.py tools tests work
 ```
 
 Machine-specific retail and BIOS paths belong only in the ignored
@@ -53,6 +52,7 @@ python tools/source_health.py --root . --strict-release
 python tools/source_manifest.py --root .
 python -m compileall -q nostalgia1907.py tools tests work
 python -m unittest discover -s tests -v
+python -m ruff check nostalgia1907.py tools tests work
 python tools/style_audit.py --root .
 ```
 
@@ -68,10 +68,13 @@ The checks have separate responsibilities:
 4. **Unit tests** cover CLI contracts, format parsers, renderer rules,
    transactions, source/release policy, comparison packaging, documentation,
    deterministic reports, and synthetic region-wrapper behavior.
-5. **Style audit** enforces the repository's standard-library PEP 8/257 policy.
+5. **Ruff** catches undefined names, unused imports, and high-signal Python
+   syntax/style defects using the pinned development version.
+6. **Style audit** enforces the repository's standard-library PEP 8/257 policy,
+   including the project-specific docstring contract.
 
-Black remains an optional contributor check rather than the semantic style
-authority.
+Ruff complements the repository-specific style audit; it does not replace the
+preservation-sensitive documentation and source-tree checks.
 
 ## Retail-backed validation
 
