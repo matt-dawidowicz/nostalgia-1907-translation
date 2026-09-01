@@ -101,13 +101,20 @@ machine paths.
 
 ## Before requesting review
 
-Run:
+Use Python 3.11 or newer and install the development checks:
+
+```powershell
+python -m pip install -e ".[dev]"
+```
+
+Then run:
 
 ```powershell
 python tools/source_health.py --root . --strict-release
 python tools/source_manifest.py --root .
 python -m compileall -q nostalgia1907.py tools tests work
 python -m unittest discover -s tests -v
+python -m ruff check nostalgia1907.py tools tests work
 python tools/style_audit.py --root .
 ```
 
