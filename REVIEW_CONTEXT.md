@@ -52,7 +52,11 @@ claims.
 - the package metadata now uses a current setuptools baseline and explicit MIT
   license/repository metadata;
 - Ruff is pinned as a development-only dependency for high-signal lint checks;
-- CI now exercises Python 3.11 on Ubuntu and Python 3.14 on Windows; and
+- CI now exercises Python 3.11 on Ubuntu and Python 3.14 on Windows;
+- the completed translation-proposal compatibility shim is removed rather than
+  retained as an inert no-pending exporter;
+- the obsolete retired-workspace registry is removed after its durable history
+  was already captured in maintenance documentation; and
 - contributor documentation no longer advertises the retired Black/3.10 paths.
 
 Because the byte-producing graph and canonical English are unchanged, this pass
