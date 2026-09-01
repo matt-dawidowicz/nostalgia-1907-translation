@@ -39,6 +39,26 @@ retired audio-localization experiment.
 The source manifest lists every other tracked review-bundle member and excludes
 only itself.
 
+## 2026-09-01 maintenance modernization
+
+This maintenance pass changes only the public development/tooling surface. It
+does **not** change canonical translation records, production build modules,
+binary formats, renderer behavior, frozen retail hashes, or runtime/release
+claims.
+
+- the supported Python floor moves from 3.10 to 3.11;
+- the Python 3.10-only `tomli` compatibility dependency and fallback code are
+  removed, leaving the runtime dependency list empty;
+- the package metadata now uses a current setuptools baseline and explicit MIT
+  license/repository metadata;
+- Ruff is pinned as a development-only dependency for high-signal lint checks;
+- CI now exercises Python 3.11 on Ubuntu and Python 3.14 on Windows; and
+- contributor documentation no longer advertises the retired Black/3.10 paths.
+
+Because the byte-producing graph and canonical English are unchanged, this pass
+requires source-only CI evidence and does not itself require a new Ares
+playthrough.
+
 ## 2026-08-30 repository-maintenance pass
 
 The maintenance pass intentionally does **not** change canonical records,
