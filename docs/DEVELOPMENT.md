@@ -68,13 +68,15 @@ The checks have separate responsibilities:
 4. **Unit tests** cover CLI contracts, format parsers, renderer rules,
    transactions, source/release policy, comparison packaging, documentation,
    deterministic reports, and synthetic region-wrapper behavior.
-5. **Ruff** catches undefined names, unused imports, and high-signal Python
-   syntax/style defects using the pinned development version.
-6. **Style audit** enforces the repository's standard-library PEP 8/257 policy,
-   including the project-specific docstring contract.
+5. **Ruff** owns generic Python linting and catches undefined names, unused
+   imports, and other high-signal syntax/style defects using the pinned
+   development version.
+6. **Documentation audit** enforces the repository-specific docstring contract
+   described in `docs/DOCSTRING_STANDARD.md` without requiring third-party
+   runtime dependencies.
 
-Ruff complements the repository-specific style audit; it does not replace the
-preservation-sensitive documentation and source-tree checks.
+The historical filename `tools/style_audit.py` is retained for continuity, but
+the tool is intentionally docstring-specific; generic linting belongs to Ruff.
 
 ## Retail-backed validation
 
