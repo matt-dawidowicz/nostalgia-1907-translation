@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Audit bomb instructions directly from original Japanese glyph sequences.
 
 The bomb sequence is branch-sensitive, so ordinary English search is not
@@ -10,7 +9,6 @@ against required and forbidden patterns without modifying any translation.
 from __future__ import annotations
 
 import hashlib
-import json
 import re
 from pathlib import Path
 
@@ -21,15 +19,7 @@ from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES, _glyphs, _trim_blank
 
 
 HERE = Path(__file__).resolve().parent
-WORKSPACE = HERE.parents[1]
 SEMANTICS = HERE / "bomb_semantics.json"
-BEFORE_AUDIT = (
-    WORKSPACE
-    / "outputs"
-    / "Nostalgia1907_Translation_Audit"
-    / "translation_conflicts_before.json"
-)
-OUTPUT = WORKSPACE / "outputs" / "Nostalgia1907_Translation_Audit"
 GLYPH_BYTES = 18
 
 
@@ -64,7 +54,7 @@ def run_audit() -> dict[str, object]:
         OSError: If tracked or prepared-retail inputs cannot be read.
 
     Side Effects:
-        Reads source, rule, optional historical-report, font, and MES files.
+        Reads canonical source, semantic rules, prepared fonts, and MES files.
         It does not alter canonical English or game data.
     """
     config = _load(SEMANTICS)
@@ -99,12 +89,6 @@ def run_audit() -> dict[str, object]:
         if not pattern:
             raise ValueError(f"empty Japanese glyph term: {item['semantic']}")
         patterns.append({**item, "pattern": pattern})
-
-    old_by_id: dict[str, str] = {}
-    if BEFORE_AUDIT.exists():
-        old_by_id = {
-            item["id"]: item["english"] for item in _load(BEFORE_AUDIT)["records"]
-        }
 
     failures: list[str] = []
     table: list[dict[str, object]] = []
@@ -198,21 +182,18 @@ def run_audit() -> dict[str, object]:
                 if _contains(glyphs_by_id[record_id], item["pattern"])
             }
         )
+        source_hex = source_hex_by_id[record_id]
         table.append(
             {
                 "record_id": record_id,
                 "japanese_source": expectation.get("japanese"),
-                "japanese_bitmap": f"../Nostalgia1907_Bilingual_Comparison/images/{record_id.split(':')[0]}/{int(record_id.split(':')[1]):03d}.png",
-                "source_record_hex": source_hex_by_id[record_id],
-                "source_record_sha256": hashlib.sha256(
-                    bytes.fromhex(source_hex_by_id[record_id])
-                )
+                "source_record_hex": source_hex,
+                "source_record_sha256": hashlib.sha256(bytes.fromhex(source_hex))
                 .hexdigest()
                 .upper(),
                 "literal_semantic_interpretation": expectation.get("literal")
                 or "; ".join(matched_semantics),
                 "semantic_terms": matched_semantics,
-                "english_before": old_by_id.get(record_id),
                 "corrected_english": english,
                 "branch_or_consequence": expectation.get("branch_or_consequence"),
                 "review_required": bool(expectation.get("review_required")),
@@ -226,63 +207,3 @@ def run_audit() -> dict[str, object]:
         "semantic_failures": failures,
         "records": table,
     }
-
-
-def _markdown(payload: dict[str, object]) -> str:
-    """Render one bomb-audit report as a deterministic Markdown table."""
-    lines = [
-        "# Nostalgia 1907 bomb-sequence source audit",
-        "",
-        f"Status: **{payload['status']}**",
-        "",
-        f"Audited source records: {payload['audited_record_count']}",
-        "",
-        "| Record ID | Japanese source | Literal semantics | English before | Corrected English | Branch / consequence |",
-        "|---|---|---|---|---|---|",
-    ]
-    for item in payload["records"]:
-        source = (
-            item["japanese_source"] or f"[retail bitmap]({item['japanese_bitmap']})"
-        )
-        values = [
-            item["record_id"],
-            source,
-            item["literal_semantic_interpretation"],
-            item["english_before"] or "",
-            item["corrected_english"],
-            item["branch_or_consequence"] or "",
-        ]
-        lines.append(
-            "| " + " | ".join(str(value).replace("|", "\\|") for value in values) + " |"
-        )
-    if payload["semantic_failures"]:
-        lines.extend(
-            ["", "## Failures", ""]
-            + [f"- {failure}" for failure in payload["semantic_failures"]]
-        )
-    return "\n".join(lines) + "\n"
-
-
-def main() -> None:
-    """Write bomb-audit reports and exit nonzero on semantic failure."""
-    payload = run_audit()
-    OUTPUT.mkdir(parents=True, exist_ok=True)
-    (OUTPUT / "bomb_sequence_audit.json").write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-    (OUTPUT / "bomb_sequence_audit.md").write_text(_markdown(payload), encoding="utf-8")
-    print(
-        json.dumps(
-            {
-                k: payload[k]
-                for k in ("status", "audited_record_count", "semantic_failure_count")
-            },
-            indent=2,
-        )
-    )
-    if payload["status"] != "PASS":
-        raise SystemExit(1)
-
-
-if __name__ == "__main__":
-    main()
