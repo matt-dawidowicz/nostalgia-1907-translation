@@ -52,7 +52,7 @@ option. Europe is not currently supported.
 
 ## Quick start
 
-Use Python 3.11 or newer. From a fresh clone:
+Use Python 3.12 or newer. From a fresh clone:
 
 ```powershell
 py -3.12 -m venv .venv
