@@ -111,7 +111,6 @@ outputs include:
 | `script_layout_audit.json` | `translation_formatter.py` | Per-record renderer/layout classification |
 | bilingual JSON/HTML/images/ZIP + package manifest | `export_bilingual_comparison.py` | Human Japanese/English review |
 | fixed-layout TSV/Markdown | `export_fixed_layout_review.py` | Runtime geometry review queue |
-| translation proposal JSON/Markdown | `export_translation_proposals.py` | Explicit no-pending proposal status |
 | `mes_report.json` | `build_mes_set.py` | Chapter size/glyph/spill measurements |
 | `archive_report.json` | `build_archives.py` | Archive slot/reflow mode and headroom |
 | ISO patch report | ISO build stage | Extents, logical sizes, allocations, headroom |
@@ -120,10 +119,10 @@ outputs include:
 Delete and regenerate reports when diagnosing staleness. Never edit a generated
 report to satisfy validation.
 
-The old active translation-proposal analysis was a one-off review tool and has
-been retired now that the queue is empty. The remaining exporter deliberately
-fails if code reintroduces a pending proposal. New wording goes through
-`nostalgia1907.py edit`, normal validation, a clean build, and runtime review.
+The old active translation-proposal analysis and its later no-pending
+compatibility exporter have been removed now that the queue is complete. New
+wording goes through `nostalgia1907.py edit`, normal validation, a clean build,
+and runtime review.
 
 ## Production and validation boundaries
 
