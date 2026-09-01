@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "work" / "clean_rebuild"))
 
 from whole_game_test import (  # noqa: E402
+    GLOBAL_RUNTIME_CHECKS,
     PASS,
     bind_build_identity,
     verify_runtime_log,
@@ -20,33 +21,94 @@ from whole_game_test import (  # noqa: E402
 )
 
 
+def complete_plan() -> dict[str, object]:
+    """Return a minimal but fully bound synthetic certification plan."""
+    return {
+        "schema_version": 1,
+        "static": {
+            "layout": {"status": "PASS", "text_box_counts": {"lower_dialogue": 1}},
+            "emitted_renderer": {"status": PASS, "chapters": 1},
+        },
+        "runtime": {
+            "build_identity": {
+                "cue_filename": "candidate.cue",
+                "cue_sha256": "A" * 64,
+                "track1_filename": "candidate_Track1.bin",
+                "track1_sha256": "B" * 64,
+            },
+            "global_checks": [
+                {"id": item_id, "status": PASS, "evidence": "observed"}
+                for item_id, _requirement in GLOBAL_RUNTIME_CHECKS
+            ],
+            "chapters": [
+                {
+                    "chapter": "PART1A",
+                    "runtime_status": PASS,
+                    "runtime_evidence": "route completed",
+                }
+            ],
+            "text_boxes": [
+                {
+                    "text_box": "lower_dialogue",
+                    "runtime_status": PASS,
+                    "runtime_evidence": "dialogue observed",
+                }
+            ],
+            "fixed_layout_record_ids": [],
+            "issues": [],
+        },
+    }
+
+
 class WholeGameRuntimeLogTests(unittest.TestCase):
     """Keep runtime-certification completion separate from static coverage."""
 
     def test_runtime_log_remains_pending_until_every_scope_is_marked(self) -> None:
         """Reject incomplete chapters and text boxes instead of optimistic success."""
-        plan = {
-            "runtime": {
-                "global_checks": [{"id": "boot", "status": PASS}],
-                "chapters": [{"chapter": "PART1A", "runtime_status": "pending"}],
-                "text_boxes": [{"text_box": "lower_dialogue", "runtime_status": PASS}],
-            }
-        }
+        plan = complete_plan()
+        plan["runtime"]["chapters"][0]["runtime_status"] = "pending"
         report = verify_runtime_log(plan)
         self.assertEqual(report["status"], "PENDING_RUNTIME")
         self.assertEqual(report["pending"], ["chapter:PART1A"])
 
     def test_runtime_log_passes_only_after_every_scope_is_recorded(self) -> None:
         """Accept a complete explicit runtime certification log."""
-        plan = {
-            "runtime": {
-                "global_checks": [{"id": "boot", "status": PASS}],
-                "chapters": [{"chapter": "PART1A", "runtime_status": PASS}],
-                "text_boxes": [{"text_box": "lower_dialogue", "runtime_status": PASS}],
-            }
+        report = verify_runtime_log(complete_plan())
+        self.assertEqual(report["status"], PASS)
+
+    def test_unbound_candidate_cannot_pass_runtime_certification(self) -> None:
+        """Require exact CUE and Track 1 identities before accepting a runtime pass."""
+        plan = complete_plan()
+        plan["runtime"]["build_identity"] = {
+            "cue_sha256": "RECORD_BEFORE_PLAYTEST",
+            "track1_sha256": "RECORD_BEFORE_PLAYTEST",
         }
         report = verify_runtime_log(plan)
-        self.assertEqual(report["status"], PASS)
+        self.assertEqual(report["status"], "PENDING_RUNTIME")
+        self.assertIn("build_identity", report["pending"])
+
+    def test_passed_scope_requires_evidence(self) -> None:
+        """Do not accept a checked box with no route or observation note."""
+        plan = complete_plan()
+        plan["runtime"]["global_checks"][0]["evidence"] = ""
+        report = verify_runtime_log(plan)
+        self.assertEqual(report["status"], "PENDING_RUNTIME")
+        self.assertIn("global:boot:evidence", report["pending"])
+
+    def test_static_failure_prevents_runtime_pass(self) -> None:
+        """Keep human runtime evidence from overriding a failed static gate."""
+        plan = complete_plan()
+        plan["static"]["layout"]["status"] = "FAIL"
+        report = verify_runtime_log(plan)
+        self.assertEqual(report["status"], "PENDING_RUNTIME")
+        self.assertIn("static:layout", report["failed"])
+
+    def test_scope_deletion_is_rejected(self) -> None:
+        """Reject edited logs that remove generated certification scopes."""
+        plan = complete_plan()
+        plan["runtime"]["global_checks"] = plan["runtime"]["global_checks"][:-1]
+        with self.assertRaisesRegex(ValueError, "global runtime checks"):
+            verify_runtime_log(plan)
 
     def test_writer_refuses_to_replace_an_existing_plan(self) -> None:
         """Preserve an existing runtime log rather than overwriting playtest evidence."""
