@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,27 +7,29 @@ name = "nostalgia1907-tools"
 version = "1.0.2"
 description = "Operator tooling for the Nostalgia 1907 English translation project"
 readme = "README.md"
-requires-python = ">=3.10"
-dependencies = [
-  "tomli>=2.0; python_version < '3.11'"
-]
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = []
 
 [project.optional-dependencies]
-style = [
-  "black==24.10.0"
+dev = [
+  "ruff==0.16.3"
 ]
 
-[tool.black]
-line-length = 88
-target-version = ["py310"]
-
-[tool.nostalgia1907.style]
-line-length = 88
-python-version = "3.10"
-formatter = "black==24.10.0"
+[project.urls]
+Repository = "https://github.com/matt-dawidowicz/nostalgia-1907-translation"
+Issues = "https://github.com/matt-dawidowicz/nostalgia-1907-translation/issues"
 
 [project.scripts]
 nostalgia1907 = "nostalgia1907:main"
 
 [tool.setuptools]
 py-modules = ["nostalgia1907"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
