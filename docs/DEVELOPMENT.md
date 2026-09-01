@@ -2,7 +2,7 @@
 
 ## Environment
 
-The supported runtime is Python 3.11 or newer. The production build and review
+The supported runtime is Python 3.12 or newer. The production build and review
 pipeline use only the Python standard library. The optional `dev` extra supplies
 the pinned Ruff version used by CI for fast static lint checks.
 
@@ -69,8 +69,8 @@ The checks have separate responsibilities:
    transactions, source/release policy, comparison packaging, documentation,
    deterministic reports, and synthetic region-wrapper behavior.
 5. **Ruff** owns generic Python linting and catches undefined names, unused
-   imports, and other high-signal syntax/style defects using the pinned
-   development version.
+   imports, obsolete syntax/APIs, and other high-signal defects using the pinned
+   development version and the Python 3.12 target.
 6. **Documentation audit** enforces the repository-specific docstring contract
    described in `docs/DOCSTRING_STANDARD.md` without requiring third-party
    runtime dependencies.
