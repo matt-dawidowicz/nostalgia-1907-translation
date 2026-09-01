@@ -147,8 +147,7 @@ def _git_tracked_files(root: Path) -> tuple[Path, ...] | None:
         completed = subprocess.run(
             ("git", "-C", str(root), "ls-files", "-z", "--cached"),
             check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
         )
     except (OSError, subprocess.CalledProcessError) as exc:
         raise SourceInventoryError(
