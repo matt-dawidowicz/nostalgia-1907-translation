@@ -20,9 +20,9 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            python-version: "3.10"
+            python-version: "3.11"
           - os: windows-latest
-            python-version: "3.12"
+            python-version: "3.14"
 
     steps:
       - name: Check out source
@@ -34,8 +34,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
 
-      - name: Install project
-        run: python -m pip install -e .
+      - name: Install project and development checks
+        run: python -m pip install -e ".[dev]"
 
       - name: Audit source-only release tree
         run: python tools/source_health.py --root . --strict-release
@@ -48,6 +48,9 @@ jobs:
 
       - name: Run source-only tests
         run: python -m unittest discover -s tests -v
+
+      - name: Run Ruff lint checks
+        run: python -m ruff check nostalgia1907.py tools tests work
 
       - name: Audit Python style and documentation
         run: python tools/style_audit.py --root .
