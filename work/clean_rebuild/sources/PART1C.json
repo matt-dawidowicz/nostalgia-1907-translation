@@ -104,7 +104,7 @@
     {
       "index": 5,
       "policy": "translate",
-      "text": "An insurance man? Absolutely not! The wireless is tied up with emergency traffic; we cannot spare it for a passenger. Locke! Throw this refined English gentleman out!",
+      "text": "An insurance man? Absolutely not! The wireless is tied up with emergency traffic. We can't spare it for a passenger. Locke! Throw this refined English gentleman out!",
       "layout_policy": "adaptive"
     },
     {
@@ -140,7 +140,7 @@
     {
       "index": 11,
       "policy": "translate",
-      "text": "Lloyd's members rank among the British Empire's most distinguished gentlemen: knights and nobles of baronial rank or higher, all listed in the Crown's registers. Has the United States Congress authorized you to address me in that manner?",
+      "text": "Lloyd's members are among the British Empire's most distinguished gentlemen: knights and nobles of baronial rank or higher, all listed in the Crown's registers. Has the United States Congress authorized you to address me in that manner?",
       "layout_policy": "adaptive"
     },
     {
@@ -164,7 +164,7 @@
     {
       "index": 15,
       "policy": "translate",
-      "text": "Even though we are liable for any damage to this ship?",
+      "text": "Even though we're liable for any damage to this ship?",
       "layout_policy": "adaptive"
     },
     {
@@ -176,7 +176,7 @@
     {
       "index": 17,
       "policy": "translate",
-      "text": "The times are changing. Things no one can see carry more weight by the day.",
+      "text": "Times are changing. Things no one can see carry more weight every day.",
       "layout_policy": "adaptive"
     },
     {
@@ -200,7 +200,7 @@
     {
       "index": 21,
       "policy": "translate",
-      "text": "The Nostalgia, an S-class ship of the Trans-Atlantic Company, is insured for a total of twenty thousand pounds...whew. If her hull is wrecked or she sinks, the underwriters owe roughly 1.2 million pounds. Who could pay that? The King of England?",
+      "text": "The Nostalgia, an S-class ship of the Trans-Atlantic Company, is insured for a total of twenty thousand pounds...whew. If her hull is wrecked or she sinks, the underwriters could owe nearly 1.2 million pounds. Who could pay that? The King of England?",
       "layout_policy": "adaptive"
     },
     {
@@ -230,7 +230,7 @@
     {
       "index": 26,
       "policy": "translate",
-      "text": "A select group contracts with your company, wagering on the ship's safety. Without lifting a finger, each receives at least three thousand pounds a year.",
+      "text": "A select group contracts with your company and wagers on the ship's safety. Without lifting a finger, each receives at least three thousand pounds a year.",
       "layout_policy": "adaptive"
     },
     {
@@ -242,13 +242,13 @@
     {
       "index": 28,
       "policy": "translate",
-      "text": "Only while the ship remains safe. If an accident wrecks her, we members alone must cover the insurance.",
+      "text": "Only while she remains safe. If an accident wrecks her, we members alone must pay the claim.",
       "layout_policy": "adaptive"
     },
     {
       "index": 29,
       "policy": "translate",
-      "text": "That is brutal.",
+      "text": "That's brutal.",
       "layout_policy": "adaptive"
     },
     {
@@ -260,13 +260,13 @@
     {
       "index": 31,
       "policy": "translate",
-      "text": "1.2 million pounds...I would rather remain an ordinary sailor.",
+      "text": "1.2 million pounds...I think I'd rather stay an ordinary sailor.",
       "layout_policy": "adaptive"
     },
     {
       "index": 32,
       "policy": "translate",
-      "text": "1.2 million...but money means nothing if you are dead.",
+      "text": "1.2 million... But money's no good when you're dead.",
       "layout_policy": "adaptive"
     },
     {
