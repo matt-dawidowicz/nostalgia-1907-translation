@@ -36,8 +36,9 @@ import re
 import subprocess
 import sys
 import tempfile
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 
 
 MANIFEST_NAME = "nostalgia1907.project.json"
