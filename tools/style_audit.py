@@ -2,9 +2,9 @@
 """Audit maintained Python against the project's PEP 8/257 profile.
 
 The audit intentionally uses only the standard library so a source checkout can
-enforce the documented layout and docstring contract before optional formatter
-dependencies are installed. Black provides mechanical formatting; this script
-guards the repository policy that Black alone cannot express.
+enforce the project-specific layout and docstring contract without development
+dependencies. Ruff provides complementary high-signal lint checks in contributor
+and CI environments.
 """
 
 from __future__ import annotations
@@ -163,8 +163,9 @@ def _string_literal_lines(source: str) -> set[int]:
     """Return physical lines occupied by atomic string or bytes literals.
 
     Long serialized HTML, CSS, reports, hashes, and fixture data should remain
-    byte-stable rather than being mechanically split. Black shares this policy:
-    it wraps syntax but preserves atomic literal data.
+    byte-stable rather than being mechanically split. The project style policy
+    permits those literals while enforcing the line limit on normal Python
+    syntax.
     """
     lines: set[int] = set()
     try:
