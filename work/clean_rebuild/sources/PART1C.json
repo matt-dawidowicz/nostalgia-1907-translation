@@ -597,7 +597,7 @@
     {
       "index": 87,
       "policy": "translate",
-      "text": "The culprit ordered us to find 'The Russian Fog.' I have no idea what those words mean.",
+      "text": "The culprit ordered us to find 'The Russian Fog.' I don't know what those words mean.",
       "layout_policy": "adaptive"
     },
     {
@@ -627,13 +627,13 @@
     {
       "index": 92,
       "policy": "translate",
-      "text": "If that is true...",
+      "text": "If that's true...",
       "layout_policy": "adaptive"
     },
     {
       "index": 93,
       "policy": "translate",
-      "text": "That California drawl of yours makes me sick! This is not a comedy! Shut your mouth!",
+      "text": "That California drawl of yours makes me sick! This isn't a comedy! Shut your mouth!",
       "layout_policy": "adaptive"
     },
     {
@@ -651,19 +651,19 @@
     {
       "index": 96,
       "policy": "translate",
-      "text": "Damn it...these are seasoned officers, yet look at them. What is happening...",
+      "text": "Damn it...these are seasoned officers, and look at them. What's happening...",
       "layout_policy": "adaptive"
     },
     {
       "index": 97,
       "policy": "translate",
-      "text": "The situation is too dire...we will not survive it by standing on ceremony.",
+      "text": "The situation is too dire...we won't survive by standing on ceremony.",
       "layout_policy": "adaptive"
     },
     {
       "index": 98,
       "policy": "translate",
-      "text": "The culprit says he will sink this ship. But not so fast! We are sailors to the bone, men of the sea! Wipe off those gloomy faces! Remember the storm in the Caribbean! It tore away our mast, yet we made it home alive! You know what to do at a time like this. You know it well! Now get to work!",
+      "text": "The culprit says he'll sink this ship. But not so fast! We're sailors to the bone, men of the sea! Wipe those gloomy looks off your faces! Remember the storm in the Caribbean! It tore away our mast, but we still made it home alive! You know what to do at a time like this. You know it! Now get to work!",
       "layout_policy": "adaptive"
     },
     {
@@ -699,13 +699,13 @@
     {
       "index": 104,
       "policy": "translate",
-      "text": "Do you know the odds that passengers survive when a ship of this size sinks?",
+      "text": "Do you know the odds of surviving when a ship this size sinks?",
       "layout_policy": "adaptive"
     },
     {
       "index": 105,
       "policy": "translate",
-      "text": "It depends on how she sinks, but without lifeboats almost everyone will perish. Half will remain trapped in the hull, and half will be caught in the vortex. Even if they escape it, no one can endure drifting on the open sea, least of all after a disaster. Within half a day they will die of exhaustion. At this time of year, sharks ride the currents into these waters and finish the rest. If you underwrote the passengers' lives as well, you have my sympathy.",
+      "text": "It depends on how she sinks, but without lifeboats almost everyone will perish. Half will be trapped in the hull, and half caught in the vortex. Even if they escape it, no one can last long adrift on the open sea after a disaster. Within half a day, exhaustion will kill them. At this time of year, sharks ride the currents into these waters and finish off the rest. If you've underwritten the passengers' lives as well, you have my sympathy.",
       "layout_policy": "adaptive"
     },
     {
@@ -717,7 +717,7 @@
     {
       "index": 107,
       "policy": "translate",
-      "text": "That is my strong suit.",
+      "text": "That's my strong suit.",
       "layout_policy": "adaptive"
     },
     {
