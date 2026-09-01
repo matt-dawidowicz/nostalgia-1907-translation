@@ -46,7 +46,7 @@ editing anything.
 
 ## First session: source-only checkout
 
-Use Python 3.11 or newer and install the development checks:
+Use Python 3.12 or newer and install the development checks:
 
 ```powershell
 python -m pip install -e ".[dev]"
