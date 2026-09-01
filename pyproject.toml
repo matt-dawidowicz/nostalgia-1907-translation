@@ -33,3 +33,11 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "UP"]
+
+# Avoid source-identity churn in behavior-bearing operator/production modules in
+# this maintenance-only pass. Their remaining annotation/import upgrades can be
+# handled with retail-backed validation in a production-code change.
+[tool.ruff.lint.per-file-ignores]
+"nostalgia1907.py" = ["UP035"]
+"work/clean_rebuild/scn_layout.py" = ["UP037"]
+"work/clean_rebuild/verification_manifest.py" = ["UP035"]
