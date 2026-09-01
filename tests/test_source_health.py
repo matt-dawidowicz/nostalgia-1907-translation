@@ -5,13 +5,9 @@ from __future__ import annotations
 import importlib.util
 import shutil
 import tempfile
+import tomllib
 import unittest
 from pathlib import Path
-
-try:
-    import tomllib
-except ModuleNotFoundError:  # pragma: no cover - exercised by the Python 3.10 CI job.
-    import tomli as tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,11 +22,10 @@ SPEC.loader.exec_module(source_health)
 class SourceHealthTests(unittest.TestCase):
     """Keep development and public-release source inventories fail-closed."""
 
-    def test_python_310_toml_backport_is_declared(self) -> None:
-        """Keep source-health TOML parsing available at the supported minimum."""
+    def test_runtime_dependencies_are_empty(self) -> None:
+        """Keep source-health and production tooling standard-library only."""
         project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-        dependencies = project["project"]["dependencies"]
-        self.assertIn("tomli>=2.0; python_version < '3.11'", dependencies)
+        self.assertEqual(project["project"]["dependencies"], [])
 
     def test_clean_source_tree_passes(self) -> None:
         """Accept valid UTF-8 Python, JSON, and TOML source files."""
@@ -63,9 +58,7 @@ class SourceHealthTests(unittest.TestCase):
                     target = clean_root / relative
                     target.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copyfile(source, target)
-                strict_report = source_health.audit(
-                    clean_root, strict_release=True
-                )
+                strict_report = source_health.audit(clean_root, strict_release=True)
         self.assertEqual(
             strict_report["status"], "PASS", strict_report["failures"]
         )
@@ -92,7 +85,9 @@ class SourceHealthTests(unittest.TestCase):
             retired.write_text("{}\n", encoding="utf-8", newline="\n")
             report = source_health.audit(root)
             self.assertEqual(report["status"], "FAIL")
-            self.assertTrue(any("retired generated recovery" in item for item in report["failures"]))
+            self.assertTrue(
+                any("retired generated recovery" in item for item in report["failures"])
+            )
 
     def test_development_mode_ignores_documented_local_state(self) -> None:
         """Keep private fixtures usable without weakening publication checks."""
@@ -124,9 +119,7 @@ class SourceHealthTests(unittest.TestCase):
             report = source_health.audit(root, strict_release=True)
             self.assertEqual(report["status"], "FAIL")
             self.assertEqual(report["inventory_mode"], "package-members")
-            self.assertTrue(
-                any("retail.iso" in failure for failure in report["failures"])
-            )
+            self.assertTrue(any("retail.iso" in failure for failure in report["failures"]))
 
     def test_strict_release_rejects_local_config_images_and_states(self) -> None:
         """Cover the release-gate false negatives found during source review."""
@@ -152,17 +145,13 @@ class SourceHealthTests(unittest.TestCase):
                         path.write_bytes(b"fixture")
                     report = source_health.audit(root, strict_release=True)
                     self.assertEqual(report["status"], "FAIL")
-                    self.assertTrue(
-                        any(filename in failure for failure in report["failures"])
-                    )
+                    self.assertTrue(any(filename in failure for failure in report["failures"]))
 
     def test_ci_uses_the_strict_release_inventory(self) -> None:
         """Keep public CI from falling back to the development-filtered audit."""
-        workflow = (ROOT / ".github" / "workflows" / "source-checks.yml")
+        workflow = ROOT / ".github" / "workflows" / "source-checks.yml"
         text = workflow.read_text(encoding="utf-8")
-        self.assertIn(
-            "python tools/source_health.py --root . --strict-release", text
-        )
+        self.assertIn("python tools/source_health.py --root . --strict-release", text)
 
 
 if __name__ == "__main__":
