@@ -48,7 +48,7 @@
     {
       "index": 2,
       "policy": "translate",
-      "text": "Fun. A con man?",
+      "text": "That was fun. Are you a con man by trade?",
       "layout_policy": "adaptive"
     },
     {
@@ -60,7 +60,7 @@
     {
       "index": 4,
       "policy": "translate",
-      "text": "Just an ordinary salesman.",
+      "text": "Afraid not. Just your average salesman.",
       "layout_policy": "adaptive"
     },
     {
