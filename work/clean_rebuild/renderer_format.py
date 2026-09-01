@@ -13,7 +13,7 @@ from __future__ import annotations
 import re
 from collections.abc import Sequence
 
-from scn_layout import Layout
+from .scn_layout import Layout
 
 
 ELLIPSIS_CAPITALIZED_FOLLOWERS = frozenset(

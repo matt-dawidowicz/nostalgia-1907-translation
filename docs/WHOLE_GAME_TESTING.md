@@ -62,7 +62,7 @@ transition, or reload.
 Generate a candidate-bound plan from the supplied test build:
 
 ```powershell
-python work\clean_rebuild\whole_game_test.py `
+python -m work.clean_rebuild.whole_game_test `
   --cue <candidate.cue> `
   --track1 <candidate_Track1.bin> `
   --output <empty-output-directory>
@@ -71,7 +71,7 @@ python work\clean_rebuild\whole_game_test.py `
 After the log has been filled, verify it without modifying it:
 
 ```powershell
-python work\clean_rebuild\whole_game_test.py --verify whole_game_runtime_log.json
+python -m work.clean_rebuild.whole_game_test --verify whole_game_runtime_log.json
 ```
 
 `PASS` means the static corpus gate and all declared runtime evidence for that

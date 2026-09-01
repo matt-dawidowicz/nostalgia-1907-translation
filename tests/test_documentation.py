@@ -74,7 +74,9 @@ class DocumentationTests(unittest.TestCase):
     def test_work_root_contains_only_active_workspaces(self) -> None:
         """Keep historical ledgers out of the operator-facing work directory."""
         directories = {
-            path.name for path in (ROOT / "work").iterdir() if path.is_dir()
+            path.name
+            for path in (ROOT / "work").iterdir()
+            if path.is_dir() and path.name != "__pycache__"
         }
         self.assertEqual(directories, {"clean_rebuild", "region_variant"})
 

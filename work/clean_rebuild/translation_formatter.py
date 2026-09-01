@@ -30,9 +30,9 @@ from collections import Counter
 from collections.abc import Mapping
 from pathlib import Path
 
-from mes_format import parse_mes
-from profile_schema import validate_profile
-from renderer_format import (
+from .mes_format import parse_mes
+from .profile_schema import validate_profile
+from .renderer_format import (
     measure_literal,
     normalize_ellipsis_style,
     normalize_semantic_text,
@@ -40,15 +40,15 @@ from renderer_format import (
     wrap_words,
     wrapped_row_failures,
 )
-from scn_layout import (
+from .scn_layout import (
     DIALOGUE_OPENING_ANCHOR_CODE,
     LABEL_ROLES,
     ROLE_CHOICE,
     RecordContract,
     infer_contracts,
 )
-from source_json import load_json_object
-from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
+from .source_json import load_json_object
+from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 
 
 HERE = Path(__file__).resolve().parent

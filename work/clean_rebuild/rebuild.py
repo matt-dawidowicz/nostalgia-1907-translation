@@ -26,15 +26,15 @@ import re
 import shutil
 from pathlib import Path
 
-from build_archives import build_archives
-from build_mes_set import build_mes_set
-from iso9660 import patch_fixed_extent_files
-from source_json import load_json_object
-from main_patch import patch_main
-from prepare_retail import prepare_retail
-from raw_cd import iso_to_raw_fixed, write_two_track_cue
-from regression import validate_build
-from verification_manifest import (
+from .build_archives import build_archives
+from .build_mes_set import build_mes_set
+from .iso9660 import patch_fixed_extent_files
+from .source_json import load_json_object
+from .main_patch import patch_main
+from .prepare_retail import prepare_retail
+from .raw_cd import iso_to_raw_fixed, write_two_track_cue
+from .regression import validate_build
+from .verification_manifest import (
     assert_exact_managed_inventory,
     collect_build_bindings,
     create_input_manifest,
@@ -193,13 +193,20 @@ def _verify_production_independence(
                 imported.extend(alias.name.split(".", 1)[0] for alias in node.names)
             elif isinstance(node, ast.ImportFrom):
                 if node.level:
-                    imported.append(f"relative:{node.module or ''}")
+                    if node.level != 1:
+                        unapproved_imports.append(
+                            f"{name} -> relative:{'.' * node.level}{node.module or ''}"
+                        )
+                        continue
+                    if node.module:
+                        imported.append(node.module.split(".", 1)[0])
+                    else:
+                        imported.extend(
+                            alias.name.split(".", 1)[0] for alias in node.names
+                        )
                 elif node.module:
                     imported.append(node.module.split(".", 1)[0])
             for imported_name in imported:
-                if imported_name.startswith("relative:"):
-                    unapproved_imports.append(f"{name} -> {imported_name}")
-                    continue
                 local_file = local_modules.get(imported_name)
                 if local_file is None:
                     continue
@@ -405,7 +412,8 @@ def _run_input_manifest(
     }
     command = [
         "python",
-        "work/clean_rebuild/rebuild.py",
+        "-m",
+        "work.clean_rebuild.rebuild",
         "<ORIGINAL_TRACK1>",
         "<ORIGINAL_TRACK2>",
         "--runs-root",

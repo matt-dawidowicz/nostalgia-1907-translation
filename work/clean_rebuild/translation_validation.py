@@ -19,14 +19,14 @@ import json
 import re
 from pathlib import Path
 
-from source_json import load_json_object
+from .source_json import load_json_object
 
-from bomb_audit import run_audit as run_bomb_audit
-from export_bilingual_comparison import validate_comparison_package
-from mes_compiler import CompileError, compile_mes
-from profile_schema import profile_text_failures, validate_profile
-from translation_formatter import audit_layouts
-from translation_audit import (
+from .bomb_audit import run_audit as run_bomb_audit
+from .export_bilingual_comparison import validate_comparison_package
+from .mes_compiler import CompileError, compile_mes
+from .profile_schema import profile_text_failures, validate_profile
+from .translation_formatter import audit_layouts
+from .translation_audit import (
     DEFAULT_RETAIL_ROOT,
     SOURCES,
     audit,

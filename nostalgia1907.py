@@ -463,9 +463,21 @@ def run_command(command: Sequence[str], *, root: Path, label: str) -> None:
 
 
 def run_script(root: Path, relative: str, *arguments: str, label: str) -> None:
-    """Run an existing Python script under the current interpreter."""
+    """Run one repository Python module under the current interpreter."""
+    module_path = Path(relative)
+    if (
+        module_path.is_absolute()
+        or module_path.suffix != ".py"
+        or not module_path.parts
+        or any(part in {"", ".", ".."} for part in module_path.parts)
+    ):
+        raise ToolError(f"invalid Python module path: {relative!r}")
+    source_path = rooted(root, module_path)
+    if not source_path.is_file():
+        raise ToolError(f"Python module source is missing: {source_path}")
+    module_name = ".".join(module_path.with_suffix("").parts)
     run_command(
-        (sys.executable, str(rooted(root, relative)), *arguments),
+        (sys.executable, "-m", module_name, *arguments),
         root=root,
         label=label,
     )

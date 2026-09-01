@@ -21,9 +21,9 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
 from pathlib import Path
 
-from source_json import load_json_object
+from .source_json import load_json_object
 
-from mes_compiler import BuildResult, compile_files
+from .mes_compiler import BuildResult, compile_files
 
 
 HERE = Path(__file__).resolve().parent

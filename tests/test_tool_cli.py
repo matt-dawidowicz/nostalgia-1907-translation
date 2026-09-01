@@ -465,5 +465,34 @@ class RepositoryPolicyTests(unittest.TestCase):
                     self.assertFalse(provenance.startswith(("/Users/", "/home/")))
 
 
+class ModuleExecutionTests(unittest.TestCase):
+    """Keep lower-level execution on importable package module paths."""
+
+    def test_run_script_uses_module_mode(self) -> None:
+        """Invoke maintained lower-level code through ``python -m``."""
+        with patch.object(nostalgia1907, "run_command") as run_command:
+            nostalgia1907.run_script(
+                ROOT,
+                "work/clean_rebuild/source_json.py",
+                "--help",
+                label="source-json fixture",
+            )
+        command = run_command.call_args.args[0]
+        self.assertEqual(
+            command[1:4],
+            ("-m", "work.clean_rebuild.source_json", "--help"),
+        )
+        self.assertEqual(run_command.call_args.kwargs["root"], ROOT)
+
+    def test_run_script_rejects_path_escape(self) -> None:
+        """Reject traversal before converting a path into a module name."""
+        with self.assertRaises(nostalgia1907.ToolError):
+            nostalgia1907.run_script(
+                ROOT,
+                "../escape.py",
+                label="escape fixture",
+            )
+
+
 if __name__ == "__main__":
     unittest.main()

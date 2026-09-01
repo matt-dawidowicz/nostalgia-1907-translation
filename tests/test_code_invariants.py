@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import os
-import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -13,17 +12,15 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
-if str(CLEAN) not in sys.path:
-    sys.path.insert(0, str(CLEAN))
 
-import iso9660  # noqa: E402
-import mes_compiler  # noqa: E402
-import mes_format  # noqa: E402
-import renderer_format  # noqa: E402
-import rebuild as clean_rebuild  # noqa: E402
-import scn_layout  # noqa: E402
-import test_script_layout as layout_tests  # noqa: E402
-import translation_formatter  # noqa: E402
+from work.clean_rebuild import iso9660  # noqa: E402
+from work.clean_rebuild import mes_compiler  # noqa: E402
+from work.clean_rebuild import mes_format  # noqa: E402
+from work.clean_rebuild import renderer_format  # noqa: E402
+from work.clean_rebuild import rebuild as clean_rebuild  # noqa: E402
+from work.clean_rebuild import scn_layout  # noqa: E402
+from work.clean_rebuild import test_script_layout as layout_tests  # noqa: E402
+from work.clean_rebuild import translation_formatter  # noqa: E402
 
 
 def mes_bytes(pointers: tuple[int, ...], script: bytes) -> bytes:

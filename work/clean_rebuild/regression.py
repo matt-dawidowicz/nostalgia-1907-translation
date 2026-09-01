@@ -17,13 +17,13 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 
-from iso9660 import SECTOR_SIZE, extract_file, read_entries, unique_file
-from lz_format import parse_archive, read_member
-from main_patch import PATCHED_SHA256, RETAIL_SHA256
-from mes_compiler import FIXED_ENGLISH_UNITS
-from mes_format import read_mes
-from source_json import load_json_array, load_json_object
-from raw_cd import verify_track
+from .iso9660 import SECTOR_SIZE, extract_file, read_entries, unique_file
+from .lz_format import parse_archive, read_member
+from .main_patch import PATCHED_SHA256, RETAIL_SHA256
+from .mes_compiler import FIXED_ENGLISH_UNITS
+from .mes_format import read_mes
+from .source_json import load_json_array, load_json_object
+from .raw_cd import verify_track
 
 
 HERE = Path(__file__).resolve().parent

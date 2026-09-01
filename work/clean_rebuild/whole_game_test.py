@@ -18,10 +18,10 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
-from mes_compiler import CompileError, compile_mes
-from source_json import load_json_object
-from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
-from translation_formatter import audit_layouts
+from .mes_compiler import CompileError, compile_mes
+from .source_json import load_json_object
+from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
+from .translation_formatter import audit_layouts
 
 
 HERE = Path(__file__).resolve().parent

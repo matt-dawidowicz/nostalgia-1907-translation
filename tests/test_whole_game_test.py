@@ -3,16 +3,14 @@
 from __future__ import annotations
 
 import json
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "work" / "clean_rebuild"))
 
-from whole_game_test import (  # noqa: E402
+from work.clean_rebuild.whole_game_test import (  # noqa: E402
     GLOBAL_RUNTIME_CHECKS,
     PASS,
     bind_build_identity,

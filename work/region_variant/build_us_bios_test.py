@@ -19,16 +19,9 @@ import hashlib
 import json
 import re
 import shutil
-import sys
 from pathlib import Path
 
-
-HERE = Path(__file__).resolve().parent
-WORKSPACE = HERE.parents[1]
-CLEAN_REBUILD = HERE.parent / "clean_rebuild"
-sys.path.insert(0, str(CLEAN_REBUILD))
-
-from raw_cd import (  # noqa: E402
+from ..clean_rebuild.raw_cd import (
     ISO_SECTOR_SIZE,
     RAW_SECTOR_SIZE,
     USER_DATA_OFFSET,
@@ -37,6 +30,10 @@ from raw_cd import (  # noqa: E402
     verify_sector_checksums,
     write_two_track_cue,
 )
+
+
+HERE = Path(__file__).resolve().parent
+WORKSPACE = HERE.parents[1]
 
 
 BOOT_SIZE = 16 * ISO_SECTOR_SIZE

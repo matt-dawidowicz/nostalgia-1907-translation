@@ -19,10 +19,10 @@ import hashlib
 import json
 from pathlib import Path
 
-from source_json import load_json_object
+from .source_json import load_json_object
 
-from iso9660 import SECTOR_SIZE, read_entries, unique_file
-from lz_format import (
+from .iso9660 import SECTOR_SIZE, read_entries, unique_file
+from .lz_format import (
     LzError,
     parse_archive,
     replace_members_fixed,

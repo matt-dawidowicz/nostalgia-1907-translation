@@ -25,7 +25,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from profile_schema import canonical_profile_index
+from .profile_schema import canonical_profile_index
 
 
 FLOATING_WIDTHS = {

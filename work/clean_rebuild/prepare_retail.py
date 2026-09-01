@@ -20,11 +20,11 @@ import json
 from collections import Counter
 from pathlib import Path
 
-from source_json import load_json_object
+from .source_json import load_json_object
 
-from iso9660 import SECTOR_SIZE, IsoEntry, read_entries, unique_file
-from lz_format import LzError, member_bytes, parse_archive
-from raw_cd import raw_to_iso
+from .iso9660 import SECTOR_SIZE, IsoEntry, read_entries, unique_file
+from .lz_format import LzError, member_bytes, parse_archive
+from .raw_cd import raw_to_iso
 
 
 HERE = Path(__file__).resolve().parent

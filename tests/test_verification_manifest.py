@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -11,10 +10,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
-if str(CLEAN) not in sys.path:
-    sys.path.insert(0, str(CLEAN))
 
-import verification_manifest as provenance  # noqa: E402
+from work.clean_rebuild import verification_manifest as provenance  # noqa: E402
 
 
 class VerificationManifestTests(unittest.TestCase):
@@ -56,7 +53,12 @@ class VerificationManifestTests(unittest.TestCase):
             track1=track1,
             track2=track2,
             build_profile={"name": "unit-test", "baseline": "reference"},
-            command=["python", "work/clean_rebuild/rebuild.py", "<TRACKS>"],
+            command=[
+                "python",
+                "-m",
+                "work.clean_rebuild.rebuild",
+                "<TRACKS>",
+            ],
             runtime={
                 "python": {"implementation": "CPython", "version": "test"},
                 "platform": {"system": "test", "release": "test", "machine": "test"},
@@ -122,7 +124,7 @@ class VerificationManifestTests(unittest.TestCase):
                 track1=track1,
                 track2=track2,
                 build_profile={"name": "unit-test", "baseline": "reference"},
-                command=["python", "work/clean_rebuild/rebuild.py", "<TRACKS>"],
+                command=["python", "-m", "work.clean_rebuild.rebuild", "<TRACKS>"],
                 runtime={
                     "python": {"implementation": "CPython", "version": "changed"},
                     "platform": {

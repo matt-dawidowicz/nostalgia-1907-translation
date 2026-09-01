@@ -3,25 +3,22 @@
 from __future__ import annotations
 
 import json
-import sys
 import unittest
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
-if str(CLEAN) not in sys.path:
-    sys.path.insert(0, str(CLEAN))
 
-from renderer_format import (  # noqa: E402
+from work.clean_rebuild.renderer_format import (  # noqa: E402
     normalize_ellipsis_style,
     reconstruct_wrapped_text,
     wrap_words,
 )
-from scn_layout import Layout  # noqa: E402
-from translation_formatter import _renderer_boundary_failures  # noqa: E402
-from scn_layout import RecordContract  # noqa: E402
-from font_render import _bytes_matrix, render_compact_cluster  # noqa: E402
+from work.clean_rebuild.scn_layout import Layout  # noqa: E402
+from work.clean_rebuild.translation_formatter import _renderer_boundary_failures  # noqa: E402
+from work.clean_rebuild.scn_layout import RecordContract  # noqa: E402
+from work.clean_rebuild.font_render import _bytes_matrix, render_compact_cluster  # noqa: E402
 
 
 class EllipsisStyleTests(unittest.TestCase):

@@ -12,10 +12,10 @@ import hashlib
 import re
 from pathlib import Path
 
-from source_json import load_json_object
+from .source_json import load_json_object
 
-from mes_format import read_mes
-from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES, _glyphs, _trim_blank
+from .mes_format import read_mes
+from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES, _glyphs, _trim_blank
 
 
 HERE = Path(__file__).resolve().parent

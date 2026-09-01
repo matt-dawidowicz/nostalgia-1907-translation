@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import hashlib
-import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -13,12 +12,9 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
 REGION = ROOT / "work" / "region_variant"
-for directory in (CLEAN, REGION):
-    if str(directory) not in sys.path:
-        sys.path.insert(0, str(directory))
 
-import build_us_bios_test as region  # noqa: E402
-import raw_cd  # noqa: E402
+from work.region_variant import build_us_bios_test as region  # noqa: E402
+from work.clean_rebuild import raw_cd  # noqa: E402
 
 
 def synthetic_boot() -> bytes:

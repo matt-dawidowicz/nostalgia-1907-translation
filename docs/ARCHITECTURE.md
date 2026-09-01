@@ -58,8 +58,8 @@ The build path is deliberately staged:
 | `nostalgia1907.py` | Supported operator CLI and preflight |
 | `nostalgia1907.project.json` | Project policy, hashes, corpus counts, paths |
 | `work/clean_rebuild/sources/` | Canonical per-chapter translation records |
-| `work/clean_rebuild/` | Active compiler, binary formats, builders, validators, review helpers |
-| `work/region_variant/` | Guarded North American region wrapper |
+| `work/clean_rebuild/` | `work.clean_rebuild` package: compiler, binary formats, builders, validators, review helpers |
+| `work/region_variant/` | `work.region_variant` package: guarded North American region wrapper |
 | `provenance/2026-08-27/` | Historical reviewed-change ledgers; never a build input |
 | `tests/` | Source-only and synthetic regression tests |
 | `tools/` | Repository health, source-manifest, and style checks |
@@ -76,10 +76,11 @@ instead of relying on manual hash edits.
 
 ## Production module boundary
 
-`rebuild.py` defines `PRODUCTION_MODULES`. That tuple is the exact local Python
-allowlist for the byte-producing clean build. The production-independence audit
-rejects a missing module, an undeclared local import, a canonical source path
-that escapes `sources/`, or a known historical-workspace marker.
+`work.clean_rebuild.rebuild` defines `PRODUCTION_MODULES`. That tuple is the exact
+local Python allowlist for the byte-producing clean build. Package modules use
+explicit relative sibling imports, and the production-independence audit rejects
+a missing module, an import outside the allowlist, a deeper relative escape, a
+canonical source path outside `sources/`, or a known historical-workspace marker.
 
 Each production module has one primary responsibility:
 

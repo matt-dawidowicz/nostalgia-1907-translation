@@ -33,8 +33,8 @@ import tempfile
 import zipfile
 from pathlib import Path, PurePosixPath
 
-from mes_format import read_mes
-from source_json import load_json_object
+from .mes_format import read_mes
+from .source_json import load_json_object
 
 
 HERE = Path(__file__).resolve().parent

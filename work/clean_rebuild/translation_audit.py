@@ -13,9 +13,9 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
-from source_json import load_json_object
+from .source_json import load_json_object
 
-from mes_format import DYNAMIC_GLYPHS_PER_PREFIX, DYNAMIC_PREFIX_START, read_mes
+from .mes_format import DYNAMIC_GLYPHS_PER_PREFIX, DYNAMIC_PREFIX_START, read_mes
 
 
 HERE = Path(__file__).resolve().parent

@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from source_json import load_json_object
+from .source_json import load_json_object
 
 
 HERE = Path(__file__).resolve().parent

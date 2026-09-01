@@ -5,7 +5,6 @@ from __future__ import annotations
 import hashlib
 import json
 import struct
-import sys
 import tempfile
 import unittest
 import zipfile
@@ -17,10 +16,8 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
-if str(CLEAN) not in sys.path:
-    sys.path.insert(0, str(CLEAN))
 
-import export_bilingual_comparison as comparison  # noqa: E402
+from work.clean_rebuild import export_bilingual_comparison as comparison  # noqa: E402
 
 
 class ComparisonExportTests(unittest.TestCase):

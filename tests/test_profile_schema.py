@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import sys
 import unittest
 from pathlib import Path
 
@@ -10,11 +9,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
 SOURCES = CLEAN / "sources"
-if str(CLEAN) not in sys.path:
-    sys.path.insert(0, str(CLEAN))
 
-from profile_schema import profile_text_failures, validate_profile  # noqa: E402
-from source_json import load_json_object  # noqa: E402
+from work.clean_rebuild.profile_schema import profile_text_failures, validate_profile  # noqa: E402
+from work.clean_rebuild.source_json import load_json_object  # noqa: E402
 
 
 class ProfileSchemaTests(unittest.TestCase):

@@ -26,6 +26,13 @@ nostalgia1907 = "nostalgia1907:main"
 
 [tool.setuptools]
 py-modules = ["nostalgia1907"]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["work", "work.*"]
+
+[tool.setuptools.package-data]
+"work.clean_rebuild" = ["*.json", "sources/*.json"]
 
 [tool.ruff]
 line-length = 88

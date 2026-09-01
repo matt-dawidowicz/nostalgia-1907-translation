@@ -15,10 +15,10 @@ import hashlib
 import json
 from pathlib import Path
 
-from renderer_format import measure_literal
-from source_json import load_json_object
-from translation_formatter import audit_layouts
-from translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
+from .renderer_format import measure_literal
+from .source_json import load_json_object
+from .translation_formatter import audit_layouts
+from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 
 
 HERE = Path(__file__).resolve().parent

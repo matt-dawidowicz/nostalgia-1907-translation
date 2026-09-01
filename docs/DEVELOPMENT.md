@@ -25,9 +25,11 @@ Machine-specific retail and BIOS paths belong only in the ignored
 
 ## Command layers
 
-Use `nostalgia1907.py` for normal work. Lower-level modules are importable for
-focused analysis, but invoking them directly can bypass preflight or evidence
-steps owned by the CLI.
+Use `nostalgia1907.py` for normal work. Lower-level tooling is installed as the
+`work.clean_rebuild` package, with the optional region stage under
+`work.region_variant`. For focused execution use `python -m` with the dotted
+module name; direct package modules can still bypass preflight or evidence steps
+owned by the CLI.
 
 | Command | Purpose |
 | --- | --- |
@@ -93,10 +95,10 @@ cannot legally carry:
 6. chapter archive replacement and allocation checks; and
 7. ISO/raw-track/Track-2 regression checks.
 
-The retail-backed layout suite remains under `work/clean_rebuild` because it is
-an executable integration gate that imports the same local module surface as the
-compiler. It reports an explicit skip when prepared fixtures do not exist. The
-CLI invokes it again only after retail prerequisites are satisfied.
+The retail-backed layout suite is `work.clean_rebuild.test_script_layout` inside
+the same package as the compiler. It reports an explicit skip when prepared
+fixtures do not exist. The CLI invokes it again only after retail prerequisites
+are satisfied.
 
 A successful `validate` proves static and deterministic contracts. It is not a
 runtime claim about window clearing, transitions, timing, branch behavior,
@@ -128,10 +130,11 @@ and runtime review.
 
 ## Production and validation boundaries
 
-`rebuild.py:PRODUCTION_MODULES` is the exact local dependency allowlist for the
-byte-producing clean build. The production-independence audit rejects undeclared
-local imports, missing dependencies, canonical source paths that escape
-`sources/`, and known historical workspace markers.
+`work.clean_rebuild.rebuild:PRODUCTION_MODULES` is the exact local dependency
+allowlist for the byte-producing clean build. Production modules use explicit
+package-relative sibling imports; the independence audit accepts only dependencies
+inside that allowlist and rejects deeper relative escapes, missing dependencies,
+canonical source paths outside `sources/`, and known historical workspace markers.
 
 Validation/review modules are maintained separately. They may reject a bad
 candidate, but they do not become an alternate source of game bytes.

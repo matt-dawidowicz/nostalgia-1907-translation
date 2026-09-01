@@ -27,17 +27,17 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
-from font_render import GLYPH_BYTES, stored_cell, validate_text
-from mes_format import DYNAMIC_PREFIX_START, MesFormatError, parse_mes
-from profile_schema import profile_text_failures
-from renderer_format import (
+from .font_render import GLYPH_BYTES, stored_cell, validate_text
+from .mes_format import DYNAMIC_PREFIX_START, MesFormatError, parse_mes
+from .profile_schema import profile_text_failures
+from .renderer_format import (
     measure_literal as _measure_literal,
     normalize_ellipsis_style,
     normalize_semantic_text,
     wrap_words as _wrap_words,
     wrapped_row_failures,
 )
-from scn_layout import (
+from .scn_layout import (
     DIALOGUE_OPENING_ANCHOR_CODE,
     LABEL_ROLES,
     PROSE_ROLES,
@@ -49,7 +49,7 @@ from scn_layout import (
     infer_roles,
     infer_row_limits,
 )
-from source_json import load_json_object
+from .source_json import load_json_object
 
 
 DYNAMIC_GLYPHS_PER_PREFIX = 0xFF

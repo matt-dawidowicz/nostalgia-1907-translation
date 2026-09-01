@@ -9,7 +9,6 @@ the formatter's public audit path incorporates the guard.
 from __future__ import annotations
 
 import hashlib
-import sys
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -17,12 +16,10 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
-if str(CLEAN) not in sys.path:
-    sys.path.insert(0, str(CLEAN))
 
-from scn_layout import Layout, RecordContract  # noqa: E402
-import mes_compiler  # noqa: E402
-import translation_formatter  # noqa: E402
+from work.clean_rebuild.scn_layout import Layout, RecordContract  # noqa: E402
+from work.clean_rebuild import mes_compiler  # noqa: E402
+from work.clean_rebuild import translation_formatter  # noqa: E402
 
 
 def dialogue_contract(*, visible_cells: int = 12) -> RecordContract:

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import sys
 import unittest
 from pathlib import Path
 
@@ -12,10 +11,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
 SOURCES = CLEAN / "sources"
 EVIDENCE = CLEAN / "bomb_semantics.json"
-if str(CLEAN) not in sys.path:
-    sys.path.insert(0, str(CLEAN))
 
-import export_fixed_layout_review as fixed_review  # noqa: E402
+from work.clean_rebuild import export_fixed_layout_review as fixed_review  # noqa: E402
 
 
 class ReviewExportTests(unittest.TestCase):
