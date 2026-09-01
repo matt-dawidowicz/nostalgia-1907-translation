@@ -7,7 +7,7 @@ conflated:
 1. the runtime-certified 1.0.2 reference;
 2. the later 2026-08-27 translation revision, which changes playable bytes; and
 3. source-only repository maintenance that changes organization/tooling without
-   changing canonical English or the byte-producing production modules.
+   changing canonical English or byte-generating behavior.
 
 ## Read first
 
@@ -41,25 +41,32 @@ only itself.
 
 ## 2026-09-01 maintenance modernization
 
-This maintenance pass changes only the public development/tooling surface. It
-does **not** change canonical translation records, production build modules,
-binary formats, renderer behavior, frozen retail hashes, or runtime/release
-claims.
+This maintenance pass does **not** change canonical translation records,
+binary-format behavior, renderer behavior, frozen retail hashes, playable-byte
+algorithms, or runtime/release claims. It does make narrowly scoped mechanical
+changes inside maintained modules where those changes remove obsolete Python
+syntax or stale verification bookkeeping.
 
-- the supported Python floor moves from 3.10 to 3.11;
+- the supported Python floor moves from 3.10 to 3.12;
 - the Python 3.10-only `tomli` compatibility dependency and fallback code are
   removed, leaving the runtime dependency list empty;
 - the package metadata now uses a current setuptools baseline and explicit MIT
   license/repository metadata;
-- Ruff is pinned as a development-only dependency for high-signal lint checks;
-- CI now exercises Python 3.11 on Ubuntu and Python 3.14 on Windows;
+- Ruff is pinned as a development-only dependency, targets Python 3.12, and
+  enables pyupgrade checks for obsolete syntax/APIs;
+- CI now exercises Python 3.12 on Ubuntu and Python 3.14 on Windows;
 - the completed translation-proposal compatibility shim is removed rather than
   retained as an inert no-pending exporter;
 - the obsolete retired-workspace registry is removed after its durable history
-  was already captured in maintenance documentation; and
-- contributor documentation no longer advertises the retired Black/3.10 paths.
+  was already captured in maintenance documentation;
+- obsolete standalone report-writing CLIs are removed from validation libraries;
+- generic hand-written lint rules are replaced by Ruff while the project-specific
+  docstring contract remains enforced by `tools/style_audit.py`;
+- `scn_layout.py` receives only a Python-3.12-safe annotation modernization; and
+- `verification_manifest.py` drops references to the retired files so a real
+  build cannot attempt to fingerprint maintenance artifacts that no longer exist.
 
-Because the byte-producing graph and canonical English are unchanged, this pass
+Because canonical English and byte-generating behavior are unchanged, this pass
 requires source-only CI evidence and does not itself require a new Ares
 playthrough.
 
