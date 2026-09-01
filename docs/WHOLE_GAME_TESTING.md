@@ -46,6 +46,14 @@ the tester records:
 - every known text-box contract; and
 - any fixed-layout record observed in the route.
 
+Verification is fail-closed. A runtime log cannot pass unless it retains the
+supported plan schema, successful static layout and emitted-renderer summaries,
+the complete generated global/chapter/text-box inventories, and an empty runtime
+issue list. It must also bind the playtest to exact CUE and Track 1 filenames and
+64-character uppercase SHA-256 hashes. Every scope marked complete must include
+a non-empty evidence note; deleting a generated certification scope is an error,
+not a way to reduce the required coverage.
+
 This is intentionally stricter than a screenshot gallery. A screenshot is
 optional for routine success, but a defect report must identify the chapter,
 route or choice, first visible words, and whether it followed a page advance,
