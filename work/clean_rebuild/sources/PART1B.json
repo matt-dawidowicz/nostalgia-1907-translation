@@ -90,7 +90,7 @@
     {
       "index": 9,
       "policy": "translate",
-      "text": "This passenger ship has just been hijacked...no way.",
+      "text": "The Nostalgia's been hijacked...? No way.",
       "layout_policy": "adaptive"
     },
     {
@@ -126,7 +126,7 @@
     {
       "index": 15,
       "policy": "translate",
-      "text": "Hard port!",
+      "text": "Hard to port!",
       "layout_policy": "adaptive"
     },
     {
@@ -181,7 +181,7 @@
     {
       "index": 24,
       "policy": "translate",
-      "text": "Mr. Stone! Check the engine room's condition!",
+      "text": "Mr. Stone! Check the engine room and report back!",
       "layout_policy": "adaptive"
     },
     {
