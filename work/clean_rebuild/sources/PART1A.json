@@ -217,7 +217,7 @@
     {
       "index": 30,
       "policy": "translate",
-      "text": "Ilyu has a seven...that is a tricky number...",
+      "text": "Ilyu has a seven...that's a tricky number...",
       "layout_policy": "adaptive"
     },
     {
@@ -277,7 +277,7 @@
     {
       "index": 40,
       "policy": "translate",
-      "text": "I will not let her read my face!",
+      "text": "I won't let her read my face!",
       "layout_policy": "adaptive"
     },
     {
@@ -319,7 +319,7 @@
     {
       "index": 47,
       "policy": "translate",
-      "text": "Change stakes?",
+      "text": "Change the stakes?",
       "layout_policy": "adaptive"
     },
     {
@@ -391,7 +391,7 @@
     {
       "index": 59,
       "policy": "translate",
-      "text": "...I will fold.",
+      "text": "...I'll fold.",
       "layout_policy": "adaptive"
     },
     {
@@ -409,7 +409,7 @@
     {
       "index": 62,
       "policy": "translate",
-      "text": "I had a seven! Oh, lucky me! I should have raised the stakes more.",
+      "text": "I had a seven! Oh, lucky me! I should've raised the stakes more.",
       "layout_policy": "adaptive"
     },
     {
@@ -445,7 +445,7 @@
     {
       "index": 68,
       "policy": "translate",
-      "text": "I had a seven! Hee hee, you are such a fool! If you knew what your card was, you would want to jump overboard! Curious? I will not tell. It is a secret. Hee hee!",
+      "text": "I had a seven! Hee hee, you are such a fool! If you knew what your card was, you would want to jump overboard! Curious? I won't tell. It's a secret. Hee hee!",
       "layout_policy": "adaptive"
     },
     {
@@ -523,7 +523,7 @@
     {
       "index": 81,
       "policy": "translate",
-      "text": "My luck just will not turn...",
+      "text": "My luck just won't turn around...",
       "layout_policy": "adaptive"
     },
     {
@@ -547,13 +547,13 @@
     {
       "index": 85,
       "policy": "translate",
-      "text": "That scared me. Your luck is not bad either.",
+      "text": "That scared me. You're pretty lucky too.",
       "layout_policy": "adaptive"
     },
     {
       "index": 86,
       "policy": "translate",
-      "text": "I had a jack. You are honest. Being weak to bluffs will make life hard.",
+      "text": "I had a jack. You're honest. If you're easy to bluff, life won't be easy.",
       "layout_policy": "adaptive"
     },
     {
@@ -565,13 +565,13 @@
     {
       "index": 88,
       "policy": "translate",
-      "text": "You had an ace. I had a jack at a time like this...",
+      "text": "You had an ace...and I drew a jack, of all things...",
       "layout_policy": "adaptive"
     },
     {
       "index": 89,
       "policy": "translate",
-      "text": "Whew, that scared me. You are bad for my heart.",
+      "text": "Whew, that scared me. You're bad for my heart.",
       "layout_policy": "adaptive"
     },
     {
@@ -589,7 +589,7 @@
     {
       "index": 92,
       "policy": "translate",
-      "text": "I had a jack. You could afford to be timid. Folding was right.",
+      "text": "I had a jack. Playing it safe was smart. Folding was right.",
       "layout_policy": "adaptive"
     },
     {
@@ -619,7 +619,7 @@
     {
       "index": 97,
       "policy": "translate",
-      "text": "Ah, I am satisfied!",
+      "text": "Now that was satisfying!",
       "layout_policy": "adaptive"
     },
     {
@@ -643,13 +643,13 @@
     {
       "index": 101,
       "policy": "translate",
-      "text": "A man should always be willing.",
+      "text": "A man has to rise to the challenge.",
       "layout_policy": "adaptive"
     },
     {
       "index": 102,
       "policy": "translate",
-      "text": "You had an ace. I could not have won.",
+      "text": "You had an ace. I couldn't have won.",
       "layout_policy": "adaptive"
     },
     {
@@ -673,7 +673,7 @@
     {
       "index": 106,
       "policy": "translate",
-      "text": "You had an ace. I had a two! If you pushed harder, I would have folded.",
+      "text": "You had an ace. I had a two! If you'd pushed harder, I would've folded.",
       "layout_policy": "adaptive"
     },
     {
@@ -745,7 +745,7 @@
     {
       "index": 118,
       "policy": "translate",
-      "text": "You had an eight. I had a three. That is awful...",
+      "text": "You had an eight. I had a three. That's awful...",
       "layout_policy": "adaptive"
     },
     {
@@ -769,7 +769,7 @@
     {
       "index": 122,
       "policy": "translate",
-      "text": "You had an ace! I had a three! Idiot! Why did you not call?",
+      "text": "You had an ace! I had a three! Idiot! Why didn't you call?",
       "layout_policy": "adaptive"
     },
     {
@@ -781,7 +781,7 @@
     {
       "index": 124,
       "policy": "translate",
-      "text": "You had an ace. I had a three. I am sick of it...",
+      "text": "You had an ace. I had a three. I'm sick of this...",
       "layout_policy": "adaptive"
     },
     {
@@ -793,7 +793,7 @@
     {
       "index": 126,
       "policy": "translate",
-      "text": "We do not tell people who fold...",
+      "text": "We don't tell people who fold...",
       "layout_policy": "adaptive"
     },
     {
@@ -811,7 +811,7 @@
     {
       "index": 129,
       "policy": "translate",
-      "text": "I had a three. You had a four. I cannot believe I lost.",
+      "text": "I had a three. You had a four. I can't believe I lost.",
       "layout_policy": "adaptive"
     },
     {
