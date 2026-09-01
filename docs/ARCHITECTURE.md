@@ -66,9 +66,9 @@ The build path is deliberately staged:
 | `docs/` | Contributor, format, testing, revision, and release documentation |
 | `outputs/` | Ignored generated reports, comparisons, and playable products |
 
-`work/clean_rebuild/retired_workspace_register.json` is a small retained
-provenance record for pre-clean-rebuild workspaces. It is not executable legacy
-code or generated media.
+Retired workspace names and completed one-off review queues are documented in
+historical maintenance records rather than carried as active files under
+`work/clean_rebuild/`.
 
 `MANIFEST.sha256` describes the complete source-only review tree. The maintained
 `tools/source_manifest.py` generator/checker makes that inventory reproducible
@@ -116,10 +116,9 @@ supported `validate` path uses `translation_formatter.py`,
 `test_script_layout.py` suite. `export_fixed_layout_review.py` and
 `whole_game_test.py` support runtime-evidence planning.
 
-`export_translation_proposals.py` now represents only the explicit completed
-queue state. Its older active proposal-analysis machinery was a one-off review
-path and was removed after the queue reached zero. New canonical changes use the
-supported edit/validate/build path instead.
+The completed translation-proposal compatibility shim was removed after the
+queue reached zero. New canonical changes use the supported edit/validate/build
+path instead; historical review outcomes remain under `docs/` and `provenance/`.
 
 Public CI deliberately runs source-only checks without copyrighted retail
 fixtures. Retail-backed layout, semantic, archive, deterministic-build, and
