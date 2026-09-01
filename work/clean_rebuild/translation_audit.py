@@ -1,18 +1,14 @@
-#!/usr/bin/env python3
 """Fingerprint retail Japanese records and audit canonical English consistency.
 
-Japanese identity is derived from the ordered retail glyph bitmaps rather than
-from OCR or mutable English. Leading and trailing blank glyphs are removed only
-for duplicate-source grouping; exact record bytes and exact bitmap fingerprints
-remain in the report. The audit is read-only until the CLI writes its derived
-JSON and Markdown reports.
+Japanese identity is derived from ordered retail glyph bitmaps rather than OCR
+or mutable English. Leading and trailing blank glyphs are removed only for
+duplicate-source grouping; exact record bytes and bitmap fingerprints remain in
+the returned evidence.
 """
 
 from __future__ import annotations
 
-import argparse
 import hashlib
-import json
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -23,10 +19,8 @@ from mes_format import DYNAMIC_GLYPHS_PER_PREFIX, DYNAMIC_PREFIX_START, read_mes
 
 
 HERE = Path(__file__).resolve().parent
-WORKSPACE = HERE.parents[1]
 SOURCES = HERE / "sources"
 DEFAULT_RETAIL_ROOT = HERE / "retail_reference"
-DEFAULT_OUTPUT = WORKSPACE / "outputs" / "Nostalgia1907_Translation_Audit"
 EXEMPTIONS = HERE / "translation_exemptions.json"
 GLYPH_BYTES = 18
 FIXED_FONT_SHA256 = "0204DBCA3D3DC2C1B23CCC3FC10FC61DD2F1054805619B2E953247E61A1C954A"
@@ -43,7 +37,9 @@ def _load_json(path: Path) -> dict[str, object]:
 
 
 def _glyphs(
-    record: bytes, fixed: tuple[bytes, ...], dynamic: tuple[bytes, ...]
+    record: bytes,
+    fixed: tuple[bytes, ...],
+    dynamic: tuple[bytes, ...],
 ) -> tuple[bytes, ...]:
     """Resolve one retail record to its exact visible glyph bitmap sequence."""
     output: list[bytes] = []
@@ -253,7 +249,10 @@ def audit(retail_root: Path) -> dict[str, object]:
             "normalization": "leading and trailing all-zero padding glyphs removed",
             "fallback": "SHA-256 of exact retail source record bytes",
         },
-        "english_comparison_normalization": "collapse all whitespace and line wrapping to one space before duplicate-source semantic comparison",
+        "english_comparison_normalization": (
+            "collapse all whitespace and line wrapping to one space before "
+            "duplicate-source semantic comparison"
+        ),
         "canonical_english_source": str(SOURCES),
         "japanese_record_source": str(retail_root / "retail_unpacked"),
         "chapter_order": chapter_order,
@@ -272,93 +271,3 @@ def audit(retail_root: Path) -> dict[str, object]:
         "duplicate_source_groups": duplicate_groups,
         "records": all_records,
     }
-
-
-def _markdown(payload: dict[str, object]) -> str:
-    """Render the audit payload as a deterministic Markdown review table."""
-    lines = [
-        "# Nostalgia 1907 exact-source translation audit",
-        "",
-        f"- Records: {payload['record_count']}",
-        f"- Duplicate Japanese source groups: {payload['duplicate_source_group_count']}",
-        f"- Conflicting duplicate-source groups: {payload['conflicting_duplicate_group_count']}",
-        f"- Formatting-only duplicate variants (not conflicts): {payload['formatting_only_duplicate_group_count']}",
-        f"- Missing visible translations: {payload['missing_visible_translation_count']}",
-        f"- Blank/control sources marked as prose: {payload['blank_source_marked_translate_count']}",
-        "",
-        "## Duplicate Japanese source groups",
-        "",
-    ]
-    for group in payload["duplicate_source_groups"]:
-        conflict = (
-            "CONFLICT"
-            if group["conflict"]
-            else (
-                "formatting variants only"
-                if group["formatting_only_variants"]
-                else "consistent"
-            )
-        )
-        lines.extend(
-            [
-                f"### {group['normalized_bitmap_sha256']} ({conflict})",
-                "",
-                f"Category: `{group['category']}`",
-                "",
-                "| Record ID | Current English |",
-                "|---|---|",
-            ]
-        )
-        for record in group["records"]:
-            english = (
-                str(record["english_rendered"]).replace("\n", " ↵ ").replace("|", "\\|")
-                or "[missing]"
-            )
-            lines.append(f"| {record['id']} | {english} |")
-        lines.append("")
-    return "\n".join(lines)
-
-
-def main() -> None:
-    """Write JSON and Markdown audit reports for command-line review."""
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT)
-    parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument("--label", default="translation_conflicts")
-    args = parser.parse_args()
-    payload = audit(args.retail_root)
-    args.output_root.mkdir(parents=True, exist_ok=True)
-    json_path = args.output_root / f"{args.label}.json"
-    md_path = args.output_root / f"{args.label}.md"
-    json_path.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-    md_path.write_text(_markdown(payload), encoding="utf-8")
-    print(
-        json.dumps(
-            {
-                "status": payload["status"],
-                "record_count": payload["record_count"],
-                "duplicate_source_group_count": payload["duplicate_source_group_count"],
-                "conflicting_duplicate_group_count": payload[
-                    "conflicting_duplicate_group_count"
-                ],
-                "formatting_only_duplicate_group_count": payload[
-                    "formatting_only_duplicate_group_count"
-                ],
-                "missing_visible_translation_count": payload[
-                    "missing_visible_translation_count"
-                ],
-                "blank_source_marked_translate_count": payload[
-                    "blank_source_marked_translate_count"
-                ],
-                "json": str(json_path),
-                "markdown": str(md_path),
-            },
-            indent=2,
-        )
-    )
-
-
-if __name__ == "__main__":
-    main()
