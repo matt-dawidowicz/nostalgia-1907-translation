@@ -1,0 +1,29 @@
+name: Apply verifier performance edits
+
+on:
+  push:
+    branches:
+      - perf/benchmark-and-optimization-20260902
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Apply verifier performance edits
+        run: python tools/apply_verifier_perf_20260902.py
+      - name: Commit verifier performance edits
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add work tests docs
+          git diff --cached --check
+          git commit -m "Optimize trusted-reference verification"
+          git push
