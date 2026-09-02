@@ -84,6 +84,7 @@ class LzOptimizerEquivalenceTests(unittest.TestCase):
         return selected
 
     def test_optimized_compressor_matches_legacy_bytes(self) -> None:
+        """Require optimized compression to emit the exact legacy bytes."""
         rng = random.Random(1907)
         corpora = (
             b"A" * 600,
@@ -123,6 +124,7 @@ class RawCdFastPathEquivalenceTests(unittest.TestCase):
         return bytes(sector)
 
     def test_trusted_fast_path_matches_full_regeneration(self) -> None:
+        """Require selective regeneration to match the full legacy rebuild."""
         sector_count = 64
         payloads = [
             bytes(((index + offset * 17) & 0xFF) for offset in range(raw_cd.ISO_SECTOR_SIZE))
@@ -163,6 +165,7 @@ class CompilerFastPathTests(unittest.TestCase):
     """Check the cache and dormant-phase shortcuts directly."""
 
     def test_stored_cell_cache_reuses_identical_render(self) -> None:
+        """Require repeated cell rendering to hit the memoized bitmap."""
         mes_compiler.stored_cell.cache_clear()
         first = mes_compiler.stored_cell("literal", "th")
         second = mes_compiler.stored_cell("literal", "th")
@@ -172,6 +175,7 @@ class CompilerFastPathTests(unittest.TestCase):
         self.assertEqual(info.hits, 1)
 
     def test_phase_optimizer_returns_immediately_without_alternates(self) -> None:
+        """Require the dormant optimizer path to skip glyph rendering work."""
         row = mes_compiler.RowPlan(
             record=0,
             prefix=(),
