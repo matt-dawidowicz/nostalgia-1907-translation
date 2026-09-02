@@ -54,13 +54,12 @@ jobs:
           forbidden = ['Barans', 'Burns', 'Russian Mist', 'Russian Wing', 'Trianon', 'Georges Black', 'Direcktor', "Queen's English"]
           problems = []
           for path in sorted(root.glob('*.json')):
-              text = path.read_text(encoding='utf-8')
-              for needle in forbidden:
-                  if needle.lower() in text.lower():
-                      problems.append(f'{path.name}: forbidden {needle!r}')
-              data = json.loads(text)
+              data = json.loads(path.read_text(encoding='utf-8'))
               for record in data.get('records', []):
                   value = record.get('text') or ''
+                  for needle in forbidden:
+                      if needle.lower() in value.lower():
+                          problems.append(f"{path.name}:{record.get('index')}: forbidden {needle!r} in {value!r}")
                   if re.search(r'\bBlack\b', value):
                       problems.append(f"{path.name}:{record.get('index')}: Black remains in {value!r}")
           if problems:
