@@ -177,7 +177,7 @@
     {
       "index": 16,
       "policy": "translate",
-      "text": "First class...even on this little ship, it felt worlds away from second class.",
+      "text": "First class...even on this little ship, worlds away from second class.",
       "layout_policy": "adaptive"
     },
     {
@@ -549,7 +549,7 @@
     {
       "index": 78,
       "policy": "translate",
-      "text": "From first class to the captain's cabin. Good. I can retrace the route.",
+      "text": "From first class to the captain's cabin. Good. I'll retrace it.",
       "layout_policy": "adaptive"
     },
     {
