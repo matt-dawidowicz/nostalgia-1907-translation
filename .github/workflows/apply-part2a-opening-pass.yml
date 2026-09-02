@@ -1,0 +1,137 @@
+name: Apply Action 2 opening polish
+
+on:
+  push:
+    branches:
+      - translation/punchier-opening-20260901
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor == 'matt-dawidowicz'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v7
+        with:
+          ref: translation/punchier-opening-20260901
+          fetch-depth: 0
+
+      - name: Apply approved PART2A dialogue polish
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('work/clean_rebuild/sources/PART2A.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          edits = {
+              5: (
+                  "Listen. From now on, you answer to me. Show any insolence and I'll shoot you on the spot! Report every finding as the investigation proceeds. Remember, my gun is always at the back of your head.",
+                  "Listen. From now on, you answer to me. Any insolence and I'll shoot you on the spot! Report everything you find. Remember, my gun is always at the back of your head.",
+              ),
+              6: (
+                  "Is this guy under some kind of delusion?",
+                  "Is this guy delusional?",
+              ),
+              11: (
+                  "The first threat came by wireless. The next was written in rouge on the captain's window...so we find the wireless set and the rouge. Right, Manager?",
+                  "The first threat came by wireless. The next was written in rouge on the captain's window...so we start with the wireless set and the rouge. Right, Manager?",
+              ),
+              15: (
+                  "Your pronunciation is terrible. The chief officer saw the wireless set thrown overboard from a first-class cabin. The vacant room is on the starboard side.",
+                  "Your pronunciation is terrible. The chief officer saw the wireless set thrown overboard from a first-class cabin. The empty cabin is on the starboard side.",
+              ),
+              16: (
+                  "First class...on this little ship, it felt worlds away from mine.",
+                  "First class...even on this little ship, it felt worlds away from second class.",
+              ),
+              18: (
+                  "How can you prove you were not the one who threw it away? Search the starboard first-class cabins and bring me whatever you find. Now hop to it!",
+                  "How can you prove you weren't the one who threw it overboard? Search the starboard first-class cabins and bring me whatever you find. Now hop to it!",
+              ),
+              25: (
+                  "She is calm.",
+                  "She's calm.",
+              ),
+              29: (
+                  "...would you prefer me to panic? I...I'm a stewardess. I can still do my job.",
+                  "...would you rather I panic? I...I'm a stewardess. I can still do my job.",
+              ),
+              35: (
+                  "Nothing appears unusual. I inspected it before we sailed.",
+                  "Nothing looks out of place. I inspected it before we sailed.",
+              ),
+              36: (
+                  "The window is shut exactly as it was. The culprit was careful.",
+                  "The window's shut exactly as it was. The culprit was careful.",
+              ),
+              40: (
+                  "All right. For the last day of my life, I'm doing rather well.",
+                  "Not bad for the last day of my life.",
+              ),
+              49: (
+                  "I'm a good man, to my friends.",
+                  "I'm a good man, at least to my friends.",
+              ),
+              52: (
+                  "A sordid trade, being an errand-boy salesman.",
+                  "What a sordid business...being a salesman is just running errands.",
+              ),
+              55: (
+                  "The hijacker's warning came from First-Class Cabin A. Have you checked who approached it at the time of transmission?",
+                  "The hijacker's warning came from First-Class Cabin A. Did you check who came near it when the message was sent?",
+              ),
+              58: (
+                  "Idiot! You aren't here to chase keys! Get moving and investigate!",
+                  "Idiot! You're not here just to chase down keys! Get moving and investigate!",
+              ),
+              61: (
+                  "You idiot! You're not a toddling baby. Work it out yourself!",
+                  "You idiot! You're not a toddling baby. Work it out yourself!",
+              ),
+          }
+
+          changed = 0
+          for index, (expected, replacement) in edits.items():
+              record = data['records'][index]
+              assert record['index'] == index, (index, record['index'])
+              actual = record['text']
+              if index == 61 and actual == replacement:
+                  continue
+              assert actual == expected, f'PART2A:{index:03d} expected {expected!r}, got {actual!r}'
+              record['text'] = replacement
+              changed += 1
+
+          assert changed == 15, changed
+          path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8', newline='\n')
+          print(f'Applied {changed} PART2A edits')
+          PY
+
+      - name: Remove one-shot workflow and refresh manifest
+        shell: bash
+        run: |
+          git rm .github/workflows/apply-part2a-opening-pass.yml
+          python tools/source_manifest.py --root . --write
+          git add work/clean_rebuild/sources/PART2A.json MANIFEST.sha256
+
+      - name: Run source validation
+        shell: bash
+        run: |
+          python tools/source_health.py --root . --strict-release
+          python tools/source_manifest.py --root .
+          python -m compileall -q nostalgia1907.py tools tests work
+          python -m unittest discover -s tests -v
+          python -m ruff check nostalgia1907.py tools tests work
+          python tools/style_audit.py --root .
+
+      - name: Commit polished source
+        shell: bash
+        run: |
+          git config user.name "matt-dawidowicz"
+          git config user.email "43389528+matt-dawidowicz@users.noreply.github.com"
+          git commit -m "Polish Action 2 opening investigation dialogue"
+          git push origin HEAD:translation/punchier-opening-20260901
