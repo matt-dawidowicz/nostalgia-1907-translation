@@ -1,0 +1,152 @@
+name: Apply PART3B naturalization pass
+
+on:
+  push:
+    branches:
+      - translation/punchier-opening-20260901
+    paths:
+      - .github/workflows/apply-part3b-polish-20260901.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: translation/punchier-opening-20260901
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install development dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Apply approved PART3B edits
+        run: |
+          git rm .github/workflows/apply-part3b-polish-20260901.yml
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('work/clean_rebuild/sources/PART3B.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+
+          edits = {
+              33: (
+                  'Tianon and Lumeranka are clean. Lumeranka spoke to me alone. They...',
+                  'Tianon and Lumeranka are in the clear. Lumeranka spoke to me alone. They...',
+              ),
+              37: (
+                  "Listen, I'm the one who has to crawl around and run all over the scene of this case! You can sit cozily under a kotatsu eating tangerines and occasionally spout some pompous lecture! Just don't take pointless action and make this mess any worse!",
+                  "Listen, I'm the one who has to crawl around and run myself ragged on this case! You can sit cozily under a kotatsu eating tangerines and spout pompous lectures now and then! Just don't do anything pointless and make this mess any worse!",
+              ),
+              50: (
+                  "The ship will sink, yet he's sure he can escape. Isn't that confidence only the culprit could have? Voysey said it might be a third country's work...",
+                  "The ship's going to sink, yet he's sure he can escape. Only the culprit could be that confident. Voysey said a third country might be behind it...",
+              ),
+              61: (
+                  'I picked that up in London.',
+                  "I picked that up in London's backstreets.",
+              ),
+              83: (
+                  'British Intelligence has thrown everything into capturing the Russian Fog. Its number-two man even came out in person.',
+                  'British Intelligence has thrown everything into capturing the Russian Fog. They even sent their number-two man in person.',
+              ),
+              90: (
+                  'In other words, if anything happened, British intelligence would be on it at once.',
+                  'In other words, if anything happened, British Intelligence would be on it at once.',
+              ),
+              103: (
+                  "Voysey hadn't deciphered 'Mede' even immediately before the incident.",
+                  "Voysey still hadn't deciphered 'Mede' right before the incident.",
+              ),
+              114: (
+                  'Then he destroyed the communications room.',
+                  'Then he destroyed the wireless room.',
+              ),
+              121: (
+                  'You know Indian poker? You are the one person who cannot see what kind of man you are!',
+                  "You know Indian poker? You're the one person who can't see what kind of man you are!",
+              ),
+              131: (
+                  "must have known Voysey's identity and reason for boarding from the start. Right?",
+                  'must have known who Voysey was and why he was aboard from the start. Right?',
+              ),
+              138: (
+                  'How does it feel to be interrogated? I have been forced to play this ugly charade against decent people all along!',
+                  "How does it feel to be interrogated? I've been forced to put decent people through this ugly charade all along!",
+              ),
+              153: (
+                  "My sense is the Russian spies never realized Voysey's true identity.",
+                  "I don't think the Russian spies ever realized Voysey's true identity.",
+              ),
+              168: (
+                  "Even the Russian spies never knew Lord Ashby's butler was deputy chief of British Intelligence Action. The disguise was perfect. Who could see through it?",
+                  "Even the Russian spies never knew Lord Ashby's butler was the deputy chief of British Intelligence Action. The disguise was perfect. Who could see through it?",
+              ),
+              200: (
+                  'You misunderstand me. You make no effort to understand. I have professional pride, spirit, and a burning drive. Identifying the Russian Fog may be the only way to honor the Deputy Chief. When this is over, am I not the only man who can take the Fog back to Britain in his place?',
+                  'You misunderstand me. You make no effort to understand. I have my professional pride, my frustration, and an urge I can barely contain. Identifying the Russian Fog may be the only way to honor the Deputy Chief. When this is over, am I not the only man who can take the Fog back to Britain in his place?',
+              ),
+              204: (
+                  'No...Ashby, you are starting to slip. You have set off my instincts.',
+                  "No...Ashby, you're starting to slip. You've put my instincts on alert.",
+              ),
+          }
+
+          records = {record['index']: record for record in data['records']}
+          exact = data['profile']['required_text_exact']
+          changed = []
+          already = []
+
+          for index, (old, new) in edits.items():
+              record = records[index]
+              current = record['text']
+              locked = exact[str(index)]
+              if current != locked:
+                  raise SystemExit(f'PART3B:{index:03d} record/profile mismatch before edit: {current!r} != {locked!r}')
+              if current == old:
+                  record['text'] = new
+                  exact[str(index)] = new
+                  changed.append(index)
+              elif current == new:
+                  already.append(index)
+              else:
+                  raise SystemExit(f'PART3B:{index:03d} unexpected current text: {current!r}')
+
+          if set(changed) | set(already) != set(edits):
+              raise SystemExit('edit accounting mismatch')
+          if not changed:
+              raise SystemExit('no approved PART3B edits needed applying')
+
+          path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
+          print('changed:', ', '.join(f'{i:03d}' for i in changed))
+          print('already target:', ', '.join(f'{i:03d}' for i in already) or '(none)')
+          PY
+
+      - name: Refresh source manifest
+        run: python tools/source_manifest.py --root . --write
+
+      - name: Validate source tree
+        run: |
+          python tools/source_health.py --root . --strict-release
+          python tools/source_manifest.py --root .
+          python -m compileall -q nostalgia1907.py tools tests work
+          python -m unittest discover -s tests -v
+          python -m ruff check nostalgia1907.py tools tests work
+          python tools/style_audit.py --root .
+
+      - name: Commit validated changes
+        run: |
+          git config user.name 'starlight_world'
+          git config user.email '43389528+matt-dawidowicz@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git diff --cached --stat
+          git commit -m 'Naturalize PART3B Ashby confrontation'
+          git push origin HEAD:translation/punchier-opening-20260901
