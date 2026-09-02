@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import bisect
+import hashlib
 import random
 import tempfile
 import unittest
@@ -130,6 +131,9 @@ class RawCdFastPathEquivalenceTests(unittest.TestCase):
             bytes(((index + offset * 17) & 0xFF) for offset in range(raw_cd.ISO_SECTOR_SIZE))
             for index in range(sector_count)
         ]
+        first_payload = bytearray(payloads[0])
+        first_payload[: len(raw_cd.BOOT_SIGNATURE)] = raw_cd.BOOT_SIGNATURE
+        payloads[0] = bytes(first_payload)
         changed = list(payloads)
         for index in (0, 7, 31, 63):
             payload = bytearray(changed[index])
@@ -159,6 +163,38 @@ class RawCdFastPathEquivalenceTests(unittest.TestCase):
                 optimized.stat().st_size,
                 sector_count * raw_cd.RAW_SECTOR_SIZE,
             )
+
+            full_report = raw_cd.verify_track(optimized)
+            reference_hash = hashlib.sha256(template.read_bytes()).hexdigest().upper()
+            delta_report = raw_cd.verify_track(
+                optimized,
+                trusted_reference=template,
+                trusted_reference_sha256=reference_hash,
+            )
+            self.assertEqual(full_report["checksum_verified_sector_count"], sector_count)
+            self.assertEqual(delta_report["checksum_verified_sector_count"], 4)
+            self.assertEqual(delta_report["checksum_inherited_sector_count"], 60)
+            self.assertEqual(
+                delta_report["checksum_verification_mode"],
+                "trusted-reference-delta",
+            )
+            with self.assertRaisesRegex(raw_cd.RawCdError, "SHA-256 mismatch"):
+                raw_cd.verify_track(
+                    optimized,
+                    trusted_reference=template,
+                    trusted_reference_sha256="0" * 64,
+                )
+
+            damaged = bytearray(optimized.read_bytes())
+            damage_offset = 7 * raw_cd.RAW_SECTOR_SIZE + raw_cd.USER_DATA_OFFSET + 20
+            damaged[damage_offset] ^= 0x01
+            optimized.write_bytes(damaged)
+            with self.assertRaisesRegex(raw_cd.RawCdError, "invalid EDC/ECC"):
+                raw_cd.verify_track(
+                    optimized,
+                    trusted_reference=template,
+                    trusted_reference_sha256=reference_hash,
+                )
 
 
 class CompilerFastPathTests(unittest.TestCase):

@@ -17,6 +17,7 @@ See ``docs/BINARY_FORMATS.md`` for the sector map and checksum boundaries.
 
 from __future__ import annotations
 
+import hashlib
 from pathlib import Path
 
 
@@ -250,38 +251,108 @@ def iso_to_raw_fixed(
     return raw_sectors
 
 
+def _sha256_file(path: Path) -> str:
+    """Return an uppercase SHA-256 digest for one streamed file."""
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        while block := source.read(1024 * 1024):
+            digest.update(block)
+    return digest.hexdigest().upper()
+
+
 def verify_track(
-    raw_path: Path, *, compare_boot_to: Path | None = None
+    raw_path: Path,
+    *,
+    compare_boot_to: Path | None = None,
+    trusted_reference: Path | None = None,
+    trusted_reference_sha256: str | None = None,
 ) -> dict[str, object]:
-    """Validate all raw sectors, boot signature, and optional boot equality.
+    """Validate raw sectors, boot signature, and optional trusted-reference delta.
+
+    By default every sector receives a fresh EDC/ECC calculation.  A caller may
+    instead supply both ``trusted_reference`` and its independently established
+    SHA-256.  The reference bytes are authenticated before sector processing; an
+    output sector that is byte-identical to that authenticated reference inherits
+    the reference's checksum evidence, while every changed sector still receives
+    full EDC/ECC verification.
 
     Args:
         raw_path: MODE1/2352 Track 1 to inspect.
-        compare_boot_to: Optional retail template whose first 16 user-data
-            sectors must match exactly.
+        compare_boot_to: Optional template whose first 16 user-data sectors must
+            match exactly.
+        trusted_reference: Optional already-certified Track 1 used as the source
+            of checksum evidence for byte-identical sectors.
+        trusted_reference_sha256: Exact expected digest for ``trusted_reference``.
+            It must be supplied together with the reference.
 
     Returns:
-        Sector count and boot/checksum evidence for regression reports.
+        Sector count, boot evidence, verification mode, and the number of sectors
+        verified directly versus inherited by exact authenticated byte identity.
 
     Raises:
-        RawCdError: If geometry, address, checksum, signature, or boot equality
-            fails.
+        RawCdError: If geometry, address, checksum, reference identity, signature,
+            or requested boot equality fails.
     """
     size = raw_path.stat().st_size
     if size % RAW_SECTOR_SIZE:
         raise RawCdError("track has a partial raw sector")
     sector_count = size // RAW_SECTOR_SIZE
+
+    if (trusted_reference is None) != (trusted_reference_sha256 is None):
+        raise RawCdError(
+            "trusted reference and trusted reference SHA-256 must be supplied together"
+        )
+    expected_reference_hash = None
+    if trusted_reference is not None:
+        if trusted_reference.stat().st_size != size:
+            raise RawCdError("trusted reference Track 1 geometry differs")
+        expected_reference_hash = str(trusted_reference_sha256).upper()
+        if len(expected_reference_hash) != 64 or any(
+            character not in "0123456789ABCDEF"
+            for character in expected_reference_hash
+        ):
+            raise RawCdError("trusted reference SHA-256 is not 64-digit hexadecimal")
+        actual_reference_hash = _sha256_file(trusted_reference)
+        if actual_reference_hash != expected_reference_hash:
+            raise RawCdError(
+                "trusted reference SHA-256 mismatch: "
+                f"{actual_reference_hash} != {expected_reference_hash}"
+            )
+
     boot_payload = bytearray()
-    with raw_path.open("rb") as source:
-        for sector_index in range(sector_count):
-            sector = source.read(RAW_SECTOR_SIZE)
-            validate_sector_header(sector, sector_index)
-            if not verify_sector_checksums(sector):
-                raise RawCdError(f"sector {sector_index}: invalid EDC/ECC")
-            if sector_index < 16:
-                boot_payload.extend(
-                    sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE]
+    directly_verified = 0
+    inherited = 0
+    reference_stream = (
+        trusted_reference.open("rb") if trusted_reference is not None else None
+    )
+    try:
+        with raw_path.open("rb") as source:
+            for sector_index in range(sector_count):
+                sector = source.read(RAW_SECTOR_SIZE)
+                validate_sector_header(sector, sector_index)
+                reference_sector = (
+                    reference_stream.read(RAW_SECTOR_SIZE)
+                    if reference_stream is not None
+                    else None
                 )
+                if reference_sector is not None and sector == reference_sector:
+                    inherited += 1
+                else:
+                    if not verify_sector_checksums(sector):
+                        raise RawCdError(f"sector {sector_index}: invalid EDC/ECC")
+                    directly_verified += 1
+                if sector_index < 16:
+                    boot_payload.extend(
+                        sector[
+                            USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE
+                        ]
+                    )
+        if reference_stream is not None and reference_stream.read(1):
+            raise RawCdError("trusted reference has trailing raw data")
+    finally:
+        if reference_stream is not None:
+            reference_stream.close()
+
     if bytes(boot_payload[:16]) != BOOT_SIGNATURE:
         raise RawCdError("Mega-CD boot signature is missing")
 
@@ -304,6 +375,14 @@ def verify_track(
         "boot_signature": BOOT_SIGNATURE.decode("ascii"),
         "boot_matches_retail": boot_matches,
         "all_sector_checksums_valid": True,
+        "checksum_verification_mode": (
+            "trusted-reference-delta"
+            if trusted_reference is not None
+            else "full-recalculation"
+        ),
+        "checksum_verified_sector_count": directly_verified,
+        "checksum_inherited_sector_count": inherited,
+        "trusted_reference_sha256": expected_reference_hash,
     }
 
 

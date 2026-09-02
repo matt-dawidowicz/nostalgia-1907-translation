@@ -22,6 +22,7 @@ from .lz_format import parse_archive, read_member
 from .main_patch import PATCHED_SHA256, RETAIL_SHA256
 from .mes_compiler import FIXED_ENGLISH_UNITS
 from .mes_format import read_mes
+from .prepare_retail import RETAIL_TRACK1_SHA256
 from .source_json import load_json_array, load_json_object
 from .raw_cd import verify_track
 
@@ -320,7 +321,12 @@ def validate_build(
     track1 = output_root / f"{basename}_Track1.bin"
     track2 = output_root / f"{basename}_Track2.bin"
     cue = output_root / f"{basename}.cue"
-    track_report = verify_track(track1, compare_boot_to=retail_track1)
+    track_report = verify_track(
+        track1,
+        compare_boot_to=retail_track1,
+        trusted_reference=retail_track1,
+        trusted_reference_sha256=RETAIL_TRACK1_SHA256,
+    )
     if track_report["sector_count"] != retail_track1.stat().st_size // 2352:
         raise ValueError("raw Track 1 sector geometry changed")
     if track2.stat().st_size != TRACK2_SIZE or sha256(track2) != TRACK2_SHA256:

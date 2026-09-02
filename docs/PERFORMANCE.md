@@ -72,9 +72,27 @@ and produced the exact frozen logical-ISO SHA-256. A full parity-verifying
 baseline attempt exceeded 90 seconds on the shared runner before completion;
 therefore no extrapolated full-run baseline time is reported here.
 
-The release regression still performs a complete final Track 1 EDC/ECC
-verification. The optimization removes redundant work during preparation and
-reconstruction; it does not remove the final output-integrity proof.
+Release regression now authenticates the complete retail reference by its
+frozen SHA-256, proves unchanged output sectors by exact byte identity to that
+reference, and recalculates EDC/ECC only for sectors that differ. This retains
+complete output-integrity evidence while avoiding another redundant full-disc
+parity pass.
+
+### Trusted-reference regression verification
+
+A paired 4,096-sector verification benchmark measures the full legacy
+recalculation against authenticated-reference delta verification:
+
+| Case | Baseline wall | Optimized wall | Speedup | Direct EDC/ECC checks |
+| --- | ---: | ---: | ---: | ---: |
+| No changed sectors | 2.436 s | 0.013 s | 181.1x | 0 / 4,096 |
+| 128 changed sectors (3.125%) | 2.499 s | 0.092 s | 27.2x | 128 / 4,096 |
+
+On the complete 81,909-sector retail Track 1, authenticated-reference
+verification took 0.216 seconds when all sectors were identical and 0.242
+seconds when five sectors were changed and freshly checksummed. The latter
+mirrors the region-wrapper mutation count. These full-track optimized timings
+include streaming SHA-256 authentication of the reference.
 
 ## Compiler micro-optimizations
 

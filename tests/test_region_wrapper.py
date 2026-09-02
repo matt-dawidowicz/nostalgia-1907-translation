@@ -120,6 +120,7 @@ class RegionWrapperTests(unittest.TestCase):
             source = root / "source.bin"
             output = root / "output.bin"
             source.write_bytes(raw_track_from_boot(original_boot))
+            source_hash = hashlib.sha256(source.read_bytes()).hexdigest().upper()
             with patch.object(
                 region, "EXPECTED_US_SECURITY_SHA256", expected_security_hash
             ):
@@ -127,9 +128,13 @@ class RegionWrapperTests(unittest.TestCase):
                     region._write_region_track(source, output, wrapped_boot),
                     [0, 1, 2, 3, 4],
                 )
-                report = region._validate_track_delta(source, output, wrapped_boot)
+                report = region._validate_track_delta(
+                    source, output, wrapped_boot, source_hash
+                )
                 self.assertEqual(report["changed_raw_sectors"], [0, 1, 2, 3, 4])
                 self.assertTrue(report["all_sector_checksums_valid"])
+                self.assertEqual(report["checksum_verified_sector_count"], 5)
+                self.assertEqual(report["checksum_inherited_sector_count"], 11)
 
                 damaged = bytearray(output.read_bytes())
                 start = 5 * raw_cd.RAW_SECTOR_SIZE
@@ -141,7 +146,9 @@ class RegionWrapperTests(unittest.TestCase):
                 with self.assertRaisesRegex(
                     region.RegionVariantError, "outside the wrapper"
                 ):
-                    region._validate_track_delta(source, output, wrapped_boot)
+                    region._validate_track_delta(
+                        source, output, wrapped_boot, source_hash
+                    )
 
 
 if __name__ == "__main__":
