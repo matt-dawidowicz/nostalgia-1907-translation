@@ -116,7 +116,7 @@
     {
       "index": 9,
       "policy": "translate",
-      "text": "Don't lump me together with him. Ahem.",
+      "text": "Don't lump me in with him. Ahem.",
       "layout_policy": "adaptive"
     },
     {
@@ -175,7 +175,7 @@
     {
       "index": 19,
       "policy": "translate",
-      "text": "I'm back by the Royal Suites. Turn left toward the Promenade Deck.",
+      "text": "I'm back by the Royal Suites. I'll turn left toward the Promenade Deck.",
       "layout_policy": "adaptive"
     },
     {
@@ -229,7 +229,7 @@
     {
       "index": 28,
       "policy": "translate",
-      "text": "She has sharp eyes.",
+      "text": "She's got sharp eyes.",
       "layout_policy": "adaptive"
     },
     {
@@ -247,7 +247,7 @@
     {
       "index": 31,
       "policy": "translate",
-      "text": "When I was little? I never thought I'd end up on a ship myself...",
+      "text": "When I was little, I never imagined I'd end up on a ship myself...",
       "layout_policy": "adaptive"
     },
     {
@@ -265,7 +265,7 @@
     {
       "index": 34,
       "policy": "translate",
-      "text": "Turn right from the stairs. Royal Suites A and B are on the left; the attendants' rooms are on the right...heh, heh, heh!",
+      "text": "From the stairs, I'll turn right. Royal Suites A and B are on the left; the attendants' rooms are on the right...heh, heh, heh!",
       "layout_policy": "adaptive"
     },
     {
@@ -277,7 +277,7 @@
     {
       "index": 36,
       "policy": "translate",
-      "text": "The path splits. Turn left.",
+      "text": "The passage splits here. I'll go left.",
       "layout_policy": "adaptive"
     },
     {
@@ -289,7 +289,7 @@
     {
       "index": 38,
       "policy": "translate",
-      "text": "Turn right again. Ahead are the Boat Deck stairs and the passage to Center Hall.",
+      "text": "I'll turn right again. Ahead are the Boat Deck stairs and the passage to Center Hall.",
       "layout_policy": "adaptive"
     },
     {
