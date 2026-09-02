@@ -489,7 +489,7 @@
     {
       "index": 68,
       "policy": "translate",
-      "text": "About what time did you discover the threat written in rouge on your cabin window?",
+      "text": "About what time did you find the threat written in rouge on your cabin window?",
       "layout_policy": "adaptive"
     },
     {
@@ -507,7 +507,7 @@
     {
       "index": 71,
       "policy": "translate",
-      "text": "Fifteen minutes since it aired...which means...",
+      "text": "Fifteen minutes after the broadcast...which means...",
       "layout_policy": "adaptive"
     },
     {
@@ -543,13 +543,13 @@
     {
       "index": 77,
       "policy": "translate",
-      "text": "Then came the lifeboat and engine-room explosions...during them, the culprit entered the captain's cabin and wrote the threat. Several routes are possible.",
+      "text": "Then the lifeboat and engine-room explosions went off...during the chaos, the culprit entered the captain's cabin and wrote the threat. Several routes are possible.",
       "layout_policy": "adaptive"
     },
     {
       "index": 78,
       "policy": "translate",
-      "text": "First class to the captain's cabin. Good. I can retrace it.",
+      "text": "From first class to the captain's cabin. Good. I can retrace the route.",
       "layout_policy": "adaptive"
     },
     {
@@ -579,7 +579,7 @@
     {
       "index": 83,
       "policy": "translate",
-      "text": "Everyone aboard. Use the shipwide broadcast and have them wait where they were at 11:00 a.m.",
+      "text": "Use the shipwide broadcast. Have everyone aboard return to where they were at 11:00 a.m. and wait there.",
       "layout_policy": "adaptive"
     },
     {
@@ -615,7 +615,7 @@
     {
       "index": 89,
       "policy": "translate",
-      "text": "The culprit wants 'The Russian Fog.' Phrase it as something connected to that. I'm taking the map. Please make the announcement.",
+      "text": "The culprit wants 'The Russian Fog.' Tie the announcement to that somehow. I'm taking the map. Please make the announcement.",
       "layout_policy": "adaptive"
     },
     {
