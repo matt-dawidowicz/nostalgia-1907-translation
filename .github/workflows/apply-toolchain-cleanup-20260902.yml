@@ -27,7 +27,10 @@ jobs:
           python-version: '3.12'
 
       - name: Apply audited cleanup
-        run: python tools/apply_cleanup_20260902.py
+        shell: bash
+        run: |
+          python tools/apply_cleanup_20260902.py
+          python tools/fix_cleanup_transform_20260902.py
 
       - name: Stage transformed inventory
         shell: bash
@@ -46,10 +49,11 @@ jobs:
       - name: Check patch hygiene
         run: git diff --cached --check
 
-      - name: Remove one-shot applicator
+      - name: Remove one-shot applicators
         shell: bash
         run: |
           rm tools/apply_cleanup_20260902.py
+          rm tools/fix_cleanup_transform_20260902.py
           rm .github/workflows/apply-toolchain-cleanup-20260902.yml
           git add -A
           python tools/source_manifest.py --root . --write
