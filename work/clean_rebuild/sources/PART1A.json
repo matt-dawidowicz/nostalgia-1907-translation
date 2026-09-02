@@ -55,7 +55,7 @@
     {
       "index": 3,
       "policy": "translate",
-      "text": "How about we switch games and play one more round?",
+      "text": "Want to switch games and play one more round?",
       "layout_policy": "adaptive"
     },
     {
@@ -67,13 +67,13 @@
     {
       "index": 5,
       "policy": "translate",
-      "text": "Gladly. What game?",
+      "text": "You're on. What are we playing?",
       "layout_policy": "adaptive"
     },
     {
       "index": 6,
       "policy": "translate",
-      "text": "How about Indian poker? Know the rules?",
+      "text": "How about Indian poker? Know how to play?",
       "layout_policy": "adaptive"
     },
     {
@@ -97,7 +97,7 @@
     {
       "index": 10,
       "policy": "translate",
-      "text": "First, we each draw one card. Then you show me your card, and I show you mine. Neither of us can look at our own card. We bet by judging the strength of the other person's card.",
+      "text": "We each draw one card and show it to the other person, without looking at our own. Then we bet based on what we see.",
       "layout_policy": "adaptive"
     },
     {
@@ -109,43 +109,43 @@
     {
       "index": 12,
       "policy": "translate",
-      "text": "Two is strongest, followed by ace, king, queen, jack, ten, nine, eight, seven, six, five, and four. Three is weakest. Set the stakes, call, and reveal both cards. The higher card wins.",
+      "text": "Two is high. Then ace, king, queen, jack, ten down to four. Three is low. Set the bet, call, show your cards. High card wins.",
       "layout_policy": "adaptive"
     },
     {
       "index": 13,
       "policy": "translate",
-      "text": "I can see your card, but you cannot see it yourself...",
+      "text": "So I can see your card, but you can't...",
       "layout_policy": "adaptive"
     },
     {
       "index": 14,
       "policy": "translate",
-      "text": "The same goes for both of us. You can see my card, but you do not know how strong your own is.",
+      "text": "And you can see mine, but you have no idea how strong your own card is.",
       "layout_policy": "adaptive"
     },
     {
       "index": 15,
       "policy": "translate",
-      "text": "There is something suggestive about this game...it reminds me of something. All right, let us begin.",
+      "text": "That's a pretty suggestive little game...reminds me of something. All right. Let's play.",
       "layout_policy": "adaptive"
     },
     {
       "index": 16,
       "policy": "translate",
-      "text": "I know. I read your face when you see my card.",
+      "text": "I get it. I read your face when you see my card.",
       "layout_policy": "adaptive"
     },
     {
       "index": 17,
       "policy": "translate",
-      "text": "Heh. You may be tough, but I'm lucky.",
+      "text": "Heh. You look tough. But I'm a liar.",
       "layout_policy": "adaptive"
     },
     {
       "index": 18,
       "policy": "translate",
-      "text": "Women are usually liars. Let us begin.",
+      "text": "Most women are liars anyway. Let's play.",
       "layout_policy": "adaptive"
     },
     {
@@ -157,7 +157,7 @@
     {
       "index": 20,
       "policy": "translate",
-      "text": "Whoever runs out of tokens loses.",
+      "text": "Run out of tokens, you lose.",
       "layout_policy": "adaptive"
     },
     {
@@ -169,7 +169,7 @@
     {
       "index": 22,
       "policy": "translate",
-      "text": "I will strip you naked.",
+      "text": "I'll strip you bare.",
       "layout_policy": "adaptive"
     },
     {
@@ -181,7 +181,7 @@
     {
       "index": 24,
       "policy": "translate",
-      "text": "Let's do it!",
+      "text": "Let's go!",
       "layout_policy": "adaptive"
     },
     {
@@ -199,37 +199,37 @@
     {
       "index": 27,
       "policy": "translate",
-      "text": "I will keep going...",
+      "text": "I'm staying in...",
       "layout_policy": "adaptive"
     },
     {
       "index": 28,
       "policy": "translate",
-      "text": "This will be over soon.",
+      "text": "This'll be over soon.",
       "layout_policy": "adaptive"
     },
     {
       "index": 29,
       "policy": "translate",
-      "text": "Ilyu has a three. I have won...I will raise the stakes and strip her bare!",
+      "text": "A three...I've got her. Raise the stakes and strip her bare!",
       "layout_policy": "adaptive"
     },
     {
       "index": 30,
       "policy": "translate",
-      "text": "Ilyu has a seven...that is a tricky number...",
+      "text": "Ilyu has a seven...that's a tricky number...",
       "layout_policy": "adaptive"
     },
     {
       "index": 31,
       "policy": "translate",
-      "text": "Ilyu has a jack...this could be close.",
+      "text": "A jack...damn, that's tough.",
       "layout_policy": "adaptive"
     },
     {
       "index": 32,
       "policy": "translate",
-      "text": "Ilyu has a two...calling normally means certain defeat. Force a fold, or beg for mercy?",
+      "text": "A two...call and I'm dead. Scare her into folding, or beg for mercy?",
       "layout_policy": "adaptive"
     },
     {
@@ -241,13 +241,13 @@
     {
       "index": 34,
       "policy": "translate",
-      "text": "She is coming on strong...is she trying to tell me my card is bad? Is it a bluff?",
+      "text": "She's coming on strong...does that mean my card is bad? Or is she bluffing?",
       "layout_policy": "adaptive"
     },
     {
       "index": 35,
       "policy": "translate",
-      "text": "Well? How confident are you?",
+      "text": "Well? Feeling confident?",
       "layout_policy": "adaptive"
     },
     {
@@ -265,7 +265,7 @@
     {
       "index": 38,
       "policy": "translate",
-      "text": "She is acting timid...did I draw a good card?",
+      "text": "She's backing off...did I draw something good?",
       "layout_policy": "adaptive"
     },
     {
@@ -277,19 +277,19 @@
     {
       "index": 40,
       "policy": "translate",
-      "text": "I will not let her read my face!",
+      "text": "I won't let her read my face!",
       "layout_policy": "adaptive"
     },
     {
       "index": 41,
       "policy": "translate",
-      "text": "Act timid...",
+      "text": "Play it timid...",
       "layout_policy": "adaptive"
     },
     {
       "index": 42,
       "policy": "translate",
-      "text": "Your luck has run out, Ilyu. Do not come crying to me.",
+      "text": "Luck's run out, Ilyu. Don't come crying to me.",
       "layout_policy": "adaptive"
     },
     {
@@ -307,19 +307,19 @@
     {
       "index": 45,
       "policy": "translate",
-      "text": "Think that card will make me cry?",
+      "text": "You really think that card can make me cry?",
       "layout_policy": "adaptive"
     },
     {
       "index": 46,
       "policy": "translate",
-      "text": "...this is tense.",
+      "text": "...this is getting tense.",
       "layout_policy": "adaptive"
     },
     {
       "index": 47,
       "policy": "translate",
-      "text": "Change stakes?",
+      "text": "Change the stakes?",
       "layout_policy": "adaptive"
     },
     {
@@ -361,7 +361,7 @@
     {
       "index": 54,
       "policy": "translate",
-      "text": "I accept. Will you call or fold?",
+      "text": "All right. Will you call or fold?",
       "layout_policy": "adaptive"
     },
     {
@@ -391,7 +391,7 @@
     {
       "index": 59,
       "policy": "translate",
-      "text": "...I will fold.",
+      "text": "...I'll fold.",
       "layout_policy": "adaptive"
     },
     {
@@ -409,7 +409,7 @@
     {
       "index": 62,
       "policy": "translate",
-      "text": "I had a seven! Oh, lucky me! I should have raised the stakes more.",
+      "text": "I had a seven! Oh, lucky me! I should've raised the stakes more.",
       "layout_policy": "adaptive"
     },
     {
@@ -445,7 +445,7 @@
     {
       "index": 68,
       "policy": "translate",
-      "text": "I had a seven! Hee hee, you are such a fool! If you knew what your card was, you would want to jump overboard! Curious? I will not tell. It is a secret. Hee hee!",
+      "text": "I had a seven! Hee hee, you're such a fool! If you knew what your card was, you'd want to jump overboard! Curious? I won't tell. It's a secret. Hee hee!",
       "layout_policy": "adaptive"
     },
     {
@@ -457,7 +457,7 @@
     {
       "index": 70,
       "policy": "translate",
-      "text": "I had a seven. You had an ace. Feel good, beating a little girl like me?",
+      "text": "I had a seven. You had an ace. Feel good about beating a little girl like me?",
       "layout_policy": "adaptive"
     },
     {
@@ -523,7 +523,7 @@
     {
       "index": 81,
       "policy": "translate",
-      "text": "My luck just will not turn...",
+      "text": "My luck just won't turn around...",
       "layout_policy": "adaptive"
     },
     {
@@ -547,13 +547,13 @@
     {
       "index": 85,
       "policy": "translate",
-      "text": "That scared me. Your luck is not bad either.",
+      "text": "That scared me. You're pretty lucky too.",
       "layout_policy": "adaptive"
     },
     {
       "index": 86,
       "policy": "translate",
-      "text": "I had a jack. You are honest. Being weak to bluffs will make life hard.",
+      "text": "I had a jack. You're honest. If you're easy to bluff, life won't be easy.",
       "layout_policy": "adaptive"
     },
     {
@@ -565,13 +565,13 @@
     {
       "index": 88,
       "policy": "translate",
-      "text": "You had an ace. I had a jack at a time like this...",
+      "text": "You had an ace...and I drew a jack, of all things...",
       "layout_policy": "adaptive"
     },
     {
       "index": 89,
       "policy": "translate",
-      "text": "Whew, that scared me. You are bad for my heart.",
+      "text": "Whew, that scared me. You're bad for my heart.",
       "layout_policy": "adaptive"
     },
     {
@@ -589,7 +589,7 @@
     {
       "index": 92,
       "policy": "translate",
-      "text": "I had a jack. You could afford to be timid. Folding was right.",
+      "text": "I had a jack. Playing it safe was smart. Folding was right.",
       "layout_policy": "adaptive"
     },
     {
@@ -619,7 +619,7 @@
     {
       "index": 97,
       "policy": "translate",
-      "text": "Ah, I am satisfied!",
+      "text": "Now that was satisfying!",
       "layout_policy": "adaptive"
     },
     {
@@ -643,13 +643,13 @@
     {
       "index": 101,
       "policy": "translate",
-      "text": "A man should always be willing.",
+      "text": "A man has to rise to the challenge.",
       "layout_policy": "adaptive"
     },
     {
       "index": 102,
       "policy": "translate",
-      "text": "You had an ace. I could not have won.",
+      "text": "You had an ace. I couldn't have won.",
       "layout_policy": "adaptive"
     },
     {
@@ -673,7 +673,7 @@
     {
       "index": 106,
       "policy": "translate",
-      "text": "You had an ace. I had a two! If you pushed harder, I would have folded.",
+      "text": "You had an ace. I had a two! If you'd pushed harder, I would've folded.",
       "layout_policy": "adaptive"
     },
     {
@@ -745,7 +745,7 @@
     {
       "index": 118,
       "policy": "translate",
-      "text": "You had an eight. I had a three. That is awful...",
+      "text": "You had an eight. I had a three. That's awful...",
       "layout_policy": "adaptive"
     },
     {
@@ -769,7 +769,7 @@
     {
       "index": 122,
       "policy": "translate",
-      "text": "You had an ace! I had a three! Idiot! Why did you not call?",
+      "text": "You had an ace! I had a three! Idiot! Why didn't you call?",
       "layout_policy": "adaptive"
     },
     {
@@ -781,7 +781,7 @@
     {
       "index": 124,
       "policy": "translate",
-      "text": "You had an ace. I had a three. I am sick of it...",
+      "text": "You had an ace. I had a three. I'm sick of this...",
       "layout_policy": "adaptive"
     },
     {
@@ -793,7 +793,7 @@
     {
       "index": 126,
       "policy": "translate",
-      "text": "We do not tell people who fold...",
+      "text": "We don't tell people who fold...",
       "layout_policy": "adaptive"
     },
     {
@@ -811,7 +811,7 @@
     {
       "index": 129,
       "policy": "translate",
-      "text": "I had a three. You had a four. I cannot believe I lost.",
+      "text": "I had a three. You had a four. I can't believe I lost.",
       "layout_policy": "adaptive"
     },
     {
@@ -829,19 +829,19 @@
     {
       "index": 132,
       "policy": "translate",
-      "text": "This voyage looks grim...",
+      "text": "This doesn't bode well for the voyage...",
       "layout_policy": "adaptive"
     },
     {
       "index": 133,
       "policy": "translate",
-      "text": "You have some skill.",
+      "text": "You're pretty good.",
       "layout_policy": "adaptive"
     },
     {
       "index": 134,
       "policy": "translate",
-      "text": "Thanks to you, this looks like a good voyage.",
+      "text": "Thanks to you, this voyage is looking up.",
       "layout_policy": "adaptive"
     },
     {

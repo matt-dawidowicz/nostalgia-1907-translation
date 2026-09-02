@@ -109,7 +109,7 @@
     {
       "index": 8,
       "policy": "translate",
-      "text": "Sorry, but I do not want to see anyone right now.",
+      "text": "Sorry, but I don't want to see anyone right now.",
       "layout_policy": "adaptive"
     },
     {
@@ -127,7 +127,7 @@
     {
       "index": 11,
       "policy": "translate",
-      "text": "You are kind. You are wonderful.",
+      "text": "You're kind. You're wonderful.",
       "layout_policy": "adaptive"
     },
     {
@@ -139,7 +139,7 @@
     {
       "index": 13,
       "policy": "translate",
-      "text": "...words like that must be exactly what I need right now...",
+      "text": "...that may be exactly what I need to hear right now...",
       "layout_policy": "adaptive"
     },
     {
@@ -390,7 +390,7 @@
     {
       "index": 55,
       "policy": "translate",
-      "text": "There was a reason she chose to copy it. Her reason does not know it, but she unconsciously sympathized with the desire clearly present in the picture.",
+      "text": "Her conscious mind doesn't know it, but she unconsciously identified with the desire expressed in the picture.",
       "layout_policy": "adaptive"
     },
     {
@@ -402,7 +402,7 @@
     {
       "index": 57,
       "policy": "translate",
-      "text": "Her true feelings, which even she has not noticed, overflow from within her and settle here...",
+      "text": "Her true feelings, which even she has not recognized, overflow from within her and take shape here...",
       "layout_policy": "adaptive"
     },
     {
@@ -570,7 +570,7 @@
     {
       "index": 85,
       "policy": "translate",
-      "text": "What a terrible way to put it...?",
+      "text": "What a terrible way to put it...",
       "layout_policy": "adaptive"
     },
     {
@@ -696,7 +696,7 @@
     {
       "index": 106,
       "policy": "translate",
-      "text": "I only copied it. I am an imitator.",
+      "text": "I only copied it. I'm a copyist.",
       "layout_policy": "adaptive"
     },
     {
@@ -990,7 +990,7 @@
     {
       "index": 155,
       "policy": "translate",
-      "text": "Your statement clearly violates Russia's state security regulations. I could inform on you to Kirikov.",
+      "text": "I could report you to Kirikov.",
       "layout_policy": "adaptive"
     },
     {
@@ -1050,7 +1050,7 @@
     {
       "index": 165,
       "policy": "translate",
-      "text": "This is bad. I am losing the will to do this again...",
+      "text": "This is bad. I'm losing the nerve to try again...",
       "layout_policy": "adaptive"
     },
     {

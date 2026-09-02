@@ -130,7 +130,7 @@
     {
       "index": 18,
       "policy": "translate",
-      "text": "Heh. How strange...we agree. I understand a little of what you are feeling.",
+      "text": "I think I understand a little of how you feel.",
       "layout_policy": "adaptive"
     },
     {
@@ -243,7 +243,7 @@
     {
       "index": 37,
       "policy": "translate",
-      "text": "After you told me Ashby was with British Intelligence, he believed I was only an ordinary detective.",
+      "text": "After you told me that Ashby was with British Intelligence, he believed I was a mediocre detective.",
       "layout_policy": "adaptive"
     },
     {
@@ -267,7 +267,7 @@
     {
       "index": 41,
       "policy": "translate",
-      "text": "I can provide you a wider intelligence network jointly operated by Britain and Japan. Then you can do more political work.",
+      "text": "I can give you access to a wider intelligence network jointly operated by Britain and Japan.",
       "layout_policy": "adaptive"
     },
     {
@@ -285,7 +285,7 @@
     {
       "index": 44,
       "policy": "translate",
-      "text": "Ashby was still green. Who'd ever heard of a spy using bombs?",
+      "text": "Ashby was still young, and spies who used bombs were unheard of.",
       "layout_policy": "adaptive"
     },
     {

@@ -86,7 +86,7 @@
     {
       "index": 2,
       "policy": "translate",
-      "text": "Navigation Control Room",
+      "text": "Pilot House",
       "layout_policy": "adaptive"
     },
     {
@@ -104,7 +104,7 @@
     {
       "index": 5,
       "policy": "translate",
-      "text": "An insurance man? Absolutely not! The wireless is tied up with emergency traffic; we cannot spare it for a passenger. Locke! Throw this refined English gentleman out!",
+      "text": "An insurance man? Absolutely not! The wireless is tied up with emergency traffic. We can't spare it for a passenger. Locke! Throw this refined English gentleman out!",
       "layout_policy": "adaptive"
     },
     {
@@ -140,7 +140,7 @@
     {
       "index": 11,
       "policy": "translate",
-      "text": "Lloyd's members rank among the British Empire's most distinguished gentlemen: knights and nobles of baronial rank or higher, all listed in the Crown's registers. Has the United States Congress authorized you to address me in that manner?",
+      "text": "Lloyd's members are among the British Empire's most distinguished gentlemen: knights and nobles of baronial rank or higher, all listed in the Crown's registers. Has the United States Congress authorized you to address me in that manner?",
       "layout_policy": "adaptive"
     },
     {
@@ -164,7 +164,7 @@
     {
       "index": 15,
       "policy": "translate",
-      "text": "Even though we are liable for any damage to this ship?",
+      "text": "Even though we're liable for any damage to this ship?",
       "layout_policy": "adaptive"
     },
     {
@@ -176,7 +176,7 @@
     {
       "index": 17,
       "policy": "translate",
-      "text": "The times are changing. Things no one can see carry more weight by the day.",
+      "text": "Times are changing. Things no one can see carry more weight every day.",
       "layout_policy": "adaptive"
     },
     {
@@ -200,13 +200,13 @@
     {
       "index": 21,
       "policy": "translate",
-      "text": "The Nostalgia, an S-class ship of the Trans-Atlantic Company, is insured for a total of twenty thousand pounds...whew. If her hull is wrecked or she sinks, the underwriters owe roughly 1.2 million pounds. Who could pay that? The King of England?",
+      "text": "The Nostalgia, an S-class ship of the Trans-Atlantic Company, is insured for a total of twenty thousand pounds...whew. If her hull is wrecked or she sinks, the underwriters could owe nearly 1.2 million pounds. Who could pay that? The King of England?",
       "layout_policy": "adaptive"
     },
     {
       "index": 22,
       "policy": "translate",
-      "text": "Me...I and a dozen fellow underwriters back home would have to cover it. I would be ruined.",
+      "text": "Me...and a dozen fellow underwriters back home. We would all be ruined.",
       "layout_policy": "adaptive"
     },
     {
@@ -230,7 +230,7 @@
     {
       "index": 26,
       "policy": "translate",
-      "text": "A select group contracts with your company, wagering on the ship's safety. Without lifting a finger, each receives at least three thousand pounds a year.",
+      "text": "A select group contracts with your company and wagers on the ship's safety. Without lifting a finger, each receives at least three thousand pounds a year.",
       "layout_policy": "adaptive"
     },
     {
@@ -242,13 +242,13 @@
     {
       "index": 28,
       "policy": "translate",
-      "text": "Only while the ship remains safe. If an accident wrecks her, we members alone must cover the insurance.",
+      "text": "Only while she remains safe. If an accident wrecks her, we members alone must pay the claim.",
       "layout_policy": "adaptive"
     },
     {
       "index": 29,
       "policy": "translate",
-      "text": "That is brutal.",
+      "text": "That's brutal.",
       "layout_policy": "adaptive"
     },
     {
@@ -260,13 +260,13 @@
     {
       "index": 31,
       "policy": "translate",
-      "text": "1.2 million pounds...I would rather remain an ordinary sailor.",
+      "text": "1.2 million pounds...I think I'd rather stay an ordinary sailor.",
       "layout_policy": "adaptive"
     },
     {
       "index": 32,
       "policy": "translate",
-      "text": "1.2 million...but money means nothing if you are dead.",
+      "text": "1.2 million...but money's no good when you're dead.",
       "layout_policy": "adaptive"
     },
     {
@@ -290,7 +290,7 @@
     {
       "index": 36,
       "policy": "translate",
-      "text": "You murdered Fred! How many more do you mean to kill? You have seized my ship, haven't you? If you have demands, come out and say them, you bastard!",
+      "text": "You murdered Fred! How many more do you mean to kill? You've seized my ship, haven't you? If you have demands, then say them, you bastard!",
       "layout_policy": "adaptive"
     },
     {
@@ -314,7 +314,7 @@
     {
       "index": 40,
       "policy": "translate",
-      "text": "This emergency meeting is now in session. Time is short, so spare us foolish questions that waste it. We have a great deal of real work ahead.",
+      "text": "This emergency meeting is now in session. Time is short, so spare me any foolish questions. We have work to do.",
       "layout_policy": "adaptive"
     },
     {
@@ -344,7 +344,7 @@
     {
       "index": 45,
       "policy": "translate",
-      "text": "The boat deck was the center of the blast. Each lifeboat appears to have been rigged with a bomb and a precisely timed detonator. We lost all eight lifeboats.",
+      "text": "The boat deck was the center of the blast. Each lifeboat appears to have been rigged with a bomb and a timed detonator. We lost all eight.",
       "layout_policy": "adaptive"
     },
     {
@@ -423,7 +423,7 @@
     {
       "index": 58,
       "policy": "translate",
-      "text": "Only Charlie, the second engineer, survived the blast down there! Impossible is impossible! I will not invent some padded repair schedule just to please you. Besides, this is no sailing ship like those we knew. It is a triumph of civilization driven by an advanced steam engine. The mast is decoration. It cannot catch so much as a breath of wind...",
+      "text": "Only Charlie, the second engineer, survived the blast down there! Impossible means impossible! I won't make up some padded repair schedule just to please you. Besides, this is no sailing ship like those we knew. It is a triumph of civilization driven by an advanced steam engine. The mast is decoration. It cannot catch so much as a breath of wind...",
       "layout_policy": "adaptive"
     },
     {
@@ -435,7 +435,7 @@
     {
       "index": 60,
       "policy": "translate",
-      "text": "That is madness! She is a 2,700-ton steel ship! She handles nothing like those old wooden tubs!",
+      "text": "That's madness! She is a 2,700-ton steel ship! She handles nothing like those old wooden tubs!",
       "layout_policy": "adaptive"
     },
     {
@@ -453,7 +453,7 @@
     {
       "index": 63,
       "policy": "translate",
-      "text": "We are presently at the exact midpoint of the North Atlantic route.",
+      "text": "We're at the exact midpoint of the North Atlantic route.",
       "layout_policy": "adaptive"
     },
     {
@@ -477,7 +477,7 @@
     {
       "index": 67,
       "policy": "translate",
-      "text": "According to the British Shipping Office's timetable, the next vessel to pass here is the British freighter Mary Star. In three days.",
+      "text": "According to the British Shipping Office timetable, the next vessel due through here is the British freighter Mary Star. In three days.",
       "layout_policy": "adaptive"
     },
     {
@@ -543,7 +543,7 @@
     {
       "index": 78,
       "policy": "translate",
-      "text": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the wireless room, cutting us off from shore...in other words, we are completely under his control.",
+      "text": "The culprit destroyed our lifeboats, bombed the engine room, and stopped the ship. Then he destroyed the wireless room, cutting us off from shore...in other words, we're completely under his control.",
       "layout_policy": "adaptive"
     },
     {
@@ -597,7 +597,7 @@
     {
       "index": 87,
       "policy": "translate",
-      "text": "The culprit ordered us to find 'The Russian Fog.' I have no idea what those words mean.",
+      "text": "The culprit ordered us to find 'The Russian Fog.' I don't know what those words mean.",
       "layout_policy": "adaptive"
     },
     {
@@ -627,13 +627,13 @@
     {
       "index": 92,
       "policy": "translate",
-      "text": "If that is true...",
+      "text": "If that's true...",
       "layout_policy": "adaptive"
     },
     {
       "index": 93,
       "policy": "translate",
-      "text": "That California drawl of yours makes me sick! This is not a comedy! Shut your mouth!",
+      "text": "That California drawl of yours makes me sick! This isn't a comedy! Shut your mouth!",
       "layout_policy": "adaptive"
     },
     {
@@ -651,19 +651,19 @@
     {
       "index": 96,
       "policy": "translate",
-      "text": "Damn it...these are seasoned officers, yet look at them. What is happening...",
+      "text": "Damn it...these are seasoned officers, and look at them. What's happening...",
       "layout_policy": "adaptive"
     },
     {
       "index": 97,
       "policy": "translate",
-      "text": "The situation is too dire...we will not survive it by standing on ceremony.",
+      "text": "The situation is too dire...we won't survive by standing on ceremony.",
       "layout_policy": "adaptive"
     },
     {
       "index": 98,
       "policy": "translate",
-      "text": "The culprit says he will sink this ship. But not so fast! We are sailors to the bone, men of the sea! Wipe off those gloomy faces! Remember the storm in the Caribbean! It tore away our mast, yet we made it home alive! You know what to do at a time like this. You know it well! Now get to work!",
+      "text": "The culprit says he'll sink this ship. But not so fast! We're sailors to the bone, men of the sea! Wipe those gloomy looks off your faces! Remember the storm in the Caribbean! It tore away our mast, but we still made it home alive! You know what to do at a time like this. You know it! Now get to work!",
       "layout_policy": "adaptive"
     },
     {
@@ -699,13 +699,13 @@
     {
       "index": 104,
       "policy": "translate",
-      "text": "Do you know the odds that passengers survive when a ship of this size sinks?",
+      "text": "Do you know the odds of surviving when a ship this size sinks?",
       "layout_policy": "adaptive"
     },
     {
       "index": 105,
       "policy": "translate",
-      "text": "It depends on how she sinks, but without lifeboats almost everyone will perish. Half will remain trapped in the hull, and half will be caught in the vortex. Even if they escape it, no one can endure drifting on the open sea, least of all after a disaster. Within half a day they will die of exhaustion. At this time of year, sharks ride the currents into these waters and finish the rest. If you underwrote the passengers' lives as well, you have my sympathy.",
+      "text": "It depends on how she sinks, but without lifeboats almost everyone will perish. Half will be trapped in the hull, and half caught in the vortex. Even if they escape it, no one can last long adrift on the open sea after a disaster. Within half a day, exhaustion will kill them. At this time of year, sharks ride the currents into these waters and finish off the rest. If you've underwritten the passengers' lives as well, you have my sympathy.",
       "layout_policy": "adaptive"
     },
     {
@@ -717,7 +717,7 @@
     {
       "index": 107,
       "policy": "translate",
-      "text": "That is my strong suit.",
+      "text": "That's my strong suit.",
       "layout_policy": "adaptive"
     },
     {
@@ -759,7 +759,7 @@
     {
       "index": 114,
       "policy": "translate",
-      "text": "An inquiry, then.",
+      "text": "So you want an investigation.",
       "layout_policy": "adaptive"
     },
     {
@@ -777,7 +777,7 @@
     {
       "index": 117,
       "policy": "translate",
-      "text": "The captain showed me the passenger list. A Frenchman living in Paris.",
+      "text": "The captain showed me the passenger list. French, lives in Paris.",
       "layout_policy": "adaptive"
     },
     {
@@ -818,7 +818,7 @@
     {
       "index": 124,
       "policy": "translate",
-      "text": "Hm. He does not dodge the point. A good sign.",
+      "text": "Hm. Straight to the point. Good.",
       "layout_policy": "adaptive"
     },
     {
@@ -836,7 +836,7 @@
     {
       "index": 127,
       "policy": "translate",
-      "text": "If you cannot find the culprit, fabricate one from among the crew.",
+      "text": "If you cannot find the culprit, frame one of the crew.",
       "layout_policy": "adaptive"
     },
     {
@@ -860,7 +860,7 @@
     {
       "index": 131,
       "policy": "translate",
-      "text": "Perfectly! Think! If the culprit sinks this ship, we are finished...",
+      "text": "Perfectly sane! Think! If the culprit sinks this ship, we're finished...",
       "layout_policy": "adaptive"
     },
     {
@@ -890,7 +890,7 @@
     {
       "index": 136,
       "policy": "translate",
-      "text": "I accept that. But if it happens, every friend back home who shares this liability will be ruined! Do you know how much this ship is insured for? I cannot drag them down with me!",
+      "text": "I accept the risk. But if that happens, every friend back home who shares this liability will be ruined! Do you know how much this ship is insured for? I cannot drag them down with me!",
       "layout_policy": "adaptive"
     },
     {
@@ -938,19 +938,19 @@
     {
       "index": 144,
       "policy": "translate",
-      "text": "If the culprit is one of the crew, the insurance contract is void...understood. If it comes to that, we will do it.",
+      "text": "If one of the crew is the culprit, the insurance contract is void...I see. If it comes to that, we'll do it.",
       "layout_policy": "adaptive"
     },
     {
       "index": 145,
       "policy": "translate",
-      "text": "Good. He has no tiresome moral scruples.",
+      "text": "Good. No tiresome moral scruples.",
       "layout_policy": "adaptive"
     },
     {
       "index": 146,
       "policy": "translate",
-      "text": "But no case is beyond me. Leave it to me. I will find 'The Russian Fog' and unmask the culprit.",
+      "text": "No case is beyond me. Leave it to me. I'll find 'The Russian Fog' and unmask the culprit.",
       "layout_policy": "adaptive"
     },
     {
@@ -968,7 +968,7 @@
     {
       "index": 149,
       "policy": "translate",
-      "text": "I saw it...a starboard first-class cabin...something was thrown from its window just before the blast...now I understand...",
+      "text": "I saw it...one of the first-class cabins on the starboard side...something was thrown from the window just before the blast...now I understand...",
       "layout_policy": "adaptive"
     },
     {
@@ -1052,7 +1052,7 @@
     {
       "index": 163,
       "policy": "translate",
-      "text": "Quite possible, if the explosive was SBC. It can generate that much heat.",
+      "text": "That's possible. If the bomb used SBC, it could generate that much heat.",
       "layout_policy": "adaptive"
     },
     {
@@ -1064,7 +1064,7 @@
     {
       "index": 165,
       "policy": "translate",
-      "text": "Shimose Basic Cracker. An incendiary shell explosive that annihilated Russia's Baltic Fleet in the Sea of Japan two years ago. It uses the heat reaction produced when picric acid contacts metal, scattering temperatures above 2,000 degrees when it explodes. Even steel melts like taffy. No one on deck could survive.",
+      "text": "Shimose Basic Cracker. An incendiary explosive used in shells that annihilated Russia's Baltic Fleet in the Sea of Japan two years ago. It exploits the heat reaction produced when picric acid comes into contact with metal. On detonation, it releases heat exceeding 2,000 degrees in every direction. Even steel melts like taffy. No one on deck could survive.",
       "layout_policy": "adaptive"
     },
     {
@@ -1130,7 +1130,7 @@
     {
       "index": 176,
       "policy": "translate",
-      "text": "You are not saying I am definitely the culprit. That is what you mean, right?",
+      "text": "You're not saying I'm definitely the culprit. That's what you mean, right?",
       "layout_policy": "adaptive"
     },
     {
@@ -1184,7 +1184,7 @@
     {
       "index": 185,
       "policy": "translate",
-      "text": "Exactly. If I were the culprit, I would have boarded under an alias, forged my passport, and posed as a subject of Qing China or another country. Otherwise I would be a complete fool. Would someone capable of setting bombs with precise time fuses leave such an obvious trail? It was not me.",
+      "text": "Exactly. If I were the culprit, I'd have boarded under an alias, forged my passport, and posed as a subject of Qing China or some other country. Otherwise I'd be a complete fool. Would someone capable of setting bombs with precise time fuses leave such an obvious trail? It wasn't me.",
       "layout_policy": "adaptive"
     },
     {
@@ -1208,7 +1208,7 @@
     {
       "index": 189,
       "policy": "translate",
-      "text": "He feels no pressure...wrong man, detective.",
+      "text": "He doesn't seem nervous...you've got the wrong man, detective.",
       "layout_policy": "adaptive"
     },
     {
@@ -1226,7 +1226,7 @@
     {
       "index": 192,
       "policy": "translate",
-      "text": "If I catch the culprit myself, you will stop glaring at me like that, right?",
+      "text": "If I catch the culprit myself, you'll stop glaring at me like that, right?",
       "layout_policy": "adaptive"
     },
     {
@@ -1274,7 +1274,7 @@
     {
       "index": 200,
       "policy": "translate",
-      "text": "True, I did not buy Yuko a souvenir. But does that deserve this much bad luck? Seriously?",
+      "text": "True, I didn't buy Yuko a souvenir. But does that deserve this much bad luck? Seriously?",
       "layout_policy": "adaptive"
     },
     {
@@ -1286,13 +1286,13 @@
     {
       "index": 202,
       "policy": "translate",
-      "text": "He would go that far?",
+      "text": "He'd go that far?",
       "layout_policy": "adaptive"
     },
     {
       "index": 203,
       "policy": "translate",
-      "text": "What is your record for catching culprits?",
+      "text": "What's your success rate at catching culprits?",
       "layout_policy": "adaptive"
     },
     {
@@ -1304,13 +1304,13 @@
     {
       "index": 205,
       "policy": "translate",
-      "text": "I thought so. That is bad news for me.",
+      "text": "I thought so. That's bad news for me.",
       "layout_policy": "adaptive"
     },
     {
       "index": 206,
       "policy": "translate",
-      "text": "Maybe it is not too late. I should buy Yuko a souvenir from the ship's shop.",
+      "text": "Maybe it's not too late to buy Yuko a souvenir from the ship's shop.",
       "layout_policy": "adaptive"
     }
   ]

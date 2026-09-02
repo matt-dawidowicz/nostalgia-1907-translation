@@ -110,7 +110,7 @@
     {
       "index": 5,
       "policy": "translate",
-      "text": "I would hardly call it a good start...may I ask you a few questions?",
+      "text": "I wouldn't exactly say it's off to a good start...may I ask you a few questions?",
       "layout_policy": "adaptive"
     },
     {
@@ -140,7 +140,7 @@
     {
       "index": 10,
       "policy": "translate",
-      "text": "Weathered...a self-made, hands-on captain.",
+      "text": "Weathered...a hands-on captain who came up through the ranks.",
       "layout_policy": "adaptive"
     },
     {
@@ -200,7 +200,7 @@
     {
       "index": 20,
       "policy": "translate",
-      "text": "Shimose explosives burned Russian battleships like paper. However sturdy she is, this is still a passenger ship.",
+      "text": "Shimose explosives burned Russian battleships like paper. No matter how sturdy she is, this is still a passenger ship.",
       "layout_policy": "adaptive"
     },
     {
@@ -254,7 +254,7 @@
     {
       "index": 29,
       "policy": "translate",
-      "text": "It was just a prelude. Sometimes it helps to pursue something seemingly unrelated before getting to the point.",
+      "text": "Just a prelude. Sometimes it helps to start with something seemingly unrelated before getting to the point.",
       "layout_policy": "adaptive"
     },
     {
@@ -290,13 +290,13 @@
     {
       "index": 35,
       "policy": "translate",
-      "text": "There is so much here that interests me...",
+      "text": "There's so much here I'm curious about...",
       "layout_policy": "adaptive"
     },
     {
       "index": 36,
       "policy": "translate",
-      "text": "A sturdy ship draws insurers. Every offer carried unusually favorable terms.",
+      "text": "A sturdy ship attracts insurers. Every offer came with unusually favorable terms.",
       "layout_policy": "adaptive"
     },
     {
@@ -386,13 +386,13 @@
     {
       "index": 51,
       "policy": "translate",
-      "text": "Then say anything!",
+      "text": "Then say something!",
       "layout_policy": "adaptive"
     },
     {
       "index": 52,
       "policy": "translate",
-      "text": "Think about the captain's nature...",
+      "text": "Think about what kind of man the captain is...",
       "layout_policy": "adaptive"
     },
     {
@@ -404,7 +404,7 @@
     {
       "index": 54,
       "policy": "translate",
-      "text": "Wrong. Safety, and its image. Safety, certainty, lives first. People trust Trans-Atlantic ships never to have accidents.",
+      "text": "Wrong. Safety, and a reputation for it. Safety, certainty, human lives first. People trust Trans-Atlantic ships because they don't have accidents.",
       "layout_policy": "adaptive"
     },
     {
@@ -428,7 +428,7 @@
     {
       "index": 58,
       "policy": "translate",
-      "text": "A poor start...damn. This is what happens when I act on a theory I don't believe.",
+      "text": "Bad start...damn. That's what I get for pursuing a theory I don't believe myself.",
       "layout_policy": "adaptive"
     },
     {
@@ -643,7 +643,7 @@
     {
       "index": 94,
       "policy": "translate",
-      "text": "What I look at is my own business.",
+      "text": "What I look at is none of your business.",
       "layout_policy": "adaptive"
     },
     {
@@ -871,7 +871,7 @@
     {
       "index": 132,
       "policy": "translate",
-      "text": "Maybe I am crazy...that is strange.",
+      "text": "Maybe I am crazy...but that is strange.",
       "layout_policy": "adaptive"
     },
     {
@@ -1075,13 +1075,13 @@
     {
       "index": 166,
       "policy": "translate",
-      "text": "Paris's narrow-minded crowd all sneer, but I appreciate it. Everything from there is beautiful. The Russian Fog is the pinnacle...I see. So it is aboard this ship...",
+      "text": "The narrow-minded crowd in Paris sneers at it, but I appreciate it. Everything from there is beautiful. The Russian Fog is the pinnacle...I see. So it's aboard this ship...",
       "layout_policy": "adaptive"
     },
     {
       "index": 167,
       "policy": "translate",
-      "text": "The culprit thinks so...so it was a jewel...",
+      "text": "The culprit thinks so...so the Russian Fog is a jewel...",
       "layout_policy": "adaptive"
     },
     {
