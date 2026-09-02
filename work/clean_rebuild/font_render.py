@@ -17,7 +17,7 @@ these cells.
 
 from __future__ import annotations
 
-from functools import lru_cache
+from functools import cache
 from pathlib import Path
 
 from .source_json import load_json_object
@@ -185,7 +185,7 @@ def render_compact_cluster(unit: str) -> bytes:
     return _matrix_bytes(matrix)
 
 
-@lru_cache(maxsize=None)
+@cache
 def stored_cell(style: str, unit: str) -> bytes:
     """Render one canonical cell style in the game's stored orientation.
 
