@@ -154,7 +154,7 @@
     {
       "index": 13,
       "policy": "translate",
-      "text": "The Anglo-Japanese Alliance...an alliance with an overwhelming imbalance of power, though.",
+      "text": "The Anglo-Japanese Alliance...though the two powers are hardly equals.",
       "layout_policy": "adaptive"
     },
     {
@@ -190,7 +190,7 @@
     {
       "index": 19,
       "policy": "translate",
-      "text": "How's the culprit investigation going?",
+      "text": "How's the search for the culprit going?",
       "layout_policy": "adaptive"
     },
     {
@@ -244,7 +244,7 @@
     {
       "index": 28,
       "policy": "translate",
-      "text": "Like hell! Don't sit back and say whatever you please!",
+      "text": "Like hell! You don't get to sit back and say whatever you please!",
       "layout_policy": "adaptive"
     },
     {
@@ -358,7 +358,7 @@
     {
       "index": 47,
       "policy": "translate",
-      "text": "Your trainer must have been lamentable. You still have not learned the proper relation between master and servant.",
+      "text": "Your trainer must have been dreadful. You still have not learned the proper relation between master and servant.",
       "layout_policy": "adaptive"
     },
     {
@@ -502,7 +502,7 @@
     {
       "index": 71,
       "policy": "translate",
-      "text": "With him...if getting what he wanted required murder, I think he might even kill.",
+      "text": "With him...if he had to kill someone to get what he wanted, I think he would.",
       "layout_policy": "adaptive"
     },
     {
@@ -532,7 +532,7 @@
     {
       "index": 76,
       "policy": "translate",
-      "text": "Paris doesn't leave a beautiful woman alone. Surely someone like you had any number of more worthwhile jobs?",
+      "text": "Paris doesn't leave a beautiful woman alone. Surely someone like you could have found any number of more worthwhile jobs?",
       "layout_policy": "adaptive"
     },
     {
@@ -580,7 +580,7 @@
     {
       "index": 84,
       "policy": "translate",
-      "text": "You can really stand talking to Braque. I would snap in ten seconds.",
+      "text": "You can actually stand talking to Braque. I'd snap in ten seconds.",
       "layout_policy": "adaptive"
     },
     {
@@ -610,7 +610,7 @@
     {
       "index": 89,
       "policy": "translate",
-      "text": "Thank you. You have told me quite a lot.",
+      "text": "Thanks. You've told me a lot.",
       "layout_policy": "adaptive"
     },
     {
@@ -688,7 +688,7 @@
     {
       "index": 102,
       "policy": "translate",
-      "text": "Braque bought my talent and offered to be my patron. He has a weakness for young women who paint...",
+      "text": "Braque recognized my talent and offered to be my patron. He has a weakness for young women who paint...",
       "layout_policy": "adaptive"
     },
     {
@@ -748,7 +748,7 @@
     {
       "index": 112,
       "policy": "translate",
-      "text": "I see...second class really is the way to travel. You make companions. I'm jealous. You'd better warn her: Braque isn't interested in her artistic talent, but in her legs.",
+      "text": "I see...second class really is the way to travel. You meet people. I'm jealous. You'd better warn her: Braque isn't interested in her artistic talent, but in her legs.",
       "layout_policy": "adaptive"
     },
     {
@@ -814,7 +814,7 @@
     {
       "index": 123,
       "policy": "translate",
-      "text": "No...so you do work after all. Sorry. I apologize for laughing.",
+      "text": "No...so you do work after all. Sorry I laughed.",
       "layout_policy": "adaptive"
     },
     {

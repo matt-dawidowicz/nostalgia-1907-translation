@@ -48,7 +48,7 @@
     {
       "index": 2,
       "policy": "translate",
-      "text": "Fun. A con man?",
+      "text": "That was fun. Are you a con man by trade?",
       "layout_policy": "adaptive"
     },
     {
@@ -60,7 +60,7 @@
     {
       "index": 4,
       "policy": "translate",
-      "text": "Just an ordinary salesman.",
+      "text": "Afraid not. Just your average salesman.",
       "layout_policy": "adaptive"
     },
     {
@@ -90,7 +90,7 @@
     {
       "index": 9,
       "policy": "translate",
-      "text": "This passenger ship has just been hijacked...no way.",
+      "text": "The Nostalgia's been hijacked...? No way.",
       "layout_policy": "adaptive"
     },
     {
@@ -126,7 +126,7 @@
     {
       "index": 15,
       "policy": "translate",
-      "text": "Hard port!",
+      "text": "Hard to port!",
       "layout_policy": "adaptive"
     },
     {
@@ -163,7 +163,7 @@
     {
       "index": 21,
       "policy": "translate",
-      "text": "Engine room hit!",
+      "text": "The engine room's been hit!",
       "layout_policy": "adaptive"
     },
     {
@@ -181,7 +181,7 @@
     {
       "index": 24,
       "policy": "translate",
-      "text": "Mr. Stone! Check the engine room's condition!",
+      "text": "Mr. Stone! Check the engine room and report back!",
       "layout_policy": "adaptive"
     },
     {
@@ -205,7 +205,7 @@
     {
       "index": 28,
       "policy": "translate",
-      "text": "11:00 a.m. Sharp.",
+      "text": "11:00 a.m. sharp.",
       "layout_policy": "adaptive"
     },
     {

@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-01",
+  "pass": "prologue_pacing_and_voice",
+  "status": "reviewed_source_edit",
+  "base_main_sha": "7644fc181a09432f4322a281acae88691d50dfe5",
+  "scope": {
+    "record_count": 32,
+    "chapters": [
+      "START",
+      "PART1A",
+      "PART1B"
+    ],
+    "mechanics_changed": false,
+    "choice_semantics_changed": false
+  },
+  "policy": [
+    "Retail Japanese meaning remains primary.",
+    "Pacing edits tighten English without adding plot facts or changing card-game mechanics.",
+    "Kasuke remains educated/conversational and becomes blunter in internal competitive thoughts.",
+    "Ilyu remains playful and cosmopolitan; no invented accent is added.",
+    "PART1A:017 restores the source meaning that Ilyu calls herself a liar, motivating Kasuke reply in PART1A:018."
+  ],
+  "source_notes": {
+    "START:000": "Literary localization preserves the past/fantasy/future comparison and delayed recognition of the faint scar.",
+    "PART1A:003-024": "Opening Indian-poker rules and banter re-read from retail Japanese; redundant/formal English tightened.",
+    "PART1A:017": "Japanese states that Ilyu is a liar, not lucky.",
+    "PART1A:132-134": "Post-game loss/win buttons re-read from retail Japanese and tightened without changing outcome meaning.",
+    "PART1B:002-004": "Post-game con-man/salesman exchange re-read from retail Japanese and localized as casual flirtatious banter."
+  },
+  "changes": [
+    {
+      "record_id": "START:000",
+      "before": "The past blurs into fantasy just as easily as we imagine one possible future. The moment I noticed the faint scar in her left eye was not here, in this fleeting instant.",
+      "after": "The past slips into fantasy as easily as any future we imagine. I didn't notice the faint scar in her left eye then, not in that fleeting instant."
+    },
+    {
+      "record_id": "PART1A:003",
+      "before": "How about we switch games and play one more round?",
+      "after": "Want to switch games and play one more round?"
+    },
+    {
+      "record_id": "PART1A:005",
+      "before": "Gladly. What game?",
+      "after": "You're on. What are we playing?"
+    },
+    {
+      "record_id": "PART1A:006",
+      "before": "How about Indian poker? Know the rules?",
+      "after": "How about Indian poker? Know how to play?"
+    },
+    {
+      "record_id": "PART1A:010",
+      "before": "First, we each draw one card. Then you show me your card, and I show you mine. Neither of us can look at our own card. We bet by judging the strength of the other person's card.",
+      "after": "We each draw one card and show it to the other person, without looking at our own. Then we bet based on what we see."
+    },
+    {
+      "record_id": "PART1A:012",
+      "before": "Two is strongest, followed by ace, king, queen, jack, ten, nine, eight, seven, six, five, and four. Three is weakest. Set the stakes, call, and reveal both cards. The higher card wins.",
+      "after": "Two is high. Then ace, king, queen, jack, ten down to four. Three is low. Set the bet, call, show your cards. High card wins."
+    },
+    {
+      "record_id": "PART1A:013",
+      "before": "I can see your card, but you cannot see it yourself...",
+      "after": "So I can see your card, but you can't..."
+    },
+    {
+      "record_id": "PART1A:014",
+      "before": "The same goes for both of us. You can see my card, but you do not know how strong your own is.",
+      "after": "And you can see mine, but you have no idea how strong your own card is."
+    },
+    {
+      "record_id": "PART1A:015",
+      "before": "There is something suggestive about this game...it reminds me of something. All right, let us begin.",
+      "after": "That's a pretty suggestive little game...reminds me of something. All right. Let's play."
+    },
+    {
+      "record_id": "PART1A:016",
+      "before": "I know. I read your face when you see my card.",
+      "after": "I get it. I read your face when you see my card."
+    },
+    {
+      "record_id": "PART1A:017",
+      "before": "Heh. You may be tough, but I'm lucky.",
+      "after": "Heh. You look tough. But I'm a liar."
+    },
+    {
+      "record_id": "PART1A:018",
+      "before": "Women are usually liars. Let us begin.",
+      "after": "Most women are liars anyway. Let's play."
+    },
+    {
+      "record_id": "PART1A:020",
+      "before": "Whoever runs out of tokens loses.",
+      "after": "Run out of tokens, you lose."
+    },
+    {
+      "record_id": "PART1A:022",
+      "before": "I will strip you naked.",
+      "after": "I'll strip you bare."
+    },
+    {
+      "record_id": "PART1A:024",
+      "before": "Let's do it!",
+      "after": "Let's go!"
+    },
+    {
+      "record_id": "PART1A:027",
+      "before": "I will keep going...",
+      "after": "I'm staying in..."
+    },
+    {
+      "record_id": "PART1A:028",
+      "before": "This will be over soon.",
+      "after": "This'll be over soon."
+    },
+    {
+      "record_id": "PART1A:029",
+      "before": "Ilyu has a three. I have won...I will raise the stakes and strip her bare!",
+      "after": "A three...I've got her. Raise the stakes and strip her bare!"
+    },
+    {
+      "record_id": "PART1A:031",
+      "before": "Ilyu has a jack...this could be close.",
+      "after": "A jack...damn, that's tough."
+    },
+    {
+      "record_id": "PART1A:032",
+      "before": "Ilyu has a two...calling normally means certain defeat. Force a fold, or beg for mercy?",
+      "after": "A two...call and I'm dead. Scare her into folding, or beg for mercy?"
+    },
+    {
+      "record_id": "PART1A:034",
+      "before": "She is coming on strong...is she trying to tell me my card is bad? Is it a bluff?",
+      "after": "She's coming on strong...does that mean my card is bad? Or is she bluffing?"
+    },
+    {
+      "record_id": "PART1A:035",
+      "before": "Well? How confident are you?",
+      "after": "Well? Feeling confident?"
+    },
+    {
+      "record_id": "PART1A:038",
+      "before": "She is acting timid...did I draw a good card?",
+      "after": "She's backing off...did I draw something good?"
+    },
+    {
+      "record_id": "PART1A:041",
+      "before": "Act timid...",
+      "after": "Play it timid..."
+    },
+    {
+      "record_id": "PART1A:042",
+      "before": "Your luck has run out, Ilyu. Do not come crying to me.",
+      "after": "Luck's run out, Ilyu. Don't come crying to me."
+    },
+    {
+      "record_id": "PART1A:045",
+      "before": "Think that card will make me cry?",
+      "after": "You really think that card can make me cry?"
+    },
+    {
+      "record_id": "PART1A:046",
+      "before": "...this is tense.",
+      "after": "...this is getting tense."
+    },
+    {
+      "record_id": "PART1A:132",
+      "before": "This voyage looks grim...",
+      "after": "This doesn't bode well for the voyage..."
+    },
+    {
+      "record_id": "PART1A:133",
+      "before": "You have some skill.",
+      "after": "You're pretty good."
+    },
+    {
+      "record_id": "PART1A:134",
+      "before": "Thanks to you, this looks like a good voyage.",
+      "after": "Thanks to you, this voyage is looking up."
+    },
+    {
+      "record_id": "PART1B:002",
+      "before": "Fun. A con man?",
+      "after": "That was fun. Are you a con man by trade?"
+    },
+    {
+      "record_id": "PART1B:004",
+      "before": "Just an ordinary salesman.",
+      "after": "Afraid not. Just your average salesman."
+    }
+  ],
+  "validation": {
+    "mes_compile": "PASS locally: 19 chapters / 2,905 records",
+    "affected_archive_fit": {
+      "START": {
+        "mode": "fixed-slot",
+        "headroom_bytes": 228
+      },
+      "PART1A": {
+        "mode": "fixed-slot",
+        "headroom_bytes": 28
+      },
+      "PART1B": {
+        "mode": "fixed-slot",
+        "headroom_bytes": 256
+      }
+    },
+    "runtime_certified": false,
+    "note": "Candidate-bound emulator/runtime validation remains required after the broader translation correction pass."
+  }
+}

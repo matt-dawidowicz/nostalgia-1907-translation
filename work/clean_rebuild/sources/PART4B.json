@@ -130,7 +130,7 @@
     {
       "index": 18,
       "policy": "translate",
-      "text": "Then suddenly it all seemed ridiculous...I had placed my own freedom within reach, yet I was trying to escape from the Emperor...a new life, same as before: obeying some country's orders, living inside someone else's plans.",
+      "text": "...a new life, but the same as before: obeying some country's orders, living inside someone else's plans.",
       "layout_policy": "adaptive"
     },
     {
@@ -172,7 +172,7 @@
     {
       "index": 25,
       "policy": "translate",
-      "text": "Disinformation...he speaks about Russia from the credible position of a defector, feeding them nonsensical intelligence. At the same time, he steals Japanese secrets and passes them to Russia.",
+      "text": "Posing credibly as a defector, he feeds them false intelligence about Russia.",
       "layout_policy": "adaptive"
     },
     {
@@ -369,7 +369,7 @@
     {
       "index": 58,
       "policy": "translate",
-      "text": "...I am disciplined under pressure.",
+      "text": "...I'm trained to stay calm under pressure.",
       "layout_policy": "adaptive"
     },
     {
@@ -609,7 +609,7 @@
     {
       "index": 98,
       "policy": "translate",
-      "text": "...wait, Kasuke. Think again. Is connecting the bypass wire really all right like this?",
+      "text": "Are we sure this is the right way to connect the bypass wire?",
       "layout_policy": "adaptive"
     },
     {
@@ -639,7 +639,7 @@
     {
       "index": 103,
       "policy": "translate",
-      "text": "When Helsinki was occupied by the Russian army, I was still a child. The only image that truly strikes me when I speak of my homeland is...the forests and lakes of Imatra.",
+      "text": "The only image that truly comes to mind when I speak of my homeland is...the forests and lakes of Imatra.",
       "layout_policy": "adaptive"
     },
     {
@@ -813,7 +813,7 @@
     {
       "index": 132,
       "policy": "translate",
-      "text": "If we remove this screw, will it not reveal the foot of the pendulum?",
+      "text": "Won't it reveal the base of the pendulum?",
       "layout_policy": "adaptive"
     },
     {
@@ -975,7 +975,7 @@
     {
       "index": 159,
       "policy": "translate",
-      "text": "I see. We secured the current. It seems you are right this time. Tell me what came next in Siberia.",
+      "text": "The current is safely bypassed. It seems you were right this time.",
       "layout_policy": "adaptive"
     },
     {
@@ -1023,7 +1023,7 @@
     {
       "index": 167,
       "policy": "translate",
-      "text": "Finally remember?",
+      "text": "You finally remembered?",
       "layout_policy": "adaptive"
     },
     {
@@ -1563,7 +1563,7 @@
     {
       "index": 257,
       "policy": "translate",
-      "text": "Wait! Do not work with that mindset. This is fiction, remember? Do you know what is real? Ilyu, anything can happen while you are alive! Whatever happens to the Emperor, you...",
+      "text": "Don't keep working in that state of mind.",
       "layout_policy": "adaptive"
     },
     {
@@ -1581,7 +1581,7 @@
     {
       "index": 260,
       "policy": "translate",
-      "text": "Thank you, Kasuke. I don't think I'll hesitate anymore. I've decided. When I was twenty-one, I realized something was wrong. The Emperor turned Suomi into a land of suspicion and brainwashed me into distrusting everyone. I can abandon him now. The forests and lakes of Suomi matter most to me.",
+      "text": "Thank you, Kasuke. I don't think I'll hesitate anymore. I've decided. At twenty-one, I finally realize it. The Emperor turned Suomi into a land of suspicion and brainwashed me into distrusting everyone. I can abandon him now. The forests and lakes of Suomi matter most to me.",
       "layout_policy": "adaptive"
     },
     {
@@ -1647,7 +1647,7 @@
     {
       "index": 271,
       "policy": "translate",
-      "text": "I don't know...maybe my instinct as a spy to secure an escape route kicked in. Realizing the danger of continuing to follow the Emperor may have stirred these feelings...",
+      "text": "I don't know...maybe my instinct as a spy to secure an escape route kicked in. Realizing the danger of following the Emperor may have stirred these feelings...",
       "layout_policy": "adaptive"
     },
     {

@@ -103,13 +103,13 @@
       "8": "No. A simple trick question like that will not work on me.",
       "9": "As I told you, my mission was strictly against Britain, not to police my own organization.",
       "10": "Capturing Voysey alive...? I don't believe it.",
-      "11": "You are not acting directly! Something is making you hesitate!",
+      "11": "You are not acting decisively! Something is making you hesitate!",
       "12": "I am always watching...sensitivity is a fine word.",
       "13": "Again, the feel of it...thinking while sensing...",
       "14": "Always reading the flow beneath conscious thought? Intuition?",
       "15": "Or switching actions on impulse, without preparation?",
       "16": "Russia's assassination bureau...you serve the same country, don't you?",
-      "17": "General Intelligence and Internal Security are separate, so even aboard the same ship I couldn't identify them.",
+      "17": "General Intelligence and Internal Security are completely separate sections, so even aboard the same ship I couldn't identify them.",
       "18": "Besides, there is a killer...",
       "19": "I concede the wager. What is your objective?",
       "20": "Only to finish the voyage safely and return to my old life.",
@@ -118,7 +118,7 @@
       "23": "The name is real...I prefer myself when I am lying.",
       "24": "Don't play games with me!",
       "25": "Why become a spy?",
-      "26": "I had no choice...no one can understand my twenty-one years.",
+      "26": "I had no choice...no one could understand what those twenty-one years were like.",
       "27": "...an opening...are you showing me a weakness?",
       "28": "What is wrong? You should be able to handle me better.",
       "29": "You are someone who can live alone.",
@@ -143,7 +143,7 @@
       "49": "Th-that knife...it belonged to Tainui Adjell...",
       "50": "The Killer",
       "51": "A mere salesman exposed you? From now on, you will obey every order I give.",
-      "52": "Heh. What kind of interrogator stays silent? You will leave your subject at a loss.",
+      "52": "What kind of interrogator stays silent? You'll only leave your subject confused.",
       "53": "...",
       "54": "I am at a loss too.",
       "55": "Have you ever been interrogated?",
@@ -157,23 +157,23 @@
       "63": "Do not try to trap me. Defectors are not always alone. Or did you expect to make me cry?",
       "64": "You are seriously twisted.",
       "65": "Sometimes I wonder whether everything others understand so naturally is exactly what I fail to grasp. I even doubt my own insight.",
-      "66": "Maybe you simply cannot prey on people's weaknesses.",
+      "66": "Maybe you simply can't exploit people's weaknesses.",
       "67": "I cannot see them...I understand my own thoughts, but...do I? I may not even understand those.",
       "68": "Once, while undercover in Prague, I was caught and interrogated.",
       "69": "The interrogator was a veteran.",
       "70": "Can you imagine how terrified I was?",
       "71": "If he read my thoughts and exposed me, I would be executed.",
       "72": "Fear of reliving that drove me to defect.",
-      "73": "Defection destroys your whole life. Even on dangerous missions, you have comrades who value you and a place where you belong.",
+      "73": "Defection means abandoning your entire life.",
       "74": "Sounds like quiet, ordinary work.",
       "75": "I am serious.",
       "76": "Did you survive?",
-      "77": "I never showed my true feelings. I trusted my disguise. I acted every day, toward everyone...",
-      "78": "...at all times.",
+      "77": "I was acting every day, with everyone...",
+      "78": "...all the time.",
       "79": "Acting every day...",
       "80": "Her walls are too high...how can I ever step inside?",
       "81": "Even now?",
-      "82": "It became a habit. I doubt even my passing feelings. Is this my true heart? Is this feeling real? I no longer know.",
+      "82": "Is this what I truly feel? Is this feeling real?",
       "83": "Ilyu's true feelings...",
       "84": "To defect, you must be alone. As you are now.",
       "85": "No one can know that.",
@@ -205,7 +205,7 @@
       "111": "...the time bomb.",
       "112": "Why are you relying on me now?",
       "113": "You bastard! You forced me to confess!",
-      "114": "The person offering sanctuary may be the bomber, an agent of a third country. If so, must you really defect to Britain?",
+      "114": "The person offering you sanctuary may be behind the bombing, an agent of a third country. If so, does your destination for defection really have to be Britain?",
       "115": "That is absurd...",
       "116": "Pathetic.",
       "117": "Try any little trick...",
@@ -223,7 +223,7 @@
       "129": "The bomber wants me. Hand me over, and the ship will be saved.",
       "130": "Kill me, and you will never know who wants you.",
       "131": "...I will not kill you.",
-      "132": "The culprit won't disarm it. This ship proves the theft, so he can't let it reach Southampton. At 7 p.m. the bomb destroys it. We must catch him, tie him before it, and force him to disarm it.",
+      "132": "The culprit won't disarm the bomb. This ship is evidence of the theft, so he can't let it reach Southampton. At 7:00 p.m. the bomb will destroy it. Our only move is to catch the culprit, tie him up in front of the bomb, and make him disarm it himself.",
       "133": "The culprit must have an escape route. Hand me over.",
       "134": "So anywhere but Britain will do?",
       "135": "Anywhere outside Russia's satellite states.",
@@ -317,7 +317,7 @@
     {
       "index": 11,
       "policy": "translate",
-      "text": "You are not acting directly! Something is making you hesitate!",
+      "text": "You are not acting decisively! Something is making you hesitate!",
       "layout_policy": "adaptive"
     },
     {
@@ -353,7 +353,7 @@
     {
       "index": 17,
       "policy": "translate",
-      "text": "General Intelligence and Internal Security are separate, so even aboard the same ship I couldn't identify them.",
+      "text": "General Intelligence and Internal Security are completely separate sections, so even aboard the same ship I couldn't identify them.",
       "layout_policy": "adaptive"
     },
     {
@@ -407,7 +407,7 @@
     {
       "index": 26,
       "policy": "translate",
-      "text": "I had no choice...no one can understand my twenty-one years.",
+      "text": "I had no choice...no one could understand what those twenty-one years were like.",
       "layout_policy": "adaptive"
     },
     {
@@ -562,7 +562,7 @@
     {
       "index": 52,
       "policy": "translate",
-      "text": "Heh. What kind of interrogator stays silent? You will leave your subject at a loss.",
+      "text": "What kind of interrogator stays silent? You'll only leave your subject confused.",
       "layout_policy": "adaptive"
     },
     {
@@ -646,7 +646,7 @@
     {
       "index": 66,
       "policy": "translate",
-      "text": "Maybe you simply cannot prey on people's weaknesses.",
+      "text": "Maybe you simply can't exploit people's weaknesses.",
       "layout_policy": "adaptive"
     },
     {
@@ -688,7 +688,7 @@
     {
       "index": 73,
       "policy": "translate",
-      "text": "Defection destroys your whole life. Even on dangerous missions, you have comrades who value you and a place where you belong.",
+      "text": "Defection means abandoning your entire life.",
       "layout_policy": "adaptive"
     },
     {
@@ -712,13 +712,13 @@
     {
       "index": 77,
       "policy": "translate",
-      "text": "I never showed my true feelings. I trusted my disguise. I acted every day, toward everyone...",
+      "text": "I was acting every day, with everyone...",
       "layout_policy": "adaptive"
     },
     {
       "index": 78,
       "policy": "translate",
-      "text": "...at all times.",
+      "text": "...all the time.",
       "layout_policy": "adaptive"
     },
     {
@@ -742,7 +742,7 @@
     {
       "index": 82,
       "policy": "translate",
-      "text": "It became a habit. I doubt even my passing feelings. Is this my true heart? Is this feeling real? I no longer know.",
+      "text": "Is this what I truly feel? Is this feeling real?",
       "layout_policy": "adaptive"
     },
     {
@@ -934,7 +934,7 @@
     {
       "index": 114,
       "policy": "translate",
-      "text": "The person offering sanctuary may be the bomber, an agent of a third country. If so, must you really defect to Britain?",
+      "text": "The person offering you sanctuary may be behind the bombing, an agent of a third country. If so, does your destination for defection really have to be Britain?",
       "layout_policy": "adaptive"
     },
     {
@@ -1042,7 +1042,7 @@
     {
       "index": 132,
       "policy": "translate",
-      "text": "The culprit won't disarm it. This ship proves the theft, so he can't let it reach Southampton. At 7 p.m. the bomb destroys it. We must catch him, tie him before it, and force him to disarm it.",
+      "text": "The culprit won't disarm the bomb. This ship is evidence of the theft, so he can't let it reach Southampton. At 7:00 p.m. the bomb will destroy it. Our only move is to catch the culprit, tie him up in front of the bomb, and make him disarm it himself.",
       "layout_policy": "adaptive"
     },
     {
@@ -1293,7 +1293,7 @@
     {
       "index": 174,
       "policy": "translate",
-      "text": "Enough...get attached and you'll pay for it...",
+      "text": "Enough...get emotionally involved and life makes you pay...",
       "layout_policy": "adaptive"
     },
     {
@@ -1365,7 +1365,7 @@
     {
       "index": 186,
       "policy": "translate",
-      "text": "Careless of you...never trust your boss. That is the first rule of working life.",
+      "text": "That is the first rule of the workplace.",
       "layout_policy": "adaptive"
     },
     {
@@ -1383,7 +1383,7 @@
     {
       "index": 189,
       "policy": "translate",
-      "text": "The accomplice is Dunant. I kept pressing Ashby, so he had Dunant write the second claim statement in a rush. It lacked planning.",
+      "text": "The accomplice is Dunant. Because I kept pressing my suspicion of Ashby, Ashby had Dunant write the second claim statement. It was rushed and lacked planning.",
       "layout_policy": "adaptive"
     },
     {
@@ -1515,7 +1515,7 @@
     {
       "index": 211,
       "policy": "translate",
-      "text": "That would be the other Russian spy, Ilyusha. She killed Voysey, and Braque too. She mistook Braque for a British Intelligence agent. She couldn't allow Kirikov, the Russian Fog, to be taken.",
+      "text": "Then it's the other Russian spy, Ilyusha. She killed Voysey. She also killed Braque because she mistook him for a man in British Intelligence. She couldn't let Kirikov, the Russian Fog, be taken away.",
       "layout_policy": "adaptive"
     },
     {

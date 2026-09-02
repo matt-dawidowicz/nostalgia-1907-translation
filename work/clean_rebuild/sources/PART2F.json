@@ -243,19 +243,19 @@
     {
       "index": 25,
       "policy": "translate",
-      "text": "I love to paint. It lets my heart wander anywhere...to Braque, though, each painting was only merchandise.",
+      "text": "I love to paint. It lets my heart wander anywhere...but to Braque, every painting was just merchandise.",
       "layout_policy": "adaptive"
     },
     {
       "index": 26,
       "policy": "translate",
-      "text": "You cannot live on art alone.",
+      "text": "You can't live on art alone.",
       "layout_policy": "adaptive"
     },
     {
       "index": 27,
       "policy": "translate",
-      "text": "I do not believe you killed him.",
+      "text": "I don't believe you killed him.",
       "layout_policy": "adaptive"
     },
     {
@@ -417,7 +417,7 @@
     {
       "index": 54,
       "policy": "translate",
-      "text": "I see...but Kasuke, you will solve this, won't you?",
+      "text": "I see...but Kasuke, you'll solve this, won't you?",
       "layout_policy": "adaptive"
     },
     {
@@ -453,7 +453,7 @@
     {
       "index": 60,
       "policy": "translate",
-      "text": "It is like a riddle from the Sphinx, young man.",
+      "text": "It's like a riddle of the Sphinx, young man.",
       "layout_policy": "adaptive"
     },
     {
@@ -495,7 +495,7 @@
     {
       "index": 67,
       "policy": "translate",
-      "text": "When people hide the truth, they substitute one word for another. Yet the words they choose still carry the impression of the truth beneath them.",
+      "text": "When people hide the truth, they substitute one word for another. Yet the words they choose still carry traces of the truth beneath them.",
       "layout_policy": "adaptive"
     },
     {
@@ -621,7 +621,7 @@
     {
       "index": 88,
       "policy": "translate",
-      "text": "If we knew who it was, we would not be struggling.",
+      "text": "If we knew who it was, we wouldn't be struggling.",
       "layout_policy": "adaptive"
     },
     {
@@ -663,7 +663,7 @@
     {
       "index": 95,
       "policy": "translate",
-      "text": "Hard eyes. He is no civilian.",
+      "text": "Those hard eyes...he's no civilian.",
       "layout_policy": "adaptive"
     },
     {
@@ -813,13 +813,13 @@
     {
       "index": 120,
       "policy": "translate",
-      "text": "Heynwood was my subordinate. I didn't believe the accusation. The second message came six months later, signed by the sender.",
+      "text": "Heynwood was my subordinate. I didn't believe the accusation. Six months later, a second message came, this time signed.",
       "layout_policy": "adaptive"
     },
     {
       "index": 121,
       "policy": "translate",
-      "text": "Barnes, employed by British Intelligence, is a spy for the Russian side.",
+      "text": "Barnes of British Intelligence is a spy for Russia.",
       "layout_policy": "adaptive"
     },
     {
@@ -939,7 +939,7 @@
     {
       "index": 141,
       "policy": "translate",
-      "text": "Regrettably, Director. Our investigation confirms that Heynwood and Burns are Russian agents.",
+      "text": "Regrettably, Director. Our investigation confirms that Heynwood and Barnes are Russian agents.",
       "layout_policy": "adaptive"
     },
     {
@@ -951,7 +951,7 @@
     {
       "index": 143,
       "policy": "translate",
-      "text": "Then every allegation made by Russian Fog was correct.",
+      "text": "Then every allegation made by the Russian Fog was true.",
       "layout_policy": "adaptive"
     },
     {
@@ -963,7 +963,7 @@
     {
       "index": 145,
       "policy": "translate",
-      "text": "What does Russian Fog want?",
+      "text": "What does the Russian Fog want?",
       "layout_policy": "adaptive"
     },
     {
@@ -1005,7 +1005,7 @@
     {
       "index": 152,
       "policy": "translate",
-      "text": "I accept the risk. If it comes to that, I still have nerve enough to take my own life. This is no work for a younger man. Let me have one last assignment before I retire.",
+      "text": "I accept the risk. If it comes to that, I still have the nerve to take my own life. This is no job for a younger man. Let me have one last assignment before I retire.",
       "layout_policy": "adaptive"
     },
     {
@@ -1161,7 +1161,7 @@
     {
       "index": 178,
       "policy": "translate",
-      "text": "Why not? I'm the employer of Dunant, who is effectively your superior. Show some respect.",
+      "text": "Why not? I'm Dunant's employer, and he's effectively your superior. Show some respect.",
       "layout_policy": "adaptive"
     },
     {
@@ -1173,13 +1173,13 @@
     {
       "index": 180,
       "policy": "translate",
-      "text": "The wireless room and captain's cabin announcements still point to you.",
+      "text": "The announcements from the wireless room and captain's cabin still point to you.",
       "layout_policy": "adaptive"
     },
     {
       "index": 181,
       "policy": "translate",
-      "text": "You pry too much. Salesman is a vulgar profession.",
+      "text": "You pry too much. Being a salesman is a vulgar profession.",
       "layout_policy": "adaptive"
     },
     {
