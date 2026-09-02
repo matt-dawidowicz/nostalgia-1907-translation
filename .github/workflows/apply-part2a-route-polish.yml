@@ -45,10 +45,6 @@ jobs:
                   "Follow this passage to second class. Cabins C and D are on the right. The shop is ahead.",
                   "This passage leads to second class. Cabins C and D are on the right. The shop is straight ahead.",
               ),
-              98: (
-                  "...what should I get Yuko?",
-                  "...What should I get Yuko?",
-              ),
               102: (
                   "The culprit did not come through the passage toward second class. I should turn around and head forward.",
                   "The culprit didn't come this way toward second class. I'll turn around and head forward.",
