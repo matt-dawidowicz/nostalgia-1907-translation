@@ -21,6 +21,10 @@ jobs:
         include:
           - os: ubuntu-latest
             python-version: "3.12"
+          - os: ubuntu-latest
+            python-version: "3.13"
+          - os: ubuntu-latest
+            python-version: "3.14"
           - os: windows-latest
             python-version: "3.14"
 
@@ -33,24 +37,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
+          cache-dependency-path: requirements-dev.txt
 
-      - name: Install project and development checks
-        run: python -m pip install -e ".[dev]"
+      - name: Install source-quality tools
+        run: python -m pip install -r requirements-dev.txt
 
-      - name: Audit source-only release tree
-        run: python tools/source_health.py --root . --strict-release
-
-      - name: Verify source review manifest
-        run: python tools/source_manifest.py --root .
-
-      - name: Compile maintained Python
-        run: python -m compileall -q nostalgia1907.py tools tests work
-
-      - name: Run source-only tests
-        run: python -m unittest discover -s tests -v
-
-      - name: Run Ruff lint checks
-        run: python -m ruff check nostalgia1907.py tools tests work
-
-      - name: Audit project docstring policy
-        run: python tools/style_audit.py --root .
+      - name: Run complete source-only validation
+        run: python -m tools.source_checks --root . --strict-release
