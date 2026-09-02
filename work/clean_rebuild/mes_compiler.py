@@ -409,6 +409,9 @@ def _optimize_phases(
     fixed_by_bitmap: dict[bytes, int],
 ) -> None:
     """Choose row phases that minimize actual record-plus-glyph-tail bytes."""
+    if not any(row.alternate is not None for row in rows):
+        return
+
     retained = set(retained_glyphs)
     row_glyphs = {
         id(row): (

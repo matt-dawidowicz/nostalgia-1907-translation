@@ -21,6 +21,7 @@ writer invariants.
 from __future__ import annotations
 
 import bisect
+from collections import deque
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -200,17 +201,20 @@ def _match_length(data: bytes, position: int, distance: int, limit: int) -> int:
 
 
 def _copy_candidates(
-    data: bytes, positions: list[list[int]], position: int
+    data: bytes, positions: dict[int, list[int]], position: int
 ) -> list[Op]:
-    """Enumerate every encodable copy ending at ``position``.
+    """Enumerate encodable copies ending at ``position``.
 
-    Candidate ordering is stable and therefore participates in deterministic
-    dynamic-programming tie breaking.
+    Copy commands require at least two bytes, so candidates are indexed by the
+    two-byte sequence ending at each possible source position.  This preserves
+    the original ascending source order and therefore deterministic tie
+    breaking, while avoiding the much larger set of one-byte false matches.
     """
     max_distance = min(0xFFF, len(data) - position)
-    if position <= 0 or max_distance <= 0:
+    if position < 2 or max_distance <= 0:
         return []
-    matching = positions[data[position - 1]]
+    key = (data[position - 2] << 8) | data[position - 1]
+    matching = positions.get(key, [])
     first = bisect.bisect_left(matching, position)
     last = bisect.bisect_right(matching, position - 1 + max_distance)
     operations: list[Op] = []
@@ -231,21 +235,53 @@ def _copy_candidates(
 
 
 def _choose_operations(data: bytes) -> list[tuple[int, Op]]:
-    """Find the minimum-bit backward parse with deterministic tie breaking."""
-    positions: list[list[int]] = [[] for _ in range(256)]
-    for index, byte in enumerate(data):
-        positions[byte].append(index)
+    """Find the minimum-bit backward parse with deterministic tie breaking.
+
+    Literal costs are affine in run length, so the long-literal range can use
+    a monotonic sliding minimum instead of rescanning up to 256 predecessors at
+    every byte.  Equal-cost minima retain the shortest literal, exactly matching
+    the previous ascending-length loop.
+    """
+    positions: dict[int, list[int]] = {}
+    for endpoint in range(1, len(data)):
+        key = (data[endpoint - 1] << 8) | data[endpoint]
+        positions.setdefault(key, []).append(endpoint)
     infinity = 10**18
     costs = [infinity] * (len(data) + 1)
     choices: list[Op | None] = [None] * (len(data) + 1)
     costs[0] = 0
+    long_literals: deque[tuple[int, int]] = deque()
     for position in range(1, len(data) + 1):
-        for length in range(1, min(264, position) + 1):
-            operation: Op = ("literal", length, 0)
-            cost = costs[position - length] + _op_cost(operation)
+        # Lengths 1..8 have a five-bit command overhead.  There are only eight
+        # candidates, so evaluating them directly is cheaper and preserves the
+        # original shortest-length tie preference.
+        for length in range(1, min(8, position) + 1):
+            cost = costs[position - length] + 5 + length * 8
             if cost < costs[position]:
                 costs[position] = cost
-                choices[position] = operation
+                choices[position] = ("literal", length, 0)
+
+        # Lengths 9..264 cost costs[j] + 11 + 8*(position-j).
+        # Maintain the minimum of costs[j] - 8*j over the legal predecessor
+        # window.  Newer equal minima replace older ones so ties choose the
+        # larger j, i.e. the shorter literal, matching the legacy loop.
+        eligible = position - 9
+        if eligible >= 0:
+            value = costs[eligible] - 8 * eligible
+            while long_literals and value <= long_literals[-1][1]:
+                long_literals.pop()
+            long_literals.append((eligible, value))
+        minimum_index = position - 264
+        while long_literals and long_literals[0][0] < minimum_index:
+            long_literals.popleft()
+        if long_literals:
+            predecessor = long_literals[0][0]
+            length = position - predecessor
+            cost = costs[predecessor] + 11 + length * 8
+            if cost < costs[position]:
+                costs[position] = cost
+                choices[position] = ("literal", length, 0)
+
         for operation in _copy_candidates(data, positions, position):
             cost = costs[position - operation[1]] + _op_cost(operation)
             if cost < costs[position]:

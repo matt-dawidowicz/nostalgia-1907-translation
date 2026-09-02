@@ -190,20 +190,27 @@ def raw_to_iso(raw_path: Path, iso_path: Path, *, verify: bool = True) -> int:
 
 
 def iso_to_raw_fixed(
-    template_raw_path: Path, iso_path: Path, output_raw_path: Path
+    template_raw_path: Path,
+    iso_path: Path,
+    output_raw_path: Path,
+    *,
+    trust_template_checksums: bool = False,
 ) -> int:
     """Rebuild Track 1 using retail raw sectors as an exact-size template.
 
     The logical ISO must contain exactly one user-data payload per template
-    sector. Headers are preserved from retail and all checksum fields are
-    regenerated after installing each 2,048-byte payload.
+    sector. Headers are preserved from retail. Changed user-data sectors receive
+    freshly generated EDC/ECC. When ``trust_template_checksums`` is true, an
+    unchanged user-data sector is copied byte-for-byte instead; callers may use
+    that fast path only after independently authenticating the complete template
+    bytes (the clean rebuild does so with the frozen retail SHA-256).
 
     Returns:
         Number of raw sectors written.
 
     Raises:
-        RawCdError: If sizes, headers, source checksums, or rebuilt checksums
-            violate the fixed-geometry contract.
+        RawCdError: If sizes, headers, or rebuilt geometry violate the
+            fixed-geometry contract.
     """
     raw_size = template_raw_path.stat().st_size
     iso_size = iso_path.stat().st_size
@@ -231,6 +238,12 @@ def iso_to_raw_fixed(
             validate_sector_header(sector, sector_index)
             if len(payload) != ISO_SECTOR_SIZE:
                 raise RawCdError(f"sector {sector_index}: short ISO read")
+            original_payload = sector[
+                USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE
+            ]
+            if trust_template_checksums and payload == original_payload:
+                output.write(sector)
+                continue
             sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE] = payload
             regenerate_checksums(sector)
             output.write(sector)

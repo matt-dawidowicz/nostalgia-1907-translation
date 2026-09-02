@@ -479,7 +479,12 @@ def _build_once(
     output_track1 = product_root / f"{basename}_Track1.bin"
     output_track2 = product_root / f"{basename}_Track2.bin"
     output_cue = product_root / f"{basename}.cue"
-    iso_to_raw_fixed(track1, build_root / "translated.iso", output_track1)
+    iso_to_raw_fixed(
+        track1,
+        build_root / "translated.iso",
+        output_track1,
+        trust_template_checksums=True,
+    )
     shutil.copyfile(track2, output_track2)
     write_two_track_cue(output_cue, output_track1, output_track2)
     verification = validate_build(build_root, product_root, track1, track2, basename)
