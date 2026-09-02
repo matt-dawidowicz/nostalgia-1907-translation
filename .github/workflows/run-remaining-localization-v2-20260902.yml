@@ -41,6 +41,40 @@ jobs:
           script = script[:cond_start] + 'conditional_names = {}\n' + script[changed_start:]
           exec(compile(script, '<remaining-localization-payload>', 'exec'), {})
           PY
+      - name: Normalize reviewed ellipsis continuations
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          fixes = {
+              'PART3B_': {
+                  3: "Laugh at me, Charlie. Even though I've got the target in my sights, I can't kill him...don't be angry...I've been a coward since I was a kid. Give me a little more time...",
+              },
+              'PART3C': {
+                  166: "Maybe I'm an idiot for not noticing...if he has even one accomplice...",
+                  174: "Enough...get emotionally involved and life will make you pay for it...",
+              },
+              'PART4B': {
+                  110: "But you like her? ...a little strange...but somehow, that's lovely.",
+                  142: "One day, the instructor in charge of me changed...this is boring. Let us stop. I have nothing more to say.",
+                  184: "Another battery again...what mission did the Emperor give you?",
+                  286: "There are two choices...Ilyu, earlier you said you had to choose, right? What did you have to choose between?",
+              },
+          }
+          root = Path('work/clean_rebuild/sources')
+          for chapter, mapping in fixes.items():
+              path = root / f'{chapter}.json'
+              data = json.loads(path.read_text(encoding='utf-8'))
+              records = {r['index']: r for r in data['records']}
+              profile_exact = (data.get('profile') or {}).get('required_text_exact', {})
+              for idx, text in mapping.items():
+                  records[idx]['text'] = text
+                  if str(idx) in profile_exact:
+                      profile_exact[str(idx)] = text
+              path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
       - name: Refresh manifest
         run: python tools/source_manifest.py --root . --write
       - name: Whole-corpus terminology consistency scan
