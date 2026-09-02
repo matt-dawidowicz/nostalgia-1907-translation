@@ -355,13 +355,13 @@
     {
       "index": 37,
       "policy": "translate",
-      "text": "I don't understand...why must anyone be killed over this?",
+      "text": "I don't understand...why does anyone have to die over this?",
       "layout_policy": "adaptive"
     },
     {
       "index": 38,
       "policy": "translate",
-      "text": "How should I know? Maybe you have a split personality, like Jekyll and Hyde. Without realizing it, another you may be committing this whole series of crimes...you're a murderer...can you deny it?",
+      "text": "How should I know? Maybe you've got a split personality, like Jekyll and Hyde. Without realizing it, your other self could be committing this whole series of crimes...you're a murderer...can you deny it?",
       "layout_policy": "adaptive"
     },
     {
@@ -440,7 +440,7 @@
     {
       "index": 51,
       "policy": "translate",
-      "text": "What a fat little thing...Betty will do. Let us poke around inside this box...",
+      "text": "What a fat little thing...Betty will do. Let's poke around inside this box...",
       "layout_policy": "adaptive"
     },
     {
@@ -470,7 +470,7 @@
     {
       "index": 56,
       "policy": "translate",
-      "text": "Bypass wire...enough for a detour, but I don't need it yet. I know that...damn, my palms are sweating...",
+      "text": "Bypass wire...enough to reroute the current, but I don't need it yet. I know that...damn, my palms are sweating...",
       "layout_policy": "adaptive"
     },
     {
@@ -740,7 +740,7 @@
     {
       "index": 101,
       "policy": "translate",
-      "text": "It is connected to the battery.",
+      "text": "It's connected to the battery.",
       "layout_policy": "adaptive"
     },
     {
@@ -1112,7 +1112,7 @@
     {
       "index": 163,
       "policy": "translate",
-      "text": "...might that be a trap too?",
+      "text": "...could that be another trap?",
       "layout_policy": "adaptive"
     },
     {
@@ -1238,7 +1238,7 @@
     {
       "index": 184,
       "policy": "translate",
-      "text": "Well, another door farther in. Betty, why are you like this?",
+      "text": "Well, there's another door farther in. Betty, why are you like this?",
       "layout_policy": "adaptive"
     },
     {
@@ -1256,7 +1256,7 @@
     {
       "index": 187,
       "policy": "translate",
-      "text": "If there is a defense circuit, opening the lid is out.",
+      "text": "If there's a defense circuit, opening the lid is out.",
       "layout_policy": "adaptive"
     },
     {
