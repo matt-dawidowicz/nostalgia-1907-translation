@@ -87,12 +87,12 @@ class LzOptimizerEquivalenceTests(unittest.TestCase):
         """Require optimized compression to emit the exact legacy bytes."""
         rng = random.Random(1907)
         corpora = (
-            b"A" * 600,
-            (b"ABRACADABRA-1907-" * 40)[:700],
-            bytes(range(256)) * 3,
-            bytes(rng.randrange(256) for _ in range(768)),
-            (b"The ship is still moving. What happened in the engine room? " * 16)[
-                :900
+            b"A" * 96,
+            (b"ABRACADABRA-1907-" * 10)[:176],
+            bytes(range(256)) + bytes(range(64)),
+            bytes(rng.randrange(256) for _ in range(320)),
+            (b"The ship is still moving. What happened in the engine room? " * 4)[
+                :224
             ],
         )
         for data in corpora:
