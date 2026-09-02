@@ -1,0 +1,227 @@
+name: Apply PART2E/PART2F naturalization
+
+on:
+  push:
+    branches:
+      - translation/punchier-opening-20260901
+    paths:
+      - .github/workflows/apply-part2ef-naturalization-20260902.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: translation/punchier-opening-20260901
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install project and development dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Apply approved PART2E and PART2F edits
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          edits = {
+              "PART2E": {
+                  37: (
+                      "I don't understand...why must anyone be killed over this?",
+                      "I don't understand...why does anyone have to die over this?",
+                  ),
+                  38: (
+                      "How should I know? Maybe you have a split personality, like Jekyll and Hyde. Without realizing it, another you may be committing this whole series of crimes...you're a murderer...can you deny it?",
+                      "How should I know? Maybe you've got a split personality, like Jekyll and Hyde. Without realizing it, your other self could be committing this whole series of crimes...you're a murderer...can you deny it?",
+                  ),
+                  51: (
+                      "What a fat little thing...Betty will do. Let us poke around inside this box...",
+                      "What a fat little thing...Betty will do. Let's poke around inside this box...",
+                  ),
+                  56: (
+                      "Bypass wire...enough for a detour, but I don't need it yet. I know that...damn, my palms are sweating...",
+                      "Bypass wire...enough to reroute the current, but I don't need it yet. I know that...damn, my palms are sweating...",
+                  ),
+                  101: (
+                      "It is connected to the battery.",
+                      "It's connected to the battery.",
+                  ),
+                  163: (
+                      "...might that be a trap too?",
+                      "...could that be another trap?",
+                  ),
+                  184: (
+                      "Well, another door farther in. Betty, why are you like this?",
+                      "Well, there's another door farther in. Betty, why are you like this?",
+                  ),
+                  187: (
+                      "If there is a defense circuit, opening the lid is out.",
+                      "If there's a defense circuit, opening the lid is out.",
+                  ),
+              },
+              "PART2F": {
+                  25: (
+                      "I love to paint. It lets my heart wander anywhere...to Braque, though, each painting was only merchandise.",
+                      "I love to paint. It lets my heart wander anywhere...but to Braque, every painting was just merchandise.",
+                  ),
+                  26: (
+                      "You cannot live on art alone.",
+                      "You can't live on art alone.",
+                  ),
+                  27: (
+                      "I do not believe you killed him.",
+                      "I don't believe you killed him.",
+                  ),
+                  54: (
+                      "I see...but Kasuke, you will solve this, won't you?",
+                      "I see...but Kasuke, you'll solve this, won't you?",
+                  ),
+                  60: (
+                      "It is like a riddle from the Sphinx, young man.",
+                      "It's like a riddle of the Sphinx, young man.",
+                  ),
+                  67: (
+                      "When people hide the truth, they substitute one word for another. Yet the words they choose still carry the impression of the truth beneath them.",
+                      "When people hide the truth, they substitute one word for another. Yet the words they choose still carry traces of the truth beneath them.",
+                  ),
+                  88: (
+                      "If we knew who it was, we would not be struggling.",
+                      "If we knew who it was, we wouldn't be struggling.",
+                  ),
+                  95: (
+                      "Hard eyes. He is no civilian.",
+                      "Those hard eyes...he's no civilian.",
+                  ),
+                  120: (
+                      "Heynwood was my subordinate. I didn't believe the accusation. The second message came six months later, signed by the sender.",
+                      "Heynwood was my subordinate. I didn't believe the accusation. Six months later, a second message came, this time signed.",
+                  ),
+                  121: (
+                      "Barnes, employed by British Intelligence, is a spy for the Russian side.",
+                      "Barnes of British Intelligence is a spy for Russia.",
+                  ),
+                  141: (
+                      "Regrettably, Director. Our investigation confirms that Heynwood and Burns are Russian agents.",
+                      "Regrettably, Director. Our investigation confirms that Heynwood and Barnes are Russian agents.",
+                  ),
+                  143: (
+                      "Then every allegation made by Russian Fog was correct.",
+                      "Then every allegation made by the Russian Fog was true.",
+                  ),
+                  145: (
+                      "What does Russian Fog want?",
+                      "What does the Russian Fog want?",
+                  ),
+                  152: (
+                      "I accept the risk. If it comes to that, I still have nerve enough to take my own life. This is no work for a younger man. Let me have one last assignment before I retire.",
+                      "I accept the risk. If it comes to that, I still have the nerve to take my own life. This is no job for a younger man. Let me have one last assignment before I retire.",
+                  ),
+                  178: (
+                      "Why not? I'm the employer of Dunant, who is effectively your superior. Show some respect.",
+                      "Why not? I'm Dunant's employer, and he's effectively your superior. Show some respect.",
+                  ),
+                  180: (
+                      "The wireless room and captain's cabin announcements still point to you.",
+                      "The announcements from the wireless room and captain's cabin still point to you.",
+                  ),
+                  181: (
+                      "You pry too much. Salesman is a vulgar profession.",
+                      "You pry too much. Being a salesman is a vulgar profession.",
+                  ),
+              },
+          }
+
+          total = 0
+          for chapter, chapter_edits in edits.items():
+              path = Path(f"work/clean_rebuild/sources/{chapter}.json")
+              data = json.loads(path.read_text(encoding="utf-8"))
+              records = {record["index"]: record for record in data["records"]}
+
+              for index, (old, new) in chapter_edits.items():
+                  actual = records[index].get("text")
+                  if actual != old:
+                      raise SystemExit(
+                          f"{chapter}:{index:03d} changed unexpectedly.\n"
+                          f"Expected: {old!r}\nActual:   {actual!r}"
+                      )
+                  records[index]["text"] = new
+                  total += 1
+
+              path.write_text(
+                  json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+                  encoding="utf-8",
+              )
+
+          if total != 25:
+              raise SystemExit(f"Expected 25 edits, applied {total}")
+          print(f"Applied {total} approved canonical text edits.")
+          PY
+
+      - name: Remove temporary workflow and refresh manifest
+        shell: bash
+        run: |
+          git rm .github/workflows/apply-part2ef-naturalization-20260902.yml
+          python tools/source_manifest.py --root . --write
+
+      - name: Verify change scope
+        shell: bash
+        run: |
+          python - <<'PY'
+          import subprocess
+
+          expected = {
+              ".github/workflows/apply-part2ef-naturalization-20260902.yml",
+              "MANIFEST.sha256",
+              "work/clean_rebuild/sources/PART2E.json",
+              "work/clean_rebuild/sources/PART2F.json",
+          }
+          changed = set(
+              subprocess.check_output(
+                  ["git", "diff", "--name-only", "HEAD"], text=True
+              ).splitlines()
+          )
+          if changed != expected:
+              raise SystemExit(
+                  "Unexpected changed paths:\n"
+                  + "\n".join(sorted(changed))
+                  + "\nExpected:\n"
+                  + "\n".join(sorted(expected))
+              )
+          print("Change scope is exact.")
+          PY
+
+      - name: Source health
+        run: python tools/source_health.py --root . --strict-release
+
+      - name: Source manifest
+        run: python tools/source_manifest.py --root .
+
+      - name: Compile maintained Python
+        run: python -m compileall -q nostalgia1907.py tools tests work
+
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Ruff
+        run: python -m ruff check nostalgia1907.py tools tests work
+
+      - name: Documentation and style policy
+        run: python tools/style_audit.py --root .
+
+      - name: Commit approved edits
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Naturalize PART2E and PART2F dialogue"
+          git push origin HEAD:translation/punchier-opening-20260901
