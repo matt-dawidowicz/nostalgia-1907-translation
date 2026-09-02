@@ -1,0 +1,101 @@
+name: Apply PART2B naturalization
+
+on:
+  push:
+    branches:
+      - translation/punchier-opening-20260901
+    paths:
+      - .github/workflows/apply-part2b-naturalization.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v7
+        with:
+          ref: translation/punchier-opening-20260901
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install project and development checks
+        run: python -m pip install -e ".[dev]"
+
+      - name: Apply approved PART2B edits
+        shell: bash
+        run: |
+          git rm .github/workflows/apply-part2b-naturalization.yml
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("work/clean_rebuild/sources/PART2B.json")
+          data = json.loads(path.read_text(encoding="utf-8"))
+          records = {r["index"]: r for r in data["records"]}
+          changes = {
+              9: (
+                  "Don't lump me together with him. Ahem.",
+                  "Don't lump me in with him. Ahem.",
+              ),
+              19: (
+                  "I'm back by the Royal Suites. Turn left toward the Promenade Deck.",
+                  "I'm back by the Royal Suites. I'll turn left toward the Promenade Deck.",
+              ),
+              28: (
+                  "She has sharp eyes.",
+                  "She's got sharp eyes.",
+              ),
+              31: (
+                  "When I was little? I never thought I'd end up on a ship myself...",
+                  "When I was little, I never imagined I'd end up on a ship myself...",
+              ),
+              34: (
+                  "Turn right from the stairs. Royal Suites A and B are on the left; the attendants' rooms are on the right...heh, heh, heh!",
+                  "From the stairs, I'll turn right. Royal Suites A and B are on the left; the attendants' rooms are on the right...heh, heh, heh!",
+              ),
+              36: (
+                  "The path splits. Turn left.",
+                  "The passage splits here. I'll go left.",
+              ),
+              38: (
+                  "Turn right again. Ahead are the Boat Deck stairs and the passage to Center Hall.",
+                  "I'll turn right again. Ahead are the Boat Deck stairs and the passage to Center Hall.",
+              ),
+          }
+          for index, (old, new) in changes.items():
+              actual = records[index]["text"]
+              if actual != old:
+                  raise SystemExit(f"PART2B:{index:03d} assertion failed: {actual!r} != {old!r}")
+              records[index]["text"] = new
+          path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+          print(f"Applied {len(changes)} approved PART2B edits")
+          PY
+          python tools/source_manifest.py --root . --write
+
+      - name: Validate source tree
+        shell: bash
+        run: |
+          python tools/source_health.py --root . --strict-release
+          python tools/source_manifest.py --root .
+          python -m compileall -q nostalgia1907.py tools tests work
+          python -m unittest discover -s tests -v
+          python -m ruff check nostalgia1907.py tools tests work
+          python tools/style_audit.py --root .
+
+      - name: Commit and push
+        shell: bash
+        run: |
+          git config user.name "starlight_world"
+          git config user.email "43389528+matt-dawidowicz@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "Polish PART2B route dialogue"
+          git push origin HEAD:translation/punchier-opening-20260901
