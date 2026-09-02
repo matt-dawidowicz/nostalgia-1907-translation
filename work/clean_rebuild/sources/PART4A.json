@@ -81,7 +81,7 @@
     {
       "index": 10,
       "policy": "translate",
-      "text": "I found the rouge from the second manifesto. Compare them and see.",
+      "text": "I found the stick of rouge used for the second manifesto. Compare it with this one.",
       "layout_policy": "adaptive"
     },
     {
@@ -99,7 +99,7 @@
     {
       "index": 13,
       "policy": "translate",
-      "text": "Ilyusha Grancelius. The second rouge was in her room.",
+      "text": "Ilyusha Grancelius. The other stick of rouge was in her room.",
       "layout_policy": "adaptive"
     },
     {
@@ -171,7 +171,7 @@
     {
       "index": 25,
       "policy": "translate",
-      "text": "Keep making a fuss and I won't mind shooting one of you! Get moving!",
+      "text": "Keep making a fuss and I won't hesitate to shoot one of you! Get moving!",
       "layout_policy": "adaptive"
     },
     {
@@ -315,7 +315,7 @@
     {
       "index": 49,
       "policy": "translate",
-      "text": "I do not like it.",
+      "text": "I don't like this.",
       "layout_policy": "adaptive"
     },
     {
