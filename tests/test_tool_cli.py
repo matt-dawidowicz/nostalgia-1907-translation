@@ -5,7 +5,6 @@ from __future__ import annotations
 import ast
 import hashlib
 import json
-import re
 import tempfile
 import unittest
 from argparse import Namespace
@@ -58,13 +57,13 @@ class ManifestTests(unittest.TestCase):
                 nostalgia1907.normalized_text_sha256(crlf),
             )
 
-    def test_package_and_manifest_versions_match(self) -> None:
-        """Require packaging metadata to match the operator manifest version."""
+    def test_repository_is_not_a_distribution_package(self) -> None:
+        """Keep project versioning in the operator manifest, not package metadata."""
         manifest = nostalgia1907.load_manifest(ROOT)
         pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-        match = re.search(r'(?m)^version = "([^"]+)"$', pyproject)
-        self.assertIsNotNone(match)
-        self.assertEqual(match.group(1), manifest["tool"]["version"])
+        self.assertNotIn("[project]", pyproject)
+        self.assertNotIn("[build-system]", pyproject)
+        self.assertRegex(manifest["tool"]["version"], r"^[0-9]+\.[0-9]+\.[0-9]+$")
 
     def test_manifest_and_local_config_reject_duplicate_keys(self) -> None:
         """Reject last-key-wins ambiguity in root operator configuration."""
@@ -181,37 +180,6 @@ class CliContractTests(unittest.TestCase):
         )
         self.assertEqual(result["status"], "SKIP")
 
-    def test_static_source_inventory_excludes_vendored_runtimes(self) -> None:
-        """Exclude installed analysis runtimes from the reviewed source inventory."""
-        manifest = nostalgia1907.load_manifest(ROOT)
-        sources = nostalgia1907.operator_python_sources(ROOT, manifest)
-        self.assertIn(ROOT / "nostalgia1907.py", sources)
-        self.assertTrue(all(".runtime" not in path.parts for path in sources))
-
-    def test_static_source_inventory_is_recursive(self) -> None:
-        """Compile future maintained packages without entering local runtimes."""
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            nested = root / "work" / "clean_rebuild" / "package" / "module.py"
-            nested.parent.mkdir(parents=True)
-            nested.write_text('"""Nested."""\n', encoding="utf-8", newline="\n")
-            runtime = (
-                root
-                / "work"
-                / "clean_rebuild"
-                / ".runtime"
-                / "ignored.py"
-            )
-            runtime.parent.mkdir(parents=True)
-            runtime.write_text('"""Ignored."""\n', encoding="utf-8", newline="\n")
-            (root / "nostalgia1907.py").write_text(
-                '"""Root."""\n', encoding="utf-8", newline="\n"
-            )
-            manifest = {"paths": {"clean_rebuild": "work/clean_rebuild"}}
-            sources = nostalgia1907.operator_python_sources(root, manifest)
-            self.assertIn(nested.resolve(), sources)
-            self.assertNotIn(runtime.resolve(), sources)
-
     def test_validate_runs_every_source_gate_before_retail_gates(self) -> None:
         """Keep the documented complete validation sequence executable."""
         manifest = nostalgia1907.load_manifest(ROOT)
@@ -259,13 +227,9 @@ class CliContractTests(unittest.TestCase):
         self.assertEqual(
             events,
             [
-                "tools/source_health.py",
-                "Python static compilation",
-                "Source-only unit tests",
-                "tools/style_audit.py",
+                "tools/source_checks.py",
                 "retail",
                 "work/clean_rebuild/translation_formatter.py",
-                "work/clean_rebuild/test_script_layout.py",
                 "comparison",
                 "work/clean_rebuild/translation_validation.py",
             ],

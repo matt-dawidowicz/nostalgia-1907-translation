@@ -35,27 +35,6 @@ ACTIVE_PROFILE_FIELDS = frozenset(
         "role_overrides",
     }
 )
-LEGACY_PROFILE_FIELDS = frozenset(
-    {
-        "choice_render_cell_limit",
-        "require_choice_segments",
-        "exclude_choice_segments_from_wrap",
-        "infer_scn_layouts",
-        "infer_all_replacement_segments",
-        "require_selector_window_segments",
-        "scn_selector_window_subtypes",
-        "validate_runtime_row_boundaries",
-        "validate_text_hygiene",
-        "validate_wrapped_text_integrity",
-        "validate_scn_floating_row_limits",
-        "validate_single_option_transition_rows",
-        "no_pad_final_row_segments",
-        "single_option_transition_row_exclude",
-        "preserve_previous_wrapped_text",
-        "preserve_previous_wrapped_text_exclude",
-    }
-)
-
 INDEXED_LAYOUT_FIELDS = frozenset(
     {"layout_overrides", "runtime_layout_overrides"}
 )
@@ -233,15 +212,14 @@ def validate_profile(
     chapter: str,
     records: Sequence[object] | None = None,
 ) -> frozenset[str]:
-    """Validate profile identity and return present legacy no-op fields.
+    """Validate profile identity and reject retired or unknown fields.
 
     Args:
         profile: Embedded canonical profile, or ``None`` when absent.
         chapter: Canonical chapter identifier that the profile must describe.
 
     Returns:
-        Legacy field names present in the profile. They are accepted for
-        provenance but have no production effect.
+        An empty compatibility set. Retired migration fields are rejected.
 
     Raises:
         ValueError: If the profile is not an object, contains an unknown field,
@@ -252,7 +230,7 @@ def validate_profile(
         return frozenset()
     if not isinstance(profile, dict):
         raise ValueError(f"{chapter}: embedded profile is not an object")
-    unknown = set(profile) - ACTIVE_PROFILE_FIELDS - LEGACY_PROFILE_FIELDS
+    unknown = set(profile) - ACTIVE_PROFILE_FIELDS
     if unknown:
         joined = ", ".join(sorted(unknown))
         raise ValueError(f"{chapter}: profile contains unknown fields: {joined}")
@@ -288,7 +266,7 @@ def validate_profile(
             raise ValueError(
                 f"{chapter}: invalid forbidden text pattern {pattern!r}: {error}"
             ) from error
-    return frozenset(set(profile).intersection(LEGACY_PROFILE_FIELDS))
+    return frozenset()
 
 
 def profile_text_failures(

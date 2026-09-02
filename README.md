@@ -57,15 +57,15 @@ Use Python 3.12 or newer. From a fresh clone:
 ```powershell
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install -e .
+# The toolchain runs directly from this checkout; no project install is required.
 ```
 
 The production and operator tooling has no third-party runtime dependencies.
-Contributors who run the full source-quality suite should install the `dev`
-extra, which currently pins Ruff:
+Contributors who run the source-quality suite install the repository-local
+development requirements (Ruff and mypy):
 
 ```powershell
-python -m pip install -e ".[dev]"
+python -m pip install -r requirements-dev.txt
 ```
 
 Put machine-specific paths only in the ignored `nostalgia1907.local.json`:
@@ -95,12 +95,7 @@ weaken an input hash or boundary check to accept a different retail revision.
 No game media is needed for the public source checks:
 
 ```powershell
-python tools/source_health.py --root . --strict-release
-python tools/source_manifest.py --root .
-python -m compileall -q nostalgia1907.py tools tests work
-python -m unittest discover -s tests -v
-python -m ruff check nostalgia1907.py tools tests work
-python tools/style_audit.py --root .
+python -m tools.source_checks --root . --strict-release
 ```
 
 `MANIFEST.sha256` is the deterministic inventory for the source-only review

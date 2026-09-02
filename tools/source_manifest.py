@@ -5,9 +5,12 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import os
-import subprocess
 from pathlib import Path
+
+try:
+    from tools.repository_inventory import RepositoryInventoryError, git_tracked_files
+except ModuleNotFoundError:  # Direct ``python tools/<script>.py`` execution.
+    from repository_inventory import RepositoryInventoryError, git_tracked_files
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,32 +38,11 @@ class ManifestInventoryError(RuntimeError):
 
 
 def _git_tracked_files(root: Path) -> tuple[Path, ...] | None:
-    """Return tracked files when ``root`` is a Git checkout, otherwise ``None``."""
-    if not (root / ".git").exists():
-        return None
+    """Return tracked files while preserving manifest-specific diagnostics."""
     try:
-        completed = subprocess.run(
-            ("git", "-C", str(root), "ls-files", "-z", "--cached"),
-            check=True,
-            capture_output=True,
-        )
-    except (OSError, subprocess.CalledProcessError) as exc:
-        raise ManifestInventoryError(
-            "could not enumerate Git-tracked source files"
-        ) from exc
-    relative_paths = tuple(
-        Path(os.fsdecode(raw_path))
-        for raw_path in completed.stdout.split(b"\0")
-        if raw_path
-    )
-    missing = [path for path in relative_paths if not (root / path).is_file()]
-    if missing:
-        names = ", ".join(path.as_posix() for path in missing[:5])
-        suffix = " ..." if len(missing) > 5 else ""
-        raise ManifestInventoryError(
-            f"tracked source files are missing from the checkout: {names}{suffix}"
-        )
-    return relative_paths
+        return git_tracked_files(root)
+    except RepositoryInventoryError as error:
+        raise ManifestInventoryError(str(error)) from error
 
 
 def manifest_files(root: Path) -> tuple[Path, ...]:

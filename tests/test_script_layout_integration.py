@@ -8,13 +8,13 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from . import mes_compiler
-from .font_render import GLYPH_BYTES, stored_cell
-from .mes_compiler import compile_files
-from .mes_format import DYNAMIC_PREFIX_START, parse_mes
-from .renderer_format import measure_literal
-from .source_json import load_json_object
-from .scn_layout import (
+from work.clean_rebuild import mes_compiler
+from work.clean_rebuild.font_render import GLYPH_BYTES, stored_cell
+from work.clean_rebuild.mes_compiler import compile_files
+from work.clean_rebuild.mes_format import DYNAMIC_PREFIX_START, parse_mes
+from work.clean_rebuild.renderer_format import measure_literal
+from work.clean_rebuild.source_json import load_json_object
+from work.clean_rebuild.scn_layout import (
     ROLE_CHOICE,
     ROLE_CONTINUATION,
     ROLE_DIALOGUE,
@@ -26,13 +26,13 @@ from .scn_layout import (
     TEXT_BOX_LOWER_DIALOGUE,
     infer_contracts,
 )
-from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
-from .translation_formatter import (
+from work.clean_rebuild.translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
+from work.clean_rebuild.translation_formatter import (
     _renderer_boundary_failures,
     audit_layouts,
     format_preview,
 )
-from .whole_game_test import build_plan, verify_runtime_log
+from work.clean_rebuild.whole_game_test import build_plan, verify_runtime_log
 
 
 HERE = Path(__file__).resolve().parent

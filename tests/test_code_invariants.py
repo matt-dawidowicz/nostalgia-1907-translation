@@ -10,17 +10,19 @@ from pathlib import Path
 from unittest.mock import patch
 
 
+from work.clean_rebuild import iso9660
+from work.clean_rebuild import mes_compiler
+from work.clean_rebuild import mes_format
+from work.clean_rebuild import renderer_format
+from work.clean_rebuild import rebuild as clean_rebuild
+from work.clean_rebuild import scn_layout
+from work.clean_rebuild import translation_formatter
+
+import test_script_layout_integration as layout_tests
+
+
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
-
-from work.clean_rebuild import iso9660  # noqa: E402
-from work.clean_rebuild import mes_compiler  # noqa: E402
-from work.clean_rebuild import mes_format  # noqa: E402
-from work.clean_rebuild import renderer_format  # noqa: E402
-from work.clean_rebuild import rebuild as clean_rebuild  # noqa: E402
-from work.clean_rebuild import scn_layout  # noqa: E402
-from work.clean_rebuild import test_script_layout as layout_tests  # noqa: E402
-from work.clean_rebuild import translation_formatter  # noqa: E402
 
 
 def mes_bytes(pointers: tuple[int, ...], script: bytes) -> bytes:
@@ -909,10 +911,7 @@ class RebuildSafetyTests(unittest.TestCase):
                 encoding="utf-8",
             )
             coverage = clean_rebuild._canonical_coverage(sources)
-            notes = clean_rebuild._render_test_notes(
-                coverage,
-                {"modules_scanned": 2, "data_files_scanned": 3},
-            )
+            notes = clean_rebuild._render_test_notes(coverage)
             self.assertIn("all 1 chapters and 2 records", notes)
             self.assertIn("declares 1 translated records", notes)
             self.assertIn("0 translated records with explicit fixed-layout", notes)
