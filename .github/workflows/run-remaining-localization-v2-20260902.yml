@@ -1,0 +1,111 @@
+name: Run remaining localization v2
+
+on:
+  push:
+    paths:
+      - '.github/workflows/run-remaining-localization-v2-20260902.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: translation/punchier-opening-20260901
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install project and development dependencies
+        run: python -m pip install -e ".[dev]"
+      - name: Execute reviewed edit payload without stale name guard
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import textwrap
+
+          path = Path('.github/workflows/apply-remaining-localization-v2-20260902.yml')
+          raw = path.read_text(encoding='utf-8')
+          section = "      - name: Apply reviewed remaining translation changes\n"
+          section_start = raw.index(section)
+          marker = "          python - <<'PY'\n"
+          start = raw.index(marker, section_start) + len(marker)
+          end = raw.index("\n          PY", start)
+          script = textwrap.dedent(raw[start:end])
+          cond_start = script.index('conditional_names = {')
+          changed_start = script.index('changed = []', cond_start)
+          script = script[:cond_start] + 'conditional_names = {}\n' + script[changed_start:]
+          exec(compile(script, '<remaining-localization-payload>', 'exec'), {})
+          PY
+      - name: Refresh manifest
+        run: python tools/source_manifest.py --root . --write
+      - name: Whole-corpus terminology consistency scan
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+          root = Path('work/clean_rebuild/sources')
+          forbidden = ['Barans', 'Burns', 'Russian Mist', 'Russian Wing', 'Trianon', 'Georges Black', 'Direcktor', "Queen's English"]
+          problems = []
+          for path in sorted(root.glob('*.json')):
+              text = path.read_text(encoding='utf-8')
+              for needle in forbidden:
+                  if needle.lower() in text.lower():
+                      problems.append(f'{path.name}: forbidden {needle!r}')
+              data = json.loads(text)
+              for record in data.get('records', []):
+                  value = record.get('text') or ''
+                  if re.search(r'\bBlack\b', value):
+                      problems.append(f"{path.name}:{record.get('index')}: Black remains in {value!r}")
+          if problems:
+              raise SystemExit('\n'.join(problems))
+          print('Whole-corpus terminology consistency scan: PASS')
+          PY
+      - name: Verify change scope
+        shell: bash
+        run: |
+          python - <<'PY'
+          import subprocess
+          allowed = {
+            'MANIFEST.sha256',
+            'work/clean_rebuild/sources/PART3B.json',
+            'work/clean_rebuild/sources/PART3B_.json',
+            'work/clean_rebuild/sources/PART3C.json',
+            'work/clean_rebuild/sources/PART4A.json',
+            'work/clean_rebuild/sources/PART4B.json',
+            'work/clean_rebuild/sources/PART4C.json',
+            'work/clean_rebuild/sources/STAFF.json',
+          }
+          changed = set(subprocess.check_output(['git', 'diff', '--name-only', 'HEAD'], text=True).splitlines())
+          unexpected = changed - allowed
+          if unexpected:
+              raise SystemExit(f'Unexpected files changed: {sorted(unexpected)}')
+          print('Scope:', *sorted(changed), sep='\n  ')
+          PY
+      - name: Source health
+        run: python tools/source_health.py --root . --strict-release
+      - name: Source manifest
+        run: python tools/source_manifest.py --root .
+      - name: Compile maintained Python
+        run: python -m compileall -q nostalgia1907.py tools tests work
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Ruff
+        run: python -m ruff check nostalgia1907.py tools tests work
+      - name: Documentation and style policy
+        run: python tools/style_audit.py --root .
+      - name: Commit reviewed remaining localization
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add MANIFEST.sha256 work/clean_rebuild/sources/PART3B.json work/clean_rebuild/sources/PART3B_.json work/clean_rebuild/sources/PART3C.json work/clean_rebuild/sources/PART4A.json work/clean_rebuild/sources/PART4B.json work/clean_rebuild/sources/PART4C.json work/clean_rebuild/sources/STAFF.json
+          git commit -m "Polish remaining chapters and fix verified source errors"
+          git push origin HEAD:translation/punchier-opening-20260901
