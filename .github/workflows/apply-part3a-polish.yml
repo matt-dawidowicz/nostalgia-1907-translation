@@ -63,10 +63,6 @@ jobs:
                   'You said yourself that you are fleeing Russia.',
                   "You said yourself you're fleeing Russia.",
               ),
-              120: (
-                  'Wait...america? Not Britain?',
-                  'Wait...America? Not Britain?',
-              ),
               159: (
                   "But I'm not much good at deciding things like that...",
                   "But I'm not much good at judging things like that...",
