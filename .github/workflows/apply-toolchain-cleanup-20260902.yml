@@ -31,6 +31,28 @@ jobs:
         run: |
           python tools/apply_cleanup_20260902.py
           python tools/fix_cleanup_transform_20260902.py
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("tests/test_source_health.py")
+          text = path.read_text(encoding="utf-8")
+          old = '''    def test_ci_uses_the_strict_release_inventory(self) -> None:
+                  """Keep public CI from falling back to the development-filtered audit."""
+                  workflow = ROOT / ".github" / "workflows" / "source-checks.yml"
+                  text = workflow.read_text(encoding="utf-8")
+                  self.assertIn("python -m tools.source_checks --root . --strict-release", text)
+          '''
+          new = '''    def test_authoritative_source_gate_supports_strict_release(self) -> None:
+                  """Keep exact-inventory validation exposed by the unified source gate."""
+                  source_gate = ROOT / "tools" / "source_checks.py"
+                  text = source_gate.read_text(encoding="utf-8")
+                  self.assertIn('"--strict-release"', text)
+                  self.assertIn("strict_release=args.strict_release", text)
+          '''
+          if old not in text:
+              raise RuntimeError("transformed source-health workflow assertion not found")
+          path.write_text(text.replace(old, new, 1), encoding="utf-8", newline="\n")
+          PY
           git checkout HEAD -- .github/workflows/source-checks.yml
 
       - name: Remove one-shot Python applicators
