@@ -91,7 +91,7 @@ jobs:
         run: |
           git config user.name "starlight_world"
           git config user.email "43389528+matt-dawidowicz@users.noreply.github.com"
-          git add work/clean_rebuild/sources/PART2A.json MANIFEST.sha256 .github/workflows/apply-part2a-route-polish.yml
+          git add -A
           git diff --cached --check
           git commit -m "Polish Action 2 route investigation dialogue"
           git push origin HEAD:translation/punchier-opening-20260901
