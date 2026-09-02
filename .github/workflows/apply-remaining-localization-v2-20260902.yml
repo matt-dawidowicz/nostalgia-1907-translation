@@ -1,0 +1,296 @@
+name: Apply remaining localization v2
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-remaining-localization-v2-20260902.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: translation/punchier-opening-20260901
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install project and development dependencies
+        run: python -m pip install -e ".[dev]"
+      - name: Verify reviewed source blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object work/clean_rebuild/sources/PART3B.json)" = "4b1bfc9bc59be81adaed618fd40b1ad861aa2c82"
+          test "$(git hash-object work/clean_rebuild/sources/PART3B_.json)" = "ce5a60d4a79ca4cefae2404cb7aa12eefce21087"
+          test "$(git hash-object work/clean_rebuild/sources/PART3C.json)" = "3d93cb273c6bf665b985a08156f391c4984c640d"
+          test "$(git hash-object work/clean_rebuild/sources/PART4A.json)" = "63821e01c786769d6fa4fba0c4df76b3ed5d85d6"
+          test "$(git hash-object work/clean_rebuild/sources/PART4B.json)" = "4447211d3602ce877cebb086b861371f61f1d0ce"
+          test "$(git hash-object work/clean_rebuild/sources/PART4C.json)" = "e37661df15caf2d9ab139f88357ec2ea8d99dceb"
+          test "$(git hash-object work/clean_rebuild/sources/STAFF.json)" = "52243f19445c0b8c2b9fe9c6568510008d4daf0b"
+      - name: Apply reviewed remaining translation changes
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('work/clean_rebuild/sources')
+          edits = {
+            'PART3B': {
+              199: "The Deputy Chief died for the Fog.",
+              202: "That's sophistry. Fine. If we make it safely to tomorrow morning, do as you please.",
+            },
+            'PART3B_': {
+              3: "Laugh at me, Charlie. Even though I've got the target in my sights, I can't kill him... Don't be angry... I've been a coward since I was a kid. Give me a little more time...",
+              8: "Sorry, but I don't want to see anyone right now.",
+              10: "Now, Ruthie...it looks like I won't be returning to southern France...sorry.",
+              11: "You're kind. You're wonderful.",
+              13: "...that may be exactly what I need to hear right now...",
+              36: "Sorry, later!",
+              50: "Human reason isn't that strong. When desire coiled at the bottom of the heart tries to get out, it will deceive its way through the checkpoint called 'reason' before it emerges.",
+              55: "Her conscious mind doesn't know it, but she unconsciously identified with the desire expressed in the picture.",
+              57: "Her true feelings, which even she has not recognized, overflow from within her and take shape here...",
+              69: "The shape of distorted desire...its symbols. The 'husband' is the symbol of her 'belief'; the 'king' is 'society' or 'authority.' Killing the king's 'daughter' is an expression of rebellion. Through it we can see her true feelings, feelings even she has not noticed. When impulse strikes and action leaps beyond reason, the true motive is laid bare.",
+              85: "What a terrible way to put it...",
+              103: "Some people remain strangers forever. You are special.",
+              105: "You did a fine job on the picture in the Center Hall.",
+              106: "I only copied it. I'm a copyist.",
+              131: "It's not such unusual work. There are plenty of jobs like it.",
+              133: "That wouldn't be strange for the 'Russian Fog.'",
+              136: "There are only two candidates left: you and Kirikov. I'll bet on you.",
+              145: "What is wrong? Where did all that bravado go?",
+              155: "I could report you to Kirikov.",
+              159: "...the flip side of 'running away'?",
+              165: "This is bad. I'm losing the nerve to try again...",
+              176: "Do you feel lost?",
+              188: "...you're kind. With him I can forget my position...a calm old man, carefree people...poor Kasuke, who can't see things through...",
+              197: "It must be one of them.",
+              204: "You're naive. This ship is one enormous piece of evidence in this whole act of plunder. Do you think a spy from a third country would leave it intact? He meant to sink it from the start.",
+              208: "Why is this guy's thinking always so forceful?",
+              210: "Press both of them harder.",
+            },
+            'PART3C': {
+              11: "You are not acting decisively! Something is making you hesitate!",
+              17: "General Intelligence and Internal Security are completely separate sections, so even aboard the same ship I couldn't identify them.",
+              26: "I had no choice...no one could understand what those twenty-one years were like.",
+              30: "Don't underestimate me.",
+              44: "Are you enjoying this?",
+              52: "What kind of interrogator stays silent? You'll only leave your subject confused.",
+              59: "Maybe. But can one person see directly into another person's thoughts?",
+              66: "Maybe you simply can't exploit people's weaknesses.",
+              73: "Defection means abandoning your entire life.",
+              77: "I was acting every day, with everyone...",
+              78: "...all the time.",
+              82: "Is this what I truly feel? Is this feeling real?",
+              97: "Well, Kirikov. How does it feel to make the biggest gamble of your life? With a family, you couldn't possibly do this, could you?",
+              110: "This is no time to list your asylum terms at leisure!",
+              111: "...the time bomb.",
+              114: "The person offering you sanctuary may be behind the bombing, an agent of a third country. If so, does your destination for defection really have to be Britain?",
+              132: "The culprit won't disarm the bomb. This ship is evidence of the theft, so he can't let it reach Southampton. At 7:00 p.m. the bomb will destroy it. Our only move is to catch the culprit, tie him up in front of the bomb, and make him disarm it himself.",
+              139: "Don't you get it? If Britain is no longer an option, you can flee to a third country that will protect you from Russia. But can you escape this ship while the culprit controls it with bombs? Maybe you can. But what about the 300 innocent people left aboard?",
+              166: "Maybe I'm an idiot for not noticing... If he has even one accomplice...",
+              174: "Enough... Get emotionally involved and life will make you pay for it...",
+              182: "Feelings are intuition.",
+              184: "Just what I'd expect from a Parisian.",
+              186: "That is the first rule of the workplace.",
+              189: "The accomplice is Dunant. Because I kept pressing my suspicion of Ashby, Ashby had Dunant write the second claim statement. It was rushed and lacked planning.",
+              190: "I used my favorite bluff.",
+              204: "We're partners. Ever since this started, I've cooperated with you, haven't I? I've even crossed dangerous bridges. Now it's your turn!",
+              208: "Exterior",
+              211: "Then it's the other Russian spy, Ilyusha. She killed Voysey. She also killed Braque because she mistook him for a man in British Intelligence. She couldn't let Kirikov, the Russian Fog, be taken away.",
+              220: "High Terrace",
+            },
+            'PART4A': {
+              10: "I found the stick of rouge used for the second manifesto. Compare it with this one.",
+              13: "Ilyusha Grancelius. The other stick of rouge was in her room.",
+              25: "Keep making a fuss and I won't hesitate to shoot one of you! Get moving!",
+              31: "Idiots! Ashby and Dunant tricked you! They are the culprits!",
+              45: "A disguised Japanese fishing vessel should find us in the South Atlantic...but food will last for only two.",
+              49: "I don't like this.",
+              56: "Damn. If we sink the ship now, that's exactly what Ashby wants.",
+              57: "He is not the winner.",
+              60: "I had some good experiences too.",
+            },
+            'PART4B': {
+              6: "I decided to defect to Britain, cut my hair short, and sent a telegram to Voysey.",
+              15: "Voysey couldn't decipher 'Mede'...the intelligence department's number-two man, said to be the sharpest in Britain, spent three days unable to understand that symbol. I thought he was someone I could never understand.",
+              18: "...a new life, but the same as before: obeying some country's orders, living inside someone else's plans.",
+              21: "I'm used to it.",
+              25: "Posing credibly as a defector, he feeds them false intelligence about Russia.",
+              27: "Kirikov was cautious. He had orders to stop my defection. When the bomber made that impossible, he decided to turn my defection plan to his advantage and infiltrate Japan.",
+              30: "Ito only cares about himself. If the Foreign Ministry is informed, Ashby will be cut loose.",
+              53: "Let's begin. The screwdriver...this one...",
+              58: "...I'm trained to stay calm under pressure.",
+              74: "So that means we've added a bypass to the safety circuit, right?",
+              85: "Strange. Japan is the only country to have defeated the mighty Russian Empire in war, yet you don't even know wire cutters...",
+              86: "I'll learn. We'll catch up with the Great Powers soon. Japan has eight million gods. Whatever we do, we won't lose.",
+              94: "Those hairy foreigners use huge screwdrivers...",
+              98: "Are we sure this is the right way to connect the bypass wire?",
+              102: "Why did you become a Russian spy...no, pardon me. Why did you side with the Russian regime?",
+              103: "The only image that truly comes to mind when I speak of my homeland is...the forests and lakes of Imatra.",
+              108: "Who is Yuko?",
+              109: "She's not as modern as you. To tell the truth, I've never talked with her properly the way I have with you. We've never even been alone together. In Japan, well...that sort of thing isn't done.",
+              110: "But you like her? ...A little strange...but somehow, that's lovely.",
+              114: "Calm down. I'm right here with you. All right?",
+              121: "They meant to train an assassination unit that would work on the Emperor's orders. Weapons training. Mountain marches...assassination. I had a knack for it. I became an honor student.",
+              131: "Let's open the left lid of the box.",
+              132: "Won't it reveal the base of the pendulum?",
+              139: "If it's a trap, you're in the same boat.",
+              142: "One day, the instructor in charge of me changed... This is boring. Let us stop. I have nothing more to say.",
+              145: "That balancing arm is in the way. We'll have to remove it.",
+              159: "The current is safely bypassed. It seems you were right this time.",
+              167: "You finally remembered?",
+              174: "It really was a trap. Were you in Siberia the whole time?",
+              175: "Yes. On the day I turned thirteen in Siberia, I was taken before the Emperor in St. Petersburg.",
+              184: "Another battery again... What mission did the Emperor give you?",
+              185: "To enter the court and uncover which courtiers secretly harbored treasonous intentions against him.",
+              187: "I was barely over ten. Who would be suspicious of a doll-like child? I already understood the absolute advantage my age gave me. I outwitted veteran Petersburg intelligence agents and always got excellent results.",
+              203: "What are you talking about? I know about the peace treaty, but the Japanese diplomat was realistic and admirable. So was Witte. War isn't a game. It isn't just about winning and losing. When he started the war, the Emperor wanted to revel in conquering the 'Eastern barbarians.' His entourage never defied him.",
+              205: "Witte understood the realities of Russia and Japan. He gave me a new mission. Japan was too weak to defeat Russia alone, so it would have to ally with a Great Power hostile to Russia.",
+              208: "Those ugly mosque-shaped onion domes. Look at Eastern Europe and you'll know how Russia treats its satellite states. Even if they cannot defy the Emperor, they are desperate. Russia was wracked by unrest and plunged into a defensive war as though prepared to kill half its own people.",
+              210: "Geographically, unless the Korean Peninsula serves as a defensive wall, the Empire's national defense cannot hold.",
+              227: "Witte said Anglo-Japanese agents were active all over Europe, inciting the Russian Revolution to divert the Emperor's attention from the Russo-Japanese War. My mission was to find those Anglo-Japanese agents and assassinate them.",
+              229: "Britain's intelligence network controls the world. The Times. Reuters...they staged Japan's victories and spread them everywhere. Inside Russia, anti-Emperor agitators cast the regime as the villain in the name of freedom. Even financial circles and the Russian court believed it. The world sympathized with Japan and lent it whatever war funds it needed. Russia was branded a country that deserved to be beaten and became hated worldwide.",
+              230: "Tch! So it wasn't because Admiral Togo's invincible fleet annihilated the Baltic Fleet with wildly ingenious tactics that we won...",
+              257: "Don't keep working in that state of mind.",
+              260: "Thank you, Kasuke. I don't think I'll hesitate anymore. I've decided. At twenty-one, I finally realize it. The Emperor turned Suomi into a land of suspicion and brainwashed me into distrusting everyone. I can abandon him now. The forests and lakes of Suomi matter most to me.",
+              271: "I don't know...maybe my instinct as a spy to secure an escape route kicked in. Realizing the danger of following the Emperor may have stirred these feelings...",
+              284: "I give up. I surrender. I apologize, so forgive me...",
+              286: "There are two choices... Ilyu, earlier you said you had to choose, right? What did you have to choose between?",
+            },
+            'PART4C': {
+              3: "...there's one more. Tainui Adjell's assassin is hiding aboard.",
+              13: "Yeah. He will definitely attack before the ship reaches port.",
+              15: "I've got a good idea who the assassin is, though.",
+              18: "I think I understand a little of how you feel.",
+              26: "Medea races through the land of forests and lakes...fleet-footed beyond pursuit...and beyond, the curtain.",
+              31: "There's one more thing. You tried to kill me too, didn't you? You kept me close at hand the whole time.",
+              32: "You were close to Ilyusha. Anyone approaching the Russian Fog would suspect a man from British Intelligence. I'm a professional assassin of Tainui Adjell, the Imperial Russian execution organization.",
+              35: "Reality is fiction. There's no need to bind yourself to a role assigned in a few minutes.",
+              37: "After you told me that Ashby was with British Intelligence, he believed I was a mediocre detective.",
+              40: "In Paris, I had you assigned to a dreary infidelity investigation, did I not?",
+              41: "I can give you access to a wider intelligence network jointly operated by Britain and Japan.",
+              44: "Ashby was still young, and spies who used bombs were unheard of.",
+              46: "You handed Kirikov to Ashby as a source of disinformation so Kirikov could infiltrate the Japanese Empire. Excellent.",
+            },
+            'STAFF': {
+              15: "        Braque / Chief Navigator        ",
+            },
+          }
+          conditional_names = {
+            'PART4A': {8: ('Black', 'Braque')},
+            'PART4C': {30: ('Black', 'Braque')},
+          }
+          changed = []
+          ending_path = root / 'PART4C.json'
+          ending_before_data = json.loads(ending_path.read_text(encoding='utf-8'))
+          ending_before = {r['index']: r.get('text') for r in ending_before_data['records'] if 51 <= r['index'] <= 59}
+
+          for chapter, mapping in edits.items():
+              path = root / f'{chapter}.json'
+              data = json.loads(path.read_text(encoding='utf-8'))
+              records = {r['index']: r for r in data['records']}
+              profile_exact = (data.get('profile') or {}).get('required_text_exact', {})
+              for idx, new_text in mapping.items():
+                  if idx not in records:
+                      raise AssertionError(f'{chapter}:{idx:03d} missing')
+                  if records[idx].get('text') == new_text:
+                      continue
+                  records[idx]['text'] = new_text
+                  key = str(idx)
+                  if key in profile_exact:
+                      profile_exact[key] = new_text
+                  changed.append(f'{chapter}:{idx:03d}')
+              for idx, (old_name, new_name) in conditional_names.get(chapter, {}).items():
+                  if idx not in records:
+                      raise AssertionError(f'{chapter}:{idx:03d} missing conditional name')
+                  current = records[idx].get('text')
+                  if current == old_name:
+                      records[idx]['text'] = new_name
+                      key = str(idx)
+                      if key in profile_exact:
+                          profile_exact[key] = new_name
+                      changed.append(f'{chapter}:{idx:03d}')
+                  elif current != new_name:
+                      raise AssertionError(f'{chapter}:{idx:03d} expected {old_name!r} or {new_name!r}, found {current!r}')
+              path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          ending_after_data = json.loads(ending_path.read_text(encoding='utf-8'))
+          ending_after = {r['index']: r.get('text') for r in ending_after_data['records'] if 51 <= r['index'] <= 59}
+          if ending_before != ending_after:
+              raise AssertionError('PART4C:051-059 ending lock changed')
+
+          print(f'CHANGED_CANONICAL_COUNT={len(changed)}')
+          print('CHANGED_CANONICAL_IDS=' + ','.join(changed))
+          PY
+      - name: Refresh manifest
+        run: python tools/source_manifest.py --root . --write
+      - name: Whole-corpus terminology consistency scan
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('work/clean_rebuild/sources')
+          forbidden = ['Barans', 'Burns', 'Russian Mist', 'Russian Wing', 'Trianon', 'Georges Black', 'Direcktor', "Queen's English"]
+          problems = []
+          for path in sorted(root.glob('*.json')):
+              text = path.read_text(encoding='utf-8')
+              for needle in forbidden:
+                  if needle.lower() in text.lower():
+                      problems.append(f'{path.name}: forbidden {needle!r}')
+              data = json.loads(text)
+              for record in data.get('records', []):
+                  if record.get('text') == 'Black':
+                      problems.append(f"{path.name}:{record.get('index')}: standalone Black")
+          if problems:
+              raise SystemExit('\n'.join(problems))
+          print('Whole-corpus terminology consistency scan: PASS')
+          PY
+      - name: Verify change scope
+        shell: bash
+        run: |
+          python - <<'PY'
+          import subprocess
+          allowed = {
+            'MANIFEST.sha256',
+            'work/clean_rebuild/sources/PART3B.json',
+            'work/clean_rebuild/sources/PART3B_.json',
+            'work/clean_rebuild/sources/PART3C.json',
+            'work/clean_rebuild/sources/PART4A.json',
+            'work/clean_rebuild/sources/PART4B.json',
+            'work/clean_rebuild/sources/PART4C.json',
+            'work/clean_rebuild/sources/STAFF.json',
+          }
+          changed = set(subprocess.check_output(['git', 'diff', '--name-only', 'HEAD'], text=True).splitlines())
+          unexpected = changed - allowed
+          if unexpected:
+              raise SystemExit(f'Unexpected files changed: {sorted(unexpected)}')
+          print('Scope:', *sorted(changed), sep='\n  ')
+          PY
+      - name: Source health
+        run: python tools/source_health.py --root . --strict-release
+      - name: Source manifest
+        run: python tools/source_manifest.py --root .
+      - name: Compile maintained Python
+        run: python -m compileall -q nostalgia1907.py tools tests work
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Ruff
+        run: python -m ruff check nostalgia1907.py tools tests work
+      - name: Documentation and style policy
+        run: python tools/style_audit.py --root .
+      - name: Commit reviewed remaining localization
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add MANIFEST.sha256 work/clean_rebuild/sources/PART3B.json work/clean_rebuild/sources/PART3B_.json work/clean_rebuild/sources/PART3C.json work/clean_rebuild/sources/PART4A.json work/clean_rebuild/sources/PART4B.json work/clean_rebuild/sources/PART4C.json work/clean_rebuild/sources/STAFF.json
+          git commit -m "Polish remaining chapters and fix verified source errors"
+          git push origin HEAD:translation/punchier-opening-20260901
