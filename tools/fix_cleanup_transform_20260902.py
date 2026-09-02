@@ -35,16 +35,35 @@ def repair_release_note_escape() -> None:
     write_text(path, text)
 
 
+def make_inventory_imports_direct_script_safe() -> None:
+    """Support both direct script execution and repository-module execution."""
+    direct = "from tools.repository_inventory import RepositoryInventoryError, git_tracked_files\n"
+    fallback = '''try:\n    from tools.repository_inventory import RepositoryInventoryError, git_tracked_files\nexcept ModuleNotFoundError:  # Direct ``python tools/<script>.py`` execution.\n    from repository_inventory import RepositoryInventoryError, git_tracked_files\n'''
+    for relative in ("tools/source_health.py", "tools/source_manifest.py"):
+        path = ROOT / relative
+        text = path.read_text(encoding="utf-8")
+        if direct not in text:
+            raise RuntimeError(f"{relative}: shared inventory import baseline changed")
+        write_text(path, text.replace(direct, fallback, 1))
+
+
 def align_code_invariant_tests() -> None:
     """Point integration-fixture and release-note tests at their new ownership."""
     path = ROOT / "tests" / "test_code_invariants.py"
     text = path.read_text(encoding="utf-8")
+    constants = 'ROOT = Path(__file__).resolve().parents[1]\nCLEAN = ROOT / "work" / "clean_rebuild"\n\n'
+    if constants not in text:
+        raise RuntimeError("test_code_invariants.py: root constants baseline changed")
+    text = text.replace(constants, "", 1)
     import_anchor = "from work.clean_rebuild import translation_formatter\n"
     if import_anchor not in text:
         raise RuntimeError("test_code_invariants.py: import anchor changed")
     text = text.replace(
         import_anchor,
-        import_anchor + "\nimport test_script_layout_integration as layout_tests\n",
+        import_anchor
+        + "\nimport test_script_layout_integration as layout_tests\n\n\n"
+        + constants.rstrip()
+        + "\n",
         1,
     )
     old_notes = '''            notes = clean_rebuild._render_test_notes(\n                coverage,\n                {"modules_scanned": 2, "data_files_scanned": 3},\n            )\n'''
@@ -108,10 +127,13 @@ def align_cli_tests() -> None:
 def main() -> None:
     """Apply all post-transform corrections and parse-check changed Python modules."""
     repair_release_note_escape()
+    make_inventory_imports_direct_script_safe()
     align_code_invariant_tests()
     align_source_health_tests()
     align_cli_tests()
     for path in (
+        ROOT / "tools" / "source_health.py",
+        ROOT / "tools" / "source_manifest.py",
         ROOT / "work" / "clean_rebuild" / "rebuild.py",
         ROOT / "tests" / "test_code_invariants.py",
         ROOT / "tests" / "test_source_health.py",
