@@ -1,0 +1,40 @@
+name: Fix remaining localization runner
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-remaining-localization-runner-20260902.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: translation/punchier-opening-20260901
+          fetch-depth: 0
+      - name: Patch null-profile handling and remove fixer
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('.github/workflows/apply-remaining-localization-20260902.yml')
+          text = path.read_text(encoding='utf-8')
+          old = "profile_exact = data.get('profile', {}).get('required_text_exact', {})"
+          new = "profile_exact = (data.get('profile') or {}).get('required_text_exact', {})"
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected exactly one null-profile expression, found {text.count(old)}')
+          path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+          git rm .github/workflows/fix-remaining-localization-runner-20260902.yml
+      - name: Commit runner fix
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/workflows/apply-remaining-localization-20260902.yml
+          git commit -m "Fix remaining localization runner null profile handling"
+          git push origin HEAD:translation/punchier-opening-20260901
