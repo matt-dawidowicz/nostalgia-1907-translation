@@ -968,7 +968,7 @@
     {
       "index": 149,
       "policy": "translate",
-      "text": "I saw it...a starboard first-class cabin...something was thrown from its window just before the blast...now I understand...",
+      "text": "I saw it...one of the first-class cabins on the starboard side...something was thrown from the window just before the blast...now I understand...",
       "layout_policy": "adaptive"
     },
     {
@@ -1052,7 +1052,7 @@
     {
       "index": 163,
       "policy": "translate",
-      "text": "Quite possible, if the explosive was SBC. It can generate that much heat.",
+      "text": "That's possible. If the bomb used SBC, it could generate that much heat.",
       "layout_policy": "adaptive"
     },
     {
@@ -1064,7 +1064,7 @@
     {
       "index": 165,
       "policy": "translate",
-      "text": "Shimose Basic Cracker. An incendiary shell explosive that annihilated Russia's Baltic Fleet in the Sea of Japan two years ago. It uses the heat reaction produced when picric acid contacts metal, scattering temperatures above 2,000 degrees when it explodes. Even steel melts like taffy. No one on deck could survive.",
+      "text": "Shimose Basic Cracker. An incendiary explosive used in shells that annihilated Russia's Baltic Fleet in the Sea of Japan two years ago. It exploits the heat reaction produced when picric acid comes into contact with metal. On detonation, it releases heat exceeding 2,000 degrees in every direction. Even steel melts like taffy. No one on deck could survive.",
       "layout_policy": "adaptive"
     },
     {
@@ -1130,7 +1130,7 @@
     {
       "index": 176,
       "policy": "translate",
-      "text": "You are not saying I am definitely the culprit. That is what you mean, right?",
+      "text": "You're not saying I'm definitely the culprit. That's what you mean, right?",
       "layout_policy": "adaptive"
     },
     {
@@ -1184,7 +1184,7 @@
     {
       "index": 185,
       "policy": "translate",
-      "text": "Exactly. If I were the culprit, I would have boarded under an alias, forged my passport, and posed as a subject of Qing China or another country. Otherwise I would be a complete fool. Would someone capable of setting bombs with precise time fuses leave such an obvious trail? It was not me.",
+      "text": "Exactly. If I were the culprit, I'd have boarded under an alias, forged my passport, and posed as a subject of Qing China or some other country. Otherwise I'd be a complete fool. Would someone capable of setting bombs with precise time fuses leave such an obvious trail? It wasn't me.",
       "layout_policy": "adaptive"
     },
     {
@@ -1208,7 +1208,7 @@
     {
       "index": 189,
       "policy": "translate",
-      "text": "He feels no pressure...wrong man, detective.",
+      "text": "He doesn't seem nervous...you've got the wrong man, detective.",
       "layout_policy": "adaptive"
     },
     {
@@ -1226,7 +1226,7 @@
     {
       "index": 192,
       "policy": "translate",
-      "text": "If I catch the culprit myself, you will stop glaring at me like that, right?",
+      "text": "If I catch the culprit myself, you'll stop glaring at me like that, right?",
       "layout_policy": "adaptive"
     },
     {
@@ -1274,7 +1274,7 @@
     {
       "index": 200,
       "policy": "translate",
-      "text": "True, I did not buy Yuko a souvenir. But does that deserve this much bad luck? Seriously?",
+      "text": "True, I didn't buy Yuko a souvenir. But does that deserve this much bad luck? Seriously?",
       "layout_policy": "adaptive"
     },
     {
@@ -1286,13 +1286,13 @@
     {
       "index": 202,
       "policy": "translate",
-      "text": "He would go that far?",
+      "text": "He'd go that far?",
       "layout_policy": "adaptive"
     },
     {
       "index": 203,
       "policy": "translate",
-      "text": "What is your record for catching culprits?",
+      "text": "What's your success rate at catching culprits?",
       "layout_policy": "adaptive"
     },
     {
@@ -1304,13 +1304,13 @@
     {
       "index": 205,
       "policy": "translate",
-      "text": "I thought so. That is bad news for me.",
+      "text": "I thought so. That's bad news for me.",
       "layout_policy": "adaptive"
     },
     {
       "index": 206,
       "policy": "translate",
-      "text": "Maybe it is not too late. I should buy Yuko a souvenir from the ship's shop.",
+      "text": "Maybe it's not too late to buy Yuko a souvenir from the ship's shop.",
       "layout_policy": "adaptive"
     }
   ]
