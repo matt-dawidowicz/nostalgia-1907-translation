@@ -1,0 +1,31 @@
+name: Regenerate performance manifest
+
+on:
+  push:
+    branches:
+      - perf/benchmark-and-optimization-20260902
+
+permissions:
+  contents: write
+
+jobs:
+  manifest:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Regenerate manifest
+        run: python tools/source_manifest.py --root . --write
+      - name: Commit manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add MANIFEST.sha256
+          git diff --cached --check
+          git commit -m "Refresh source manifest for performance changes"
+          git push
