@@ -462,10 +462,10 @@ def infer_layouts(
     # first 12-cell row.  Runtime screenshots of PART1A:003 confirm the
     # 11-cell continuation boundary ("more" must not be packed as 12 cells).
     dialogue_visible = _pair(settings, "scn_dialogue_layout", (12, 11))
-    continuation_visible = _pair(settings, "scn_continuation_layout", (12, 10))
+    continuation_visible = _pair(settings, "scn_continuation_layout", (11, 10))
     dialogue_runtime = _pair(settings, "scn_dialogue_runtime_layout", dialogue_visible)
     continuation_runtime = _pair(
-        settings, "scn_continuation_runtime_layout", continuation_visible
+        settings, "scn_continuation_runtime_layout", (11, 11)
     )
     window_subtypes = _window_subtypes(settings)
     visible_overrides = _indexed_pairs(settings, "layout_overrides")

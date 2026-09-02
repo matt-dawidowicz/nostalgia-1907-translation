@@ -104,7 +104,7 @@ machine paths.
 Use Python 3.12 or newer and install the development checks:
 
 ```powershell
-python -m pip install -e ".[dev]"
+python -m pip install -r requirements-dev.txt
 ```
 
 Then run:

@@ -40,6 +40,8 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
+from work.clean_rebuild.source_json import load_json_object as _strict_load_json_object
+
 
 MANIFEST_NAME = "nostalgia1907.project.json"
 LOCAL_CONFIG_NAME = "nostalgia1907.local.json"
@@ -52,36 +54,14 @@ class ToolError(RuntimeError):
     """Report an actionable operator error without a Python traceback."""
 
 
-class DuplicateJsonKeyError(ValueError):
-    """Report a repeated object key in tracked or local JSON input."""
-
-
-def _reject_duplicate_json_keys(
-    pairs: list[tuple[str, Any]],
-) -> dict[str, Any]:
-    """Build one JSON object while rejecting last-key-wins ambiguity."""
-    result: dict[str, Any] = {}
-    for key, value in pairs:
-        if key in result:
-            raise DuplicateJsonKeyError(f"duplicate JSON object key: {key!r}")
-        result[key] = value
-    return result
-
-
 def load_json_object(path: Path, *, label: str) -> dict[str, Any]:
-    """Load one UTF-8 JSON object with duplicate-key rejection."""
+    """Load one strict UTF-8 JSON object and translate expected input errors."""
     try:
-        payload = json.loads(
-            path.read_text(encoding="utf-8"),
-            object_pairs_hook=_reject_duplicate_json_keys,
-        )
+        return _strict_load_json_object(path)
     except FileNotFoundError as error:
         raise ToolError(f"missing {label}: {path}") from error
-    except (json.JSONDecodeError, DuplicateJsonKeyError) as error:
+    except ValueError as error:
         raise ToolError(f"invalid {label}: {error}") from error
-    if not isinstance(payload, dict):
-        raise ToolError(f"{label} must contain a JSON object")
-    return payload
 
 
 # Project discovery, configuration, and immutable input guards.
@@ -616,40 +596,6 @@ def comparison_paths(root: Path, manifest: dict[str, Any]) -> tuple[Path, Path]:
     return output, output / "Nostalgia1907_Japanese_English_Comparison.json"
 
 
-def operator_python_sources(root: Path, manifest: dict[str, Any]) -> list[Path]:
-    """List maintained Python under one normalized root without local runtimes."""
-    root = root.resolve()
-    directories = (
-        rooted(root, manifest["paths"]["clean_rebuild"]),
-        root / "work" / "region_variant",
-        root / "tools",
-        root / "tests",
-    )
-    excluded = {
-        ".agents",
-        ".codex",
-        ".git",
-        ".runtime",
-        ".venv",
-        "__pycache__",
-        "build",
-        "dist",
-        "outputs",
-        "retail_input",
-        "retail_reference",
-    }
-    sources = {root / "nostalgia1907.py"}
-    for directory in directories:
-        if not directory.is_dir():
-            continue
-        for path in directory.rglob("*.py"):
-            relative = path.relative_to(directory)
-            if any(part in excluded or part.startswith("runs") for part in relative.parts):
-                continue
-            sources.add(root / directory.relative_to(root) / relative)
-    return sorted(sources, key=lambda path: path.relative_to(root).as_posix())
-
-
 def command_compare(root: Path, args: argparse.Namespace) -> int:
     """Regenerate the deterministic Japanese/English review package.
 
@@ -683,43 +629,13 @@ def command_validate(root: Path, args: argparse.Namespace) -> int:
     output unless the caller explicitly skips it.
     """
     manifest = load_manifest(root)
-    python_sources = operator_python_sources(root, manifest)
     run_script(
         root,
-        "tools/source_health.py",
+        "tools/source_checks.py",
         "--root",
         str(root),
-        label="Source-tree health audit",
-    )
-    run_command(
-        (
-            sys.executable,
-            "-m",
-            "py_compile",
-            *(str(path) for path in python_sources),
-        ),
-        root=root,
-        label="Python static compilation",
-    )
-    run_command(
-        (
-            sys.executable,
-            "-m",
-            "unittest",
-            "discover",
-            "-s",
-            "tests",
-            "-v",
-        ),
-        root=root,
-        label="Source-only unit tests",
-    )
-    run_script(
-        root,
-        "tools/style_audit.py",
-        "--root",
-        str(root),
-        label="Maintained-source style audit",
+        "--strict-release",
+        label="Complete source-only validation",
     )
     retail = require_retail_reference(root, manifest)
     run_script(
@@ -728,12 +644,6 @@ def command_validate(root: Path, args: argparse.Namespace) -> int:
         "--retail-root",
         str(retail),
         label="Renderer-aware layout audit",
-    )
-    run_script(
-        root,
-        "work/clean_rebuild/test_script_layout.py",
-        "-v",
-        label="Script layout tests",
     )
     _, comparison_json = comparison_paths(root, manifest)
     if not args.skip_comparison:
@@ -1021,7 +931,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         root = find_project_root(args.project_root)
         return int(args.handler(root, args))
-    except (ToolError, FileNotFoundError, PermissionError, ValueError) as exc:
+    except (ToolError, FileNotFoundError, PermissionError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
     except KeyboardInterrupt:

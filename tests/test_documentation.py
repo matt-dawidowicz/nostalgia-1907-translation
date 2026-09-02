@@ -137,19 +137,23 @@ class DocumentationTests(unittest.TestCase):
                 text = path.read_text(encoding="utf-8")
                 self.assertIsNone(windows_absolute.search(text))
 
-    def test_maintained_python_has_complete_pep257_coverage(self) -> None:
-        """Require a structurally valid docstring on every maintained symbol."""
-        callable_nodes = (
-            ast.ClassDef,
-            ast.FunctionDef,
-            ast.AsyncFunctionDef,
-        )
+    def test_maintained_python_has_documented_public_api(self) -> None:
+        """Require structural docstrings on modules and public top-level APIs."""
+        callable_nodes = (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)
         for path in maintained_python():
             tree = ast.parse(path.read_text(encoding="utf-8"))
-            nodes = [tree, *ast.walk(tree)]
+            nodes = [tree]
+            for node in tree.body:
+                if isinstance(node, callable_nodes) and not node.name.startswith("_"):
+                    nodes.append(node)
+                    if isinstance(node, ast.ClassDef):
+                        nodes.extend(
+                            member
+                            for member in node.body
+                            if isinstance(member, (ast.FunctionDef, ast.AsyncFunctionDef))
+                            and not member.name.startswith("_")
+                        )
             for node in nodes:
-                if node is not tree and not isinstance(node, callable_nodes):
-                    continue
                 name = "<module>" if node is tree else node.name
                 with self.subTest(path=path.relative_to(ROOT), symbol=name):
                     docstring = ast.get_docstring(node, clean=False)

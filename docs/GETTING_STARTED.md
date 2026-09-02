@@ -49,7 +49,7 @@ editing anything.
 Use Python 3.12 or newer and install the development checks:
 
 ```powershell
-python -m pip install -e ".[dev]"
+python -m pip install -r requirements-dev.txt
 python tools/source_health.py --root . --strict-release
 python -m unittest discover -s tests -v
 python -m ruff check nostalgia1907.py tools tests work

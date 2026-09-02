@@ -10,13 +10,13 @@ the pinned Ruff version used by CI for fast static lint checks.
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-python -m pip install -e .
+# no project install is required
 ```
 
 For the complete contributor toolchain:
 
 ```powershell
-python -m pip install -e ".[dev]"
+python -m pip install -r requirements-dev.txt
 python -m ruff check nostalgia1907.py tools tests work
 ```
 
@@ -95,7 +95,7 @@ cannot legally carry:
 6. chapter archive replacement and allocation checks; and
 7. ISO/raw-track/Track-2 regression checks.
 
-The retail-backed layout suite is `work.clean_rebuild.test_script_layout` inside
+The retail-backed layout suite is `tests/test_script_layout_integration.py` inside
 the same package as the compiler. It reports an explicit skip when prepared
 fixtures do not exist. The CLI invokes it again only after retail prerequisites
 are satisfied.

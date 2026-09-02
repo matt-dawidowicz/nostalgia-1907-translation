@@ -6,11 +6,14 @@ from __future__ import annotations
 import argparse
 import ast
 import json
-import os
-import subprocess
 import tomllib
 from collections.abc import Iterable
 from pathlib import Path
+
+try:
+    from tools.repository_inventory import RepositoryInventoryError, git_tracked_files
+except ModuleNotFoundError:  # Direct ``python tools/<script>.py`` execution.
+    from repository_inventory import RepositoryInventoryError, git_tracked_files
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -140,45 +143,30 @@ def _is_release_local_state(path: Path) -> bool:
 
 
 def _git_tracked_files(root: Path) -> tuple[Path, ...] | None:
-    """Return Git-tracked files, or ``None`` for an unpacked source package."""
-    if not (root / ".git").exists():
-        return None
+    """Return Git-tracked files while preserving this tool's error type."""
     try:
-        completed = subprocess.run(
-            ("git", "-C", str(root), "ls-files", "-z", "--cached"),
-            check=True,
-            capture_output=True,
-        )
-    except (OSError, subprocess.CalledProcessError) as exc:
-        raise SourceInventoryError(
-            "strict release audit could not enumerate Git-tracked files"
-        ) from exc
-    relative_paths = tuple(
-        Path(os.fsdecode(raw_path))
-        for raw_path in completed.stdout.split(b"\0")
-        if raw_path
+        return git_tracked_files(root)
+    except RepositoryInventoryError as error:
+        raise SourceInventoryError(str(error)) from error
+
+
+def _excluded_directory_name(name: str) -> bool:
+    """Return whether development traversal should skip a directory entirely."""
+    return (
+        name in EXCLUDED_DIRECTORY_NAMES
+        or name.endswith(".egg-info")
+        or any(name.startswith(prefix) for prefix in EXCLUDED_DIRECTORY_PREFIXES)
     )
-    missing = [
-        path.as_posix()
-        for path in relative_paths
-        if not (root / path).is_file()
-    ]
-    if missing:
-        joined = ", ".join(missing[:5])
-        suffix = " ..." if len(missing) > 5 else ""
-        raise SourceInventoryError(
-            f"strict release audit found missing tracked files: {joined}{suffix}"
-        )
-    return relative_paths
 
 
 def iter_source_files(root: Path) -> Iterable[Path]:
-    """Yield development source files while ignoring documented local state."""
-    for path in sorted(
-        root.rglob("*"), key=lambda item: item.relative_to(root).as_posix()
-    ):
-        if path.is_file() and not _is_excluded(path.relative_to(root)):
-            yield path
+    """Yield source files while pruning generated/local trees before descent."""
+    for directory, directory_names, file_names in root.walk(top_down=True):
+        directory_names[:] = sorted(
+            name for name in directory_names if not _excluded_directory_name(name)
+        )
+        for name in sorted(file_names):
+            yield directory / name
 
 
 def iter_release_files(root: Path) -> tuple[str, tuple[Path, ...]]:

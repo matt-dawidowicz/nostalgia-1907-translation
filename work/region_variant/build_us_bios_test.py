@@ -321,10 +321,16 @@ def _validate_track_delta(
     input_track: Path,
     output_track: Path,
     expected_boot: bytes,
+    expected_input_sha256: str,
 ) -> dict[str, object]:
     """Prove the exact wrapper model and all raw-sector mutation boundaries."""
     if input_track.stat().st_size != output_track.stat().st_size:
         raise RegionVariantError("region variant changed Track 1 geometry")
+    expected_input_sha256 = expected_input_sha256.upper()
+    if sha256(input_track) != expected_input_sha256:
+        raise RegionVariantError(
+            "region validation input does not match the authenticated baseline"
+        )
     changed_sectors: list[int] = []
     raw_digest = hashlib.sha256()
     logical_digest = hashlib.sha256()
@@ -338,15 +344,15 @@ def _validate_track_delta(
             if len(right) != RAW_SECTOR_SIZE:
                 raise RegionVariantError("short region-variant sector")
             validate_sector_header(right, sector_index)
-            if not verify_sector_checksums(right):
-                raise RegionVariantError(
-                    f"region variant sector {sector_index} has invalid EDC/ECC"
-                )
             raw_digest.update(right)
             logical_digest.update(
                 right[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE]
             )
             if left != right:
+                if not verify_sector_checksums(right):
+                    raise RegionVariantError(
+                        f"region variant sector {sector_index} has invalid EDC/ECC"
+                    )
                 changed_sectors.append(sector_index)
                 if sector_index >= 5:
                     raise RegionVariantError(
@@ -385,6 +391,9 @@ def _validate_track_delta(
         "size": output_track.stat().st_size,
         "boot_signature": "SEGADISCSYSTEM  ",
         "all_sector_checksums_valid": True,
+        "checksum_verification_mode": "trusted-reference-delta",
+        "checksum_verified_sector_count": len(changed_sectors),
+        "checksum_inherited_sector_count": sector_index - len(changed_sectors),
         "sha256": raw_digest.hexdigest().upper(),
         "logical_iso_sha256": logical_hash,
         "changed_raw_sectors": changed_sectors,
@@ -437,7 +446,9 @@ def _build_once(
     shutil.copyfile(baseline_track2, output_track2)
     write_two_track_cue(output_cue, output_track1, output_track2)
 
-    track1_report = _validate_track_delta(baseline_track1, output_track1, output_boot)
+    track1_report = _validate_track_delta(
+        baseline_track1, output_track1, output_boot, expected_track1_sha256
+    )
     if sha256(output_track2) != EXPECTED_TRACK2_SHA256:
         raise RegionVariantError("output Track 2 differs from retail")
     expected_cue = _expected_cue(output_track1.name, output_track2.name)
@@ -509,7 +520,9 @@ def _publish_verified_runs(
         cue = product / artifact_names[2]
         if not all(path.is_file() for path in (track1, track2, cue)):
             raise RegionVariantError(f"staged product is incomplete: {product}")
-        track1_report = _validate_track_delta(baseline_track1, track1, expected_boot)
+        track1_report = _validate_track_delta(
+            baseline_track1, track1, expected_boot, expected_track1_sha256
+        )
         if sha256(track2) != EXPECTED_TRACK2_SHA256:
             raise RegionVariantError(f"staged Track 2 differs from retail: {track2}")
         if cue.read_bytes() != _expected_cue(track1.name, track2.name):

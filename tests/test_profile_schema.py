@@ -5,39 +5,35 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
+from work.clean_rebuild.profile_schema import profile_text_failures, validate_profile
+from work.clean_rebuild.source_json import load_json_object
+
 
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
 SOURCES = CLEAN / "sources"
 
-from work.clean_rebuild.profile_schema import profile_text_failures, validate_profile  # noqa: E402
-from work.clean_rebuild.source_json import load_json_object  # noqa: E402
-
 
 class ProfileSchemaTests(unittest.TestCase):
-    """Keep live profile settings distinct from accepted legacy metadata."""
+    """Keep canonical renderer profiles limited to live production fields."""
 
     def test_all_canonical_profiles_and_text_rules_pass(self) -> None:
-        """Validate every tracked profile without requiring retail fixtures."""
+        """Validate every tracked profile without retired migration fields."""
         index = load_json_object(SOURCES / "index.json")
-        legacy_fields: set[str] = set()
         for item in index["chapters"]:
             source = load_json_object(SOURCES / item["source"])
             chapter = source["chapter"]
             with self.subTest(chapter=chapter):
-                legacy_fields.update(
-                    validate_profile(source.get("profile"), chapter=chapter)
-                )
+                self.assertEqual(validate_profile(source.get("profile"), chapter=chapter), frozenset())
                 self.assertEqual(
-                    profile_text_failures(
-                        source.get("profile"),
-                        source["records"],
-                        chapter=chapter,
-                    ),
+                    profile_text_failures(source.get("profile"), source["records"], chapter=chapter),
                     [],
                 )
-        self.assertIn("validate_wrapped_text_integrity", legacy_fields)
-        self.assertIn("choice_render_cell_limit", legacy_fields)
+
+    def test_retired_profile_field_is_rejected(self) -> None:
+        """Prevent migration-era no-op settings from returning to canonical data."""
+        with self.assertRaisesRegex(ValueError, "unknown fields"):
+            validate_profile({"schema_version": 1, "choice_render_cell_limit": None}, chapter="TEST")
 
     def test_unknown_profile_field_is_rejected(self) -> None:
         """Fail closed when an active-looking setting has no implementation."""

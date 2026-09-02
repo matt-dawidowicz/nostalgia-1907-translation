@@ -175,9 +175,11 @@ Both fixed and dynamic glyphs are one-bit 12x12 images stored in 18 bytes.
 them into the storage orientation expected by the game.
 
 A normal generated cell contains one or two six-pixel English character slots.
-Selected three-character punctuation clusters, such as an ellipsis or an
-apostrophe contraction fragment, may use a compact bitmap while preserving the
-same visible text.
+Selected three-character punctuation clusters, such as an ellipsis or a numeric
+decimal fragment, may use a compact bitmap while preserving the same visible
+text. Apostrophes deliberately remain on the ordinary six-pixel character grid
+so contractions cannot switch between incompatible spacing algorithms based on
+pair phase.
 
 The MES compiler deduplicates identical bitmaps into the chapter's dynamic
 glyph bank. This is why text capacity depends on unique rendered cells as well
@@ -206,8 +208,17 @@ The complete contract catalogue and evidence rules are in
 
 ## SCN renderer references
 
-SCN remains byte-for-byte retail data. The project reads only structurally
-proven command shapes needed to relate MES records to renderers.
+Retail SCN remains the read-only structural authority used for renderer
+inference. Generated archives preserve it byte-for-byte except for one closed,
+hash-locked correction in `PART1A.SCN`: the two Call/Fold selector-window X
+bytes at offsets `0x065D` and `0x0666` change from `0x17` (23) to `0x18` (24).
+That aligns the transient selectors with the persistent poker status panel
+already relocated by the frozen `MAIN.BIN` patch; Ares runtime testing confirmed
+that the old coordinates clipped the panel's top border. `scn_patch.py` requires
+the exact retail and patched hashes and proves that no other SCN byte changes.
+
+The project otherwise reads only structurally proven command shapes needed to
+relate MES records to renderers.
 
 Relevant commands include:
 

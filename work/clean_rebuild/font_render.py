@@ -17,6 +17,7 @@ these cells.
 
 from __future__ import annotations
 
+from functools import cache
 from pathlib import Path
 
 from .source_json import load_json_object
@@ -101,6 +102,12 @@ def render_literal_cell(unit: str) -> bytes:
             continue
         pattern = _pattern(char)
         x_base = slot * 6
+        if char == "'":
+            # The apostrophe is a one-pixel mark inside a six-pixel character
+            # slot. Keep the character advance monospaced while balancing the
+            # mark between its neighboring letters instead of pinning it to
+            # the slot's left edge.
+            x_base += 2 if slot == 0 else 1
         for row_index, row in enumerate(pattern):
             y = 2 + row_index
             if y >= GLYPH_HEIGHT:
@@ -137,7 +144,12 @@ def render_compact_cluster(unit: str) -> bytes:
     Compact rendering is restricted to patterns recognized by the compiler so
     prose cannot be squeezed arbitrarily to evade layout or glyph limits.
     """
-    if len(unit) != 3 or " " in unit or not any(char in ".'" for char in unit):
+    if unit != "..." and not (
+        len(unit) == 3
+        and unit[0].isdigit()
+        and unit[1] == "."
+        and unit[2].isdigit()
+    ):
         raise FontError(f"unsupported compact punctuation cluster {unit!r}")
     patterns = [_pattern(char) for char in unit]
     if unit == "...":
@@ -184,6 +196,7 @@ def render_compact_cluster(unit: str) -> bytes:
     return _matrix_bytes(matrix)
 
 
+@cache
 def stored_cell(style: str, unit: str) -> bytes:
     """Render one canonical cell style in the game's stored orientation.
 

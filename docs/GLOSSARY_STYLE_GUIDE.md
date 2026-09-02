@@ -46,7 +46,7 @@ This guide supplements, but does not silently override, the tracked `translation
 | 付き部屋C | Adjoining Room C | Project-controlled room label. |
 | クルー会議室 | Crew Meeting Room | Location-label title case. |
 | バー・ホクサイ / バーホクサイ | Bar Hokusai | Shipboard bar name. Do not misread it as a port/starboard direction. |
-| 運航管制室 | Navigation Control Room | Keep distinct from communications room. |
+| 運航管制室 | Pilot House | Period-natural shipboard label; keep distinct from communications room. |
 | 機関室 | Engine Room | Do not swap with communications/radio spaces. |
 | 通信室 | Communications Room | Prefer this when the room, not individual equipment, is meant. |
 | 左舷 | port | Never starboard. |

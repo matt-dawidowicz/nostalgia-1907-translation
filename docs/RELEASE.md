@@ -56,8 +56,8 @@ A successful `nostalgia1907.py build` proves that:
   automated validation gate;
 - two independent clean builds are byte-identical;
 - two independent North American region builds are byte-identical;
-- fixed disc boundaries, SCN data, Track 2, and required raw-CD checks remain
-  intact; and
+- fixed disc boundaries, the guarded SCN mutation contract, Track 2, and
+  required raw-CD checks remain intact; and
 - the final verification manifest binds the delivery files to those inputs.
 
 It does not prove visual behavior in an emulator. Manual playtesting remains

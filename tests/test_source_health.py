@@ -22,10 +22,14 @@ SPEC.loader.exec_module(source_health)
 class SourceHealthTests(unittest.TestCase):
     """Keep development and public-release source inventories fail-closed."""
 
-    def test_runtime_dependencies_are_empty(self) -> None:
-        """Keep source-health and production tooling standard-library only."""
+    def test_repository_has_no_runtime_package_metadata(self) -> None:
+        """Keep the directly executed production toolchain dependency-free."""
         project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-        self.assertEqual(project["project"]["dependencies"], [])
+        self.assertNotIn("project", project)
+        self.assertNotIn("build-system", project)
+        requirements = (ROOT / "requirements-dev.txt").read_text(encoding="utf-8")
+        self.assertIn("ruff==", requirements)
+        self.assertIn("mypy==", requirements)
 
     def test_clean_source_tree_passes(self) -> None:
         """Accept valid UTF-8 Python, JSON, and TOML source files."""
@@ -147,11 +151,12 @@ class SourceHealthTests(unittest.TestCase):
                     self.assertEqual(report["status"], "FAIL")
                     self.assertTrue(any(filename in failure for failure in report["failures"]))
 
-    def test_ci_uses_the_strict_release_inventory(self) -> None:
-        """Keep public CI from falling back to the development-filtered audit."""
-        workflow = ROOT / ".github" / "workflows" / "source-checks.yml"
-        text = workflow.read_text(encoding="utf-8")
-        self.assertIn("python tools/source_health.py --root . --strict-release", text)
+    def test_authoritative_source_gate_supports_strict_release(self) -> None:
+        """Keep exact-inventory validation exposed by the unified source gate."""
+        source_gate = ROOT / "tools" / "source_checks.py"
+        text = source_gate.read_text(encoding="utf-8")
+        self.assertIn('"--strict-release"', text)
+        self.assertIn("strict_release=args.strict_release", text)
 
 
 if __name__ == "__main__":

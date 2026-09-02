@@ -17,9 +17,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import tempfile
 from pathlib import Path
 
 from .source_json import load_json_object
+from .scn_patch import patch_part1a_scn
 
 from .iso9660 import SECTOR_SIZE, read_entries, unique_file
 from .lz_format import (
@@ -27,6 +29,7 @@ from .lz_format import (
     parse_archive,
     replace_members_fixed,
     replace_members_reflow,
+    read_member,
 )
 
 
@@ -80,24 +83,31 @@ def build_archives(build_root: Path) -> dict[str, object]:
             retail_path.write_bytes(retail_data)
             output_path = output_root / archive_name
             replacements = {f"{chapter}.MES": mes_root / f"{chapter}.MES"}
-            try:
-                replacement_report = replace_members_fixed(
-                    retail_path, output_path, replacements
-                )
-                archive_mode = "fixed-slot"
-                archive_headroom = replacement_report[0]["headroom"]
-            except LzError as error:
-                if "but retail slot is" not in str(error):
-                    raise
-                reflow = replace_members_reflow(
-                    retail_path,
-                    output_path,
-                    replacements,
-                    maximum_archive_size=iso_entry.allocated_size,
-                )
-                replacement_report = reflow["replacements"]
-                archive_mode = "guarded-reflow"
-                archive_headroom = reflow["headroom"]
+            with tempfile.TemporaryDirectory(prefix="nostalgia1907-scn-") as temporary:
+                if chapter == "PART1A":
+                    patched_scn = Path(temporary) / "PART1A.SCN"
+                    patched_scn.write_bytes(
+                        patch_part1a_scn(read_member(retail_path, "PART1A.SCN"))
+                    )
+                    replacements["PART1A.SCN"] = patched_scn
+                try:
+                    replacement_report = replace_members_fixed(
+                        retail_path, output_path, replacements
+                    )
+                    archive_mode = "fixed-slot"
+                    archive_headroom = replacement_report[0]["headroom"]
+                except LzError as error:
+                    if "but retail slot is" not in str(error):
+                        raise
+                    reflow = replace_members_reflow(
+                        retail_path,
+                        output_path,
+                        replacements,
+                        maximum_archive_size=iso_entry.allocated_size,
+                    )
+                    replacement_report = reflow["replacements"]
+                    archive_mode = "guarded-reflow"
+                    archive_headroom = reflow["headroom"]
 
             output_data = output_path.read_bytes()
             if archive_mode == "fixed-slot" and len(output_data) != len(retail_data):

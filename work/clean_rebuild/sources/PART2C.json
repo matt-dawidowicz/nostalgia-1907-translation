@@ -19,24 +19,10 @@
   "profile": {
     "schema_version": 1,
     "name": "PART2C",
-    "choice_render_cell_limit": 18,
-    "require_choice_segments": false,
-    "require_selector_window_segments": true,
-    "exclude_choice_segments_from_wrap": true,
-    "scn_selector_window_subtypes": [
-      40
-    ],
-    "infer_scn_layouts": true,
-    "infer_all_replacement_segments": true,
     "scn_window_text_subtypes": [
       39,
       40
     ],
-    "validate_runtime_row_boundaries": true,
-    "validate_text_hygiene": true,
-    "validate_wrapped_text_integrity": true,
-    "validate_scn_floating_row_limits": true,
-    "validate_single_option_transition_rows": true,
     "scn_dialogue_layout": {
       "first": 12,
       "continuation": 10
@@ -55,9 +41,6 @@
     },
     "layout_overrides": {},
     "runtime_layout_overrides": {},
-    "no_pad_final_row_segments": [
-      74
-    ],
     "required_text_exact": {
       "65": "Tianon",
       "85": "Lumeranka",

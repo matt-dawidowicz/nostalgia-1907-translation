@@ -22,7 +22,9 @@ from .lz_format import parse_archive, read_member
 from .main_patch import PATCHED_SHA256, RETAIL_SHA256
 from .mes_compiler import FIXED_ENGLISH_UNITS
 from .mes_format import read_mes
+from .prepare_retail import RETAIL_TRACK1_SHA256
 from .source_json import load_json_array, load_json_object
+from .scn_patch import patch_part1a_scn
 from .raw_cd import verify_track
 
 
@@ -283,15 +285,18 @@ def validate_build(
             != (build_root / "mes" / mes_name).read_bytes()
         ):
             raise ValueError(f"{chapter}: compressed MES round-trip differs")
-        if (
-            read_member(output_archive, f"{chapter}.SCN")
-            != (
-                build_root / "retail_unpacked" / chapter / f"{chapter}.SCN"
-            ).read_bytes()
-        ):
-            raise ValueError(f"{chapter}: SCN payload changed")
+        retail_scn = (
+            build_root / "retail_unpacked" / chapter / f"{chapter}.SCN"
+        ).read_bytes()
+        expected_scn = (
+            patch_part1a_scn(retail_scn) if chapter == "PART1A" else retail_scn
+        )
+        if read_member(output_archive, f"{chapter}.SCN") != expected_scn:
+            raise ValueError(f"{chapter}: SCN payload is outside the guarded contract")
         for old_entry, new_entry in zip(original_entries, rebuilt_entries, strict=True):
-            if old_entry.name == mes_name:
+            if old_entry.name == mes_name or (
+                chapter == "PART1A" and old_entry.name == "PART1A.SCN"
+            ):
                 continue
             old_payload = original[
                 old_entry.offset : old_entry.offset + old_entry.compressed_size
@@ -320,7 +325,12 @@ def validate_build(
     track1 = output_root / f"{basename}_Track1.bin"
     track2 = output_root / f"{basename}_Track2.bin"
     cue = output_root / f"{basename}.cue"
-    track_report = verify_track(track1, compare_boot_to=retail_track1)
+    track_report = verify_track(
+        track1,
+        compare_boot_to=retail_track1,
+        trusted_reference=retail_track1,
+        trusted_reference_sha256=RETAIL_TRACK1_SHA256,
+    )
     if track_report["sector_count"] != retail_track1.stat().st_size // 2352:
         raise ValueError("raw Track 1 sector geometry changed")
     if track2.stat().st_size != TRACK2_SIZE or sha256(track2) != TRACK2_SHA256:

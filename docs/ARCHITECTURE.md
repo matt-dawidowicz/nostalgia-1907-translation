@@ -40,8 +40,9 @@ The build path is deliberately staged:
    reference.
 2. `mes_compiler.py` combines canonical English with the original MES/SCN
    structure and shared renderer rules.
-3. `build_archives.py` replaces MES members within guarded archive capacity.
-4. `iso9660.py`, `main_patch.py`, and `font_render.py` create the logical disc
+3. `build_archives.py` replaces MES members within guarded archive capacity and
+   installs the single hash-locked `PART1A.SCN` selector-coordinate correction.
+4. `iso9660.py`, `main_patch.py`, `scn_patch.py`, and `font_render.py` create the logical disc
    payload without relocating unrelated files.
 5. `raw_cd.py` reconstructs MODE1/2352 Track 1 and copies Track 2 exactly.
 6. `regression.py` checks cross-layer preservation invariants.
@@ -98,8 +99,9 @@ Each production module has one primary responsibility:
 | `mes_compiler.py` | Canonical records to guarded MES bytes |
 | `prepare_retail.py` | Exact retail verification and extraction |
 | `build_mes_set.py` | Whole-corpus MES compilation and font assembly |
-| `build_archives.py` | MES installation within original archive allocation |
+| `build_archives.py` | MES and guarded PART1A SCN installation within original archive allocation |
 | `main_patch.py` | Frozen hash-guarded executable adjustment |
+| `scn_patch.py` | Frozen two-byte PART1A Call/Fold selector alignment correction |
 | `regression.py` | Cross-layer binary preservation proofs |
 | `verification_manifest.py` | Input fingerprints and explicit output binding |
 | `rebuild.py` | Orchestration, two-run determinism, publication |

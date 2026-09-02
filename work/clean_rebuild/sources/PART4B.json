@@ -1683,7 +1683,7 @@
     {
       "index": 277,
       "policy": "translate",
-      "text": "I am...scared.",
+      "text": "I'm...scared.",
       "layout_policy": "adaptive"
     },
     {
@@ -1695,7 +1695,7 @@
     {
       "index": 279,
       "policy": "translate",
-      "text": "Open the connector...Ilyu, my sleeve is caught and I cannot turn the screwdriver!",
+      "text": "Open the connector...Ilyu, my sleeve is caught and I can't turn the screwdriver!",
       "layout_policy": "adaptive"
     },
     {
@@ -1719,13 +1719,13 @@
     {
       "index": 283,
       "policy": "translate",
-      "text": "I do not know...my hands are frozen...",
+      "text": "I don't know...my hands are frozen...",
       "layout_policy": "adaptive"
     },
     {
       "index": 284,
       "policy": "translate",
-      "text": "I give up. I surrender. I apologize, so forgive me...",
+      "text": "I give up. I surrender. I'm sorry...forgive me...",
       "layout_policy": "adaptive"
     },
     {
@@ -1737,25 +1737,25 @@
     {
       "index": 286,
       "policy": "translate",
-      "text": "There are two choices...Ilyu, earlier you said you had to choose, right? What did you have to choose between?",
+      "text": "Two choices...Ilyu, earlier you said you had a choice to make. What were you choosing between?",
       "layout_policy": "adaptive"
     },
     {
       "index": 287,
       "policy": "translate",
-      "text": "At a time like this...you are still interested in me?",
+      "text": "At a time like this...you're still interested in me?",
       "layout_policy": "adaptive"
     },
     {
       "index": 288,
       "policy": "translate",
-      "text": "Yes. I cannot think about anything but you.",
+      "text": "Yes. I can't think about anything but you.",
       "layout_policy": "adaptive"
     },
     {
       "index": 289,
       "policy": "translate",
-      "text": "You are a strange man...I will leave this choice to you. Cut whichever you want. I will not regret it.",
+      "text": "You're a strange man...I'll leave this choice to you. Cut whichever one you want. I won't regret it.",
       "layout_policy": "adaptive"
     },
     {
@@ -1773,7 +1773,7 @@
     {
       "index": 292,
       "policy": "translate",
-      "text": "I am cutting it, Ilyu.",
+      "text": "I'm cutting it, Ilyu.",
       "layout_policy": "adaptive"
     }
   ]

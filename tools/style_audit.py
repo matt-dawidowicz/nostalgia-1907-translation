@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Audit maintained Python against the project's docstring contract.
+"""Audit maintained Python public APIs against the project's docstring contract.
 
-Ruff owns generic Python linting in contributor and CI environments. This
-standard-library audit keeps only the repository-specific documentation policy:
-every maintained module, class, function, method, and nested helper must have a
-structured docstring with a non-empty punctuated summary.
+Ruff owns generic Python linting. This audit requires structured documentation
+for maintained modules and public APIs while leaving private helper documentation
+to technical necessity and review.
 """
 
 from __future__ import annotations
@@ -54,7 +53,17 @@ def iter_maintained_python(root: Path) -> tuple[Path, ...]:
 def _docstring_nodes(tree: ast.Module) -> Iterable[ast.AST]:
     """Yield the module and every maintained symbol that needs a docstring."""
     yield tree
-    yield from (node for node in ast.walk(tree) if isinstance(node, DOCUMENTED_NODES))
+    for node in tree.body:
+        if not isinstance(node, DOCUMENTED_NODES) or node.name.startswith("_"):
+            continue
+        yield node
+        if isinstance(node, ast.ClassDef):
+            yield from (
+                member
+                for member in node.body
+                if isinstance(member, (ast.FunctionDef, ast.AsyncFunctionDef))
+                and not member.name.startswith("_")
+            )
 
 
 def _symbol_name(node: ast.AST) -> str:

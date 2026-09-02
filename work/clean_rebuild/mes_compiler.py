@@ -290,12 +290,6 @@ def _compact_cluster(unit: str) -> bool:
         unit == "..."
         or (
             len(unit) == 3
-            and unit[1] == "'"
-            and unit[0].isalpha()
-            and unit[2].isalpha()
-        )
-        or (
-            len(unit) == 3
             and unit[1] == "."
             and unit[0].isdigit()
             and unit[2].isdigit()
@@ -409,6 +403,9 @@ def _optimize_phases(
     fixed_by_bitmap: dict[bytes, int],
 ) -> None:
     """Choose row phases that minimize actual record-plus-glyph-tail bytes."""
+    if not any(row.alternate is not None for row in rows):
+        return
+
     retained = set(retained_glyphs)
     row_glyphs = {
         id(row): (

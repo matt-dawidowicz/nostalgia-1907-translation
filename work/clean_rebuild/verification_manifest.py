@@ -38,7 +38,6 @@ VERIFICATION_MODULES = (
     "bomb_audit.py",
     "export_bilingual_comparison.py",
     "export_fixed_layout_review.py",
-    "test_script_layout.py",
 )
 CONFIGURATION_FILES = (
     "font_patterns.json",
@@ -396,7 +395,7 @@ def collect_build_bindings(
                 clean_root / name,
             )
         )
-    for name in ("nostalgia1907.py", "nostalgia1907.project.json", "pyproject.toml"):
+    for name in ("nostalgia1907.py", "nostalgia1907.project.json"):
         bindings.append(
             FileBinding(
                 "operator_and_project_configuration",

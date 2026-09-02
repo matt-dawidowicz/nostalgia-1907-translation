@@ -19,7 +19,7 @@ to compensate for stale storage geometry.
 | Contract | Evidence | Geometry ownership |
 | --- | --- | --- |
 | `lower_dialogue` | SCN `0x21 <speaker> <text>` | One initial 12-cell row followed by an 11-cell continuation stride; a retail `0x10` quote cell becomes a one-time blank opening gutter. A three-line page clear does not reset the wider row. |
-| `lower_continuation` | SCN `0x21 <text> 0x0000` | Separate lower-box continuation layout; it never receives the opening gutter. |
+| `lower_continuation` | SCN `0x21 <text> 0x0000` | Separate lower-box continuation layout; it never receives the opening gutter and begins directly on the native 11-cell physical continuation stride. |
 | `floating_window` | Valid SCN `0x24` text window and its `0x27` chain, including selector targets | Width and row limit derive from the window operands. A selector retains its `menu_choice` role while using the same window geometry. |
 | `full_screen_narration` | Reviewed `START` SCN/profile evidence | Explicit 16-cell full-screen narration contract. |
 | `lower_caption` | Reviewed `PART2A:093` SCN/profile evidence | Explicit lower-area route-caption contract. |

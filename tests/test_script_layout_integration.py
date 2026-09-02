@@ -8,13 +8,13 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from . import mes_compiler
-from .font_render import GLYPH_BYTES, stored_cell
-from .mes_compiler import compile_files
-from .mes_format import DYNAMIC_PREFIX_START, parse_mes
-from .renderer_format import measure_literal
-from .source_json import load_json_object
-from .scn_layout import (
+from work.clean_rebuild import mes_compiler
+from work.clean_rebuild.font_render import GLYPH_BYTES, stored_cell
+from work.clean_rebuild.mes_compiler import compile_files
+from work.clean_rebuild.mes_format import DYNAMIC_PREFIX_START, parse_mes
+from work.clean_rebuild.renderer_format import measure_literal
+from work.clean_rebuild.source_json import load_json_object
+from work.clean_rebuild.scn_layout import (
     ROLE_CHOICE,
     ROLE_CONTINUATION,
     ROLE_DIALOGUE,
@@ -23,16 +23,17 @@ from .scn_layout import (
     ROLE_OVERLAY,
     ROLE_PERSPECTIVE,
     ROLE_THOUGHT,
+    TEXT_BOX_LOWER_CONTINUATION,
     TEXT_BOX_LOWER_DIALOGUE,
     infer_contracts,
 )
-from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
-from .translation_formatter import (
+from work.clean_rebuild.translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
+from work.clean_rebuild.translation_formatter import (
     _renderer_boundary_failures,
     audit_layouts,
     format_preview,
 )
-from .whole_game_test import build_plan, verify_runtime_log
+from work.clean_rebuild.whole_game_test import build_plan, verify_runtime_log
 
 
 HERE = Path(__file__).resolve().parent
@@ -186,7 +187,17 @@ class ScriptLayoutTests(unittest.TestCase):
         )
         self.assertEqual(contract.max_rows, 6)
         rows = format_preview(canonical["records"][0]["text"], contract)
-        self.assertEqual(len(rows), 6)
+        self.assertEqual(
+            rows,
+            [
+                "The past slips into fantasy as",
+                "easily as any future we imagine.",
+                "I didn't notice the faint scar",
+                "in her left eye then, not in",
+                "that fleeting instant.",
+            ],
+        )
+        self.assertLessEqual(len(rows), contract.max_rows)
         self.assertTrue(all(len(row) <= 32 for row in rows))
         self.assertEqual(" ".join(rows), canonical["records"][0]["text"])
 
@@ -200,11 +211,14 @@ class ScriptLayoutTests(unittest.TestCase):
         rows = format_preview(canonical["records"][3]["text"], inferred[3])
         self.assertEqual(
             rows,
-            ["How about we switch", "games and play one", "more round?"],
+            ["Want to switch games", "and play one more", "round?"],
         )
         self.assertEqual(" ".join(rows), canonical["records"][3]["text"])
         rows = format_preview(canonical["records"][6]["text"], inferred[6])
-        self.assertEqual(rows, ["How about Indian", "poker? Know the rules?"])
+        self.assertEqual(
+            rows,
+            ["How about Indian", "poker? Know how to", "play?"],
+        )
 
     def test_lower_dialogue_keeps_continuation_width_after_page_cycle(self) -> None:
         """Keep lower-dialogue page clears separate from X-coordinate geometry."""
@@ -228,29 +242,26 @@ class ScriptLayoutTests(unittest.TestCase):
             canonical["records"][10]["text"], contract.layout
         )
         self.assertEqual(
-            [len(prefix) for prefix, _line in row_specs[:7]],
-            [1, 0, 0, 0, 0, 0, 0],
+            [len(prefix) for prefix, _line in row_specs],
+            [1] + [0] * (len(row_specs) - 1),
         )
         self.assertEqual(row_specs[0][0], (mes_compiler.BLANK_CELL,))
         self.assertEqual(
             [
                 len(prefix) + measure_literal(line)
-                for prefix, line in row_specs[:7]
+                for prefix, line in row_specs
             ],
-            [12, 11, 11, 11, 11, 11, 11],
+            [12] + [11] * (len(row_specs) - 1),
         )
         self.assertEqual(
             format_preview(canonical["records"][10]["text"], contract),
             [
-                "First, we each draw",
-                "one card. Then you",
-                "show me your card, and",
-                "I show you mine.",
-                "Neither of us can look",
-                "at our own card. We",
-                "bet by judging the",
-                "strength of the other",
-                "person's card.",
+                "We each draw one card",
+                "and show it to the",
+                "other person, without",
+                "looking at our own.",
+                "Then we bet based on",
+                "what we see.",
             ],
         )
 
@@ -316,7 +327,7 @@ class ScriptLayoutTests(unittest.TestCase):
                 "PART1A",
                 20,
                 ROLE_CONTINUATION,
-                (12, 10, 12, 10),
+                (11, 10, 11, 11),
                 None,
             ),
         )
@@ -454,9 +465,9 @@ class ScriptLayoutTests(unittest.TestCase):
         canonical = source("PART1A")
         inferred = contracts("PART1A")
         expected = {
-            16: ["I know. I read your", "face when you see my", "card."],
-            17: ["Heh. You may be tough,", "but I'm lucky."],
-            18: ["Women are usually", "liars. Let us begin."],
+            16: ["I get it. I read your", "face when you see my", "card."],
+            17: ["Heh. You look tough.", "But I'm a liar."],
+            18: ["Most women are liars", "anyway. Let's play."],
         }
         for index, rows in expected.items():
             with self.subTest(index=index):
@@ -581,37 +592,54 @@ class ScriptLayoutTests(unittest.TestCase):
 
         chapter = "PART1A"
         retail = DEFAULT_RETAIL_ROOT / "retail_unpacked" / chapter
+        canonical = source(chapter)
         result = mes_compiler.compile_mes(
             (retail / f"{chapter}.MES").read_bytes(),
             (retail / f"{chapter}.SCN").read_bytes(),
-            source(chapter),
+            canonical,
         )
-        record = parse_mes(result.data).records[10]
-        cells: list[bytes] = []
-        offset = 0
-        while record[offset]:
-            size = 2 if record[offset] >= DYNAMIC_PREFIX_START else 1
-            cells.append(record[offset : offset + size])
-            offset += size
-        # The first faulty boundary was the "on" cell after twelve decoded
-        # cells. It must now be dynamic so MAIN.BIN cannot take its fixed-byte
-        # lookahead path at that edge.
-        self.assertGreaterEqual(cells[12][0], DYNAMIC_PREFIX_START)
+        parsed = parse_mes(result.data)
+        inferred = contracts(chapter)
+        for index, contract in inferred.items():
+            if contract.layout is None or contract.layout.text_box not in {
+                TEXT_BOX_LOWER_DIALOGUE,
+                TEXT_BOX_LOWER_CONTINUATION,
+            }:
+                continue
+            text = canonical["records"][index].get("text")
+            if not isinstance(text, str):
+                continue
+            row_specs = mes_compiler._prose_rows(text, contract.layout)
+            logical_cells: list[bytes] = []
+            record = parsed.records[index]
+            offset = 0
+            while record[offset]:
+                size = 2 if record[offset] >= DYNAMIC_PREFIX_START else 1
+                logical_cells.append(record[offset : offset + size])
+                offset += size
+            cell_offset = 0
+            for row_index, (_prefix, _line) in enumerate(row_specs[:-1]):
+                cell_offset += contract.layout.physical_cells(row_index)
+                self.assertNotIn(
+                    logical_cells[cell_offset][0],
+                    mes_compiler.NATIVE_DIALOGUE_ROW_EDGE_RESERVED_CODES,
+                    msg=f"{chapter}:{index:03d} row {row_index + 1}",
+                )
 
         # The compiled-byte audit is independent from the dictionary's static
-        # allowlist. Reintroducing the old ``on`` byte must fail because this
-        # record places it exactly after a native lower-dialogue row stride.
+        # allowlist. Reintroducing a reserved fixed byte for ``lo`` must fail
+        # because PART1A:020 begins its second native continuation row with it.
         dictionary = mes_compiler.FIXED_ENGLISH_UNITS
         try:
-            mes_compiler.FIXED_ENGLISH_UNITS = dictionary + ((0x05, "literal", "on"),)
+            mes_compiler.FIXED_ENGLISH_UNITS = dictionary + ((0x05, "literal", "lo"),)
             with self.assertRaisesRegex(
                 mes_compiler.CompileError,
-                r"PART1A:010 emits native row-edge code 0x05",
+                r"PART1A:\d{3} emits native row-edge code 0x05",
             ):
                 mes_compiler.compile_mes(
                     (retail / f"{chapter}.MES").read_bytes(),
                     (retail / f"{chapter}.SCN").read_bytes(),
-                    source(chapter),
+                    canonical,
                 )
         finally:
             mes_compiler.FIXED_ENGLISH_UNITS = dictionary

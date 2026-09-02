@@ -99,7 +99,10 @@ def prepare_retail(track1: Path, build_root: Path) -> dict[str, object]:
 
     build_root.mkdir(parents=True, exist_ok=True)
     retail_iso = build_root / "retail.iso"
-    sector_count = raw_to_iso(track1, retail_iso, verify=True)
+    # The complete Track 1 bytes were authenticated against the frozen retail
+    # SHA-256 immediately above, so recomputing every sector's EDC/ECC here adds
+    # CPU cost without increasing confidence in this exact accepted input.
+    sector_count = raw_to_iso(track1, retail_iso, verify=False)
     iso_hash = sha256(retail_iso)
     iso_size = retail_iso.stat().st_size
     if iso_size != RETAIL_ISO_SIZE or iso_hash != RETAIL_ISO_SHA256:

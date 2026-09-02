@@ -66,6 +66,7 @@ PRODUCTION_MODULES = (
     "build_mes_set.py",
     "build_archives.py",
     "main_patch.py",
+    "scn_patch.py",
     "regression.py",
     "verification_manifest.py",
     "rebuild.py",
@@ -335,10 +336,7 @@ def _canonical_coverage(sources: Path = SOURCES) -> dict[str, object]:
     }
 
 
-def _render_test_notes(
-    coverage: dict[str, object],
-    dependency_audit: dict[str, object],
-) -> str:
+def _render_test_notes(coverage: dict[str, object]) -> str:
     """Render release notes from validated coverage and dependency evidence."""
     preserved_indexes = ", ".join(
         str(index) for index in coverage["part3b_preserved_record_indexes"]
@@ -347,12 +345,8 @@ def _render_test_notes(
         "# Nostalgia 1907 clean rebuild\n\n"
         "Built twice, byte-for-byte identically, from the verified original "
         "Japanese BIN.\n"
-        f"A static production dependency audit scanned "
-        f"{dependency_audit['modules_scanned']} allowlisted modules and "
-        f"{dependency_audit['data_files_scanned']} tracked data paths; it found "
-        "no unapproved local imports, escaped source paths, or known "
-        "historical-workspace markers in production code. "
-        "Retail inputs remain separately size- and SHA-256-guarded.\n\n"
+        "Source-only validation separately enforces the production dependency "
+        "boundary before a release build is accepted.\n\n"
         f"Static checks cover all {coverage['chapter_count']} chapters and "
         f"{coverage['record_count']:,} records, MES pointer/glyph bounds, the "
         "PART3C 0x3FFF limit, exhaustive adaptive/fixed layout policies, "
@@ -486,7 +480,12 @@ def _build_once(
     output_track1 = product_root / f"{basename}_Track1.bin"
     output_track2 = product_root / f"{basename}_Track2.bin"
     output_cue = product_root / f"{basename}.cue"
-    iso_to_raw_fixed(track1, build_root / "translated.iso", output_track1)
+    iso_to_raw_fixed(
+        track1,
+        build_root / "translated.iso",
+        output_track1,
+        trust_template_checksums=True,
+    )
     shutil.copyfile(track2, output_track2)
     write_two_track_cue(output_cue, output_track1, output_track2)
     verification = validate_build(build_root, product_root, track1, track2, basename)
@@ -572,7 +571,6 @@ def rebuild(
         Existing non-empty directories are never cleaned or overwritten.
     """
     basename = _validate_basename(basename)
-    dependency_audit = _verify_production_independence()
     coverage = _canonical_coverage()
     run_a_build = runs_root / "run_a" / "build"
     run_a_product = runs_root / "run_a" / "product"
@@ -606,7 +604,6 @@ def rebuild(
     report = {
         "status": "PASS",
         "pipeline": "retail Japanese Track 1 -> clean extraction -> canonical translation -> fixed extents -> BIN/CUE",
-        "production_dependency_audit": dependency_audit,
         "canonical_coverage": coverage,
         "two_clean_builds_byte_identical": True,
         "two_clean_builds_same_input_fingerprint": True,
@@ -630,7 +627,7 @@ def rebuild(
             "independent clean build runs."
         ),
     )
-    notes = _render_test_notes(coverage, dependency_audit)
+    notes = _render_test_notes(coverage)
     (delivery_root / "TEST_NOTES.md").write_text(notes, encoding="utf-8")
     return report
 
