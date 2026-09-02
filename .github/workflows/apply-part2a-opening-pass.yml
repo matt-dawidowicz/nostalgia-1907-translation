@@ -19,6 +19,15 @@ jobs:
           ref: translation/punchier-opening-20260901
           fetch-depth: 0
 
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install project and development checks
+        run: python -m pip install -e ".[dev]"
+
       - name: Apply approved PART2A dialogue polish
         shell: bash
         run: |
