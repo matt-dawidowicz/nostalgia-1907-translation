@@ -12,6 +12,8 @@ jobs:
   apply:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
     steps:
       - name: Check out cleanup branch
         uses: actions/checkout@v7
