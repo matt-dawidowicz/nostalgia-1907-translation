@@ -31,6 +31,13 @@ jobs:
         run: |
           python tools/apply_cleanup_20260902.py
           python tools/fix_cleanup_transform_20260902.py
+          git checkout HEAD -- .github/workflows/source-checks.yml
+
+      - name: Remove one-shot Python applicators
+        shell: bash
+        run: |
+          rm tools/apply_cleanup_20260902.py
+          rm tools/fix_cleanup_transform_20260902.py
 
       - name: Stage transformed inventory
         shell: bash
@@ -49,20 +56,7 @@ jobs:
       - name: Check patch hygiene
         run: git diff --cached --check
 
-      - name: Remove one-shot applicators
-        shell: bash
-        run: |
-          rm tools/apply_cleanup_20260902.py
-          rm tools/fix_cleanup_transform_20260902.py
-          rm .github/workflows/apply-toolchain-cleanup-20260902.yml
-          git add -A
-          python tools/source_manifest.py --root . --write
-          git add MANIFEST.sha256
-
-      - name: Re-run source checks against final staged tree
-        run: python -m tools.source_checks --root . --strict-release
-
-      - name: Commit cleanup
+      - name: Commit durable cleanup
         shell: bash
         run: |
           set -euo pipefail
