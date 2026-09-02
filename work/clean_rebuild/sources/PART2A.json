@@ -111,13 +111,13 @@
     {
       "index": 5,
       "policy": "translate",
-      "text": "Listen. From now on, you answer to me. Show any insolence and I'll shoot you on the spot! Report every finding as the investigation proceeds. Remember, my gun is always at the back of your head.",
+      "text": "Listen. From now on, you answer to me. Any insolence and I'll shoot you on the spot! Report everything you find. Remember, my gun is always at the back of your head.",
       "layout_policy": "adaptive"
     },
     {
       "index": 6,
       "policy": "translate",
-      "text": "Is this guy under some kind of delusion?",
+      "text": "Is this guy delusional?",
       "layout_policy": "adaptive"
     },
     {
@@ -147,7 +147,7 @@
     {
       "index": 11,
       "policy": "translate",
-      "text": "The first threat came by wireless. The next was written in rouge on the captain's window...so we find the wireless set and the rouge. Right, Manager?",
+      "text": "The first threat came by wireless. The next was written in rouge on the captain's window...so we start with the wireless set and the rouge. Right, Manager?",
       "layout_policy": "adaptive"
     },
     {
@@ -171,13 +171,13 @@
     {
       "index": 15,
       "policy": "translate",
-      "text": "Your pronunciation is terrible. The chief officer saw the wireless set thrown overboard from a first-class cabin. The vacant room is on the starboard side.",
+      "text": "Your pronunciation is terrible. The chief officer saw the wireless set thrown overboard from a first-class cabin. The empty cabin is on the starboard side.",
       "layout_policy": "adaptive"
     },
     {
       "index": 16,
       "policy": "translate",
-      "text": "First class...on this little ship, it felt worlds away from mine.",
+      "text": "First class...even on this little ship, it felt worlds away from second class.",
       "layout_policy": "adaptive"
     },
     {
@@ -189,7 +189,7 @@
     {
       "index": 18,
       "policy": "translate",
-      "text": "How can you prove you were not the one who threw it away? Search the starboard first-class cabins and bring me whatever you find. Now hop to it!",
+      "text": "How can you prove you weren't the one who threw it overboard? Search the starboard first-class cabins and bring me whatever you find. Now hop to it!",
       "layout_policy": "adaptive"
     },
     {
@@ -231,7 +231,7 @@
     {
       "index": 25,
       "policy": "translate",
-      "text": "She is calm.",
+      "text": "She's calm.",
       "layout_policy": "adaptive"
     },
     {
@@ -255,7 +255,7 @@
     {
       "index": 29,
       "policy": "translate",
-      "text": "...would you prefer me to panic? I...I'm a stewardess. I can still do my job.",
+      "text": "...would you rather I panic? I...I'm a stewardess. I can still do my job.",
       "layout_policy": "adaptive"
     },
     {
@@ -291,13 +291,13 @@
     {
       "index": 35,
       "policy": "translate",
-      "text": "Nothing appears unusual. I inspected it before we sailed.",
+      "text": "Nothing looks out of place. I inspected it before we sailed.",
       "layout_policy": "adaptive"
     },
     {
       "index": 36,
       "policy": "translate",
-      "text": "The window is shut exactly as it was. The culprit was careful.",
+      "text": "The window's shut exactly as it was. The culprit was careful.",
       "layout_policy": "adaptive"
     },
     {
@@ -321,7 +321,7 @@
     {
       "index": 40,
       "policy": "translate",
-      "text": "All right. For the last day of my life, I'm doing rather well.",
+      "text": "Not bad for the last day of my life.",
       "layout_policy": "adaptive"
     },
     {
@@ -375,7 +375,7 @@
     {
       "index": 49,
       "policy": "translate",
-      "text": "I'm a good man, to my friends.",
+      "text": "I'm a good man, at least to my friends.",
       "layout_policy": "adaptive"
     },
     {
@@ -393,7 +393,7 @@
     {
       "index": 52,
       "policy": "translate",
-      "text": "A sordid trade, being an errand-boy salesman.",
+      "text": "What a sordid business...being a salesman is just running errands.",
       "layout_policy": "adaptive"
     },
     {
@@ -411,7 +411,7 @@
     {
       "index": 55,
       "policy": "translate",
-      "text": "The hijacker's warning came from First-Class Cabin A. Have you checked who approached it at the time of transmission?",
+      "text": "The hijacker's warning came from First-Class Cabin A. Did you check who came near it when the message was sent?",
       "layout_policy": "adaptive"
     },
     {
@@ -429,7 +429,7 @@
     {
       "index": 58,
       "policy": "translate",
-      "text": "Idiot! You aren't here to chase keys! Get moving and investigate!",
+      "text": "Idiot! You're not here just to chase down keys! Get moving and investigate!",
       "layout_policy": "adaptive"
     },
     {
