@@ -21,10 +21,11 @@ from .iso9660 import SECTOR_SIZE, extract_file, read_entries, unique_file
 from .lz_format import parse_archive, read_member
 from .main_patch import PATCHED_SHA256, RETAIL_SHA256
 from .mes_compiler import FIXED_ENGLISH_UNITS
-from .mes_format import read_mes
+from .mes_format import read_mes, record_render_tokens
 from .prepare_retail import RETAIL_TRACK1_SHA256
 from .source_json import load_json_array, load_json_object
 from .scn_patch import patch_part1a_scn
+from .script_integrity import audit_project_scn_references
 from .raw_cd import verify_track
 
 
@@ -173,6 +174,22 @@ def validate_build(
         mes = read_mes(mes_path)
         if mes.record_count != canonical["record_count"]:
             raise ValueError(f"{chapter}: output record count changed")
+        retail_mes = read_mes(
+            build_root / "retail_unpacked" / chapter / f"{chapter}.MES"
+        )
+        preserved_indexes = {
+            record_index
+            for record_index, record in enumerate(records)
+            if record.get("policy") == "preserve"
+        }
+        for record_index in sorted(preserved_indexes):
+            if record_render_tokens(retail_mes, record_index) != record_render_tokens(
+                mes, record_index
+            ):
+                raise ValueError(
+                    f"{chapter}:{record_index:03d}: preserved record changed "
+                    "fixed/control bytes or rendered dynamic glyphs"
+                )
         if any(not record or record[-1] != 0 for record in mes.records):
             raise ValueError(f"{chapter}: a record lacks its terminator")
         if len(mes.glyphs) > DYNAMIC_LIMIT:
@@ -192,6 +209,16 @@ def validate_build(
         )
     if total_records != EXPECTED_RECORDS:
         raise ValueError(f"total record count changed: {total_records}")
+
+    scn_integrity = audit_project_scn_references(build_root)
+    if scn_integrity["status"] != "PASS":
+        failures = scn_integrity["failures"]
+        detail = (
+            failures[0]
+            if isinstance(failures, list) and failures
+            else "unknown failure"
+        )
+        raise ValueError(f"SCN referential-integrity audit failed: {detail}")
 
     part3c = read_mes(build_root / "mes" / "PART3C.MES")
     part3c_source = load_json_object(SOURCES / "PART3C.json")
