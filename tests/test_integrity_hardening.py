@@ -15,6 +15,7 @@ class ScriptIntegrityTests(unittest.TestCase):
     """Prove recognized SCN edges fail closed when their operands are unsafe."""
 
     def test_valid_choice_edge_is_inventoried(self) -> None:
+        """Inventory a structurally valid 0x31 choice and its branch target."""
         scn = bytes((0x31, 0x00, 0x01, 0xFF, 0x00, 0x06, 0x72))
         references = scan_scn_text_references(scn, 1, None)
         edges = choice_edges(references)
@@ -24,11 +25,13 @@ class ScriptIntegrityTests(unittest.TestCase):
         self.assertEqual(edges[0].target_opcode, 0x72)
 
     def test_out_of_range_choice_target_is_not_accepted(self) -> None:
+        """Reject a 0x31 candidate whose branch destination leaves the SCN."""
         scn = bytes((0x31, 0x00, 0x01, 0xFF, 0x01, 0x00))
         references = scan_scn_text_references(scn, 1, None)
         self.assertFalse(any(item.command == "0x31" for item in references))
 
     def test_dialogue_reference_requires_in_range_record(self) -> None:
+        """Accept valid 0x21 IDs and reject the same shape with a stale ID."""
         valid = bytes((0x21, 0x00, 0x01, 0x00, 0x02))
         refs = scan_scn_text_references(valid, 2, None)
         self.assertEqual(
@@ -53,6 +56,7 @@ class PreservedRecordIdentityTests(unittest.TestCase):
         )
 
     def test_dynamic_index_remap_with_same_bitmap_is_equivalent(self) -> None:
+        """Treat glyph-index renumbering as equivalent when the bitmap is identical."""
         glyph_a = b"A" * 18
         glyph_b = b"B" * 18
         before = self._mes(bytes((0x41, 0xF0, 0x02, 0x00)), (glyph_a, glyph_b))
@@ -62,6 +66,7 @@ class PreservedRecordIdentityTests(unittest.TestCase):
         )
 
     def test_fixed_or_control_byte_change_is_detected(self) -> None:
+        """Reject a preserved record when any fixed or control byte changes."""
         glyph = b"G" * 18
         before = self._mes(bytes((0x41, 0xF0, 0x01, 0x00)), (glyph,))
         after = self._mes(bytes((0x42, 0xF0, 0x01, 0x00)), (glyph,))
@@ -70,6 +75,7 @@ class PreservedRecordIdentityTests(unittest.TestCase):
         )
 
     def test_dynamic_bitmap_change_is_detected(self) -> None:
+        """Reject a preserved record when a referenced dynamic glyph bitmap changes."""
         before = self._mes(bytes((0xF0, 0x01, 0x00)), (b"A" * 18,))
         after = self._mes(bytes((0xF0, 0x01, 0x00)), (b"B" * 18,))
         self.assertNotEqual(
@@ -81,6 +87,7 @@ class RendererBoundaryCampaignTests(unittest.TestCase):
     """Exercise exact-width and one-past-width renderer boundaries."""
 
     def test_eighteen_cell_boundary_accepts_36_rejects_37_character_token(self) -> None:
+        """Accept the 18-cell limit and reject one additional packed character."""
         layout = Layout(18, 18, 18, 18, text_box=TEXT_BOX_SCENE_LABEL)
         exact = "A" * 36
         exact_rows = wrap_words(exact, layout)
@@ -96,6 +103,7 @@ class RendererBoundaryCampaignTests(unittest.TestCase):
         )
 
     def test_dialogue_first_and_continuation_boundaries_are_distinct(self) -> None:
+        """Keep the native 12-cell opening row distinct from 11-cell continuations."""
         layout = Layout(12, 11, 12, 11)
         self.assertEqual(layout.visible_cells(0), 12)
         self.assertEqual(layout.visible_cells(1), 11)
