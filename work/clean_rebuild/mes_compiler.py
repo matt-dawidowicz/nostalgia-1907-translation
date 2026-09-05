@@ -57,8 +57,8 @@ RUNTIME_DYNAMIC_GLYPH_LIMIT = 1020
 PART3C_HARD_LIMIT = 0x3FFF
 FIXED_BLANK_CELL_CODE = 0x48
 # MAIN.BIN's lower-dialogue parser has a row-edge lookahead path for these
-# otherwise ordinary fixed-font byte values.  It consumes them differently
-# only when they are the next cell after a full row.  Generated English must
+# otherwise ordinary fixed-font byte values. It consumes them differently
+# only when they are the next cell after a full row. Generated English must
 # therefore use the dynamic form for their bitmaps; a dynamic F0-FF reference
 # is still exactly one renderer cell but cannot enter that legacy path.
 #
@@ -70,10 +70,10 @@ NATIVE_DIALOGUE_ROW_EDGE_RESERVED_CODES = frozenset(
 )
 FIXED_ENGLISH_UNITS = (
     # These cells form a shared English dictionary, not a chapter-specific
-    # workaround.  Each one is a display-identical 12x12 cell installed in an
-    # otherwise unused fixed-font slot.  One-byte references let every chapter
+    # workaround. Each one is a display-identical 12x12 cell installed in an
+    # otherwise unused fixed-font slot. One-byte references let every chapter
     # retain a left-aligned pair phase without paying a two-byte dynamic
-    # reference for common cells.  The chosen codes are checked against every
+    # reference for common cells. The chosen codes are checked against every
     # preserved retail record by the integration suite before a build is made.
     (0x06, "literal", "li"),
     (0x84, "literal", "nd"),
@@ -227,29 +227,17 @@ BLANK_CELL: Cell = ("literal", "  ")
 # semantic English and renderer contracts; they do not write MES bytes.
 
 
-@dataclass
+@dataclass(frozen=True)
 class RowPlan:
-    """One left-aligned runtime row.
-
-    ``alternate`` remains part of the compact-row optimizer's data contract,
-    but normal compilation deliberately leaves it unavailable. A former
-    shifted packing alternative placed a literal blank before the first source
-    character. It improved glyph reuse but visibly indented selected rows, so
-    display position takes priority over that storage optimization.
-    """
+    """One immutable, position-preserving left-aligned runtime row."""
 
     record: int
     prefix: tuple[Cell, ...]
     primary: tuple[Cell, ...]
-    alternate: tuple[Cell, ...] | None
-    selected_alternate: bool = False
 
     def cells(self) -> tuple[Cell, ...]:
-        """Return the currently selected complete row."""
-        body = self.alternate if self.selected_alternate else self.primary
-        if body is None:
-            raise CompileError("row selected a missing alternate phase")
-        return self.prefix + body
+        """Return the complete row in renderer order."""
+        return self.prefix + self.primary
 
 
 def _dynamic_code(index: int) -> bytes:
@@ -344,13 +332,8 @@ def _row_plan(record: int, line: str, prefix: tuple[Cell, ...] = ()) -> RowPlan:
     """Build one position-preserving packed row for the runtime renderer."""
     packed = _pack_row(line)
     if packed is None:
-        return RowPlan(record, prefix, (), None)
-    return RowPlan(
-        record=record,
-        prefix=prefix,
-        primary=packed[1],
-        alternate=None,
-    )
+        return RowPlan(record, prefix, ())
+    return RowPlan(record=record, prefix=prefix, primary=packed[1])
 
 
 def _prose_rows(
@@ -397,98 +380,11 @@ def _prose_rows(
     return output
 
 
-def _optimize_phases(
-    rows: list[RowPlan],
-    retained_glyphs: list[bytes],
-    fixed_by_bitmap: dict[bytes, int],
-) -> None:
-    """Choose row phases that minimize actual record-plus-glyph-tail bytes."""
-    if not any(row.alternate is not None for row in rows):
-        return
-
-    retained = set(retained_glyphs)
-    row_glyphs = {
-        id(row): (
-            Counter(stored_cell(*cell) for cell in row.primary),
-            (
-                Counter(stored_cell(*cell) for cell in row.alternate)
-                if row.alternate is not None
-                else None
-            ),
-        )
-        for row in rows
-    }
-
-    def byte_cost(references: Counter[bytes]) -> int:
-        """Measure encoded references plus newly required dynamic glyph bytes."""
-        record_bytes = sum(
-            count * (1 if glyph in fixed_by_bitmap else 2)
-            for glyph, count in references.items()
-        )
-        dynamic_glyphs = sum(
-            glyph not in fixed_by_bitmap or glyph in retained for glyph in references
-        )
-        return record_bytes + dynamic_glyphs * GLYPH_BYTES
-
-    def subtract(references: Counter[bytes], values: Counter[bytes]) -> None:
-        """Remove one row's multiset from the mutable global reference count."""
-        for glyph, count in values.items():
-            remaining = references[glyph] - count
-            if remaining:
-                references[glyph] = remaining
-            else:
-                del references[glyph]
-
-    best_cost: int | None = None
-    best_selection: tuple[bool, ...] | None = None
-    for start_alternate, reverse in (
-        (False, False),
-        (False, True),
-        (True, False),
-        (True, True),
-    ):
-        for row in rows:
-            row.selected_alternate = start_alternate and row.alternate is not None
-        references: Counter[bytes] = Counter(retained_glyphs)
-        for row in rows:
-            primary, alternate = row_glyphs[id(row)]
-            references.update(alternate if row.selected_alternate else primary)
-        ordered_rows = list(reversed(rows)) if reverse else rows
-        while True:
-            changed = False
-            for row in ordered_rows:
-                primary, alternate = row_glyphs[id(row)]
-                if alternate is None:
-                    continue
-                current = alternate if row.selected_alternate else primary
-                candidate = primary if row.selected_alternate else alternate
-                before = byte_cost(references)
-                subtract(references, current)
-                references.update(candidate)
-                if byte_cost(references) < before:
-                    row.selected_alternate = not row.selected_alternate
-                    changed = True
-                else:
-                    subtract(references, candidate)
-                    references.update(current)
-            if not changed:
-                break
-        final_cost = byte_cost(references)
-        selection = tuple(row.selected_alternate for row in rows)
-        if best_cost is None or (final_cost, selection) < (best_cost, best_selection):
-            best_cost = final_cost
-            best_selection = selection
-    if best_selection is None:
-        raise CompileError("row phase optimizer produced no candidate")
-    for row, selected in zip(rows, best_selection):
-        row.selected_alternate = selected
-
-
 def _decode_emitted_cells(record: bytes) -> tuple[bytes, ...]:
     """Decode one emitted MES record into the renderer's logical cells.
 
     A dynamic ``F0``--``FF`` reference occupies two storage bytes but exactly
-    one runtime cell.  The distinction is the heart of this audit: byte
+    one runtime cell. The distinction is the heart of this audit: byte
     length is not a safe proxy for the dialogue cursor's X advance.
     """
     cells: list[bytes] = []
@@ -823,7 +719,6 @@ def compile_mes(
         fixed_by_bitmap[bitmap] = code
         patches.append((code, bitmap.hex().upper()))
     fixed_font_patches = tuple(patches)
-    _optimize_phases(row_plans, glyphs, fixed_by_bitmap)
 
     generated_frequency: Counter[bytes] = Counter(
         stored_cell(*cell)

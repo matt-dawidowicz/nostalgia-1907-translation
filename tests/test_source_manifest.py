@@ -61,6 +61,18 @@ class SourceManifestTests(unittest.TestCase):
                 source_manifest.sha256(crlf),
             )
 
+    def test_makefile_and_sha256_text_hashes_normalize_line_endings(self) -> None:
+        """Match source-health text policy for suffixless and checksum text files."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for name in ("Makefile", "checks.sha256"):
+                with self.subTest(name=name):
+                    path = root / name
+                    path.write_bytes(b"first\nsecond\n")
+                    lf_hash = source_manifest.sha256(path)
+                    path.write_bytes(b"first\r\nsecond\r\n")
+                    self.assertEqual(source_manifest.sha256(path), lf_hash)
+
     def test_check_manifest_detects_changed_source(self) -> None:
         """Reject a manifest after any represented source byte changes."""
         with tempfile.TemporaryDirectory() as temporary:
@@ -80,6 +92,15 @@ class SourceManifestTests(unittest.TestCase):
             valid, differences = source_manifest.check_manifest(root)
             self.assertFalse(valid)
             self.assertTrue(any("changed" in item for item in differences))
+
+    def test_manifest_diff_reports_duplicate_lines(self) -> None:
+        """A duplicated hash line must produce an actionable stale-line diagnostic."""
+        expected = source_manifest.HEADER + "A" * 64 + "  source.txt\n"
+        actual = expected + "A" * 64 + "  source.txt\n"
+        differences = source_manifest.manifest_diff(expected, actual)
+        self.assertEqual(len(differences), 1)
+        self.assertIn("unexpected or stale", differences[0])
+        self.assertIn("source.txt", differences[0])
 
     def test_repository_manifest_matches_current_tree(self) -> None:
         """Keep the committed review manifest synchronized with source."""

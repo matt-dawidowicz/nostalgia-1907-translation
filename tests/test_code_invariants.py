@@ -170,7 +170,7 @@ class RowPackingTests(unittest.TestCase):
     """Keep storage optimization from changing visible text placement."""
 
     def test_row_packing_keeps_the_first_source_character_left_aligned(self) -> None:
-        """Reject the former phase shift that added a visible leading blank."""
+        """Reject the former phase shift and its obsolete alternate-row state."""
         for text in (
             "It was not here, in this",
             "games and play one",
@@ -178,8 +178,8 @@ class RowPackingTests(unittest.TestCase):
         ):
             with self.subTest(text=text):
                 row = mes_compiler._row_plan(0, text)
-                self.assertIsNone(row.alternate)
-                self.assertFalse(row.selected_alternate)
+                self.assertFalse(hasattr(row, "alternate"))
+                self.assertFalse(hasattr(row, "selected_alternate"))
                 self.assertEqual(row.cells()[0], ("literal", text[:2]))
 
     def test_prose_rows_without_an_anchor_never_reserve_a_leading_blank_cell(

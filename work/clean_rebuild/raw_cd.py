@@ -171,10 +171,15 @@ def raw_to_iso(raw_path: Path, iso_path: Path, *, verify: bool = True) -> int:
     Returns:
         Number of sectors written to ``iso_path``.
 
+    Raises:
+        RawCdError: If input and output alias or raw-sector validation fails.
+
     Side Effects:
         Creates parent directories and replaces ``iso_path``; the raw input is
         read-only.
     """
+    if raw_path.resolve() == iso_path.resolve():
+        raise RawCdError("raw input and ISO output paths must differ")
     size = raw_path.stat().st_size
     if size % RAW_SECTOR_SIZE:
         raise RawCdError(f"{raw_path}: size is not divisible by {RAW_SECTOR_SIZE}")
@@ -210,9 +215,12 @@ def iso_to_raw_fixed(
         Number of raw sectors written.
 
     Raises:
-        RawCdError: If sizes, headers, or rebuilt geometry violate the
-            fixed-geometry contract.
+        RawCdError: If paths alias, sizes, headers, or rebuilt geometry violate
+            the fixed-geometry contract.
     """
+    output = output_raw_path.resolve()
+    if output in {template_raw_path.resolve(), iso_path.resolve()}:
+        raise RawCdError("raw output path must differ from both rebuild inputs")
     raw_size = template_raw_path.stat().st_size
     iso_size = iso_path.stat().st_size
     if raw_size % RAW_SECTOR_SIZE:
@@ -231,7 +239,7 @@ def iso_to_raw_fixed(
     with (
         template_raw_path.open("rb") as template,
         iso_path.open("rb") as iso,
-        output_raw_path.open("wb") as output,
+        output_raw_path.open("wb") as output_stream,
     ):
         for sector_index in range(raw_sectors):
             sector = bytearray(template.read(RAW_SECTOR_SIZE))
@@ -243,11 +251,11 @@ def iso_to_raw_fixed(
                 USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE
             ]
             if trust_template_checksums and payload == original_payload:
-                output.write(sector)
+                output_stream.write(sector)
                 continue
             sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE] = payload
             regenerate_checksums(sector)
-            output.write(sector)
+            output_stream.write(sector)
     return raw_sectors
 
 
@@ -393,6 +401,13 @@ def write_two_track_cue(cue_path: Path, data_track: Path, audio_track: Path) -> 
     names rather than machine-specific paths. Track 2 retains the retail
     two-second pregap represented by INDEX 00 and INDEX 01.
     """
+    cue_resolved = cue_path.resolve()
+    data_resolved = data_track.resolve()
+    audio_resolved = audio_track.resolve()
+    if data_resolved == audio_resolved:
+        raise RawCdError("data and audio track paths must differ")
+    if cue_resolved in {data_resolved, audio_resolved}:
+        raise RawCdError("CUE output path must differ from both track files")
     if (
         cue_path.parent.resolve() != data_track.parent.resolve()
         or cue_path.parent.resolve() != audio_track.parent.resolve()

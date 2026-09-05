@@ -21,9 +21,9 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
 from pathlib import Path
 
-from .source_json import load_json_object
-
+from .font_render import GLYPH_BYTES
 from .mes_compiler import BuildResult, compile_files
+from .source_json import load_json_object
 
 
 HERE = Path(__file__).resolve().parent
@@ -91,8 +91,8 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
         Capacity and hash evidence for every MES plus the merged font patches.
 
     Raises:
-        ValueError: If compilation fails, font patches conflict, or a patched
-            code lies outside the retail fixed-font bank.
+        ValueError: If compilation fails, a font patch is malformed or
+            conflicting, or a patched code lies outside the retail font bank.
 
     Side Effects:
         Writes generated MES files, ``FIX_CODE.FNT``, and ``mes_report.json``
@@ -124,8 +124,14 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
     chapters: list[dict[str, object]] = []
     font_patches: dict[int, bytes] = {}
     for details, raw_patches in compiled:
+        chapter = details.get("chapter", "<unknown>")
         for code, glyph_hex in raw_patches:
             glyph = bytes.fromhex(glyph_hex)
+            if len(glyph) != GLYPH_BYTES:
+                raise ValueError(
+                    f"{chapter}: fixed-font patch 0x{code:02X} is {len(glyph)} bytes; "
+                    f"expected {GLYPH_BYTES}"
+                )
             previous = font_patches.get(code)
             if previous is not None and previous != glyph:
                 raise ValueError(f"conflicting fixed-font patch for code 0x{code:02X}")
@@ -133,13 +139,13 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
         chapters.append(details)
 
     font = bytearray(retail_font.read_bytes())
-    if len(font) % 18:
+    if len(font) % GLYPH_BYTES:
         raise ValueError("retail fixed font has a partial glyph")
     for code, glyph in sorted(font_patches.items()):
-        offset = (code - 1) * 18
-        if not 0 <= offset <= len(font) - 18:
+        offset = (code - 1) * GLYPH_BYTES
+        if not 0 <= offset <= len(font) - GLYPH_BYTES:
             raise ValueError(f"fixed-font code 0x{code:02X} is outside the font")
-        font[offset : offset + 18] = glyph
+        font[offset : offset + GLYPH_BYTES] = glyph
     output_font.parent.mkdir(parents=True, exist_ok=True)
     output_font.write_bytes(font)
     font_bytes = bytes(font)

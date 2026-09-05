@@ -20,17 +20,16 @@ import json
 import tempfile
 from pathlib import Path
 
-from .source_json import load_json_object
-from .scn_patch import patch_part1a_scn
-
 from .iso9660 import SECTOR_SIZE, read_entries, unique_file
 from .lz_format import (
-    LzError,
+    LzSlotOverflowError,
     parse_archive,
     replace_members_fixed,
     replace_members_reflow,
     read_member,
 )
+from .scn_patch import patch_part1a_scn
+from .source_json import load_json_object
 
 
 HERE = Path(__file__).resolve().parent
@@ -42,13 +41,55 @@ def _sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest().upper()
 
 
+def _minimum_fixed_headroom(replacements: list[dict[str, object]]) -> int:
+    """Return the tightest fixed member-slot headroom in one archive."""
+    if not replacements:
+        raise ValueError("fixed-slot replacement report is empty")
+    headrooms = [item.get("headroom") for item in replacements]
+    if not all(isinstance(value, int) for value in headrooms):
+        raise ValueError("fixed-slot replacement report has invalid headroom")
+    return min(headrooms)
+
+
+def _replace_archive(
+    retail_path: Path,
+    output_path: Path,
+    replacements: dict[str, Path],
+    allocation_size: int,
+) -> tuple[list[dict[str, object]], str, int]:
+    """Use fixed slots when possible and reflow only for typed capacity failure."""
+    try:
+        replacement_report = replace_members_fixed(
+            retail_path, output_path, replacements
+        )
+        return replacement_report, "fixed-slot", _minimum_fixed_headroom(
+            replacement_report
+        )
+    except LzSlotOverflowError:
+        reflow = replace_members_reflow(
+            retail_path,
+            output_path,
+            replacements,
+            maximum_archive_size=allocation_size,
+        )
+        replacement_report = reflow.get("replacements")
+        headroom = reflow.get("headroom")
+        if not isinstance(replacement_report, list) or not all(
+            isinstance(item, dict) for item in replacement_report
+        ):
+            raise ValueError("guarded-reflow report has invalid replacements")
+        if not isinstance(headroom, int):
+            raise ValueError("guarded-reflow report has invalid headroom")
+        return replacement_report, "guarded-reflow", headroom
+
+
 def build_archives(build_root: Path) -> dict[str, object]:
     """Replace MES members while preserving each retail ISO allocation.
 
     Fixed-slot replacement is attempted first. Reflow is permitted only for
-    the specific capacity failure that means a compressed MES no longer fits
-    its member slot, and it remains bounded by the archive's retail ISO sector
-    allocation.
+    the specific typed capacity failure that means a compressed member no
+    longer fits its retail slot, and it remains bounded by the archive's retail
+    ISO sector allocation.
 
     Returns:
         A report recording mode, hashes, member count, replacement details, and
@@ -83,31 +124,30 @@ def build_archives(build_root: Path) -> dict[str, object]:
             retail_path.write_bytes(retail_data)
             output_path = output_root / archive_name
             replacements = {f"{chapter}.MES": mes_root / f"{chapter}.MES"}
-            with tempfile.TemporaryDirectory(prefix="nostalgia1907-scn-") as temporary:
-                if chapter == "PART1A":
+            if chapter == "PART1A":
+                with tempfile.TemporaryDirectory(
+                    prefix="nostalgia1907-scn-"
+                ) as temporary:
                     patched_scn = Path(temporary) / "PART1A.SCN"
                     patched_scn.write_bytes(
                         patch_part1a_scn(read_member(retail_path, "PART1A.SCN"))
                     )
                     replacements["PART1A.SCN"] = patched_scn
-                try:
-                    replacement_report = replace_members_fixed(
-                        retail_path, output_path, replacements
+                    replacement_report, archive_mode, archive_headroom = (
+                        _replace_archive(
+                            retail_path,
+                            output_path,
+                            replacements,
+                            iso_entry.allocated_size,
+                        )
                     )
-                    archive_mode = "fixed-slot"
-                    archive_headroom = replacement_report[0]["headroom"]
-                except LzError as error:
-                    if "but retail slot is" not in str(error):
-                        raise
-                    reflow = replace_members_reflow(
-                        retail_path,
-                        output_path,
-                        replacements,
-                        maximum_archive_size=iso_entry.allocated_size,
-                    )
-                    replacement_report = reflow["replacements"]
-                    archive_mode = "guarded-reflow"
-                    archive_headroom = reflow["headroom"]
+            else:
+                replacement_report, archive_mode, archive_headroom = _replace_archive(
+                    retail_path,
+                    output_path,
+                    replacements,
+                    iso_entry.allocated_size,
+                )
 
             output_data = output_path.read_bytes()
             if archive_mode == "fixed-slot" and len(output_data) != len(retail_data):

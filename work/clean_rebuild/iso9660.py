@@ -229,11 +229,17 @@ def patch_fixed_extent_files(
     """Patch files inside their retail allocations without moving extents.
 
     A replacement may change its logical byte size, but it must fit in the
-    complete sector allocation owned by the retail file.  Every matching ISO
-    directory record receives the new size in both byte orders.  The complete
+    complete sector allocation owned by the retail file. Every matching ISO
+    directory record receives the new size in both byte orders. The complete
     retail allocation is cleared before writing so stale compressed data can
     never remain addressable through a buggy length calculation.
+
+    Raises:
+        IsoError: If source/output alias, replacement geometry, or the rebuilt
+            ISO violates the fixed-extent contract.
     """
+    if source_iso.resolve() == output_iso.resolve():
+        raise IsoError("source and output ISO paths must differ")
     if not replacements:
         raise IsoError("at least one ISO replacement is required")
     entries = read_entries(source_iso)
@@ -302,25 +308,3 @@ def patch_fixed_extent_files(
             }
         )
     return report
-
-
-def patch_exact_files(
-    source_iso: Path,
-    output_iso: Path,
-    replacements: dict[str, Path],
-) -> list[dict[str, object]]:
-    """Patch fixed extents while additionally requiring unchanged file sizes.
-
-    This compatibility entry point performs the stronger logical-size preflight
-    before delegating to ``patch_fixed_extent_files``. It has the same output
-    side effects and verification report.
-    """
-    entries = read_entries(source_iso)
-    for target, replacement_path in replacements.items():
-        entry = unique_file(entries, target)
-        if replacement_path.stat().st_size != entry.size:
-            raise IsoError(
-                f"{target}: exact fixed-extent patch requires {entry.size} bytes, "
-                f"got {replacement_path.stat().st_size}"
-            )
-    return patch_fixed_extent_files(source_iso, output_iso, replacements)

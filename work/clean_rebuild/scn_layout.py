@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Infer text roles and MES rendering contracts from retail SCN commands.
 
-The game does not use one universal text box.  SCN commands select distinct
+The game does not use one universal text box. SCN commands select distinct
 renderers for lower dialogue, continuation rows, floating thought/aside
-windows, choices, and the two labels at the top of the scene UI.  Keeping the
-role inference here gives the compiler and the translation editor one shared,
-source-derived contract.
+windows, choices, and the two labels at the top of the scene UI. Keeping the
+role and occurrence inference here gives the compiler, translation editor, and
+layout auditor one shared, source-derived contract.
 
 SCN operands refer to MES records with one-based IDs; every public result from
 this module uses the zero-based canonical record index. Inference accepts only
@@ -23,6 +23,7 @@ See ``docs/TRANSLATION_EDITING.md`` for policy ownership and
 
 from __future__ import annotations
 
+from collections import defaultdict
 from dataclasses import dataclass
 
 from .profile_schema import canonical_profile_index
@@ -42,6 +43,10 @@ FLOATING_WIDTHS = {
     0x11: 9,
     0x12: 10,
 }
+# MAIN.BIN special one-line handlers use an 18-cell physical canvas.
+SPECIAL_LINE_CELLS = 18
+# The overloaded 0x24/0x28 countdown form with width operand 0x05 is two cells.
+SPECIAL_28_WIDTHS = {0x05: 2}
 
 ROLE_DIALOGUE = "main_dialogue"
 ROLE_CONTINUATION = "dialogue_continuation"
@@ -53,7 +58,7 @@ ROLE_OVERLAY = "overlay_text"
 ROLE_NARRATION = "narration"
 ROLE_CHOICE = "menu_choice"
 
-# Text-box identity is as important as its measured width.  The compiler must
+# Text-box identity is as important as its measured width. The compiler must
 # never make a floating window, selector, or continuation record inherit the
 # lower-dialogue cadence just because both happen to contain English prose.
 TEXT_BOX_UNCLASSIFIED = "unclassified"
@@ -76,8 +81,8 @@ TEXT_BOX_IDS = frozenset(
 )
 
 # Retail lower dialogue begins with this fixed Japanese opening-quote cell in
-# almost every ordinary ``0x21`` dialogue record.  MAIN.BIN renders that first
-# cell at X=$4A, then renders every later row at X=$56.  English must retain a
+# almost every ordinary ``0x21`` dialogue record. MAIN.BIN renders that first
+# cell at X=$4A, then renders every later row at X=$56. English must retain a
 # one-time gutter there, otherwise its first letter becomes the persistent
 # left-side glyph on every later page.
 DIALOGUE_OPENING_ANCHOR_CODE = 0x10
@@ -323,7 +328,7 @@ def _indexed_text_boxes(profile: dict[str, object]) -> dict[int, str]:
 
 def _window_subtypes(profile: dict[str, object]) -> set[int]:
     """Return SCN 0x24 subtypes that carry visible text."""
-    # 0x28 is overloaded by selector commands in several chapters.  It is
+    # 0x28 is overloaded by selector commands in several chapters. It is
     # visible text only where the source profile explicitly opts it in.
     raw = profile.get("scn_window_text_subtypes", [0x27])
     if not isinstance(raw, list) or not all(isinstance(item, int) for item in raw):
@@ -340,7 +345,7 @@ def _window_text_commands(
 
     ``0x24`` opens the floating renderer and supplies its first MES record.
     Zero or more immediately following ``0x27 <id>`` commands display later
-    records through that same renderer.  Treating the chained records as
+    records through that same renderer. Treating the chained records as
     independent opcodes loses their width and row contract, which is how
     stale hand-wrapping survived the first adaptive-formatting pass.
     """
@@ -412,6 +417,187 @@ def _selector_window_commands(
     return [commands[key] for key in sorted(commands)]
 
 
+def display_occurrences(
+    scn: bytes,
+    record_count: int,
+    profile: dict[str, object] | None,
+) -> dict[int, list[dict[str, object]]]:
+    """Inventory every structurally proven SCN text-display occurrence.
+
+    The inventory is shared by role inference and the box-layout auditor. It
+    accepts only complete command shapes with in-range record IDs. In
+    particular, scene labels require the exact adjacent ``0x22``/``0x23`` pair;
+    isolated matching bytes are never treated as label commands.
+    """
+    result: dict[int, list[dict[str, object]]] = defaultdict(list)
+    settings = profile or {}
+    window_subtypes = _window_subtypes(settings)
+    special_window_offsets: set[int] = set()
+
+    def add(index: int, **fields: object) -> None:
+        """Append one occurrence only when its canonical record index is valid."""
+        if 0 <= index < record_count:
+            result[index].append(fields)
+
+    for offset in range(len(scn)):
+        opcode = scn[offset]
+        if opcode == 0x21 and offset + 5 <= len(scn):
+            first_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
+            second_id = int.from_bytes(scn[offset + 3 : offset + 5], "big")
+            if 1 <= second_id <= record_count:
+                if 1 <= first_id <= record_count:
+                    add(
+                        first_id - 1,
+                        offset=f"0x{offset:X}",
+                        command="0x21",
+                        part="speaker_name",
+                        box="scene_label/speaker",
+                        role=ROLE_SPEAKER,
+                    )
+                add(
+                    second_id - 1,
+                    offset=f"0x{offset:X}",
+                    command="0x21",
+                    part="dialogue_body",
+                    box="lower_dialogue",
+                    role=ROLE_DIALOGUE,
+                )
+            elif second_id == 0 and 1 <= first_id <= record_count:
+                add(
+                    first_id - 1,
+                    offset=f"0x{offset:X}",
+                    command="0x21",
+                    part="dialogue_continuation",
+                    box="lower_continuation",
+                    role=ROLE_CONTINUATION,
+                )
+        elif opcode == 0x20 and offset + 3 <= len(scn):
+            text_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
+            if 1 <= text_id <= record_count:
+                add(
+                    text_id - 1,
+                    offset=f"0x{offset:X}",
+                    command="0x20",
+                    part="fixed_line",
+                    box="special_line",
+                    permitted_cells=SPECIAL_LINE_CELLS,
+                    max_rows=1,
+                    evidence="MAIN.BIN 12px/cell special-line renderer",
+                )
+        elif opcode == 0x22 and offset + 6 <= len(scn) and scn[offset + 3] == 0x23:
+            location_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
+            perspective_id = int.from_bytes(scn[offset + 4 : offset + 6], "big")
+            if 1 <= location_id <= record_count and 1 <= perspective_id <= record_count:
+                add(
+                    location_id - 1,
+                    offset=f"0x{offset:X}",
+                    command="0x22",
+                    part="location_name",
+                    box="scene_label/location",
+                    role=ROLE_LOCATION,
+                    permitted_cells=SPECIAL_LINE_CELLS,
+                    max_rows=1,
+                    evidence="MAIN.BIN 12px/cell special-line renderer",
+                )
+                add(
+                    perspective_id - 1,
+                    offset=f"0x{offset + 3:X}",
+                    command="0x23",
+                    part="perspective_name",
+                    box="scene_label/perspective",
+                    role=ROLE_PERSPECTIVE,
+                    permitted_cells=SPECIAL_LINE_CELLS,
+                    max_rows=1,
+                    evidence="MAIN.BIN 12px/cell special-line renderer",
+                )
+        elif (
+            opcode == 0x24
+            and offset + 8 <= len(scn)
+            and scn[offset + 5] == 0x28
+            and scn[offset + 3] in SPECIAL_28_WIDTHS
+        ):
+            text_id = int.from_bytes(scn[offset + 6 : offset + 8], "big")
+            if 1 <= text_id <= record_count:
+                width_byte = scn[offset + 3]
+                fields: dict[str, object] = {
+                    "offset": f"0x{offset:X}",
+                    "command": "0x24/0x28",
+                    "part": "special_window",
+                    "box": "floating_window",
+                    "subtype": "0x28",
+                    "width_operand": f"0x{width_byte:02X}",
+                    "y_operand": scn[offset + 2],
+                    "permitted_cells": SPECIAL_28_WIDTHS[width_byte],
+                    "max_rows": 1,
+                    "evidence": "SCN 0x24/0x28 special-window geometry",
+                }
+                if 0x28 in window_subtypes:
+                    fields["role"] = ROLE_OVERLAY
+                add(text_id - 1, **fields)
+                special_window_offsets.add(offset)
+        elif opcode == 0x31 and offset + 6 <= len(scn) and scn[offset + 3] == 0xFF:
+            text_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
+            jump = int.from_bytes(scn[offset + 4 : offset + 6], "big")
+            if 1 <= text_id <= record_count and 0 < jump < len(scn):
+                add(
+                    text_id - 1,
+                    offset=f"0x{offset:X}",
+                    command="0x31",
+                    part="menu_choice",
+                    box="choice",
+                    role=ROLE_CHOICE,
+                    branch_target=f"0x{jump:X}",
+                )
+
+    for offset, subtype, width_byte, raw_y, indexes in _window_text_commands(
+        scn, record_count, window_subtypes
+    ):
+        role = ROLE_THOUGHT if subtype == 0x27 else ROLE_OVERLAY
+        for chain_index, index in enumerate(indexes):
+            if chain_index == 0 and offset in special_window_offsets:
+                continue
+            add(
+                index,
+                offset=(
+                    f"0x{offset:X}"
+                    if chain_index == 0
+                    else f"0x{offset + 8 + 3 * (chain_index - 1):X}"
+                ),
+                command="0x24" if chain_index == 0 else "0x27",
+                part=(
+                    "floating_window"
+                    if chain_index == 0
+                    else "floating_continuation"
+                ),
+                box="floating_window",
+                role=role,
+                subtype=f"0x{subtype:02X}",
+                width_operand=f"0x{width_byte:02X}",
+                y_operand=raw_y,
+                chain_position=chain_index,
+                permitted_cells=FLOATING_WIDTHS.get(width_byte),
+                evidence="SCN floating-window width operand",
+            )
+    for offset, subtype, width_byte, raw_y, indexes in _selector_window_commands(
+        scn, record_count
+    ):
+        for index in indexes:
+            add(
+                index,
+                offset=f"0x{offset:X}",
+                command="0x24 selector target",
+                part="menu_choice_window",
+                box="floating_window",
+                role=ROLE_CHOICE,
+                subtype=f"0x{subtype:02X}",
+                width_operand=f"0x{width_byte:02X}",
+                y_operand=raw_y,
+                permitted_cells=FLOATING_WIDTHS.get(width_byte),
+                evidence="SCN selector-window width operand",
+            )
+    return result
+
+
 def _role_overrides(profile: dict[str, object]) -> dict[int, frozenset[str]]:
     """Read reviewed role replacements for structurally exceptional records."""
     raw = profile.get("role_overrides", {})
@@ -459,7 +645,7 @@ def infer_layouts(
     settings = profile or {}
     # This is a native lower-dialogue contract, not a generic English width:
     # physical cells repeat 12/11/11, with an optional quote gutter in the
-    # first 12-cell row.  Runtime screenshots of PART1A:003 confirm the
+    # first 12-cell row. Runtime screenshots of PART1A:003 confirm the
     # 11-cell continuation boundary ("more" must not be packed as 12 cells).
     dialogue_visible = _pair(settings, "scn_dialogue_layout", (12, 11))
     continuation_visible = _pair(settings, "scn_continuation_layout", (11, 10))
@@ -567,7 +753,7 @@ def infer_layouts(
             add(
                 index,
                 # Selector tables target the same 0x24 window renderer as
-                # ordinary floating text.  The record can also retain the
+                # ordinary floating text. The record can also retain the
                 # menu_choice role, but its cell contract must not conflict
                 # with an identical floating-window use elsewhere in SCN.
                 Layout(cells, cells, cells, cells, text_box=TEXT_BOX_FLOATING),
@@ -634,56 +820,17 @@ def infer_roles(
     translated_indexes: set[int],
     profile: dict[str, object] | None,
 ) -> dict[int, frozenset[str]]:
-    """Infer UI roles without consulting the English translation.
-
-    Top labels are accepted only from the exact adjacent ``0x22``/``0x23``
-    pair used by the scene UI.  That avoids treating operand bytes elsewhere
-    in the script as label commands.
-    """
+    """Infer UI roles from the shared structural display inventory."""
     settings = profile or {}
-    window_subtypes = _window_subtypes(settings)
     roles: dict[int, set[str]] = {}
 
-    def add(index: int, role: str) -> None:
-        """Attach one structural role only to a translated record."""
-        if index in translated_indexes:
-            roles.setdefault(index, set()).add(role)
-
-    for offset in range(len(scn)):
-        opcode = scn[offset]
-        if opcode == 0x21 and offset + 5 <= len(scn):
-            first_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
-            second_id = int.from_bytes(scn[offset + 3 : offset + 5], "big")
-            if 1 <= second_id <= record_count:
-                if 1 <= first_id <= record_count:
-                    add(first_id - 1, ROLE_SPEAKER)
-                add(second_id - 1, ROLE_DIALOGUE)
-            elif second_id == 0 and 1 <= first_id <= record_count:
-                add(first_id - 1, ROLE_CONTINUATION)
-        elif opcode == 0x22 and offset + 6 <= len(scn) and scn[offset + 3] == 0x23:
-            location_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
-            perspective_id = int.from_bytes(scn[offset + 4 : offset + 6], "big")
-            if 1 <= location_id <= record_count and 1 <= perspective_id <= record_count:
-                add(location_id - 1, ROLE_LOCATION)
-                add(perspective_id - 1, ROLE_PERSPECTIVE)
-        elif opcode == 0x31 and offset + 6 <= len(scn) and scn[offset + 3] == 0xFF:
-            text_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
-            jump = int.from_bytes(scn[offset + 4 : offset + 6], "big")
-            if 1 <= text_id <= record_count and 0 < jump < len(scn):
-                add(text_id - 1, ROLE_CHOICE)
-
-    for _offset, subtype, _width_byte, _raw_y, indexes in _window_text_commands(
-        scn, record_count, window_subtypes
-    ):
-        role = ROLE_THOUGHT if subtype == 0x27 else ROLE_OVERLAY
-        for index in indexes:
-            add(index, role)
-
-    for _offset, _subtype, _width_byte, _raw_y, indexes in _selector_window_commands(
-        scn, record_count
-    ):
-        for index in indexes:
-            add(index, ROLE_CHOICE)
+    for index, occurrences in display_occurrences(scn, record_count, profile).items():
+        if index not in translated_indexes:
+            continue
+        for occurrence in occurrences:
+            role = occurrence.get("role")
+            if isinstance(role, str):
+                roles.setdefault(index, set()).add(role)
 
     for index, replacement in _role_overrides(settings).items():
         if index in translated_indexes:
@@ -715,7 +862,7 @@ def infer_row_limits(
             if index not in translated_indexes:
                 continue
             previous = limits.get(index)
-            # A record may be reused by windows at different Y positions.  It
+            # A record may be reused by windows at different Y positions. It
             # must satisfy the tightest of those real renderers.
             limits[index] = (
                 min(previous, max_rows) if previous is not None else max_rows

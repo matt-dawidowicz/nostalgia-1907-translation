@@ -5,12 +5,9 @@ from __future__ import annotations
 
 import unittest
 
-from work.clean_rebuild.box_layout_audit import (
-    SPECIAL_LINE_CELLS,
-    _occurrences,
-    _row_details,
-)
+from work.clean_rebuild.box_layout_audit import _row_details
 from work.clean_rebuild.renderer_format import measure_literal
+from work.clean_rebuild.scn_layout import SPECIAL_LINE_CELLS, display_occurrences
 from work.clean_rebuild.source_json import load_json_object
 from work.clean_rebuild.staff_credit_layout import (
     STAFF_CANVAS_CHARACTERS,
@@ -23,19 +20,35 @@ from work.clean_rebuild.translation_audit import SOURCES
 class BoxLayoutAuditTests(unittest.TestCase):
     """Protect geometry learned from the retail script and MAIN.BIN renderer."""
 
-    def test_special_line_opcodes_have_eighteen_cell_contract(self) -> None:
-        """SCN 0x20/0x22/0x23 records inherit the proven 18-cell line width."""
-        for opcode in (0x20, 0x22, 0x23):
-            with self.subTest(opcode=opcode):
-                uses = _occurrences(bytes((opcode, 0x00, 0x01)), 1, None)
-                self.assertEqual(len(uses[0]), 1)
-                self.assertEqual(uses[0][0]["permitted_cells"], SPECIAL_LINE_CELLS)
-                self.assertEqual(uses[0][0]["max_rows"], 1)
+    def test_special_line_and_paired_labels_have_eighteen_cell_contract(self) -> None:
+        """Use 18 cells for 0x20 and the exact adjacent 0x22/0x23 label pair."""
+        fixed = display_occurrences(b"\x20\x00\x01", 1, None)
+        self.assertEqual(len(fixed[0]), 1)
+        self.assertEqual(fixed[0][0]["permitted_cells"], SPECIAL_LINE_CELLS)
+        self.assertEqual(fixed[0][0]["max_rows"], 1)
+
+        labels = display_occurrences(
+            b"\x22\x00\x01\x23\x00\x02",
+            2,
+            None,
+        )
+        self.assertEqual(labels[0][0]["part"], "location_name")
+        self.assertEqual(labels[0][0]["permitted_cells"], SPECIAL_LINE_CELLS)
+        self.assertEqual(labels[0][0]["max_rows"], 1)
+        self.assertEqual(labels[1][0]["part"], "perspective_name")
+        self.assertEqual(labels[1][0]["permitted_cells"], SPECIAL_LINE_CELLS)
+        self.assertEqual(labels[1][0]["max_rows"], 1)
+
+    def test_isolated_label_opcode_bytes_are_not_occurrences(self) -> None:
+        """Do not certify operand bytes as scene labels without the paired shape."""
+        for scn in (b"\x22\x00\x01", b"\x23\x00\x01"):
+            with self.subTest(scn=scn):
+                self.assertEqual(display_occurrences(scn, 1, None), {})
 
     def test_special_countdown_window_has_two_cell_contract(self) -> None:
         """The retail 0x24/.../0x28 countdown form is a two-cell window."""
         scn = bytes((0x24, 0x17, 0x07, 0x05, 0x0C, 0x28, 0x00, 0x01))
-        uses = _occurrences(scn, 1, None)
+        uses = display_occurrences(scn, 1, None)
         self.assertEqual(len(uses[0]), 1)
         self.assertEqual(uses[0][0]["command"], "0x24/0x28")
         self.assertEqual(uses[0][0]["permitted_cells"], 2)

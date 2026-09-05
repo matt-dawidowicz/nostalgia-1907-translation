@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""Classify and validate canonical renderer-profile fields.
+"""Validate canonical renderer-profile fields and active text rules.
 
-Renderer profiles accumulated both live production settings and historical
-migration flags. This module makes that distinction executable: active fields
-are consumed by current validation or layout inference, legacy fields are
-accepted only as provenance, and unknown fields are rejected. It also enforces
-profile-owned exact text, prefix, and forbidden-pattern rules against canonical
-records without requiring retail data.
+Renderer profiles contain only live production settings consumed by current
+validation or layout inference. Retired migration flags and unknown fields are
+rejected instead of being retained as compatibility state. The module also
+enforces profile-owned exact text, prefix, and forbidden-pattern rules against
+canonical records without requiring retail data.
 """
 
 from __future__ import annotations
@@ -66,7 +65,7 @@ PROFILE_ROLES = frozenset(
 def canonical_profile_index(raw_index: object, *, field: str, chapter: str) -> int:
     """Return one canonical non-negative profile record index.
 
-    JSON object keys are strings.  Requiring their exact decimal form prevents
+    JSON object keys are strings. Requiring their exact decimal form prevents
     aliases such as ``"01"`` and ``"1"`` from silently collapsing when the
     SCN consumers convert keys to integers.
     """
@@ -211,23 +210,21 @@ def validate_profile(
     *,
     chapter: str,
     records: Sequence[object] | None = None,
-) -> frozenset[str]:
+) -> None:
     """Validate profile identity and reject retired or unknown fields.
 
     Args:
         profile: Embedded canonical profile, or ``None`` when absent.
         chapter: Canonical chapter identifier that the profile must describe.
-
-    Returns:
-        An empty compatibility set. Retired migration fields are rejected.
+        records: Optional canonical records used to validate indexed targets.
 
     Raises:
         ValueError: If the profile is not an object, contains an unknown field,
             uses an unsupported schema, names a different chapter, or contains
-            a malformed active text rule.
+            a malformed active rule.
     """
     if profile is None:
-        return frozenset()
+        return
     if not isinstance(profile, dict):
         raise ValueError(f"{chapter}: embedded profile is not an object")
     unknown = set(profile) - ACTIVE_PROFILE_FIELDS
@@ -266,7 +263,6 @@ def validate_profile(
             raise ValueError(
                 f"{chapter}: invalid forbidden text pattern {pattern!r}: {error}"
             ) from error
-    return frozenset()
 
 
 def profile_text_failures(

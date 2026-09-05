@@ -25,7 +25,6 @@ from pathlib import Path
 
 GLYPH_BYTES = 18
 DYNAMIC_PREFIX_START = 0xF0
-DYNAMIC_PREFIX_END = 0xFF
 DYNAMIC_GLYPHS_PER_PREFIX = 0xFF
 
 
@@ -67,7 +66,7 @@ class MesFile:
                 if value < DYNAMIC_PREFIX_START:
                     offset += 1
                     continue
-                if value > DYNAMIC_PREFIX_END or offset + 1 >= len(record):
+                if offset + 1 >= len(record):
                     raise MesFormatError(
                         f"record {record_index} has a truncated dynamic reference"
                     )
