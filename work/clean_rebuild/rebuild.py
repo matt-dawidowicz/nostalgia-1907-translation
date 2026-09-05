@@ -59,6 +59,7 @@ PRODUCTION_MODULES = (
     "source_json.py",
     "font_render.py",
     "scn_layout.py",
+    "script_integrity.py",
     "renderer_format.py",
     "profile_schema.py",
     "mes_compiler.py",

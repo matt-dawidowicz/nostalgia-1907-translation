@@ -45,7 +45,8 @@ The build path is deliberately staged:
 4. `iso9660.py`, `main_patch.py`, `scn_patch.py`, and `font_render.py` create the logical disc
    payload without relocating unrelated files.
 5. `raw_cd.py` reconstructs MODE1/2352 Track 1 and copies Track 2 exactly.
-6. `regression.py` checks cross-layer preservation invariants.
+6. `regression.py` checks cross-layer preservation invariants, including
+   preserved-record rendering identity and SCN-to-MES referential integrity.
 7. `verification_manifest.py` binds declared inputs and direct output hashes.
 8. `rebuild.py` repeats the clean build independently and publishes only when
    both runs agree.
@@ -94,6 +95,7 @@ Each production module has one primary responsibility:
 | `source_json.py` | Strict UTF-8 JSON loading and duplicate-key rejection |
 | `font_render.py` | Fixed and generated glyph bitmaps |
 | `scn_layout.py` | SCN-derived renderer roles and geometry |
+| `script_integrity.py` | SCN-to-MES text-reference integrity and choice-branch inventory |
 | `renderer_format.py` | Shared text normalization, wrapping, and row reconstruction |
 | `profile_schema.py` | Chapter-profile schema and active/legacy field classification |
 | `mes_compiler.py` | Canonical records to guarded MES bytes |
@@ -117,7 +119,8 @@ supported `validate` path uses `translation_formatter.py`,
 `translation_audit.py`, `translation_validation.py`, `bomb_audit.py`,
 `export_bilingual_comparison.py`, and the retail-backed
 `test_script_layout.py` suite. `export_fixed_layout_review.py` and
-`whole_game_test.py` support runtime-evidence planning.
+`whole_game_test.py` support runtime-evidence planning; the latter also requires
+evidence for every statically inventoried menu-choice branch.
 
 The completed translation-proposal compatibility shim was removed after the
 queue reached zero. New canonical changes use the supported edit/validate/build
@@ -167,13 +170,19 @@ The build avoids relocating disc structures:
 
 1. MES record count and order stay fixed.
 2. Compiled MES data must fit pointer and runtime glyph limits.
-3. LZ replacement uses the original member slot when possible and guarded
+3. Preserved MES records must retain identical fixed/control bytes and identical
+   rendered dynamic glyphs, even if legal glyph-bank compaction renumbers the
+   dynamic references.
+4. Proven SCN text references must resolve to canonical MES records, and every
+   translated record must have either a proven SCN reference or an explicit
+   profile-backed renderer contract.
+5. LZ replacement uses the original member slot when possible and guarded
    reflow only inside the original archive allocation.
-4. ISO file extents stay fixed; only declared payload bytes and logical sizes
+6. ISO file extents stay fixed; only declared payload bytes and logical sizes
    may change.
-5. Raw Track 1 preserves sector count and non-user-data geometry.
-6. Track 2 is copied byte-for-byte.
-7. The North American wrapper modifies only its explicitly guarded boot/security
+7. Raw Track 1 preserves sector count and non-user-data geometry.
+8. Track 2 is copied byte-for-byte.
+9. The North American wrapper modifies only its explicitly guarded boot/security
    region.
 
 `regression.py` verifies these boundaries against the retail reference rather
@@ -221,6 +230,7 @@ When promoting a new reverse-engineering discovery:
 | Fix a renderer rule | `scn_layout.py` or shared `renderer_format.py`/compiler logic |
 | Add a semantic invariant | `translation_validation.py` and its tracked rule data |
 | Change MES parsing | `mes_format.py` |
+| Change SCN reference/branch validation | `script_integrity.py` |
 | Change archive handling | `lz_format.py` / `build_archives.py` |
 | Change ISO placement | `iso9660.py` |
 | Change sector handling | `raw_cd.py` |
