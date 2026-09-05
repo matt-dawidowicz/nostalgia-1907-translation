@@ -21,3 +21,16 @@ jobs:
             pyproject.toml
           include-hidden-files: true
           if-no-files-found: error
+
+      - name: Download m68k binutils package
+        run: |
+          mkdir -p toolbundle
+          cd toolbundle
+          apt-get download binutils-m68k-linux-gnu
+
+      - name: Upload m68k binutils package
+        uses: actions/upload-artifact@v4
+        with:
+          name: m68k-binutils-deb
+          path: toolbundle/*.deb
+          if-no-files-found: error
