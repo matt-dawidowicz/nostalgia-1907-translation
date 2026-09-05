@@ -18,6 +18,10 @@ jobs:
           name: nostalgia-layout-audit-source
           path: |
             work/
+            tests/
+            tools/
+            docs/
+            MANIFEST.sha256
             pyproject.toml
           include-hidden-files: true
           if-no-files-found: error
