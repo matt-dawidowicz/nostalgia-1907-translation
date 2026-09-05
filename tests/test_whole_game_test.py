@@ -40,7 +40,7 @@ def complete_plan() -> dict[str, object]:
                 "renderer_contract_row_edges": 0,
             },
             "scn_references": {
-                "status": PASS,
+                "status": "PASS",
                 "reference_count": 1,
                 "choice_branch_count": 1,
             },
