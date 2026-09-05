@@ -8,7 +8,11 @@ import unittest
 from work.clean_rebuild.mes_format import MesFile, record_render_tokens
 from work.clean_rebuild.renderer_format import wrap_words, wrapped_row_failures
 from work.clean_rebuild.scn_layout import Layout, TEXT_BOX_SCENE_LABEL
-from work.clean_rebuild.script_integrity import choice_edges, scan_scn_text_references
+from work.clean_rebuild.script_integrity import (
+    choice_edges,
+    fixed_layout_width_failure,
+    scan_scn_text_references,
+)
 
 
 class ScriptIntegrityTests(unittest.TestCase):
@@ -41,6 +45,22 @@ class ScriptIntegrityTests(unittest.TestCase):
         invalid = bytes((0x21, 0x00, 0x01, 0x00, 0x03))
         refs = scan_scn_text_references(invalid, 2, None)
         self.assertFalse(any(item.command == "0x21" for item in refs))
+
+    def test_fixed_special_renderer_rejects_one_cell_overflow(self) -> None:
+        """Reject a 19-cell line in the proven 18-cell 0x20/0x22/0x23 family."""
+        self.assertIsNone(fixed_layout_width_failure("A" * 36, ("0x20",)))
+        self.assertEqual(
+            fixed_layout_width_failure("A" * 37, ("0x20",)),
+            "fixed renderer overflow: 19 > 18 cells",
+        )
+
+    def test_countdown_renderer_uses_two_cell_limit(self) -> None:
+        """Apply the immediate 0x24/0x28 countdown window's two-cell capacity."""
+        self.assertIsNone(fixed_layout_width_failure("1234", ("0x24/0x28",)))
+        self.assertEqual(
+            fixed_layout_width_failure("12345", ("0x24/0x28",)),
+            "fixed renderer overflow: 3 > 2 cells",
+        )
 
 
 class PreservedRecordIdentityTests(unittest.TestCase):
