@@ -169,6 +169,47 @@ def read_mes(path: Path) -> MesFile:
     return parse_mes(path.read_bytes(), source=str(path))
 
 
+def record_render_tokens(
+    mes: MesFile, record_index: int
+) -> tuple[tuple[str, int | bytes], ...]:
+    """Return a remap-stable token stream for one encoded MES record.
+
+    Fixed/control bytes are retained verbatim. Dynamic references are resolved
+    to their 18-byte glyph bitmap so a legal glyph-bank compaction does not
+    create a false difference. Comparing these tokens therefore proves that a
+    preserved record has the same fixed/control bytes and the same rendered
+    dynamic cells in the same order even when dynamic indexes are renumbered.
+    """
+    if not 0 <= record_index < mes.record_count:
+        raise MesFormatError(f"record index {record_index} is out of range")
+    record = mes.records[record_index]
+    tokens: list[tuple[str, int | bytes]] = []
+    offset = 0
+    while offset < len(record):
+        value = record[offset]
+        if value < DYNAMIC_PREFIX_START:
+            tokens.append(("fixed", value))
+            offset += 1
+            continue
+        if offset + 1 >= len(record) or record[offset + 1] == 0:
+            raise MesFormatError(
+                f"record {record_index} has an invalid dynamic reference"
+            )
+        dynamic_index = (
+            (value - DYNAMIC_PREFIX_START) * DYNAMIC_GLYPHS_PER_PREFIX
+            + record[offset + 1]
+            - 1
+        )
+        if dynamic_index >= len(mes.glyphs):
+            raise MesFormatError(
+                f"record {record_index} dynamic reference {dynamic_index} exceeds "
+                f"the {len(mes.glyphs)}-glyph bank"
+            )
+        tokens.append(("dynamic", mes.glyphs[dynamic_index]))
+        offset += 2
+    return tuple(tokens)
+
+
 def changed_record_indexes(original: MesFile, rebuilt: MesFile) -> tuple[int, ...]:
     """Return indexes whose encoded record bytes differ between two MES files."""
     if original.record_count != rebuilt.record_count:
