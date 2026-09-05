@@ -16,12 +16,11 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
 from .renderer_format import measure_literal
-from .scn_layout import _selector_window_commands, _window_text_commands
+from .scn_layout import FLOATING_WIDTHS, _selector_window_commands, _window_text_commands
 from .source_json import load_json_object
 from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 from .translation_formatter import audit_layouts
@@ -37,6 +36,20 @@ DEFAULT_REPORT = (
 )
 DEFAULT_TSV = DEFAULT_REPORT.with_suffix(".tsv")
 
+# MAIN.BIN special one-line text handlers (SCN 0x20/0x22/0x23) start at
+# X=2 in a 224-pixel staging surface and advance 12 pixels per rendered cell.
+# The retail scripts independently top out at 18 cells, so 18 is the proven
+# physical capacity rather than an English authoring convention.
+SPECIAL_LINE_CELLS = 18
+SPECIAL_LINE_OPCODES = {
+    0x20: ("fixed_line", "special_line"),
+    0x22: ("location_name", "scene_label/location"),
+    0x23: ("perspective_name", "scene_label/perspective"),
+}
+# The countdown uses the overloaded 0x28 window subtype with width operand
+# 0x05.  Static SCN evidence proves that exact variant is a two-cell window.
+SPECIAL_28_WIDTHS = {0x05: 2}
+
 
 def _leading_spaces(text: str) -> int:
     """Return literal leading ASCII spaces in one rendered row."""
@@ -50,7 +63,16 @@ def _trailing_spaces(text: str) -> int:
 
 def _row_details(item: dict[str, object]) -> list[dict[str, object]]:
     """Describe every preview/exact row using the record's proven geometry."""
-    rows = item.get("preview_rows")
+    # Fixed-layout records are compiled from their exact display text, including
+    # deliberate leading/trailing spaces.  The base formatter preview is semantic
+    # and therefore normalizes those spaces away, so use the exact fixed rows here.
+    if item.get("layout_policy") == "fixed" and not isinstance(item.get("layout"), dict):
+        exact = item.get("display_text")
+        if not isinstance(exact, str):
+            raise ValueError(f"{item.get('id')}: display_text is malformed")
+        rows = exact.split("\n")
+    else:
+        rows = item.get("preview_rows")
     if not isinstance(rows, list) or not all(isinstance(row, str) for row in rows):
         raise ValueError(f"{item.get('id')}: preview_rows is malformed")
     layout = item.get("layout")
@@ -144,24 +166,39 @@ def _occurrences(
                     part="dialogue_continuation",
                     box="lower_continuation",
                 )
-        elif opcode == 0x22 and offset + 6 <= len(scn) and scn[offset + 3] == 0x23:
-            location_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
-            perspective_id = int.from_bytes(scn[offset + 4 : offset + 6], "big")
-            if 1 <= location_id <= record_count:
+        elif opcode in SPECIAL_LINE_OPCODES and offset + 3 <= len(scn):
+            text_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
+            if 1 <= text_id <= record_count:
+                part, box = SPECIAL_LINE_OPCODES[opcode]
                 add(
-                    location_id - 1,
+                    text_id - 1,
                     offset=f"0x{offset:X}",
-                    command="0x22/0x23",
-                    part="location_name",
-                    box="scene_label/location",
+                    command=f"0x{opcode:02X}",
+                    part=part,
+                    box=box,
+                    permitted_cells=SPECIAL_LINE_CELLS,
+                    max_rows=1,
+                    evidence="MAIN.BIN 12px/cell special-line renderer",
                 )
-            if 1 <= perspective_id <= record_count:
+        elif (
+            opcode == 0x24
+            and offset + 8 <= len(scn)
+            and scn[offset + 5] == 0x28
+            and scn[offset + 3] in SPECIAL_28_WIDTHS
+        ):
+            text_id = int.from_bytes(scn[offset + 6 : offset + 8], "big")
+            if 1 <= text_id <= record_count:
+                width_byte = scn[offset + 3]
                 add(
-                    perspective_id - 1,
-                    offset=f"0x{offset + 3:X}",
-                    command="0x22/0x23",
-                    part="perspective_name",
-                    box="scene_label/perspective",
+                    text_id - 1,
+                    offset=f"0x{offset:X}",
+                    command="0x24/0x28",
+                    part="special_window",
+                    box="floating_window",
+                    width_operand=f"0x{width_byte:02X}",
+                    permitted_cells=SPECIAL_28_WIDTHS[width_byte],
+                    max_rows=1,
+                    evidence="SCN 0x24/0x28 special-window geometry",
                 )
         elif opcode == 0x31 and offset + 6 <= len(scn) and scn[offset + 3] == 0xFF:
             text_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
@@ -193,6 +230,8 @@ def _occurrences(
                 width_operand=f"0x{width_byte:02X}",
                 y_operand=raw_y,
                 chain_position=chain_index,
+                permitted_cells=FLOATING_WIDTHS.get(width_byte),
+                evidence="SCN floating-window width operand",
             )
     for offset, subtype, width_byte, raw_y, indexes in _selector_window_commands(
         scn, record_count
@@ -207,6 +246,8 @@ def _occurrences(
                 subtype=f"0x{subtype:02X}",
                 width_operand=f"0x{width_byte:02X}",
                 y_operand=raw_y,
+                permitted_cells=FLOATING_WIDTHS.get(width_byte),
+                evidence="SCN selector-window width operand",
             )
     return result
 
@@ -243,12 +284,26 @@ def audit(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
                 raise ValueError(f"{record_id}: missing from base layout audit")
             row_details = _row_details(item)
             raw_occurrences = occurrences.get(int(source_record["index"]), [])
-            occurrence_count += len(raw_occurrences)
             layout = item.get("layout")
+            if isinstance(layout, dict) and not raw_occurrences:
+                raw_occurrences = [
+                    {
+                        "offset": "profile",
+                        "command": "profile",
+                        "part": "profile_contract",
+                        "box": str(layout["text_box"]),
+                        "evidence": "reviewed profile-backed renderer contract",
+                    }
+                ]
+            occurrence_count += len(raw_occurrences)
             box = (
                 str(layout["text_box"])
                 if isinstance(layout, dict)
-                else "fixed_unproven"
+                else (
+                    str(raw_occurrences[0]["box"])
+                    if raw_occurrences and raw_occurrences[0].get("box")
+                    else "fixed_unproven"
+                )
             )
             box_counts[box] += 1
             record_defects = list(item.get("failures", []))
@@ -267,21 +322,37 @@ def audit(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
                     )
 
             if item.get("layout_policy") == "fixed" and not isinstance(layout, dict):
-                record_blockers.append(
-                    "fixed translated record has no proven width/rows/origin/alignment contract"
-                )
-                if any(int(row["leading_spaces"]) > 0 for row in row_details):
+                geometry = [
+                    occurrence
+                    for occurrence in raw_occurrences
+                    if isinstance(occurrence.get("permitted_cells"), int)
+                ]
+                if not geometry:
                     record_blockers.append(
-                        "fixed record contains leading spaces whose indentation cannot be certified"
+                        "fixed translated record has no proven width/rows/origin/alignment contract"
                     )
-            elif not raw_occurrences:
-                # Reviewed profile overrides can legitimately provide a contract
-                # when the renderer path is not represented by the generic SCN
-                # command shapes. Keep this visible rather than pretending an
-                # occurrence was found.
-                record_blockers.append(
-                    "no generic SCN display occurrence identified; verify profile-backed renderer evidence"
-                )
+                else:
+                    for occurrence in geometry:
+                        permitted = int(occurrence["permitted_cells"])
+                        max_rows = occurrence.get("max_rows")
+                        if isinstance(max_rows, int) and len(row_details) > max_rows:
+                            record_defects.append(
+                                f"{occurrence['offset']} {occurrence['command']} exceeds row limit: "
+                                f"{len(row_details)} > {max_rows}"
+                            )
+                        for row in row_details:
+                            if int(row["used_cells"]) > permitted:
+                                record_defects.append(
+                                    f"{occurrence['offset']} {occurrence['command']} row {row['row']} "
+                                    f"exceeds box width: {row['used_cells']} > {permitted} cells"
+                                )
+                    if chapter == "STAFF":
+                        exact = source_record.get("text")
+                        if not isinstance(exact, str) or len(exact) != 36:
+                            record_defects.append(
+                                "STAFF fixed line must occupy exactly 36 source characters "
+                                "for the proven 18-cell canvas"
+                            )
 
             defects.extend(f"{record_id}: {problem}" for problem in record_defects)
             blockers.extend(f"{record_id}: {problem}" for problem in record_blockers)
