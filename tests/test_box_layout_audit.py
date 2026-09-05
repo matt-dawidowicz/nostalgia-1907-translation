@@ -12,6 +12,11 @@ from work.clean_rebuild.box_layout_audit import (
 )
 from work.clean_rebuild.renderer_format import measure_literal
 from work.clean_rebuild.source_json import load_json_object
+from work.clean_rebuild.staff_credit_layout import (
+    STAFF_CANVAS_CHARACTERS,
+    audit_staff_credits,
+    centered_credit_line,
+)
 from work.clean_rebuild.translation_audit import SOURCES
 
 
@@ -54,13 +59,46 @@ class BoxLayoutAuditTests(unittest.TestCase):
     def test_staff_rows_match_native_eighteen_cell_canvas(self) -> None:
         """Every credit row must remain exactly 36 source chars / 18 cells."""
         staff = load_json_object(SOURCES / "STAFF.json")
+        self.assertEqual(STAFF_CANVAS_CHARACTERS, SPECIAL_LINE_CELLS * 2)
         for record in staff["records"]:
             if record.get("policy") != "translate":
                 continue
             text = record["text"]
             with self.subTest(index=record["index"]):
-                self.assertEqual(len(text), 36)
+                self.assertEqual(len(text), STAFF_CANVAS_CHARACTERS)
                 self.assertEqual(measure_literal(text), SPECIAL_LINE_CELLS)
+
+    def test_staff_rows_are_centered_on_native_canvas(self) -> None:
+        """Keep all fixed STAFF padding derived from one centering rule."""
+        staff = load_json_object(SOURCES / "STAFF.json")
+        report = audit_staff_credits(staff)
+        self.assertEqual(report["status"], "PASS", report["failures"])
+        self.assertEqual(report["audited_record_count"], 62)
+        for record in staff["records"]:
+            if record.get("policy") != "translate":
+                continue
+            text = record["text"]
+            with self.subTest(index=record["index"]):
+                self.assertEqual(text, centered_credit_line(text))
+
+    def test_staff_centering_audit_rejects_left_aligned_short_credit(self) -> None:
+        """Catch the observed Ruthie-style regression even when width still fits."""
+        report = audit_staff_credits(
+            {
+                "chapter": "STAFF",
+                "records": [
+                    {
+                        "index": 19,
+                        "policy": "translate",
+                        "text": "Ruthie".ljust(STAFF_CANVAS_CHARACTERS),
+                    }
+                ],
+            }
+        )
+        self.assertEqual(report["status"], "FAIL")
+        self.assertEqual(report["failure_count"], 1)
+        self.assertIn("STAFF:019: credit is not centered", report["failures"][0])
+        self.assertIn("padding 0/30, expected 15/15", report["failures"][0])
 
 
 if __name__ == "__main__":
