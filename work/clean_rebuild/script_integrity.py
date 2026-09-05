@@ -25,7 +25,11 @@ from .scn_layout import (
     infer_contracts,
 )
 from .source_json import load_json_object
-from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
+
+
+HERE = Path(__file__).resolve().parent
+SOURCES = HERE / "sources"
+DEFAULT_RETAIL_ROOT = HERE / "retail_reference"
 
 
 @dataclass(frozen=True)
