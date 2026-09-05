@@ -1,0 +1,23 @@
+name: Temp Export Source
+
+on:
+  push:
+    branches:
+      - temp-layout-audit-export-20260904
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Upload source bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: nostalgia-layout-audit-source
+          path: |
+            work/
+            pyproject.toml
+          include-hidden-files: true
+          if-no-files-found: error
