@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Any
 
 from .mes_compiler import CompileError, compile_mes
+from .script_integrity import audit_project_scn_references
 from .source_json import load_json_object
 from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 from .translation_formatter import audit_layouts
@@ -26,7 +27,7 @@ from .translation_formatter import audit_layouts
 
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
-PLAN_SCHEMA_VERSION = 1
+PLAN_SCHEMA_VERSION = 2
 PASS = "pass"
 PENDING = "pending"
 VALID_RUNTIME_STATES = frozenset((PASS, "fail", PENDING, "not_applicable"))
@@ -48,8 +49,20 @@ GLOBAL_RUNTIME_CHECKS = (
         "Advance across a speaker, scene, or window transition and verify the next box clears correctly.",
     ),
     (
+        "full_to_short_clear",
+        "Advance from a visually full or multi-row text box to a much shorter box and confirm no stale glyphs remain.",
+    ),
+    (
+        "renderer_switch",
+        "Exercise lower dialogue, a floating window, a choice, and the return to dialogue; confirm cursor position and clearing reset at every renderer switch.",
+    ),
+    (
         "choice",
-        "Exercise every available choice branch encountered during the route, then confirm the selected path continues.",
+        "Exercise every generated choice edge in the branch inventory and confirm each selected path reaches its expected continuation.",
+    ),
+    (
+        "credits_layout",
+        "Watch the complete credits sequence and confirm every 18-cell line is centered/aligned as intended with no clipping or stale text.",
     ),
     (
         "save_reload",
@@ -115,6 +128,7 @@ def build_plan(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, Any]:
     """
     layout = audit_layouts(retail_root)
     compiled = _compiled_static_summary(retail_root)
+    scn_integrity = audit_project_scn_references(retail_root)
     index = _load(SOURCES / "index.json")
     records_by_chapter: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for record in layout["records"]:
@@ -172,6 +186,15 @@ def build_plan(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, Any]:
         }
         for text_box, record_ids in sorted(text_boxes.items())
     ]
+    runtime_branch_edges = [
+        {
+            **edge,
+            "status": PENDING,
+            "evidence": "",
+        }
+        for chapter in scn_integrity["chapters"]
+        for edge in chapter["choice_edges"]
+    ]
     return {
         "schema_version": PLAN_SCHEMA_VERSION,
         "purpose": "Whole-game static validation plus human runtime certification",
@@ -182,6 +205,11 @@ def build_plan(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, Any]:
                 if key not in {"records", "failures", "warnings", "legacy_issues"}
             },
             "emitted_renderer": compiled,
+            "scn_references": {
+                key: value
+                for key, value in scn_integrity.items()
+                if key != "chapters"
+            },
         },
         "runtime": {
             "build_identity": {
@@ -200,6 +228,7 @@ def build_plan(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, Any]:
             "chapters": chapters,
             "text_boxes": runtime_boxes,
             "fixed_layout_record_ids": fixed_records,
+            "branch_edges": runtime_branch_edges,
             "issues": [],
         },
     }
@@ -225,6 +254,8 @@ def _markdown(plan: dict[str, Any]) -> str:
         f"- Emitted MES rows: {emitted['renderer_contract_rows']}",
         f"- Emitted MES logical cells: {emitted['renderer_contract_cells']}",
         f"- Lower-dialogue row edges: {emitted['renderer_contract_row_edges']}",
+        f"- Proven SCN text references: {static['scn_references']['reference_count']}",
+        f"- Menu-choice branch edges: {static['scn_references']['choice_branch_count']}",
         "",
         "## Runtime requirements",
         "",
@@ -243,6 +274,12 @@ def _markdown(plan: dict[str, Any]) -> str:
         lines.append(
             f"- [ ] **{text_box['text_box']}** ({text_box['static_record_count']} records; "
             f"examples: {examples})"
+        )
+    lines.extend(("", "## Choice-branch edges", ""))
+    for edge in runtime["branch_edges"]:
+        lines.append(
+            f"- [ ] **{edge['id']}** — {edge['record_id']} -> "
+            f"0x{edge['branch_target']:X} (target opcode 0x{edge['target_opcode']:02X})"
         )
     lines.extend(
         (
@@ -340,8 +377,13 @@ def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("runtime plan is missing")
     layout = static.get("layout")
     emitted = static.get("emitted_renderer")
-    if not isinstance(layout, dict) or not isinstance(emitted, dict):
-        raise ValueError("static layout or emitted-renderer summary is missing")
+    scn_references = static.get("scn_references")
+    if (
+        not isinstance(layout, dict)
+        or not isinstance(emitted, dict)
+        or not isinstance(scn_references, dict)
+    ):
+        raise ValueError("static layout, emitted-renderer, or SCN summary is missing")
 
     pending: list[str] = []
     failed: list[str] = []
@@ -349,6 +391,8 @@ def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
         failed.append("static:layout")
     if emitted.get("status") != PASS:
         failed.append("static:emitted_renderer")
+    if scn_references.get("status") != "PASS":
+        failed.append("static:scn_references")
     if not _bound_candidate(runtime.get("build_identity")):
         pending.append("build_identity")
 
@@ -356,6 +400,7 @@ def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
     chapters = runtime.get("chapters")
     text_boxes = runtime.get("text_boxes")
     fixed_records = runtime.get("fixed_layout_record_ids")
+    branch_edges = runtime.get("branch_edges")
     issues = runtime.get("issues")
     if not isinstance(global_checks, list):
         raise ValueError("global runtime checks are missing")
@@ -365,6 +410,8 @@ def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("runtime text-box inventory is missing")
     if not isinstance(fixed_records, list):
         raise ValueError("fixed-layout runtime inventory is missing")
+    if not isinstance(branch_edges, list):
+        raise ValueError("choice-branch runtime inventory is missing")
     if not isinstance(issues, list):
         raise ValueError("runtime issue inventory is missing")
 
@@ -408,6 +455,18 @@ def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("fixed-layout runtime inventory contains an invalid record ID")
     if len(fixed_records) != len(set(fixed_records)):
         raise ValueError("fixed-layout runtime inventory contains duplicates")
+    expected_branch_count = scn_references.get("choice_branch_count")
+    if not isinstance(expected_branch_count, int) or expected_branch_count < 0:
+        raise ValueError("static choice-branch count is invalid")
+    if len(branch_edges) != expected_branch_count:
+        raise ValueError("runtime choice-branch inventory differs from static coverage")
+    branch_ids = [
+        edge.get("id") if isinstance(edge, dict) else None for edge in branch_edges
+    ]
+    if any(not isinstance(edge_id, str) or not edge_id for edge_id in branch_ids):
+        raise ValueError("runtime choice-branch entry is malformed")
+    if len(branch_ids) != len(set(branch_ids)):
+        raise ValueError("runtime choice-branch inventory contains duplicates")
     if issues:
         failed.append("runtime:issues")
 
@@ -441,6 +500,17 @@ def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
             state_key="runtime_status",
             evidence_key="runtime_evidence",
             label=f"text_box:{text_box['text_box']}",
+            pending=pending,
+            failed=failed,
+        )
+    for edge in branch_edges:
+        if not isinstance(edge, dict):
+            raise ValueError("runtime choice-branch entry is malformed")
+        _require_runtime_evidence(
+            edge,
+            state_key="status",
+            evidence_key="evidence",
+            label=f"branch:{edge['id']}",
             pending=pending,
             failed=failed,
         )
