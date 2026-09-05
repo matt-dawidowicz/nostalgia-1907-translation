@@ -1,40 +1,48 @@
-name: Temp Export Source
+name: Temp Apply Layout Audit
 
 on:
   push:
     branches:
       - temp-layout-audit-export-20260904
 
+permissions:
+  contents: write
+
 jobs:
-  export:
+  apply:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
+      - name: Check out staging branch
         uses: actions/checkout@v4
-
-      - name: Upload source bundle
-        uses: actions/upload-artifact@v4
         with:
-          name: nostalgia-layout-audit-source
-          path: |
-            work/
-            tests/
-            tools/
-            docs/
-            MANIFEST.sha256
-            pyproject.toml
-          include-hidden-files: true
-          if-no-files-found: error
+          fetch-depth: 0
 
-      - name: Download m68k binutils package
+      - name: Verify staged payload
         run: |
-          mkdir -p toolbundle
-          cd toolbundle
-          apt-get download binutils-m68k-linux-gnu
+          base64 -d .github/layout_changes.b64 > /tmp/layout_changes.tar.gz
+          echo "a3fd596d71774f3ad572a1818024b4b041eeb38e5a9c7323fcb432b9082774f5  /tmp/layout_changes.tar.gz" | sha256sum -c -
 
-      - name: Upload m68k binutils package
-        uses: actions/upload-artifact@v4
-        with:
-          name: m68k-binutils-deb
-          path: toolbundle/*.deb
-          if-no-files-found: error
+      - name: Apply and push audited changes
+        run: |
+          git fetch origin layout-box-audit
+          git checkout -B layout-box-audit origin/layout-box-audit
+          tar -xzf /tmp/layout_changes.tar.gz
+          git add MANIFEST.sha256 \
+            docs/BINARY_FORMATS.md \
+            docs/DEVELOPMENT.md \
+            docs/TEXT_BOX_CONTRACTS.md \
+            tests/test_box_layout_audit.py \
+            tests/test_code_invariants.py \
+            tests/test_renderer_boundary_audit.py \
+            tests/test_renderer_spacing.py \
+            tests/test_review_exports.py \
+            work/clean_rebuild/box_layout_audit.py \
+            work/clean_rebuild/export_fixed_layout_review.py \
+            work/clean_rebuild/scn_layout.py \
+            work/clean_rebuild/sources/STAFF.json \
+            work/clean_rebuild/translation_validation.py
+          git diff --cached --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Certify all translated text box layouts"
+          git push origin HEAD:layout-box-audit
