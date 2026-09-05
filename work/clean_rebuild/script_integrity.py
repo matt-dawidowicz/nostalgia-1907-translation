@@ -19,6 +19,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from .mes_format import read_mes
+from .renderer_format import measure_literal
 from .scn_layout import (
     _selector_window_commands,
     _window_text_commands,
@@ -30,6 +31,7 @@ from .source_json import load_json_object
 HERE = Path(__file__).resolve().parent
 SOURCES = HERE / "sources"
 DEFAULT_RETAIL_ROOT = HERE / "retail_reference"
+SPECIAL_FIXED_WIDTHS = {"0x20": 18, "0x22": 18, "0x23": 18, "0x24/0x28": 2}
 
 
 @dataclass(frozen=True)
@@ -70,11 +72,12 @@ def scan_scn_text_references(
 ) -> tuple[ScnTextReference, ...]:
     """Return every reference identified by a proven text-bearing SCN shape.
 
-    This is deliberately conservative. In particular, 0x22/0x23 labels are
-    accepted only as the adjacent pair used by the scene UI, while 0x31 is
-    accepted only with its marker byte, an in-range record ID, and an in-range
-    branch target. Floating and selector windows reuse the reviewed parsers in
-    ``scn_layout`` so layout and referential audits cannot drift apart.
+    The 0x20, 0x22, and 0x23 one-line renderers are accepted as their proven
+    three-byte forms when the one-based text ID is in range; retail scripts use
+    both adjacent and standalone 0x22/0x23 commands. 0x31 is accepted only with
+    its marker byte, an in-range record ID, and an in-range branch target.
+    Floating and selector windows reuse the reviewed parsers in ``scn_layout``
+    so layout and referential audits cannot drift apart.
     """
     if record_count <= 0:
         raise ValueError("record_count must be positive")
@@ -126,12 +129,6 @@ def scan_scn_text_references(
                 add(offset, "0x21", second_id - 1, "dialogue_body")
             elif second_id == 0 and 1 <= first_id <= record_count:
                 add(offset, "0x21", first_id - 1, "dialogue_continuation")
-        elif opcode == 0x22 and offset + 6 <= len(scn) and scn[offset + 3] == 0x23:
-            location_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
-            perspective_id = int.from_bytes(scn[offset + 4 : offset + 6], "big")
-            if 1 <= location_id <= record_count and 1 <= perspective_id <= record_count:
-                add(offset, "0x22/0x23", location_id - 1, "location_name")
-                add(offset + 3, "0x22/0x23", perspective_id - 1, "perspective_name")
         elif (
             opcode == 0x24
             and offset + 8 <= len(scn)
@@ -188,6 +185,26 @@ def scan_scn_text_references(
     )
 
 
+def fixed_layout_width_failure(text: str, commands: tuple[str, ...]) -> str | None:
+    """Return a fixed one-line geometry failure, or ``None`` when it fits.
+
+    The special 0x20/0x22/0x23 renderers share the 18-cell width proven from
+    MAIN.BIN. The immediate 0x24/0x28 countdown form has a two-cell window.
+    When one record is reused by more than one renderer, the tightest proven
+    width owns the safety decision.
+    """
+    widths = [SPECIAL_FIXED_WIDTHS[command] for command in commands if command in SPECIAL_FIXED_WIDTHS]
+    if not widths:
+        return "fixed translated record has no proven special-renderer width"
+    if "\n" in text or "\r" in text:
+        return "fixed one-line renderer contains an explicit line break"
+    permitted = min(widths)
+    used = measure_literal(text)
+    if used > permitted:
+        return f"fixed renderer overflow: {used} > {permitted} cells"
+    return None
+
+
 def choice_edges(references: tuple[ScnTextReference, ...]) -> tuple[ScnChoiceEdge, ...]:
     """Return every recognized menu-choice branch from a reference inventory."""
     return tuple(
@@ -221,6 +238,7 @@ def audit_project_scn_references(
     total_references = 0
     total_choice_edges = 0
     total_profile_only = 0
+    total_fixed_certified = 0
 
     for chapter_item in index["chapters"]:
         chapter = str(chapter_item["chapter"])
@@ -253,6 +271,33 @@ def audit_project_scn_references(
         )
         references = scan_scn_text_references(scn, record_count, profile)
         referenced = {item.record_index for item in references}
+        references_by_record: dict[int, list[ScnTextReference]] = {}
+        for reference in references:
+            references_by_record.setdefault(reference.record_index, []).append(reference)
+        fixed_indexes = {
+            int(record["index"])
+            for record in source["records"]
+            if record.get("policy") == "translate"
+            and record.get("layout_policy") == "fixed"
+        }
+        fixed_certified = 0
+        for record_index in sorted(fixed_indexes):
+            record = source["records"][record_index]
+            text = record.get("text")
+            if not isinstance(text, str):
+                failures.append(
+                    f"{chapter}:{record_index:03d}: fixed translated record has no text"
+                )
+                continue
+            commands = tuple(
+                reference.command
+                for reference in references_by_record.get(record_index, [])
+            )
+            width_failure = fixed_layout_width_failure(text, commands)
+            if width_failure is not None:
+                failures.append(f"{chapter}:{record_index:03d}: {width_failure}")
+                continue
+            fixed_certified += 1
         contracts = infer_contracts(
             scn,
             record_count,
@@ -285,12 +330,15 @@ def audit_project_scn_references(
         total_references += len(references)
         total_choice_edges += len(edges)
         total_profile_only += len(profile_only)
+        total_fixed_certified += fixed_certified
         chapters.append(
             {
                 "chapter": chapter,
                 "reference_count": len(references),
                 "referenced_record_count": len(referenced),
                 "translated_record_count": len(translated),
+                "fixed_layout_record_count": len(fixed_indexes),
+                "fixed_layout_certified_count": fixed_certified,
                 "profile_only_translated_record_ids": [
                     f"{chapter}:{record_index:03d}" for record_index in profile_only
                 ],
@@ -317,6 +365,7 @@ def audit_project_scn_references(
         "chapter_count": len(chapters),
         "reference_count": total_references,
         "choice_branch_count": total_choice_edges,
+        "fixed_layout_certified_count": total_fixed_certified,
         "profile_only_translated_record_count": total_profile_only,
         "chapters": chapters,
     }
