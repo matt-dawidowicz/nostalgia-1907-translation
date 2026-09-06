@@ -2,96 +2,134 @@
 
 ## Current source status
 
-Version **1.0.2 remains the latest runtime-certified published reference**. The
-current source tree also contains the post-1.0.2 2026-08-27 translation
-revision. That revision changes canonical English and playable bytes. It has
-passed source CI plus retail-backed layout, MES-capacity, and archive-fit gates,
-but it has not completed a fresh candidate-bound Ares playthrough and is not a
-new runtime-certified release. See
-[the revision record](TRANSLATION_REVISION_20260827.md).
+Version **1.0.2 remains the latest runtime-certified published reference**.
+The maintained source is the cumulative post-1.0.2 successor line described in
+[`CURRENT_STATUS.md`](CURRENT_STATUS.md). It includes the August source-fidelity
+revision plus later complete-script editing, renderer/runtime corrections,
+fixed-layout and script-integrity hardening, STAFF centering, repository/build
+hardening, and deterministic performance changes.
 
-Do not use the 1.0.2 playtest as evidence for the current source revision. A
-successor release must complete the build and runtime requirements below with
-its own hashes.
+Because playable bytes changed after 1.0.2, the current source does **not**
+inherit the historical 1.0.2 Ares result. Several intermediate successor
+candidates completed retail-backed deterministic proofs, but later changes mean
+those hashes are development evidence, not the release identity of the current
+source. A successor release must freeze one exact final commit and certify the
+products built from that exact source.
 
 ## Runtime-reviewed reference
 
-Version 1.0.2 is a source, documentation, and metadata maintenance release: it
-identifies the existing runtime-reviewed reference rather than claiming a new
-playable artifact.
-
-The North American artifact with Track 1 SHA-256
+The North American 1.0.2 artifact with Track 1 SHA-256
 `1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`
-is the runtime-reviewed reference for the current renderer contracts. Its
-unchanged Track 2 SHA-256 is
+is the current runtime-reviewed reference. Its unchanged Track 2 SHA-256 is
 `F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991`.
-The exact hashes are the durable identity; former private build-number labels
-are deliberately not used in public-facing documentation.
 
-Prior verification reports state that the artifact was created through two
+Prior verification reports state that the reference was created through two
 independent byte-identical clean rebuilds followed by two byte-identical North
-American region builds. The current source-hardening build produced the same
-playable Track 1 bytes.
-
-The project maintainer completed a full playtest of this exact Track 1 in
-Ares. It included the targeted dialogue-renderer checks, page advances, and
-dialogue transitions; no defect was reported during the playthrough. This is
-the current runtime evidence for the release reference. Independent and future
-regression playtests are welcome, especially for alternate choices, emulator
-versions, hardware, and newly reported routes. The historical record does not
-include an Ares version number, so future reports must record their own version
+American region builds. The project maintainer completed a full playtest of
+this exact Track 1 in Ares with no reported defect. The historical record does
+not include an Ares version number; future reports must record their own version
 rather than supplying one retroactively.
 
-A source-only checkout cannot independently replay the emulator session or
-re-prove the excluded artifact hashes. Every candidate whose playable bytes
-change must generate fresh verification reports and new runtime evidence tied
-to its exact hashes.
+A source-only checkout cannot replay that emulator session or re-prove excluded
+artifact hashes. Every candidate whose playable bytes differ needs fresh
+verification reports and runtime evidence tied to its own exact hashes.
 
-## What a release proves
+## What a build proves
 
 A successful `nostalgia1907.py build` proves that:
 
 - the supplied Japanese Track 1 and Track 2 match their required hashes;
-- the canonical source, compiler, format code, and configuration pass the
-  automated validation gate;
+- canonical source, production code, and configuration pass the maintained
+  validation gates;
 - two independent clean builds are byte-identical;
 - two independent North American region builds are byte-identical;
-- fixed disc boundaries, the guarded SCN mutation contract, Track 2, and
-  required raw-CD checks remain intact; and
-- the final verification manifest binds the delivery files to those inputs.
+- fixed disc boundaries, the guarded SCN mutation contract, Track 2, and raw-CD
+  integrity remain intact; and
+- final verification binds the delivery files to declared inputs and hashes.
 
-It does not prove visual behavior in an emulator. Manual playtesting remains
-required whenever playable bytes change or a release claims broader runtime
-coverage than the reference above.
+Authenticated unchanged raw sectors may inherit checksum evidence by exact
+identity to the verified retail reference; changed sectors are regenerated and
+checked directly. This is a preservation proof, not an emulator-behavior claim.
+
+A successful build does **not** prove visible window clearing, timing,
+transitions, branch behavior, save/reload behavior, or emulator compatibility.
+
+## Source gate before a release build
+
+Install the development tools and run the one maintained source contract:
+
+```powershell
+python -m pip install -r requirements-dev.txt
+python -m tools.source_checks --root . --strict-release
+```
+
+If tracked source changed, regenerate `MANIFEST.sha256` first:
+
+```powershell
+python tools/source_manifest.py --root . --write
+python -m tools.source_checks --root . --strict-release
+```
+
+Do not substitute an older hand-copied list of source-health, Black, style, or
+lint commands. The unified gate is authoritative and includes Ruff format,
+Ruff lint, mypy, production-dependency, manifest, test, compilation, and
+public-API documentation checks.
+
+## Successor release procedure
+
+Freeze an exact commit before beginning candidate certification. Then:
+
+1. run `python nostalgia1907.py doctor`;
+2. run `python nostalgia1907.py prepare` against the verified retail Track 1;
+3. run `python nostalgia1907.py validate`;
+4. run the normal North American `build` from new, empty staging/delivery roots;
+5. confirm both clean builds and both region builds agree;
+6. record final translated ISO, Track 1, Track 2, CUE, aggregate input
+   fingerprint, and verification-manifest identities;
+7. generate a candidate-bound whole-game runtime plan;
+8. complete the Ares runtime log for the exact candidate; and
+9. verify the completed runtime log before publishing a new version.
+
+Any source or production-path change after the freeze creates a different
+candidate and resets the build/runtime certification obligation. Documentation-
+only changes do not change playable bytes, but they must still keep
+`MANIFEST.sha256` and source CI synchronized.
 
 ## Required manual checks
 
-For every changed candidate, use the generated `.cue` file in Ares with the
-verified U.S. Sega CD BIOS. Check the affected scenes and at least one
-representative of each text-box type:
+For every changed playable candidate, use the generated `.cue` in Ares with the
+verified U.S. Sega CD BIOS. The generated whole-game plan is authoritative for
+scope. At minimum the evidence must cover:
 
-1. Advance every page in a multi-page lower dialogue box.
-2. Cross at least one speaker or dialogue transition.
-3. Inspect adaptive, fixed, compact-label, and anchor text records.
-4. Save and reload once, then confirm normal progression and audio.
-5. Record the candidate Track 1 hash, Ares version, route or chapter coverage,
-   and the chapter/record IDs for any defect.
+1. boot and a fresh-game start;
+2. multi-page lower dialogue and page advances;
+3. speaker/dialogue and text-box transitions;
+4. choices and the generated route/branch inventory;
+5. every chapter required by the generated plan;
+6. representative adaptive and fixed layouts plus all required text-box
+   contracts;
+7. save and reload followed by normal progression and audio; and
+8. the ending path.
 
-Use [whole-game testing](WHOLE_GAME_TESTING.md) when scheduling an independent
-or regression playthrough. Do not treat static validation as runtime proof, and
-do not reuse the reference playtest as evidence for a candidate whose playable
-bytes have changed.
+`PART4C:051` through `PART4C:059` require one uninterrupted ending-sequence
+observation because their fixed placement/transition behavior is not completely
+proved by static SCN geometry.
+
+Record the candidate Track 1 hash, CUE identity, Ares version, route/chapter
+coverage, evidence notes, and any defect IDs. Do not treat screenshots as a
+substitute for the structured runtime log.
 
 ## Publishing checklist
 
 Before publishing a build or patch:
 
-1. Run `python tools/source_health.py --root . --strict-release`, the source-only test suite,
-   the style/Black checks, and `python nostalgia1907.py validate`.
-2. Build from a new, empty staging directory.
-3. Confirm the final verification manifest reports both deterministic stages.
-4. Complete and record the required Ares checks for any changed playable bytes.
-5. Publish only source, documentation, checksums, and legal instructions, not a
+1. confirm the exact frozen source commit and a green unified source gate;
+2. confirm the complete retail-backed `validate` path passed;
+3. build from new, empty staging/delivery roots;
+4. confirm the final verification manifest reports both deterministic stages;
+5. complete and verify the candidate-bound Ares runtime log;
+6. ensure the runtime issue inventory is empty; and
+7. publish only source, documentation, checksums, and legal instructions, not a
    BIOS or copyrighted game image.
 
 Public source collaboration can review and test synthetic/compiler changes

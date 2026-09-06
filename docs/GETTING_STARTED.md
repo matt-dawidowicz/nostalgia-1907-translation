@@ -1,19 +1,26 @@
 # Getting started
 
 This guide is the shortest safe route into the project. It is for contributors
-who have not worked with Mega-CD images, SCN programs, or the earlier
-translation history. Start here before reading the deeper format documents.
+who have not worked with Mega-CD images, SCN programs, or the translation
+history. Start here before reading the deeper format documents.
 
 ## Current release status
 
-Version 1.0.2 remains the latest runtime-certified published reference; its
+Version **1.0.2** remains the latest runtime-certified published reference. Its
 hash-identified North American build completed the recorded full maintainer Ares
-playtest with no reported defects. The current source tree contains a later
-2026-08-27 translation revision whose playable bytes change. Its source and
-retail-backed static gates are green, but it still needs a fresh deterministic
-release build and candidate-bound runtime checks. Read [the revision
-record](TRANSLATION_REVISION_20260827.md) and [release policy](RELEASE.md)
-before preparing a build for publication.
+playthrough with no reported defects.
+
+The maintained source is a **cumulative post-1.0.2 successor line**. It includes
+more than the 2026-08-27 translation revision: the complete English-script audit,
+renderer/runtime fixes, Game Hall SCN correction, fixed-layout and script-
+integrity hardening, STAFF centering, defensive repository/build work, and
+performance/quality improvements have all been integrated since then.
+
+Those changes include playable-byte changes. The current source therefore needs
+its own exact deterministic release candidate and candidate-bound Ares runtime
+log before it can supersede 1.0.2. Read [current project
+status](CURRENT_STATUS.md) and [release policy](RELEASE.md) before preparing a
+build for publication.
 
 ## Pick a contributor path
 
@@ -24,7 +31,7 @@ Choose the smallest path that matches your task.
 | Source review | A normal source clone and Python | Documentation, tests, or synthetic formatter fixtures | A retail build or runtime result |
 | Translation edit | Verified local retail inputs | Reviewed canonical English JSON after preview and validation | That a static preview proves Ares behavior |
 | Renderer investigation | Retail inputs plus SCN evidence and Ares access | Shared formatter/compiler/layout rules with regression tests | That one screenshot proves a general rule |
-| Release maintenance | Verified tracks, the U.S. BIOS, and Ares | A clean North American candidate and its evidence | That a successful build alone is a release certification |
+| Release maintenance | Verified tracks, the U.S. BIOS, and Ares | A frozen North American candidate and its evidence | That a successful build alone is runtime certification |
 
 North America is the default release region. Japan is an explicit diagnostic
 override. Europe is not a supported target.
@@ -40,23 +47,26 @@ The project deliberately separates three authorities:
 3. **Generated output** is MES, archives, reports, comparisons, and BIN/CUE
    files. It is disposable evidence, never an input to a later rebuild.
 
-If a proposed change crosses one of these boundaries, stop and read
+If a proposed change crosses one of these boundaries, read
 [Architecture](ARCHITECTURE.md) and [Binary formats](BINARY_FORMATS.md) before
 editing anything.
 
 ## First session: source-only checkout
 
-Use Python 3.12 or newer and install the development checks:
+Use Python 3.12 or newer. The repository runs directly from the checkout; do not
+install it as a package. Install only the development tools needed by the
+source-quality gate:
 
 ```powershell
 python -m pip install -r requirements-dev.txt
-python tools/source_health.py --root . --strict-release
-python -m unittest discover -s tests -v
-python -m ruff check nostalgia1907.py tools tests work
-python tools/style_audit.py --root .
+python -m tools.source_checks --root . --strict-release
 ```
 
-These commands are safe in a public clone and require no game media or BIOS.
+The unified source gate performs source health, exact manifest verification,
+production-dependency auditing, compilation, source-only tests, Ruff format and
+lint checks, the maintained mypy ratchet, and the public-API documentation
+audit. These checks require no game media or BIOS.
+
 Read failures from top to bottom. Do not remove a check, relax a hash, or add a
 generated file merely to make the command pass. A contributor without private
 retail fixtures can still improve documentation, tests, parsing, and synthetic
@@ -65,8 +75,8 @@ renderer coverage.
 ## First session: maintainer checkout
 
 Keep private paths in the ignored `nostalgia1907.local.json` file. Supply your
-own verified Japanese Track 1, Track 2, and U.S. Sega CD BIOS; do not copy
-those files into the repository.
+own verified Japanese Track 1, Track 2, and U.S. Sega CD BIOS; do not copy those
+files into the repository.
 
 ```powershell
 python nostalgia1907.py doctor
@@ -79,6 +89,10 @@ The real `build` command uses empty staging and delivery directories, then
 performs two clean builds and two North American wrapper builds. It creates the
 neutral `Nostalgia1907_CleanRebuild_NorthAmerica` candidate name by default.
 Load the resulting `.cue` in Ares; do not load an individual `.bin` file.
+
+For a release candidate, freeze the exact source commit before the real build.
+Later source or production-path changes invalidate candidate identity and
+require a fresh build/certification cycle.
 
 ## Make a translation change safely
 
@@ -106,7 +120,7 @@ semantic English, not a collection of spacing workarounds.
 | --- | --- | --- |
 | Awkward or incorrect English | Canonical record and its policy | Revise reviewed wording and preview it |
 | Repeated broken word, spacing, or page behavior | SCN-derived renderer class and shared formatter | Add a general test and fix shared code only with runtime evidence |
-| One-off fixed overlay is wrong | The record's fixed-layout contract | Preserve placement unless SCN evidence establishes a broader rule |
+| One-off fixed overlay is wrong | The record's fixed-layout contract | Preserve placement unless structural/runtime evidence establishes a broader rule |
 | Build/ISO/track failure | First failing validation stage | Repair the reported invariant; never waive it |
 | Ares-only defect | Candidate hash, record ID, route, and transition state | Record reproducible runtime evidence before changing the renderer |
 
@@ -116,15 +130,22 @@ prove emulator redraw behavior.
 
 ## Before opening a pull request
 
-Run the checks appropriate to your path, inspect `git diff`, and make sure no
-BIOS, retail input, extracted member, generated image, comparison screenshot,
-or local configuration file is staged. Use [Contributing](../CONTRIBUTING.md)
-for the full review checklist.
+If tracked source changed, refresh the source manifest and rerun the unified
+gate:
+
+```powershell
+python tools/source_manifest.py --root . --write
+python -m tools.source_checks --root . --strict-release
+```
+
+Inspect `git diff`, and make sure no BIOS, retail input, extracted member,
+generated image, comparison screenshot, or local configuration file is staged.
+Use [Contributing](../CONTRIBUTING.md) for the full review checklist.
 
 ## Where to go next
 
-- Need the command and validation details? Read [Development and
-  validation](DEVELOPMENT.md).
+- Need the current release boundary? Read [Current project status](CURRENT_STATUS.md).
+- Need command and validation details? Read [Development and validation](DEVELOPMENT.md).
 - Need to understand text boxes? Read [Text-box contracts](TEXT_BOX_CONTRACTS.md).
 - Need to change English safely? Read [Translation editing](TRANSLATION_EDITING.md).
 - Need to build or publish? Read [Release and playtest policy](RELEASE.md).

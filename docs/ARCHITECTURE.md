@@ -15,11 +15,10 @@ The repository has three trust classes:
 | Generated output | MES, LZ, ISO, BIN/CUE, reports and review packages | Disposable products that must be reproducible |
 
 Version 1.0.2 remains the latest runtime-certified published reference. The
-current source tree contains the later 2026-08-27 translation revision, which
-changes playable bytes and therefore requires fresh candidate-bound runtime
-evidence before it can supersede 1.0.2. See
-[the revision record](TRANSLATION_REVISION_20260827.md) and
-[release policy](RELEASE.md).
+maintained source is the cumulative post-1.0.2 successor line described in
+[`CURRENT_STATUS.md`](CURRENT_STATUS.md). Later translation, renderer/runtime,
+STAFF-layout, hardening, and production-path changes mean that line requires its
+own exact candidate-bound deterministic and Ares evidence before publication.
 
 ## Supported flow
 
@@ -38,15 +37,16 @@ The build path is deliberately staged:
 
 1. `prepare_retail.py` verifies Track 1 and derives a hash-locked retail
    reference.
-2. `mes_compiler.py` combines canonical English with the original MES/SCN
-   structure and shared renderer rules.
+2. `mes_compiler.py` combines canonical English with original MES/SCN structure
+   and shared renderer rules.
 3. `build_archives.py` replaces MES members within guarded archive capacity and
-   installs the single hash-locked `PART1A.SCN` selector-coordinate correction.
-4. `iso9660.py`, `main_patch.py`, `scn_patch.py`, and `font_render.py` create the logical disc
-   payload without relocating unrelated files.
-5. `raw_cd.py` reconstructs MODE1/2352 Track 1 and copies Track 2 exactly.
-6. `regression.py` checks cross-layer preservation invariants, including
-   preserved-record rendering identity and SCN-to-MES referential integrity.
+   installs the single closed `PART1A.SCN` selector-coordinate correction.
+4. `iso9660.py`, `main_patch.py`, `scn_patch.py`, and `font_render.py` construct
+   the logical disc payload without relocating unrelated files.
+5. `raw_cd.py` reconstructs changed MODE1/2352 sectors and reuses authenticated
+   unchanged raw sectors byte-for-byte when legal; Track 2 is copied exactly.
+6. `regression.py` checks cross-layer preservation invariants, preserved-record
+   rendering identity, SCN-to-MES referential integrity, and raw-disc integrity.
 7. `verification_manifest.py` binds declared inputs and direct output hashes.
 8. `rebuild.py` repeats the clean build independently and publishes only when
    both runs agree.
@@ -60,21 +60,17 @@ The build path is deliberately staged:
 | `nostalgia1907.py` | Supported operator CLI and preflight |
 | `nostalgia1907.project.json` | Project policy, hashes, corpus counts, paths |
 | `work/clean_rebuild/sources/` | Canonical per-chapter translation records |
-| `work/clean_rebuild/` | `work.clean_rebuild` package: compiler, binary formats, builders, validators, review helpers |
-| `work/region_variant/` | `work.region_variant` package: guarded North American region wrapper |
-| `provenance/2026-08-27/` | Historical reviewed-change ledgers; never a build input |
-| `tests/` | Source-only and synthetic regression tests |
-| `tools/` | Repository health, source-manifest, and style checks |
-| `docs/` | Contributor, format, testing, revision, and release documentation |
+| `work/clean_rebuild/` | Compiler, binary formats, builders, validators, review helpers |
+| `work/region_variant/` | Guarded North American region wrapper |
+| `provenance/` | Dated reviewed-change ledgers; never build inputs |
+| `tests/` | Source-only, synthetic, integration, and regression tests |
+| `tools/` | Unified source gate, repository inventory/health, manifest, documentation audit |
+| `docs/` | Current status, architecture, formats, editing, testing, history, release policy |
 | `outputs/` | Ignored generated reports, comparisons, and playable products |
 
-Retired workspace names and completed one-off review queues are documented in
-historical maintenance records rather than carried as active files under
-`work/clean_rebuild/`.
-
-`MANIFEST.sha256` describes the complete source-only review tree. The maintained
-`tools/source_manifest.py` generator/checker makes that inventory reproducible
-instead of relying on manual hash edits.
+`MANIFEST.sha256` describes the complete source-only review tree except itself.
+`tools/source_manifest.py` renders and verifies it deterministically from the
+tracked inventory supplied by `tools/repository_inventory.py`.
 
 ## Production module boundary
 
@@ -84,24 +80,24 @@ explicit relative sibling imports, and the production-independence audit rejects
 a missing module, an import outside the allowlist, a deeper relative escape, a
 canonical source path outside `sources/`, or a known historical-workspace marker.
 
-Each production module has one primary responsibility:
+Every production dependency is documented below:
 
 | Module | Owns |
 | --- | --- |
-| `raw_cd.py` | MODE1/2352 sectors, EDC/ECC, CUE writing |
-| `iso9660.py` | ISO directory records, extents, logical sizes |
-| `lz_format.py` | Chapter archive parsing and compression |
+| `raw_cd.py` | MODE1/2352 sectors, EDC/ECC, authenticated unchanged-sector reuse, CUE writing |
+| `iso9660.py` | ISO directory records, fixed extents, logical sizes |
+| `lz_format.py` | Chapter archive parsing and deterministic compression |
 | `mes_format.py` | MES parsing and structural validation |
 | `source_json.py` | Strict UTF-8 JSON loading and duplicate-key rejection |
 | `font_render.py` | Fixed and generated glyph bitmaps |
-| `scn_layout.py` | SCN-derived renderer roles and geometry |
+| `scn_layout.py` | Shared SCN display inventory, renderer roles, geometry, row limits |
 | `script_integrity.py` | SCN-to-MES text-reference integrity and choice-branch inventory |
-| `renderer_format.py` | Shared text normalization, wrapping, and row reconstruction |
-| `profile_schema.py` | Active chapter-profile schema and rule validation |
+| `renderer_format.py` | Shared normalization, wrapping, and row reconstruction |
+| `profile_schema.py` | Active fail-closed chapter-profile schema and rules |
 | `mes_compiler.py` | Canonical records to guarded MES bytes |
 | `prepare_retail.py` | Exact retail verification and extraction |
 | `build_mes_set.py` | Whole-corpus MES compilation and font assembly |
-| `build_archives.py` | MES and guarded PART1A SCN installation within original archive allocation |
+| `build_archives.py` | MES and guarded PART1A SCN installation within original allocation |
 | `main_patch.py` | Frozen hash-guarded executable adjustment |
 | `scn_patch.py` | Frozen two-byte PART1A Call/Fold selector alignment correction |
 | `regression.py` | Cross-layer binary preservation proofs |
@@ -114,34 +110,41 @@ boundary.
 
 ## Validation and review boundary
 
-Validation code is maintained separately from the byte-producing allowlist. The
-supported `validate` path uses `translation_formatter.py`,
-`translation_audit.py`, `translation_validation.py`, `bomb_audit.py`,
-`export_bilingual_comparison.py`, and the retail-backed
-`test_script_layout.py` suite. `export_fixed_layout_review.py` and
-`whole_game_test.py` support runtime-evidence planning; the latter also requires
-evidence for every statically inventoried menu-choice branch.
+`tools/source_checks.py` is the one maintained source-only contract. It combines
+source health, source-manifest identity, production-dependency policy,
+maintained-Python compilation, source-only tests, Ruff format, Ruff lint, mypy,
+and the public-API documentation audit.
 
-The completed translation-proposal compatibility shim was removed after the
-queue reached zero. New canonical changes use the supported edit/validate/build
-path instead; historical review outcomes remain under `docs/` and `provenance/`.
+Retail-backed validation remains separate because public CI cannot carry
+copyrighted fixtures. The supported `nostalgia1907.py validate` path uses the
+shared formatter/audits, compilation/archive/regression modules, bilingual
+comparison exporter, semantic validation, and
+`tests/test_script_layout_integration.py` after verified retail prerequisites are
+available.
 
-Public CI deliberately runs source-only checks without copyrighted retail
-fixtures. Retail-backed layout, semantic, archive, deterministic-build, and
-runtime gates remain maintainer operations with verified local inputs.
+`export_fixed_layout_review.py` and `whole_game_test.py` support runtime-evidence
+planning. Whole-game certification is fail-closed against incomplete static
+summaries, candidate identity, generated route/text-box inventories, evidence
+notes, and open runtime issues.
+
+The old active translation-proposal machinery and retired profile-compatibility
+switches have been removed. New canonical changes use the supported
+edit/validate/build path; historical outcomes remain under `docs/` and
+`provenance/`.
 
 ## Canonical source contract
 
-`sources/index.json` fixes chapter order and per-chapter counts. Each chapter
-contains a contiguous zero-based record table with an explicit translation
-policy and layout ownership.
+`sources/index.json` fixes chapter order and per-chapter counts. The maintained
+project contract is 19 chapters / 2,905 records, currently 2,883 translated and
+22 deliberately preserved.
 
 Important invariants are:
 
 - stable `CHAPTER:NNN` IDs and record order;
 - `policy: "translate"` versus `policy: "preserve"`;
-- `layout_policy: "adaptive"` only where SCN proves safe renderer geometry;
-- `layout_policy: "fixed"` where reviewers still own exact spacing;
+- `layout_policy: "adaptive"` only where a shared renderer contract is proven;
+- `layout_policy: "fixed"` where reviewer-owned physical layout remains
+  authoritative;
 - Japanese retail MES/SCN hashes as source-side guards; and
 - no discovery by matching mutable English text.
 
@@ -150,15 +153,15 @@ conversion is explicit and tested.
 
 ## Renderer ownership
 
-The game has multiple text renderers. `scn_layout.py` classifies lower dialogue,
-speaker labels, continuation rows, floating thoughts/overlays, compact labels,
-choices, and reviewed narration cases from original SCN structure.
+The game has multiple text renderers. `scn_layout.py` builds one structural
+inventory and derives lower dialogue, continuation rows, floating windows,
+labels, choices, and reviewed exceptional roles from original SCN evidence.
 
-`translation_formatter.py` and `mes_compiler.py` share the public
-`renderer_format.py` behavior. Adaptive source stores semantic English while the
-compiler derives safe rows. Fixed source retains reviewer-controlled spacing.
-The compiler repeats authoritative row/token checks before encoding so direct
-low-level compilation cannot bypass the formatter's safety model.
+`translation_formatter.py` and `mes_compiler.py` share
+`renderer_format.py`. Adaptive source stores semantic English while the compiler
+derives physical rows. Fixed source retains reviewer-controlled spacing. The
+compiler repeats authoritative row/token checks before encoding so direct
+low-level compilation cannot bypass preview safety.
 
 Static geometry is not a runtime claim. Window clearing, transitions, timing,
 branch behavior, and emulator-visible redraw still require candidate-bound
@@ -170,50 +173,53 @@ The build avoids relocating disc structures:
 
 1. MES record count and order stay fixed.
 2. Compiled MES data must fit pointer and runtime glyph limits.
-3. Preserved MES records must retain identical fixed/control bytes and identical
-   rendered dynamic glyphs, even if legal glyph-bank compaction renumbers the
-   dynamic references.
-4. Proven SCN text references must resolve to canonical MES records, and every
-   translated record must have either a proven SCN reference or an explicit
-   profile-backed renderer contract.
-5. LZ replacement uses the original member slot when possible and guarded
-   reflow only inside the original archive allocation.
+3. Preserved MES records retain fixed/control semantics and identical rendered
+   dynamic glyphs even if legal glyph-bank compaction renumbers references.
+4. Proven SCN text references resolve to canonical MES records; translated
+   records have proven SCN references or explicit reviewed renderer contracts.
+5. LZ replacement uses original member slots when possible and guarded reflow
+   only inside the original archive allocation.
 6. ISO file extents stay fixed; only declared payload bytes and logical sizes
    may change.
-7. Raw Track 1 preserves sector count and non-user-data geometry.
+7. Raw Track 1 preserves sector count, headers, addresses, mode, and geometry.
+   Authenticated unchanged sectors may be reused exactly; changed sectors receive
+   direct EDC/ECC regeneration and verification.
 8. Track 2 is copied byte-for-byte.
 9. The North American wrapper modifies only its explicitly guarded boot/security
    region.
 
-`regression.py` verifies these boundaries against the retail reference rather
-than trusting a previous translated product.
+`regression.py` verifies these boundaries against authenticated retail evidence,
+not a previous translated product.
 
 ## Determinism and cryptographic binding
 
-A clean run fingerprints declared canonical source, retail fixtures, production
-and validation code, configuration, original tracks, normalized command/build
-profile, and runtime identity. The resulting **aggregate input fingerprint** is
-recorded with explicit hashes for every managed output.
+Game builds use **fresh output roots**. A clean run fingerprints declared
+canonical source, retail fixtures, production and validation code,
+configuration, original tracks, normalized command/build profile, and runtime
+identity. The resulting **aggregate input fingerprint** is recorded with direct
+hashes for managed outputs.
 
 `verification_manifest.py` never discovers release products by an unrestricted
 output glob. Expected artifacts are named, snapshotted, rehashed immediately
-before report creation, and checked for missing or unexpected files. Two clean
-runs must agree before publication; the region wrapper has its own independent
+before report creation, and checked for missing/unexpected files. Two clean runs
+must agree before publication; the region wrapper has its own independent
 repeatability check.
 
-This proves reproducibility and direct report-to-byte binding. It does not turn
-static success into a **runtime claim**.
+The bilingual comparison package fixes member paths, ordering, ZIP metadata,
+PNG generation, and text line endings. Its byte-identity guarantee is scoped to
+the same input bytes, exporter source, and **CPython major/minor** runtime.
+
+Determinism proves reproducibility. It does not convert static evidence into a
+**runtime claim**.
 
 ## Historical provenance policy
 
 Historical outcomes belong in `docs/` or `provenance/`, not as executable
-one-off scripts beside production code. Once a discovery is promoted, the
-durable form is a general implementation rule plus a focused regression test.
-Obsolete forensic decoders, migration applicators, ad-hoc capacity planners,
-generated review-bundle scaffolding, and intermediate translation snapshots are
-removed rather than kept on the maintained Python surface.
+one-off scripts beside production code. Dated reports must preserve their
+historical measurements while clearly pointing readers to `CURRENT_STATUS.md`
+for the present release boundary.
 
-When promoting a new reverse-engineering discovery:
+When promoting a reverse-engineering discovery:
 
 1. record the evidence and scope;
 2. express the behavior as a general parser/renderer/build rule;
@@ -228,7 +234,7 @@ When promoting a new reverse-engineering discovery:
 | Correct English wording | `sources/<CHAPTER>.json` via `nostalgia1907.py edit` |
 | Lock a repeated term | Canonical records plus `translation_glossary.json` when required |
 | Fix a renderer rule | `scn_layout.py` or shared `renderer_format.py`/compiler logic |
-| Add a semantic invariant | `translation_validation.py` and its tracked rule data |
+| Add a semantic invariant | `translation_validation.py` and tracked rule data |
 | Change MES parsing | `mes_format.py` |
 | Change SCN reference/branch validation | `script_integrity.py` |
 | Change archive handling | `lz_format.py` / `build_archives.py` |

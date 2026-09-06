@@ -8,44 +8,44 @@ Retained candidate: North American maintenance reference
 
 Architectural baseline: validated clean-rebuild architecture
 
-> Historical status: this report records the maintenance decision made on the
-> date above. Its then-pending runtime questions were subsequently addressed by
-> the full maintainer Ares playtest of the hash-identified North American
-> reference. Version 1.0.2 remains the latest runtime-certified published
-> reference, while the current source tree contains a later translation
-> revision that still requires fresh runtime evidence. Use [release
-> policy](RELEASE.md) and [the 2026-08-27 revision
-> record](TRANSLATION_REVISION_20260827.md) for current status.
+## How to read this report now
 
-## Release decision
+This document preserves the measurements and decisions of the August 2
+maintenance state. Its exact test counts, corpus split, build hashes, file
+counts, and pending-work language are **historical values**, not the current
+source contract.
 
-The maintenance reference was retained as the North American playtest
-candidate. A later renderer experiment produced additional runtime layout
-regressions during manual testing. Its source experiment and generated image
-were therefore retired rather than promoted. Nothing in this maintenance state
-depends on the rejected experiment, and none of its BIN/CUE or run directories
-is retained.
+Subsequent work completed the full 1.0.2 maintainer Ares playthrough and later
+created a cumulative post-1.0.2 successor line with additional translation,
+renderer, Game Hall, fixed-layout, STAFF, hardening, performance, and source-
+quality changes. Version 1.0.2 remains the latest runtime-certified published
+reference; the current successor still requires final candidate-bound build and
+Ares certification. Use [Current project status](CURRENT_STATUS.md) and
+[Release policy](RELEASE.md) for current claims.
 
-This decision did not declare the maintenance reference a final release. Manual
-testing established that the stale-letter clearing problem and the earlier
-leading-indentation problem were fixed, while some inter-word/apostrophe-adjacent spacing still needed
-runtime review. Static success is not being presented as proof that
-every scene is visually final.
+## Historical release decision
 
-North America remains the default region for all new normal builds. The
-Japanese-region output is available only through the explicit
-`--region japan` diagnostic override.
+The maintenance reference was retained as the North American playtest candidate.
+A later renderer experiment introduced additional runtime layout regressions and
+was retired rather than promoted. None of its generated BIN/CUE or run
+directories became a build input.
+
+At the time of this report, manual testing had established fixes for stale-letter
+clearing and leading indentation while some spacing behavior still needed
+runtime review. That pending language is intentionally preserved as the state of
+August 2; later 1.0.2 playtesting superseded it.
+
+North America was established as the normal default region, with Japan retained
+as an explicit diagnostic path.
 
 ## Retained-candidate provenance and hashes
 
-Before removing older artifacts, the maintained source was compared with the
-input records embedded in the retained candidate's clean-delivery verification
-manifest. All 52 workspace source, configuration, production, and validation
-files checked in that comparison matched byte-for-byte. The full
-retained-candidate input manifest records 115 files after original-disc and
-prepared-retail fixtures are included.
+The historical maintenance source was compared against the retained candidate's
+clean-delivery verification manifest. All 52 workspace source/configuration/
+production/validation files in that comparison matched byte-for-byte; the full
+input manifest contained 115 files after retail/prepared inputs were included.
 
-| Evidence | Value |
+| Evidence | Historical value |
 | --- | --- |
 | Aggregate clean-build input fingerprint | `9F065F96122C9D15B2D86718142D5EC6BB0E205A3329CAD5E181A7C6890B3827` |
 | Independent clean builds | 2; byte-identical |
@@ -57,157 +57,101 @@ prepared-retail fixtures are included.
 | Track 2 SHA-256 | `F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991` |
 | North American CUE SHA-256 | `CCFBDD75FF464DD57B06CBD32B5263BD794BE8059019E19E3F5172B42BAEE9BE` |
 
-The North American wrapper changes only raw sectors 0 through 4, preserves the
-relocated original boot payload exactly, leaves all later raw sectors and Track
-2 byte-identical, and does not alter translation records, SCN data, ISO files,
-or file extents.
+These hashes identify that dated candidate only. They are not the identity of
+1.0.2's later runtime-reviewed Track 1 and are not the identity of the current
+successor source.
 
-## Canonical translation changes since `a2fca0c`
+The region wrapper changed only raw sectors 0 through 4, preserved the relocated
+original boot payload, left later raw sectors and Track 2 byte-identical, and
+did not alter translation records, ISO extents, or unrelated archive content.
 
-The canonical inventory remains 19 chapters, 2,905 records, 2,882 translated
-records, and 23 deliberately preserved records. IDs, order, policies, control
-codes, and binary boundaries are unchanged.
+## Canonical translation changes in that historical state
 
-Exactly 377 translated record texts changed:
+At the August 2 snapshot the inventory was **19 chapters / 2,905 records** with
+**2,882 translated and 23 preserved**. That split is intentionally recorded as
+historical; current canonical policy is **2,883 translated / 22 preserved**.
 
-- 369 records adopted the compact ellipsis rule. A pause is written as
-  `...word`, not `... word`; capitalization is retained only for names,
-  acronyms, `I` forms, titles, quoted text, and other reviewed exceptions.
-- Eight records received reviewed wording changes:
+Exactly 377 translated record texts had changed since the report's comparison
+base:
 
-| Record | Previous text | Current text |
-| --- | --- | --- |
-| `PART1A:017` | `Hee hee, you may be tough. But I am lucky.` | `Heh. You may be tough, but I'm lucky.` |
-| `PART1A:024` | `Let us do it!` | `Let's do it!` |
-| `PART2E:133` | `Cut upper red wire.` | `Cut the upper red wire.` |
-| `PART2E:150` | `Cut lower blue wire.` | `Cut the lower blue wire.` |
-| `PART2E:212` | `Set the cutters around the red wire... Cut.` | `I've got the cutters on the red wire...I'm cutting it.` |
-| `PART2E:213` | `Wire cutters on blue wire... Cut.` | `I've got the cutters on the blue wire...I'm cutting it.` |
-| `PART4B:171` | `Cut upper red wire.` | `Cut the upper red wire.` |
-| `PART4B:195` | `Cut lower blue wire.` | `Cut the lower blue wire.` |
+- 369 adopted the then-reviewed compact ellipsis convention; and
+- 8 received specific wording changes, including the reviewed contractions and
+  bomb-wire instructions recorded in the original maintenance work.
 
-Text-change counts by chapter are recorded here so future reviews can reconcile
-the change without relying on a generated diff:
+The exact historical chapter-by-chapter count remains useful for reconciling
+that maintenance transition, but it is not a target count for current source.
 
-| Chapter | Changed records | Chapter | Changed records |
-| --- | ---: | --- | ---: |
-| PART1A | 13 | PART1B | 1 |
-| PART1C | 22 | PART1D | 18 |
-| PART2A | 13 | PART2B | 11 |
-| PART2C | 17 | PART2D | 20 |
-| PART2E | 44 | PART2F | 14 |
-| PART3A | 42 | PART3B | 26 |
-| PART3B_ | 40 | PART3C | 29 |
-| PART4A | 3 | PART4B | 58 |
-| PART4C | 6 | Total | 377 |
+## Renderer/compiler outcome from the maintenance state
 
-## Renderer and compiler changes
+The durable discoveries promoted from that work included:
 
-The lower-dialogue fix is shared renderer logic, not a prologue-specific or
-chapter-specific patch:
+- separating physical runtime cells from prose-visible cells;
+- modeling lower-dialogue opening and continuation geometry explicitly;
+- emitting the English replacement for the Japanese opening-quote gutter only
+  once per dialogue stream;
+- keeping other prose boxes on their own SCN-derived geometry;
+- rejecting word splits, row overflow, invalid geometry, and shifted text at
+  renderer boundaries; and
+- making canonical JSON updates transactional with explicit recovery behavior.
 
-- SCN-derived layout now distinguishes physical runtime cells from prose-visible
-  cells and validates all geometry before compilation.
-- The lower box follows its native repeating 12/11/11-cell row cadence.
-- Retail main dialogue can carry one initial Japanese opening-quote cell. The
-  English compiler replaces that one cell with the shared blank fixed cell.
-- That gutter anchor is emitted once for the dialogue stream. Page transitions
-  do not emit another blank cell, so later pages keep their complete first-row
-  stride.
-- Other prose boxes use their own SCN-derived geometry and do not inherit the
-  dialogue gutter.
-- Renderer-boundary audits reject split words, row overflow, invalid geometry,
-  and a source character shifted into an unintended leading blank.
-- Compact ellipses use a dedicated deterministic renderer rule and are guarded
-  both in canonical sources and repair-table application.
-- JSON source updates are transactional: duplicate keys, staging failures,
-  replacement failures, serialization failures, and rollback failures are
-  tested explicitly.
+Later Ares investigations refined the lower-dialogue contract further by
+establishing the protected row-edge fixed codes and native 11-cell continuation
+stride; later still, apostrophe spacing was normalized. Read
+[Adaptive renderer assessment](ADAPTIVE_RENDERER_ASSESSMENT.md) for that
+historical chain and [Text-box contracts](TEXT_BOX_CONTRACTS.md) for the current
+contract.
 
-## Build, region, and verification hardening
+## Build/verification hardening established or foreshadowed here
 
-- `nostalgia1907.py build` now defaults to `north-america` from project policy.
-- The normal North American build performs two independent clean builds,
-  verifies their artifact hashes and input fingerprints, then performs two
-  independent guarded region wrappers before publishing.
-- `--region japan` is the explicit unwrapped diagnostic path.
-- `build-us` remains for a hash-locked older baseline and now verifies the exact
-  expected source Track 1 before wrapping.
-- Build/run/output roots reject equality, nesting, occupied destinations,
-  invalid basenames, and path collisions before publication.
-- `verification_manifest.py` fingerprints declared canonical sources, retail
-  fixtures, production and validation code, configuration, original tracks,
-  normalized command/profile, and runtime identity.
-- Reports name and rehash every expected output directly, reject stale or extra
-  product files, and bind human-readable verification to the same machine
-  manifest and aggregate input fingerprint.
-- MES reports use build-relative paths, allowing clean builds in different
-  roots to remain byte-identical.
+The maintenance work established several long-lived policies:
 
-## Review and source-tree hardening
+- North America as the normal build target;
+- repeated clean builds and region wrappers before publication;
+- rejection of occupied/overlapping unsafe output roots;
+- cryptographic binding of declared inputs and managed outputs;
+- exact output inventory checks; and
+- source-only review that excludes retail/game media.
 
-- The bilingual comparison exporter now uses a deterministic standard-library
-  PNG and ZIP implementation. Fresh staging, an exact expected inventory,
-  fixed metadata, member hashes, and sidecar validation prevent stale files
-  from contaminating a package. Pillow is no longer a production dependency.
-- Fixed-layout records have a separate evidence queue that explicitly avoids
-  claiming runtime geometry from static previews.
-- Translation proposals are evidence-only and cannot silently edit canonical
-  JSON. The empty queue works without retail media.
-- ISO and MES parsers gained strict bounds, duplicate-record, padding,
-  terminator, and extent validation.
-- `tools/source_health.py` enforces UTF-8/LF text hygiene, strict JSON keys,
-  parseable maintained source, and a media-free source checkout. Its strict
-  release mode audits the exact Git-tracked or unpacked-package inventory so
-  ignored directory names cannot conceal retail media, local configuration,
-  screenshots, or emulator states. It uses the standard-library TOML parser on
-  Python 3.11+ and the conditional `tomli` backport on Python 3.10.
-- New focused test modules cover build reports, comparison determinism,
-  ellipsis style, renderer boundaries, review exports, source health, and
-  verification-manifest binding.
+Later repository work substantially strengthened these controls: current code
+also rejects destructive source/output aliasing, uses typed archive-capacity
+failures, validates tighter fixed-layout/script-integrity contracts, centralizes
+production-dependency checks, and runs a unified source gate.
 
-## Cleanup performed
+## Historical source-tree cleanup
 
-The cleanup was intentionally split between generated delivery state and the
-maintained Git checkout. Required original Japanese tracks, the prepared retail
-reference, canonical sources, tests, and retained-candidate provenance were preserved.
+The report recorded removal of rejected renderer experiments, obsolete delivery
+copies/run directories, ignored generated media, build/dump trees, and probe
+directories. Those were local ignored/untracked artifacts rather than Git source
+deletions.
 
-- The active delivery workspace removed the rejected renderer experiment,
-  obsolete earlier delivery copies and run directories, a forgotten retry
-  directory, and obsolete build logs. Only the retained North American
-  delivery and its provenance remain there.
-- The Git checkout removed 13 ignored legacy output/run directories, 175 loose
-  ignored generated media files, three ignored generated build/dump trees, and
-  three empty probe directories. This removed 5,844,392,056 bytes from that
-  checkout before the final validation run.
-- The final validation's generated comparison, audit, build, and Python cache
-  directories were removed again after their results were captured.
-- No tracked BIN, CUE, ISO, MES, SCN, LZ, FNT, PCM, WAV, or PNG file remains in
-  the source checkout. Original and rebuilt media remain protected by
-  `.gitignore`.
+No retail BIN/CUE/ISO/MES/SCN/LZ/FNT/PCM/WAV/PNG product became part of the
+source release. That source-only boundary remains current.
 
-These local deletions were permanent filesystem removals, not Recycle Bin
-operations. They do not appear as Git deletions because every removed artifact
-was already ignored and untracked.
+## Verification captured for the August 2 state
 
-## Verification captured for this maintenance state
+The historical Windows/Python 3.12 run reported, among other checks:
 
-The following checks completed successfully with CPython 3.12.13 on Windows:
+- source-health PASS;
+- Python compilation PASS;
+- 95 maintained unit tests PASS;
+- `doctor` PASS for configured retail prerequisites;
+- full `validate` PASS;
+- renderer-aware corpus audit PASS;
+- deterministic bilingual comparison PASS; and
+- semantic/generated-artifact validation PASS.
 
-| Check | Result |
-| --- | --- |
-| Source-health audit | PASS; 201 files checked, zero forbidden media or failures |
-| Python static compilation | PASS |
-| Maintained unit-test discovery | PASS; 95 tests |
-| Operator `doctor` | PASS for Python, canonical inventory, both original tracks, and prepared retail reference; optional BIOS skipped because not configured |
-| Full `validate` command | PASS |
-| Renderer-aware corpus audit | PASS; 2,759 adaptive and 123 fixed records, zero failures/warnings/legacy issues |
-| Script-layout suite inside validation | PASS; 13 tests |
-| Deterministic comparison package | PASS; 2,905 images and 2,928 exact package members |
-| Semantic/generated-artifact validation | PASS; zero failures |
+Those exact test counts and tool internals have since changed. Do not use them to
+judge current CI health; run the current unified gate:
 
-The project maintainer subsequently playtested the byte-identical
-runtime-reviewed reference in Ares, including the targeted dialogue renderer,
-page advances, and dialogue transitions, with no defect reported in the tested
-coverage. Static and deterministic checks protect the build contract; they do
-not expand that recorded coverage into a whole-game certification.
+```text
+python -m tools.source_checks --root . --strict-release
+```
+
+## Subsequent runtime result
+
+The later hash-identified **1.0.2** North American reference—not the older Track
+1 hash listed in this report—completed the recorded full maintainer Ares
+playthrough. That later exact Track 1 is documented in
+[Current project status](CURRENT_STATUS.md). It is legitimate whole-game runtime
+evidence for 1.0.2 only, and it does not transfer to the changed successor
+candidate.
