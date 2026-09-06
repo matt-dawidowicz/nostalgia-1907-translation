@@ -31,11 +31,12 @@ import struct
 import sys
 import tempfile
 import zipfile
+import zlib
+from functools import cache
 from pathlib import Path, PurePosixPath
 
 from .mes_format import read_mes
 from .source_json import load_json_object
-
 
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
@@ -46,7 +47,9 @@ GLYPH_BYTES = 18
 GLYPH_WIDTH = 12
 GLYPH_HEIGHT = 12
 FIXED_FONT_SIZE = 4284
-FIXED_FONT_SHA256 = "0204DBCA3D3DC2C1B23CCC3FC10FC61DD2F1054805619B2E953247E61A1C954A"
+FIXED_FONT_SHA256 = (
+    "0204DBCA3D3DC2C1B23CCC3FC10FC61DD2F1054805619B2E953247E61A1C954A"
+)
 DYNAMIC_GLYPHS_PER_PREFIX = 0xFF
 EXPECTED_CHAPTERS = 19
 EXPECTED_RECORDS = 2905
@@ -54,7 +57,9 @@ JSON_NAME = "Nostalgia1907_Japanese_English_Comparison.json"
 HTML_NAME = "Nostalgia1907_Japanese_English_Comparison.html"
 MARKDOWN_NAME = "Nostalgia1907_Japanese_English_Comparison.md"
 ZIP_NAME = "Nostalgia1907_Japanese_English_Comparison.zip"
-PACKAGE_MANIFEST_NAME = "Nostalgia1907_Japanese_English_Comparison.manifest.json"
+PACKAGE_MANIFEST_NAME = (
+    "Nostalgia1907_Japanese_English_Comparison.manifest.json"
+)
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 ZIP_DOS_DATE = 0x0021
 ZIP_DOS_TIME = 0x0000
@@ -84,19 +89,24 @@ def _write_text_lf(path: Path, value: str) -> None:
         output.write(value)
 
 
-def _glyph_matrix(stored: bytes) -> list[list[int]]:
-    """Decode and rotate one native stored glyph into upright screen order."""
+@cache
+def _glyph_matrix(stored: bytes) -> tuple[tuple[int, ...], ...]:
+    """Decode and rotate one native glyph once per unique stored bitmap."""
     if len(stored) != GLYPH_BYTES:
-        raise ValueError(f"glyph has {len(stored)} bytes, expected {GLYPH_BYTES}")
-    bits = [(byte >> shift) & 1 for byte in stored for shift in range(7, -1, -1)]
+        raise ValueError(
+            f"glyph has {len(stored)} bytes, expected {GLYPH_BYTES}"
+        )
+    bits = [
+        (byte >> shift) & 1 for byte in stored for shift in range(7, -1, -1)
+    ]
     source = [
-        bits[row * GLYPH_WIDTH : (row + 1) * GLYPH_WIDTH] for row in range(GLYPH_HEIGHT)
+        bits[row * GLYPH_WIDTH : (row + 1) * GLYPH_WIDTH]
+        for row in range(GLYPH_HEIGHT)
     ]
-    # Retail glyphs are stored clockwise relative to the visible screen glyph.
-    return [
-        [source[x][GLYPH_WIDTH - 1 - y] for x in range(GLYPH_WIDTH)]
+    return tuple(
+        tuple(source[x][GLYPH_WIDTH - 1 - y] for x in range(GLYPH_WIDTH))
         for y in range(GLYPH_HEIGHT)
-    ]
+    )
 
 
 def _record_glyphs(
@@ -133,7 +143,9 @@ def _record_glyphs(
         elif 1 <= value <= 0xED:
             index = value - 1
             if index >= len(fixed_glyphs):
-                raise ValueError(f"fixed glyph 0x{value:02X} exceeds FIX_CODE.FNT")
+                raise ValueError(
+                    f"fixed glyph 0x{value:02X} exceeds FIX_CODE.FNT"
+                )
             glyphs.append(fixed_glyphs[index])
             tokens.append(f"<FIX:{value:02X}>")
             offset += 1
@@ -148,21 +160,17 @@ def _png_chunk(kind: bytes, payload: bytes) -> bytes:
         raise ValueError("PNG chunk type must be exactly four bytes")
     crc = binascii.crc32(kind)
     crc = binascii.crc32(payload, crc) & 0xFFFFFFFF
-    return struct.pack(">I", len(payload)) + kind + payload + struct.pack(">I", crc)
+    return (
+        struct.pack(">I", len(payload))
+        + kind
+        + payload
+        + struct.pack(">I", crc)
+    )
 
 
 def _adler32(payload: bytes) -> int:
-    """Return the RFC 1950 Adler-32 checksum without a codec dependency."""
-    first = 1
-    second = 0
-    modulus = 65521
-    for offset in range(0, len(payload), 5552):
-        for value in payload[offset : offset + 5552]:
-            first += value
-            second += first
-        first %= modulus
-        second %= modulus
-    return (second << 16) | first
+    """Return the RFC 1950 Adler-32 checksum through CPython's native codec."""
+    return zlib.adler32(payload) & 0xFFFFFFFF
 
 
 def _stored_zlib_stream(payload: bytes) -> bytes:
@@ -172,7 +180,8 @@ def _stored_zlib_stream(payload: bytes) -> bytes:
         blocks = (b"",)
     else:
         blocks = tuple(
-            payload[offset : offset + 65535] for offset in range(0, len(payload), 65535)
+            payload[offset : offset + 65535]
+            for offset in range(0, len(payload), 65535)
         )
     for index, block in enumerate(blocks):
         output.append(0x01 if index == len(blocks) - 1 else 0x00)
@@ -189,7 +198,9 @@ def _encode_monochrome_png(width: int, height: int, pixels: bytes) -> bytes:
         raise ValueError("PNG dimensions must be positive")
     row_bytes = (width + 7) // 8
     if len(pixels) != row_bytes * height:
-        raise ValueError("monochrome raster length does not match its dimensions")
+        raise ValueError(
+            "monochrome raster length does not match its dimensions"
+        )
     scanlines = bytearray((row_bytes + 1) * height)
     for row in range(height):
         source_start = row * row_bytes
@@ -233,10 +244,30 @@ def _blank_placeholder(width: int, height: int) -> bytearray:
     return pixels
 
 
+@cache
+def _scaled_black_offsets(
+    glyph: bytes, scale: int
+) -> tuple[tuple[int, int], ...]:
+    """Return cached scaled black-pixel offsets for one immutable glyph."""
+    offsets: list[tuple[int, int]] = []
+    for y, source_row in enumerate(_glyph_matrix(glyph)):
+        for x, bit in enumerate(source_row):
+            if not bit:
+                continue
+            x_base = x * scale
+            y_base = y * scale
+            offsets.extend(
+                (x_base + dx, y_base + dy)
+                for dy in range(scale)
+                for dx in range(scale)
+            )
+    return tuple(offsets)
+
+
 def _render_record(
     glyphs: list[bytes], output: Path, *, columns: int = 48
 ) -> tuple[int, int]:
-    """Render one record's original Japanese glyphs without OCR or resampling."""
+    """Render one record while reusing cached immutable glyph rasters."""
     scale = 2
     padding = 4
     cell = GLYPH_WIDTH * scale
@@ -251,21 +282,13 @@ def _render_record(
             row, column = divmod(index, columns)
             x_base = padding + column * cell
             y_base = padding + row * cell
-            matrix = _glyph_matrix(glyph)
-            for y, source_row in enumerate(matrix):
-                for x, bit in enumerate(source_row):
-                    if not bit:
-                        continue
-                    target_x = x_base + x * scale
-                    target_y = y_base + y * scale
-                    for dy in range(scale):
-                        for dx in range(scale):
-                            _set_black(
-                                pixels,
-                                row_bytes,
-                                target_x + dx,
-                                target_y + dy,
-                            )
+            for x_offset, y_offset in _scaled_black_offsets(glyph, scale):
+                _set_black(
+                    pixels,
+                    row_bytes,
+                    x_base + x_offset,
+                    y_base + y_offset,
+                )
     else:
         width, height = 240, 32
         pixels = _blank_placeholder(width, height)
@@ -274,7 +297,9 @@ def _render_record(
     return width, height
 
 
-def _chapter_markdown(chapter: dict[str, object], *, image_prefix: str = "") -> str:
+def _chapter_markdown(
+    chapter: dict[str, object], *, image_prefix: str = ""
+) -> str:
     """Return one image-and-text comparison chapter."""
     lines = [f"# {chapter['chapter']}", ""]
     for record in chapter["records"]:
@@ -291,7 +316,9 @@ def _chapter_markdown(chapter: dict[str, object], *, image_prefix: str = "") -> 
             ]
         )
         if record["english"] is None or not record["english"]:
-            lines.extend(["_[No canonical English prose / control-only record]_", ""])
+            lines.extend(
+                ["_[No canonical English prose / control-only record]_", ""]
+            )
         else:
             lines.extend(["```text", record["english"], "```", ""])
         if record["controls"]:
@@ -316,7 +343,9 @@ def _comparison_html(chapters: list[dict[str, object]]) -> str:
                 if english
                 else "<em>No canonical English prose / control-only record</em>"
             )
-            search = html.escape(f"{record['id']} {english or ''}".lower(), quote=True)
+            search = html.escape(
+                f"{record['id']} {english or ''}".lower(), quote=True
+            )
             controls = (
                 f'<div class="controls">Control bytes: {html.escape(", ".join(record["controls"]))}</div>'
                 if record["controls"]
@@ -324,9 +353,9 @@ def _comparison_html(chapters: list[dict[str, object]]) -> str:
             )
             records.append(
                 f"""<article class="record" data-chapter="{html.escape(name)}" data-search="{search}">
-<div class="record-id"><a href="#{html.escape(record['id'])}" id="{html.escape(record['id'])}">{html.escape(record['id'])}</a></div>
+<div class="record-id"><a href="#{html.escape(record["id"])}" id="{html.escape(record["id"])}">{html.escape(record["id"])}</a></div>
 <div class="jp"><div class="label">Japanese — original retail bitmap glyphs</div>
-<img src="{html.escape(record['japanese_image'])}" alt="Original Japanese glyphs for {html.escape(record['id'])}" loading="lazy"></div>
+<img src="{html.escape(record["japanese_image"])}" alt="Original Japanese glyphs for {html.escape(record["id"])}" loading="lazy"></div>
 <div class="en"><div class="label">English — canonical translation</div><pre>{english_display}</pre>{controls}</div>
 </article>"""
             )
@@ -382,7 +411,9 @@ def _normalized_member_path(value: str) -> str:
         or not path.parts
         or any(part in {"", ".", ".."} for part in path.parts)
     ):
-        raise ValueError(f"archive member is not a normalized relative path: {value!r}")
+        raise ValueError(
+            f"archive member is not a normalized relative path: {value!r}"
+        )
     normalized = path.as_posix()
     if normalized != value:
         raise ValueError(f"archive member is not normalized: {value!r}")
@@ -392,7 +423,9 @@ def _normalized_member_path(value: str) -> str:
 def _inventory(root: Path) -> set[str]:
     """Return every regular file under a staging or published root."""
     return {
-        path.relative_to(root).as_posix() for path in root.rglob("*") if path.is_file()
+        path.relative_to(root).as_posix()
+        for path in root.rglob("*")
+        if path.is_file()
     }
 
 
@@ -628,7 +661,9 @@ def validate_comparison_package(output_root: Path) -> dict[str, object]:
     archive_spec = manifest.get("archive")
     package_name = manifest.get("package")
     if package_name != ZIP_NAME:
-        failures.append(f"package manifest names unexpected archive: {package_name!r}")
+        failures.append(
+            f"package manifest names unexpected archive: {package_name!r}"
+        )
     archive_path = output_root / ZIP_NAME
     expected_disk = set(paths) | {PACKAGE_MANIFEST_NAME, archive_path.name}
     actual_disk = _inventory(output_root) if output_root.is_dir() else set()
@@ -637,7 +672,9 @@ def validate_comparison_package(output_root: Path) -> dict[str, object]:
     if missing_disk:
         failures.append(f"published package is missing files: {missing_disk}")
     if unexpected_disk:
-        failures.append(f"published package has unexpected files: {unexpected_disk}")
+        failures.append(
+            f"published package has unexpected files: {unexpected_disk}"
+        )
 
     for member in members:
         path = output_root / str(member["path"])
@@ -654,7 +691,9 @@ def validate_comparison_package(output_root: Path) -> dict[str, object]:
         if archive_path.stat().st_size != archive_spec.get("size"):
             failures.append("archive size differs from the package manifest")
         if sha256(archive_path) != str(archive_spec.get("sha256", "")).upper():
-            failures.append("archive SHA-256 differs from the package manifest")
+            failures.append(
+                "archive SHA-256 differs from the package manifest"
+            )
         try:
             with zipfile.ZipFile(archive_path) as archive:
                 infos = archive.infolist()
@@ -694,7 +733,9 @@ def validate_comparison_package(output_root: Path) -> dict[str, object]:
                         len(payload) != entry["size"]
                         or _sha256_bytes(payload) != entry["sha256"]
                     ):
-                        failures.append(f"archive member bytes differ: {info.filename}")
+                        failures.append(
+                            f"archive member bytes differ: {info.filename}"
+                        )
         except (OSError, zipfile.BadZipFile, RuntimeError) as error:
             failures.append(f"archive cannot be validated: {error}")
 
@@ -711,20 +752,26 @@ def validate_comparison_package(output_root: Path) -> dict[str, object]:
                 path for path in paths if path.startswith("images/")
             )
             if len(image_paths) != len(set(image_paths)):
-                failures.append("comparison JSON repeats Japanese image references")
+                failures.append(
+                    "comparison JSON repeats Japanese image references"
+                )
             if sorted(image_paths) != expected_images:
                 failures.append(
                     "comparison JSON image references differ from exact image inventory"
                 )
         except (KeyError, TypeError, json.JSONDecodeError) as error:
-            failures.append(f"comparison JSON cannot be cross-checked: {error}")
+            failures.append(
+                f"comparison JSON cannot be cross-checked: {error}"
+            )
 
     return {
         "status": "PASS" if not failures else "FAIL",
         "failure_count": len(failures),
         "failures": failures,
         "member_count": len(members),
-        "archive_sha256": sha256(archive_path) if archive_path.is_file() else None,
+        "archive_sha256": sha256(archive_path)
+        if archive_path.is_file()
+        else None,
         "unexpected_file_count": len(unexpected_disk),
         "missing_file_count": len(missing_disk),
     }
@@ -757,7 +804,11 @@ def _publish_staging(staging: Path, output_root: Path) -> None:
     try:
         os.replace(staging, output_root)
     except BaseException:
-        if previous is not None and previous.exists() and not output_root.exists():
+        if (
+            previous is not None
+            and previous.exists()
+            and not output_root.exists()
+        ):
             os.replace(previous, output_root)
         raise
     if previous is not None:
@@ -787,9 +838,11 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
         name = item["chapter"]
         canonical = load_json_object(SOURCES / item["source"])
         mes_path = retail_root / "retail_unpacked" / name / f"{name}.MES"
+        mes_size = mes_path.stat().st_size
+        mes_digest = sha256(mes_path)
         if (
-            mes_path.stat().st_size != canonical["retail_mes"]["size"]
-            or sha256(mes_path) != canonical["retail_mes"]["sha256"]
+            mes_size != canonical["retail_mes"]["size"]
+            or mes_digest != canonical["retail_mes"]["sha256"]
         ):
             raise ValueError(f"{name}: retail MES failed its canonical guard")
         mes = read_mes(mes_path)
@@ -797,7 +850,9 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
             mes.record_count != canonical["record_count"]
             or len(canonical["records"]) != mes.record_count
         ):
-            raise ValueError(f"{name}: Japanese/English record counts disagree")
+            raise ValueError(
+                f"{name}: Japanese/English record counts disagree"
+            )
         chapter_markdown_path = f"chapters/{name}.md"
         expected_members.add(chapter_markdown_path)
         records: list[dict[str, object]] = []
@@ -806,7 +861,9 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
         ):
             if english_record["index"] != record_index:
                 raise ValueError(f"{name}: canonical indexes are not aligned")
-            glyphs, controls, tokens = _record_glyphs(raw, fixed_glyphs, mes.glyphs)
+            glyphs, controls, tokens = _record_glyphs(
+                raw, fixed_glyphs, mes.glyphs
+            )
             relative_image = Path("images") / name / f"{record_index:03d}.png"
             relative_image_string = relative_image.as_posix()
             expected_members.add(relative_image_string)
@@ -835,7 +892,7 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
             {
                 "chapter": name,
                 "record_count": mes.record_count,
-                "retail_mes_sha256": sha256(mes_path),
+                "retail_mes_sha256": mes_digest,
                 "records": records,
             }
         )
@@ -860,7 +917,9 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
     json_path = staging / JSON_NAME
     html_path = staging / HTML_NAME
     markdown_path = staging / MARKDOWN_NAME
-    _write_text_lf(json_path, json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
+    _write_text_lf(
+        json_path, json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
+    )
     _write_text_lf(html_path, _comparison_html(chapters))
     markdown_parts = [
         "# Nostalgia 1907 Japanese / English Record Comparison\n\n"
@@ -891,13 +950,19 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
         raise AssertionError("comparison JSON did not round-trip")
     for chapter in reconstructed["chapters"]:
         if len(chapter["records"]) != chapter["record_count"]:
-            raise AssertionError(f"{chapter['chapter']}: comparison JSON lost records")
+            raise AssertionError(
+                f"{chapter['chapter']}: comparison JSON lost records"
+            )
         for record in chapter["records"]:
             if not (staging / record["japanese_image"]).is_file():
-                raise AssertionError(f"missing Japanese image for {record['id']}")
+                raise AssertionError(
+                    f"missing Japanese image for {record['id']}"
+                )
 
     _validate_inventory(staging, expected_members, "pre-archive staging")
-    members = [_member_entry(staging, path) for path in sorted(expected_members)]
+    members = [
+        _member_entry(staging, path) for path in sorted(expected_members)
+    ]
     zip_path = staging / ZIP_NAME
     _write_deterministic_zip(zip_path, staging, members)
     manifest = _write_package_manifest(
@@ -922,7 +987,9 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
         "chapter_count": len(chapters),
         "record_count": total,
         "japanese_visible_glyphs": visible_glyphs,
-        "image_count": sum(path.startswith("images/") for path in expected_members),
+        "image_count": sum(
+            path.startswith("images/") for path in expected_members
+        ),
         "member_count": len(members),
         "unexpected_file_count": 0,
         "html_sha256": sha256(html_path),
@@ -933,7 +1000,9 @@ def _export_to_staging(retail_root: Path, staging: Path) -> dict[str, object]:
     }
 
 
-def export_comparison(retail_root: Path, output_root: Path) -> dict[str, object]:
+def export_comparison(
+    retail_root: Path, output_root: Path
+) -> dict[str, object]:
     """Export all 2,905 record pairs through clean run-specific staging.
 
     Args:
@@ -960,7 +1029,9 @@ def export_comparison(retail_root: Path, output_root: Path) -> dict[str, object]
         raise ValueError(
             f"comparison output exists but is not a directory: {output_root}"
         )
-    previous_files = sorted(_inventory(output_root)) if output_root.is_dir() else []
+    previous_files = (
+        sorted(_inventory(output_root)) if output_root.is_dir() else []
+    )
     abandoned_staging = sorted(
         path
         for path in output_root.parent.glob(f".{output_root.name}.staging-*")
@@ -1005,7 +1076,9 @@ def export_comparison(retail_root: Path, output_root: Path) -> dict[str, object]
 def main() -> None:
     """Run the command-line entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT)
+    parser.add_argument(
+        "--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT
+    )
     parser.add_argument("--output-root", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument(
         "--validate-only",

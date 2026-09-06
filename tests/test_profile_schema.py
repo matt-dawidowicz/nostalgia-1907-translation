@@ -5,9 +5,11 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
-from work.clean_rebuild.profile_schema import profile_text_failures, validate_profile
+from work.clean_rebuild.profile_schema import (
+    profile_text_failures,
+    validate_profile,
+)
 from work.clean_rebuild.source_json import load_json_object
-
 
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
@@ -68,9 +70,15 @@ class ProfileSchemaTests(unittest.TestCase):
         ]
         failures = profile_text_failures(profile, records, chapter="TEST")
         self.assertEqual(len(failures), 3)
-        self.assertTrue(any("equal 'Exact'" in failure for failure in failures))
-        self.assertTrue(any("start with 'ACT 1:'" in failure for failure in failures))
-        self.assertTrue(any("forbidden profile pattern" in failure for failure in failures))
+        self.assertTrue(
+            any("equal 'Exact'" in failure for failure in failures)
+        )
+        self.assertTrue(
+            any("start with 'ACT 1:'" in failure for failure in failures)
+        )
+        self.assertTrue(
+            any("forbidden profile pattern" in failure for failure in failures)
+        )
 
     def test_profile_name_must_match_its_canonical_chapter(self) -> None:
         """Prevent copied profiles from silently governing another chapter."""
@@ -80,7 +88,9 @@ class ProfileSchemaTests(unittest.TestCase):
                 chapter="TEST",
             )
 
-    def test_indexed_renderer_rules_require_canonical_translated_targets(self) -> None:
+    def test_indexed_renderer_rules_require_canonical_translated_targets(
+        self,
+    ) -> None:
         """Reject aliases, stale indexes, and preserve-record renderer edits."""
         records = [
             {"index": 0, "policy": "translate", "text": "Visible"},
@@ -109,7 +119,11 @@ class ProfileSchemaTests(unittest.TestCase):
         records = [{"index": 0, "policy": "translate", "text": "Visible"}]
         invalid_profiles = (
             {"layout_overrides": {"0": {"first": 8}}},
-            {"runtime_layout_overrides": {"0": {"first": 0, "continuation": 8}}},
+            {
+                "runtime_layout_overrides": {
+                    "0": {"first": 0, "continuation": 8}
+                }
+            },
             {"row_limit_overrides": {"0": 0}},
             {"text_box_overrides": {"0": "unknown_box"}},
             {"role_overrides": {"0": ["made_up_role"]}},
@@ -117,7 +131,8 @@ class ProfileSchemaTests(unittest.TestCase):
         for profile in invalid_profiles:
             with self.subTest(profile=profile):
                 with self.assertRaisesRegex(
-                    ValueError, "unsupported layout fields|is invalid|positive widths"
+                    ValueError,
+                    "unsupported layout fields|is invalid|positive widths",
                 ):
                     validate_profile(profile, chapter="TEST", records=records)
 

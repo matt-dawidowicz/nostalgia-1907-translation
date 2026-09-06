@@ -20,12 +20,10 @@ import json
 from collections import Counter
 from pathlib import Path
 
-from .source_json import load_json_object
-
 from .iso9660 import SECTOR_SIZE, IsoEntry, read_entries, unique_file
 from .lz_format import LzError, member_bytes, parse_archive
 from .raw_cd import raw_to_iso
-
+from .source_json import load_json_object
 
 HERE = Path(__file__).resolve().parent
 SOURCES = HERE / "sources"
@@ -34,7 +32,9 @@ RETAIL_TRACK1_SHA256 = (
     "EFE9A453849F52DC72B7E72EE98D8644882655536E59991C2C85C5A35A41D0E5"
 )
 RETAIL_ISO_SIZE = 167_749_632
-RETAIL_ISO_SHA256 = "7944AF20FD802A43BEFBFA97734993EB63A3803F76D4AFBCEF315E41D4459ECC"
+RETAIL_ISO_SHA256 = (
+    "7944AF20FD802A43BEFBFA97734993EB63A3803F76D4AFBCEF315E41D4459ECC"
+)
 
 
 def sha256(path: Path) -> str:
@@ -55,7 +55,9 @@ def _read_iso_entry(iso: object, entry: IsoEntry, label: str) -> bytes:
     return data
 
 
-def _unique_member(data: bytes, entries: tuple[object, ...], name: str) -> bytes:
+def _unique_member(
+    data: bytes, entries: tuple[object, ...], name: str
+) -> bytes:
     """Return one uniquely named archive member from already-parsed bytes."""
     matches = [entry for entry in entries if entry.name == name]
     if len(matches) != 1:
@@ -106,7 +108,9 @@ def prepare_retail(track1: Path, build_root: Path) -> dict[str, object]:
     iso_hash = sha256(retail_iso)
     iso_size = retail_iso.stat().st_size
     if iso_size != RETAIL_ISO_SIZE or iso_hash != RETAIL_ISO_SHA256:
-        raise ValueError("retail ISO extraction does not match its frozen size/hash")
+        raise ValueError(
+            "retail ISO extraction does not match its frozen size/hash"
+        )
 
     source_index = load_json_object(SOURCES / "index.json")
     iso_entries = read_entries(retail_iso)
@@ -146,7 +150,10 @@ def prepare_retail(track1: Path, build_root: Path) -> dict[str, object]:
                     raise ValueError(
                         f"{member_name}: retail member failed canonical guard"
                     )
-                extracted[kind.lower()] = {"size": len(payload), "sha256": digest}
+                extracted[kind.lower()] = {
+                    "size": len(payload),
+                    "sha256": digest,
+                }
             chapters.append(
                 {
                     "chapter": chapter,

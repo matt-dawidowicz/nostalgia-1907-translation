@@ -15,9 +15,12 @@ from __future__ import annotations
 
 import hashlib
 
-
-RETAIL_SHA256 = "AEF74096DF5416A947D15A1DAF32995A4373F629DE9C5AC301EFE9CE67D4F05E"
-PATCHED_SHA256 = "F425B9D080E5DE46373DF90D23E136F13D895198C3A2764644B1337FEABBF50A"
+RETAIL_SHA256 = (
+    "AEF74096DF5416A947D15A1DAF32995A4373F629DE9C5AC301EFE9CE67D4F05E"
+)
+PATCHED_SHA256 = (
+    "F425B9D080E5DE46373DF90D23E136F13D895198C3A2764644B1337FEABBF50A"
+)
 STATUS_PANEL_OFFSET = 0x2772
 STATUS_PANEL_RETAIL = bytes((23, 19, 8, 8))
 STATUS_PANEL_PATCHED = bytes((24, 19, 8, 8))
@@ -69,13 +72,17 @@ def patch_main(retail: bytes) -> bytes:
         )
     panel_end = STATUS_PANEL_OFFSET + len(STATUS_PANEL_RETAIL)
     if retail[STATUS_PANEL_OFFSET:panel_end] != STATUS_PANEL_RETAIL:
-        raise ValueError("MAIN.BIN status-panel descriptor is not the retail value")
+        raise ValueError(
+            "MAIN.BIN status-panel descriptor is not the retail value"
+        )
     marker_values = tuple(
         int.from_bytes(retail[offset : offset + 2], "big")
         for offset in MARKER_X_OFFSETS
     )
     if marker_values != MARKER_X_RETAIL:
-        raise ValueError("MAIN.BIN status-marker coordinates are not the retail values")
+        raise ValueError(
+            "MAIN.BIN status-marker coordinates are not the retail values"
+        )
 
     patched = bytearray(retail)
     patched[STATUS_PANEL_OFFSET:panel_end] = STATUS_PANEL_PATCHED
@@ -83,12 +90,18 @@ def patch_main(retail: bytes) -> bytes:
         patched[offset : offset + 2] = (value + 8).to_bytes(2, "big")
     result = bytes(patched)
     if len(result) != len(retail) or sha256(result) != PATCHED_SHA256:
-        raise AssertionError("MAIN.BIN patch output does not match its frozen result")
+        raise AssertionError(
+            "MAIN.BIN patch output does not match its frozen result"
+        )
 
     changed = {
-        index for index, pair in enumerate(zip(retail, result)) if pair[0] != pair[1]
+        index
+        for index, pair in enumerate(zip(retail, result))
+        if pair[0] != pair[1]
     }
-    expected = {STATUS_PANEL_OFFSET} | {offset + 1 for offset in MARKER_X_OFFSETS}
+    expected = {STATUS_PANEL_OFFSET} | {
+        offset + 1 for offset in MARKER_X_OFFSETS
+    }
     if changed != expected:
         raise AssertionError("MAIN.BIN patch touched unexpected byte offsets")
     return result

@@ -32,25 +32,27 @@ from .mes_format import DYNAMIC_PREFIX_START, MesFormatError, parse_mes
 from .profile_schema import profile_text_failures
 from .renderer_format import (
     measure_literal as _measure_literal,
+)
+from .renderer_format import (
     normalize_ellipsis_style,
     normalize_semantic_text,
-    wrap_words as _wrap_words,
     wrapped_row_failures,
+)
+from .renderer_format import (
+    wrap_words as _wrap_words,
 )
 from .scn_layout import (
     DIALOGUE_OPENING_ANCHOR_CODE,
     LABEL_ROLES,
     PROSE_ROLES,
     ROLE_CHOICE,
-    Layout,
     TEXT_BOX_LOWER_CONTINUATION,
     TEXT_BOX_LOWER_DIALOGUE,
+    Layout,
+    infer_contracts,
     infer_layouts,
-    infer_roles,
-    infer_row_limits,
 )
 from .source_json import load_json_object
-
 
 DYNAMIC_GLYPHS_PER_PREFIX = 0xFF
 RUNTIME_DYNAMIC_GLYPH_LIMIT = 1020
@@ -193,6 +195,12 @@ FIXED_ENGLISH_UNITS = (
 )
 
 
+FIXED_BLANK_CELL_ENABLED = any(
+    code == FIXED_BLANK_CELL_CODE
+    for code, _style, _unit in FIXED_ENGLISH_UNITS
+)
+
+
 class CompileError(ValueError):
     """Raised when canonical text cannot be compiled within runtime limits."""
 
@@ -239,6 +247,11 @@ class RowPlan:
         """Return the complete row in renderer order."""
         return self.prefix + self.primary
 
+    @property
+    def cell_count(self) -> int:
+        """Return the row width without allocating a joined tuple."""
+        return len(self.prefix) + len(self.primary)
+
 
 def _dynamic_code(index: int) -> bytes:
     """Encode one zero-based dynamic glyph index."""
@@ -263,10 +276,16 @@ def _remap_preserved(record: bytes, mapping: dict[int, int]) -> bytes:
             offset += 1
             continue
         if offset + 1 >= len(record) or record[offset + 1] == 0:
-            raise CompileError("preserved record has a truncated dynamic reference")
-        old_index = (value - DYNAMIC_PREFIX_START) * 0xFF + record[offset + 1] - 1
+            raise CompileError(
+                "preserved record has a truncated dynamic reference"
+            )
+        old_index = (
+            (value - DYNAMIC_PREFIX_START) * 0xFF + record[offset + 1] - 1
+        )
         if old_index not in mapping:
-            raise CompileError(f"preserved dynamic glyph {old_index} was not retained")
+            raise CompileError(
+                f"preserved dynamic glyph {old_index} was not retained"
+            )
         output.extend(_dynamic_code(mapping[old_index]))
         offset += 2
     return bytes(output)
@@ -274,14 +293,11 @@ def _remap_preserved(record: bytes, mapping: dict[int, int]) -> bytes:
 
 def _compact_cluster(unit: str) -> bool:
     """Return whether three source characters safely share one cell."""
-    return (
-        unit == "..."
-        or (
-            len(unit) == 3
-            and unit[1] == "."
-            and unit[0].isdigit()
-            and unit[2].isdigit()
-        )
+    return unit == "..." or (
+        len(unit) == 3
+        and unit[1] == "."
+        and unit[0].isdigit()
+        and unit[2].isdigit()
     )
 
 
@@ -328,7 +344,9 @@ def _pack_row(line: str) -> tuple[int, tuple[Cell, ...]] | None:
     return punctuation_count, units
 
 
-def _row_plan(record: int, line: str, prefix: tuple[Cell, ...] = ()) -> RowPlan:
+def _row_plan(
+    record: int, line: str, prefix: tuple[Cell, ...] = ()
+) -> RowPlan:
     """Build one position-preserving packed row for the runtime renderer."""
     packed = _pack_row(line)
     if packed is None:
@@ -393,14 +411,20 @@ def _decode_emitted_cells(record: bytes) -> tuple[bytes, ...]:
         value = record[offset]
         if value == 0:
             if offset != len(record) - 1:
-                raise CompileError("emitted MES record has data after its terminator")
+                raise CompileError(
+                    "emitted MES record has data after its terminator"
+                )
             return tuple(cells)
         width = 2 if value >= DYNAMIC_PREFIX_START else 1
         if offset + width > len(record):
-            raise CompileError("emitted MES record has a truncated dynamic reference")
+            raise CompileError(
+                "emitted MES record has a truncated dynamic reference"
+            )
         cell = record[offset : offset + width]
         if width == 2 and cell[1] == 0:
-            raise CompileError("emitted MES record has a zero dynamic reference")
+            raise CompileError(
+                "emitted MES record has a zero dynamic reference"
+            )
         cells.append(cell)
         offset += width
     raise CompileError("emitted MES record is missing its terminator")
@@ -426,7 +450,9 @@ def _audit_emitted_renderer_contract(
     audited_rows = 0
     audited_cells = 0
     audited_row_edges = 0
-    lower_boxes = frozenset((TEXT_BOX_LOWER_DIALOGUE, TEXT_BOX_LOWER_CONTINUATION))
+    lower_boxes = frozenset(
+        (TEXT_BOX_LOWER_DIALOGUE, TEXT_BOX_LOWER_CONTINUATION)
+    )
 
     for index in sorted(adaptive_indexes):
         layout = layouts.get(index)
@@ -436,9 +462,11 @@ def _audit_emitted_renderer_contract(
             continue
         plans = rows_by_record.get(index)
         if plans is None:
-            raise CompileError(f"{chapter}:{index:03d} has no emitted row plan")
+            raise CompileError(
+                f"{chapter}:{index:03d} has no emitted row plan"
+            )
         cells = _decode_emitted_cells(output_records[index])
-        expected_cells = sum(len(plan.cells()) for plan in plans)
+        expected_cells = sum(plan.cell_count for plan in plans)
         if len(cells) != expected_cells:
             raise CompileError(
                 f"{chapter}:{index:03d} emits {len(cells)} logical cells; "
@@ -447,7 +475,7 @@ def _audit_emitted_renderer_contract(
 
         cell_offset = 0
         for row_index, plan in enumerate(plans):
-            row_cells = len(plan.cells())
+            row_cells = plan.cell_count
             physical_cells = layout.physical_cells(row_index)
             if row_cells != physical_cells:
                 raise CompileError(
@@ -462,13 +490,9 @@ def _audit_emitted_renderer_contract(
                 )
             if layout.anchor_cells(row_index):
                 expected_anchor = bytes((FIXED_BLANK_CELL_CODE,))
-                fixed_anchor_enabled = any(
-                    code == FIXED_BLANK_CELL_CODE
-                    for code, _style, _unit in FIXED_ENGLISH_UNITS
-                )
-                if fixed_anchor_enabled and row[: layout.anchor_cells(row_index)] != (
-                    expected_anchor,
-                ) * layout.anchor_cells(row_index):
+                if FIXED_BLANK_CELL_ENABLED and row[
+                    : layout.anchor_cells(row_index)
+                ] != (expected_anchor,) * layout.anchor_cells(row_index):
                     raise CompileError(
                         f"{chapter}:{index:03d} does not preserve its one-time "
                         "dialogue gutter"
@@ -518,7 +542,9 @@ def compile_mes(
     retail_guard = canonical.get("retail_mes")
     scn_guard = canonical.get("retail_scn")
     if not isinstance(retail_guard, dict) or not isinstance(scn_guard, dict):
-        raise CompileError(f"{chapter}: canonical retail hash guards are missing")
+        raise CompileError(
+            f"{chapter}: canonical retail hash guards are missing"
+        )
     actual_mes_hash = hashlib.sha256(retail_data).hexdigest().upper()
     actual_scn_hash = hashlib.sha256(scn_data).hexdigest().upper()
     if (
@@ -536,9 +562,14 @@ def compile_mes(
             f"{chapter}: retail SCN does not match the canonical hash guard"
         )
     if canonical.get("record_count") != retail.record_count:
-        raise CompileError(f"{chapter}: canonical and retail record counts disagree")
+        raise CompileError(
+            f"{chapter}: canonical and retail record counts disagree"
+        )
     raw_records = canonical.get("records")
-    if not isinstance(raw_records, list) or len(raw_records) != retail.record_count:
+    if (
+        not isinstance(raw_records, list)
+        or len(raw_records) != retail.record_count
+    ):
         raise CompileError(f"{chapter}: canonical record table is incomplete")
     text_mode = canonical.get("text_mode")
     if text_mode not in {"render-ready", "prose", "adaptive", "preserve"}:
@@ -548,7 +579,10 @@ def compile_mes(
     adaptive_indexes: set[int] = set()
     preserved: set[int] = set()
     for expected_index, record in enumerate(raw_records):
-        if not isinstance(record, dict) or record.get("index") != expected_index:
+        if (
+            not isinstance(record, dict)
+            or record.get("index") != expected_index
+        ):
             raise CompileError(
                 f"{chapter}: canonical record indexes are not contiguous"
             )
@@ -592,9 +626,13 @@ def compile_mes(
         elif policy == "preserve" and record.get("text") is None:
             preserved.add(expected_index)
         else:
-            raise CompileError(f"{chapter}: invalid record policy at {expected_index}")
+            raise CompileError(
+                f"{chapter}: invalid record policy at {expected_index}"
+            )
     if set(range(retail.record_count)) != set(translated) | preserved:
-        raise CompileError(f"{chapter}: every record must have exactly one policy")
+        raise CompileError(
+            f"{chapter}: every record must have exactly one policy"
+        )
 
     profile = canonical.get("profile")
     try:
@@ -627,38 +665,56 @@ def compile_mes(
     if text_mode == "adaptive":
         adaptive_indexes = set(translated)
     needs_layouts = text_mode == "prose" or bool(adaptive_indexes)
-    layouts = (
-        infer_layouts(
+    if adaptive_indexes:
+        contracts = infer_contracts(
             scn_data,
             retail.record_count,
             set(translated),
             profile,
             retail_records=retail.records,
         )
-        if needs_layouts
-        else {}
-    )
-    roles = (
-        infer_roles(scn_data, retail.record_count, set(translated), profile)
-        if adaptive_indexes
-        else {}
-    )
-    row_limits = (
-        infer_row_limits(scn_data, retail.record_count, set(translated), profile)
-        if adaptive_indexes
-        else {}
-    )
+        layouts = {
+            index: contract.layout
+            for index, contract in contracts.items()
+            if contract.layout is not None
+        }
+        roles = {
+            index: contract.roles
+            for index, contract in contracts.items()
+            if contract.roles
+        }
+        row_limits = {
+            index: contract.max_rows
+            for index, contract in contracts.items()
+            if contract.max_rows is not None
+        }
+    elif needs_layouts:
+        layouts = infer_layouts(
+            scn_data,
+            retail.record_count,
+            set(translated),
+            profile,
+            retail_records=retail.records,
+        )
+        roles = {}
+        row_limits = {}
+    else:
+        layouts = {}
+        roles = {}
+        row_limits = {}
     retained_indexes = sorted(
-        index
-        for record_index in preserved
-        for index in _dynamic_indexes(retail.records[record_index])
+        {
+            index
+            for record_index in preserved
+            for index in _dynamic_indexes(retail.records[record_index])
+        }
     )
-    retained_indexes = sorted(set(retained_indexes))
     old_to_new = {old: new for new, old in enumerate(retained_indexes)}
     glyphs = [retail.glyphs[index] for index in retained_indexes]
-    bitmap_to_index = {bitmap: index for index, bitmap in enumerate(glyphs)}
     row_plans: list[RowPlan] = []
-    rows_by_record: dict[int, list[RowPlan]] = {index: [] for index in translated}
+    rows_by_record: dict[int, list[RowPlan]] = {
+        index: [] for index in translated
+    }
     for index, text in sorted(translated.items()):
         adaptive_record = index in adaptive_indexes
         layout_policy = raw_records[index].get("layout_policy")
@@ -671,7 +727,9 @@ def compile_mes(
             layout = layouts.get(index)
             if adaptive_record:
                 record_roles = roles.get(index, frozenset())
-                non_prose_contract = record_roles & (LABEL_ROLES | {ROLE_CHOICE})
+                non_prose_contract = record_roles & (
+                    LABEL_ROLES | {ROLE_CHOICE}
+                )
                 if layout is None and not non_prose_contract:
                     raise CompileError(
                         f"{chapter}:{index:03d}: adaptive text has no proven "
@@ -680,7 +738,9 @@ def compile_mes(
                 if layout is not None or record_roles & (
                     PROSE_ROLES | LABEL_ROLES | {ROLE_CHOICE}
                 ):
-                    working = normalize_ellipsis_style(normalize_semantic_text(text))
+                    working = normalize_ellipsis_style(
+                        normalize_semantic_text(text)
+                    )
             row_specs = _prose_rows(
                 working,
                 layout,
@@ -720,17 +780,28 @@ def compile_mes(
         patches.append((code, bitmap.hex().upper()))
     fixed_font_patches = tuple(patches)
 
+    bitmap_rows_by_record = {
+        index: [
+            tuple(stored_cell(*cell) for cell in plan.cells())
+            for plan in plans
+        ]
+        for index, plans in rows_by_record.items()
+    }
+    bitmap_rows = [
+        bitmap_row
+        for index in sorted(bitmap_rows_by_record)
+        for bitmap_row in bitmap_rows_by_record[index]
+    ]
     generated_frequency: Counter[bytes] = Counter(
-        stored_cell(*cell)
-        for row in row_plans
-        for cell in row.cells()
-        if stored_cell(*cell) not in fixed_by_bitmap
+        bitmap
+        for bitmap_row in bitmap_rows
+        for bitmap in bitmap_row
+        if bitmap not in fixed_by_bitmap
     )
     generated_first_use: list[bytes] = []
     seen_generated = set(glyphs)
-    for row in row_plans:
-        for cell in row.cells():
-            bitmap = stored_cell(*cell)
+    for bitmap_row in bitmap_rows:
+        for bitmap in bitmap_row:
             if bitmap in fixed_by_bitmap or bitmap in seen_generated:
                 continue
             seen_generated.add(bitmap)
@@ -752,13 +823,18 @@ def compile_mes(
     fixed_spill_occurrences = 0
     for index in range(retail.record_count):
         if index in preserved:
-            output_records.append(_remap_preserved(retail.records[index], old_to_new))
+            output_records.append(
+                _remap_preserved(retail.records[index], old_to_new)
+            )
             continue
-        units = [cell for row in rows_by_record[index] for cell in row.cells()]
-        rendered_cells += len(units)
+        bitmap_rows_for_record = bitmap_rows_by_record[index]
+        rendered_cells += sum(len(row) for row in bitmap_rows_for_record)
         encoded = bytearray()
-        for unit in units:
-            bitmap = stored_cell(*unit)
+        for bitmap in (
+            bitmap
+            for bitmap_row in bitmap_rows_for_record
+            for bitmap in bitmap_row
+        ):
             fixed_code = fixed_by_bitmap.get(bitmap)
             if fixed_code is not None:
                 encoded.append(fixed_code)
@@ -766,7 +842,9 @@ def compile_mes(
                 continue
             dynamic_index = bitmap_to_index.get(bitmap)
             if dynamic_index is None:
-                raise CompileError("generated glyph was absent from the ordered bank")
+                raise CompileError(
+                    "generated glyph was absent from the ordered bank"
+                )
             encoded.extend(_dynamic_code(dynamic_index))
         encoded.append(0)
         output_records.append(bytes(encoded))
@@ -795,8 +873,10 @@ def compile_mes(
         pointers.append(cursor)
         cursor += len(record)
     split_offset = cursor
-    if split_offset > 0xFFFF or any(pointer > 0xFFFF for pointer in pointers):
-        raise CompileError(f"{chapter}: MES pointer region exceeds 16-bit offsets")
+    if split_offset > 0xFFFF:
+        raise CompileError(
+            f"{chapter}: MES pointer region exceeds 16-bit offsets"
+        )
     output = bytearray(split_offset + len(glyphs) * GLYPH_BYTES)
     output[:2] = split_offset.to_bytes(2, "big")
     for index, pointer in enumerate(pointers):
@@ -807,7 +887,9 @@ def compile_mes(
         cursor += len(record)
     output[split_offset:] = b"".join(glyphs)
     parsed = parse_mes(bytes(output), source=f"compiled {chapter}")
-    if parsed.record_count != retail.record_count or len(parsed.glyphs) != len(glyphs):
+    if parsed.record_count != retail.record_count or len(parsed.glyphs) != len(
+        glyphs
+    ):
         raise CompileError(f"{chapter}: compiled MES self-check failed")
     if chapter == "PART3C" and len(output) > PART3C_HARD_LIMIT:
         raise CompileError(
@@ -843,8 +925,12 @@ def _dynamic_indexes(record: bytes) -> set[int]:
             offset += 1
             continue
         if offset + 1 >= len(record) or record[offset + 1] == 0:
-            raise MesFormatError("invalid dynamic reference in preserved record")
-        indexes.add((value - DYNAMIC_PREFIX_START) * 0xFF + record[offset + 1] - 1)
+            raise MesFormatError(
+                "invalid dynamic reference in preserved record"
+            )
+        indexes.add(
+            (value - DYNAMIC_PREFIX_START) * 0xFF + record[offset + 1] - 1
+        )
         offset += 2
     return indexes
 

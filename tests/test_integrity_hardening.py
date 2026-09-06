@@ -7,7 +7,7 @@ import unittest
 
 from work.clean_rebuild.mes_format import MesFile, record_render_tokens
 from work.clean_rebuild.renderer_format import wrap_words, wrapped_row_failures
-from work.clean_rebuild.scn_layout import Layout, TEXT_BOX_SCENE_LABEL
+from work.clean_rebuild.scn_layout import TEXT_BOX_SCENE_LABEL, Layout
 from work.clean_rebuild.script_integrity import (
     choice_edges,
     fixed_layout_width_failure,
@@ -106,7 +106,9 @@ class PreservedRecordIdentityTests(unittest.TestCase):
 class RendererBoundaryCampaignTests(unittest.TestCase):
     """Exercise exact-width and one-past-width renderer boundaries."""
 
-    def test_eighteen_cell_boundary_accepts_36_rejects_37_character_token(self) -> None:
+    def test_eighteen_cell_boundary_accepts_36_rejects_37_character_token(
+        self,
+    ) -> None:
         """Accept the 18-cell limit and reject one additional packed character."""
         layout = Layout(18, 18, 18, 18, text_box=TEXT_BOX_SCENE_LABEL)
         exact = "A" * 36
@@ -122,7 +124,9 @@ class RendererBoundaryCampaignTests(unittest.TestCase):
             any("splits or alters source token" in item for item in failures)
         )
 
-    def test_dialogue_first_and_continuation_boundaries_are_distinct(self) -> None:
+    def test_dialogue_first_and_continuation_boundaries_are_distinct(
+        self,
+    ) -> None:
         """Keep the native 12-cell opening row distinct from 11-cell continuations."""
         layout = Layout(12, 11, 12, 11)
         self.assertEqual(layout.visible_cells(0), 12)

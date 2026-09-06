@@ -27,7 +27,6 @@ from .scn_layout import (
 )
 from .source_json import load_json_object
 
-
 HERE = Path(__file__).resolve().parent
 SOURCES = HERE / "sources"
 DEFAULT_RETAIL_ROOT = HERE / "retail_reference"
@@ -60,7 +59,9 @@ def _window_subtypes(profile: dict[str, object] | None) -> set[int]:
     """Return visible 0x24 subtypes using the profile default from layout inference."""
     settings = profile or {}
     raw = settings.get("scn_window_text_subtypes", [0x27])
-    if not isinstance(raw, list) or not all(isinstance(item, int) for item in raw):
+    if not isinstance(raw, list) or not all(
+        isinstance(item, int) for item in raw
+    ):
         raise ValueError("profile scn_window_text_subtypes is invalid")
     return set(raw)
 
@@ -97,7 +98,9 @@ def scan_scn_text_references(
                 f"{command} at 0x{offset:X} references out-of-range "
                 f"record {record_index}"
             )
-        target_opcode = scn[branch_target] if branch_target is not None else None
+        target_opcode = (
+            scn[branch_target] if branch_target is not None else None
+        )
         references.append(
             ScnTextReference(
                 offset=offset,
@@ -138,7 +141,11 @@ def scan_scn_text_references(
             text_id = int.from_bytes(scn[offset + 6 : offset + 8], "big")
             if 1 <= text_id <= record_count:
                 add(offset, "0x24/0x28", text_id - 1, "special_window")
-        elif opcode == 0x31 and offset + 6 <= len(scn) and scn[offset + 3] == 0xFF:
+        elif (
+            opcode == 0x31
+            and offset + 6 <= len(scn)
+            and scn[offset + 3] == 0xFF
+        ):
             text_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
             target = int.from_bytes(scn[offset + 4 : offset + 6], "big")
             if 1 <= text_id <= record_count and 0 < target < len(scn):
@@ -162,7 +169,9 @@ def scan_scn_text_references(
                 command_offset,
                 "0x24" if position == 0 else "0x27",
                 index,
-                "floating_window" if position == 0 else "floating_continuation",
+                "floating_window"
+                if position == 0
+                else "floating_continuation",
             )
 
     for offset, _subtype, _width, _raw_y, indexes in _selector_window_commands(
@@ -185,7 +194,9 @@ def scan_scn_text_references(
     )
 
 
-def fixed_layout_width_failure(text: str, commands: tuple[str, ...]) -> str | None:
+def fixed_layout_width_failure(
+    text: str, commands: tuple[str, ...]
+) -> str | None:
     """Return a fixed one-line geometry failure, or ``None`` when it fits.
 
     The special 0x20/0x22/0x23 renderers share the 18-cell width proven from
@@ -193,7 +204,11 @@ def fixed_layout_width_failure(text: str, commands: tuple[str, ...]) -> str | No
     When one record is reused by more than one renderer, the tightest proven
     width owns the safety decision.
     """
-    widths = [SPECIAL_FIXED_WIDTHS[command] for command in commands if command in SPECIAL_FIXED_WIDTHS]
+    widths = [
+        SPECIAL_FIXED_WIDTHS[command]
+        for command in commands
+        if command in SPECIAL_FIXED_WIDTHS
+    ]
     if not widths:
         return "fixed translated record has no proven special-renderer width"
     if "\n" in text or "\r" in text:
@@ -205,7 +220,9 @@ def fixed_layout_width_failure(text: str, commands: tuple[str, ...]) -> str | No
     return None
 
 
-def choice_edges(references: tuple[ScnTextReference, ...]) -> tuple[ScnChoiceEdge, ...]:
+def choice_edges(
+    references: tuple[ScnTextReference, ...],
+) -> tuple[ScnChoiceEdge, ...]:
     """Return every recognized menu-choice branch from a reference inventory."""
     return tuple(
         ScnChoiceEdge(
@@ -273,7 +290,9 @@ def audit_project_scn_references(
         referenced = {item.record_index for item in references}
         references_by_record: dict[int, list[ScnTextReference]] = {}
         for reference in references:
-            references_by_record.setdefault(reference.record_index, []).append(reference)
+            references_by_record.setdefault(reference.record_index, []).append(
+                reference
+            )
         fixed_indexes = {
             int(record["index"])
             for record in source["records"]
@@ -295,7 +314,9 @@ def audit_project_scn_references(
             )
             width_failure = fixed_layout_width_failure(text, commands)
             if width_failure is not None:
-                failures.append(f"{chapter}:{record_index:03d}: {width_failure}")
+                failures.append(
+                    f"{chapter}:{record_index:03d}: {width_failure}"
+                )
                 continue
             fixed_certified += 1
         contracts = infer_contracts(
@@ -340,7 +361,8 @@ def audit_project_scn_references(
                 "fixed_layout_record_count": len(fixed_indexes),
                 "fixed_layout_certified_count": fixed_certified,
                 "profile_only_translated_record_ids": [
-                    f"{chapter}:{record_index:03d}" for record_index in profile_only
+                    f"{chapter}:{record_index:03d}"
+                    for record_index in profile_only
                 ],
                 "missing_translated_record_ids": [
                     f"{chapter}:{record_index:03d}" for record_index in missing

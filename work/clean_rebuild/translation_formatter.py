@@ -50,7 +50,6 @@ from .scn_layout import (
 from .source_json import load_json_object
 from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 
-
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
 RULES = HERE / "script_layout_rules.json"
@@ -71,7 +70,9 @@ def _load(path: Path) -> dict[str, object]:
 
 def _json_source_bytes(source: dict[str, object]) -> bytes:
     """Serialize one canonical chapter deterministically as UTF-8 JSON."""
-    return (json.dumps(source, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    return (json.dumps(source, ensure_ascii=False, indent=2) + "\n").encode(
+        "utf-8"
+    )
 
 
 def _write_transaction_temp(
@@ -234,8 +235,14 @@ def _transactional_write_json_sources(
             # recovery copy of that target. Preserve it for manual recovery
             # while removing unrelated staged files and unused backups.
             _cleanup_transaction_files(temporary_paths - retained_backups)
-            retained = sorted(str(path) for path in retained_backups if path.exists())
-            recovery = f"; recovery backups retained at {retained}" if retained else ""
+            retained = sorted(
+                str(path) for path in retained_backups if path.exists()
+            )
+            recovery = (
+                f"; recovery backups retained at {retained}"
+                if retained
+                else ""
+            )
             raise OSError(
                 "canonical JSON transaction failed and rollback was incomplete: "
                 + "; ".join(rollback_errors)
@@ -246,9 +253,9 @@ def _transactional_write_json_sources(
     _cleanup_transaction_files(temporary_paths)
 
 
-def _chapter_sources() -> (
-    tuple[dict[str, object], dict[str, tuple[Path, dict[str, object]]]]
-):
+def _chapter_sources() -> tuple[
+    dict[str, object], dict[str, tuple[Path, dict[str, object]]]
+]:
     """Load the canonical index and every chapter in declared order.
 
     Returns:
@@ -269,18 +276,15 @@ def _chapter_sources() -> (
 
 
 def _contracts(
-    source: dict[str, object], retail_root: Path
+    source: dict[str, object],
+    retail_root: Path,
+    *,
+    retail_records: tuple[bytes, ...] | None = None,
 ) -> dict[int, RecordContract]:
     """Infer contracts from a chapter's retail SCN and opening MES cells.
 
-    Canonical English never supplies geometry. SCN determines the renderer;
-    the original MES only identifies the native opening quote gutter that
-    persists beside main dialogue across continuation rows.
-
-    Raises:
-        ValueError: If the embedded renderer profile is malformed.
-        FileNotFoundError: If the hash-locked retail SCN is unavailable.
-        ScnLayoutError: If the SCN evidence is malformed or contradictory.
+    A caller that already parsed the retail MES may supply ``retail_records``
+    so auditing and contract inference share that immutable parse.
     """
     chapter = source["chapter"]
     records = source["records"]
@@ -292,6 +296,8 @@ def _contracts(
         raise FileNotFoundError(f"missing hash-locked retail SCN: {scn}")
     if not mes.exists():
         raise FileNotFoundError(f"missing hash-locked retail MES: {mes}")
+    if retail_records is None:
+        retail_records = parse_mes(mes.read_bytes(), source=str(mes)).records
     translated = {
         record["index"]
         for record in records
@@ -302,7 +308,7 @@ def _contracts(
         source["record_count"],
         translated,
         source.get("profile"),
-        retail_records=parse_mes(mes.read_bytes(), source=str(mes)).records,
+        retail_records=retail_records,
     )
 
 
@@ -334,14 +340,30 @@ def _require_explicit_fixed_policy() -> bool:
     return value
 
 
-def format_preview(text: str, contract: RecordContract | None) -> list[str]:
+def format_preview(
+    text: str,
+    contract: RecordContract | None,
+    *,
+    normalized: bool = False,
+) -> list[str]:
     """Return visible, unpadded rows for a proposed semantic string.
 
-    Records without proven SCN geometry remain a single fixed-layout value.
-    The preview shares normalization and wrapping code with the compiler, so it
-    is suitable for review but never writes canonical source.
+    Set ``normalized`` only when the caller has already applied the shared
+    semantic and ellipsis normalization. The public function remains the one
+    preview boundary used by audits and tests.
     """
-    semantic = normalize_ellipsis_style(normalize_semantic_text(text))
+    semantic = (
+        text
+        if normalized
+        else normalize_ellipsis_style(normalize_semantic_text(text))
+    )
+    return _format_semantic_preview(semantic, contract)
+
+
+def _format_semantic_preview(
+    semantic: str, contract: RecordContract | None
+) -> list[str]:
+    """Wrap already-normalized semantic text without normalizing it again."""
     if contract is None or contract.layout is None:
         return [semantic]
     return wrap_words(semantic, contract.layout)
@@ -378,7 +400,7 @@ def _record_audit(
     """
     normalized = normalize_semantic_text(text)
     semantic = normalize_ellipsis_style(normalized)
-    rows = format_preview(semantic, contract)
+    rows = format_preview(semantic, contract, normalized=True)
     roles = sorted(contract.roles) if contract is not None else []
     failures: list[str] = []
     warnings: list[str] = []
@@ -404,7 +426,9 @@ def _record_audit(
         failures.append("menu choice is not a single line")
     if adaptive and (roles or (contract and contract.layout)):
         if text != normalized:
-            failures.append("adaptive canonical text contains legacy layout whitespace")
+            failures.append(
+                "adaptive canonical text contains legacy layout whitespace"
+            )
     if text != normalize_ellipsis_style(text):
         failures.append("canonical text violates the no-space ellipsis style")
     layout = None
@@ -438,7 +462,9 @@ def _record_audit(
     }
 
 
-def audit_layouts(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
+def audit_layouts(
+    retail_root: Path = DEFAULT_RETAIL_ROOT,
+) -> dict[str, object]:
     """Audit every canonical record against its original SCN renderer.
 
     Args:
@@ -464,16 +490,15 @@ def audit_layouts(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
     adaptive_chapters: list[str] = []
     adaptive_record_count = 0
     for chapter, (_, source) in chapters.items():
-        contracts = _contracts(source, retail_root)
         retail_records = parse_mes(
             (
-                retail_root
-                / "retail_unpacked"
-                / chapter
-                / f"{chapter}.MES"
+                retail_root / "retail_unpacked" / chapter / f"{chapter}.MES"
             ).read_bytes(),
             source=f"{chapter}.MES",
         ).records
+        contracts = _contracts(
+            source, retail_root, retail_records=retail_records
+        )
         text_mode = source["text_mode"]
         if text_mode == "adaptive":
             adaptive_chapters.append(chapter)
@@ -488,7 +513,8 @@ def audit_layouts(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
             contract = contracts.get(record["index"])
             anchor = record.get("layout_policy") == "anchor"
             adaptive = (
-                text_mode == "adaptive" or record.get("layout_policy") == "adaptive"
+                text_mode == "adaptive"
+                or record.get("layout_policy") == "adaptive"
             )
             adaptive_record_count += adaptive
             item = _record_audit(
@@ -525,43 +551,40 @@ def audit_layouts(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
             if item["layout"] is not None:
                 text_box_counts.update((str(item["layout"]["text_box"]),))
             records.append(item)
-    failures = [
-        f"{item['id']}: {failure}"
-        for item in records
-        if item["adaptive"]
-        for failure in item["failures"]
-    ]
-    legacy_issues = [
-        f"{item['id']}: {failure}"
-        for item in records
-        if not item["adaptive"]
-        for failure in item["failures"]
-    ]
-    warnings = [
-        f"{item['id']}: {warning}" for item in records for warning in item["warnings"]
-    ]
-    classified = [item for item in records if item["roles"] or item["layout"]]
-    unclassified_layouts = [
-        item["id"]
-        for item in records
-        if item["layout"] is not None and item["layout"]["text_box"] == "unclassified"
-    ]
-    fixed = [
-        item
-        for item in records
-        if not (item["roles"] or item["layout"]) and item["layout_policy"] == "fixed"
-    ]
-    undeclared = [
-        item
-        for item in records
-        if not (item["roles"] or item["layout"]) and item["layout_policy"] != "fixed"
-    ]
-    anchors = [item for item in classified if item["anchor"]]
-    unmigrated = [
-        item["id"]
-        for item in classified
-        if not item["adaptive"] and not item["anchor"]
-    ]
+    failures: list[str] = []
+    legacy_issues: list[str] = []
+    warnings: list[str] = []
+    classified: list[dict[str, object]] = []
+    unclassified_layouts: list[str] = []
+    fixed: list[dict[str, object]] = []
+    undeclared: list[dict[str, object]] = []
+    anchors: list[dict[str, object]] = []
+    unmigrated: list[str] = []
+    for item in records:
+        item_id = str(item["id"])
+        item_failures = item["failures"]
+        target = failures if item["adaptive"] else legacy_issues
+        target.extend(f"{item_id}: {failure}" for failure in item_failures)
+        warnings.extend(
+            f"{item_id}: {warning}" for warning in item["warnings"]
+        )
+        is_classified = bool(item["roles"] or item["layout"])
+        if is_classified:
+            classified.append(item)
+            if item["anchor"]:
+                anchors.append(item)
+            if not item["adaptive"] and not item["anchor"]:
+                unmigrated.append(item_id)
+        elif item["layout_policy"] == "fixed":
+            fixed.append(item)
+        else:
+            undeclared.append(item)
+        layout = item["layout"]
+        if (
+            isinstance(layout, dict)
+            and layout.get("text_box") == "unclassified"
+        ):
+            unclassified_layouts.append(item_id)
     migration_failures = (
         [
             f"{record_id}: SCN-classified record is not using adaptive layout"
@@ -629,7 +652,9 @@ def _changes(path: Path) -> dict[str, str]:
         changes = {}
         for position, item in enumerate(raw):
             if not isinstance(item, dict):
-                raise ValueError(f"changes list entry {position} is not an object")
+                raise ValueError(
+                    f"changes list entry {position} is not an object"
+                )
             record_id = item.get("id")
             text = item.get("text")
             if not isinstance(record_id, str) or not isinstance(text, str):
@@ -637,10 +662,14 @@ def _changes(path: Path) -> dict[str, str]:
                     f"changes list entry {position} requires string id and text"
                 )
             if record_id in changes:
-                raise ValueError(f"changes list repeats stable ID {record_id!r}")
+                raise ValueError(
+                    f"changes list repeats stable ID {record_id!r}"
+                )
             changes[record_id] = text
     else:
-        raise ValueError("changes must be an ID-to-text object or an entry list")
+        raise ValueError(
+            "changes must be an ID-to-text object or an entry list"
+        )
     if not all(
         isinstance(key, str) and isinstance(value, str)
         for key, value in changes.items()
@@ -689,7 +718,10 @@ def apply_changes(
         if not 0 <= record_index < source["record_count"]:
             raise ValueError(f"{record_id}: index is outside the record table")
         record = source["records"][record_index]
-        if record.get("index") != record_index or record.get("policy") != "translate":
+        if (
+            record.get("index") != record_index
+            or record.get("policy") != "translate"
+        ):
             raise ValueError(f"{record_id}: record is not translated prose")
         if chapter not in contracts_by_chapter:
             contracts_by_chapter[chapter] = _contracts(source, retail_root)
@@ -704,8 +736,12 @@ def apply_changes(
         if audited["failures"]:
             raise ValueError(f"{record_id}: " + "; ".join(audited["failures"]))
         before = record["text"]
-        if contract is not None and (contract.roles or contract.layout is not None):
-            record["text"] = normalize_ellipsis_style(normalize_semantic_text(proposed))
+        if contract is not None and (
+            contract.roles or contract.layout is not None
+        ):
+            record["text"] = normalize_ellipsis_style(
+                normalize_semantic_text(proposed)
+            )
             record["layout_policy"] = "adaptive"
         else:
             # Without proven SCN geometry the record is an explicit bitmap
@@ -715,7 +751,10 @@ def apply_changes(
         profile = source.get("profile")
         if isinstance(profile, dict):
             required_exact = profile.get("required_text_exact")
-            if isinstance(required_exact, dict) and str(record_index) in required_exact:
+            if (
+                isinstance(required_exact, dict)
+                and str(record_index) in required_exact
+            ):
                 required_exact[str(record_index)] = record["text"]
         pending[source_path] = source
         report.append(
@@ -728,7 +767,11 @@ def apply_changes(
             }
         )
     _transactional_write_json_sources(pending)
-    return {"status": "PASS", "changed_record_count": len(report), "changes": report}
+    return {
+        "status": "PASS",
+        "changed_record_count": len(report),
+        "changes": report,
+    }
 
 
 def normalize_ellipsis_sources(
@@ -799,8 +842,8 @@ def normalize_ellipsis_sources(
                         raise ValueError(
                             f"{record_id}: required exact text is not a string"
                         )
-                    required_exact[str(record["index"])] = normalize_ellipsis_style(
-                        exact
+                    required_exact[str(record["index"])] = (
+                        normalize_ellipsis_style(exact)
                     )
             changed_records += 1
             source_changed = True
@@ -841,13 +884,17 @@ def migrate(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
             if record.get("policy") != "translate":
                 continue
             contract = contracts.get(record["index"])
-            if contract is None or (not contract.roles and contract.layout is None):
+            if contract is None or (
+                not contract.roles and contract.layout is None
+            ):
                 if record.get("layout_policy") != "fixed":
                     record["layout_policy"] = "fixed"
                     fixed_records += 1
                     source_changed = True
                 continue
-            semantic = normalize_ellipsis_style(normalize_semantic_text(record["text"]))
+            semantic = normalize_ellipsis_style(
+                normalize_semantic_text(record["text"])
+            )
             audited = _record_audit(
                 f"{chapter}:{record['index']:03d}",
                 semantic,
@@ -882,7 +929,8 @@ def migrate(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
             changed_chapters.append(chapter)
     if blocking_failures:
         raise ValueError(
-            "adaptive migration aborted before writing; " + "; ".join(blocking_failures)
+            "adaptive migration aborted before writing; "
+            + "; ".join(blocking_failures)
         )
     _transactional_write_json_sources(dict(pending))
     return {
@@ -897,10 +945,14 @@ def migrate(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
 def main() -> None:
     """Run preview, batch-apply, style migration, layout migration, or audit."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT)
+    parser.add_argument(
+        "--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT
+    )
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
     action = parser.add_mutually_exclusive_group()
-    action.add_argument("--record", help="preview one stable CHAPTER:NNN record")
+    action.add_argument(
+        "--record", help="preview one stable CHAPTER:NNN record"
+    )
     action.add_argument(
         "--changes", type=Path, help="apply an ID-keyed English change file"
     )
@@ -910,7 +962,9 @@ def main() -> None:
         help="apply the reviewed no-space ellipsis style to all translated records",
     )
     action.add_argument(
-        "--migrate", action="store_true", help="adopt adaptive mode and semantic text"
+        "--migrate",
+        action="store_true",
+        help="adopt adaptive mode and semantic text",
     )
     parser.add_argument("--text", help="proposed English for --record")
     args = parser.parse_args()
@@ -945,7 +999,9 @@ def main() -> None:
     else:
         payload = audit_layouts(args.retail_root)
         args.report.parent.mkdir(parents=True, exist_ok=True)
-        args.report.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        args.report.write_text(
+            json.dumps(payload, indent=2) + "\n", encoding="utf-8"
+        )
         payload = {
             key: value
             for key, value in payload.items()

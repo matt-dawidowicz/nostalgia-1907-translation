@@ -13,7 +13,6 @@ from unittest.mock import patch
 
 import nostalgia1907
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -63,7 +62,9 @@ class ManifestTests(unittest.TestCase):
         pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
         self.assertNotIn("[project]", pyproject)
         self.assertNotIn("[build-system]", pyproject)
-        self.assertRegex(manifest["tool"]["version"], r"^[0-9]+\.[0-9]+\.[0-9]+$")
+        self.assertRegex(
+            manifest["tool"]["version"], r"^[0-9]+\.[0-9]+\.[0-9]+$"
+        )
 
     def test_manifest_and_local_config_reject_duplicate_keys(self) -> None:
         """Reject last-key-wins ambiguity in root operator configuration."""
@@ -89,7 +90,9 @@ class ManifestTests(unittest.TestCase):
             ):
                 nostalgia1907.load_local_config(root)
 
-    def test_validated_baseline_and_retail_track2_share_exact_audio(self) -> None:
+    def test_validated_baseline_and_retail_track2_share_exact_audio(
+        self,
+    ) -> None:
         """Require the validated build to retain the exact retail audio track."""
         manifest = nostalgia1907.load_manifest(ROOT)
         baseline = manifest["translation"]["validated_baseline"]
@@ -137,7 +140,12 @@ class CliContractTests(unittest.TestCase):
             nostalgia1907.release_basename("Nostalgia1907_Custom"),
             "Nostalgia1907_Custom",
         )
-        for invalid in ("../candidate", "candidate/test", "candidate test", ""):
+        for invalid in (
+            "../candidate",
+            "candidate/test",
+            "candidate test",
+            "",
+        ):
             with self.subTest(invalid=invalid):
                 with self.assertRaises(nostalgia1907.ToolError):
                     nostalgia1907.release_basename(invalid)
@@ -205,14 +213,22 @@ class CliContractTests(unittest.TestCase):
             events.append(label)
 
         with (
-            patch.object(nostalgia1907, "load_manifest", return_value=manifest),
+            patch.object(
+                nostalgia1907, "load_manifest", return_value=manifest
+            ),
             patch.object(
                 nostalgia1907,
                 "require_retail_reference",
-                side_effect=lambda *_args: events.append("retail") or Path("retail"),
+                side_effect=lambda *_args: (
+                    events.append("retail") or Path("retail")
+                ),
             ),
-            patch.object(nostalgia1907, "run_script", side_effect=fake_run_script),
-            patch.object(nostalgia1907, "run_command", side_effect=fake_run_command),
+            patch.object(
+                nostalgia1907, "run_script", side_effect=fake_run_script
+            ),
+            patch.object(
+                nostalgia1907, "run_command", side_effect=fake_run_command
+            ),
             patch.object(
                 nostalgia1907,
                 "command_compare",
@@ -220,7 +236,9 @@ class CliContractTests(unittest.TestCase):
             ),
         ):
             self.assertEqual(
-                nostalgia1907.command_validate(ROOT, Namespace(skip_comparison=False)),
+                nostalgia1907.command_validate(
+                    ROOT, Namespace(skip_comparison=False)
+                ),
                 0,
             )
 
@@ -259,7 +277,9 @@ class CliContractTests(unittest.TestCase):
             (occupied / "artifact.bin").write_bytes(b"fixture")
             self.assertEqual(nostalgia1907.directory_state(absent), "absent")
             self.assertEqual(nostalgia1907.directory_state(empty), "empty")
-            self.assertEqual(nostalgia1907.directory_state(occupied), "non-empty")
+            self.assertEqual(
+                nostalgia1907.directory_state(occupied), "non-empty"
+            )
             nostalgia1907.require_fresh_build_directory("test", absent)
             nostalgia1907.require_fresh_build_directory("test", empty)
             with self.assertRaises(nostalgia1907.ToolError):
@@ -280,7 +300,9 @@ class CliContractTests(unittest.TestCase):
             ):
                 with self.subTest(runs=runs, delivery=delivery):
                     with self.assertRaises(nostalgia1907.ToolError):
-                        nostalgia1907.require_separate_build_directories(runs, delivery)
+                        nostalgia1907.require_separate_build_directories(
+                            runs, delivery
+                        )
 
     def test_normal_build_runs_full_validation_before_builder(self) -> None:
         """Require validation to finish before any normal build subprocess starts."""
@@ -307,13 +329,17 @@ class CliContractTests(unittest.TestCase):
                 patch.object(
                     nostalgia1907,
                     "run_script",
-                    side_effect=lambda *_args, **_kwargs: events.append("build"),
+                    side_effect=lambda *_args, **_kwargs: events.append(
+                        "build"
+                    ),
                 ),
             ):
                 self.assertEqual(nostalgia1907.command_build(ROOT, args), 0)
             self.assertEqual(events, ["validate", "build"])
 
-    def test_north_american_build_wraps_only_a_proven_clean_stage(self) -> None:
+    def test_north_american_build_wraps_only_a_proven_clean_stage(
+        self,
+    ) -> None:
         """Pass only a hash-proven clean stage into the U.S. wrapper."""
         with tempfile.TemporaryDirectory() as temporary:
             temporary_root = Path(temporary)
@@ -345,12 +371,12 @@ class CliContractTests(unittest.TestCase):
                     clean_delivery = Path(script_args[delivery_index])
                     clean_basename = script_args[basename_index]
                     clean_delivery.mkdir(parents=True)
-                    (clean_delivery / f"{clean_basename}_Track1.bin").write_bytes(
-                        b"clean track 1"
-                    )
-                    (clean_delivery / f"{clean_basename}_Track2.bin").write_bytes(
-                        b"clean track 2"
-                    )
+                    (
+                        clean_delivery / f"{clean_basename}_Track1.bin"
+                    ).write_bytes(b"clean track 1")
+                    (
+                        clean_delivery / f"{clean_basename}_Track2.bin"
+                    ).write_bytes(b"clean track 2")
                 else:
                     events.append("region")
 
@@ -361,7 +387,9 @@ class CliContractTests(unittest.TestCase):
                     "command_validate",
                     side_effect=lambda *_args: events.append("validate") or 0,
                 ),
-                patch.object(nostalgia1907, "run_script", side_effect=fake_run_script),
+                patch.object(
+                    nostalgia1907, "run_script", side_effect=fake_run_script
+                ),
             ):
                 self.assertEqual(nostalgia1907.command_build(ROOT, args), 0)
 
@@ -375,18 +403,24 @@ class CliContractTests(unittest.TestCase):
                 "work/region_variant/build_us_bios_test.py",
             )
             region_args = scripts[1][1]
-            expected_hash = hashlib.sha256(b"clean track 1").hexdigest().upper()
+            expected_hash = (
+                hashlib.sha256(b"clean track 1").hexdigest().upper()
+            )
             self.assertEqual(
                 region_args[region_args.index("--expected-track1-sha256") + 1],
                 expected_hash,
             )
-            self.assertIn("Nostalgia1907_CleanRebuild_test_NorthAmerica", region_args)
+            self.assertIn(
+                "Nostalgia1907_CleanRebuild_test_NorthAmerica", region_args
+            )
 
 
 class RepositoryPolicyTests(unittest.TestCase):
     """Protect production modules and manifests from local-machine assumptions."""
 
-    def test_production_modules_do_not_reference_historical_workspaces(self) -> None:
+    def test_production_modules_do_not_reference_historical_workspaces(
+        self,
+    ) -> None:
         """Reject hard-coded paths to retired forensic workspaces."""
         clean = ROOT / "work" / "clean_rebuild"
         rebuild_path = clean / "rebuild.py"
@@ -396,7 +430,8 @@ class RepositoryPolicyTests(unittest.TestCase):
             if not isinstance(node, ast.Assign):
                 continue
             if any(
-                isinstance(target, ast.Name) and target.id == "PRODUCTION_MODULES"
+                isinstance(target, ast.Name)
+                and target.id == "PRODUCTION_MODULES"
                 for target in node.targets
             ):
                 production_modules = ast.literal_eval(node.value)
@@ -415,18 +450,26 @@ class RepositoryPolicyTests(unittest.TestCase):
         self.assertNotIn(r"C:\\Users", text)
         self.assertNotIn(r"D:\\", text)
 
-    def test_canonical_provenance_contains_no_machine_specific_paths(self) -> None:
+    def test_canonical_provenance_contains_no_machine_specific_paths(
+        self,
+    ) -> None:
         """Represent historical text provenance with portable labels only."""
         sources = ROOT / "work" / "clean_rebuild" / "sources"
-        index = json.loads((sources / "index.json").read_text(encoding="utf-8"))
+        index = json.loads(
+            (sources / "index.json").read_text(encoding="utf-8")
+        )
         for item in index["chapters"]:
             canonical = json.loads(
                 (sources / item["source"]).read_text(encoding="utf-8")
             )
             for provenance in canonical.get("text_sources", []):
-                with self.subTest(chapter=canonical["chapter"], value=provenance):
+                with self.subTest(
+                    chapter=canonical["chapter"], value=provenance
+                ):
                     self.assertNotRegex(provenance, r"(?i)^[A-Z]:[\\/]")
-                    self.assertFalse(provenance.startswith(("/Users/", "/home/")))
+                    self.assertFalse(
+                        provenance.startswith(("/Users/", "/home/"))
+                    )
 
 
 class ModuleExecutionTests(unittest.TestCase):

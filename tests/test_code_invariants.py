@@ -9,17 +9,17 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-
-from work.clean_rebuild import iso9660
-from work.clean_rebuild import mes_compiler
-from work.clean_rebuild import mes_format
-from work.clean_rebuild import renderer_format
-from work.clean_rebuild import rebuild as clean_rebuild
-from work.clean_rebuild import scn_layout
-from work.clean_rebuild import translation_formatter
-
 import test_script_layout_integration as layout_tests
 
+from work.clean_rebuild import (
+    iso9660,
+    mes_compiler,
+    mes_format,
+    renderer_format,
+    scn_layout,
+    translation_formatter,
+)
+from work.clean_rebuild import rebuild as clean_rebuild
 
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
@@ -90,14 +90,18 @@ def write_test_iso(
         directory_record(b"FILE.BIN;1", file_extent, file_size),
     ]
     if duplicate_extent is not None:
-        records.append(directory_record(b"FILE.BIN;1", duplicate_extent, file_size))
+        records.append(
+            directory_record(b"FILE.BIN;1", duplicate_extent, file_size)
+        )
     directory = b"".join(records)
     start = 20 * iso9660.SECTOR_SIZE
     image[start : start + len(directory)] = directory
     path.write_bytes(image)
 
 
-def canonical_source(text: str, *, layout_policy: str = "fixed") -> dict[str, object]:
+def canonical_source(
+    text: str, *, layout_policy: str = "fixed"
+) -> dict[str, object]:
     """Return a one-record canonical chapter object for transaction tests."""
     return {
         "record_count": 1,
@@ -126,7 +130,9 @@ def write_dependency_fixture(
     sources = root / "sources"
     sources.mkdir()
     (sources / "index.json").write_text(
-        json.dumps({"chapter_count": len(chapters or []), "chapters": chapters or []})
+        json.dumps(
+            {"chapter_count": len(chapters or []), "chapters": chapters or []}
+        )
         + "\n",
         encoding="utf-8",
     )
@@ -169,7 +175,9 @@ class MesFormatTests(unittest.TestCase):
 class RowPackingTests(unittest.TestCase):
     """Keep storage optimization from changing visible text placement."""
 
-    def test_row_packing_keeps_the_first_source_character_left_aligned(self) -> None:
+    def test_row_packing_keeps_the_first_source_character_left_aligned(
+        self,
+    ) -> None:
         """Reject the former phase shift and its obsolete alternate-row state."""
         for text in (
             "It was not here, in this",
@@ -191,7 +199,9 @@ class RowPackingTests(unittest.TestCase):
         self.assertEqual(rows[0][0], ())
         self.assertTrue(rows[0][1].startswith("left"))
 
-    def test_opening_anchor_is_emitted_once_for_the_full_dialogue_stream(self) -> None:
+    def test_opening_anchor_is_emitted_once_for_the_full_dialogue_stream(
+        self,
+    ) -> None:
         """Keep one gutter while every later row uses the continuation stride."""
         layout = mes_compiler.Layout(
             3,
@@ -201,7 +211,9 @@ class RowPackingTests(unittest.TestCase):
             page_rows=3,
             opening_anchor_cells=1,
         )
-        rows = mes_compiler._prose_rows("one two four five six ten nine", layout)
+        rows = mes_compiler._prose_rows(
+            "one two four five six ten nine", layout
+        )
         self.assertEqual(
             [len(prefix) for prefix, _line in rows[:7]],
             [1, 0, 0, 0, 0, 0, 0],
@@ -223,14 +235,20 @@ class RowPackingTests(unittest.TestCase):
             [3, 2, 2, 2, 2, 2, 2],
         )
 
-    def test_layout_rejects_invalid_cell_geometry_and_row_indexes(self) -> None:
+    def test_layout_rejects_invalid_cell_geometry_and_row_indexes(
+        self,
+    ) -> None:
         """Fail closed instead of silently compiling an impossible layout."""
-        with self.assertRaisesRegex(scn_layout.ScnLayoutError, "must be positive"):
+        with self.assertRaisesRegex(
+            scn_layout.ScnLayoutError, "must be positive"
+        ):
             mes_compiler.Layout(0, 2, 2, 2)
         with self.assertRaisesRegex(scn_layout.ScnLayoutError, "narrower"):
             mes_compiler.Layout(3, 2, 2, 2)
         layout = mes_compiler.Layout(3, 2, 3, 2)
-        with self.assertRaisesRegex(scn_layout.ScnLayoutError, "must not be negative"):
+        with self.assertRaisesRegex(
+            scn_layout.ScnLayoutError, "must not be negative"
+        ):
             layout.physical_cells(-1)
         with self.assertRaisesRegex(scn_layout.ScnLayoutError, "page_rows"):
             mes_compiler.Layout(3, 2, 3, 2, page_rows=0)
@@ -273,7 +291,9 @@ class IsoFormatTests(unittest.TestCase):
         """Reject a name length that extends beyond the directory record."""
         record = bytearray(directory_record(b"A", 1, 1))
         record[32] = 10
-        with self.assertRaisesRegex(iso9660.IsoError, "truncates its file identifier"):
+        with self.assertRaisesRegex(
+            iso9660.IsoError, "truncates its file identifier"
+        ):
             iso9660._parse_record(bytes(record), 0)
 
     def test_identifier_padding_rules_are_enforced(self) -> None:
@@ -315,7 +335,9 @@ class IsoFormatTests(unittest.TestCase):
                 file_extent=21,
                 file_size=iso9660.SECTOR_SIZE,
             )
-            entry = iso9660.unique_file(iso9660.read_entries(iso_path), "FILE.BIN")
+            entry = iso9660.unique_file(
+                iso9660.read_entries(iso_path), "FILE.BIN"
+            )
             self.assertEqual(entry.allocated_size, iso9660.SECTOR_SIZE)
 
     def test_conflicting_duplicate_file_records_are_rejected(self) -> None:
@@ -329,14 +351,18 @@ class IsoFormatTests(unittest.TestCase):
                 duplicate_extent=20,
             )
             entries = iso9660.read_entries(iso_path)
-            with self.assertRaisesRegex(iso9660.IsoError, "conflicting duplicate"):
+            with self.assertRaisesRegex(
+                iso9660.IsoError, "conflicting duplicate"
+            ):
                 iso9660.unique_file(entries, "FILE.BIN")
 
 
 class TranslationFormatterTests(unittest.TestCase):
     """Protect duplicate-key handling and transactional canonical writes."""
 
-    def test_duplicate_json_keys_are_rejected_at_every_object_level(self) -> None:
+    def test_duplicate_json_keys_are_rejected_at_every_object_level(
+        self,
+    ) -> None:
         """Reject duplicate IDs, wrapper keys, and unrelated metadata keys."""
         payloads = (
             '{"PART1A:003":"first","PART1A:003":"second"}',
@@ -353,7 +379,9 @@ class TranslationFormatterTests(unittest.TestCase):
                     ):
                         translation_formatter._changes(path)
 
-    def test_unique_object_and_list_change_forms_remain_supported(self) -> None:
+    def test_unique_object_and_list_change_forms_remain_supported(
+        self,
+    ) -> None:
         """Keep both documented unique change-set representations working."""
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / "changes.json"
@@ -392,7 +420,9 @@ class TranslationFormatterTests(unittest.TestCase):
                 {"PART1A:003": "one"},
             )
 
-    def test_apply_rejects_malformed_profile_before_retail_lookup(self) -> None:
+    def test_apply_rejects_malformed_profile_before_retail_lookup(
+        self,
+    ) -> None:
         """Fail before source mutation when an embedded profile is invalid."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -494,7 +524,9 @@ class TranslationFormatterTests(unittest.TestCase):
                 "_write_transaction_temp",
                 side_effect=failing_write,
             ):
-                with self.assertRaisesRegex(OSError, "simulated staging failure"):
+                with self.assertRaisesRegex(
+                    OSError, "simulated staging failure"
+                ):
                     translation_formatter._transactional_write_json_sources(
                         {
                             first: {"value": "after A"},
@@ -533,7 +565,9 @@ class TranslationFormatterTests(unittest.TestCase):
                 "replace",
                 side_effect=failing_replace,
             ):
-                with self.assertRaisesRegex(OSError, "second replacement failure"):
+                with self.assertRaisesRegex(
+                    OSError, "second replacement failure"
+                ):
                     translation_formatter._transactional_write_json_sources(
                         {
                             first: {"value": "after A"},
@@ -545,7 +579,9 @@ class TranslationFormatterTests(unittest.TestCase):
             self.assertEqual(list(root.glob(".*.new")), [])
             self.assertEqual(list(root.glob(".*.backup")), [])
 
-    def test_first_replacement_failure_leaves_all_sources_untouched(self) -> None:
+    def test_first_replacement_failure_leaves_all_sources_untouched(
+        self,
+    ) -> None:
         """Preserve every chapter when the first canonical replace cannot start."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -568,7 +604,9 @@ class TranslationFormatterTests(unittest.TestCase):
                 "replace",
                 side_effect=failing_replace,
             ):
-                with self.assertRaisesRegex(OSError, "first replacement failure"):
+                with self.assertRaisesRegex(
+                    OSError, "first replacement failure"
+                ):
                     translation_formatter._transactional_write_json_sources(
                         {
                             first: {"value": "after A"},
@@ -654,7 +692,9 @@ class TranslationFormatterTests(unittest.TestCase):
             root = Path(temporary)
             first = root / "A.json"
             second = root / "B.json"
-            first.write_text(json.dumps(canonical_source("before A")), encoding="utf-8")
+            first.write_text(
+                json.dumps(canonical_source("before A")), encoding="utf-8"
+            )
             second.write_text(
                 json.dumps(canonical_source("before B")), encoding="utf-8"
             )
@@ -689,15 +729,21 @@ class TranslationFormatterTests(unittest.TestCase):
                     "_chapter_sources",
                     return_value=({}, chapters),
                 ),
-                patch.object(translation_formatter, "_contracts", return_value={}),
-                patch.object(translation_formatter, "_rules_by_role", return_value={}),
+                patch.object(
+                    translation_formatter, "_contracts", return_value={}
+                ),
+                patch.object(
+                    translation_formatter, "_rules_by_role", return_value={}
+                ),
                 patch.object(
                     translation_formatter.os,
                     "replace",
                     side_effect=failing_replace,
                 ),
             ):
-                with self.assertRaisesRegex(OSError, "simulated apply failure"):
+                with self.assertRaisesRegex(
+                    OSError, "simulated apply failure"
+                ):
                     translation_formatter.apply_changes(changes, root)
             self.assertEqual(first.read_bytes(), before_first)
             self.assertEqual(second.read_bytes(), before_second)
@@ -737,15 +783,21 @@ class TranslationFormatterTests(unittest.TestCase):
                     "_chapter_sources",
                     return_value=({}, chapters),
                 ),
-                patch.object(translation_formatter, "_contracts", return_value={}),
-                patch.object(translation_formatter, "_rules_by_role", return_value={}),
+                patch.object(
+                    translation_formatter, "_contracts", return_value={}
+                ),
+                patch.object(
+                    translation_formatter, "_rules_by_role", return_value={}
+                ),
                 patch.object(
                     translation_formatter.os,
                     "replace",
                     side_effect=failing_replace,
                 ),
             ):
-                with self.assertRaisesRegex(OSError, "simulated migration failure"):
+                with self.assertRaisesRegex(
+                    OSError, "simulated migration failure"
+                ):
                     translation_formatter.migrate(root)
             self.assertEqual(first.read_bytes(), before_first)
             self.assertEqual(second.read_bytes(), before_second)
@@ -757,7 +809,9 @@ class RebuildSafetyTests(unittest.TestCase):
     def test_direct_basename_validation_rejects_path_syntax(self) -> None:
         """Reject traversal, absolute forms, separators, dot segments, and empties."""
         self.assertEqual(
-            clean_rebuild._validate_basename("Nostalgia1907_CleanRebuild_Example"),
+            clean_rebuild._validate_basename(
+                "Nostalgia1907_CleanRebuild_Example"
+            ),
             "Nostalgia1907_CleanRebuild_Example",
         )
         invalid = (
@@ -813,7 +867,9 @@ class RebuildSafetyTests(unittest.TestCase):
                     "hidden.py": "VALUE = 1\n",
                 },
             )
-            with self.assertRaisesRegex(ValueError, "unapproved local imports"):
+            with self.assertRaisesRegex(
+                ValueError, "unapproved local imports"
+            ):
                 clean_rebuild._verify_production_independence(
                     root,
                     ("entry.py",),
@@ -839,7 +895,9 @@ class RebuildSafetyTests(unittest.TestCase):
                             }
                         ],
                     )
-                    with self.assertRaisesRegex(ValueError, "one JSON filename"):
+                    with self.assertRaisesRegex(
+                        ValueError, "one JSON filename"
+                    ):
                         clean_rebuild._verify_production_independence(
                             root,
                             ("entry.py",),
@@ -860,7 +918,9 @@ class RebuildSafetyTests(unittest.TestCase):
                 root,
                 ("entry.py", "helper.py"),
             )
-            self.assertEqual(report["local_import_edges"], ["entry.py -> helper.py"])
+            self.assertEqual(
+                report["local_import_edges"], ["entry.py -> helper.py"]
+            )
 
     def test_canonical_coverage_matches_current_sources(self) -> None:
         """Derive every published coverage count from the tracked source set."""
@@ -914,7 +974,9 @@ class RebuildSafetyTests(unittest.TestCase):
             notes = clean_rebuild._render_test_notes(coverage)
             self.assertIn("all 1 chapters and 2 records", notes)
             self.assertIn("declares 1 translated records", notes)
-            self.assertIn("0 translated records with explicit fixed-layout", notes)
+            self.assertIn(
+                "0 translated records with explicit fixed-layout", notes
+            )
             self.assertIn("PART3B_ contains 1 translated records", notes)
             self.assertIn("Retail records 1 remain retail-preserved", notes)
 

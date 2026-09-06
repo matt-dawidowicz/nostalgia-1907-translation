@@ -29,11 +29,11 @@ from pathlib import Path
 from .build_archives import build_archives
 from .build_mes_set import build_mes_set
 from .iso9660 import patch_fixed_extent_files
-from .source_json import load_json_object
 from .main_patch import patch_main
 from .prepare_retail import prepare_retail
 from .raw_cd import iso_to_raw_fixed, write_two_track_cue
 from .regression import validate_build
+from .source_json import load_json_object
 from .verification_manifest import (
     assert_exact_managed_inventory,
     collect_build_bindings,
@@ -43,7 +43,6 @@ from .verification_manifest import (
     snapshot_artifacts,
     write_bound_verification,
 )
-
 
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
@@ -81,7 +80,9 @@ def _ensure_empty(path: Path) -> None:
     """Create a staging directory and reject unsafe pre-existing paths."""
     if path.exists():
         if not path.is_dir():
-            raise ValueError(f"clean-build path exists and is not a directory: {path}")
+            raise ValueError(
+                f"clean-build path exists and is not a directory: {path}"
+            )
         if any(path.iterdir()):
             raise ValueError(
                 f"refusing to reuse non-empty clean-build directory: {path}"
@@ -91,7 +92,9 @@ def _ensure_empty(path: Path) -> None:
 
 def _validate_basename(basename: str) -> str:
     """Reject path syntax and unsafe characters in a direct build basename."""
-    if not isinstance(basename, str) or not RELEASE_BASENAME.fullmatch(basename):
+    if not isinstance(basename, str) or not RELEASE_BASENAME.fullmatch(
+        basename
+    ):
         raise ValueError(
             "basename must start with a letter or digit and contain only "
             "letters, digits, period, underscore, or hyphen"
@@ -119,8 +122,12 @@ def _production_data_files(root: Path) -> tuple[Path, ...]:
     data_files = [root / "font_patterns.json", index_path]
     seen: set[str] = set()
     for item in chapters:
-        if not isinstance(item, dict) or not isinstance(item.get("source"), str):
-            raise ValueError("production source index contains an invalid source entry")
+        if not isinstance(item, dict) or not isinstance(
+            item.get("source"), str
+        ):
+            raise ValueError(
+                "production source index contains an invalid source entry"
+            )
         source_name = item["source"]
         source_path = Path(source_name)
         if (
@@ -133,7 +140,9 @@ def _production_data_files(root: Path) -> tuple[Path, ...]:
                 f"production source path must be one JSON filename: {source_name!r}"
             )
         if source_name in seen:
-            raise ValueError(f"production source index repeats {source_name!r}")
+            raise ValueError(
+                f"production source index repeats {source_name!r}"
+            )
         seen.add(source_name)
         data_files.append(sources / source_name)
     missing = [str(path) for path in data_files if not path.is_file()]
@@ -197,7 +206,9 @@ def _verify_production_independence(
         for node in ast.walk(tree):
             imported: list[str] = []
             if isinstance(node, ast.Import):
-                imported.extend(alias.name.split(".", 1)[0] for alias in node.names)
+                imported.extend(
+                    alias.name.split(".", 1)[0] for alias in node.names
+                )
             elif isinstance(node, ast.ImportFrom):
                 if node.level:
                     if node.level != 1:
@@ -226,10 +237,16 @@ def _verify_production_independence(
     if unapproved_imports or marker_hits:
         problems = []
         if unapproved_imports:
-            problems.append(f"unapproved local imports: {sorted(unapproved_imports)}")
+            problems.append(
+                f"unapproved local imports: {sorted(unapproved_imports)}"
+            )
         if marker_hits:
-            problems.append(f"historical-workspace markers: {sorted(marker_hits)}")
-        raise ValueError("production dependency audit failed: " + "; ".join(problems))
+            problems.append(
+                f"historical-workspace markers: {sorted(marker_hits)}"
+            )
+        raise ValueError(
+            "production dependency audit failed: " + "; ".join(problems)
+        )
 
     return {
         "status": "PASS",
@@ -270,23 +287,34 @@ def _canonical_coverage(sources: Path = SOURCES) -> dict[str, object]:
     part3b_translated = 0
     for item in items:
         if not isinstance(item, dict):
-            raise ValueError("canonical source index contains a non-object chapter")
+            raise ValueError(
+                "canonical source index contains a non-object chapter"
+            )
         chapter = item.get("chapter")
         source_name = item.get("source")
         if not isinstance(chapter, str) or not isinstance(source_name, str):
-            raise ValueError("canonical source index contains an invalid chapter entry")
+            raise ValueError(
+                "canonical source index contains an invalid chapter entry"
+            )
         if not SOURCE_JSON_NAME.fullmatch(source_name):
             raise ValueError(
                 f"{chapter}: canonical source path is unsafe: {source_name!r}"
             )
         source = load_json_object(sources / source_name)
         records = source.get("records")
-        if not isinstance(records, list) or source.get("record_count") != len(records):
-            raise ValueError(f"{chapter}: canonical record count is inconsistent")
+        if not isinstance(records, list) or source.get("record_count") != len(
+            records
+        ):
+            raise ValueError(
+                f"{chapter}: canonical record count is inconsistent"
+            )
         translated = 0
         preserved = 0
         for index_value, record in enumerate(records):
-            if not isinstance(record, dict) or record.get("index") != index_value:
+            if (
+                not isinstance(record, dict)
+                or record.get("index") != index_value
+            ):
                 raise ValueError(
                     f"{chapter}: canonical record ordering is inconsistent"
                 )
@@ -308,13 +336,17 @@ def _canonical_coverage(sources: Path = SOURCES) -> dict[str, object]:
             elif policy == "preserve":
                 preserved += 1
             else:
-                raise ValueError(f"{chapter}:{index_value:03d}: invalid record policy")
+                raise ValueError(
+                    f"{chapter}:{index_value:03d}: invalid record policy"
+                )
         if (
             item.get("record_count") != len(records)
             or item.get("translated_records") != translated
             or item.get("preserved_records") != preserved
         ):
-            raise ValueError(f"{chapter}: source-index coverage counts are stale")
+            raise ValueError(
+                f"{chapter}: source-index coverage counts are stale"
+            )
         totals["record_count"] += len(records)
         totals["translated_record_count"] += translated
         totals["preserved_record_count"] += preserved
@@ -333,7 +365,9 @@ def _canonical_coverage(sources: Path = SOURCES) -> dict[str, object]:
         + totals["anchor_record_count"]
         != totals["translated_record_count"]
     ):
-        raise ValueError("canonical translated layout-policy counts are incomplete")
+        raise ValueError(
+            "canonical translated layout-policy counts are incomplete"
+        )
     return {
         "chapter_count": len(items),
         **totals,
@@ -384,8 +418,12 @@ def _chapter_names(sources: Path = SOURCES) -> tuple[str, ...]:
         raise ValueError("canonical source index has no chapters list")
     names: list[str] = []
     for item in chapters:
-        if not isinstance(item, dict) or not isinstance(item.get("chapter"), str):
-            raise ValueError("canonical source index contains an invalid chapter entry")
+        if not isinstance(item, dict) or not isinstance(
+            item.get("chapter"), str
+        ):
+            raise ValueError(
+                "canonical source index contains an invalid chapter entry"
+            )
         names.append(item["chapter"])
     if len(names) != len(set(names)):
         raise ValueError("canonical source index repeats a chapter")
@@ -399,10 +437,14 @@ def _run_input_manifest(
     basename: str,
 ) -> dict[str, object]:
     """Fingerprint every declared source and prepared Japanese build fixture."""
-    project_manifest = load_json_object(WORKSPACE / "nostalgia1907.project.json")
+    project_manifest = load_json_object(
+        WORKSPACE / "nostalgia1907.project.json"
+    )
     translation = project_manifest.get("translation")
     baseline = (
-        translation.get("validated_baseline") if isinstance(translation, dict) else None
+        translation.get("validated_baseline")
+        if isinstance(translation, dict)
+        else None
     )
     profile = {
         "name": "clean-rebuild-single-run",
@@ -465,7 +507,9 @@ def _build_once(
 
     index = load_json_object(SOURCES / "index.json")
     replacements = {
-        f"{item['chapter']}.LZ": build_root / "archives" / f"{item['chapter']}.LZ"
+        f"{item['chapter']}.LZ": build_root
+        / "archives"
+        / f"{item['chapter']}.LZ"
         for item in index["chapters"]
     }
     replacements.update(
@@ -494,7 +538,9 @@ def _build_once(
     )
     shutil.copyfile(track2, output_track2)
     write_two_track_cue(output_cue, output_track1, output_track2)
-    verification = validate_build(build_root, product_root, track1, track2, basename)
+    verification = validate_build(
+        build_root, product_root, track1, track2, basename
+    )
 
     chapters = _chapter_names()
     assert_exact_managed_inventory(
@@ -541,7 +587,8 @@ def _manifest(
         _chapter_names(),
     )
     return {
-        str(item["path"]): str(item["sha256"]) for item in snapshot_artifacts(artifacts)
+        str(item["path"]): str(item["sha256"])
+        for item in snapshot_artifacts(artifacts)
     }
 
 
@@ -598,7 +645,9 @@ def rebuild(
             for name in set(manifest_a) | set(manifest_b)
             if manifest_a.get(name) != manifest_b.get(name)
         )
-        raise ValueError(f"two clean builds were not byte-identical: {mismatches}")
+        raise ValueError(
+            f"two clean builds were not byte-identical: {mismatches}"
+        )
 
     _ensure_empty(delivery_root)
     for suffix in ("_Track1.bin", "_Track2.bin", ".cue"):
@@ -606,7 +655,9 @@ def rebuild(
         shutil.copyfile(run_a_product / name, delivery_root / name)
     delivery_artifacts = expected_delivery_artifacts(delivery_root, basename)
     delivery_snapshot = snapshot_artifacts(delivery_artifacts)
-    run_manifest = load_json_object(run_a_product / "verification_manifest.json")
+    run_manifest = load_json_object(
+        run_a_product / "verification_manifest.json"
+    )
     report = {
         "status": "PASS",
         "pipeline": "retail Japanese Track 1 -> clean extraction -> canonical translation -> fixed extents -> BIN/CUE",
@@ -652,7 +703,11 @@ def main() -> None:
     parser.add_argument("--basename", default=DEFAULT_BASENAME)
     args = parser.parse_args()
     result = rebuild(
-        args.track1, args.track2, args.runs_root, args.delivery_root, args.basename
+        args.track1,
+        args.track2,
+        args.runs_root,
+        args.delivery_root,
+        args.basename,
     )
     print(
         json.dumps(

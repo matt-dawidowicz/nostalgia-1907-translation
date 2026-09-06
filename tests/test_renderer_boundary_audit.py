@@ -13,13 +13,11 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from work.clean_rebuild import mes_compiler, translation_formatter
+from work.clean_rebuild.scn_layout import Layout, RecordContract
 
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
-
-from work.clean_rebuild.scn_layout import Layout, RecordContract  # noqa: E402
-from work.clean_rebuild import mes_compiler  # noqa: E402
-from work.clean_rebuild import translation_formatter  # noqa: E402
 
 
 def dialogue_contract(*, visible_cells: int = 12) -> RecordContract:
@@ -58,7 +56,9 @@ class RendererBoundaryUnitTests(unittest.TestCase):
 
         self.assertEqual(rows, ["one two", "three"])
         self.assertEqual(
-            translation_formatter._renderer_boundary_failures(semantic, rows, contract),
+            translation_formatter._renderer_boundary_failures(
+                semantic, rows, contract
+            ),
             [],
         )
 
@@ -150,7 +150,9 @@ class RendererBoundaryUnitTests(unittest.TestCase):
             ],
         }
 
-        with self.assertRaisesRegex(mes_compiler.CompileError, "no proven SCN layout"):
+        with self.assertRaisesRegex(
+            mes_compiler.CompileError, "no proven SCN layout"
+        ):
             mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
 
     def test_compile_mes_enforces_profile_text_rules_directly(self) -> None:
@@ -188,7 +190,9 @@ class RendererBoundaryUnitTests(unittest.TestCase):
         with self.assertRaisesRegex(mes_compiler.CompileError, "Locked text"):
             mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
 
-    def test_compile_mes_validates_profiles_for_preserve_only_input(self) -> None:
+    def test_compile_mes_validates_profiles_for_preserve_only_input(
+        self,
+    ) -> None:
         """Do not let the unchanged-retail fast path bypass profile schema."""
         retail_mes = b"\x00\x06\x00\x04\x01\x00"
         retail_scn = b""
@@ -219,7 +223,9 @@ class RendererBoundaryUnitTests(unittest.TestCase):
             ],
         }
 
-        with self.assertRaisesRegex(mes_compiler.CompileError, "unknown fields"):
+        with self.assertRaisesRegex(
+            mes_compiler.CompileError, "unknown fields"
+        ):
             mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
 
     def test_record_audit_includes_boundary_guard_failures(self) -> None:
@@ -254,7 +260,9 @@ class RendererBoundaryCorpusTests(unittest.TestCase):
         try:
             report = translation_formatter.audit_layouts()
         except FileNotFoundError as error:
-            self.skipTest(f"prepared Japanese retail fixtures unavailable: {error}")
+            self.skipTest(
+                f"prepared Japanese retail fixtures unavailable: {error}"
+            )
 
         boundary_failures = [
             failure
@@ -264,8 +272,12 @@ class RendererBoundaryCorpusTests(unittest.TestCase):
         self.assertEqual(report["status"], "PASS")
         self.assertEqual(report["adaptive_record_count"], 2759)
         self.assertEqual(report["unclassified_layout_count"], 0)
-        self.assertGreater(report["text_box_counts"].get("lower_dialogue", 0), 0)
-        self.assertGreater(report["text_box_counts"].get("floating_window", 0), 0)
+        self.assertGreater(
+            report["text_box_counts"].get("lower_dialogue", 0), 0
+        )
+        self.assertGreater(
+            report["text_box_counts"].get("floating_window", 0), 0
+        )
         self.assertEqual(boundary_failures, [])
 
 

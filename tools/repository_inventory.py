@@ -31,7 +31,9 @@ def git_tracked_files(root: Path) -> tuple[Path, ...] | None:
         for raw_path in completed.stdout.split(b"\0")
         if raw_path
     )
-    missing = tuple(path for path in relative_paths if not (root / path).is_file())
+    missing = tuple(
+        path for path in relative_paths if not (root / path).is_file()
+    )
     if missing:
         names = ", ".join(path.as_posix() for path in missing[:5])
         suffix = " ..." if len(missing) > 5 else ""

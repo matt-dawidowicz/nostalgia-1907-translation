@@ -22,7 +22,6 @@ from pathlib import Path
 
 from .source_json import load_json_object
 
-
 HERE = Path(__file__).resolve().parent
 PATTERN_PATH = HERE / "font_patterns.json"
 GLYPH_WIDTH = 12
@@ -50,7 +49,9 @@ def _pattern(char: str) -> list[str]:
 
 def _matrix_bytes(matrix: list[list[int]]) -> bytes:
     """Pack a 12x12 one-bit matrix in row-major bit order."""
-    if len(matrix) != GLYPH_HEIGHT or any(len(row) != GLYPH_WIDTH for row in matrix):
+    if len(matrix) != GLYPH_HEIGHT or any(
+        len(row) != GLYPH_WIDTH for row in matrix
+    ):
         raise FontError("glyph matrix is not 12x12")
     bits = [bit for row in matrix for bit in row]
     output = bytearray()
@@ -68,7 +69,8 @@ def _bytes_matrix(data: bytes) -> list[list[int]]:
         raise FontError(f"glyph is {len(data)} bytes, expected {GLYPH_BYTES}")
     bits = [(byte >> shift) & 1 for byte in data for shift in range(7, -1, -1)]
     return [
-        bits[row * GLYPH_WIDTH : (row + 1) * GLYPH_WIDTH] for row in range(GLYPH_HEIGHT)
+        bits[row * GLYPH_WIDTH : (row + 1) * GLYPH_WIDTH]
+        for row in range(GLYPH_HEIGHT)
     ]
 
 
@@ -95,7 +97,9 @@ def render_literal_cell(unit: str) -> bytes:
     rather than substituting a glyph.
     """
     if not 1 <= len(unit) <= 2:
-        raise FontError(f"literal cell must contain one or two characters: {unit!r}")
+        raise FontError(
+            f"literal cell must contain one or two characters: {unit!r}"
+        )
     matrix = [[0] * GLYPH_WIDTH for _ in range(GLYPH_HEIGHT)]
     for slot, char in enumerate(unit):
         if char == " ":
@@ -174,13 +178,16 @@ def render_compact_cluster(unit: str) -> bytes:
     while sum(widths) + sum(gaps) > GLYPH_WIDTH:
         widest = max(widths)
         if widest <= 3:
-            raise FontError(f"compact punctuation cluster does not fit: {unit!r}")
+            raise FontError(
+                f"compact punctuation cluster does not fit: {unit!r}"
+            )
         widths[widths.index(widest)] -= 1
     matrix = [[0] * GLYPH_WIDTH for _ in range(GLYPH_HEIGHT)]
     x_base = 0
     for index, (pattern, width) in enumerate(zip(patterns, widths)):
         copied = [
-            _resample_row(row, width) if len(row) != width else row for row in pattern
+            _resample_row(row, width) if len(row) != width else row
+            for row in pattern
         ]
         for row_index, row in enumerate(copied):
             y = 2 + row_index

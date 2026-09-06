@@ -15,7 +15,6 @@ from collections.abc import Iterable, Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-
 MAINTAINED_DIRECTORIES = (
     "tools",
     "tests",
@@ -135,7 +134,9 @@ def audit(root: Path) -> dict[str, object]:
     paths = iter_maintained_python(root)
     for path in paths:
         try:
-            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+            tree = ast.parse(
+                path.read_text(encoding="utf-8"), filename=str(path)
+            )
         except SyntaxError as error:
             violations.append(
                 DocumentationViolation(
@@ -147,7 +148,9 @@ def audit(root: Path) -> dict[str, object]:
             )
             continue
         violations.extend(_audit_docstrings(path, tree, root))
-    ordered = sorted(violations, key=lambda item: (item.path, item.line, item.rule))
+    ordered = sorted(
+        violations, key=lambda item: (item.path, item.line, item.rule)
+    )
     return {
         "status": "PASS" if not ordered else "FAIL",
         "files_checked": len(paths),

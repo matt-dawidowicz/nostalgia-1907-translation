@@ -7,7 +7,6 @@ import tempfile
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 from work.clean_rebuild.whole_game_test import (  # noqa: E402
@@ -96,7 +95,9 @@ def complete_plan() -> dict[str, object]:
 class WholeGameRuntimeLogTests(unittest.TestCase):
     """Keep runtime-certification completion separate from static coverage."""
 
-    def test_runtime_log_remains_pending_until_every_scope_is_marked(self) -> None:
+    def test_runtime_log_remains_pending_until_every_scope_is_marked(
+        self,
+    ) -> None:
         """Reject incomplete chapters and text boxes instead of optimistic success."""
         plan = complete_plan()
         plan["runtime"]["chapters"][0]["runtime_status"] = "pending"
@@ -104,7 +105,9 @@ class WholeGameRuntimeLogTests(unittest.TestCase):
         self.assertEqual(report["status"], "PENDING_RUNTIME")
         self.assertEqual(report["pending"], ["chapter:PART1A"])
 
-    def test_runtime_log_passes_only_after_every_scope_is_recorded(self) -> None:
+    def test_runtime_log_passes_only_after_every_scope_is_recorded(
+        self,
+    ) -> None:
         """Accept a complete explicit runtime certification log."""
         report = verify_runtime_log(complete_plan())
         self.assertEqual(report["status"], PASS)
@@ -147,7 +150,9 @@ class WholeGameRuntimeLogTests(unittest.TestCase):
     def test_scope_deletion_is_rejected(self) -> None:
         """Reject edited logs that remove generated certification scopes."""
         plan = complete_plan()
-        plan["runtime"]["global_checks"] = plan["runtime"]["global_checks"][:-1]
+        plan["runtime"]["global_checks"] = plan["runtime"]["global_checks"][
+            :-1
+        ]
         with self.assertRaisesRegex(ValueError, "global runtime checks"):
             verify_runtime_log(plan)
 
@@ -166,7 +171,9 @@ class WholeGameRuntimeLogTests(unittest.TestCase):
             json_path, markdown_path = write_plan(output, plan)
             self.assertTrue(json_path.is_file())
             self.assertTrue(markdown_path.is_file())
-            self.assertEqual(json.loads(json_path.read_text(encoding="utf-8")), plan)
+            self.assertEqual(
+                json.loads(json_path.read_text(encoding="utf-8")), plan
+            )
             with self.assertRaises(ValueError):
                 write_plan(output, plan)
 

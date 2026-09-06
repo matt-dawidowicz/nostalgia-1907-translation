@@ -13,7 +13,6 @@ from __future__ import annotations
 import re
 from collections.abc import Sequence
 
-
 ACTIVE_PROFILE_FIELDS = frozenset(
     {
         "schema_version",
@@ -62,14 +61,18 @@ PROFILE_ROLES = frozenset(
 )
 
 
-def canonical_profile_index(raw_index: object, *, field: str, chapter: str) -> int:
+def canonical_profile_index(
+    raw_index: object, *, field: str, chapter: str
+) -> int:
     """Return one canonical non-negative profile record index.
 
     JSON object keys are strings. Requiring their exact decimal form prevents
     aliases such as ``"01"`` and ``"1"`` from silently collapsing when the
     SCN consumers convert keys to integers.
     """
-    if not isinstance(raw_index, str) or not re.fullmatch(r"0|[1-9][0-9]*", raw_index):
+    if not isinstance(raw_index, str) or not re.fullmatch(
+        r"0|[1-9][0-9]*", raw_index
+    ):
         raise ValueError(
             f"{chapter}: profile {field} index {raw_index!r} is not canonical"
         )
@@ -110,7 +113,9 @@ def _indexed_string_rules(
         raise ValueError(f"{chapter}: profile {field} is not an object")
     rules: dict[int, str] = {}
     for raw_index, expected in raw.items():
-        index = canonical_profile_index(raw_index, field=field, chapter=chapter)
+        index = canonical_profile_index(
+            raw_index, field=field, chapter=chapter
+        )
         _translated_index(index, records, field=field, chapter=chapter)
         if not isinstance(expected, str):
             raise ValueError(
@@ -133,7 +138,9 @@ def _indexed_rules(
         raise ValueError(f"{chapter}: profile {field} is not an object")
     rules: dict[int, object] = {}
     for raw_index, value in raw.items():
-        index = canonical_profile_index(raw_index, field=field, chapter=chapter)
+        index = canonical_profile_index(
+            raw_index, field=field, chapter=chapter
+        )
         if index in rules:
             raise ValueError(
                 f"{chapter}: profile {field} has duplicate normalized index {index}"
@@ -174,20 +181,27 @@ def _validate_indexed_renderer_rules(
                     f"{chapter}: profile {field}[{index}] must contain positive widths"
                 )
             reason = value.get("reason")
-            if reason is not None and (not isinstance(reason, str) or not reason):
+            if reason is not None and (
+                not isinstance(reason, str) or not reason
+            ):
                 raise ValueError(
                     f"{chapter}: profile {field}[{index}] reason is not a non-empty string"
                 )
 
     for field, validator in (
-        ("row_limit_overrides", lambda value: isinstance(value, int) and value > 0),
+        (
+            "row_limit_overrides",
+            lambda value: isinstance(value, int) and value > 0,
+        ),
         ("text_box_overrides", lambda value: value in TEXT_BOX_IDS),
     ):
         for index, value in _indexed_rules(
             profile, field, chapter=chapter, records=records
         ).items():
             if not validator(value):
-                raise ValueError(f"{chapter}: profile {field}[{index}] is invalid")
+                raise ValueError(
+                    f"{chapter}: profile {field}[{index}] is invalid"
+                )
 
     for index, value in _indexed_rules(
         profile, "role_overrides", chapter=chapter, records=records
@@ -197,7 +211,8 @@ def _validate_indexed_renderer_rules(
             not isinstance(roles, list)
             or not roles
             or not all(
-                isinstance(role, str) and role in PROFILE_ROLES for role in roles
+                isinstance(role, str) and role in PROFILE_ROLES
+                for role in roles
             )
         ):
             raise ValueError(
@@ -230,7 +245,9 @@ def validate_profile(
     unknown = set(profile) - ACTIVE_PROFILE_FIELDS
     if unknown:
         joined = ", ".join(sorted(unknown))
-        raise ValueError(f"{chapter}: profile contains unknown fields: {joined}")
+        raise ValueError(
+            f"{chapter}: profile contains unknown fields: {joined}"
+        )
     if profile.get("schema_version") not in {None, 1}:
         raise ValueError(f"{chapter}: unsupported profile schema version")
     profile_name = profile.get("name")
@@ -239,8 +256,12 @@ def validate_profile(
             f"{chapter}: profile name {profile_name!r} does not match chapter"
         )
     translation_status = profile.get("translation_status")
-    if translation_status is not None and not isinstance(translation_status, str):
-        raise ValueError(f"{chapter}: profile translation_status is not a string")
+    if translation_status is not None and not isinstance(
+        translation_status, str
+    ):
+        raise ValueError(
+            f"{chapter}: profile translation_status is not a string"
+        )
 
     _indexed_string_rules(
         profile, "required_text_exact", chapter=chapter, records=records
@@ -296,7 +317,9 @@ def profile_text_failures(
                 continue
             record = records[index]
             if not isinstance(record, dict):
-                failures.append(f"{chapter}:{index:03d}: canonical record is not an object")
+                failures.append(
+                    f"{chapter}:{index:03d}: canonical record is not an object"
+                )
                 continue
             text = record.get("text")
             if not isinstance(text, str):
@@ -304,7 +327,11 @@ def profile_text_failures(
                     f"{chapter}:{index:03d}: profile {field} requires translated text"
                 )
                 continue
-            valid = text == expected if field == "exact text" else text.startswith(expected)
+            valid = (
+                text == expected
+                if field == "exact text"
+                else text.startswith(expected)
+            )
             if not valid:
                 relation = "equal" if field == "exact text" else "start with"
                 failures.append(
@@ -318,7 +345,9 @@ def profile_text_failures(
         if isinstance(pattern, str)
     ]
     for index, record in enumerate(records):
-        if not isinstance(record, dict) or not isinstance(record.get("text"), str):
+        if not isinstance(record, dict) or not isinstance(
+            record.get("text"), str
+        ):
             continue
         text = record["text"]
         for pattern in patterns:

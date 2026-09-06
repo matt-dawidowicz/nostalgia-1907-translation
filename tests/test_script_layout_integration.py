@@ -13,7 +13,6 @@ from work.clean_rebuild.font_render import GLYPH_BYTES, stored_cell
 from work.clean_rebuild.mes_compiler import compile_files
 from work.clean_rebuild.mes_format import DYNAMIC_PREFIX_START, parse_mes
 from work.clean_rebuild.renderer_format import measure_literal
-from work.clean_rebuild.source_json import load_json_object
 from work.clean_rebuild.scn_layout import (
     ROLE_CHOICE,
     ROLE_CONTINUATION,
@@ -27,6 +26,7 @@ from work.clean_rebuild.scn_layout import (
     TEXT_BOX_LOWER_DIALOGUE,
     infer_contracts,
 )
+from work.clean_rebuild.source_json import load_json_object
 from work.clean_rebuild.translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 from work.clean_rebuild.translation_formatter import (
     _renderer_boundary_failures,
@@ -34,7 +34,6 @@ from work.clean_rebuild.translation_formatter import (
     format_preview,
 )
 from work.clean_rebuild.whole_game_test import build_plan, verify_runtime_log
-
 
 HERE = Path(__file__).resolve().parent
 
@@ -62,7 +61,9 @@ def require_retail_layout_fixtures(
 ) -> None:
     """Skip layout integration tests when prepared retail fixtures are absent."""
     missing = [
-        path for path in required_retail_layout_files(retail_root) if not path.is_file()
+        path
+        for path in required_retail_layout_files(retail_root)
+        if not path.is_file()
     ]
     if not missing:
         return
@@ -96,11 +97,15 @@ def contracts(chapter: str) -> dict[int, object]:
         canonical["record_count"],
         translated,
         canonical.get("profile"),
-        retail_records=parse_mes((retail / f"{chapter}.MES").read_bytes()).records,
+        retail_records=parse_mes(
+            (retail / f"{chapter}.MES").read_bytes()
+        ).records,
     )
 
 
-def patched_font(retail_font: bytes, patches: tuple[tuple[int, str], ...]) -> bytes:
+def patched_font(
+    retail_font: bytes, patches: tuple[tuple[int, str], ...]
+) -> bytes:
     """Apply one build result's declared fixed-font changes."""
     output = bytearray(retail_font)
     for code, bitmap_hex in patches:
@@ -109,7 +114,9 @@ def patched_font(retail_font: bytes, patches: tuple[tuple[int, str], ...]) -> by
     return bytes(output)
 
 
-def bitmap_records(mes_data: bytes, fixed_font: bytes) -> tuple[tuple[bytes, ...], ...]:
+def bitmap_records(
+    mes_data: bytes, fixed_font: bytes
+) -> tuple[tuple[bytes, ...], ...]:
     """Decode each MES record to its exact displayed bitmap sequence."""
     mes = parse_mes(mes_data)
     output: list[tuple[bytes, ...]] = []
@@ -125,7 +132,9 @@ def bitmap_records(mes_data: bytes, fixed_font: bytes) -> tuple[tuple[bytes, ...
                 bitmaps.append(fixed_font[start : start + GLYPH_BYTES])
                 offset += 1
                 continue
-            index = (value - DYNAMIC_PREFIX_START) * 0xFF + record[offset + 1] - 1
+            index = (
+                (value - DYNAMIC_PREFIX_START) * 0xFF + record[offset + 1] - 1
+            )
             bitmaps.append(mes.glyphs[index])
             offset += 2
         output.append(tuple(bitmaps))
@@ -157,7 +166,9 @@ def expected_prose_bitmaps(
             anchor_offsets.append(len(cells))
         cells.extend(
             stored_cell(*cell)
-            for cell in mes_compiler._row_plan(record_index, line, prefix).cells()
+            for cell in mes_compiler._row_plan(
+                record_index, line, prefix
+            ).cells()
         )
     return tuple(cells), tuple(anchor_offsets)
 
@@ -220,7 +231,9 @@ class ScriptLayoutTests(unittest.TestCase):
             ["How about Indian", "poker? Know how to", "play?"],
         )
 
-    def test_lower_dialogue_keeps_continuation_width_after_page_cycle(self) -> None:
+    def test_lower_dialogue_keeps_continuation_width_after_page_cycle(
+        self,
+    ) -> None:
         """Keep lower-dialogue page clears separate from X-coordinate geometry."""
         canonical = source("PART1A")
         contract = contracts("PART1A")[10]
@@ -350,7 +363,9 @@ class ScriptLayoutTests(unittest.TestCase):
 
                 text = canonical["records"][index]["text"]
                 rows = format_preview(text, contract)
-                self.assertEqual(_renderer_boundary_failures(text, rows, contract), [])
+                self.assertEqual(
+                    _renderer_boundary_failures(text, rows, contract), []
+                )
                 if max_rows is not None:
                     self.assertLessEqual(len(rows), max_rows)
 
@@ -358,11 +373,11 @@ class ScriptLayoutTests(unittest.TestCase):
                 self.assertEqual(len(row_specs), len(rows))
                 self.assertTrue(all(not prefix for prefix, _line in row_specs))
                 self.assertEqual(
+                    [measure_literal(line) for _prefix, line in row_specs],
                     [
-                        measure_literal(line)
-                        for _prefix, line in row_specs
+                        contract.layout.runtime_cells(row)
+                        for row in range(len(rows))
                     ],
-                    [contract.layout.runtime_cells(row) for row in range(len(rows))],
                 )
 
                 if chapter not in compiled:
@@ -377,7 +392,9 @@ class ScriptLayoutTests(unittest.TestCase):
                     canonical["record_count"],
                 )
 
-    def test_floating_window_overflow_is_rejected_during_compilation(self) -> None:
+    def test_floating_window_overflow_is_rejected_during_compilation(
+        self,
+    ) -> None:
         """Reject overflow in a side thought before a MES file can be written."""
         chapter = "PART1A"
         canonical = source(chapter)
@@ -394,7 +411,9 @@ class ScriptLayoutTests(unittest.TestCase):
                 altered,
             )
 
-    def test_compiled_lower_dialogue_keeps_only_the_initial_blank_anchor(self) -> None:
+    def test_compiled_lower_dialogue_keeps_only_the_initial_blank_anchor(
+        self,
+    ) -> None:
         """Verify native quote gutters are emitted once, never at page resets."""
         source_index = load_json_object(SOURCES / "index.json")
         retail_font = (
@@ -489,7 +508,9 @@ class ScriptLayoutTests(unittest.TestCase):
         self.assertEqual(len(failures), 1)
         self.assertIn("tough.", failures[0])
 
-    def test_selector_and_standalone_window_continuation_are_classified(self) -> None:
+    def test_selector_and_standalone_window_continuation_are_classified(
+        self,
+    ) -> None:
         """Classify selector choices and standalone continuation windows."""
         part1a = contracts("PART1A")
         self.assertIn(ROLE_CHOICE, part1a[39].roles)
@@ -525,7 +546,9 @@ class ScriptLayoutTests(unittest.TestCase):
         self.assertEqual(static["emitted_renderer"]["status"], "pass")
         self.assertEqual(static["emitted_renderer"]["chapters"], 19)
         self.assertEqual(static["emitted_renderer"]["records"], 2905)
-        self.assertEqual(static["emitted_renderer"]["renderer_contract_records"], 2490)
+        self.assertEqual(
+            static["emitted_renderer"]["renderer_contract_records"], 2490
+        )
         self.assertEqual(len(plan["runtime"]["chapters"]), 19)
         self.assertEqual(len(plan["runtime"]["fixed_layout_record_ids"]), 123)
         runtime = verify_runtime_log(plan)
@@ -546,7 +569,9 @@ class ScriptLayoutTests(unittest.TestCase):
                     SOURCES / f"{chapter}.json",
                     output / f"{chapter}.MES",
                 )
-                self.assertEqual(result.record_count, source(chapter)["record_count"])
+                self.assertEqual(
+                    result.record_count, source(chapter)["record_count"]
+                )
                 self.assertLessEqual(result.dynamic_glyphs, 1020)
 
     def test_fixed_english_dictionary_is_bitmap_identical(self) -> None:
@@ -561,7 +586,9 @@ class ScriptLayoutTests(unittest.TestCase):
         try:
             mes_compiler.FIXED_ENGLISH_UNITS = ()
             mes_compiler.PART3C_HARD_LIMIT = 0xFFFF
-            before = mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
+            before = mes_compiler.compile_mes(
+                retail_mes, retail_scn, canonical
+            )
         finally:
             mes_compiler.FIXED_ENGLISH_UNITS = dictionary
             mes_compiler.PART3C_HARD_LIMIT = hard_limit
@@ -573,7 +600,9 @@ class ScriptLayoutTests(unittest.TestCase):
         self.assertLess(len(after.data), len(before.data))
         self.assertLessEqual(len(after.data), hard_limit - 0x100)
 
-        retail_font = (retail_root / "retail_files" / "FIX_CODE.FNT").read_bytes()
+        retail_font = (
+            retail_root / "retail_files" / "FIX_CODE.FNT"
+        ).read_bytes()
         before_font = patched_font(retail_font, before.fixed_font_patches)
         after_font = patched_font(retail_font, after.fixed_font_patches)
         self.assertEqual(
@@ -581,13 +610,16 @@ class ScriptLayoutTests(unittest.TestCase):
             bitmap_records(after.data, after_font),
         )
 
-    def test_fixed_english_dictionary_excludes_native_row_edge_codes(self) -> None:
+    def test_fixed_english_dictionary_excludes_native_row_edge_codes(
+        self,
+    ) -> None:
         """Never emit a generated fixed byte with special row-edge semantics."""
         dictionary_codes = {
             code for code, _style, _unit in mes_compiler.FIXED_ENGLISH_UNITS
         }
         self.assertFalse(
-            dictionary_codes & mes_compiler.NATIVE_DIALOGUE_ROW_EDGE_RESERVED_CODES
+            dictionary_codes
+            & mes_compiler.NATIVE_DIALOGUE_ROW_EDGE_RESERVED_CODES
         )
 
         chapter = "PART1A"
@@ -631,7 +663,9 @@ class ScriptLayoutTests(unittest.TestCase):
         # because PART1A:020 begins its second native continuation row with it.
         dictionary = mes_compiler.FIXED_ENGLISH_UNITS
         try:
-            mes_compiler.FIXED_ENGLISH_UNITS = dictionary + ((0x05, "literal", "lo"),)
+            mes_compiler.FIXED_ENGLISH_UNITS = dictionary + (
+                (0x05, "literal", "lo"),
+            )
             with self.assertRaisesRegex(
                 mes_compiler.CompileError,
                 r"PART1A:\d{3} emits native row-edge code 0x05",
@@ -644,14 +678,22 @@ class ScriptLayoutTests(unittest.TestCase):
         finally:
             mes_compiler.FIXED_ENGLISH_UNITS = dictionary
 
-    def test_compact_display_labels_preserve_canonical_translation(self) -> None:
+    def test_compact_display_labels_preserve_canonical_translation(
+        self,
+    ) -> None:
         """Render compact nameplate text without weakening glossary authority."""
         cases = (
             ("PART2D", 145, "Chief Engineer", "Chief Eng.", 5),
             ("PART2E", 47, "Chief Engineer", "Chief Eng.", 5),
             ("PART2E", 26, "Royal Suite B", "Royal Suite B", 7),
         )
-        for chapter, record_index, canonical_text, display_text, cell_count in cases:
+        for (
+            chapter,
+            record_index,
+            canonical_text,
+            display_text,
+            cell_count,
+        ) in cases:
             with self.subTest(chapter=chapter, record=record_index):
                 retail = DEFAULT_RETAIL_ROOT / "retail_unpacked" / chapter
                 canonical = source(chapter)
@@ -664,7 +706,9 @@ class ScriptLayoutTests(unittest.TestCase):
                     canonical,
                 )
                 font = patched_font(
-                    (DEFAULT_RETAIL_ROOT / "retail_files" / "FIX_CODE.FNT").read_bytes(),
+                    (
+                        DEFAULT_RETAIL_ROOT / "retail_files" / "FIX_CODE.FNT"
+                    ).read_bytes(),
                     result.fixed_font_patches,
                 )
                 rendered = bitmap_records(result.data, font)[record_index]
@@ -679,7 +723,9 @@ class ScriptLayoutTests(unittest.TestCase):
                 self.assertEqual(rendered, expected)
                 self.assertEqual(len(rendered), cell_count)
 
-    def test_standalone_quote_fragment_compiles_to_one_blank_cell(self) -> None:
+    def test_standalone_quote_fragment_compiles_to_one_blank_cell(
+        self,
+    ) -> None:
         """Replace the visible Japanese quote marker without changing record order."""
         chapter = "PART2E"
         record_index = 28
@@ -696,7 +742,9 @@ class ScriptLayoutTests(unittest.TestCase):
             canonical,
         )
         font = patched_font(
-            (DEFAULT_RETAIL_ROOT / "retail_files" / "FIX_CODE.FNT").read_bytes(),
+            (
+                DEFAULT_RETAIL_ROOT / "retail_files" / "FIX_CODE.FNT"
+            ).read_bytes(),
             result.fixed_font_patches,
         )
         rendered = bitmap_records(result.data, font)[record_index]

@@ -13,11 +13,10 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
+from work.clean_rebuild import export_bilingual_comparison as comparison
 
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
-
-from work.clean_rebuild import export_bilingual_comparison as comparison  # noqa: E402
 
 
 class ComparisonExportTests(unittest.TestCase):
@@ -92,7 +91,9 @@ class ComparisonExportTests(unittest.TestCase):
             patch.object(comparison, "SOURCES", sources),
             patch.object(comparison, "EXPECTED_CHAPTERS", 1),
             patch.object(comparison, "EXPECTED_RECORDS", 2),
-            patch.object(comparison, "FIXED_FONT_SIZE", fixed_path.stat().st_size),
+            patch.object(
+                comparison, "FIXED_FONT_SIZE", fixed_path.stat().st_size
+            ),
             patch.object(
                 comparison, "FIXED_FONT_SHA256", comparison.sha256(fixed_path)
             ),
@@ -111,7 +112,9 @@ class ComparisonExportTests(unittest.TestCase):
             prior_staging = root / ".comparison.staging-prior"
             prior_staging.mkdir()
             stale_staging = prior_staging / "STALE_STAGING_SENTINEL.txt"
-            stale_staging.write_text("stale staging sentinel", encoding="utf-8")
+            stale_staging.write_text(
+                "stale staging sentinel", encoding="utf-8"
+            )
 
             result = self._export(root / "fixture", output)
 
@@ -143,7 +146,9 @@ class ComparisonExportTests(unittest.TestCase):
             validation = comparison.validate_comparison_package(output)
             self.assertEqual(validation["status"], "PASS")
 
-    def test_independent_clean_exports_have_identical_archive_and_members(self) -> None:
+    def test_independent_clean_exports_have_identical_archive_and_members(
+        self,
+    ) -> None:
         """Compare archive and member hashes from two independent clean roots."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -151,7 +156,9 @@ class ComparisonExportTests(unittest.TestCase):
             second = root / "second"
             first_result = self._export(root / "fixture-a", first)
             second_result = self._export(root / "fixture-b", second)
-            self.assertEqual(first_result["zip_sha256"], second_result["zip_sha256"])
+            self.assertEqual(
+                first_result["zip_sha256"], second_result["zip_sha256"]
+            )
             self.assertEqual(
                 (first / comparison.ZIP_NAME).read_bytes(),
                 (second / comparison.ZIP_NAME).read_bytes(),
@@ -161,7 +168,10 @@ class ComparisonExportTests(unittest.TestCase):
                 with zipfile.ZipFile(output / comparison.ZIP_NAME) as archive:
                     inventories.append(
                         [
-                            (name, hashlib.sha256(archive.read(name)).hexdigest())
+                            (
+                                name,
+                                hashlib.sha256(archive.read(name)).hexdigest(),
+                            )
                             for name in archive.namelist()
                         ]
                     )
@@ -207,10 +217,15 @@ class ComparisonExportTests(unittest.TestCase):
             validation = comparison.validate_comparison_package(output)
             self.assertEqual(validation["status"], "FAIL")
             self.assertTrue(
-                any("unexpected archive" in item for item in validation["failures"])
+                any(
+                    "unexpected archive" in item
+                    for item in validation["failures"]
+                )
             )
 
-    def test_png_encoder_has_only_fixed_chunks_and_exact_scanlines(self) -> None:
+    def test_png_encoder_has_only_fixed_chunks_and_exact_scanlines(
+        self,
+    ) -> None:
         """Prove the in-module PNG has no metadata or encoder heuristics."""
         width, height = 8, 2
         raster = bytes((0b10101010, 0b01010101))
@@ -224,13 +239,19 @@ class ComparisonExportTests(unittest.TestCase):
             data = payload[offset + 8 : offset + 8 + size]
             chunks.append((kind, data))
             offset += 12 + size
-        self.assertEqual([kind for kind, _ in chunks], [b"IHDR", b"IDAT", b"IEND"])
+        self.assertEqual(
+            [kind for kind, _ in chunks], [b"IHDR", b"IDAT", b"IEND"]
+        )
         ihdr = chunks[0][1]
-        self.assertEqual(struct.unpack(">IIBBBBB", ihdr), (8, 2, 1, 0, 0, 0, 0))
+        self.assertEqual(
+            struct.unpack(">IIBBBBB", ihdr), (8, 2, 1, 0, 0, 0, 0)
+        )
         scanlines = zlib.decompress(chunks[1][1])
-        self.assertEqual(scanlines, b"\x00\xAA\x00\x55")
+        self.assertEqual(scanlines, b"\x00\xaa\x00\x55")
 
-    def test_inventory_guard_reports_missing_and_unexpected_paths(self) -> None:
+    def test_inventory_guard_reports_missing_and_unexpected_paths(
+        self,
+    ) -> None:
         """Report both sides of an exact staging inventory mismatch."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

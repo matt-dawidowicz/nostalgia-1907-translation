@@ -7,7 +7,6 @@ import re
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
 REGION = ROOT / "work" / "region_variant"
@@ -60,7 +59,8 @@ class DocumentationTests(unittest.TestCase):
             if not isinstance(node, ast.Assign):
                 continue
             if any(
-                isinstance(target, ast.Name) and target.id == "PRODUCTION_MODULES"
+                isinstance(target, ast.Name)
+                and target.id == "PRODUCTION_MODULES"
                 for target in node.targets
             ):
                 modules = ast.literal_eval(node.value)
@@ -84,7 +84,9 @@ class DocumentationTests(unittest.TestCase):
         """Keep maintained code/data separate from historical prose artifacts."""
         self.assertEqual(list(CLEAN.glob("*.md")), [])
 
-    def test_editing_guide_documents_the_canonical_record_contract(self) -> None:
+    def test_editing_guide_documents_the_canonical_record_contract(
+        self,
+    ) -> None:
         """Keep canonical record ownership explicit in the editor guide."""
         editing = DOCS["editing"].read_text(encoding="utf-8")
         for token in (
@@ -144,13 +146,17 @@ class DocumentationTests(unittest.TestCase):
             tree = ast.parse(path.read_text(encoding="utf-8"))
             nodes = [tree]
             for node in tree.body:
-                if isinstance(node, callable_nodes) and not node.name.startswith("_"):
+                if isinstance(
+                    node, callable_nodes
+                ) and not node.name.startswith("_"):
                     nodes.append(node)
                     if isinstance(node, ast.ClassDef):
                         nodes.extend(
                             member
                             for member in node.body
-                            if isinstance(member, (ast.FunctionDef, ast.AsyncFunctionDef))
+                            if isinstance(
+                                member, (ast.FunctionDef, ast.AsyncFunctionDef)
+                            )
                             and not member.name.startswith("_")
                         )
             for node in nodes:

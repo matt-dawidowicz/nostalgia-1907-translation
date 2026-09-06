@@ -24,7 +24,6 @@ from .source_json import load_json_object
 from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 from .translation_formatter import audit_layouts
 
-
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
 PLAN_SCHEMA_VERSION = 2
@@ -80,9 +79,12 @@ def _load(path: Path) -> dict[str, Any]:
     return load_json_object(path)
 
 
-def _compiled_static_summary(retail_root: Path) -> dict[str, Any]:
-    """Compile all chapters and aggregate emitted-byte renderer evidence."""
-    index = _load(SOURCES / "index.json")
+def _compiled_static_summary(
+    retail_root: Path,
+    index: dict[str, Any],
+    sources_by_chapter: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    """Compile all chapters using already-loaded canonical source objects."""
     failures: list[str] = []
     totals: Counter[str] = Counter()
     for chapter_item in index["chapters"]:
@@ -92,7 +94,7 @@ def _compiled_static_summary(retail_root: Path) -> dict[str, Any]:
             result = compile_mes(
                 (retail / f"{chapter}.MES").read_bytes(),
                 (retail / f"{chapter}.SCN").read_bytes(),
-                _load(SOURCES / chapter_item["source"]),
+                sources_by_chapter[chapter],
             )
         except (CompileError, OSError, ValueError) as error:
             failures.append(f"{chapter}: {error}")
@@ -102,7 +104,9 @@ def _compiled_static_summary(retail_root: Path) -> dict[str, Any]:
         totals["renderer_contract_records"] += result.renderer_contract_records
         totals["renderer_contract_rows"] += result.renderer_contract_rows
         totals["renderer_contract_cells"] += result.renderer_contract_cells
-        totals["renderer_contract_row_edges"] += result.renderer_contract_row_edges
+        totals["renderer_contract_row_edges"] += (
+            result.renderer_contract_row_edges
+        )
     return {
         "status": PASS if not failures else "fail",
         "failure_count": len(failures),
@@ -126,10 +130,14 @@ def build_plan(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, Any]:
         OSError: If canonical or retail inputs are unavailable.
         ValueError: If source metadata or renderer contracts are malformed.
     """
-    layout = audit_layouts(retail_root)
-    compiled = _compiled_static_summary(retail_root)
-    scn_integrity = audit_project_scn_references(retail_root)
     index = _load(SOURCES / "index.json")
+    sources_by_chapter = {
+        str(item["chapter"]): _load(SOURCES / item["source"])
+        for item in index["chapters"]
+    }
+    layout = audit_layouts(retail_root)
+    compiled = _compiled_static_summary(retail_root, index, sources_by_chapter)
+    scn_integrity = audit_project_scn_references(retail_root)
     records_by_chapter: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for record in layout["records"]:
         chapter = str(record["id"]).split(":", 1)[0]
@@ -140,9 +148,11 @@ def build_plan(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, Any]:
     fixed_records: list[str] = []
     for chapter_item in index["chapters"]:
         chapter = str(chapter_item["chapter"])
-        source = _load(SOURCES / chapter_item["source"])
+        source = sources_by_chapter[chapter]
         translated = [
-            record for record in source["records"] if record["policy"] == "translate"
+            record
+            for record in source["records"]
+            if record["policy"] == "translate"
         ]
         fixed = [
             f"{chapter}:{record['index']:03d}"
@@ -165,7 +175,8 @@ def build_plan(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, Any]:
                 "record_count": source["record_count"],
                 "translated_record_count": len(translated),
                 "preserved_record_count": sum(
-                    record["policy"] == "preserve" for record in source["records"]
+                    record["policy"] == "preserve"
+                    for record in source["records"]
                 ),
                 "adaptive_record_count": len(records_by_chapter[chapter]),
                 "fixed_record_ids": fixed,
@@ -202,7 +213,8 @@ def build_plan(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, Any]:
             "layout": {
                 key: value
                 for key, value in layout.items()
-                if key not in {"records", "failures", "warnings", "legacy_issues"}
+                if key
+                not in {"records", "failures", "warnings", "legacy_issues"}
             },
             "emitted_renderer": compiled,
             "scn_references": {
@@ -308,10 +320,21 @@ def write_plan(output_dir: Path, plan: dict[str, Any]) -> tuple[Path, Path]:
     return json_path, markdown_path
 
 
+def _sha256_file(path: Path) -> str:
+    """Return an uppercase SHA-256 digest without loading a large file whole."""
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        while block := source.read(1024 * 1024):
+            digest.update(block)
+    return digest.hexdigest().upper()
+
+
 def bind_build_identity(plan: dict[str, Any], cue: Path, track1: Path) -> None:
     """Bind a generated certification plan to the exact playable candidate."""
     if not cue.is_file() or not track1.is_file():
-        raise ValueError("cue and Track 1 must both exist before playtest binding")
+        raise ValueError(
+            "cue and Track 1 must both exist before playtest binding"
+        )
     runtime = plan.get("runtime")
     if not isinstance(runtime, dict) or not isinstance(
         runtime.get("build_identity"), dict
@@ -319,9 +342,9 @@ def bind_build_identity(plan: dict[str, Any], cue: Path, track1: Path) -> None:
         raise ValueError("runtime build identity is missing")
     runtime["build_identity"] = {
         "cue_filename": cue.name,
-        "cue_sha256": hashlib.sha256(cue.read_bytes()).hexdigest().upper(),
+        "cue_sha256": _sha256_file(cue),
         "track1_filename": track1.name,
-        "track1_sha256": hashlib.sha256(track1.read_bytes()).hexdigest().upper(),
+        "track1_sha256": _sha256_file(track1),
     }
 
 
@@ -331,7 +354,11 @@ def _bound_candidate(identity: object) -> bool:
         return False
     for key in ("cue_filename", "track1_filename"):
         value = identity.get(key)
-        if not isinstance(value, str) or not value or Path(value).name != value:
+        if (
+            not isinstance(value, str)
+            or not value
+            or Path(value).name != value
+        ):
             return False
     for key in ("cue_sha256", "track1_sha256"):
         value = identity.get(key)
@@ -361,14 +388,19 @@ def _require_runtime_evidence(
         failed.append(label)
     elif state == PENDING:
         pending.append(label)
-    elif not isinstance(item.get(evidence_key), str) or not item[evidence_key].strip():
+    elif (
+        not isinstance(item.get(evidence_key), str)
+        or not item[evidence_key].strip()
+    ):
         pending.append(f"{label}:evidence")
 
 
 def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
     """Return pass only for a bound, statically valid runtime certification."""
     if plan.get("schema_version") != PLAN_SCHEMA_VERSION:
-        raise ValueError("runtime log schema version is missing or unsupported")
+        raise ValueError(
+            "runtime log schema version is missing or unsupported"
+        )
     static = plan.get("static")
     runtime = plan.get("runtime")
     if not isinstance(static, dict):
@@ -383,7 +415,9 @@ def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
         or not isinstance(emitted, dict)
         or not isinstance(scn_references, dict)
     ):
-        raise ValueError("static layout, emitted-renderer, or SCN summary is missing")
+        raise ValueError(
+            "static layout, emitted-renderer, or SCN summary is missing"
+        )
 
     pending: list[str] = []
     failed: list[str] = []
@@ -415,16 +449,25 @@ def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(issues, list):
         raise ValueError("runtime issue inventory is missing")
 
-    expected_global_ids = [item_id for item_id, _requirement in GLOBAL_RUNTIME_CHECKS]
+    expected_global_ids = [
+        item_id for item_id, _requirement in GLOBAL_RUNTIME_CHECKS
+    ]
     actual_global_ids = [
-        check.get("id") if isinstance(check, dict) else None for check in global_checks
+        check.get("id") if isinstance(check, dict) else None
+        for check in global_checks
     ]
     if actual_global_ids != expected_global_ids:
-        raise ValueError("global runtime checks do not match the generated contract")
+        raise ValueError(
+            "global runtime checks do not match the generated contract"
+        )
 
     emitted_chapters = emitted.get("chapters")
-    if not isinstance(emitted_chapters, int) or emitted_chapters != len(chapters):
-        raise ValueError("runtime chapter inventory differs from static coverage")
+    if not isinstance(emitted_chapters, int) or emitted_chapters != len(
+        chapters
+    ):
+        raise ValueError(
+            "runtime chapter inventory differs from static coverage"
+        )
     chapter_names = [
         chapter.get("chapter") if isinstance(chapter, dict) else None
         for chapter in chapters
@@ -446,24 +489,33 @@ def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
     if len(text_box_names) != len(set(text_box_names)):
         raise ValueError("runtime text-box inventory contains duplicates")
     if set(text_box_names) != {str(name) for name in static_box_counts}:
-        raise ValueError("runtime text-box inventory differs from static coverage")
+        raise ValueError(
+            "runtime text-box inventory differs from static coverage"
+        )
 
     if any(
         not isinstance(record_id, str) or not record_id
         for record_id in fixed_records
     ):
-        raise ValueError("fixed-layout runtime inventory contains an invalid record ID")
+        raise ValueError(
+            "fixed-layout runtime inventory contains an invalid record ID"
+        )
     if len(fixed_records) != len(set(fixed_records)):
         raise ValueError("fixed-layout runtime inventory contains duplicates")
     expected_branch_count = scn_references.get("choice_branch_count")
     if not isinstance(expected_branch_count, int) or expected_branch_count < 0:
         raise ValueError("static choice-branch count is invalid")
     if len(branch_edges) != expected_branch_count:
-        raise ValueError("runtime choice-branch inventory differs from static coverage")
+        raise ValueError(
+            "runtime choice-branch inventory differs from static coverage"
+        )
     branch_ids = [
-        edge.get("id") if isinstance(edge, dict) else None for edge in branch_edges
+        edge.get("id") if isinstance(edge, dict) else None
+        for edge in branch_edges
     ]
-    if any(not isinstance(edge_id, str) or not edge_id for edge_id in branch_ids):
+    if any(
+        not isinstance(edge_id, str) or not edge_id for edge_id in branch_ids
+    ):
         raise ValueError("runtime choice-branch entry is malformed")
     if len(branch_ids) != len(set(branch_ids)):
         raise ValueError("runtime choice-branch inventory contains duplicates")
@@ -526,7 +578,9 @@ def verify_runtime_log(plan: dict[str, Any]) -> dict[str, Any]:
 def main() -> None:
     """Generate a whole-game plan or verify a filled runtime certification log."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT)
+    parser.add_argument(
+        "--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT
+    )
     parser.add_argument("--output", type=Path)
     parser.add_argument("--verify", type=Path)
     parser.add_argument("--cue", type=Path)
@@ -537,7 +591,9 @@ def main() -> None:
     if args.output:
         plan = build_plan(args.retail_root)
         if bool(args.cue) != bool(args.track1):
-            parser.error("provide both --cue and --track1 when binding a playtest")
+            parser.error(
+                "provide both --cue and --track1 when binding a playtest"
+            )
         if args.cue:
             bind_build_identity(plan, args.cue, args.track1)
         json_path, markdown_path = write_plan(args.output, plan)

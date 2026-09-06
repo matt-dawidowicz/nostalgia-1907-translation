@@ -6,11 +6,14 @@ import tempfile
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
 
-from work.clean_rebuild.source_json import load_json_array, load_json_object, loads_json  # noqa: E402
+from work.clean_rebuild.source_json import (  # noqa: E402
+    load_json_array,
+    load_json_object,
+    loads_json,
+)
 
 
 class StrictJsonTests(unittest.TestCase):
@@ -52,7 +55,9 @@ class StrictJsonTests(unittest.TestCase):
                 encoding="utf-8",
                 newline="\n",
             )
-            with self.assertRaisesRegex(ValueError, "duplicate JSON object key"):
+            with self.assertRaisesRegex(
+                ValueError, "duplicate JSON object key"
+            ):
                 load_json_array(path)
 
 

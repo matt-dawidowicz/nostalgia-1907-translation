@@ -21,7 +21,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-
 SECTOR_SIZE = 2048
 
 
@@ -59,14 +58,18 @@ def normalize_path(path: str) -> str:
     )
 
 
-def _parse_record(data: bytes, offset: int) -> tuple[str, int, int, int, int] | None:
+def _parse_record(
+    data: bytes, offset: int
+) -> tuple[str, int, int, int, int] | None:
     """Parse one ISO directory record from a directory extent."""
     if offset >= len(data) or data[offset] == 0:
         return None
     length = data[offset]
     record = data[offset : offset + length]
     if len(record) != length or length < 34:
-        raise IsoError(f"truncated directory record at relative offset {offset}")
+        raise IsoError(
+            f"truncated directory record at relative offset {offset}"
+        )
     extent_le = int.from_bytes(record[2:6], "little")
     extent_be = int.from_bytes(record[6:10], "big")
     size_le = int.from_bytes(record[10:14], "little")
@@ -79,9 +82,13 @@ def _parse_record(data: bytes, offset: int) -> tuple[str, int, int, int, int] | 
     identifier_end = 33 + name_size
     padding_size = 1 if name_size % 2 == 0 else 0
     if identifier_end + padding_size > length:
-        raise IsoError("ISO directory record truncates its file identifier or padding")
+        raise IsoError(
+            "ISO directory record truncates its file identifier or padding"
+        )
     if padding_size and record[identifier_end] != 0:
-        raise IsoError("ISO directory record has nonzero file-identifier padding")
+        raise IsoError(
+            "ISO directory record has nonzero file-identifier padding"
+        )
     raw_name = record[33:identifier_end]
     if raw_name == b"\0":
         name = "."
@@ -144,7 +151,9 @@ def read_entries(iso_path: Path) -> tuple[IsoEntry, ...]:
             if key in visited:
                 return
             visited.add(key)
-            _validate_extent(extent, size, iso_size, f"directory {prefix or '/'}")
+            _validate_extent(
+                extent, size, iso_size, f"directory {prefix or '/'}"
+            )
             iso.seek(extent * SECTOR_SIZE)
             directory = iso.read(size)
             offset = 0
@@ -168,7 +177,9 @@ def read_entries(iso_path: Path) -> tuple[IsoEntry, ...]:
                     iso_size,
                     f"{kind} {path}",
                 )
-                entry = IsoEntry(path, child_extent, child_size, flags, record_offset)
+                entry = IsoEntry(
+                    path, child_extent, child_size, flags, record_offset
+                )
                 entries.append(entry)
                 if entry.is_directory:
                     walk(path, child_extent, child_size)
@@ -180,7 +191,9 @@ def read_entries(iso_path: Path) -> tuple[IsoEntry, ...]:
 def unique_file(entries: tuple[IsoEntry, ...], target: str) -> IsoEntry:
     """Resolve one unambiguous non-directory path."""
     normalized = normalize_path(target)
-    matches = [entry for entry in entries if normalize_path(entry.path) == normalized]
+    matches = [
+        entry for entry in entries if normalize_path(entry.path) == normalized
+    ]
     if not matches:
         raise IsoError(f"ISO does not contain {target!r}")
     layouts = {(entry.extent, entry.size, entry.flags) for entry in matches}
@@ -295,7 +308,9 @@ def patch_fixed_extent_files(
             installed_payload = output.read(len(payload))
             padding = output.read(entry.allocated_size - len(payload))
         if installed_payload != payload or any(padding):
-            raise IsoError(f"{target}: installed payload or zero padding differs")
+            raise IsoError(
+                f"{target}: installed payload or zero padding differs"
+            )
         report.append(
             {
                 "target": target,

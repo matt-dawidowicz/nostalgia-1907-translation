@@ -7,7 +7,10 @@ import unittest
 
 from work.clean_rebuild.box_layout_audit import _row_details
 from work.clean_rebuild.renderer_format import measure_literal
-from work.clean_rebuild.scn_layout import SPECIAL_LINE_CELLS, display_occurrences
+from work.clean_rebuild.scn_layout import (
+    SPECIAL_LINE_CELLS,
+    display_occurrences,
+)
 from work.clean_rebuild.source_json import load_json_object
 from work.clean_rebuild.staff_credit_layout import (
     STAFF_CANVAS_CHARACTERS,
@@ -20,7 +23,9 @@ from work.clean_rebuild.translation_audit import SOURCES
 class BoxLayoutAuditTests(unittest.TestCase):
     """Protect geometry learned from the retail script and MAIN.BIN renderer."""
 
-    def test_special_line_and_paired_labels_have_eighteen_cell_contract(self) -> None:
+    def test_special_line_and_paired_labels_have_eighteen_cell_contract(
+        self,
+    ) -> None:
         """Use 18 cells for 0x20 and the exact adjacent 0x22/0x23 label pair."""
         fixed = display_occurrences(b"\x20\x00\x01", 1, None)
         self.assertEqual(len(fixed[0]), 1)
@@ -94,7 +99,9 @@ class BoxLayoutAuditTests(unittest.TestCase):
             with self.subTest(index=record["index"]):
                 self.assertEqual(text, centered_credit_line(text))
 
-    def test_staff_centering_audit_rejects_left_aligned_short_credit(self) -> None:
+    def test_staff_centering_audit_rejects_left_aligned_short_credit(
+        self,
+    ) -> None:
         """Catch the observed Ruthie-style regression even when width still fits."""
         report = audit_staff_credits(
             {
@@ -110,7 +117,9 @@ class BoxLayoutAuditTests(unittest.TestCase):
         )
         self.assertEqual(report["status"], "FAIL")
         self.assertEqual(report["failure_count"], 1)
-        self.assertIn("STAFF:019: credit is not centered", report["failures"][0])
+        self.assertIn(
+            "STAFF:019: credit is not centered", report["failures"][0]
+        )
         self.assertIn("padding 0/30, expected 15/15", report["failures"][0])
 
 

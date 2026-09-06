@@ -13,17 +13,21 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
+from .mes_format import (
+    DYNAMIC_GLYPHS_PER_PREFIX,
+    DYNAMIC_PREFIX_START,
+    read_mes,
+)
 from .source_json import load_json_object
-
-from .mes_format import DYNAMIC_GLYPHS_PER_PREFIX, DYNAMIC_PREFIX_START, read_mes
-
 
 HERE = Path(__file__).resolve().parent
 SOURCES = HERE / "sources"
 DEFAULT_RETAIL_ROOT = HERE / "retail_reference"
 EXEMPTIONS = HERE / "translation_exemptions.json"
 GLYPH_BYTES = 18
-FIXED_FONT_SHA256 = "0204DBCA3D3DC2C1B23CCC3FC10FC61DD2F1054805619B2E953247E61A1C954A"
+FIXED_FONT_SHA256 = (
+    "0204DBCA3D3DC2C1B23CCC3FC10FC61DD2F1054805619B2E953247E61A1C954A"
+)
 
 
 def _sha256(data: bytes) -> str:
@@ -136,7 +140,10 @@ def audit(retail_root: Path) -> dict[str, object]:
 
     fixed_path = retail_root / "retail_files" / "FIX_CODE.FNT"
     fixed_data = fixed_path.read_bytes()
-    if len(fixed_data) % GLYPH_BYTES or _sha256(fixed_data) != FIXED_FONT_SHA256:
+    if (
+        len(fixed_data) % GLYPH_BYTES
+        or _sha256(fixed_data) != FIXED_FONT_SHA256
+    ):
         raise ValueError("retail fixed font failed its size/hash guard")
     fixed = tuple(
         fixed_data[offset : offset + GLYPH_BYTES]
@@ -158,7 +165,9 @@ def audit(retail_root: Path) -> dict[str, object]:
         mes_path = retail_root / "retail_unpacked" / chapter / f"{chapter}.MES"
         mes = read_mes(mes_path)
         if mes.record_count != len(records):
-            raise ValueError(f"{chapter}: retail/canonical record-count mismatch")
+            raise ValueError(
+                f"{chapter}: retail/canonical record-count mismatch"
+            )
         for expected_index, (source_record, english_record) in enumerate(
             zip(mes.records, records, strict=True)
         ):
@@ -167,14 +176,18 @@ def audit(retail_root: Path) -> dict[str, object]:
                 not isinstance(english_record, dict)
                 or english_record.get("index") != expected_index
             ):
-                raise ValueError(f"{record_id}: canonical numeric ID is not stable")
+                raise ValueError(
+                    f"{record_id}: canonical numeric ID is not stable"
+                )
             policy = english_record.get("policy")
             if policy not in {"translate", "preserve"}:
                 raise ValueError(f"{record_id}: invalid canonical policy")
             resolved = _glyphs(source_record, fixed, mes.glyphs)
             normalized = _trim_blank(resolved)
             rendered_english = english_record.get("text")
-            english = normalize_english_for_semantic_comparison(rendered_english)
+            english = normalize_english_for_semantic_comparison(
+                rendered_english
+            )
             item = {
                 "id": record_id,
                 "chapter": chapter,
@@ -188,7 +201,9 @@ def audit(retail_root: Path) -> dict[str, object]:
                 "normalized_visible_glyph_count": len(normalized),
                 "english": english,
                 "english_rendered": (
-                    rendered_english if isinstance(rendered_english, str) else ""
+                    rendered_english
+                    if isinstance(rendered_english, str)
+                    else ""
                 ),
                 "category": _category(len(normalized), english, policy),
             }
@@ -201,7 +216,9 @@ def audit(retail_root: Path) -> dict[str, object]:
         if len(members) < 2:
             continue
         english_values = sorted({member["english"] for member in members})
-        rendered_values = sorted({member["english_rendered"] for member in members})
+        rendered_values = sorted(
+            {member["english_rendered"] for member in members}
+        )
         categories = sorted({member["category"] for member in members})
         duplicate_groups.append(
             {
@@ -212,7 +229,9 @@ def audit(retail_root: Path) -> dict[str, object]:
                 "formatting_only_variants": len(english_values) == 1
                 and len(rendered_values) > 1,
                 "category": (
-                    categories[0] if len(categories) == 1 else "mixed_or_unresolved"
+                    categories[0]
+                    if len(categories) == 1
+                    else "mixed_or_unresolved"
                 ),
                 "records": [
                     {

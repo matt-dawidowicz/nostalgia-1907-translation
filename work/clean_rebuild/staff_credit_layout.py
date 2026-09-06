@@ -25,7 +25,6 @@ from typing import Any
 from .source_json import load_json_object
 from .translation_audit import SOURCES
 
-
 STAFF_CANVAS_CELLS = 18
 STAFF_CANVAS_CHARACTERS = STAFF_CANVAS_CELLS * 2
 DEFAULT_STAFF_SOURCE = SOURCES / "STAFF.json"
@@ -65,7 +64,9 @@ def _edge_spaces(text: str) -> tuple[int, int]:
     return leading, trailing
 
 
-def audit_staff_credits(source: dict[str, Any] | None = None) -> dict[str, object]:
+def audit_staff_credits(
+    source: dict[str, Any] | None = None,
+) -> dict[str, object]:
     """Audit every translated STAFF record for exact width and centering.
 
     Args:
@@ -80,11 +81,15 @@ def audit_staff_credits(source: dict[str, Any] | None = None) -> dict[str, objec
         OSError: If the canonical source cannot be read when ``source`` is
             omitted.
     """
-    document = load_json_object(DEFAULT_STAFF_SOURCE) if source is None else source
+    document = (
+        load_json_object(DEFAULT_STAFF_SOURCE) if source is None else source
+    )
     chapter = document.get("chapter")
     records = document.get("records")
     if chapter != "STAFF" or not isinstance(records, list):
-        raise ValueError("STAFF credit audit requires a STAFF source record list")
+        raise ValueError(
+            "STAFF credit audit requires a STAFF source record list"
+        )
 
     failures: list[str] = []
     audited_ids: list[str] = []
@@ -94,7 +99,9 @@ def audit_staff_credits(source: dict[str, Any] | None = None) -> dict[str, objec
         index = record.get("index")
         text = record.get("text")
         if not isinstance(index, int) or not isinstance(text, str):
-            raise ValueError("translated STAFF record requires integer index and text")
+            raise ValueError(
+                "translated STAFF record requires integer index and text"
+            )
         record_id = f"STAFF:{index:03d}"
         audited_ids.append(record_id)
         if len(text) != STAFF_CANVAS_CHARACTERS:

@@ -11,9 +11,15 @@ from collections.abc import Iterable
 from pathlib import Path
 
 try:
-    from tools.repository_inventory import RepositoryInventoryError, git_tracked_files
+    from tools.repository_inventory import (
+        RepositoryInventoryError,
+        git_tracked_files,
+    )
 except ModuleNotFoundError:  # Direct ``python tools/<script>.py`` execution.
-    from repository_inventory import RepositoryInventoryError, git_tracked_files
+    from repository_inventory import (
+        RepositoryInventoryError,
+        git_tracked_files,
+    )
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -106,7 +112,9 @@ class SourceInventoryError(RuntimeError):
     """Report that a strict release inventory could not be enumerated safely."""
 
 
-def _reject_duplicate_json_keys(pairs: list[tuple[str, object]]) -> dict[str, object]:
+def _reject_duplicate_json_keys(
+    pairs: list[tuple[str, object]],
+) -> dict[str, object]:
     """Build one JSON object while rejecting duplicate keys at every level."""
     result: dict[str, object] = {}
     for key, value in pairs:
@@ -124,9 +132,13 @@ def _is_git_metadata(path: Path) -> bool:
 def _is_release_local_state(path: Path) -> bool:
     """Return whether a release member belongs to generated or private state."""
     for part in path.parts[:-1]:
-        if part in FORBIDDEN_RELEASE_DIRECTORY_NAMES or part.endswith(".egg-info"):
+        if part in FORBIDDEN_RELEASE_DIRECTORY_NAMES or part.endswith(
+            ".egg-info"
+        ):
             return True
-        if any(part.startswith(prefix) for prefix in EXCLUDED_DIRECTORY_PREFIXES):
+        if any(
+            part.startswith(prefix) for prefix in EXCLUDED_DIRECTORY_PREFIXES
+        ):
             return True
     return path.suffix.lower() in FORBIDDEN_RELEASE_SUFFIXES
 
@@ -144,7 +156,9 @@ def _excluded_directory_name(name: str) -> bool:
     return (
         name in EXCLUDED_DIRECTORY_NAMES
         or name.endswith(".egg-info")
-        or any(name.startswith(prefix) for prefix in EXCLUDED_DIRECTORY_PREFIXES)
+        or any(
+            name.startswith(prefix) for prefix in EXCLUDED_DIRECTORY_PREFIXES
+        )
     )
 
 
@@ -152,7 +166,9 @@ def iter_source_files(root: Path) -> Iterable[Path]:
     """Yield source files while pruning generated/local trees before descent."""
     for directory, directory_names, file_names in root.walk(top_down=True):
         directory_names[:] = sorted(
-            name for name in directory_names if not _excluded_directory_name(name)
+            name
+            for name in directory_names
+            if not _excluded_directory_name(name)
         )
         for name in sorted(file_names):
             yield directory / name
@@ -173,17 +189,19 @@ def iter_release_files(root: Path) -> tuple[str, tuple[Path, ...]]:
     return "package-members", files
 
 
-def _check_text(path: Path, relative: str, failures: list[str]) -> None:
-    """Validate UTF-8, LF endings, trailing whitespace, and final newline."""
-    try:
-        data = path.read_bytes()
-        text = data.decode("utf-8")
-    except UnicodeDecodeError as exc:
-        failures.append(f"{relative}: not valid UTF-8: {exc}")
-        return
+def _check_text(
+    path: Path,
+    relative: str,
+    data: bytes,
+    text: str,
+    failures: list[str],
+) -> None:
+    """Validate decoded UTF-8 source text and line-ending hygiene."""
     suffix = path.suffix.lower()
     if b"\r" in data and suffix != ".ps1":
-        failures.append(f"{relative}: contains CR characters; source must use LF")
+        failures.append(
+            f"{relative}: contains CR characters; source must use LF"
+        )
     if suffix == ".ps1":
         unmatched = data.replace(b"\r\n", b"")
         if b"\r" in unmatched or b"\n" in unmatched:
@@ -197,10 +215,14 @@ def _check_text(path: Path, relative: str, failures: list[str]) -> None:
             failures.append(f"{relative}:{line_number}: trailing whitespace")
 
 
-def _check_structured_source(path: Path, relative: str, failures: list[str]) -> None:
-    """Parse Python, JSON, and TOML files with strict source-level checks."""
+def _check_structured_source(
+    path: Path,
+    relative: str,
+    text: str,
+    failures: list[str],
+) -> None:
+    """Parse already-decoded Python, JSON, and TOML source text."""
     try:
-        text = path.read_text(encoding="utf-8")
         if path.suffix == ".py":
             ast.parse(text, filename=relative)
         elif path.suffix == ".json":
@@ -251,7 +273,9 @@ def audit(root: Path, *, strict_release: bool = False) -> dict[str, object]:
         relative = path.relative_to(root).as_posix()
         files_checked += 1
         suffix = path.suffix.lower()
-        if suffix in FORBIDDEN_MEDIA_SUFFIXES or _is_numbered_save_state(suffix):
+        if suffix in FORBIDDEN_MEDIA_SUFFIXES or _is_numbered_save_state(
+            suffix
+        ):
             forbidden_media.append(relative)
         if strict_release and path.name.casefold() in LOCAL_ONLY_FILENAMES:
             local_only_files.append(relative)
@@ -259,15 +283,25 @@ def audit(root: Path, *, strict_release: bool = False) -> dict[str, object]:
             release_local_state.append(relative)
         if (
             path.name in RETIRED_GENERATED_FILENAMES
-            or path.name.startswith("recover_bonus_") and path.suffix == ".json"
+            or path.name.startswith("recover_bonus_")
+            and path.suffix == ".json"
         ):
             retired_generated.append(relative)
+        text: str | None = None
+        data: bytes | None = None
         if suffix in TEXT_SUFFIXES or path.name in TEXT_NAMES:
             text_files_checked += 1
-            _check_text(path, relative, failures)
+            try:
+                data = path.read_bytes()
+                text = data.decode("utf-8")
+            except UnicodeDecodeError as exc:
+                failures.append(f"{relative}: not valid UTF-8: {exc}")
+            else:
+                _check_text(path, relative, data, text, failures)
         if suffix in {".json", ".py", ".toml"}:
             structured_files_checked += 1
-            _check_structured_source(path, relative, failures)
+            if text is not None:
+                _check_structured_source(path, relative, text, failures)
 
     if forbidden_media:
         failures.extend(

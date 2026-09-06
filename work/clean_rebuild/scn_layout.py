@@ -28,7 +28,6 @@ from dataclasses import dataclass
 
 from .profile_schema import canonical_profile_index
 
-
 FLOATING_WIDTHS = {
     0x07: 4,
     0x08: 5,
@@ -89,7 +88,13 @@ DIALOGUE_OPENING_ANCHOR_CODE = 0x10
 
 LABEL_ROLES = frozenset((ROLE_SPEAKER, ROLE_LOCATION, ROLE_PERSPECTIVE))
 PROSE_ROLES = frozenset(
-    (ROLE_DIALOGUE, ROLE_CONTINUATION, ROLE_THOUGHT, ROLE_OVERLAY, ROLE_NARRATION)
+    (
+        ROLE_DIALOGUE,
+        ROLE_CONTINUATION,
+        ROLE_THOUGHT,
+        ROLE_OVERLAY,
+        ROLE_NARRATION,
+    )
 )
 
 
@@ -131,7 +136,9 @@ class Layout:
         if any(width <= 0 for width in widths):
             raise ScnLayoutError("layout cell widths must be positive")
         if self.runtime_first < self.visible_first:
-            raise ScnLayoutError("layout first-row stride is narrower than visibility")
+            raise ScnLayoutError(
+                "layout first-row stride is narrower than visibility"
+            )
         if self.runtime_continuation < self.visible_continuation:
             raise ScnLayoutError(
                 "layout continuation stride is narrower than visibility"
@@ -141,9 +148,13 @@ class Layout:
         if not isinstance(self.repeat_first_row_on_page, bool):
             raise ScnLayoutError("layout page-repeat flag must be boolean")
         if self.opening_anchor_cells < 0:
-            raise ScnLayoutError("layout opening anchor cells must not be negative")
+            raise ScnLayoutError(
+                "layout opening anchor cells must not be negative"
+            )
         if self.text_box not in TEXT_BOX_IDS:
-            raise ScnLayoutError(f"unknown layout text-box identity {self.text_box!r}")
+            raise ScnLayoutError(
+                f"unknown layout text-box identity {self.text_box!r}"
+            )
         if (
             self.opening_anchor_cells >= self.visible_first
             or self.opening_anchor_cells >= self.runtime_first
@@ -186,11 +197,15 @@ class Layout:
 
     def physical_cadence(self) -> tuple[int, ...]:
         """Return the emitted-cell cadence for one complete renderer cycle."""
-        return tuple(self.physical_cells(row) for row in range(self.cadence_rows()))
+        return tuple(
+            self.physical_cells(row) for row in range(self.cadence_rows())
+        )
 
     def visible_cadence(self) -> tuple[int, ...]:
         """Return prose capacities for one complete renderer cycle."""
-        return tuple(self.visible_cells(row) for row in range(self.cadence_rows()))
+        return tuple(
+            self.visible_cells(row) for row in range(self.cadence_rows())
+        )
 
     def visible_cells(self, row_index: int) -> int:
         """Return the proven visible capacity for one flattened row index."""
@@ -219,7 +234,9 @@ class Layout:
         and every later row retains its independently declared geometry.
         """
         if cells <= 0:
-            raise ScnLayoutError("layout opening anchor cells must be positive")
+            raise ScnLayoutError(
+                "layout opening anchor cells must be positive"
+            )
         if self.visible_first <= cells or self.runtime_first <= cells:
             raise ScnLayoutError(
                 "layout opening anchor leaves no first-row prose cells"
@@ -271,7 +288,9 @@ def _pair(
     return first, continuation
 
 
-def _indexed_pairs(profile: dict[str, object], key: str) -> dict[int, tuple[int, int]]:
+def _indexed_pairs(
+    profile: dict[str, object], key: str
+) -> dict[int, tuple[int, int]]:
     """Read record-indexed first/continuation width overrides."""
     raw = profile.get(key, {})
     if not isinstance(raw, dict):
@@ -287,7 +306,9 @@ def _indexed_pairs(profile: dict[str, object], key: str) -> dict[int, tuple[int,
                 f"profile {key} has invalid record {raw_index!r}"
             ) from exc
         if index < 0 or not isinstance(raw_layout, dict):
-            raise ScnLayoutError(f"profile {key} has invalid record {raw_index!r}")
+            raise ScnLayoutError(
+                f"profile {key} has invalid record {raw_index!r}"
+            )
         first = raw_layout.get("first")
         continuation = raw_layout.get("continuation")
         if (
@@ -331,7 +352,9 @@ def _window_subtypes(profile: dict[str, object]) -> set[int]:
     # 0x28 is overloaded by selector commands in several chapters. It is
     # visible text only where the source profile explicitly opts it in.
     raw = profile.get("scn_window_text_subtypes", [0x27])
-    if not isinstance(raw, list) or not all(isinstance(item, int) for item in raw):
+    if not isinstance(raw, list) or not all(
+        isinstance(item, int) for item in raw
+    ):
         raise ScnLayoutError("profile scn_window_text_subtypes is invalid")
     return set(raw)
 
@@ -359,7 +382,9 @@ def _window_text_commands(
         indexes = [text_id - 1]
         cursor = offset + 8
         while cursor + 3 <= len(scn) and scn[cursor] == 0x27:
-            continuation_id = int.from_bytes(scn[cursor + 1 : cursor + 3], "big")
+            continuation_id = int.from_bytes(
+                scn[cursor + 1 : cursor + 3], "big"
+            )
             if not 1 <= continuation_id <= record_count:
                 break
             indexes.append(continuation_id - 1)
@@ -390,7 +415,9 @@ def _selector_window_commands(
         cursor = offset + 1
         display_targets: list[int] = []
         while cursor + 6 <= len(scn) and scn[cursor] == 0x43:
-            display_targets.append(int.from_bytes(scn[cursor + 4 : cursor + 6], "big"))
+            display_targets.append(
+                int.from_bytes(scn[cursor + 4 : cursor + 6], "big")
+            )
             cursor += 6
         if not display_targets or cursor >= len(scn) or scn[cursor] != 0x44:
             offset += 1
@@ -484,10 +511,19 @@ def display_occurrences(
                     max_rows=1,
                     evidence="MAIN.BIN 12px/cell special-line renderer",
                 )
-        elif opcode == 0x22 and offset + 6 <= len(scn) and scn[offset + 3] == 0x23:
+        elif (
+            opcode == 0x22
+            and offset + 6 <= len(scn)
+            and scn[offset + 3] == 0x23
+        ):
             location_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
-            perspective_id = int.from_bytes(scn[offset + 4 : offset + 6], "big")
-            if 1 <= location_id <= record_count and 1 <= perspective_id <= record_count:
+            perspective_id = int.from_bytes(
+                scn[offset + 4 : offset + 6], "big"
+            )
+            if (
+                1 <= location_id <= record_count
+                and 1 <= perspective_id <= record_count
+            ):
                 add(
                     location_id - 1,
                     offset=f"0x{offset:X}",
@@ -535,7 +571,11 @@ def display_occurrences(
                     fields["role"] = ROLE_OVERLAY
                 add(text_id - 1, **fields)
                 special_window_offsets.add(offset)
-        elif opcode == 0x31 and offset + 6 <= len(scn) and scn[offset + 3] == 0xFF:
+        elif (
+            opcode == 0x31
+            and offset + 6 <= len(scn)
+            and scn[offset + 3] == 0xFF
+        ):
             text_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
             jump = int.from_bytes(scn[offset + 4 : offset + 6], "big")
             if 1 <= text_id <= record_count and 0 < jump < len(scn):
@@ -578,9 +618,13 @@ def display_occurrences(
                 permitted_cells=FLOATING_WIDTHS.get(width_byte),
                 evidence="SCN floating-window width operand",
             )
-    for offset, subtype, width_byte, raw_y, indexes in _selector_window_commands(
-        scn, record_count
-    ):
+    for (
+        offset,
+        subtype,
+        width_byte,
+        raw_y,
+        indexes,
+    ) in _selector_window_commands(scn, record_count):
         for index in indexes:
             add(
                 index,
@@ -611,15 +655,21 @@ def _role_overrides(profile: dict[str, object]) -> dict[int, frozenset[str]]:
                 raw_index, field="role_overrides", chapter="SCN profile"
             )
         except ValueError as exc:
-            raise ScnLayoutError(f"invalid role override record {raw_index!r}") from exc
+            raise ScnLayoutError(
+                f"invalid role override record {raw_index!r}"
+            ) from exc
         values = [raw_roles] if isinstance(raw_roles, str) else raw_roles
         if (
             index < 0
             or not isinstance(values, list)
             or not values
-            or not all(isinstance(role, str) and role in allowed for role in values)
+            or not all(
+                isinstance(role, str) and role in allowed for role in values
+            )
         ):
-            raise ScnLayoutError(f"invalid role override for record {raw_index!r}")
+            raise ScnLayoutError(
+                f"invalid role override for record {raw_index!r}"
+            )
         output[index] = frozenset(values)
     return output
 
@@ -631,35 +681,32 @@ def infer_layouts(
     profile: dict[str, object] | None,
     *,
     retail_records: tuple[bytes, ...] | None = None,
+    occurrences: dict[int, list[dict[str, object]]] | None = None,
 ) -> dict[int, Layout]:
-    """Infer translated-record geometry from structural SCN commands.
+    """Infer translated-record geometry from shared structural SCN evidence.
 
-    Dialogue, continuation, floating-window, and selector command operands are
-    converted from one-based SCN IDs to zero-based canonical indexes. When the
-    matching hash-locked MES records are supplied, a retail opening quote at
-    the start of a normal dialogue record becomes a one-time blank English
-    gutter. Reviewed profile overrides may refine visible/runtime widths but
-    cannot make runtime stride smaller than visible capacity or resolve
-    conflicting SCN evidence silently.
+    When ``occurrences`` is supplied by :func:`infer_contracts`, role, layout,
+    and row-limit inference consume one common command inventory instead of
+    independently rescanning the SCN byte stream.
     """
     settings = profile or {}
-    # This is a native lower-dialogue contract, not a generic English width:
-    # physical cells repeat 12/11/11, with an optional quote gutter in the
-    # first 12-cell row. Runtime screenshots of PART1A:003 confirm the
-    # 11-cell continuation boundary ("more" must not be packed as 12 cells).
     dialogue_visible = _pair(settings, "scn_dialogue_layout", (12, 11))
     continuation_visible = _pair(settings, "scn_continuation_layout", (11, 10))
-    dialogue_runtime = _pair(settings, "scn_dialogue_runtime_layout", dialogue_visible)
+    dialogue_runtime = _pair(
+        settings, "scn_dialogue_runtime_layout", dialogue_visible
+    )
     continuation_runtime = _pair(
         settings, "scn_continuation_runtime_layout", (11, 11)
     )
-    window_subtypes = _window_subtypes(settings)
     visible_overrides = _indexed_pairs(settings, "layout_overrides")
     runtime_overrides = _indexed_pairs(settings, "runtime_layout_overrides")
     text_box_overrides = _indexed_text_boxes(settings)
     layouts: dict[int, Layout] = {}
     if retail_records is not None and len(retail_records) != record_count:
-        raise ScnLayoutError("retail MES record count does not match SCN layout input")
+        raise ScnLayoutError(
+            "retail MES record count does not match SCN layout input"
+        )
+    inventory = occurrences or display_occurrences(scn, record_count, profile)
     dialogue_anchor_indexes: set[int] = set()
 
     def add(index: int, layout: Layout, source: str) -> None:
@@ -681,12 +728,14 @@ def infer_layouts(
             )
         layouts[index] = layout
 
-    for offset, opcode in enumerate(scn):
-        if opcode == 0x21 and offset + 5 <= len(scn):
-            first_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
-            second_id = int.from_bytes(scn[offset + 3 : offset + 5], "big")
-            if 1 <= second_id <= record_count:
-                index = second_id - 1
+    floating_roles = {ROLE_THOUGHT, ROLE_OVERLAY, ROLE_CHOICE}
+    for index, record_occurrences in inventory.items():
+        if index not in translated_indexes:
+            continue
+        for occurrence in record_occurrences:
+            role = occurrence.get("role")
+            source = str(occurrence.get("offset", "unknown SCN offset"))
+            if role == ROLE_DIALOGUE:
                 add(
                     index,
                     Layout(
@@ -696,15 +745,16 @@ def infer_layouts(
                         repeat_first_row_on_page=False,
                         text_box=TEXT_BOX_LOWER_DIALOGUE,
                     ),
-                    f"0x21 dialogue at 0x{offset:X}",
+                    f"0x21 dialogue at {source}",
                 )
-                if retail_records is not None and retail_records[index][:1] == bytes(
-                    (DIALOGUE_OPENING_ANCHOR_CODE,)
-                ):
+                if retail_records is not None and retail_records[index][
+                    :1
+                ] == bytes((DIALOGUE_OPENING_ANCHOR_CODE,)):
                     dialogue_anchor_indexes.add(index)
-            elif second_id == 0 and 1 <= first_id <= record_count:
+                continue
+            if role == ROLE_CONTINUATION:
                 add(
-                    first_id - 1,
+                    index,
                     Layout(
                         *continuation_visible,
                         *continuation_runtime,
@@ -712,56 +762,32 @@ def infer_layouts(
                         repeat_first_row_on_page=False,
                         text_box=TEXT_BOX_LOWER_CONTINUATION,
                     ),
-                    f"0x21 continuation at 0x{offset:X}",
+                    f"0x21 continuation at {source}",
                 )
-    for offset, _subtype, width_byte, _raw_y, indexes in _window_text_commands(
-        scn, record_count, window_subtypes
-    ):
-        eligible = [index for index in indexes if index in translated_indexes]
-        if not eligible:
-            # Preserved records retain their retail wrapping byte-for-byte.
-            continue
-        if width_byte not in FLOATING_WIDTHS:
-            if all(index in visible_overrides for index in eligible):
-                # Exceptional renderers (for example START's full-screen
-                # narration) have reviewed explicit contracts below.
                 continue
-            raise ScnLayoutError(
-                f"unsupported floating width 0x{width_byte:02X} at 0x{offset:X}"
-            )
-        cells = FLOATING_WIDTHS[width_byte]
-        for chain_position, index in enumerate(indexes):
+            if (
+                occurrence.get("box") != "floating_window"
+                or role not in floating_roles
+            ):
+                continue
+            cells = occurrence.get("permitted_cells")
+            if not isinstance(cells, int):
+                if index in visible_overrides:
+                    continue
+                width = occurrence.get("width_operand", "unknown")
+                raise ScnLayoutError(
+                    f"unsupported floating width {width} at {source}"
+                )
             add(
                 index,
                 Layout(cells, cells, cells, cells, text_box=TEXT_BOX_FLOATING),
-                (
-                    f"0x24 window at 0x{offset:X}"
-                    if chain_position == 0
-                    else f"0x27 window continuation at 0x{offset + 8 + 3 * (chain_position - 1):X}"
-                ),
-            )
-
-    for offset, _subtype, width_byte, _raw_y, indexes in _selector_window_commands(
-        scn, record_count
-    ):
-        if width_byte not in FLOATING_WIDTHS:
-            raise ScnLayoutError(
-                f"unsupported selector width 0x{width_byte:02X} at 0x{offset:X}"
-            )
-        cells = FLOATING_WIDTHS[width_byte]
-        for index in indexes:
-            add(
-                index,
-                # Selector tables target the same 0x24 window renderer as
-                # ordinary floating text. The record can also retain the
-                # menu_choice role, but its cell contract must not conflict
-                # with an identical floating-window use elsewhere in SCN.
-                Layout(cells, cells, cells, cells, text_box=TEXT_BOX_FLOATING),
-                f"0x42/0x43 selector window at 0x{offset:X}",
+                f"floating window at {source}",
             )
 
     for index in sorted(
-        set(visible_overrides) | set(runtime_overrides) | set(text_box_overrides)
+        set(visible_overrides)
+        | set(runtime_overrides)
+        | set(text_box_overrides)
     ):
         if index not in translated_indexes:
             continue
@@ -789,14 +815,18 @@ def infer_layouts(
             *runtime,
             page_rows=previous.page_rows if previous is not None else None,
             repeat_first_row_on_page=(
-                previous.repeat_first_row_on_page if previous is not None else False
+                previous.repeat_first_row_on_page
+                if previous is not None
+                else False
             ),
             opening_anchor_cells=(
                 previous.opening_anchor_cells if previous is not None else 0
             ),
             text_box=text_box_overrides.get(
                 index,
-                previous.text_box if previous is not None else TEXT_BOX_UNCLASSIFIED,
+                previous.text_box
+                if previous is not None
+                else TEXT_BOX_UNCLASSIFIED,
             ),
         )
         if (
@@ -819,15 +849,18 @@ def infer_roles(
     record_count: int,
     translated_indexes: set[int],
     profile: dict[str, object] | None,
+    *,
+    occurrences: dict[int, list[dict[str, object]]] | None = None,
 ) -> dict[int, frozenset[str]]:
-    """Infer UI roles from the shared structural display inventory."""
+    """Infer UI roles from one shared structural display inventory."""
     settings = profile or {}
     roles: dict[int, set[str]] = {}
+    inventory = occurrences or display_occurrences(scn, record_count, profile)
 
-    for index, occurrences in display_occurrences(scn, record_count, profile).items():
+    for index, record_occurrences in inventory.items():
         if index not in translated_indexes:
             continue
-        for occurrence in occurrences:
+        for occurrence in record_occurrences:
             role = occurrence.get("role")
             if isinstance(role, str):
                 roles.setdefault(index, set()).add(role)
@@ -835,7 +868,9 @@ def infer_roles(
     for index, replacement in _role_overrides(settings).items():
         if index in translated_indexes:
             roles[index] = set(replacement)
-    return {index: frozenset(values) for index, values in sorted(roles.items())}
+    return {
+        index: frozenset(values) for index, values in sorted(roles.items())
+    }
 
 
 def infer_row_limits(
@@ -843,43 +878,37 @@ def infer_row_limits(
     record_count: int,
     translated_indexes: set[int],
     profile: dict[str, object] | None,
+    *,
+    occurrences: dict[int, list[dict[str, object]]] | None = None,
 ) -> dict[int, int]:
-    """Infer visible row limits from floating-window Y coordinates.
-
-    Only structurally valid configured window subtypes participate. Profile
-    overrides are explicit record-indexed evidence for exceptional renderers.
-    """
+    """Infer floating-window row limits from shared structural occurrences."""
     settings = profile or {}
-    window_subtypes = _window_subtypes(settings)
     limits: dict[int, int] = {}
-    for offset, _subtype, _width_byte, raw_y, indexes in _window_text_commands(
-        scn, record_count, window_subtypes
-    ):
-        max_rows = (28 - raw_y - 2) // 2
-        if max_rows <= 0:
-            raise ScnLayoutError(f"floating window at 0x{offset:X} has no visible rows")
-        for index in indexes:
-            if index not in translated_indexes:
+    inventory = occurrences or display_occurrences(scn, record_count, profile)
+    floating_roles = {ROLE_THOUGHT, ROLE_OVERLAY, ROLE_CHOICE}
+    for index, record_occurrences in inventory.items():
+        if index not in translated_indexes:
+            continue
+        for occurrence in record_occurrences:
+            if (
+                occurrence.get("box") != "floating_window"
+                or occurrence.get("role") not in floating_roles
+            ):
                 continue
-            previous = limits.get(index)
-            # A record may be reused by windows at different Y positions. It
-            # must satisfy the tightest of those real renderers.
-            limits[index] = (
-                min(previous, max_rows) if previous is not None else max_rows
-            )
-    for offset, _subtype, _width_byte, raw_y, indexes in _selector_window_commands(
-        scn, record_count
-    ):
-        max_rows = (28 - raw_y - 2) // 2
-        if max_rows <= 0:
-            raise ScnLayoutError(f"selector window at 0x{offset:X} has no visible rows")
-        for index in indexes:
-            if index not in translated_indexes:
+            raw_y = occurrence.get("y_operand")
+            if not isinstance(raw_y, int):
                 continue
+            max_rows = (28 - raw_y - 2) // 2
+            if max_rows <= 0:
+                offset = occurrence.get("offset", "unknown SCN offset")
+                raise ScnLayoutError(
+                    f"floating window at {offset} has no visible rows"
+                )
             previous = limits.get(index)
             limits[index] = (
                 min(previous, max_rows) if previous is not None else max_rows
             )
+
     raw_overrides = settings.get("row_limit_overrides", {})
     if not isinstance(raw_overrides, dict):
         raise ScnLayoutError("profile row_limit_overrides is not an object")
@@ -889,7 +918,9 @@ def infer_row_limits(
                 raw_index, field="row_limit_overrides", chapter="SCN profile"
             )
         except ValueError as exc:
-            raise ScnLayoutError(f"invalid row-limit record {raw_index!r}") from exc
+            raise ScnLayoutError(
+                f"invalid row-limit record {raw_index!r}"
+            ) from exc
         if not isinstance(raw_limit, int) or raw_limit <= 0:
             raise ScnLayoutError(f"invalid row limit for record {raw_index!r}")
         if index in translated_indexes:
@@ -905,21 +936,35 @@ def infer_contracts(
     *,
     retail_records: tuple[bytes, ...] | None = None,
 ) -> dict[int, RecordContract]:
-    """Return shared role, layout, and row contracts for translated records.
+    """Return roles, layouts, and row limits from one shared SCN inventory.
 
-    The result is keyed only by translated canonical indexes that have at least
-    one proven role, layout, or vertical limit. English text is never consulted,
-    preventing the translation from determining its own renderer rules.
+    English text is never consulted. A single occurrence inventory is reused by
+    every inference layer so structural command parsing cannot drift or be
+    repeated three times for one chapter.
     """
-    roles = infer_roles(scn, record_count, translated_indexes, profile)
+    occurrences = display_occurrences(scn, record_count, profile)
+    roles = infer_roles(
+        scn,
+        record_count,
+        translated_indexes,
+        profile,
+        occurrences=occurrences,
+    )
     layouts = infer_layouts(
         scn,
         record_count,
         translated_indexes,
         profile,
         retail_records=retail_records,
+        occurrences=occurrences,
     )
-    row_limits = infer_row_limits(scn, record_count, translated_indexes, profile)
+    row_limits = infer_row_limits(
+        scn,
+        record_count,
+        translated_indexes,
+        profile,
+        occurrences=occurrences,
+    )
     indexes = set(roles) | set(layouts) | set(row_limits)
     return {
         index: RecordContract(
