@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: efficiency-campaign-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   autofix:
     if: ${{ !contains(github.event.head_commit.message, '[campaign-generated]') }}
@@ -28,6 +32,9 @@ jobs:
 
       - name: Apply deterministic refactor
         run: python tools/efficiency_autofix.py
+
+      - name: Apply non-autofixable PEP repairs
+        run: python tools/efficiency_followup.py
 
       - name: Write canonical Ruff configuration
         shell: bash
