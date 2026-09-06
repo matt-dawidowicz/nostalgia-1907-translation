@@ -34,6 +34,10 @@ class LzError(ValueError):
     """Raised when an archive or compressed member violates the game format."""
 
 
+class LzSlotOverflowError(LzError):
+    """Raised when a replacement cannot fit its original retail member slot."""
+
+
 @dataclass(frozen=True)
 class Entry:
     """One validated member-table row.
@@ -459,13 +463,17 @@ def replace_members_fixed(
     and decoder before the output is accepted.
 
     Raises:
-        LzError: If a name is ambiguous, compressed data exceeds its retail
-            slot, or any output invariant fails.
+        LzSlotOverflowError: If compressed replacement data exceeds its retail
+            member slot.
+        LzError: If paths alias, a name is ambiguous, or another output invariant
+            fails.
 
     Side Effects:
         Writes ``output_archive`` only; ``source_archive`` and replacement
         source files are read-only.
     """
+    if source_archive.resolve() == output_archive.resolve():
+        raise LzError("source and output archive paths must differ")
     if not replacements:
         raise LzError("at least one archive replacement is required")
     data = bytearray(source_archive.read_bytes())
@@ -487,7 +495,7 @@ def replace_members_fixed(
         )
         slot_size = slot_end - entry.offset
         if len(payload) > slot_size:
-            raise LzError(
+            raise LzSlotOverflowError(
                 f"{name}: encoded payload is {len(payload)} bytes but retail slot is {slot_size}"
             )
         data[entry.offset : slot_end] = payload + b"\0" * (slot_size - len(payload))
@@ -535,9 +543,15 @@ def replace_members_reflow(
     Returns:
         Replacement details and remaining outer-allocation headroom.
 
+    Raises:
+        LzError: If paths alias or any archive, capacity, or round-trip invariant
+            fails.
+
     Side Effects:
         Writes and reparses ``output_archive``; no input is modified.
     """
+    if source_archive.resolve() == output_archive.resolve():
+        raise LzError("source and output archive paths must differ")
     if not replacements:
         raise LzError("at least one archive replacement is required")
     source = source_archive.read_bytes()

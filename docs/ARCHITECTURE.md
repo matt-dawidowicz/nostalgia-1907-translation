@@ -97,7 +97,7 @@ Each production module has one primary responsibility:
 | `scn_layout.py` | SCN-derived renderer roles and geometry |
 | `script_integrity.py` | SCN-to-MES text-reference integrity and choice-branch inventory |
 | `renderer_format.py` | Shared text normalization, wrapping, and row reconstruction |
-| `profile_schema.py` | Chapter-profile schema and active/legacy field classification |
+| `profile_schema.py` | Active chapter-profile schema and rule validation |
 | `mes_compiler.py` | Canonical records to guarded MES bytes |
 | `prepare_retail.py` | Exact retail verification and extraction |
 | `build_mes_set.py` | Whole-corpus MES compilation and font assembly |

@@ -18,8 +18,6 @@ except ModuleNotFoundError:  # Direct ``python tools/<script>.py`` execution.
 
 ROOT = Path(__file__).resolve().parents[1]
 TEXT_SUFFIXES = {
-    ".gitattributes",
-    ".gitignore",
     ".json",
     ".md",
     ".ps1",
@@ -30,6 +28,9 @@ TEXT_SUFFIXES = {
     ".yml",
     ".yaml",
 }
+TEXT_NAMES = frozenset(
+    {".editorconfig", ".gitattributes", ".gitignore", "LICENSE", "Makefile"}
+)
 FORBIDDEN_MEDIA_SUFFIXES = {
     ".apng",
     ".avif",
@@ -115,18 +116,6 @@ def _reject_duplicate_json_keys(pairs: list[tuple[str, object]]) -> dict[str, ob
     return result
 
 
-def _is_excluded(path: Path) -> bool:
-    """Return whether a relative path belongs to generated or local-only state."""
-    for part in path.parts[:-1]:
-        if part in EXCLUDED_DIRECTORY_NAMES:
-            return True
-        if part.endswith(".egg-info"):
-            return True
-        if any(part.startswith(prefix) for prefix in EXCLUDED_DIRECTORY_PREFIXES):
-            return True
-    return False
-
-
 def _is_git_metadata(path: Path) -> bool:
     """Return whether a package-relative path is internal Git metadata."""
     return bool(path.parts) and path.parts[0] == ".git"
@@ -192,12 +181,15 @@ def _check_text(path: Path, relative: str, failures: list[str]) -> None:
     except UnicodeDecodeError as exc:
         failures.append(f"{relative}: not valid UTF-8: {exc}")
         return
-    if b"\r" in data and path.suffix.lower() != ".ps1":
+    suffix = path.suffix.lower()
+    if b"\r" in data and suffix != ".ps1":
         failures.append(f"{relative}: contains CR characters; source must use LF")
-    if path.suffix.lower() == ".ps1" and b"\n" in data.replace(b"\r\n", b""):
-        failures.append(
-            f"{relative}: PowerShell source must use consistent CRLF endings"
-        )
+    if suffix == ".ps1":
+        unmatched = data.replace(b"\r\n", b"")
+        if b"\r" in unmatched or b"\n" in unmatched:
+            failures.append(
+                f"{relative}: PowerShell source must use consistent CRLF endings"
+            )
     if data and not data.endswith(b"\n"):
         failures.append(f"{relative}: missing final newline")
     for line_number, line in enumerate(text.splitlines(), start=1):
@@ -270,7 +262,7 @@ def audit(root: Path, *, strict_release: bool = False) -> dict[str, object]:
             or path.name.startswith("recover_bonus_") and path.suffix == ".json"
         ):
             retired_generated.append(relative)
-        if suffix in TEXT_SUFFIXES or path.name in {"LICENSE", "Makefile"}:
+        if suffix in TEXT_SUFFIXES or path.name in TEXT_NAMES:
             text_files_checked += 1
             _check_text(path, relative, failures)
         if suffix in {".json", ".py", ".toml"}:

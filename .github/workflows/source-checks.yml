@@ -1,41 +1,82 @@
 name: Source checks
 
 on:
-  push:
   pull_request:
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
 
 concurrency:
-  group: source-checks-${{ github.workflow }}-${{ github.ref }}
+  group: source-checks-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
-  source-tests:
-    name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            python-version: "3.12"
-          - os: ubuntu-latest
-            python-version: "3.13"
-          - os: ubuntu-latest
-            python-version: "3.14"
-          - os: windows-latest
-            python-version: "3.14"
+  linux:
+    name: Ubuntu / Python 3.12-3.14
+    runs-on: ubuntu-latest
 
     steps:
       - name: Check out source
         uses: actions/checkout@v7
 
-      - name: Set up Python
+      - name: Set up Python 3.12
         uses: actions/setup-python@v7
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install source-quality tools
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Run complete source-only validation
+        run: python -m tools.source_checks --root . --strict-release
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install Python 3.13 tools
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Check Python 3.13 compatibility
+        run: |
+          python -m compileall -q nostalgia1907.py tools tests work
+          python -m unittest discover -s tests -v
+
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install Python 3.14 tools
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Check Python 3.14 compatibility
+        run: |
+          python -m compileall -q nostalgia1907.py tools tests work
+          python -m unittest discover -s tests -v
+
+  windows:
+    name: Windows / Python 3.14
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
           cache: pip
           cache-dependency-path: requirements-dev.txt
 

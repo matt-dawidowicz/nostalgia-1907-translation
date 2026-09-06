@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Role-aware editor and auditor for canonical Nostalgia 1907 English text.
 
-This tool never translates Japanese.  It accepts English wording only at a
+This tool never translates Japanese. It accepts English wording only at a
 stable ``CHAPTER:NNN`` ID, derives that record's renderer from the original
-SCN, and previews or stores semantic (unwrapped) text.  The MES compiler owns
+SCN, and previews or stores semantic (unwrapped) text. The MES compiler owns
 the final wrapping so later wording edits cannot inherit stale manual spaces.
 
 Stable IDs use the canonical zero-based record index; SCN's one-based operands
@@ -655,9 +655,10 @@ def apply_changes(
     """Atomically apply reviewed English changes using per-record contracts.
 
     Every requested ID is resolved, policy-checked, and audited in memory
-    before any chapter file is written. SCN-classified records store normalized
-    semantic text with adaptive layout; unclassified records preserve the
-    reviewer's exact fixed layout.
+    before any chapter file is written. Renderer contracts are inferred once
+    per affected chapter and role rules are loaded once for the complete batch.
+    SCN-classified records store normalized semantic text with adaptive layout;
+    unclassified records preserve the reviewer's exact fixed layout.
 
     Args:
         path: UTF-8 JSON change set accepted by ``_changes``.
@@ -676,6 +677,8 @@ def apply_changes(
     """
     changes = _changes(path)
     _, chapters = _chapter_sources()
+    rules = _rules_by_role()
+    contracts_by_chapter: dict[str, dict[int, RecordContract]] = {}
     pending: dict[Path, dict[str, object]] = {}
     report: list[dict[str, object]] = []
     for record_id, proposed in changes.items():
@@ -688,13 +691,15 @@ def apply_changes(
         record = source["records"][record_index]
         if record.get("index") != record_index or record.get("policy") != "translate":
             raise ValueError(f"{record_id}: record is not translated prose")
-        contract = _contracts(source, retail_root).get(record_index)
+        if chapter not in contracts_by_chapter:
+            contracts_by_chapter[chapter] = _contracts(source, retail_root)
+        contract = contracts_by_chapter[chapter].get(record_index)
         audited = _record_audit(
             record_id,
             proposed,
             True,
             contract,
-            _rules_by_role(),
+            rules,
         )
         if audited["failures"]:
             raise ValueError(f"{record_id}: " + "; ".join(audited["failures"]))
@@ -704,7 +709,7 @@ def apply_changes(
             record["layout_policy"] = "adaptive"
         else:
             # Without proven SCN geometry the record is an explicit bitmap
-            # layout.  Preserve the reviewer's exact line/space decisions.
+            # layout. Preserve the reviewer's exact line/space decisions.
             record["text"] = normalize_ellipsis_style(proposed)
             record["layout_policy"] = "fixed"
         profile = source.get("profile")
