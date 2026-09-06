@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply non-autofixable PEP 8 import-order repairs for the campaign."""
+"""Apply non-autofixable PEP 8 and compatibility repairs for the campaign."""
 
 from __future__ import annotations
 
@@ -14,12 +14,12 @@ def _replace_once(relative: str, old: str, new: str) -> None:
     path = ROOT / relative
     text = path.read_text(encoding="utf-8")
     if text.count(old) != 1:
-        raise RuntimeError(f"{relative}: import-order target is not unique")
+        raise RuntimeError(f"{relative}: follow-up target is not unique")
     path.write_text(text.replace(old, new), encoding="utf-8", newline="\n")
 
 
 def main() -> None:
-    """Move six intentionally delayed test imports into PEP 8 import position."""
+    """Apply import-order repairs and preserve the public preview test seam."""
     _replace_once(
         "tests/test_comparison_export.py",
         '''
@@ -126,6 +126,38 @@ from work.clean_rebuild import verification_manifest as provenance
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
 ''',
+    )
+    _replace_once(
+        "work/clean_rebuild/translation_formatter.py",
+        '''def format_preview(text: str, contract: RecordContract | None) -> list[str]:
+    """Return visible, unpadded rows for a proposed semantic string."""
+    semantic = normalize_ellipsis_style(normalize_semantic_text(text))
+    return _format_semantic_preview(semantic, contract)
+''',
+        '''def format_preview(
+    text: str,
+    contract: RecordContract | None,
+    *,
+    normalized: bool = False,
+) -> list[str]:
+    """Return visible, unpadded rows for a proposed semantic string.
+
+    Set ``normalized`` only when the caller has already applied the shared
+    semantic and ellipsis normalization. The public function remains the one
+    preview boundary used by audits and tests.
+    """
+    semantic = (
+        text
+        if normalized
+        else normalize_ellipsis_style(normalize_semantic_text(text))
+    )
+    return _format_semantic_preview(semantic, contract)
+''',
+    )
+    _replace_once(
+        "work/clean_rebuild/translation_formatter.py",
+        "    rows = _format_semantic_preview(semantic, contract)\n",
+        "    rows = format_preview(semantic, contract, normalized=True)\n",
     )
 
 
