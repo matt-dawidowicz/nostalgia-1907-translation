@@ -5,6 +5,9 @@ project. A wording change is acceptable only when it remains semantically
 correct, fits the renderer selected by the original SCN program, compiles inside
 original binary boundaries, and leaves unrelated game data untouched.
 
+Read [current project status](docs/CURRENT_STATUS.md) before treating a dated
+revision or maintenance report as current release evidence.
+
 Start with:
 
 - [Getting started](docs/GETTING_STARTED.md) for contributor paths and safe first
@@ -16,14 +19,16 @@ Start with:
 - [Text-box contracts](docs/TEXT_BOX_CONTRACTS.md) for renderer ownership.
 - [Binary formats](docs/BINARY_FORMATS.md) for MES, LZ, ISO, raw-CD, font, and
   SCN structures.
-- [Development and validation](docs/DEVELOPMENT.md) for source/retail test layers
-  and generated evidence.
+- [Development and validation](docs/DEVELOPMENT.md) for the unified source gate,
+  retail validation, CI, and generated evidence.
 - [Whole-game testing](docs/WHOLE_GAME_TESTING.md) and
-  [release policy](docs/RELEASE.md) for runtime evidence.
-- [the 2026-08-27 revision record](docs/TRANSLATION_REVISION_20260827.md) for the
-  current post-1.0.2 source state.
+  [release policy](docs/RELEASE.md) for candidate-bound runtime evidence.
 - [the Python documentation standard](docs/DOCSTRING_STANDARD.md) for maintained
   code comments and docstrings.
+
+Dated documents such as the 2026-08-27 translation revision and the 2026-09-01
+prologue review are provenance snapshots. They explain how the current source
+was reached; they are not substitutes for `docs/CURRENT_STATUS.md`.
 
 ## Contribution licensing
 
@@ -46,32 +51,39 @@ relevant verified format contract:
 - original Japanese Track 1 and Track 2 as read-only inputs;
 - all 19 chapter names and all 2,905 record positions;
 - stable record IDs/order and `policy: "preserve"` records;
-- SCN bytes, branch targets, and non-MES archive members;
+- SCN/control data except the one closed, hash-locked PART1A selector correction;
+- non-MES archive-member identity outside declared changes;
 - fixed ISO extents and total logical ISO size;
-- raw Track 1 sector geometry, headers, boot data, EDC, and ECC;
+- raw Track 1 sector geometry, headers, boot data, EDC, and ECC integrity;
 - Track 2 byte-for-byte; and
 - the distinction between canonical text and generated wrapping.
 
 Do not repair a screenshot by adding a chapter-specific binary patch. Correct
 the canonical English when wording is wrong, or correct a shared renderer rule
-when structurally equivalent windows are formatted wrong.
+when structurally equivalent windows are formatted wrong. The existing PART1A
+SCN correction is a separately proven closed exception, not a precedent for
+ad-hoc patches.
 
 ## Recommended workflow
 
-1. Install the project and run `doctor`.
-2. Prepare the retail reference from the exact original Japanese Track 1.
-3. Identify the stable `CHAPTER:NNN` record.
-4. Preview the English change with `edit`.
-5. Apply only after the preview shows the expected role and rows.
-6. Regenerate the comparison package when translation content changed.
-7. Run complete validation.
-8. Build only when a new BIN/CUE candidate is actually needed.
-9. Playtest the affected scene; automated checks do not replace runtime
+1. Use the repository directly; there is no project install step.
+2. Install `requirements-dev.txt` when running source-quality checks.
+3. Run `doctor` and prepare the retail reference when the task needs retail
    evidence.
+4. Identify the stable `CHAPTER:NNN` record.
+5. Preview the English change with `edit`.
+6. Apply only after the preview shows the expected role and rows.
+7. Regenerate the comparison package when translation content changed.
+8. Run complete validation.
+9. Build only when a new BIN/CUE candidate is actually needed.
+10. Playtest changed runtime behavior; automated checks do not replace runtime
+    evidence.
 
 Typical commands:
 
 ```powershell
+python -m pip install -r requirements-dev.txt
+python -m tools.source_checks --root . --strict-release
 python nostalgia1907.py doctor
 python nostalgia1907.py prepare
 python nostalgia1907.py edit PART1A:003 --text "Reviewed wording"
@@ -95,9 +107,9 @@ intermediate snapshots, and ad-hoc capacity/report scripts should not be added
 to the maintained clean-rebuild surface after their conclusions have been
 promoted into shared code/tests/documentation.
 
-Embedded chapter profiles are schema-checked. Add only documented active
-fields. Historical `text_sources` values must be portable labels, never local
-machine paths.
+Embedded chapter profiles are fail-closed. `profile_schema.py` accepts only
+active production fields; retired migration switches and unknown keys are
+rejected rather than retained as compatibility state.
 
 ## Before requesting review
 
@@ -107,21 +119,23 @@ Use Python 3.12 or newer and install the development checks:
 python -m pip install -r requirements-dev.txt
 ```
 
-Then run:
+Run the maintained source contract:
 
 ```powershell
-python tools/source_health.py --root . --strict-release
-python tools/source_manifest.py --root .
-python -m compileall -q nostalgia1907.py tools tests work
-python -m unittest discover -s tests -v
-python -m ruff check nostalgia1907.py tools tests work
-python tools/style_audit.py --root .
+python -m tools.source_checks --root . --strict-release
 ```
+
+That command includes source health, exact manifest verification, the production
+dependency audit, maintained-Python compilation, source-only tests, Ruff format,
+Ruff lint, the maintained mypy ratchet, and the public-API documentation audit.
+Do not maintain a separate hand-copied checklist as the authoritative source
+gate.
 
 If intentional tracked source changed, regenerate the review manifest first:
 
 ```powershell
 python tools/source_manifest.py --root . --write
+python -m tools.source_checks --root . --strict-release
 ```
 
 Then inspect:

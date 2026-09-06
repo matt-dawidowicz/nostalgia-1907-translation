@@ -1,29 +1,40 @@
 # Source-release review context
 
 This document gives reviewers the current source-only context for the Nostalgia
-1907 English fan-translation project. It separates three things that must not be
-conflated:
+1907 English fan-translation project. Read
+[`docs/CURRENT_STATUS.md`](docs/CURRENT_STATUS.md) first; dated revision and
+maintenance files are historical evidence, not current-state summaries.
 
-1. the runtime-certified 1.0.2 reference;
-2. the later 2026-08-27 translation revision, which changes playable bytes; and
-3. source-only repository maintenance and validation hardening that do not
-   change canonical English or byte-generating behavior.
+The current review must keep three evidence classes separate:
+
+1. the runtime-certified **1.0.2** reference;
+2. the cumulative **post-1.0.2 successor source line**, which now includes
+   translation, renderer/runtime, fixed-layout, STAFF, hardening, and performance
+   changes; and
+3. candidate-specific retail/runtime evidence, which is valid only for the exact
+   source and output hashes that produced it.
 
 ## Read first
 
-1. `README.md`
-2. `docs/GETTING_STARTED.md`
-3. `docs/ARCHITECTURE.md`
-4. `docs/TEXT_BOX_CONTRACTS.md`
-5. `docs/DEVELOPMENT.md`
-6. `docs/TRANSLATION_REVISION_20260827.md`
+1. `docs/CURRENT_STATUS.md`
+2. `README.md`
+3. `docs/GETTING_STARTED.md`
+4. `docs/ARCHITECTURE.md`
+5. `docs/TEXT_BOX_CONTRACTS.md`
+6. `docs/DEVELOPMENT.md`
 7. `docs/RELEASE.md`
-8. `CHATGPT_REVIEW_PROMPT.md`
+8. `docs/WHOLE_GAME_TESTING.md`
+9. `CHATGPT_REVIEW_PROMPT.md`
 
-Verify `MANIFEST.sha256` before source review:
+Dated records such as `docs/TRANSLATION_REVISION_20260827.md`,
+`docs/PROLOGUE_PACING_REVISION_20260901.md`, and
+`docs/HISTORICAL_MAINTENANCE_REPORT.md` should be consulted when reviewing the
+history of a particular change.
+
+Verify the maintained source contract with:
 
 ```text
-python tools/source_manifest.py --root .
+python -m tools.source_checks --root . --strict-release
 ```
 
 ## Scope and exclusions
@@ -33,107 +44,71 @@ source tests, documentation, project policy, GitHub source checks, and historica
 review provenance under `provenance/`.
 
 Excluded: retail or rebuilt images, CUE files, BIOS files, extracted retail
-members, comparison images, generated reports, local configuration, and the
-retired audio-localization experiment.
+members, comparison images, generated reports, local configuration, and retired
+experiments.
 
-The source manifest lists every other tracked review-bundle member and excludes
-only itself.
+`MANIFEST.sha256` describes the exact tracked source-review tree except for the
+manifest itself. It is generated, not hand-maintained.
 
-## 2026-09-01 maintenance modernization and validation hardening
+## Current maintained source line
 
-This maintenance pass does **not** change canonical translation records,
-binary-format behavior, renderer behavior, frozen retail hashes, playable-byte
-algorithms, or historical runtime/release claims. It does make narrowly scoped
-mechanical changes inside maintained modules where those changes remove obsolete
-Python syntax or stale verification bookkeeping, and it makes future runtime
-certification fail closed against incomplete or hand-edited evidence.
+The present source is no longer just the 2026-08-27 revision. The following
+major work is integrated:
 
-- the supported Python floor moves from 3.10 to 3.12;
-- the Python 3.10-only `tomli` compatibility dependency and fallback code are
-  removed, leaving the runtime dependency list empty;
-- the package metadata now uses a current setuptools baseline and explicit MIT
-  license/repository metadata;
-- Ruff is pinned as a development-only dependency, targets Python 3.12, and
-  enables pyupgrade checks for obsolete syntax/APIs;
-- CI now exercises Python 3.12 on Ubuntu and Python 3.14 on Windows;
-- the completed translation-proposal compatibility shim is removed rather than
-  retained as an inert no-pending exporter;
-- the obsolete retired-workspace registry is removed after its durable history
-  was already captured in maintenance documentation;
-- obsolete standalone report-writing CLIs are removed from validation libraries;
-- generic hand-written lint rules are replaced by Ruff while the project-specific
-  docstring contract remains enforced by `tools/style_audit.py`;
-- `scn_layout.py` receives only a Python-3.12-safe annotation modernization;
-- `verification_manifest.py` drops references to the retired files so a real
-  build cannot attempt to fingerprint maintenance artifacts that no longer exist;
-- `whole_game_test.py` now requires the supported schema, successful static
-  summaries, exact candidate filename/hash binding, intact generated runtime
-  inventories, evidence notes for completed scopes, and an empty runtime issue
-  list before certification can pass; and
-- regression tests explicitly reject unbound candidates, missing evidence,
-  failed static coverage, and deleted certification scopes.
+- full-corpus Japanese source-fidelity and character-voice revision;
+- complete English-script audit and first-play pacing/clarity pass;
+- late-game source/terminology corrections;
+- shared lower-dialogue continuation and apostrophe-spacing corrections;
+- the closed hash-locked PART1A Game Hall selector-coordinate fix;
+- exhaustive retail-backed layout/script-integrity gates, including fixed
+  layouts, SCN-to-MES references, choice branches, and preserved-render identity;
+- STAFF credit correction/centering;
+- defensive build, path, archive, verification, and source-health hardening;
+- removal of obsolete maintenance/proposal/profile compatibility state;
+- deterministic rebuild performance optimizations; and
+- repository-wide Ruff format/lint, PEP 257, and maintained mypy checks.
 
-Because canonical English and byte-generating behavior are unchanged, this pass
-requires source-only CI evidence and does not itself require a new Ares
-playthrough. The stricter verifier applies to future candidate certification; it
-does not retroactively invent or change historical 1.0.2 evidence.
+The canonical project contract is 19 chapters / 2,905 records, with 2,883
+translated and 22 deliberately preserved.
 
-## 2026-08-30 repository-maintenance pass
+## Public source gate and CI
 
-The maintenance pass intentionally does **not** change canonical records,
-production-module code, binary formats, renderer behavior, project hashes, or
-release/runtime claims. Its scope is repository hygiene:
+The source-only contract is implemented by `tools/source_checks.py`. It checks:
 
-- one-off translation applicators, forensic decoders, capacity planners,
-  intermediate snapshots, and obsolete report/export scripts were removed from
-  `work/clean_rebuild/`;
-- the completed translation-proposal exporter was reduced to its explicit
-  no-pending status contract instead of retaining the old active-analysis
-  machinery;
-- reviewed 2026-08-27 change ledgers were moved out of the active `work/`
-  namespace into `provenance/2026-08-27/`;
-- the README, architecture, development guide, and ignore rules were tightened
-  around the supported surfaces;
-- documentation coverage now derives the maintained Python surface rather than
-  hard-coding a long file list; and
-- `tools/source_manifest.py` plus CI coverage now make `MANIFEST.sha256` a
-  generated-and-verified contract instead of a manual inventory.
+- source-tree health and publication policy;
+- exact `MANIFEST.sha256` identity;
+- production-module/data dependency containment;
+- maintained-Python compilation;
+- source-only unit tests;
+- Ruff formatting;
+- Ruff linting;
+- the maintained mypy target set; and
+- the public-API documentation policy.
 
-This pass therefore requires source-only regression evidence but does not, by
-itself, trigger a new Ares playthrough. Any later change to canonical English or
-byte-producing code remains subject to the normal candidate-bound runtime rule.
+CI runs the complete gate on Ubuntu/Python 3.12 and Windows/Python 3.14, plus
+compile/unit compatibility on Ubuntu/Python 3.13 and 3.14. Do not use older
+documents that describe only Ubuntu 3.10/3.12, a two-command lint setup, Black,
+or an optional package-install workflow as the current CI contract.
 
-## 2026-08-27 post-1.0.2 translation revision
+## Release evidence boundary
 
-The current canonical source contains the complete Japanese-semantic and
-character-voice revision that was not part of 1.0.2. The semantic application
-changed 345 canonical records, followed by reviewed voice, ending, capacity,
-and validator passes.
-
-The final revision was reported green on Windows/Python 3.12 and Ubuntu/Python
-3.10 source CI. Retail-backed validation passed the 17-test layout suite, all 19
-MES chapters, and all 19 LZ archive rebuilds; PART3C was 16,073 bytes (`0x3EC9`)
-and minimum archive headroom was 168 bytes. Those results are recorded in
-`docs/TRANSLATION_REVISION_20260827.md`.
-
-That is source/build evidence, not runtime certification. The playable bytes
-changed, so the historical 1.0.2 Ares evidence cannot be inherited.
-
-## Historical 1.0.2 runtime reference
-
-The latest runtime-certified North American Track 1 remains:
+The 1.0.2 North American Track 1 remains:
 
 `1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`
 
-Its unchanged Track 2 SHA-256 is:
+Track 2 remains:
 
 `F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991`
 
-That exact 1.0.2 Track 1 completed a full maintainer Ares playthrough, including
-targeted lower-dialogue checks, page advances, and dialogue transitions, with no
-reported defect. The current post-1.0.2 source revision still needs its own
-fresh deterministic two-track build and candidate-bound Ares evidence before it
-can become a runtime-certified successor.
+That exact 1.0.2 Track 1 completed the recorded full maintainer Ares playthrough.
+The successor source line does not inherit it.
+
+Intermediate successor commits have completed substantial retail-backed
+compilation/determinism work and targeted Ares checks. Those results are useful
+regression evidence, but later source/playable/production changes mean the
+current successor must still freeze an exact final commit, generate a fresh
+North American candidate, record its deterministic hashes, and complete the
+candidate-bound whole-game Ares log before a new release claim.
 
 ## Preservation boundary
 
@@ -141,7 +116,8 @@ Reviewers should confirm that current source work preserves:
 
 - all 19 chapter names and 2,905 record positions;
 - Japanese records, stable IDs/order, and preserve/translate policy;
-- SCN/control bytes and non-MES archive members;
+- retail SCN/control structure except the single closed PART1A correction;
+- non-MES archive data outside declared changes;
 - fixed ISO extents and raw Track 1 geometry;
 - Track 2 byte-for-byte;
 - North America as the default supported build region; and

@@ -11,21 +11,28 @@ BIN/CUE files, screenshots, or other copyrighted game media.
 
 ## Project status
 
-The latest runtime-certified published reference remains **1.0.2**. Its exact
-North American Track 1 completed a full maintainer Ares playthrough and is
-identified by SHA-256:
+Version **1.0.2** remains the latest runtime-certified published reference. Its
+North American Track 1 completed the recorded full maintainer Ares playthrough
+and is identified by SHA-256:
 
 `1D99B456DA49F3F98B059B5E5DBAA6075DDE762C91448ABF20485B098E565C17`
 
-The current source tree contains the later **2026-08-27 source-fidelity and
-character-voice revision**. That revision re-audited the 2,905-record corpus and
-changes playable bytes. It has source and retail-backed static validation, but
-it does not inherit the 1.0.2 runtime certification. A fresh deterministic
-candidate and candidate-bound Ares playthrough are still required before it can
-become a successor release.
+The maintained source is now the cumulative post-1.0.2 successor line, not only
+the original 2026-08-27 revision. It includes the full-corpus source-fidelity
+and voice work, the September complete-script audit, renderer/runtime fixes,
+fixed-layout and script-integrity hardening, STAFF credit corrections and
+centering, build/repository hardening, and deterministic performance work.
+Those changes include playable-byte changes, so the source does **not** inherit
+the 1.0.2 runtime certification.
 
-See [the revision record](docs/TRANSLATION_REVISION_20260827.md) and
-[release policy](docs/RELEASE.md) for the exact evidence boundary.
+The canonical corpus is 19 chapters / 2,905 records: 2,883 translated and 22
+deliberately preserved. Public source CI is green for the maintained source
+contract, but a successor release still requires a fresh deterministic build
+and a candidate-bound Ares certification tied to the exact final hashes.
+
+Read [current project status](docs/CURRENT_STATUS.md) before using dated revision
+reports as evidence. See [release policy](docs/RELEASE.md) for the publication
+boundary.
 
 ## Supported workflow
 
@@ -40,8 +47,8 @@ doctor -> prepare -> edit/compare -> validate -> build -> Ares playtest
   hash-locked retail reference.
 - `edit` previews or applies an English change by stable record ID.
 - `compare` regenerates the bilingual human-review package.
-- `validate` runs source, renderer, semantic, compilation, and retail-backed
-  regression gates.
+- `validate` runs the maintained source gate plus renderer, semantic,
+  compilation, archive, and retail-backed regression checks.
 - `build` performs two independent clean rebuilds and, by default, two guarded
   North American region-wrapper runs before publication.
 - Ares playtesting remains the final gate for behavior static analysis cannot
@@ -61,8 +68,8 @@ py -3.12 -m venv .venv
 ```
 
 The production and operator tooling has no third-party runtime dependencies.
-Contributors who run the source-quality suite install the repository-local
-development requirements (Ruff and mypy):
+Contributors who run source-quality checks install the repository-local
+development requirements:
 
 ```powershell
 python -m pip install -r requirements-dev.txt
@@ -92,11 +99,17 @@ weaken an input hash or boundary check to accept a different retail revision.
 
 ## Source-only development
 
-No game media is needed for the public source checks:
+No game media is needed for the public source contract:
 
 ```powershell
 python -m tools.source_checks --root . --strict-release
 ```
+
+That single command owns the maintained source-health, manifest, production
+boundary, compilation, unit-test, Ruff-format, Ruff-lint, mypy, and public-API
+documentation checks. CI runs the complete gate on Ubuntu/Python 3.12 and
+Windows/Python 3.14, with additional Python 3.13/3.14 compatibility coverage on
+Ubuntu.
 
 `MANIFEST.sha256` is the deterministic inventory for the source-only review
 bundle. Regenerate it only after intentional tracked-source changes:
@@ -104,9 +117,6 @@ bundle. Regenerate it only after intentional tracked-source changes:
 ```powershell
 python tools/source_manifest.py --root . --write
 ```
-
-CI verifies the manifest, so a source change cannot leave the review inventory
-silently stale.
 
 ## Translation source
 
@@ -125,9 +135,9 @@ python nostalgia1907.py validate
 
 Preserve Japanese records, stable IDs, record order, archive member order, ISO
 extents, Track 2, and the distinction between semantic English and generated
-wrapping. Retail SCN remains the read-only structural authority; the generated
-game has one separately hash-locked, runtime-reviewed two-byte PART1A selector
-coordinate correction documented in `scn_patch.py`.
+wrapping. Retail SCN remains the structural authority; the generated game has
+one separately hash-locked, runtime-reviewed two-byte PART1A selector-coordinate
+correction documented in `scn_patch.py`.
 
 ## Renderer and binary safety
 
@@ -136,11 +146,13 @@ geometry from original SCN structure and shares that contract between preview
 and compilation. Adaptive records store semantic English; fixed records retain
 reviewer-owned spacing where safe general reflow has not been proven.
 
-The rebuild also preserves the original binary envelope: MES record structure,
+The rebuild preserves the original binary envelope: MES record structure,
 archive allocations, fixed ISO extents, raw MODE1/2352 geometry, and Track 2.
-Deterministic hashes and static regression prove those boundaries, but they do
-not prove on-screen clearing, timing, transitions, branch behavior, or emulator
-compatibility. Those remain runtime-test responsibilities.
+Authenticated unchanged raw sectors may be reused byte-for-byte; changed sectors
+receive regenerated EDC/ECC and are checked directly. Deterministic hashes and
+static regression prove those boundaries, but they do not prove on-screen
+clearing, timing, transitions, branch behavior, or emulator compatibility.
+Those remain runtime-test responsibilities.
 
 ## Repository map
 
@@ -151,10 +163,10 @@ compatibility. Those remain runtime-test responsibilities.
 | `work/clean_rebuild/sources/` | Canonical English records |
 | `work/clean_rebuild/` | Active compiler, formats, builders, validators, review helpers |
 | `work/region_variant/` | Guarded North American security/region wrapper |
-| `provenance/2026-08-27/` | Reviewed change ledgers for the post-1.0.2 revision |
-| `tests/` | Source-only, synthetic, and regression tests |
-| `tools/` | Source health, manifest, and style audits |
-| `docs/` | Architecture, formats, editing, testing, and release policy |
+| `provenance/` | Dated reviewed-change ledgers; never build inputs |
+| `tests/` | Source-only, synthetic, integration, and regression tests |
+| `tools/` | Unified source gate, repository inventory/health, manifest, and documentation audit |
+| `docs/` | Current status, architecture, formats, editing, testing, historical revision, and release policy |
 | `outputs/` | Ignored generated reports and build products |
 
 Historical reverse-engineering outcomes are retained as documentation or small
@@ -164,14 +176,15 @@ part of the maintained code surface.
 
 ## Read next
 
-1. [Getting started](docs/GETTING_STARTED.md)
-2. [Architecture](docs/ARCHITECTURE.md)
-3. [Translation editing](docs/TRANSLATION_EDITING.md)
-4. [Text-box contracts](docs/TEXT_BOX_CONTRACTS.md)
-5. [Development and validation](docs/DEVELOPMENT.md)
-6. [Binary formats](docs/BINARY_FORMATS.md)
-7. [Whole-game testing](docs/WHOLE_GAME_TESTING.md)
-8. [Release policy](docs/RELEASE.md)
+1. [Current project status](docs/CURRENT_STATUS.md)
+2. [Getting started](docs/GETTING_STARTED.md)
+3. [Architecture](docs/ARCHITECTURE.md)
+4. [Translation editing](docs/TRANSLATION_EDITING.md)
+5. [Text-box contracts](docs/TEXT_BOX_CONTRACTS.md)
+6. [Development and validation](docs/DEVELOPMENT.md)
+7. [Binary formats](docs/BINARY_FORMATS.md)
+8. [Whole-game testing](docs/WHOLE_GAME_TESTING.md)
+9. [Release policy](docs/RELEASE.md)
 
 For contribution requirements, read [CONTRIBUTING.md](CONTRIBUTING.md). Python
 callables and explanatory comments follow
