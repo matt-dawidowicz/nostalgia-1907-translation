@@ -198,7 +198,7 @@ class RawCdFastPathEquivalenceTests(unittest.TestCase):
 
 
 class CompilerFastPathTests(unittest.TestCase):
-    """Check the cache and dormant-phase shortcuts directly."""
+    """Check the maintained compiler cache shortcut directly."""
 
     def test_stored_cell_cache_reuses_identical_render(self) -> None:
         """Require repeated cell rendering to hit the memoized bitmap."""
@@ -209,22 +209,6 @@ class CompilerFastPathTests(unittest.TestCase):
         info = mes_compiler.stored_cell.cache_info()
         self.assertEqual(info.misses, 1)
         self.assertEqual(info.hits, 1)
-
-    def test_phase_optimizer_returns_immediately_without_alternates(self) -> None:
-        """Require the dormant optimizer path to skip glyph rendering work."""
-        row = mes_compiler.RowPlan(
-            record=0,
-            prefix=(),
-            primary=(("literal", "th"),),
-            alternate=None,
-        )
-        with patch.object(
-            mes_compiler,
-            "stored_cell",
-            side_effect=AssertionError("renderer should not run"),
-        ):
-            mes_compiler._optimize_phases([row], [], {})
-        self.assertFalse(row.selected_alternate)
 
 
 if __name__ == "__main__":

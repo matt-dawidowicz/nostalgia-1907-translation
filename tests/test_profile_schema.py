@@ -24,16 +24,25 @@ class ProfileSchemaTests(unittest.TestCase):
             source = load_json_object(SOURCES / item["source"])
             chapter = source["chapter"]
             with self.subTest(chapter=chapter):
-                self.assertEqual(validate_profile(source.get("profile"), chapter=chapter), frozenset())
+                self.assertIsNone(
+                    validate_profile(source.get("profile"), chapter=chapter)
+                )
                 self.assertEqual(
-                    profile_text_failures(source.get("profile"), source["records"], chapter=chapter),
+                    profile_text_failures(
+                        source.get("profile"),
+                        source["records"],
+                        chapter=chapter,
+                    ),
                     [],
                 )
 
     def test_retired_profile_field_is_rejected(self) -> None:
         """Prevent migration-era no-op settings from returning to canonical data."""
         with self.assertRaisesRegex(ValueError, "unknown fields"):
-            validate_profile({"schema_version": 1, "choice_render_cell_limit": None}, chapter="TEST")
+            validate_profile(
+                {"schema_version": 1, "choice_render_cell_limit": None},
+                chapter="TEST",
+            )
 
     def test_unknown_profile_field_is_rejected(self) -> None:
         """Fail closed when an active-looking setting has no implementation."""

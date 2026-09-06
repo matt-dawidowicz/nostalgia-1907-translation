@@ -78,9 +78,14 @@ PRODUCTION_MODULES = (
 
 
 def _ensure_empty(path: Path) -> None:
-    """Create a new staging directory and reject stale build contents."""
-    if path.exists() and any(path.iterdir()):
-        raise ValueError(f"refusing to reuse non-empty clean-build directory: {path}")
+    """Create a staging directory and reject unsafe pre-existing paths."""
+    if path.exists():
+        if not path.is_dir():
+            raise ValueError(f"clean-build path exists and is not a directory: {path}")
+        if any(path.iterdir()):
+            raise ValueError(
+                f"refusing to reuse non-empty clean-build directory: {path}"
+            )
     path.mkdir(parents=True, exist_ok=True)
 
 

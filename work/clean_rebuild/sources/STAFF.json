@@ -22,19 +22,19 @@
     {
       "index": 0,
       "policy": "translate",
-      "text": "              VOICE CAST            ",
+      "text": "             VOICE CAST             ",
       "layout_policy": "fixed"
     },
     {
       "index": 1,
       "policy": "translate",
-      "text": "                Kasuke              ",
+      "text": "               Kasuke               ",
       "layout_policy": "fixed"
     },
     {
       "index": 2,
       "policy": "translate",
-      "text": "          Hitoshi Kindaichi         ",
+      "text": "         Hitoshi Kindaichi          ",
       "layout_policy": "fixed"
     },
     {
@@ -46,7 +46,7 @@
     {
       "index": 4,
       "policy": "translate",
-      "text": "            Miyuki Kikuchi          ",
+      "text": "           Miyuki Kikuchi           ",
       "layout_policy": "fixed"
     },
     {
@@ -76,13 +76,13 @@
     {
       "index": 9,
       "policy": "translate",
-      "text": "Dunant                              ",
+      "text": "               Dunant               ",
       "layout_policy": "fixed"
     },
     {
       "index": 10,
       "policy": "translate",
-      "text": "            Hisaji Yamano           ",
+      "text": "           Hisaji Yamano            ",
       "layout_policy": "fixed"
     },
     {
@@ -94,13 +94,13 @@
     {
       "index": 12,
       "policy": "translate",
-      "text": "          Katsuyoshi Mikami         ",
+      "text": "         Katsuyoshi Mikami          ",
       "layout_policy": "fixed"
     },
     {
       "index": 13,
       "policy": "translate",
-      "text": "Old Karl / Surgeon                  ",
+      "text": "         Old Karl / Surgeon         ",
       "layout_policy": "fixed"
     },
     {
@@ -130,13 +130,13 @@
     {
       "index": 18,
       "policy": "translate",
-      "text": "          Toshikazu Fujiwara        ",
+      "text": "         Toshikazu Fujiwara         ",
       "layout_policy": "fixed"
     },
     {
       "index": 19,
       "policy": "translate",
-      "text": "Ruthie                              ",
+      "text": "               Ruthie               ",
       "layout_policy": "fixed"
     },
     {
@@ -148,19 +148,19 @@
     {
       "index": 21,
       "policy": "translate",
-      "text": "              Stravinsky            ",
+      "text": "             Stravinsky             ",
       "layout_policy": "fixed"
     },
     {
       "index": 22,
       "policy": "translate",
-      "text": "          Shimoki Matsuzaki         ",
+      "text": "         Shimoki Matsuzaki          ",
       "layout_policy": "fixed"
     },
     {
       "index": 23,
       "policy": "translate",
-      "text": "Lumeranka                           ",
+      "text": "             Lumeranka              ",
       "layout_policy": "fixed"
     },
     {
@@ -172,7 +172,7 @@
     {
       "index": 25,
       "policy": "translate",
-      "text": "          Locke / Passenger         ",
+      "text": "         Locke / Passenger          ",
       "layout_policy": "fixed"
     },
     {
@@ -196,19 +196,19 @@
     {
       "index": 29,
       "policy": "translate",
-      "text": "Fitz                                ",
+      "text": "                Fitz                ",
       "layout_policy": "fixed"
     },
     {
       "index": 30,
       "policy": "translate",
-      "text": "    Yuko Sugano / Sadako Sugawara   ",
+      "text": "   Yuko Sugano / Sadako Sugawara    ",
       "layout_policy": "fixed"
     },
     {
       "index": 31,
       "policy": "translate",
-      "text": "Sunmin                              ",
+      "text": "               Sunmin               ",
       "layout_policy": "fixed"
     },
     {
@@ -220,19 +220,19 @@
     {
       "index": 33,
       "policy": "translate",
-      "text": "              Bartender             ",
+      "text": "             Bartender              ",
       "layout_policy": "fixed"
     },
     {
       "index": 34,
       "policy": "translate",
-      "text": "              Gen Chiba             ",
+      "text": "             Gen Chiba              ",
       "layout_policy": "fixed"
     },
     {
       "index": 35,
       "policy": "translate",
-      "text": "            MEGA-CD STAFF           ",
+      "text": "           MEGA-CD STAFF            ",
       "layout_policy": "fixed"
     },
     {
@@ -244,7 +244,7 @@
     {
       "index": 37,
       "policy": "translate",
-      "text": "          Takashi Yoshikawa         ",
+      "text": "         Takashi Yoshikawa          ",
       "layout_policy": "fixed"
     },
     {
@@ -256,7 +256,7 @@
     {
       "index": 39,
       "policy": "translate",
-      "text": "            Naoki Tachino           ",
+      "text": "           Naoki Tachino            ",
       "layout_policy": "fixed"
     },
     {
@@ -268,19 +268,19 @@
     {
       "index": 41,
       "policy": "translate",
-      "text": "  Hiroshi Takahashi / Kazuhisa Ikeda",
+      "text": " Hiroshi Takahashi / Kazuhisa Ikeda ",
       "layout_policy": "fixed"
     },
     {
       "index": 42,
       "policy": "translate",
-      "text": "          Music Composition         ",
+      "text": "         Music Composition          ",
       "layout_policy": "fixed"
     },
     {
       "index": 43,
       "policy": "translate",
-      "text": "            Yukie Marikawa          ",
+      "text": "           Yukie Marikawa           ",
       "layout_policy": "fixed"
     },
     {
@@ -298,7 +298,7 @@
     {
       "index": 46,
       "policy": "translate",
-      "text": "          Production Manager        ",
+      "text": "         Production Manager         ",
       "layout_policy": "fixed"
     },
     {
@@ -316,7 +316,7 @@
     {
       "index": 49,
       "policy": "translate",
-      "text": "            Akio Watanabe           ",
+      "text": "           Akio Watanabe            ",
       "layout_policy": "fixed"
     },
     {
@@ -328,7 +328,7 @@
     {
       "index": 51,
       "policy": "translate",
-      "text": "          Nobukazu Watanabe         ",
+      "text": "         Nobukazu Watanabe          ",
       "layout_policy": "fixed"
     },
     {
@@ -340,7 +340,7 @@
     {
       "index": 53,
       "policy": "translate",
-      "text": "                Staff               ",
+      "text": "               Staff                ",
       "layout_policy": "fixed"
     },
     {

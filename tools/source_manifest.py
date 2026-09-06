@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+from collections import Counter
 from pathlib import Path
 
 try:
@@ -25,12 +26,13 @@ TEXT_SUFFIXES = {
     ".md",
     ".ps1",
     ".py",
+    ".sha256",
     ".toml",
     ".txt",
     ".yaml",
     ".yml",
 }
-TEXT_NAMES = {".editorconfig", ".gitattributes", ".gitignore", "LICENSE"}
+TEXT_NAMES = {".editorconfig", ".gitattributes", ".gitignore", "LICENSE", "Makefile"}
 
 
 class ManifestInventoryError(RuntimeError):
@@ -97,10 +99,10 @@ def render_manifest(root: Path) -> str:
 
 def manifest_diff(expected: str, actual: str) -> tuple[str, ...]:
     """Return concise line-oriented diagnostics for a stale manifest."""
-    expected_lines = set(expected.splitlines()[2:])
-    actual_lines = set(actual.splitlines()[2:])
-    missing = sorted(expected_lines - actual_lines)
-    unexpected = sorted(actual_lines - expected_lines)
+    expected_lines = Counter(expected.splitlines()[2:])
+    actual_lines = Counter(actual.splitlines()[2:])
+    missing = sorted((expected_lines - actual_lines).elements())
+    unexpected = sorted((actual_lines - expected_lines).elements())
     messages: list[str] = []
     messages.extend(f"missing or changed: {line}" for line in missing)
     messages.extend(f"unexpected or stale: {line}" for line in unexpected)

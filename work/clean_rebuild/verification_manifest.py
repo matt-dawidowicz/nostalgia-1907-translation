@@ -610,7 +610,7 @@ def validate_bound_verification(
     failures: list[str] = []
     try:
         manifest = load_json_object(manifest_path)
-    except (OSError, json.JSONDecodeError) as error:
+    except (OSError, ValueError) as error:
         return {
             "status": "FAIL",
             "failure_count": 1,

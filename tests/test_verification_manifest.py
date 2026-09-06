@@ -185,6 +185,17 @@ class VerificationManifestTests(unittest.TestCase):
                 any("outputs differ" in item for item in validation["failures"])
             )
 
+    def test_malformed_bound_manifest_returns_failure_report(self) -> None:
+        """Strict JSON loader errors must not escape the verification API."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            manifest = root / "verification_manifest.json"
+            manifest.write_text('{"broken": true,,}\n', encoding="utf-8")
+            validation = provenance.validate_bound_verification(manifest, {})
+            self.assertEqual(validation["status"], "FAIL")
+            self.assertEqual(validation["failure_count"], 1)
+            self.assertIn("cannot read bound verification manifest", validation["failures"][0])
+
     def test_stale_artifact_cannot_be_reported_as_current(self) -> None:
         """Mutation after generation must abort before either report is written."""
         with tempfile.TemporaryDirectory() as temporary:

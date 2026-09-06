@@ -80,6 +80,39 @@ class SourceHealthTests(unittest.TestCase):
             self.assertEqual(report["forbidden_media_count"], 1)
             self.assertTrue(any("duplicate key" in item for item in report["failures"]))
 
+    def test_dotfile_text_hygiene_is_checked(self) -> None:
+        """Do not let suffixless Git control files bypass text validation."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / ".gitignore").write_bytes(b"build/  \n")
+            report = source_health.audit(root)
+            self.assertEqual(report["status"], "FAIL")
+            self.assertEqual(report["text_files_checked"], 1)
+            self.assertTrue(
+                any(
+                    ".gitignore:1: trailing whitespace" in item
+                    for item in report["failures"]
+                )
+            )
+
+    def test_mixed_powershell_line_endings_fail(self) -> None:
+        """Reject lone CR or LF bytes mixed into otherwise valid CRLF source."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            script = root / "mixed.ps1"
+            for data in (b"one\r\ntwo\rthree\r\n", b"one\r\ntwo\nthree\r\n"):
+                with self.subTest(data=data):
+                    script.write_bytes(data)
+                    report = source_health.audit(root)
+                    self.assertEqual(report["status"], "FAIL")
+                    self.assertTrue(
+                        any(
+                            "PowerShell source must use consistent CRLF endings"
+                            in item
+                            for item in report["failures"]
+                        )
+                    )
+
     def test_retired_recovery_outputs_fail(self) -> None:
         """Keep historical generated recovery reports out of source releases."""
         with tempfile.TemporaryDirectory() as temporary:
