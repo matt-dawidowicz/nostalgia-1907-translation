@@ -9,9 +9,15 @@ from collections import Counter
 from pathlib import Path
 
 try:
-    from tools.repository_inventory import RepositoryInventoryError, git_tracked_files
+    from tools.repository_inventory import (
+        RepositoryInventoryError,
+        git_tracked_files,
+    )
 except ModuleNotFoundError:  # Direct ``python tools/<script>.py`` execution.
-    from repository_inventory import RepositoryInventoryError, git_tracked_files
+    from repository_inventory import (
+        RepositoryInventoryError,
+        git_tracked_files,
+    )
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,7 +38,13 @@ TEXT_SUFFIXES = {
     ".yaml",
     ".yml",
 }
-TEXT_NAMES = {".editorconfig", ".gitattributes", ".gitignore", "LICENSE", "Makefile"}
+TEXT_NAMES = {
+    ".editorconfig",
+    ".gitattributes",
+    ".gitignore",
+    "LICENSE",
+    "Makefile",
+}
 
 
 class ManifestInventoryError(RuntimeError):
@@ -145,7 +157,9 @@ def main() -> None:
     for difference in differences[:MAX_DIFF_LINES]:
         print(f"- {difference}")
     if len(differences) > MAX_DIFF_LINES:
-        print(f"- ... and {len(differences) - MAX_DIFF_LINES} more differences")
+        print(
+            f"- ... and {len(differences) - MAX_DIFF_LINES} more differences"
+        )
     print(f"Run: python tools/source_manifest.py --root {root} --write")
     raise SystemExit(1)
 

@@ -24,13 +24,12 @@ from .iso9660 import SECTOR_SIZE, read_entries, unique_file
 from .lz_format import (
     LzSlotOverflowError,
     parse_archive,
+    read_member,
     replace_members_fixed,
     replace_members_reflow,
-    read_member,
 )
 from .scn_patch import patch_part1a_scn
 from .source_json import load_json_object
-
 
 HERE = Path(__file__).resolve().parent
 SOURCES = HERE / "sources"
@@ -62,8 +61,10 @@ def _replace_archive(
         replacement_report = replace_members_fixed(
             retail_path, output_path, replacements
         )
-        return replacement_report, "fixed-slot", _minimum_fixed_headroom(
-            replacement_report
+        return (
+            replacement_report,
+            "fixed-slot",
+            _minimum_fixed_headroom(replacement_report),
         )
     except LzSlotOverflowError:
         reflow = replace_members_reflow(
@@ -130,7 +131,9 @@ def build_archives(build_root: Path) -> dict[str, object]:
                 ) as temporary:
                     patched_scn = Path(temporary) / "PART1A.SCN"
                     patched_scn.write_bytes(
-                        patch_part1a_scn(read_member(retail_path, "PART1A.SCN"))
+                        patch_part1a_scn(
+                            read_member(retail_path, "PART1A.SCN")
+                        )
                     )
                     replacements["PART1A.SCN"] = patched_scn
                     replacement_report, archive_mode, archive_headroom = (
@@ -142,21 +145,31 @@ def build_archives(build_root: Path) -> dict[str, object]:
                         )
                     )
             else:
-                replacement_report, archive_mode, archive_headroom = _replace_archive(
-                    retail_path,
-                    output_path,
-                    replacements,
-                    iso_entry.allocated_size,
+                replacement_report, archive_mode, archive_headroom = (
+                    _replace_archive(
+                        retail_path,
+                        output_path,
+                        replacements,
+                        iso_entry.allocated_size,
+                    )
                 )
 
             output_data = output_path.read_bytes()
-            if archive_mode == "fixed-slot" and len(output_data) != len(retail_data):
+            if archive_mode == "fixed-slot" and len(output_data) != len(
+                retail_data
+            ):
                 raise ValueError(f"{chapter}: fixed-slot archive size changed")
             if len(output_data) > iso_entry.allocated_size:
-                raise ValueError(f"{chapter}: archive exceeds its retail ISO allocation")
+                raise ValueError(
+                    f"{chapter}: archive exceeds its retail ISO allocation"
+                )
 
-            retail_entries = parse_archive(retail_data, source=str(retail_path))
-            output_entries = parse_archive(output_data, source=str(output_path))
+            retail_entries = parse_archive(
+                retail_data, source=str(retail_path)
+            )
+            output_entries = parse_archive(
+                output_data, source=str(output_path)
+            )
             if [entry.name for entry in output_entries] != [
                 entry.name for entry in retail_entries
             ]:
@@ -209,10 +222,14 @@ def main() -> None:
             {
                 "status": payload["status"],
                 "archive_count": payload["archive_count"],
-                "minimum_archive_headroom": payload["minimum_archive_headroom"],
+                "minimum_archive_headroom": payload[
+                    "minimum_archive_headroom"
+                ],
                 "modes": {
                     mode: sum(
-                        1 for chapter in payload["chapters"] if chapter["mode"] == mode
+                        1
+                        for chapter in payload["chapters"]
+                        if chapter["mode"] == mode
                     )
                     for mode in sorted(
                         {chapter["mode"] for chapter in payload["chapters"]}

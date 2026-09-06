@@ -8,7 +8,6 @@ from pathlib import Path
 
 from tools import style_audit
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -36,7 +35,9 @@ class StyleAuditTests(unittest.TestCase):
         ]
         self.assertEqual(report["status"], "FAIL")
         self.assertEqual(len(violations), 2)
-        self.assertTrue(all(item["path"] == "nostalgia1907.py" for item in violations))
+        self.assertTrue(
+            all(item["path"] == "nostalgia1907.py" for item in violations)
+        )
 
 
 if __name__ == "__main__":

@@ -40,8 +40,9 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from work.clean_rebuild.source_json import load_json_object as _strict_load_json_object
-
+from work.clean_rebuild.source_json import (
+    load_json_object as _strict_load_json_object,
+)
 
 MANIFEST_NAME = "nostalgia1907.project.json"
 LOCAL_CONFIG_NAME = "nostalgia1907.local.json"
@@ -191,7 +192,9 @@ def file_check(
         )
         return result
     result.update(
-        status="PASS", detail=f"verified {actual_size} bytes", sha256=actual_hash
+        status="PASS",
+        detail=f"verified {actual_size} bytes",
+        sha256=actual_hash,
     )
     return result
 
@@ -277,7 +280,9 @@ def source_index_check(root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def retail_reference_check(root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
+def retail_reference_check(
+    root: Path, manifest: dict[str, Any]
+) -> dict[str, Any]:
     """Check whether the prepared retail tree matches frozen input contracts.
 
     This inexpensive readiness check trusts only the preparation report's
@@ -346,7 +351,9 @@ def doctor_report(root: Path, args: argparse.Namespace) -> dict[str, Any]:
     """
     manifest = load_manifest(root)
     local = load_local_config(root)
-    minimum = tuple(int(part) for part in manifest["tool"]["python_minimum"].split("."))
+    minimum = tuple(
+        int(part) for part in manifest["tool"]["python_minimum"].split(".")
+    )
     checks: list[dict[str, Any]] = [
         {
             "name": "Python",
@@ -364,9 +371,13 @@ def doctor_report(root: Path, args: argparse.Namespace) -> dict[str, Any]:
         ("track1", "original Japanese Track 1"),
         ("track2", "original Japanese Track 2"),
     ):
-        path = default_input_path(root, manifest, local, key, getattr(args, key))
+        path = default_input_path(
+            root, manifest, local, key, getattr(args, key)
+        )
         checks.append(
-            file_check(label, path, manifest["retail_inputs"][key], required=True)
+            file_check(
+                label, path, manifest["retail_inputs"][key], required=True
+            )
         )
     checks.append(retail_reference_check(root, manifest))
 
@@ -414,10 +425,13 @@ def print_doctor(report: dict[str, Any]) -> None:
     print(f"Project: {report['project_root']}")
     for check in report["checks"]:
         location = f" — {check['path']}" if check.get("path") else ""
-        print(f"[{check['status']}] {check['name']}: {check['detail']}{location}")
+        print(
+            f"[{check['status']}] {check['name']}: {check['detail']}{location}"
+        )
     if report["status"] == "PASS":
         retail_ready = any(
-            check["name"] == "prepared retail reference" and check["status"] == "PASS"
+            check["name"] == "prepared retail reference"
+            and check["status"] == "PASS"
             for check in report["checks"]
         )
         if retail_ready:
@@ -439,7 +453,9 @@ def run_command(command: Sequence[str], *, root: Path, label: str) -> None:
     print(f"\n== {label} ==", flush=True)
     completed = subprocess.run(list(command), cwd=root, check=False)
     if completed.returncode:
-        raise ToolError(f"{label} failed with exit code {completed.returncode}")
+        raise ToolError(
+            f"{label} failed with exit code {completed.returncode}"
+        )
 
 
 def run_script(root: Path, relative: str, *arguments: str, label: str) -> None:
@@ -467,7 +483,9 @@ def require_retail_reference(root: Path, manifest: dict[str, Any]) -> Path:
     """Require the hash-locked prepared retail tree used by review tools."""
     result = retail_reference_check(root, manifest)
     if result["status"] != "PASS":
-        raise ToolError(f"prepared retail reference is not ready: {result['detail']}")
+        raise ToolError(
+            f"prepared retail reference is not ready: {result['detail']}"
+        )
     return rooted(root, manifest["paths"]["retail_reference"])
 
 
@@ -497,7 +515,9 @@ def command_prepare(root: Path, args: argparse.Namespace) -> int:
     local = load_local_config(root)
     track1 = default_input_path(root, manifest, local, "track1", args.track1)
     require_file(
-        "original Japanese Track 1", track1, manifest["retail_inputs"]["track1"]
+        "original Japanese Track 1",
+        track1,
+        manifest["retail_inputs"]["track1"],
     )
     reference = rooted(root, manifest["paths"]["retail_reference"])
     run_script(
@@ -590,7 +610,9 @@ def validate_edit_request(args: argparse.Namespace) -> None:
         raise ToolError("edit requires RECORD and --text, or --changes FILE")
 
 
-def comparison_paths(root: Path, manifest: dict[str, Any]) -> tuple[Path, Path]:
+def comparison_paths(
+    root: Path, manifest: dict[str, Any]
+) -> tuple[Path, Path]:
     """Return the comparison package root and its canonical JSON."""
     output = rooted(root, manifest["paths"]["comparison_output"])
     return output, output / "Nostalgia1907_Japanese_English_Comparison.json"
@@ -606,7 +628,9 @@ def command_compare(root: Path, args: argparse.Namespace) -> int:
     manifest = load_manifest(root)
     retail = require_retail_reference(root, manifest)
     default_output, _ = comparison_paths(root, manifest)
-    output = args.output.expanduser().resolve() if args.output else default_output
+    output = (
+        args.output.expanduser().resolve() if args.output else default_output
+    )
     run_script(
         root,
         "work/clean_rebuild/export_bilingual_comparison.py",
@@ -700,7 +724,11 @@ def require_fresh_build_directory(label: str, path: Path) -> None:
 
 def require_separate_build_directories(runs: Path, delivery: Path) -> None:
     """Reject equal or nested run/delivery roots before a build starts."""
-    if runs == delivery or runs in delivery.parents or delivery in runs.parents:
+    if (
+        runs == delivery
+        or runs in delivery.parents
+        or delivery in runs.parents
+    ):
         raise ToolError(
             "runs root and delivery root must be separate, non-overlapping paths: "
             f"{runs} / {delivery}"
@@ -721,17 +749,25 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
     track1 = default_input_path(root, manifest, local, "track1", args.track1)
     track2 = default_input_path(root, manifest, local, "track2", args.track2)
     require_file(
-        "original Japanese Track 1", track1, manifest["retail_inputs"]["track1"]
+        "original Japanese Track 1",
+        track1,
+        manifest["retail_inputs"]["track1"],
     )
     require_file(
-        "original Japanese Track 2", track2, manifest["retail_inputs"]["track2"]
+        "original Japanese Track 2",
+        track2,
+        manifest["retail_inputs"]["track2"],
     )
-    region = getattr(args, "region", None) or manifest["build"]["default_region"]
+    region = (
+        getattr(args, "region", None) or manifest["build"]["default_region"]
+    )
     if region not in {"north-america", "japan"}:
         raise ToolError(f"unsupported build region: {region!r}")
     base_basename = release_basename(args.name)
     basename = (
-        f"{base_basename}_NorthAmerica" if region == "north-america" else base_basename
+        f"{base_basename}_NorthAmerica"
+        if region == "north-america"
+        else base_basename
     )
     bios: Path | None = None
     if region == "north-america":
@@ -793,7 +829,9 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
         )
         return 0
 
-    if bios is None:  # Defensive narrowing; region resolution required it above.
+    if (
+        bios is None
+    ):  # Defensive narrowing; region resolution required it above.
         raise ToolError("North American build did not resolve a U.S. BIOS")
     clean_runs = runs / "clean_runs"
     clean_delivery = runs / "clean_delivery"
@@ -814,7 +852,9 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
     baseline_track1 = clean_delivery / f"{base_basename}_Track1.bin"
     baseline_track2 = clean_delivery / f"{base_basename}_Track2.bin"
     if not baseline_track1.is_file() or not baseline_track2.is_file():
-        raise ToolError("clean build returned without its proven BIN artifacts")
+        raise ToolError(
+            "clean build returned without its proven BIN artifacts"
+        )
     baseline_track1_sha256 = sha256(baseline_track1)
     run_script(
         root,
@@ -848,7 +888,9 @@ def parser() -> argparse.ArgumentParser:
     )
     commands = result.add_subparsers(dest="command", required=True)
 
-    doctor = commands.add_parser("doctor", help="check dependencies, inputs, and setup")
+    doctor = commands.add_parser(
+        "doctor", help="check dependencies, inputs, and setup"
+    )
     doctor.add_argument("--track1", type=Path)
     doctor.add_argument("--track2", type=Path)
     doctor.add_argument("--us-bios", type=Path)
@@ -868,9 +910,13 @@ def parser() -> argparse.ArgumentParser:
     )
     edit.add_argument("record", nargs="?", help="stable CHAPTER:NNN record ID")
     edit.add_argument("--text", help="proposed canonical English")
-    edit.add_argument("--changes", type=Path, help="reviewed ID-keyed JSON change file")
     edit.add_argument(
-        "--apply", action="store_true", help="write RECORD/--text after validation"
+        "--changes", type=Path, help="reviewed ID-keyed JSON change file"
+    )
+    edit.add_argument(
+        "--apply",
+        action="store_true",
+        help="write RECORD/--text after validation",
     )
     edit.set_defaults(handler=command_edit)
 
@@ -909,7 +955,9 @@ def parser() -> argparse.ArgumentParser:
     build.add_argument("--runs-root", type=Path)
     build.add_argument("--output", type=Path)
     build.add_argument(
-        "--dry-run", action="store_true", help="show resolved inputs/outputs only"
+        "--dry-run",
+        action="store_true",
+        help="show resolved inputs/outputs only",
     )
     build.set_defaults(handler=command_build)
 

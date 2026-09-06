@@ -39,7 +39,11 @@ class Part1aScnPatchTests(unittest.TestCase):
         self.assertEqual(result, expected_bytes)
         self.assertEqual(len(result), len(retail))
         self.assertEqual(
-            {i for i, pair in enumerate(zip(retail, result, strict=True)) if pair[0] != pair[1]},
+            {
+                i
+                for i, pair in enumerate(zip(retail, result, strict=True))
+                if pair[0] != pair[1]
+            },
             set(scn_patch.SELECTOR_X_OFFSETS),
         )
 
@@ -48,7 +52,9 @@ class Part1aScnPatchTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "retail hash mismatch"):
             scn_patch.patch_part1a_scn(b"not retail PART1A.SCN")
 
-    def test_wrong_coordinate_is_rejected_even_when_hash_is_authenticated(self) -> None:
+    def test_wrong_coordinate_is_rejected_even_when_hash_is_authenticated(
+        self,
+    ) -> None:
         """Require the expected old X values independently of the file hash."""
         retail = self._fixture(selector_x=0x16)
         with patch.object(

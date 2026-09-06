@@ -6,7 +6,6 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -21,11 +20,15 @@ def _replace_once(relative: str, old: str, new: str) -> None:
     text = path.read_text(encoding="utf-8")
     count = text.count(old)
     if count != 1:
-        raise RuntimeError(f"{relative}: expected one replacement target, found {count}")
+        raise RuntimeError(
+            f"{relative}: expected one replacement target, found {count}"
+        )
     path.write_text(text.replace(old, new), encoding="utf-8", newline="\n")
 
 
-def _replace_between(relative: str, start: str, end: str, replacement: str) -> None:
+def _replace_between(
+    relative: str, start: str, end: str, replacement: str
+) -> None:
     """Replace text between unique markers while preserving the end marker."""
     path = _path(relative)
     text = path.read_text(encoding="utf-8")
@@ -48,10 +51,13 @@ def _replace_function(relative: str, name: str, replacement: str) -> None:
     matches = [
         node
         for node in tree.body
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == name
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        and node.name == name
     ]
     if len(matches) != 1:
-        raise RuntimeError(f"{relative}: expected one top-level function {name!r}")
+        raise RuntimeError(
+            f"{relative}: expected one top-level function {name!r}"
+        )
     node = matches[0]
     if node.end_lineno is None:
         raise RuntimeError(f"{relative}: function {name!r} has no end line")
@@ -60,7 +66,12 @@ def _replace_function(relative: str, name: str, replacement: str) -> None:
     if node.decorator_list:
         start = min(decorator.lineno for decorator in node.decorator_list) - 1
     end = node.end_lineno
-    new_text = "".join(lines[:start]) + replacement.rstrip() + "\n\n" + "".join(lines[end:])
+    new_text = (
+        "".join(lines[:start])
+        + replacement.rstrip()
+        + "\n\n"
+        + "".join(lines[end:])
+    )
     path.write_text(new_text, encoding="utf-8", newline="\n")
 
 
@@ -87,16 +98,16 @@ def _configure_standards() -> None:
     )
     _replace_once(
         "tools/source_checks.py",
-        "    _run((sys.executable, \"-m\", \"ruff\", \"check\", *CHECK_PATHS), root=root, label=\"Ruff lint checks\")\n",
+        '    _run((sys.executable, "-m", "ruff", "check", *CHECK_PATHS), root=root, label="Ruff lint checks")\n',
         "    _run(\n"
-        "        (sys.executable, \"-m\", \"ruff\", \"format\", \"--check\", *CHECK_PATHS),\n"
+        '        (sys.executable, "-m", "ruff", "format", "--check", *CHECK_PATHS),\n'
         "        root=root,\n"
-        "        label=\"Ruff format checks\",\n"
+        '        label="Ruff format checks",\n'
         "    )\n"
         "    _run(\n"
-        "        (sys.executable, \"-m\", \"ruff\", \"check\", *CHECK_PATHS),\n"
+        '        (sys.executable, "-m", "ruff", "check", *CHECK_PATHS),\n'
         "        root=root,\n"
-        "        label=\"Ruff lint checks\",\n"
+        '        label="Ruff lint checks",\n'
         "    )\n",
     )
 
@@ -555,14 +566,14 @@ def _optimize_compiler() -> None:
     _replace_once(
         "work/clean_rebuild/mes_compiler.py",
         "    def cells(self) -> tuple[Cell, ...]:\n"
-        "        \"\"\"Return the complete row in renderer order.\"\"\"\n"
+        '        """Return the complete row in renderer order."""\n'
         "        return self.prefix + self.primary\n",
         "    def cells(self) -> tuple[Cell, ...]:\n"
-        "        \"\"\"Return the complete row in renderer order.\"\"\"\n"
+        '        """Return the complete row in renderer order."""\n'
         "        return self.prefix + self.primary\n\n"
         "    @property\n"
         "    def cell_count(self) -> int:\n"
-        "        \"\"\"Return the row width without allocating a joined tuple.\"\"\"\n"
+        '        """Return the row width without allocating a joined tuple."""\n'
         "        return len(self.prefix) + len(self.primary)\n",
     )
     _replace_once(
@@ -593,9 +604,9 @@ def _optimize_compiler() -> None:
     )
     _replace_between(
         "work/clean_rebuild/mes_compiler.py",
-        "    needs_layouts = text_mode == \"prose\" or bool(adaptive_indexes)\n",
+        '    needs_layouts = text_mode == "prose" or bool(adaptive_indexes)\n',
         "    old_to_new = {old: new for new, old in enumerate(retained_indexes)}\n",
-        '''    needs_layouts = text_mode == "prose" or bool(adaptive_indexes)
+        """    needs_layouts = text_mode == "prose" or bool(adaptive_indexes)
     if adaptive_indexes:
         contracts = infer_contracts(
             scn_data,
@@ -640,7 +651,7 @@ def _optimize_compiler() -> None:
             for index in _dynamic_indexes(retail.records[record_index])
         }
     )
-''',
+""",
     )
     _replace_once(
         "work/clean_rebuild/mes_compiler.py",
@@ -651,8 +662,8 @@ def _optimize_compiler() -> None:
     _replace_between(
         "work/clean_rebuild/mes_compiler.py",
         "    generated_frequency: Counter[bytes] = Counter(\n",
-        "    if glyph_order == \"first-use\":\n",
-        '''    bitmap_rows_by_record = {
+        '    if glyph_order == "first-use":\n',
+        """    bitmap_rows_by_record = {
         index: [
             tuple(stored_cell(*cell) for cell in plan.cells())
             for plan in plans
@@ -678,7 +689,7 @@ def _optimize_compiler() -> None:
                 continue
             seen_generated.add(bitmap)
             generated_first_use.append(bitmap)
-''',
+""",
     )
     _replace_once(
         "work/clean_rebuild/mes_compiler.py",
@@ -783,19 +794,18 @@ def _renderer_tokens(text: str) -> list[str]:
     )
     _replace_once(
         "work/clean_rebuild/translation_formatter.py",
-        "        ).records\n"
-        "        text_mode = source[\"text_mode\"]\n",
+        '        ).records\n        text_mode = source["text_mode"]\n',
         "        ).records\n"
         "        contracts = _contracts(\n"
         "            source, retail_root, retail_records=retail_records\n"
         "        )\n"
-        "        text_mode = source[\"text_mode\"]\n",
+        '        text_mode = source["text_mode"]\n',
     )
     _replace_between(
         "work/clean_rebuild/translation_formatter.py",
         "    failures = [\n",
         "    migration_failures = (\n",
-        '''    failures: list[str] = []
+        """    failures: list[str] = []
     legacy_issues: list[str] = []
     warnings: list[str] = []
     classified: list[dict[str, object]] = []
@@ -829,7 +839,7 @@ def _renderer_tokens(text: str) -> list[str]:
             and layout.get("text_box") == "unclassified"
         ):
             unclassified_layouts.append(item_id)
-''',
+""",
     )
 
 
@@ -891,7 +901,7 @@ def _optimize_source_health() -> None:
         "        if suffix in TEXT_SUFFIXES or path.name in TEXT_NAMES:\n"
         "            text_files_checked += 1\n"
         "            _check_text(path, relative, failures)\n"
-        "        if suffix in {\".json\", \".py\", \".toml\"}:\n"
+        '        if suffix in {".json", ".py", ".toml"}:\n'
         "            structured_files_checked += 1\n"
         "            _check_structured_source(path, relative, failures)\n",
         "        text: str | None = None\n"
@@ -900,12 +910,12 @@ def _optimize_source_health() -> None:
         "            text_files_checked += 1\n"
         "            try:\n"
         "                data = path.read_bytes()\n"
-        "                text = data.decode(\"utf-8\")\n"
+        '                text = data.decode("utf-8")\n'
         "            except UnicodeDecodeError as exc:\n"
-        "                failures.append(f\"{relative}: not valid UTF-8: {exc}\")\n"
+        '                failures.append(f"{relative}: not valid UTF-8: {exc}")\n'
         "            else:\n"
         "                _check_text(path, relative, data, text, failures)\n"
-        "        if suffix in {\".json\", \".py\", \".toml\"}:\n"
+        '        if suffix in {".json", ".py", ".toml"}:\n'
         "            structured_files_checked += 1\n"
         "            if text is not None:\n"
         "                _check_structured_source(path, relative, text, failures)\n",
@@ -1009,20 +1019,20 @@ def _render_record(
     _replace_once(
         "work/clean_rebuild/export_bilingual_comparison.py",
         "        if (\n"
-        "            mes_path.stat().st_size != canonical[\"retail_mes\"][\"size\"]\n"
-        "            or sha256(mes_path) != canonical[\"retail_mes\"][\"sha256\"]\n"
+        '            mes_path.stat().st_size != canonical["retail_mes"]["size"]\n'
+        '            or sha256(mes_path) != canonical["retail_mes"]["sha256"]\n'
         "        ):\n",
         "        mes_size = mes_path.stat().st_size\n"
         "        mes_digest = sha256(mes_path)\n"
         "        if (\n"
-        "            mes_size != canonical[\"retail_mes\"][\"size\"]\n"
-        "            or mes_digest != canonical[\"retail_mes\"][\"sha256\"]\n"
+        '            mes_size != canonical["retail_mes"]["size"]\n'
+        '            or mes_digest != canonical["retail_mes"]["sha256"]\n'
         "        ):\n",
     )
     _replace_once(
         "work/clean_rebuild/export_bilingual_comparison.py",
-        "                \"retail_mes_sha256\": sha256(mes_path),\n",
-        "                \"retail_mes_sha256\": mes_digest,\n",
+        '                "retail_mes_sha256": sha256(mes_path),\n',
+        '                "retail_mes_sha256": mes_digest,\n',
     )
 
 
@@ -1069,11 +1079,11 @@ def _optimize_whole_game() -> None:
         "    layout = audit_layouts(retail_root)\n"
         "    compiled = _compiled_static_summary(retail_root)\n"
         "    scn_integrity = audit_project_scn_references(retail_root)\n"
-        "    index = _load(SOURCES / \"index.json\")\n",
-        "    index = _load(SOURCES / \"index.json\")\n"
+        '    index = _load(SOURCES / "index.json")\n',
+        '    index = _load(SOURCES / "index.json")\n'
         "    sources_by_chapter = {\n"
-        "        str(item[\"chapter\"]): _load(SOURCES / item[\"source\"])\n"
-        "        for item in index[\"chapters\"]\n"
+        '        str(item["chapter"]): _load(SOURCES / item["source"])\n'
+        '        for item in index["chapters"]\n'
         "    }\n"
         "    layout = audit_layouts(retail_root)\n"
         "    compiled = _compiled_static_summary(\n"
@@ -1083,7 +1093,7 @@ def _optimize_whole_game() -> None:
     )
     _replace_once(
         "work/clean_rebuild/whole_game_test.py",
-        "        source = _load(SOURCES / chapter_item[\"source\"])\n",
+        '        source = _load(SOURCES / chapter_item["source"])\n',
         "        source = sources_by_chapter[chapter]\n",
     )
     _replace_once(
@@ -1104,12 +1114,12 @@ def bind_build_identity(plan: dict[str, Any], cue: Path, track1: Path) -> None:
     )
     _replace_once(
         "work/clean_rebuild/whole_game_test.py",
-        "        \"cue_sha256\": hashlib.sha256(cue.read_bytes()).hexdigest().upper(),\n"
-        "        \"track1_filename\": track1.name,\n"
-        "        \"track1_sha256\": hashlib.sha256(track1.read_bytes()).hexdigest().upper(),\n",
-        "        \"cue_sha256\": _sha256_file(cue),\n"
-        "        \"track1_filename\": track1.name,\n"
-        "        \"track1_sha256\": _sha256_file(track1),\n",
+        '        "cue_sha256": hashlib.sha256(cue.read_bytes()).hexdigest().upper(),\n'
+        '        "track1_filename": track1.name,\n'
+        '        "track1_sha256": hashlib.sha256(track1.read_bytes()).hexdigest().upper(),\n',
+        '        "cue_sha256": _sha256_file(cue),\n'
+        '        "track1_filename": track1.name,\n'
+        '        "track1_sha256": _sha256_file(track1),\n',
     )
 
 
@@ -1133,9 +1143,8 @@ def _extend_regressions() -> None:
     )
     _replace_once(
         "tests/test_performance_equivalence.py",
-        "            b\"A\" * 96,\n",
-        "            b\"A\" * 96,\n"
-        "            b\"AB\" * 256,\n",
+        '            b"A" * 96,\n',
+        '            b"A" * 96,\n            b"AB" * 256,\n',
     )
     _replace_once(
         "tests/test_performance_equivalence.py",
@@ -1221,7 +1230,7 @@ def _update_docs() -> None:
     performance_path = _path("docs/PERFORMANCE.md")
     performance = performance_path.read_text(encoding="utf-8")
     marker = "## Investigated non-hotspots\n"
-    addition = '''## September 6, 2026 follow-up efficiency pass
+    addition = """## September 6, 2026 follow-up efficiency pass
 
 The follow-up pass removes repeated work that remained after the major codec and
 raw-disc optimizations:
@@ -1245,7 +1254,7 @@ The regression suite preserves the older compressor as a reference algorithm
 and compares emitted compressed bytes, including a long repetitive corpus that
 exercises the new range-minimum path.
 
-'''
+"""
     if marker not in performance:
         raise RuntimeError("docs/PERFORMANCE.md: insertion marker is missing")
     performance_path.write_text(

@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import hashlib
 
-
 RETAIL_PART1A_SCN_SHA256 = (
     "2F345D957366BB3CDA14FA5764EFBC294F7B2C06531C6ED8E50745354DB3F00E"
 )
@@ -55,7 +54,9 @@ def patch_part1a_scn(retail: bytes) -> bytes:
             "PART1A.SCN retail hash mismatch: expected "
             f"{RETAIL_PART1A_SCN_SHA256}, got {digest}"
         )
-    if any(retail[offset] != RETAIL_SELECTOR_X for offset in SELECTOR_X_OFFSETS):
+    if any(
+        retail[offset] != RETAIL_SELECTOR_X for offset in SELECTOR_X_OFFSETS
+    ):
         values = tuple(retail[offset] for offset in SELECTOR_X_OFFSETS)
         raise ValueError(
             "PART1A.SCN Call/Fold selector coordinates are not the retail values: "
@@ -67,12 +68,22 @@ def patch_part1a_scn(retail: bytes) -> bytes:
         patched[offset] = PATCHED_SELECTOR_X
     result = bytes(patched)
 
-    if len(result) != len(retail) or sha256(result) != PATCHED_PART1A_SCN_SHA256:
-        raise AssertionError("PART1A.SCN patch output does not match its frozen result")
+    if (
+        len(result) != len(retail)
+        or sha256(result) != PATCHED_PART1A_SCN_SHA256
+    ):
+        raise AssertionError(
+            "PART1A.SCN patch output does not match its frozen result"
+        )
     changed = {
-        index for index, (before, after) in enumerate(zip(retail, result, strict=True))
+        index
+        for index, (before, after) in enumerate(
+            zip(retail, result, strict=True)
+        )
         if before != after
     }
     if changed != set(SELECTOR_X_OFFSETS):
-        raise AssertionError("PART1A.SCN patch touched unexpected byte offsets")
+        raise AssertionError(
+            "PART1A.SCN patch touched unexpected byte offsets"
+        )
     return result

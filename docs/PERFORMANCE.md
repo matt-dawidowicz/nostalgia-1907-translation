@@ -96,14 +96,39 @@ include streaming SHA-256 authentication of the reference.
 
 ## Compiler micro-optimizations
 
-`stored_cell()` is deterministic for an immutable `(style, unit)` pair, so its
-rendered 12x12 bitmap is now memoized. The row-phase optimizer also returns
-immediately when no row has an alternate phase, which is the current normal
-compiler path. Tests explicitly cover both shortcuts.
+`stored_cell()` remains memoized for immutable `(style, unit)` pairs. The MES
+compiler now materializes each row's glyph bitmaps once and reuses that bitmap
+plan for frequency ordering, first-use ordering, and final record encoding. It
+also avoids tuple joins used only to count cells, duplicate retained-glyph
+sorting, constant dictionary scans, and a redundant pointer-range pass.
 
-These were accepted as low-risk reductions in repeated work. They are not
-presented as major end-to-end wins because the retail benchmark identified LZ
-compression and raw-sector parity generation as the dominant costs.
+These are low-risk reductions in repeated Python work. They are not presented
+as dominant end-to-end wins because LZ compression and raw-sector parity
+generation remain the principal binary-processing costs.
+
+## September 6, 2026 follow-up efficiency pass
+
+The follow-up pass removes repeated work that remained after the major codec and
+raw-disc optimizations:
+
+- SCN role, geometry, and row-limit inference now share one structural display
+  inventory per contract build instead of independently rescanning commands.
+- Long LZ copy matches are represented as intervals. A range-minimum DP query
+  selects the best legal long-copy predecessor without allocating every length
+  from 5 through the maximum match. Legacy-byte equivalence remains mandatory.
+- The bilingual exporter caches decoded and 2x-scaled immutable glyph rasters,
+  uses the native Adler-32 implementation, and reuses each retail MES digest.
+- Source-health validation decodes each text source once before both hygiene and
+  parser checks.
+- Whole-game planning reuses canonical chapter objects inside the plan build and
+  streams large CUE/Track 1 identity hashes instead of loading Track 1 whole.
+- Translation auditing avoids duplicate semantic normalization, shares an
+  already-parsed retail MES with renderer-contract inference, and classifies the
+  final audit report in one pass.
+
+The regression suite preserves the older compressor as a reference algorithm
+and compares emitted compressed bytes, including a long repetitive corpus that
+exercises the new range-minimum path.
 
 ## Investigated non-hotspots
 

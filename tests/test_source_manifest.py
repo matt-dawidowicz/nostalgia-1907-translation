@@ -7,7 +7,6 @@ import tempfile
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 MODULE_PATH = ROOT / "tools" / "source_manifest.py"
 SPEC = importlib.util.spec_from_file_location("source_manifest", MODULE_PATH)
@@ -20,7 +19,9 @@ SPEC.loader.exec_module(source_manifest)
 class SourceManifestTests(unittest.TestCase):
     """Keep review-bundle inventory deterministic and fail-closed."""
 
-    def test_package_inventory_is_sorted_and_excludes_manifest_itself(self) -> None:
+    def test_package_inventory_is_sorted_and_excludes_manifest_itself(
+        self,
+    ) -> None:
         """Render every package member exactly once in portable path order."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -61,7 +62,9 @@ class SourceManifestTests(unittest.TestCase):
                 source_manifest.sha256(crlf),
             )
 
-    def test_makefile_and_sha256_text_hashes_normalize_line_endings(self) -> None:
+    def test_makefile_and_sha256_text_hashes_normalize_line_endings(
+        self,
+    ) -> None:
         """Match source-health text policy for suffixless and checksum text files."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

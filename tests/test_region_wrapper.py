@@ -8,13 +8,12 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
 REGION = ROOT / "work" / "region_variant"
 
-from work.region_variant import build_us_bios_test as region  # noqa: E402
 from work.clean_rebuild import raw_cd  # noqa: E402
+from work.region_variant import build_us_bios_test as region  # noqa: E402
 
 
 def synthetic_boot() -> bytes:
@@ -45,7 +44,8 @@ def raw_sector(sector_index: int, user_data: bytes) -> bytes:
     sector[12:15] = raw_cd.sector_msf(sector_index)
     sector[raw_cd.MODE_OFFSET] = 1
     sector[
-        raw_cd.USER_DATA_OFFSET : raw_cd.USER_DATA_OFFSET + raw_cd.ISO_SECTOR_SIZE
+        raw_cd.USER_DATA_OFFSET : raw_cd.USER_DATA_OFFSET
+        + raw_cd.ISO_SECTOR_SIZE
     ] = user_data
     raw_cd.regenerate_checksums(sector)
     return bytes(sector)
@@ -57,8 +57,7 @@ def raw_track_from_boot(boot: bytes) -> bytes:
         raw_sector(
             sector_index,
             boot[
-                sector_index
-                * raw_cd.ISO_SECTOR_SIZE : (sector_index + 1)
+                sector_index * raw_cd.ISO_SECTOR_SIZE : (sector_index + 1)
                 * raw_cd.ISO_SECTOR_SIZE
             ],
         )
@@ -71,17 +70,30 @@ class RegionWrapperTests(unittest.TestCase):
 
     def test_region_basename_rejects_path_syntax(self) -> None:
         """Keep wrapper artifact names inside their selected staging directory."""
-        self.assertEqual(region._validate_basename("Nostalgia1907_Test"), "Nostalgia1907_Test")
-        for basename in ("", "../escape", "nested/name", "nested\\name", ".hidden"):
+        self.assertEqual(
+            region._validate_basename("Nostalgia1907_Test"),
+            "Nostalgia1907_Test",
+        )
+        for basename in (
+            "",
+            "../escape",
+            "nested/name",
+            "nested\\name",
+            ".hidden",
+        ):
             with self.subTest(basename=basename):
-                with self.assertRaisesRegex(region.RegionVariantError, "filename stem"):
+                with self.assertRaisesRegex(
+                    region.RegionVariantError, "filename stem"
+                ):
                     region._validate_basename(basename)
 
     def test_wrapper_has_no_report_only_publication_entry_point(self) -> None:
         """Prevent staged JSON reports from authorizing an external publication."""
         self.assertFalse(hasattr(region, "publish_existing"))
 
-    def test_wrapped_boot_preserves_metadata_and_relocates_exactly(self) -> None:
+    def test_wrapped_boot_preserves_metadata_and_relocates_exactly(
+        self,
+    ) -> None:
         """Keep the Japanese outer header and original payload byte-exact."""
         original = synthetic_boot()
         security = synthetic_security()
@@ -99,7 +111,9 @@ class RegionWrapperTests(unittest.TestCase):
             output[region.RELOCATION_END :], original[region.RELOCATION_END :]
         )
         for offset, expected in region.OUTPUT_HEADER_FIELDS.items():
-            self.assertEqual(int.from_bytes(output[offset : offset + 4], "big"), expected)
+            self.assertEqual(
+                int.from_bytes(output[offset : offset + 4], "big"), expected
+            )
 
     def test_wrapped_boot_rejects_unproven_relocation_capacity(self) -> None:
         """Refuse a baseline whose supposedly unused boot tail is occupied."""
@@ -108,7 +122,9 @@ class RegionWrapperTests(unittest.TestCase):
         with self.assertRaisesRegex(region.RegionVariantError, "zero-filled"):
             region.build_wrapped_boot(bytes(original), synthetic_security())
 
-    def test_raw_track_wrapper_changes_only_sectors_zero_through_four(self) -> None:
+    def test_raw_track_wrapper_changes_only_sectors_zero_through_four(
+        self,
+    ) -> None:
         """Validate EDC/ECC and reject a later-sector mutation explicitly."""
         original_boot = synthetic_boot()
         security = synthetic_security()
@@ -120,7 +136,9 @@ class RegionWrapperTests(unittest.TestCase):
             source = root / "source.bin"
             output = root / "output.bin"
             source.write_bytes(raw_track_from_boot(original_boot))
-            source_hash = hashlib.sha256(source.read_bytes()).hexdigest().upper()
+            source_hash = (
+                hashlib.sha256(source.read_bytes()).hexdigest().upper()
+            )
             with patch.object(
                 region, "EXPECTED_US_SECURITY_SHA256", expected_security_hash
             ):
@@ -131,14 +149,18 @@ class RegionWrapperTests(unittest.TestCase):
                 report = region._validate_track_delta(
                     source, output, wrapped_boot, source_hash
                 )
-                self.assertEqual(report["changed_raw_sectors"], [0, 1, 2, 3, 4])
+                self.assertEqual(
+                    report["changed_raw_sectors"], [0, 1, 2, 3, 4]
+                )
                 self.assertTrue(report["all_sector_checksums_valid"])
                 self.assertEqual(report["checksum_verified_sector_count"], 5)
                 self.assertEqual(report["checksum_inherited_sector_count"], 11)
 
                 damaged = bytearray(output.read_bytes())
                 start = 5 * raw_cd.RAW_SECTOR_SIZE
-                sector = bytearray(damaged[start : start + raw_cd.RAW_SECTOR_SIZE])
+                sector = bytearray(
+                    damaged[start : start + raw_cd.RAW_SECTOR_SIZE]
+                )
                 sector[raw_cd.USER_DATA_OFFSET] ^= 0x01
                 raw_cd.regenerate_checksums(sector)
                 damaged[start : start + raw_cd.RAW_SECTOR_SIZE] = sector

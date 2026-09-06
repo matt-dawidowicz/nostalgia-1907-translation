@@ -17,9 +17,8 @@ from pathlib import Path
 
 from .renderer_format import measure_literal
 from .source_json import load_json_object
-from .translation_formatter import audit_layouts
 from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
-
+from .translation_formatter import audit_layouts
 
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
@@ -76,7 +75,9 @@ def _comparison_records(path: Path) -> dict[str, dict[str, object]]:
     }
 
 
-def _risk(record_id: str, text: str, row_cells: list[int]) -> tuple[int, str, str]:
+def _risk(
+    record_id: str, text: str, row_cells: list[int]
+) -> tuple[int, str, str]:
     """Assign a review priority without pretending to know runtime geometry."""
     if record_id in PRIORITY_PART4C:
         return (
@@ -89,7 +90,11 @@ def _risk(record_id: str, text: str, row_cells: list[int]) -> tuple[int, str, st
                 "PART4C:054 reaches 41 characters in one fixed row."
             ),
         )
-    if len(row_cells) > 1 or max(row_cells, default=0) >= 18 or text != text.strip():
+    if (
+        len(row_cells) > 1
+        or max(row_cells, default=0) >= 18
+        or text != text.strip()
+    ):
         return (
             2,
             "ELEVATED",
@@ -149,10 +154,14 @@ def build_queue(
         source = comparison.get(record_id)
         record = canonical.get(record_id)
         if source is None or record is None:
-            raise ValueError(f"{record_id}: comparison/canonical evidence is missing")
+            raise ValueError(
+                f"{record_id}: comparison/canonical evidence is missing"
+            )
         text = record.get("text")
         if not isinstance(text, str):
-            raise ValueError(f"{record_id}: fixed translated text is not a string")
+            raise ValueError(
+                f"{record_id}: fixed translated text is not a string"
+            )
         exact_rows = text.split("\n")
         row_cells = [measure_literal(row) for row in exact_rows]
         image_relative = str(source["japanese_image"])
@@ -176,7 +185,9 @@ def build_queue(
                 ),
                 "japanese_source_record_bytes": len(record_bytes),
                 "japanese_source_record_sha256": _sha256_bytes(record_bytes),
-                "japanese_source_token_stream_sha256": _sha256_bytes(token_stream),
+                "japanese_source_token_stream_sha256": _sha256_bytes(
+                    token_stream
+                ),
                 "japanese_visible_glyphs": source["japanese_visible_glyphs"],
                 "japanese_image_reference": image_relative,
                 "japanese_image_sha256": image_hash,
@@ -208,7 +219,9 @@ def build_queue(
                     "preview proves runtime fit, centering, clipping, or timing."
                 ),
                 "risk_assessment": rationale,
-                "runtime_scene_or_replay_evidence_needed": _runtime_evidence(record_id),
+                "runtime_scene_or_replay_evidence_needed": _runtime_evidence(
+                    record_id
+                ),
             }
         )
     if len(rows) != EXPECTED_FIXED_RECORDS:
@@ -319,8 +332,12 @@ def write_markdown(path: Path, rows: list[dict[str, object]]) -> None:
 def main() -> None:
     """Run the fixed-layout review export without modifying canonical sources."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT)
-    parser.add_argument("--comparison-json", type=Path, default=DEFAULT_COMPARISON)
+    parser.add_argument(
+        "--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT
+    )
+    parser.add_argument(
+        "--comparison-json", type=Path, default=DEFAULT_COMPARISON
+    )
     parser.add_argument("--tsv", type=Path, default=DEFAULT_TSV)
     parser.add_argument("--markdown", type=Path, default=DEFAULT_MARKDOWN)
     args = parser.parse_args()

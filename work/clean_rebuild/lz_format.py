@@ -25,7 +25,6 @@ from collections import deque
 from dataclasses import dataclass
 from pathlib import Path
 
-
 ENTRY_SIZE = 0x1E
 Op = tuple[str, int, int]
 
@@ -78,7 +77,9 @@ class BackwardBits:
         self.position -= 4
         if self.position < 0:
             raise LzError("compressed bitstream underflow")
-        return int.from_bytes(self.data[self.position : self.position + 4], "big")
+        return int.from_bytes(
+            self.data[self.position : self.position + 4], "big"
+        )
 
     def bit(self) -> int:
         """Consume one least-significant-first stream bit."""
@@ -114,7 +115,9 @@ def decompress(payload: bytes, expected_size: int | None = None) -> bytes:
             XOR checksum is invalid.
     """
     if len(payload) < 12 or len(payload) % 4:
-        raise LzError("compressed payload must contain at least three aligned words")
+        raise LzError(
+            "compressed payload must contain at least three aligned words"
+        )
     position = len(payload)
 
     def previous_word() -> int:
@@ -173,7 +176,9 @@ def decompress(payload: bytes, expected_size: int | None = None) -> bytes:
             count = reader.bits(8)
             copy(reader.bits(12), count)
     if reader.checksum:
-        raise LzError(f"compressed payload checksum is 0x{reader.checksum:08X}")
+        raise LzError(
+            f"compressed payload checksum is 0x{reader.checksum:08X}"
+        )
     return bytes(output)
 
 
@@ -190,7 +195,9 @@ def _op_cost(op: Op) -> int:
     return {"copy2": 10, "copy3": 12, "copy4": 13, "copylong": 23}[kind]
 
 
-def _match_length(data: bytes, position: int, distance: int, limit: int) -> int:
+def _match_length(
+    data: bytes, position: int, distance: int, limit: int
+) -> int:
     """Measure a legal backward match without crossing input boundaries."""
     length = 0
     while length < limit:
@@ -204,15 +211,14 @@ def _match_length(data: bytes, position: int, distance: int, limit: int) -> int:
     return length
 
 
-def _copy_candidates(
+def _copy_matches(
     data: bytes, positions: dict[int, list[int]], position: int
-) -> list[Op]:
-    """Enumerate encodable copies ending at ``position``.
+) -> list[tuple[int, int]]:
+    """Return legal copy distances and their maximum backward match lengths.
 
-    Copy commands require at least two bytes, so candidates are indexed by the
-    two-byte sequence ending at each possible source position.  This preserves
-    the original ascending source order and therefore deterministic tie
-    breaking, while avoiding the much larger set of one-byte false matches.
+    One match now represents the complete long-copy interval instead of
+    allocating one operation tuple for every length from five through the
+    maximum. The DP selects the best long length with a range-minimum query.
     """
     max_distance = min(0xFFF, len(data) - position)
     if position < 2 or max_distance <= 0:
@@ -221,30 +227,23 @@ def _copy_candidates(
     matching = positions.get(key, [])
     first = bisect.bisect_left(matching, position)
     last = bisect.bisect_right(matching, position - 1 + max_distance)
-    operations: list[Op] = []
+    matches: list[tuple[int, int]] = []
     for source in matching[first:last]:
         distance = source - (position - 1)
         length = _match_length(data, position, distance, min(256, position))
-        if length >= 2 and distance <= 0xFF:
-            operations.append(("copy2", 2, distance))
-        if length >= 3 and distance <= 0x1FF:
-            operations.append(("copy3", 3, distance))
-        if length >= 4 and distance <= 0x3FF:
-            operations.append(("copy4", 4, distance))
-        operations.extend(
-            ("copylong", candidate_length, distance)
-            for candidate_length in range(5, length + 1)
-        )
-    return operations
+        if length >= 2:
+            matches.append((distance, length))
+    return matches
 
 
 def _choose_operations(data: bytes) -> list[tuple[int, Op]]:
     """Find the minimum-bit backward parse with deterministic tie breaking.
 
-    Literal costs are affine in run length, so the long-literal range can use
-    a monotonic sliding minimum instead of rescanning up to 256 predecessors at
-    every byte.  Equal-cost minima retain the shortest literal, exactly matching
-    the previous ascending-length loop.
+    Literal costs use a monotonic sliding minimum. Long-copy commands have a
+    fixed 23-bit cost, so a segment tree selects the least-cost legal
+    predecessor without materializing every candidate length. Equal-cost range
+    minima choose the largest predecessor index, which is the shortest copy and
+    therefore preserves the legacy ascending-length tie preference.
     """
     positions: dict[int, list[int]] = {}
     for endpoint in range(1, len(data)):
@@ -255,20 +254,45 @@ def _choose_operations(data: bytes) -> list[tuple[int, Op]]:
     choices: list[Op | None] = [None] * (len(data) + 1)
     costs[0] = 0
     long_literals: deque[tuple[int, int]] = deque()
+
+    tree_size = 1 << max(0, len(data)).bit_length()
+    range_minima = [(infinity, 0)] * (tree_size * 2)
+
+    def update_range_minimum(index: int, cost: int) -> None:
+        """Publish one completed DP cost to the iterative segment tree."""
+        node = tree_size + index
+        range_minima[node] = (cost, -index)
+        node //= 2
+        while node:
+            range_minima[node] = min(
+                range_minima[node * 2], range_minima[node * 2 + 1]
+            )
+            node //= 2
+
+    def query_range_minimum(first: int, last: int) -> tuple[int, int]:
+        """Return minimum cost and largest tied index in an inclusive range."""
+        left = tree_size + first
+        right = tree_size + last + 1
+        best = (infinity, 0)
+        while left < right:
+            if left & 1:
+                best = min(best, range_minima[left])
+                left += 1
+            if right & 1:
+                right -= 1
+                best = min(best, range_minima[right])
+            left //= 2
+            right //= 2
+        return best[0], -best[1]
+
+    update_range_minimum(0, 0)
     for position in range(1, len(data) + 1):
-        # Lengths 1..8 have a five-bit command overhead.  There are only eight
-        # candidates, so evaluating them directly is cheaper and preserves the
-        # original shortest-length tie preference.
         for length in range(1, min(8, position) + 1):
             cost = costs[position - length] + 5 + length * 8
             if cost < costs[position]:
                 costs[position] = cost
                 choices[position] = ("literal", length, 0)
 
-        # Lengths 9..264 cost costs[j] + 11 + 8*(position-j).
-        # Maintain the minimum of costs[j] - 8*j over the legal predecessor
-        # window.  Newer equal minima replace older ones so ties choose the
-        # larger j, i.e. the shorter literal, matching the legacy loop.
         eligible = position - 9
         if eligible >= 0:
             value = costs[eligible] - 8 * eligible
@@ -286,11 +310,36 @@ def _choose_operations(data: bytes) -> list[tuple[int, Op]]:
                 costs[position] = cost
                 choices[position] = ("literal", length, 0)
 
-        for operation in _copy_candidates(data, positions, position):
-            cost = costs[position - operation[1]] + _op_cost(operation)
-            if cost < costs[position]:
-                costs[position] = cost
-                choices[position] = operation
+        for distance, match_length in _copy_matches(data, positions, position):
+            if distance <= 0xFF:
+                cost = costs[position - 2] + 10
+                if cost < costs[position]:
+                    costs[position] = cost
+                    choices[position] = ("copy2", 2, distance)
+            if match_length >= 3 and distance <= 0x1FF:
+                cost = costs[position - 3] + 12
+                if cost < costs[position]:
+                    costs[position] = cost
+                    choices[position] = ("copy3", 3, distance)
+            if match_length >= 4 and distance <= 0x3FF:
+                cost = costs[position - 4] + 13
+                if cost < costs[position]:
+                    costs[position] = cost
+                    choices[position] = ("copy4", 4, distance)
+            if match_length >= 5:
+                predecessor_cost, predecessor = query_range_minimum(
+                    position - match_length, position - 5
+                )
+                cost = predecessor_cost + 23
+                if cost < costs[position]:
+                    costs[position] = cost
+                    choices[position] = (
+                        "copylong",
+                        position - predecessor,
+                        distance,
+                    )
+
+        update_range_minimum(position, costs[position])
 
     selected: list[tuple[int, Op]] = []
     position = len(data)
@@ -367,7 +416,9 @@ def compress(data: bytes) -> bytes:
     return payload
 
 
-def parse_archive(data: bytes, *, source: str = "<bytes>") -> tuple[Entry, ...]:
+def parse_archive(
+    data: bytes, *, source: str = "<bytes>"
+) -> tuple[Entry, ...]:
     """Parse and fully bound-check an archive member table.
 
     Entry order and duplicate names are preserved. Payload offsets must begin
@@ -379,7 +430,9 @@ def parse_archive(data: bytes, *, source: str = "<bytes>") -> tuple[Entry, ...]:
     count = int.from_bytes(data[:2], "big")
     entry_size = int.from_bytes(data[2:4], "big")
     if entry_size != ENTRY_SIZE:
-        raise LzError(f"{source}: unexpected table entry size 0x{entry_size:04X}")
+        raise LzError(
+            f"{source}: unexpected table entry size 0x{entry_size:04X}"
+        )
     table_end = 4 + count * ENTRY_SIZE
     if table_end > len(data):
         raise LzError(f"{source}: truncated member table")
@@ -390,7 +443,9 @@ def parse_archive(data: bytes, *, source: str = "<bytes>") -> tuple[Entry, ...]:
         try:
             name = raw[:14].split(b"\0", 1)[0].decode("ascii")
         except UnicodeDecodeError as error:
-            raise LzError(f"{source}: member {index} has a non-ASCII name") from error
+            raise LzError(
+                f"{source}: member {index} has a non-ASCII name"
+            ) from error
         entry = Entry(
             index=index,
             name=name,
@@ -401,15 +456,27 @@ def parse_archive(data: bytes, *, source: str = "<bytes>") -> tuple[Entry, ...]:
         )
         if not name:
             raise LzError(f"{source}: empty member name at index {index}")
-        if entry.offset < table_end or entry.offset + entry.compressed_size > len(data):
+        if (
+            entry.offset < table_end
+            or entry.offset + entry.compressed_size > len(data)
+        ):
             raise LzError(f"{source}:{name}: payload lies outside the archive")
         entries.append(entry)
-    if any(left.offset >= right.offset for left, right in zip(entries, entries[1:])):
+    if any(
+        left.offset >= right.offset
+        for left, right in zip(entries, entries[1:])
+    ):
         raise LzError(f"{source}: member slots are not strictly ordered")
     for index, entry in enumerate(entries):
-        slot_end = entries[index + 1].offset if index + 1 < len(entries) else len(data)
+        slot_end = (
+            entries[index + 1].offset
+            if index + 1 < len(entries)
+            else len(data)
+        )
         if entry.offset + entry.compressed_size > slot_end:
-            raise LzError(f"{source}:{entry.name}: payload overlaps the next slot")
+            raise LzError(
+                f"{source}:{entry.name}: payload overlaps the next slot"
+            )
     return tuple(entries)
 
 
@@ -430,7 +497,9 @@ def read_member(archive_path: Path, member_name: str) -> bytes:
         if entry.name == member_name
     ]
     if len(matches) != 1:
-        raise LzError(f"{archive_path}: expected one member named {member_name!r}")
+        raise LzError(
+            f"{archive_path}: expected one member named {member_name!r}"
+        )
     return member_bytes(data, matches[0])
 
 
@@ -498,10 +567,16 @@ def replace_members_fixed(
             raise LzSlotOverflowError(
                 f"{name}: encoded payload is {len(payload)} bytes but retail slot is {slot_size}"
             )
-        data[entry.offset : slot_end] = payload + b"\0" * (slot_size - len(payload))
+        data[entry.offset : slot_end] = payload + b"\0" * (
+            slot_size - len(payload)
+        )
         table_offset = 4 + entry.index * ENTRY_SIZE
-        data[table_offset + 18 : table_offset + 22] = compressed_size.to_bytes(4, "big")
-        data[table_offset + 22 : table_offset + 26] = unpacked_size.to_bytes(4, "big")
+        data[table_offset + 18 : table_offset + 22] = compressed_size.to_bytes(
+            4, "big"
+        )
+        data[table_offset + 22 : table_offset + 26] = unpacked_size.to_bytes(
+            4, "big"
+        )
         expected[name] = unpacked
         report.append(
             {
@@ -522,7 +597,9 @@ def replace_members_fixed(
     for name, unpacked in expected.items():
         entry = next(item for item in rebuilt_entries if item.name == name)
         if member_bytes(rebuilt, entry) != unpacked:
-            raise LzError(f"{name}: rebuilt member failed round-trip verification")
+            raise LzError(
+                f"{name}: rebuilt member failed round-trip verification"
+            )
     return report
 
 
@@ -568,7 +645,9 @@ def replace_members_reflow(
             encoded = compress(unpacked)
             payload = encoded if len(encoded) < len(unpacked) else unpacked
             compressed_size = len(payload)
-            unpacked_size = len(unpacked) if payload is encoded else len(payload)
+            unpacked_size = (
+                len(unpacked) if payload is encoded else len(payload)
+            )
             expected[entry.name] = unpacked
             replacements_report.append(
                 {
@@ -579,16 +658,24 @@ def replace_members_reflow(
                 }
             )
         else:
-            payload = source[entry.offset : entry.offset + entry.compressed_size]
+            payload = source[
+                entry.offset : entry.offset + entry.compressed_size
+            ]
             compressed_size = entry.compressed_size
             unpacked_size = entry.unpacked_size
         payloads.append((payload, compressed_size, unpacked_size))
 
     first_payload = entries[0].offset
-    required_end = first_payload + sum(len(payload) for payload, _, _ in payloads)
-    limit = len(source) if maximum_archive_size is None else maximum_archive_size
+    required_end = first_payload + sum(
+        len(payload) for payload, _, _ in payloads
+    )
+    limit = (
+        len(source) if maximum_archive_size is None else maximum_archive_size
+    )
     if limit < len(source):
-        raise LzError("maximum archive size is smaller than the retail archive")
+        raise LzError(
+            "maximum archive size is smaller than the retail archive"
+        )
     if required_end > limit:
         raise LzError(
             f"reflow needs {required_end - limit} bytes beyond the guarded allocation"
@@ -597,31 +684,47 @@ def replace_members_reflow(
     output = bytearray(source + b"\0" * (output_size - len(source)))
     output[first_payload:] = b"\0" * (output_size - first_payload)
     cursor = first_payload
-    for entry, (payload, compressed_size, unpacked_size) in zip(entries, payloads):
+    for entry, (payload, compressed_size, unpacked_size) in zip(
+        entries, payloads
+    ):
         table_offset = 4 + entry.index * ENTRY_SIZE
-        output[table_offset + 14 : table_offset + 18] = cursor.to_bytes(4, "big")
-        output[table_offset + 18 : table_offset + 22] = compressed_size.to_bytes(
+        output[table_offset + 14 : table_offset + 18] = cursor.to_bytes(
             4, "big"
         )
-        output[table_offset + 22 : table_offset + 26] = unpacked_size.to_bytes(4, "big")
+        output[table_offset + 18 : table_offset + 22] = (
+            compressed_size.to_bytes(4, "big")
+        )
+        output[table_offset + 22 : table_offset + 26] = unpacked_size.to_bytes(
+            4, "big"
+        )
         output[cursor : cursor + len(payload)] = payload
         cursor += len(payload)
 
     output_archive.parent.mkdir(parents=True, exist_ok=True)
     output_archive.write_bytes(output)
-    if not source_archive.stat().st_size <= output_archive.stat().st_size <= limit:
+    if (
+        not source_archive.stat().st_size
+        <= output_archive.stat().st_size
+        <= limit
+    ):
         raise LzError("reflow output escaped the guarded archive-size range")
     rebuilt = output_archive.read_bytes()
     rebuilt_entries = parse_archive(rebuilt, source=str(output_archive))
-    if [entry.name for entry in rebuilt_entries] != [entry.name for entry in entries]:
+    if [entry.name for entry in rebuilt_entries] != [
+        entry.name for entry in entries
+    ]:
         raise LzError("reflow changed member order or names")
     for name, unpacked in expected.items():
         matches = [item for item in rebuilt_entries if item.name == name]
         if len(matches) != 1:
-            raise LzError(f"{name}: rebuilt replacement member became ambiguous")
+            raise LzError(
+                f"{name}: rebuilt replacement member became ambiguous"
+            )
         entry = matches[0]
         if member_bytes(rebuilt, entry) != unpacked:
-            raise LzError(f"{name}: reflowed member failed round-trip verification")
+            raise LzError(
+                f"{name}: reflowed member failed round-trip verification"
+            )
     return {
         "replacements": replacements_report,
         "payload_start": first_payload,

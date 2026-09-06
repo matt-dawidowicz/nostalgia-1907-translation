@@ -8,12 +8,17 @@ import hashlib
 import random
 import tempfile
 import unittest
+import zlib
 from pathlib import Path
 from unittest.mock import patch
 
-from work.clean_rebuild import lz_format
-from work.clean_rebuild import mes_compiler
-from work.clean_rebuild import raw_cd
+from work.clean_rebuild import (
+    export_bilingual_comparison,
+    lz_format,
+    mes_compiler,
+    raw_cd,
+    scn_layout,
+)
 
 
 class LzOptimizerEquivalenceTests(unittest.TestCase):
@@ -53,7 +58,9 @@ class LzOptimizerEquivalenceTests(unittest.TestCase):
         return operations
 
     @classmethod
-    def _legacy_choose_operations(cls, data: bytes) -> list[tuple[int, lz_format.Op]]:
+    def _legacy_choose_operations(
+        cls, data: bytes
+    ) -> list[tuple[int, lz_format.Op]]:
         positions: list[list[int]] = [[] for _ in range(256)]
         for index, byte in enumerate(data):
             positions[byte].append(index)
@@ -68,8 +75,12 @@ class LzOptimizerEquivalenceTests(unittest.TestCase):
                 if cost < costs[position]:
                     costs[position] = cost
                     choices[position] = operation
-            for operation in cls._legacy_copy_candidates(data, positions, position):
-                cost = costs[position - operation[1]] + lz_format._op_cost(operation)
+            for operation in cls._legacy_copy_candidates(
+                data, positions, position
+            ):
+                cost = costs[position - operation[1]] + lz_format._op_cost(
+                    operation
+                )
                 if cost < costs[position]:
                     costs[position] = cost
                     choices[position] = operation
@@ -79,7 +90,9 @@ class LzOptimizerEquivalenceTests(unittest.TestCase):
         while position:
             operation = choices[position]
             if operation is None:
-                raise AssertionError(f"legacy compressor could not cover byte {position}")
+                raise AssertionError(
+                    f"legacy compressor could not cover byte {position}"
+                )
             selected.append((position, operation))
             position -= operation[1]
         return selected
@@ -89,12 +102,14 @@ class LzOptimizerEquivalenceTests(unittest.TestCase):
         rng = random.Random(1907)
         corpora = (
             b"A" * 96,
+            b"AB" * 256,
             (b"ABRACADABRA-1907-" * 10)[:176],
             bytes(range(256)) + bytes(range(64)),
             bytes(rng.randrange(256) for _ in range(320)),
-            (b"The ship is still moving. What happened in the engine room? " * 4)[
-                :224
-            ],
+            (
+                b"The ship is still moving. What happened in the engine room? "
+                * 4
+            )[:224],
         )
         for data in corpora:
             with self.subTest(length=len(data), prefix=data[:12]):
@@ -106,7 +121,60 @@ class LzOptimizerEquivalenceTests(unittest.TestCase):
                     legacy = lz_format.compress(data)
                 optimized = lz_format.compress(data)
                 self.assertEqual(optimized, legacy)
-                self.assertEqual(lz_format.decompress(optimized, len(data)), data)
+                self.assertEqual(
+                    lz_format.decompress(optimized, len(data)), data
+                )
+
+
+class ScnInventoryEquivalenceTests(unittest.TestCase):
+    """Require contract inference to inventory each SCN only once."""
+
+    def test_contracts_share_one_display_inventory(self) -> None:
+        """Build role/layout/row contracts from one structural inventory."""
+        scn = bytes((0x21, 0x00, 0x01, 0x00, 0x02))
+        with patch.object(
+            scn_layout,
+            "display_occurrences",
+            wraps=scn_layout.display_occurrences,
+        ) as inventory:
+            contracts = scn_layout.infer_contracts(
+                scn,
+                2,
+                {0, 1},
+                {},
+                retail_records=(b"\0", b"\0"),
+            )
+        self.assertEqual(inventory.call_count, 1)
+        self.assertIn(scn_layout.ROLE_SPEAKER, contracts[0].roles)
+        self.assertEqual(
+            contracts[1].layout.text_box,
+            scn_layout.TEXT_BOX_LOWER_DIALOGUE,
+        )
+
+
+class ComparisonExporterFastPathTests(unittest.TestCase):
+    """Check deterministic glyph and checksum fast paths directly."""
+
+    def test_scaled_glyph_offsets_are_cached(self) -> None:
+        """Reuse decoded/scaled raster work for repeated immutable glyphs."""
+        glyph = bytes(range(export_bilingual_comparison.GLYPH_BYTES))
+        export_bilingual_comparison._glyph_matrix.cache_clear()
+        export_bilingual_comparison._scaled_black_offsets.cache_clear()
+        first = export_bilingual_comparison._scaled_black_offsets(glyph, 2)
+        second = export_bilingual_comparison._scaled_black_offsets(glyph, 2)
+        self.assertEqual(first, second)
+        self.assertEqual(
+            export_bilingual_comparison._scaled_black_offsets.cache_info().hits,
+            1,
+        )
+
+    def test_native_adler32_matches_standard_result(self) -> None:
+        """Keep deterministic PNG zlib checksums byte-identical."""
+        payload = bytes(range(256)) * 41
+        self.assertEqual(
+            export_bilingual_comparison._adler32(payload),
+            zlib.adler32(payload) & 0xFFFFFFFF,
+        )
 
 
 class RawCdFastPathEquivalenceTests(unittest.TestCase):
@@ -119,7 +187,8 @@ class RawCdFastPathEquivalenceTests(unittest.TestCase):
         sector[12:15] = raw_cd.sector_msf(index)
         sector[raw_cd.MODE_OFFSET] = 1
         sector[
-            raw_cd.USER_DATA_OFFSET : raw_cd.USER_DATA_OFFSET + raw_cd.ISO_SECTOR_SIZE
+            raw_cd.USER_DATA_OFFSET : raw_cd.USER_DATA_OFFSET
+            + raw_cd.ISO_SECTOR_SIZE
         ] = payload
         raw_cd.regenerate_checksums(sector)
         return bytes(sector)
@@ -128,7 +197,10 @@ class RawCdFastPathEquivalenceTests(unittest.TestCase):
         """Require selective regeneration to match the full legacy rebuild."""
         sector_count = 64
         payloads = [
-            bytes(((index + offset * 17) & 0xFF) for offset in range(raw_cd.ISO_SECTOR_SIZE))
+            bytes(
+                ((index + offset * 17) & 0xFF)
+                for offset in range(raw_cd.ISO_SECTOR_SIZE)
+            )
             for index in range(sector_count)
         ]
         first_payload = bytearray(payloads[0])
@@ -147,7 +219,10 @@ class RawCdFastPathEquivalenceTests(unittest.TestCase):
             baseline = root / "baseline.bin"
             optimized = root / "optimized.bin"
             template.write_bytes(
-                b"".join(self._sector(index, payload) for index, payload in enumerate(payloads))
+                b"".join(
+                    self._sector(index, payload)
+                    for index, payload in enumerate(payloads)
+                )
             )
             logical.write_bytes(b"".join(changed))
 
@@ -165,15 +240,21 @@ class RawCdFastPathEquivalenceTests(unittest.TestCase):
             )
 
             full_report = raw_cd.verify_track(optimized)
-            reference_hash = hashlib.sha256(template.read_bytes()).hexdigest().upper()
+            reference_hash = (
+                hashlib.sha256(template.read_bytes()).hexdigest().upper()
+            )
             delta_report = raw_cd.verify_track(
                 optimized,
                 trusted_reference=template,
                 trusted_reference_sha256=reference_hash,
             )
-            self.assertEqual(full_report["checksum_verified_sector_count"], sector_count)
+            self.assertEqual(
+                full_report["checksum_verified_sector_count"], sector_count
+            )
             self.assertEqual(delta_report["checksum_verified_sector_count"], 4)
-            self.assertEqual(delta_report["checksum_inherited_sector_count"], 60)
+            self.assertEqual(
+                delta_report["checksum_inherited_sector_count"], 60
+            )
             self.assertEqual(
                 delta_report["checksum_verification_mode"],
                 "trusted-reference-delta",
@@ -186,7 +267,9 @@ class RawCdFastPathEquivalenceTests(unittest.TestCase):
                 )
 
             damaged = bytearray(optimized.read_bytes())
-            damage_offset = 7 * raw_cd.RAW_SECTOR_SIZE + raw_cd.USER_DATA_OFFSET + 20
+            damage_offset = (
+                7 * raw_cd.RAW_SECTOR_SIZE + raw_cd.USER_DATA_OFFSET + 20
+            )
             damaged[damage_offset] ^= 0x01
             optimized.write_bytes(damaged)
             with self.assertRaisesRegex(raw_cd.RawCdError, "invalid EDC/ECC"):

@@ -23,11 +23,10 @@ from .main_patch import PATCHED_SHA256, RETAIL_SHA256
 from .mes_compiler import FIXED_ENGLISH_UNITS
 from .mes_format import read_mes, record_render_tokens
 from .prepare_retail import RETAIL_TRACK1_SHA256
-from .source_json import load_json_array, load_json_object
+from .raw_cd import verify_track
 from .scn_patch import patch_part1a_scn
 from .script_integrity import audit_project_scn_references
-from .raw_cd import verify_track
-
+from .source_json import load_json_array, load_json_object
 
 HERE = Path(__file__).resolve().parent
 SOURCES = HERE / "sources"
@@ -36,7 +35,9 @@ PART3C_LIMIT = 0x3FFF
 EXPECTED_CHAPTERS = 19
 EXPECTED_RECORDS = 2905
 TRACK2_SIZE = 24_710_112
-TRACK2_SHA256 = "F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991"
+TRACK2_SHA256 = (
+    "F17C698255DA74F725A51EFC1119445E719A00A654BA6815E5C4729677347991"
+)
 
 
 def sha256(path: Path) -> str:
@@ -117,23 +118,38 @@ def validate_build(
     total_records = 0
     max_dynamic = 0
     mes_results: list[dict[str, object]] = []
-    mes_report_by_chapter = {item["chapter"]: item for item in mes_report["chapters"]}
+    mes_report_by_chapter = {
+        item["chapter"]: item for item in mes_report["chapters"]
+    }
     for item in index["chapters"]:
         chapter = item["chapter"]
         canonical = load_json_object(SOURCES / item["source"])
         records = canonical.get("records")
-        if not isinstance(records, list) or len(records) != canonical["record_count"]:
-            raise ValueError(f"{chapter}: canonical record coverage is incomplete")
-        if any(record.get("index") != index for index, record in enumerate(records)):
-            raise ValueError(f"{chapter}: canonical record indexes are not contiguous")
+        if (
+            not isinstance(records, list)
+            or len(records) != canonical["record_count"]
+        ):
+            raise ValueError(
+                f"{chapter}: canonical record coverage is incomplete"
+            )
         if any(
-            record.get("policy") not in {"translate", "preserve"} for record in records
+            record.get("index") != index
+            for index, record in enumerate(records)
+        ):
+            raise ValueError(
+                f"{chapter}: canonical record indexes are not contiguous"
+            )
+        if any(
+            record.get("policy") not in {"translate", "preserve"}
+            for record in records
         ):
             raise ValueError(f"{chapter}: canonical record policy is invalid")
         translated_count = sum(
             record.get("policy") == "translate" for record in records
         )
-        preserved_count = sum(record.get("policy") == "preserve" for record in records)
+        preserved_count = sum(
+            record.get("policy") == "preserve" for record in records
+        )
         if canonical.get("text_mode") == "preserve":
             raise ValueError(
                 f"{chapter}: a playable script reverted to preserve-only mode"
@@ -142,7 +158,9 @@ def validate_build(
             item.get("translated_records") != translated_count
             or item.get("preserved_records") != preserved_count
         ):
-            raise ValueError(f"{chapter}: source index policy counts are stale")
+            raise ValueError(
+                f"{chapter}: source index policy counts are stale"
+            )
         reported = mes_report_by_chapter.get(chapter)
         if not isinstance(reported, dict) or (
             reported.get("translated_records") != translated_count
@@ -183,9 +201,9 @@ def validate_build(
             if record.get("policy") == "preserve"
         }
         for record_index in sorted(preserved_indexes):
-            if record_render_tokens(retail_mes, record_index) != record_render_tokens(
-                mes, record_index
-            ):
+            if record_render_tokens(
+                retail_mes, record_index
+            ) != record_render_tokens(mes, record_index):
                 raise ValueError(
                     f"{chapter}:{record_index:03d}: preserved record changed "
                     "fixed/control bytes or rendered dynamic glyphs"
@@ -193,7 +211,9 @@ def validate_build(
         if any(not record or record[-1] != 0 for record in mes.records):
             raise ValueError(f"{chapter}: a record lacks its terminator")
         if len(mes.glyphs) > DYNAMIC_LIMIT:
-            raise ValueError(f"{chapter}: dynamic glyph bank exceeds runtime RAM")
+            raise ValueError(
+                f"{chapter}: dynamic glyph bank exceeds runtime RAM"
+            )
         if chapter == "PART3C" and mes_path.stat().st_size > PART3C_LIMIT:
             raise ValueError("PART3C crossed the hard 0x3FFF boundary")
         total_records += mes.record_count
@@ -227,7 +247,9 @@ def validate_build(
             "PART3C record 194 no longer follows source アッシュビー -> Ashby"
         )
     if part3c.records[194] in {part3c.records[146], part3c.records[147]}:
-        raise ValueError("PART3C Ashby speaker label collapsed into Yamada or Dunant")
+        raise ValueError(
+            "PART3C Ashby speaker label collapsed into Yamada or Dunant"
+        )
 
     retail_font = build_root / "retail_files" / "FIX_CODE.FNT"
     output_font = build_root / "FIX_CODE.FNT"
@@ -238,9 +260,13 @@ def validate_build(
     patched_codes = {
         int(value, 16) for value in mes_report["fixed_font"]["patched_codes"]
     }
-    expected_fixed_codes = {code for code, _style, _unit in FIXED_ENGLISH_UNITS}
+    expected_fixed_codes = {
+        code for code, _style, _unit in FIXED_ENGLISH_UNITS
+    }
     if patched_codes != expected_fixed_codes:
-        raise ValueError("generated fixed-font dictionary does not match the compiler")
+        raise ValueError(
+            "generated fixed-font dictionary does not match the compiler"
+        )
     changed_codes = {
         code
         for code in range(1, len(after_font) // 18 + 1)
@@ -248,18 +274,24 @@ def validate_build(
         != after_font[(code - 1) * 18 : code * 18]
     }
     if changed_codes != patched_codes:
-        raise ValueError("fixed font changed outside the declared spill glyphs")
+        raise ValueError(
+            "fixed font changed outside the declared spill glyphs"
+        )
     retail_iso = build_root / "retail.iso"
     output_iso = build_root / "translated.iso"
     retail_iso_entries = read_entries(retail_iso)
     output_iso_entries = read_entries(output_iso)
     target_names = {item["target"] for item in patch_report}
-    expected_targets = {f"{item['chapter']}.LZ" for item in index["chapters"]} | {
+    expected_targets = {
+        f"{item['chapter']}.LZ" for item in index["chapters"]
+    } | {
         "FIX_CODE.FNT",
         "MAIN.BIN",
     }
     if target_names != expected_targets:
-        raise ValueError("ISO replacement set is incomplete or contains extras")
+        raise ValueError(
+            "ISO replacement set is incomplete or contains extras"
+        )
 
     allowed: list[tuple[int, int]] = []
     for patch in patch_report:
@@ -275,19 +307,22 @@ def validate_build(
         allowed.append(
             (
                 retail_entry.extent * SECTOR_SIZE,
-                retail_entry.extent * SECTOR_SIZE + retail_entry.allocated_size,
+                retail_entry.extent * SECTOR_SIZE
+                + retail_entry.allocated_size,
             )
         )
         normalized = target.upper()
         records = [
             entry
             for entry in retail_iso_entries
-            if entry.path.split("/", 1)[-1].split(";", 1)[0].upper() == normalized
+            if entry.path.split("/", 1)[-1].split(";", 1)[0].upper()
+            == normalized
         ]
         if not records:
             raise ValueError(f"{target}: no retail directory record")
         allowed.extend(
-            (entry.record_offset + 10, entry.record_offset + 18) for entry in records
+            (entry.record_offset + 10, entry.record_offset + 18)
+            for entry in records
         )
     _assert_unchanged_outside(retail_iso, output_iso, allowed)
 
@@ -297,7 +332,9 @@ def validate_build(
         output_archive = build_root / "archives" / f"{chapter}.LZ"
         installed_archive = extract_file(output_iso, f"{chapter}.LZ")
         if installed_archive != output_archive.read_bytes():
-            raise ValueError(f"{chapter}: ISO archive differs from built archive")
+            raise ValueError(
+                f"{chapter}: ISO archive differs from built archive"
+            )
         original = retail_archive.read_bytes()
         rebuilt = output_archive.read_bytes()
         original_entries = parse_archive(original, source=str(retail_archive))
@@ -319,8 +356,12 @@ def validate_build(
             patch_part1a_scn(retail_scn) if chapter == "PART1A" else retail_scn
         )
         if read_member(output_archive, f"{chapter}.SCN") != expected_scn:
-            raise ValueError(f"{chapter}: SCN payload is outside the guarded contract")
-        for old_entry, new_entry in zip(original_entries, rebuilt_entries, strict=True):
+            raise ValueError(
+                f"{chapter}: SCN payload is outside the guarded contract"
+            )
+        for old_entry, new_entry in zip(
+            original_entries, rebuilt_entries, strict=True
+        ):
             if old_entry.name == mes_name or (
                 chapter == "PART1A" and old_entry.name == "PART1A.SCN"
             ):
@@ -336,7 +377,9 @@ def validate_build(
                     f"{chapter}:{old_entry.index}:{old_entry.name}: non-MES payload changed"
                 )
         if chapter == "PART3B_" and rebuilt == original:
-            raise ValueError("PART3B_ translation was not installed into its archive")
+            raise ValueError(
+                "PART3B_ translation was not installed into its archive"
+            )
 
     main_bin = build_root / "MAIN.BIN"
     if sha256(build_root / "retail_files" / "MAIN.BIN") != RETAIL_SHA256:
@@ -366,7 +409,9 @@ def validate_build(
         sha256(retail_track2) != TRACK2_SHA256
         or retail_track2.stat().st_size != TRACK2_SIZE
     ):
-        raise ValueError("input Track 2 is not the expected retail audio track")
+        raise ValueError(
+            "input Track 2 is not the expected retail audio track"
+        )
     expected_cue = (
         f'FILE "{track1.name}" BINARY\r\n'
         "  TRACK 01 MODE1/2352\r\n"

@@ -6,19 +6,22 @@ import json
 import unittest
 from pathlib import Path
 
-
-ROOT = Path(__file__).resolve().parents[1]
-CLEAN = ROOT / "work" / "clean_rebuild"
-
-from work.clean_rebuild.renderer_format import (  # noqa: E402
+from work.clean_rebuild.font_render import (
+    _bytes_matrix,
+    render_compact_cluster,
+)
+from work.clean_rebuild.renderer_format import (
     normalize_ellipsis_style,
     reconstruct_wrapped_text,
     wrap_words,
 )
-from work.clean_rebuild.scn_layout import Layout  # noqa: E402
-from work.clean_rebuild.translation_formatter import _renderer_boundary_failures  # noqa: E402
-from work.clean_rebuild.scn_layout import RecordContract  # noqa: E402
-from work.clean_rebuild.font_render import _bytes_matrix, render_compact_cluster  # noqa: E402
+from work.clean_rebuild.scn_layout import Layout, RecordContract
+from work.clean_rebuild.translation_formatter import (
+    _renderer_boundary_failures,
+)
+
+ROOT = Path(__file__).resolve().parents[1]
+CLEAN = ROOT / "work" / "clean_rebuild"
 
 
 class EllipsisStyleTests(unittest.TestCase):
@@ -49,7 +52,9 @@ class EllipsisStyleTests(unittest.TestCase):
             '"Wait..."the answer is 90...100."',
         )
 
-    def test_ellipsis_can_end_a_renderer_row_without_a_rendered_space(self) -> None:
+    def test_ellipsis_can_end_a_renderer_row_without_a_rendered_space(
+        self,
+    ) -> None:
         """Allow a soft renderer break while retaining canonical attached prose."""
         layout = Layout(
             visible_first=8,
@@ -64,7 +69,9 @@ class EllipsisStyleTests(unittest.TestCase):
             reconstruct_wrapped_text(rows), "premeditated...we continue"
         )
 
-    def test_terminal_punctuation_may_follow_an_ellipsis_on_the_next_row(self) -> None:
+    def test_terminal_punctuation_may_follow_an_ellipsis_on_the_next_row(
+        self,
+    ) -> None:
         """Treat ``...?`` as an ellipsis edge, not a broken source token."""
         contract = RecordContract(
             roles=frozenset(("main_dialogue",)),
@@ -74,19 +81,29 @@ class EllipsisStyleTests(unittest.TestCase):
         rows = wrap_words("What are you plotting...?", contract.layout)
 
         self.assertEqual(
-            _renderer_boundary_failures("What are you plotting...?", rows, contract), []
+            _renderer_boundary_failures(
+                "What are you plotting...?", rows, contract
+            ),
+            [],
         )
 
     def test_compact_ellipsis_does_not_leave_a_blank_cell_tail(self) -> None:
         """Spread the three dots through their cell up to the following word."""
         matrix = _bytes_matrix(render_compact_cluster("..."))
         occupied_columns = sorted(
-            {column for row in matrix for column, value in enumerate(row) if value}
+            {
+                column
+                for row in matrix
+                for column, value in enumerate(row)
+                if value
+            }
         )
 
         self.assertEqual(occupied_columns, [0, 5, 10])
 
-    def test_all_translated_canonical_records_already_follow_the_style(self) -> None:
+    def test_all_translated_canonical_records_already_follow_the_style(
+        self,
+    ) -> None:
         """Reject a future source edit that restores a spaced ellipsis pause."""
         sources = CLEAN / "sources"
         for path in sorted(sources.glob("*.json")):
@@ -95,7 +112,9 @@ class EllipsisStyleTests(unittest.TestCase):
                 if record.get("policy") != "translate":
                     continue
                 text = record.get("text")
-                with self.subTest(chapter=path.stem, index=record.get("index")):
+                with self.subTest(
+                    chapter=path.stem, index=record.get("index")
+                ):
                     self.assertIsInstance(text, str)
                     self.assertEqual(text, normalize_ellipsis_style(text))
 

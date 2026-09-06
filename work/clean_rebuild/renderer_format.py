@@ -15,7 +15,6 @@ from collections.abc import Sequence
 
 from .scn_layout import Layout
 
-
 ELLIPSIS_CAPITALIZED_FOLLOWERS = frozenset(
     (
         "Ashby",
@@ -84,7 +83,9 @@ def normalize_ellipsis_style(text: str) -> str:
         newline = match.group("newline") or ""
         quote = match.group("quote")
         word = match.group("word")
-        follower = word if word in ELLIPSIS_CAPITALIZED_FOLLOWERS else word.lower()
+        follower = (
+            word if word in ELLIPSIS_CAPITALIZED_FOLLOWERS else word.lower()
+        )
         return f"...{gap}{newline}{quote}{follower}"
 
     return ELLIPSIS_FOLLOWER.sub(replace, text)
@@ -189,10 +190,14 @@ def wrapped_row_failures(
             min(len(source_tokens), len(rendered_tokens)),
         )
         source_token = (
-            source_tokens[mismatch] if mismatch < len(source_tokens) else "<end>"
+            source_tokens[mismatch]
+            if mismatch < len(source_tokens)
+            else "<end>"
         )
         rendered_token = (
-            rendered_tokens[mismatch] if mismatch < len(rendered_tokens) else "<end>"
+            rendered_tokens[mismatch]
+            if mismatch < len(rendered_tokens)
+            else "<end>"
         )
         failures.append(
             "renderer row boundary splits or alters source token "

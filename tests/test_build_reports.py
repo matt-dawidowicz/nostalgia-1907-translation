@@ -8,7 +8,6 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
 
@@ -27,7 +26,9 @@ class BuildReportTests(unittest.TestCase):
             sources = root / "sources"
             sources.mkdir()
             (sources / "index.json").write_text(
-                json.dumps({"chapters": [{"chapter": "TEST", "source": "TEST.json"}]})
+                json.dumps(
+                    {"chapters": [{"chapter": "TEST", "source": "TEST.json"}]}
+                )
                 + "\n",
                 encoding="utf-8",
             )
@@ -78,21 +79,27 @@ class BuildReportTests(unittest.TestCase):
                     font.parent.mkdir(parents=True)
                     font.write_bytes(b"\0" * GLYPH_BYTES)
                     reports.append(mes_set.build_mes_set(build))
-                    report_bytes.append((build / "mes_report.json").read_bytes())
+                    report_bytes.append(
+                        (build / "mes_report.json").read_bytes()
+                    )
 
             self.assertEqual(reports[0], reports[1])
             self.assertEqual(report_bytes[0], report_bytes[1])
             self.assertEqual(reports[0]["fixed_font"]["path"], "FIX_CODE.FNT")
             self.assertEqual(reports[0]["chapters"][0]["path"], "mes/TEST.MES")
 
-    def test_malformed_fixed_font_patch_is_rejected_before_font_write(self) -> None:
+    def test_malformed_fixed_font_patch_is_rejected_before_font_write(
+        self,
+    ) -> None:
         """Never let a short patch resize and shift the fixed-font bytearray."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             sources = root / "sources"
             sources.mkdir()
             (sources / "index.json").write_text(
-                json.dumps({"chapters": [{"chapter": "TEST", "source": "TEST.json"}]})
+                json.dumps(
+                    {"chapters": [{"chapter": "TEST", "source": "TEST.json"}]}
+                )
                 + "\n",
                 encoding="utf-8",
             )
@@ -128,7 +135,9 @@ class BuildReportTests(unittest.TestCase):
                     scn_layout_records=1,
                     fixed_spill_count=1,
                     fixed_spill_occurrences=1,
-                    fixed_font_patches=((1, (b"X" * (GLYPH_BYTES - 1)).hex()),),
+                    fixed_font_patches=(
+                        (1, (b"X" * (GLYPH_BYTES - 1)).hex()),
+                    ),
                     glyph_order="first-use",
                 )
 
@@ -143,7 +152,9 @@ class BuildReportTests(unittest.TestCase):
                     mes_set.build_mes_set(build)
 
             self.assertFalse((build / "FIX_CODE.FNT").exists())
-            self.assertEqual(retail_font.read_bytes(), b"\0" * (GLYPH_BYTES * 2))
+            self.assertEqual(
+                retail_font.read_bytes(), b"\0" * (GLYPH_BYTES * 2)
+            )
 
 
 if __name__ == "__main__":

@@ -26,7 +26,6 @@ from .source_json import load_json_object
 from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 from .translation_formatter import audit_layouts
 
-
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
 DEFAULT_REPORT = (
@@ -53,14 +52,18 @@ def _row_details(item: dict[str, object]) -> list[dict[str, object]]:
     # Fixed-layout records are compiled from their exact display text, including
     # deliberate leading/trailing spaces. The base formatter preview is semantic
     # and therefore normalizes those spaces away, so use the exact fixed rows here.
-    if item.get("layout_policy") == "fixed" and not isinstance(item.get("layout"), dict):
+    if item.get("layout_policy") == "fixed" and not isinstance(
+        item.get("layout"), dict
+    ):
         exact = item.get("display_text")
         if not isinstance(exact, str):
             raise ValueError(f"{item.get('id')}: display_text is malformed")
         rows = exact.split("\n")
     else:
         rows = item.get("preview_rows")
-    if not isinstance(rows, list) or not all(isinstance(row, str) for row in rows):
+    if not isinstance(rows, list) or not all(
+        isinstance(row, str) for row in rows
+    ):
         raise ValueError(f"{item.get('id')}: preview_rows is malformed")
     layout = item.get("layout")
     output: list[dict[str, object]] = []
@@ -72,7 +75,9 @@ def _row_details(item: dict[str, object]) -> list[dict[str, object]]:
         if isinstance(layout, dict):
             visible = layout.get("visible_cells")
             if not isinstance(visible, dict):
-                raise ValueError(f"{item.get('id')}: visible cell geometry is malformed")
+                raise ValueError(
+                    f"{item.get('id')}: visible cell geometry is malformed"
+                )
             page_rows = layout.get("page_rows")
             repeat = bool(layout.get("repeat_first_row_on_page"))
             first = row_index == 0 or (
@@ -87,7 +92,9 @@ def _row_details(item: dict[str, object]) -> list[dict[str, object]]:
             if not isinstance(raw_permitted, int):
                 raise ValueError(f"{item.get('id')}: {key} width is malformed")
             native_prefix_cells = (
-                int(layout.get("opening_anchor_cells", 0)) if row_index == 0 else 0
+                int(layout.get("opening_anchor_cells", 0))
+                if row_index == 0
+                else 0
             )
             permitted_cells = raw_permitted - native_prefix_cells
             row_kind = key
@@ -129,11 +136,15 @@ def audit(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
         retail = retail_root / "retail_unpacked" / chapter
         scn_path = retail / f"{chapter}.SCN"
         if not scn_path.is_file():
-            raise FileNotFoundError(f"missing hash-locked retail SCN: {scn_path}")
+            raise FileNotFoundError(
+                f"missing hash-locked retail SCN: {scn_path}"
+            )
         occurrences = display_occurrences(
             scn_path.read_bytes(),
             int(source["record_count"]),
-            source.get("profile") if isinstance(source.get("profile"), dict) else None,
+            source.get("profile")
+            if isinstance(source.get("profile"), dict)
+            else None,
         )
         for source_record in source["records"]:
             if source_record.get("policy") != "translate":
@@ -141,7 +152,9 @@ def audit(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
             record_id = f"{chapter}:{int(source_record['index']):03d}"
             item = base_by_id.get(record_id)
             if item is None:
-                raise ValueError(f"{record_id}: missing from base layout audit")
+                raise ValueError(
+                    f"{record_id}: missing from base layout audit"
+                )
             row_details = _row_details(item)
             raw_occurrences = occurrences.get(int(source_record["index"]), [])
             layout = item.get("layout")
@@ -171,7 +184,10 @@ def audit(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
 
             for row in row_details:
                 permitted = row["permitted_cells"]
-                if isinstance(permitted, int) and int(row["used_cells"]) > permitted:
+                if (
+                    isinstance(permitted, int)
+                    and int(row["used_cells"]) > permitted
+                ):
                     record_defects.append(
                         f"row {row['row']} exceeds box width: "
                         f"{row['used_cells']} > {permitted} cells"
@@ -181,7 +197,9 @@ def audit(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
                         f"row {row['row']} contains unexplained leading indentation"
                     )
 
-            if item.get("layout_policy") == "fixed" and not isinstance(layout, dict):
+            if item.get("layout_policy") == "fixed" and not isinstance(
+                layout, dict
+            ):
                 geometry = [
                     occurrence
                     for occurrence in raw_occurrences
@@ -195,7 +213,10 @@ def audit(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
                     for occurrence in geometry:
                         permitted = int(occurrence["permitted_cells"])
                         max_rows = occurrence.get("max_rows")
-                        if isinstance(max_rows, int) and len(row_details) > max_rows:
+                        if (
+                            isinstance(max_rows, int)
+                            and len(row_details) > max_rows
+                        ):
                             record_defects.append(
                                 f"{occurrence['offset']} {occurrence['command']} exceeds row limit: "
                                 f"{len(row_details)} > {max_rows}"
@@ -214,8 +235,12 @@ def audit(retail_root: Path = DEFAULT_RETAIL_ROOT) -> dict[str, object]:
                                 "for the proven 18-cell canvas"
                             )
 
-            defects.extend(f"{record_id}: {problem}" for problem in record_defects)
-            blockers.extend(f"{record_id}: {problem}" for problem in record_blockers)
+            defects.extend(
+                f"{record_id}: {problem}" for problem in record_defects
+            )
+            blockers.extend(
+                f"{record_id}: {problem}" for problem in record_blockers
+            )
             records.append(
                 {
                     "id": record_id,
@@ -299,13 +324,17 @@ def write_tsv(path: Path, report: dict[str, object]) -> None:
 def main() -> None:
     """Run the audit and write JSON plus TSV review artifacts."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT)
+    parser.add_argument(
+        "--retail-root", type=Path, default=DEFAULT_RETAIL_ROOT
+    )
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
     parser.add_argument("--tsv", type=Path, default=DEFAULT_TSV)
     args = parser.parse_args()
     report = audit(args.retail_root)
     args.report.parent.mkdir(parents=True, exist_ok=True)
-    args.report.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    args.report.write_text(
+        json.dumps(report, indent=2) + "\n", encoding="utf-8"
+    )
     write_tsv(args.tsv, report)
     summary = {key: value for key, value in report.items() if key != "records"}
     print(json.dumps(summary, indent=2))

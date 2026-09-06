@@ -47,7 +47,9 @@ def loads_json(text: str, *, source: str = "<json>") -> Any:
         None.
     """
     try:
-        return json.loads(text, object_pairs_hook=_object_without_duplicate_keys)
+        return json.loads(
+            text, object_pairs_hook=_object_without_duplicate_keys
+        )
     except (json.JSONDecodeError, DuplicateJsonKeyError) as error:
         raise ValueError(f"{source}: {error}") from error
 

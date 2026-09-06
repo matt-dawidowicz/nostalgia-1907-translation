@@ -6,13 +6,12 @@ import json
 import unittest
 from pathlib import Path
 
+from work.clean_rebuild import export_fixed_layout_review as fixed_review
 
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
 SOURCES = CLEAN / "sources"
 EVIDENCE = CLEAN / "bomb_semantics.json"
-
-from work.clean_rebuild import export_fixed_layout_review as fixed_review  # noqa: E402
 
 
 class ReviewExportTests(unittest.TestCase):
@@ -25,7 +24,9 @@ class ReviewExportTests(unittest.TestCase):
             {f"PART4C:{index:03d}" for index in range(51, 60)},
         )
         for record_id in sorted(fixed_review.PRIORITY_PART4C):
-            priority, risk, rationale = fixed_review._risk(record_id, "sample", [3])
+            priority, risk, rationale = fixed_review._risk(
+                record_id, "sample", [3]
+            )
             self.assertEqual((priority, risk), (1, "HIGH"))
             self.assertIn("no SCN-derived geometry", rationale)
             self.assertNotIn("source images", rationale)
@@ -33,11 +34,15 @@ class ReviewExportTests(unittest.TestCase):
             self.assertIn("replay the exact scene/branch", evidence)
             self.assertIn("full-frame capture", evidence)
 
-    def test_approved_part2e_pair_matches_reviewed_japanese_evidence(self) -> None:
+    def test_approved_part2e_pair_matches_reviewed_japanese_evidence(
+        self,
+    ) -> None:
         """Bind contextual revisions to reviewed Japanese and canonical text."""
         evidence = json.loads(EVIDENCE.read_text(encoding="utf-8"))
         expectations = evidence["record_expectations"]
-        source = json.loads((SOURCES / "PART2E.json").read_text(encoding="utf-8"))
+        source = json.loads(
+            (SOURCES / "PART2E.json").read_text(encoding="utf-8")
+        )
         canonical = {
             f"PART2E:{record['index']:03d}": record["text"]
             for record in source["records"]

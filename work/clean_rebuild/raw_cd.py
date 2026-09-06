@@ -20,7 +20,6 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 
-
 RAW_SECTOR_SIZE = 2352
 ISO_SECTOR_SIZE = 2048
 USER_DATA_OFFSET = 16
@@ -30,7 +29,7 @@ ZERO_OFFSET = 0x814
 ECC_P_OFFSET = 0x81C
 ECC_Q_OFFSET = 0x8C8
 ECC_END = 0x930
-SYNC = b"\x00" + b"\xFF" * 10 + b"\x00"
+SYNC = b"\x00" + b"\xff" * 10 + b"\x00"
 BOOT_SIGNATURE = b"SEGADISCSYSTEM  "
 
 
@@ -98,7 +97,9 @@ def ecc_plane(
     return bytes(output)
 
 
-def validate_sector_header(sector: bytes | bytearray, sector_index: int) -> None:
+def validate_sector_header(
+    sector: bytes | bytearray, sector_index: int
+) -> None:
     """Reject a sector that is not a correctly addressed MODE1 sector."""
     if len(sector) != RAW_SECTOR_SIZE:
         raise RawCdError(f"sector {sector_index}: short raw sector")
@@ -129,12 +130,16 @@ def regenerate_checksums(sector: bytearray) -> None:
         or sector[MODE_OFFSET] != 1
     ):
         raise RawCdError("cannot checksum a non-MODE1/2352 sector")
-    sector[EDC_OFFSET:ZERO_OFFSET] = edc(sector[:EDC_OFFSET]).to_bytes(4, "little")
+    sector[EDC_OFFSET:ZERO_OFFSET] = edc(sector[:EDC_OFFSET]).to_bytes(
+        4, "little"
+    )
     sector[ZERO_OFFSET:ECC_P_OFFSET] = b"\0" * (ECC_P_OFFSET - ZERO_OFFSET)
     sector[ECC_P_OFFSET:ECC_Q_OFFSET] = ecc_plane(
         sector[0x0C:ECC_P_OFFSET], 86, 24, 2, 86
     )
-    sector[ECC_Q_OFFSET:ECC_END] = ecc_plane(sector[0x0C:ECC_Q_OFFSET], 52, 43, 86, 88)
+    sector[ECC_Q_OFFSET:ECC_END] = ecc_plane(
+        sector[0x0C:ECC_Q_OFFSET], 52, 43, 86, 88
+    )
 
 
 def _bcd(value: int) -> int:
@@ -182,7 +187,9 @@ def raw_to_iso(raw_path: Path, iso_path: Path, *, verify: bool = True) -> int:
         raise RawCdError("raw input and ISO output paths must differ")
     size = raw_path.stat().st_size
     if size % RAW_SECTOR_SIZE:
-        raise RawCdError(f"{raw_path}: size is not divisible by {RAW_SECTOR_SIZE}")
+        raise RawCdError(
+            f"{raw_path}: size is not divisible by {RAW_SECTOR_SIZE}"
+        )
     sector_count = size // RAW_SECTOR_SIZE
     iso_path.parent.mkdir(parents=True, exist_ok=True)
     with raw_path.open("rb") as source, iso_path.open("wb") as output:
@@ -191,7 +198,9 @@ def raw_to_iso(raw_path: Path, iso_path: Path, *, verify: bool = True) -> int:
             validate_sector_header(sector, sector_index)
             if verify and not verify_sector_checksums(sector):
                 raise RawCdError(f"sector {sector_index}: invalid EDC/ECC")
-            output.write(sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE])
+            output.write(
+                sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE]
+            )
     return sector_count
 
 
@@ -220,7 +229,9 @@ def iso_to_raw_fixed(
     """
     output = output_raw_path.resolve()
     if output in {template_raw_path.resolve(), iso_path.resolve()}:
-        raise RawCdError("raw output path must differ from both rebuild inputs")
+        raise RawCdError(
+            "raw output path must differ from both rebuild inputs"
+        )
     raw_size = template_raw_path.stat().st_size
     iso_size = iso_path.stat().st_size
     if raw_size % RAW_SECTOR_SIZE:
@@ -253,7 +264,9 @@ def iso_to_raw_fixed(
             if trust_template_checksums and payload == original_payload:
                 output_stream.write(sector)
                 continue
-            sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE] = payload
+            sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE] = (
+                payload
+            )
             regenerate_checksums(sector)
             output_stream.write(sector)
     return raw_sectors
@@ -319,7 +332,9 @@ def verify_track(
             character not in "0123456789ABCDEF"
             for character in expected_reference_hash
         ):
-            raise RawCdError("trusted reference SHA-256 is not 64-digit hexadecimal")
+            raise RawCdError(
+                "trusted reference SHA-256 is not 64-digit hexadecimal"
+            )
         actual_reference_hash = _sha256_file(trusted_reference)
         if actual_reference_hash != expected_reference_hash:
             raise RawCdError(
@@ -347,12 +362,15 @@ def verify_track(
                     inherited += 1
                 else:
                     if not verify_sector_checksums(sector):
-                        raise RawCdError(f"sector {sector_index}: invalid EDC/ECC")
+                        raise RawCdError(
+                            f"sector {sector_index}: invalid EDC/ECC"
+                        )
                     directly_verified += 1
                 if sector_index < 16:
                     boot_payload.extend(
                         sector[
-                            USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE
+                            USER_DATA_OFFSET : USER_DATA_OFFSET
+                            + ISO_SECTOR_SIZE
                         ]
                     )
         if reference_stream is not None and reference_stream.read(1):
@@ -372,7 +390,9 @@ def verify_track(
                 sector = source.read(RAW_SECTOR_SIZE)
                 validate_sector_header(sector, sector_index)
                 reference.extend(
-                    sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE]
+                    sector[
+                        USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE
+                    ]
                 )
         boot_matches = bytes(reference) == bytes(boot_payload)
         if not boot_matches:
@@ -394,7 +414,9 @@ def verify_track(
     }
 
 
-def write_two_track_cue(cue_path: Path, data_track: Path, audio_track: Path) -> None:
+def write_two_track_cue(
+    cue_path: Path, data_track: Path, audio_track: Path
+) -> None:
     """Write the retail-compatible two-track CUE with exact CRLF endings.
 
     All three files must share one directory so the CUE contains portable base

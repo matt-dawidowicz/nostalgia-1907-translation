@@ -12,11 +12,14 @@ import hashlib
 import re
 from pathlib import Path
 
-from .source_json import load_json_object
-
 from .mes_format import read_mes
-from .translation_audit import DEFAULT_RETAIL_ROOT, SOURCES, _glyphs, _trim_blank
-
+from .source_json import load_json_object
+from .translation_audit import (
+    DEFAULT_RETAIL_ROOT,
+    SOURCES,
+    _glyphs,
+    _trim_blank,
+)
 
 HERE = Path(__file__).resolve().parent
 SEMANTICS = HERE / "bomb_semantics.json"
@@ -58,9 +61,12 @@ def run_audit() -> dict[str, object]:
         It does not alter canonical English or game data.
     """
     config = _load(SEMANTICS)
-    fixed_data = (DEFAULT_RETAIL_ROOT / "retail_files" / "FIX_CODE.FNT").read_bytes()
+    fixed_data = (
+        DEFAULT_RETAIL_ROOT / "retail_files" / "FIX_CODE.FNT"
+    ).read_bytes()
     fixed = tuple(
-        fixed_data[i : i + GLYPH_BYTES] for i in range(0, len(fixed_data), GLYPH_BYTES)
+        fixed_data[i : i + GLYPH_BYTES]
+        for i in range(0, len(fixed_data), GLYPH_BYTES)
     )
     index = _load(SOURCES / "index.json")
     canonical_by_id: dict[str, str] = {}
@@ -70,7 +76,10 @@ def run_audit() -> dict[str, object]:
         chapter = chapter_item["chapter"]
         canonical = _load(SOURCES / chapter_item["source"])
         mes = read_mes(
-            DEFAULT_RETAIL_ROOT / "retail_unpacked" / chapter / f"{chapter}.MES"
+            DEFAULT_RETAIL_ROOT
+            / "retail_unpacked"
+            / chapter
+            / f"{chapter}.MES"
         )
         for number, (source_record, english_record) in enumerate(
             zip(mes.records, canonical["records"], strict=True)
@@ -110,12 +119,15 @@ def run_audit() -> dict[str, object]:
             candidate_ids.add(record_id)
             english = canonical_by_id[record_id]
             matched_names = {term["semantic"] for term in matched}
-            action_signal = bool(matched_names & {"wire", "cut", "open", "bypass"})
+            action_signal = bool(
+                matched_names & {"wire", "cut", "open", "bypass"}
+            )
             for term in matched:
                 semantic = term["semantic"]
                 if record_id not in expectations:
                     if (
-                        semantic in {"upper", "lower", "left", "right", "red", "blue"}
+                        semantic
+                        in {"upper", "lower", "left", "right", "red", "blue"}
                         and not action_signal
                     ):
                         continue
@@ -163,13 +175,16 @@ def run_audit() -> dict[str, object]:
                     )
 
     for record_id in sorted(
-        candidate_ids, key=lambda value: (value.split(":")[0], int(value.split(":")[1]))
+        candidate_ids,
+        key=lambda value: (value.split(":")[0], int(value.split(":")[1])),
     ):
         expectation = expectations.get(record_id, {})
         english = canonical_by_id[record_id]
         expected = expectation.get("corrected_english")
         if isinstance(expected, str) and english != expected:
-            failures.append(f"{record_id}: {english!r} != expected {expected!r}")
+            failures.append(
+                f"{record_id}: {english!r} != expected {expected!r}"
+            )
         for pattern in expectation.get("required_english", []):
             if not re.search(pattern, english, re.IGNORECASE):
                 failures.append(
@@ -188,14 +203,18 @@ def run_audit() -> dict[str, object]:
                 "record_id": record_id,
                 "japanese_source": expectation.get("japanese"),
                 "source_record_hex": source_hex,
-                "source_record_sha256": hashlib.sha256(bytes.fromhex(source_hex))
+                "source_record_sha256": hashlib.sha256(
+                    bytes.fromhex(source_hex)
+                )
                 .hexdigest()
                 .upper(),
                 "literal_semantic_interpretation": expectation.get("literal")
                 or "; ".join(matched_semantics),
                 "semantic_terms": matched_semantics,
                 "corrected_english": english,
-                "branch_or_consequence": expectation.get("branch_or_consequence"),
+                "branch_or_consequence": expectation.get(
+                    "branch_or_consequence"
+                ),
                 "review_required": bool(expectation.get("review_required")),
             }
         )

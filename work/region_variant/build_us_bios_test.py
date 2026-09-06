@@ -31,7 +31,6 @@ from ..clean_rebuild.raw_cd import (
     write_two_track_cue,
 )
 
-
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
 
@@ -95,7 +94,9 @@ SAFE_BASENAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\Z")
 def _validate_basename(basename: str) -> str:
     """Return a portable artifact stem or reject path-like release names."""
     if not isinstance(basename, str) or not SAFE_BASENAME.fullmatch(basename):
-        raise RegionVariantError("basename must be a portable non-path filename stem")
+        raise RegionVariantError(
+            "basename must be a portable non-path filename stem"
+        )
     return basename
 
 
@@ -144,7 +145,9 @@ def _ensure_empty(path: Path) -> None:
     an operator rather than silently overwritten.
     """
     if path.exists() and any(path.iterdir()):
-        raise RegionVariantError(f"refusing to reuse non-empty directory: {path}")
+        raise RegionVariantError(
+            f"refusing to reuse non-empty directory: {path}"
+        )
     path.mkdir(parents=True, exist_ok=True)
 
 
@@ -159,7 +162,9 @@ def _read_boot(raw_path: Path) -> bytes:
                 raise RegionVariantError(
                     f"{raw_path}: sector {sector_index} has invalid EDC/ECC"
                 )
-            boot.extend(sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE])
+            boot.extend(
+                sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE]
+            )
     if len(boot) != BOOT_SIZE:
         raise RegionVariantError(f"{raw_path}: incomplete 32 KiB boot area")
     return bytes(boot)
@@ -178,7 +183,9 @@ def _derive_us_security(us_bios: Path) -> bytes:
     bios = us_bios.read_bytes()
     security = US_SECURITY_PREFIX + bios[US_BIOS_SECURITY_SLICE]
     if len(security) != SECURITY_END - SECURITY_START:
-        raise RegionVariantError("derived U.S. security program has the wrong size")
+        raise RegionVariantError(
+            "derived U.S. security program has the wrong size"
+        )
     security_hash = _bytes_sha256(security)
     if security_hash != EXPECTED_US_SECURITY_SHA256:
         raise RegionVariantError(
@@ -242,9 +249,13 @@ def build_wrapped_boot(input_boot: bytes, us_security: bytes) -> bytes:
             "validated relocation capacity is no longer zero-filled"
         )
 
-    last_nonzero = max(index for index, value in enumerate(input_boot) if value != 0)
+    last_nonzero = max(
+        index for index, value in enumerate(input_boot) if value != 0
+    )
     if last_nonzero != ORIGINAL_USED_END - 1:
-        raise RegionVariantError(f"unexpected last used boot byte: 0x{last_nonzero:X}")
+        raise RegionVariantError(
+            f"unexpected last used boot byte: 0x{last_nonzero:X}"
+        )
 
     output = bytearray(input_boot)
     for offset, value in OUTPUT_HEADER_FIELDS.items():
@@ -259,8 +270,13 @@ def build_wrapped_boot(input_boot: bytes, us_security: bytes) -> bytes:
 
     if output[0x1F0:0x200] != input_boot[0x1F0:0x200]:
         raise RegionVariantError("outer country metadata was altered")
-    if output[RELOCATION_START:RELOCATION_END] != input_boot[:ORIGINAL_USED_END]:
-        raise RegionVariantError("original boot payload was not relocated exactly")
+    if (
+        output[RELOCATION_START:RELOCATION_END]
+        != input_boot[:ORIGINAL_USED_END]
+    ):
+        raise RegionVariantError(
+            "original boot payload was not relocated exactly"
+        )
     if output[RELOCATION_END:] != input_boot[RELOCATION_END:]:
         raise RegionVariantError("boot bytes after the relocation changed")
     return bytes(output)
@@ -287,13 +303,15 @@ def _write_region_track(
                 start = sector_index * ISO_SECTOR_SIZE
                 replacement = output_boot[start : start + ISO_SECTOR_SIZE]
                 current = bytes(
-                    sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE]
+                    sector[
+                        USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE
+                    ]
                 )
                 if replacement != current:
                     changed.append(sector_index)
-                    sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE] = (
-                        replacement
-                    )
+                    sector[
+                        USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE
+                    ] = replacement
                     regenerate_checksums(sector)
             output.write(sector)
     if changed != [0, 1, 2, 3, 4]:
@@ -312,7 +330,9 @@ def iso_user_sha256(raw_path: Path) -> str:
                 raise RegionVariantError(
                     f"{raw_path}: sector {sector_index} has invalid EDC/ECC"
                 )
-            digest.update(sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE])
+            digest.update(
+                sector[USER_DATA_OFFSET : USER_DATA_OFFSET + ISO_SECTOR_SIZE]
+            )
             sector_index += 1
     return digest.hexdigest().upper()
 
@@ -366,17 +386,24 @@ def _validate_track_delta(
         if output.read(1):
             raise RegionVariantError("region variant has trailing raw data")
     if changed_sectors != [0, 1, 2, 3, 4]:
-        raise RegionVariantError(f"unexpected changed sector set: {changed_sectors}")
+        raise RegionVariantError(
+            f"unexpected changed sector set: {changed_sectors}"
+        )
 
     input_boot = _read_boot(input_track)
     output_boot = _read_boot(output_track)
     if output_boot != expected_boot:
         raise RegionVariantError("installed wrapper differs from the recipe")
-    if output_boot[RELOCATION_START:RELOCATION_END] != input_boot[:ORIGINAL_USED_END]:
+    if (
+        output_boot[RELOCATION_START:RELOCATION_END]
+        != input_boot[:ORIGINAL_USED_END]
+    ):
         raise RegionVariantError("relocated original boot bytes differ")
     if output_boot[RELOCATION_END:] != input_boot[RELOCATION_END:]:
         raise RegionVariantError("post-wrapper boot bytes differ")
-    if output_boot[TAG_END:RELOCATION_START] != b"\0" * (RELOCATION_START - TAG_END):
+    if output_boot[TAG_END:RELOCATION_START] != b"\0" * (
+        RELOCATION_START - TAG_END
+    ):
         raise RegionVariantError("post-tag padding is not canonical zero")
     if _bytes_sha256(output_boot[SECURITY_START:SECURITY_END]) != (
         EXPECTED_US_SECURITY_SHA256
@@ -499,7 +526,9 @@ def _publish_verified_runs(
     basename = _validate_basename(basename)
     expected_track1_sha256 = expected_track1_sha256.upper()
     if sha256(baseline_track1) != expected_track1_sha256:
-        raise RegionVariantError("Track 1 does not match the selected validated baseline")
+        raise RegionVariantError(
+            "Track 1 does not match the selected validated baseline"
+        )
     if sha256(baseline_track2) != EXPECTED_TRACK2_SHA256:
         raise RegionVariantError("Track 2 is not the exact retail audio track")
     expected_boot = build_wrapped_boot(
@@ -519,21 +548,30 @@ def _publish_verified_runs(
         track2 = product / artifact_names[1]
         cue = product / artifact_names[2]
         if not all(path.is_file() for path in (track1, track2, cue)):
-            raise RegionVariantError(f"staged product is incomplete: {product}")
+            raise RegionVariantError(
+                f"staged product is incomplete: {product}"
+            )
         track1_report = _validate_track_delta(
             baseline_track1, track1, expected_boot, expected_track1_sha256
         )
         if sha256(track2) != EXPECTED_TRACK2_SHA256:
-            raise RegionVariantError(f"staged Track 2 differs from retail: {track2}")
+            raise RegionVariantError(
+                f"staged Track 2 differs from retail: {track2}"
+            )
         if cue.read_bytes() != _expected_cue(track1.name, track2.name):
-            raise RegionVariantError(f"staged CUE contents differ from the recipe: {cue}")
+            raise RegionVariantError(
+                f"staged CUE contents differ from the recipe: {cue}"
+            )
         staged_reports.append(
             {
                 "status": "PASS",
                 "baseline_track1_sha256": expected_track1_sha256,
                 "us_bios_sha256": EXPECTED_US_BIOS_SHA256,
                 "track1": track1_report,
-                "track2": {"size": track2.stat().st_size, "sha256": sha256(track2)},
+                "track2": {
+                    "size": track2.stat().st_size,
+                    "sha256": sha256(track2),
+                },
                 "cue": {"size": cue.stat().st_size, "sha256": sha256(cue)},
             }
         )
@@ -564,7 +602,9 @@ def _publish_verified_runs(
         "source_track2_sha256": EXPECTED_TRACK2_SHA256,
         "us_bios_sha256": EXPECTED_US_BIOS_SHA256,
         "us_security_sha256": EXPECTED_US_SECURITY_SHA256,
-        "region_variant_logical_iso_sha256": first["track1"]["logical_iso_sha256"],
+        "region_variant_logical_iso_sha256": first["track1"][
+            "logical_iso_sha256"
+        ],
         "artifact_sha256": compared,
         "verification": first,
         "second_verification": second,
@@ -626,7 +666,8 @@ def build_twice(
     basename = _validate_basename(basename)
     expected_track1_sha256 = expected_track1_sha256.upper()
     if len(expected_track1_sha256) != 64 or any(
-        character not in "0123456789ABCDEF" for character in expected_track1_sha256
+        character not in "0123456789ABCDEF"
+        for character in expected_track1_sha256
     ):
         raise RegionVariantError(
             "expected Track 1 SHA-256 is not a 64-digit hexadecimal value"
@@ -682,7 +723,9 @@ def main() -> None:
     parser.add_argument(
         "--delivery-root",
         type=Path,
-        default=WORKSPACE / "outputs" / "Nostalgia1907_CleanRebuild_NorthAmerica",
+        default=WORKSPACE
+        / "outputs"
+        / "Nostalgia1907_CleanRebuild_NorthAmerica",
     )
     parser.add_argument(
         "--basename", default="Nostalgia1907_CleanRebuild_NorthAmerica"

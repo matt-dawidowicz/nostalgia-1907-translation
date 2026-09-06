@@ -25,7 +25,6 @@ from .font_render import GLYPH_BYTES
 from .mes_compiler import BuildResult, compile_files
 from .source_json import load_json_object
 
-
 HERE = Path(__file__).resolve().parent
 SOURCES = HERE / "sources"
 
@@ -116,7 +115,9 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
     with ThreadPoolExecutor(max_workers=worker_count) as executor:
         compiled = list(
             executor.map(
-                lambda item: _compile_chapter(build_root, original, output, item),
+                lambda item: _compile_chapter(
+                    build_root, original, output, item
+                ),
                 items,
             )
         )
@@ -134,7 +135,9 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
                 )
             previous = font_patches.get(code)
             if previous is not None and previous != glyph:
-                raise ValueError(f"conflicting fixed-font patch for code 0x{code:02X}")
+                raise ValueError(
+                    f"conflicting fixed-font patch for code 0x{code:02X}"
+                )
             font_patches[code] = glyph
         chapters.append(details)
 
@@ -144,7 +147,9 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
     for code, glyph in sorted(font_patches.items()):
         offset = (code - 1) * GLYPH_BYTES
         if not 0 <= offset <= len(font) - GLYPH_BYTES:
-            raise ValueError(f"fixed-font code 0x{code:02X} is outside the font")
+            raise ValueError(
+                f"fixed-font code 0x{code:02X} is outside the font"
+            )
         font[offset : offset + GLYPH_BYTES] = glyph
     output_font.parent.mkdir(parents=True, exist_ok=True)
     output_font.write_bytes(font)
@@ -153,12 +158,16 @@ def build_mes_set(build_root: Path) -> dict[str, object]:
         "status": "PASS",
         "chapter_count": len(chapters),
         "total_records": sum(int(item["record_count"]) for item in chapters),
-        "max_dynamic_glyphs": max(int(item["dynamic_glyphs"]) for item in chapters),
+        "max_dynamic_glyphs": max(
+            int(item["dynamic_glyphs"]) for item in chapters
+        ),
         "fixed_font": {
             "path": report_path(build_root, output_font),
             "size": len(font_bytes),
             "sha256": hashlib.sha256(font_bytes).hexdigest().upper(),
-            "patched_codes": [f"0x{code:02X}" for code in sorted(font_patches)],
+            "patched_codes": [
+                f"0x{code:02X}" for code in sorted(font_patches)
+            ],
         },
         "chapters": chapters,
     }

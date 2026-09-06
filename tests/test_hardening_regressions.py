@@ -43,7 +43,11 @@ class HardeningRegressionTests(unittest.TestCase):
 
     def test_archive_reflow_is_used_only_for_typed_slot_overflow(self) -> None:
         """Do not select a destructive layout fallback by parsing error text."""
-        paths = (Path("retail.lz"), Path("output.lz"), {"TEST.MES": Path("test.mes")})
+        paths = (
+            Path("retail.lz"),
+            Path("output.lz"),
+            {"TEST.MES": Path("test.mes")},
+        )
         reflow_report = {
             "replacements": [{"member": "TEST.MES", "headroom": 0}],
             "headroom": 23,
@@ -72,7 +76,9 @@ class HardeningRegressionTests(unittest.TestCase):
             patch.object(
                 build_archives,
                 "replace_members_fixed",
-                side_effect=LzError("but retail slot is mentioned incidentally"),
+                side_effect=LzError(
+                    "but retail slot is mentioned incidentally"
+                ),
             ),
             patch.object(build_archives, "replace_members_reflow") as reflow,
         ):
@@ -99,7 +105,9 @@ class HardeningRegressionTests(unittest.TestCase):
                         writer(archive, archive, replacements)
                     self.assertEqual(archive.read_bytes(), original)
 
-    def test_iso_patcher_rejects_same_source_and_output_before_truncation(self) -> None:
+    def test_iso_patcher_rejects_same_source_and_output_before_truncation(
+        self,
+    ) -> None:
         """An in-place call must fail before opening the ISO for destructive write."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -109,7 +117,9 @@ class HardeningRegressionTests(unittest.TestCase):
             replacement = root / "replacement.bin"
             replacement.write_bytes(b"replacement")
 
-            with self.assertRaisesRegex(IsoError, "source and output ISO paths must differ"):
+            with self.assertRaisesRegex(
+                IsoError, "source and output ISO paths must differ"
+            ):
                 patch_fixed_extent_files(iso, iso, {"FILE.BIN": replacement})
 
             self.assertEqual(iso.read_bytes(), original)
@@ -173,17 +183,23 @@ class HardeningRegressionTests(unittest.TestCase):
                 raw_cd.write_two_track_cue(root / "game.cue", data, data)
             self.assertEqual(data.read_bytes(), data_bytes)
 
-    def test_clean_build_root_rejects_existing_file_without_touching_it(self) -> None:
+    def test_clean_build_root_rejects_existing_file_without_touching_it(
+        self,
+    ) -> None:
         """Report a domain error instead of leaking ``NotADirectoryError``."""
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / "build"
             original = b"occupied"
             path.write_bytes(original)
-            with self.assertRaisesRegex(ValueError, "exists and is not a directory"):
+            with self.assertRaisesRegex(
+                ValueError, "exists and is not a directory"
+            ):
                 rebuild._ensure_empty(path)
             self.assertEqual(path.read_bytes(), original)
 
-    def test_batch_edits_cache_contracts_per_chapter_and_rules_once(self) -> None:
+    def test_batch_edits_cache_contracts_per_chapter_and_rules_once(
+        self,
+    ) -> None:
         """Avoid repeated retail parsing and rule loading inside one edit batch."""
         chapter_a = {
             "chapter": "A",
@@ -220,7 +236,9 @@ class HardeningRegressionTests(unittest.TestCase):
 
         audit_result = {"failures": [], "roles": [], "preview_rows": []}
         with (
-            patch.object(translation_formatter, "_changes", return_value=changes),
+            patch.object(
+                translation_formatter, "_changes", return_value=changes
+            ),
             patch.object(
                 translation_formatter,
                 "_chapter_sources",

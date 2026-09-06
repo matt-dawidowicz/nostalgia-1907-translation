@@ -15,9 +15,13 @@ protects reverse-engineered behavior.
 
 ## Formatting profile
 
-Python 3.12 is the minimum supported interpreter. Ruff owns generic linting and
-modernization checks with the repository's 88-column target. Source text uses
-UTF-8, LF line endings, a final newline, and no trailing whitespace.
+Python 3.12 is the minimum supported interpreter. Ruff format is the canonical
+layout engine with a 79-column target. Ruff's pycodestyle rules enforce the
+PEP 8 lint contract, while its pydocstyle `pep257` convention enforces PEP 257
+for maintained public APIs. `E501` is excluded because Ruff's formatter may
+retain intrinsically unbreakable strings; ordinary code is still formatted to
+the 79-column target. Source text uses UTF-8, LF line endings, a final newline,
+and no trailing whitespace.
 
 ## Docstrings
 

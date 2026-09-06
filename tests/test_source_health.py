@@ -9,7 +9,6 @@ import tomllib
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 MODULE_PATH = ROOT / "tools" / "source_health.py"
 SPEC = importlib.util.spec_from_file_location("source_health", MODULE_PATH)
@@ -24,10 +23,14 @@ class SourceHealthTests(unittest.TestCase):
 
     def test_repository_has_no_runtime_package_metadata(self) -> None:
         """Keep the directly executed production toolchain dependency-free."""
-        project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+        project = tomllib.loads(
+            (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        )
         self.assertNotIn("project", project)
         self.assertNotIn("build-system", project)
-        requirements = (ROOT / "requirements-dev.txt").read_text(encoding="utf-8")
+        requirements = (ROOT / "requirements-dev.txt").read_text(
+            encoding="utf-8"
+        )
         self.assertIn("ruff==", requirements)
         self.assertIn("mypy==", requirements)
 
@@ -62,7 +65,9 @@ class SourceHealthTests(unittest.TestCase):
                     target = clean_root / relative
                     target.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copyfile(source, target)
-                strict_report = source_health.audit(clean_root, strict_release=True)
+                strict_report = source_health.audit(
+                    clean_root, strict_release=True
+                )
         self.assertEqual(
             strict_report["status"], "PASS", strict_report["failures"]
         )
@@ -78,7 +83,9 @@ class SourceHealthTests(unittest.TestCase):
             report = source_health.audit(root)
             self.assertEqual(report["status"], "FAIL")
             self.assertEqual(report["forbidden_media_count"], 1)
-            self.assertTrue(any("duplicate key" in item for item in report["failures"]))
+            self.assertTrue(
+                any("duplicate key" in item for item in report["failures"])
+            )
 
     def test_dotfile_text_hygiene_is_checked(self) -> None:
         """Do not let suffixless Git control files bypass text validation."""
@@ -123,7 +130,10 @@ class SourceHealthTests(unittest.TestCase):
             report = source_health.audit(root)
             self.assertEqual(report["status"], "FAIL")
             self.assertTrue(
-                any("retired generated recovery" in item for item in report["failures"])
+                any(
+                    "retired generated recovery" in item
+                    for item in report["failures"]
+                )
             )
 
     def test_development_mode_ignores_documented_local_state(self) -> None:
@@ -156,9 +166,13 @@ class SourceHealthTests(unittest.TestCase):
             report = source_health.audit(root, strict_release=True)
             self.assertEqual(report["status"], "FAIL")
             self.assertEqual(report["inventory_mode"], "package-members")
-            self.assertTrue(any("retail.iso" in failure for failure in report["failures"]))
+            self.assertTrue(
+                any("retail.iso" in failure for failure in report["failures"])
+            )
 
-    def test_strict_release_rejects_local_config_images_and_states(self) -> None:
+    def test_strict_release_rejects_local_config_images_and_states(
+        self,
+    ) -> None:
         """Cover the release-gate false negatives found during source review."""
         forbidden = (
             "nostalgia1907.local.json",
@@ -182,7 +196,12 @@ class SourceHealthTests(unittest.TestCase):
                         path.write_bytes(b"fixture")
                     report = source_health.audit(root, strict_release=True)
                     self.assertEqual(report["status"], "FAIL")
-                    self.assertTrue(any(filename in failure for failure in report["failures"]))
+                    self.assertTrue(
+                        any(
+                            filename in failure
+                            for failure in report["failures"]
+                        )
+                    )
 
     def test_authoritative_source_gate_supports_strict_release(self) -> None:
         """Keep exact-inventory validation exposed by the unified source gate."""

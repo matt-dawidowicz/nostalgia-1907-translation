@@ -19,20 +19,18 @@ import json
 import re
 from pathlib import Path
 
-from .source_json import load_json_object
-
 from .bomb_audit import run_audit as run_bomb_audit
 from .export_bilingual_comparison import validate_comparison_package
 from .mes_compiler import CompileError, compile_mes
 from .profile_schema import profile_text_failures, validate_profile
-from .translation_formatter import audit_layouts
+from .source_json import load_json_object
 from .translation_audit import (
     DEFAULT_RETAIL_ROOT,
     SOURCES,
     audit,
     normalize_english_for_semantic_comparison,
 )
-
+from .translation_formatter import audit_layouts
 
 HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parents[1]
@@ -131,11 +129,15 @@ def validate(
     if normalize_english_for_semantic_comparison(
         "same\n  words"
     ) != normalize_english_for_semantic_comparison("same words"):
-        failures.append("duplicate-source whitespace/line-wrap normalization is broken")
+        failures.append(
+            "duplicate-source whitespace/line-wrap normalization is broken"
+        )
     if exact["record_count"] != EXPECTED_RECORDS:
         failures.append(f"record count changed: {exact['record_count']}")
     if len(exact["chapter_order"]) != EXPECTED_CHAPTERS:
-        failures.append(f"chapter count changed: {len(exact['chapter_order'])}")
+        failures.append(
+            f"chapter count changed: {len(exact['chapter_order'])}"
+        )
     if exact["conflicting_duplicate_group_count"]:
         failures.append(
             "identical Japanese source fingerprints have conflicting English"
@@ -148,7 +150,9 @@ def validate(
     records_by_id = {item["id"]: item for item in exact["records"]}
     by_fingerprint: dict[str, list[dict[str, object]]] = {}
     for record in exact["records"]:
-        by_fingerprint.setdefault(record["normalized_bitmap_sha256"], []).append(record)
+        by_fingerprint.setdefault(
+            record["normalized_bitmap_sha256"], []
+        ).append(record)
 
     for term in glossary["fixed_source_terms"]:
         representative = records_by_id.get(term["source_record_id"])
@@ -157,7 +161,9 @@ def validate(
             or representative["normalized_bitmap_sha256"]
             != term["normalized_bitmap_sha256"]
         ):
-            failures.append(f"glossary source fingerprint changed for {term['id']}")
+            failures.append(
+                f"glossary source fingerprint changed for {term['id']}"
+            )
             continue
         for record in by_fingerprint.get(term["normalized_bitmap_sha256"], []):
             if (
@@ -184,7 +190,9 @@ def validate(
         record_id = expected["record_id"]
         record = records_by_id.get(record_id)
         if record is None:
-            failures.append(f"source-authoritative record is missing: {record_id}")
+            failures.append(
+                f"source-authoritative record is missing: {record_id}"
+            )
             continue
         if record["source_record_sha256"] != expected["source_record_sha256"]:
             failures.append(f"{record_id}: Japanese source hash changed")
@@ -200,17 +208,28 @@ def validate(
         record_id = exception["record_id"]
         record = records_by_id.get(record_id)
         if record is None:
-            failures.append(f"reviewed contextual exception is missing: {record_id}")
+            failures.append(
+                f"reviewed contextual exception is missing: {record_id}"
+            )
             continue
-        if record["normalized_bitmap_sha256"] != exception["normalized_bitmap_sha256"]:
+        if (
+            record["normalized_bitmap_sha256"]
+            != exception["normalized_bitmap_sha256"]
+        ):
             failures.append(
                 f"{record_id}: contextual-exception Japanese fingerprint changed"
             )
-        if not re.search(exception["required_english_pattern"], record["english"]):
-            failures.append(f"{record_id}: reviewed contextual distinction disappeared")
+        if not re.search(
+            exception["required_english_pattern"], record["english"]
+        ):
+            failures.append(
+                f"{record_id}: reviewed contextual distinction disappeared"
+            )
         forbidden = exception.get("forbidden_english_pattern")
         if forbidden and re.search(forbidden, record["english"]):
-            failures.append(f"{record_id}: forbidden contextual rendering returned")
+            failures.append(
+                f"{record_id}: forbidden contextual rendering returned"
+            )
 
     for rule in repairs["bomb_term_replacements"]:
         pattern = re.compile(rule["pattern"])
@@ -218,30 +237,40 @@ def validate(
             pattern.sub(rule["replacement"], sample) != sample
             for sample in ("cord", "cords")
         ):
-            failures.append("blanket cord-to-wire prose replacement is forbidden")
+            failures.append(
+                "blanket cord-to-wire prose replacement is forbidden"
+            )
 
     all_english = "\n".join(
         record["english"] for record in exact["records"] if record["english"]
     )
     for pattern in glossary["forbidden_english_patterns"]:
         if re.search(pattern, all_english):
-            failures.append(f"known noncanonical English variant remains: {pattern}")
+            failures.append(
+                f"known noncanonical English variant remains: {pattern}"
+            )
     if "British Intelligence Action" not in all_english:
-        failures.append("canonical British Intelligence Action name disappeared")
+        failures.append(
+            "canonical British Intelligence Action name disappeared"
+        )
     if "Mede" not in all_english or "Medea" not in all_english:
         failures.append("Mede/Medea source distinction disappeared")
 
     for record_id in repairs["preserve_records"]:
         record = records_by_id[record_id]
         if record["policy"] != "preserve" or record["english"]:
-            failures.append(f"{record_id}: reviewed control/punctuation policy changed")
+            failures.append(
+                f"{record_id}: reviewed control/punctuation policy changed"
+            )
     for table_name in (
         "reviewed_visible_translation_exemptions",
         "reviewed_control_records",
     ):
         for record_id, item in exemptions[table_name].items():
             if records_by_id[record_id]["policy"] != item["expected_policy"]:
-                failures.append(f"{record_id}: reviewed exemption policy changed")
+                failures.append(
+                    f"{record_id}: reviewed exemption policy changed"
+                )
 
     index = _load(SOURCES / "index.json")
     canonical_text_by_id: dict[str, object] = {}
@@ -251,7 +280,9 @@ def validate(
         chapter = chapter_item["chapter"]
         source = _load(SOURCES / chapter_item["source"])
         records = source.get("records")
-        if not isinstance(records, list) or len(records) != source.get("record_count"):
+        if not isinstance(records, list) or len(records) != source.get(
+            "record_count"
+        ):
             failures.append(f"{chapter}: canonical record table is incomplete")
             continue
         try:
@@ -266,11 +297,18 @@ def validate(
         except ValueError as error:
             failures.append(str(error))
         if any(
-            record.get("index") != position for position, record in enumerate(records)
+            record.get("index") != position
+            for position, record in enumerate(records)
         ):
-            failures.append(f"{chapter}: canonical IDs/order are not contiguous")
-        translated = sum(record.get("policy") == "translate" for record in records)
-        preserved = sum(record.get("policy") == "preserve" for record in records)
+            failures.append(
+                f"{chapter}: canonical IDs/order are not contiguous"
+            )
+        translated = sum(
+            record.get("policy") == "translate" for record in records
+        )
+        preserved = sum(
+            record.get("policy") == "preserve" for record in records
+        )
         if translated != chapter_item.get(
             "translated_records"
         ) or preserved != chapter_item.get("preserved_records"):
@@ -287,8 +325,13 @@ def validate(
         if record["policy"] == "preserve"
     }
     if part3b.get("record_count") != 211 or part3b_preserved != {4, 15}:
-        failures.append(f"PART3B_ classification changed: {sorted(part3b_preserved)}")
-    if sum(record["policy"] == "translate" for record in part3b["records"]) != 209:
+        failures.append(
+            f"PART3B_ classification changed: {sorted(part3b_preserved)}"
+        )
+    if (
+        sum(record["policy"] == "translate" for record in part3b["records"])
+        != 209
+    ):
         failures.append("PART3B_ no longer has 209 translated prose records")
     for record_id, expected in {
         "PART3B_:001": "Cargo Hold",
@@ -300,14 +343,17 @@ def validate(
             failures.append(f"{record_id}: PART3B_ glossary regression")
 
     bomb = run_bomb_audit()
-    failures.extend(f"bomb: {failure}" for failure in bomb["semantic_failures"])
+    failures.extend(
+        f"bomb: {failure}" for failure in bomb["semantic_failures"]
+    )
 
     layout = audit_layouts(DEFAULT_RETAIL_ROOT)
     failures.extend(f"layout: {failure}" for failure in layout["failures"])
 
     emitted_renderer = _audit_compiled_renderer_contracts()
     failures.extend(
-        f"emitted-renderer: {failure}" for failure in emitted_renderer["failures"]
+        f"emitted-renderer: {failure}"
+        for failure in emitted_renderer["failures"]
     )
 
     comparison_checked = False
@@ -333,7 +379,9 @@ def validate(
         for record in generated:
             record_id = record["id"]
             if record.get("english") != canonical_text_by_id.get(record_id):
-                failures.append(f"{record_id}: generated comparison English is stale")
+                failures.append(
+                    f"{record_id}: generated comparison English is stale"
+                )
             if (
                 record.get("source_record_hex")
                 != records_by_id[record_id]["source_record_hex"]
@@ -342,7 +390,9 @@ def validate(
                     f"{record_id}: generated comparison Japanese source is stale"
                 )
         comparison_checked = True
-        comparison_package = validate_comparison_package(comparison_json.parent)
+        comparison_package = validate_comparison_package(
+            comparison_json.parent
+        )
         comparison_package_checked = True
         failures.extend(
             f"comparison-package: {failure}"
@@ -361,8 +411,12 @@ def validate(
         "formatting_only_duplicate_variants": exact[
             "formatting_only_duplicate_group_count"
         ],
-        "missing_visible_translations": exact["missing_visible_translation_count"],
-        "blank_sources_marked_prose": exact["blank_source_marked_translate_count"],
+        "missing_visible_translations": exact[
+            "missing_visible_translation_count"
+        ],
+        "blank_sources_marked_prose": exact[
+            "blank_source_marked_translate_count"
+        ],
         "glossary_fixed_terms": len(glossary["fixed_source_terms"]),
         "reviewed_contextual_exceptions": len(
             glossary.get("reviewed_contextual_exceptions", [])
@@ -373,16 +427,22 @@ def validate(
         "adaptive_layout_records": layout["adaptive_record_count"],
         "legacy_layout_issues": layout["legacy_issue_count"],
         "emitted_renderer_contract_status": emitted_renderer["status"],
-        "emitted_renderer_contract_failures": emitted_renderer["failure_count"],
+        "emitted_renderer_contract_failures": emitted_renderer[
+            "failure_count"
+        ],
         "emitted_renderer_contract_records": emitted_renderer["record_count"],
         "emitted_renderer_contract_rows": emitted_renderer["row_count"],
         "emitted_renderer_contract_cells": emitted_renderer["cell_count"],
-        "emitted_renderer_contract_row_edges": emitted_renderer["row_edge_count"],
+        "emitted_renderer_contract_row_edges": emitted_renderer[
+            "row_edge_count"
+        ],
         "comparison_checked": comparison_checked,
         "comparison_package_checked": comparison_package_checked,
         "comparison_package_status": comparison_package["status"],
         "comparison_package_member_count": comparison_package["member_count"],
-        "comparison_package_failure_count": comparison_package["failure_count"],
+        "comparison_package_failure_count": comparison_package[
+            "failure_count"
+        ],
         "legacy_profile_fields_present": sorted(legacy_profile_fields),
     }
 
@@ -390,11 +450,14 @@ def validate(
 def main() -> None:
     """Run validation and exit nonzero when any mandatory rule fails."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--comparison-json", type=Path, default=DEFAULT_COMPARISON)
+    parser.add_argument(
+        "--comparison-json", type=Path, default=DEFAULT_COMPARISON
+    )
     parser.add_argument("--allow-missing-comparison", action="store_true")
     args = parser.parse_args()
     payload = validate(
-        args.comparison_json, require_comparison=not args.allow_missing_comparison
+        args.comparison_json,
+        require_comparison=not args.allow_missing_comparison,
     )
     print(json.dumps(payload, indent=2))
     if payload["status"] != "PASS":

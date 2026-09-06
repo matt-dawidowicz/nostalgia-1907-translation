@@ -7,17 +7,18 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from work.clean_rebuild import verification_manifest as provenance
 
 ROOT = Path(__file__).resolve().parents[1]
 CLEAN = ROOT / "work" / "clean_rebuild"
-
-from work.clean_rebuild import verification_manifest as provenance  # noqa: E402
 
 
 class VerificationManifestTests(unittest.TestCase):
     """Prove fingerprint sensitivity, exclusions, and stale-output rejection."""
 
-    def _inputs(self, root: Path) -> tuple[list[provenance.FileBinding], Path, Path]:
+    def _inputs(
+        self, root: Path
+    ) -> tuple[list[provenance.FileBinding], Path, Path]:
         """Create a minimal declared source set plus original track fixtures."""
         canonical = root / "canonical.json"
         production = root / "production.py"
@@ -61,14 +62,21 @@ class VerificationManifestTests(unittest.TestCase):
             ],
             runtime={
                 "python": {"implementation": "CPython", "version": "test"},
-                "platform": {"system": "test", "release": "test", "machine": "test"},
+                "platform": {
+                    "system": "test",
+                    "release": "test",
+                    "machine": "test",
+                },
                 "output_affecting_dependencies": [],
             },
         )
 
     def test_declared_verification_inputs_exist(self) -> None:
         """Keep retired maintenance artifacts out of the build fingerprint."""
-        declared = (*provenance.VERIFICATION_MODULES, *provenance.CONFIGURATION_FILES)
+        declared = (
+            *provenance.VERIFICATION_MODULES,
+            *provenance.CONFIGURATION_FILES,
+        )
         missing = [name for name in declared if not (CLEAN / name).is_file()]
         self.assertEqual(missing, [])
 
@@ -78,7 +86,9 @@ class VerificationManifestTests(unittest.TestCase):
             root = Path(temporary)
             bindings, track1, track2 = self._inputs(root)
             before = self._manifest(bindings, track1, track2)
-            bindings[0].path.write_text('{"text":"revised"}\n', encoding="utf-8")
+            bindings[0].path.write_text(
+                '{"text":"revised"}\n', encoding="utf-8"
+            )
             after = self._manifest(bindings, track1, track2)
             self.assertNotEqual(
                 before["aggregate_input_fingerprint"],
@@ -98,7 +108,9 @@ class VerificationManifestTests(unittest.TestCase):
                 after["aggregate_input_fingerprint"],
             )
 
-    def test_ignored_file_change_does_not_change_input_fingerprint(self) -> None:
+    def test_ignored_file_change_does_not_change_input_fingerprint(
+        self,
+    ) -> None:
         """An undeclared unrelated file must remain outside the fingerprint."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -113,7 +125,9 @@ class VerificationManifestTests(unittest.TestCase):
                 after["aggregate_input_fingerprint"],
             )
 
-    def test_output_affecting_runtime_change_changes_input_fingerprint(self) -> None:
+    def test_output_affecting_runtime_change_changes_input_fingerprint(
+        self,
+    ) -> None:
         """Runtime identity is part of the exact execution input contract."""
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -124,9 +138,17 @@ class VerificationManifestTests(unittest.TestCase):
                 track1=track1,
                 track2=track2,
                 build_profile={"name": "unit-test", "baseline": "reference"},
-                command=["python", "-m", "work.clean_rebuild.rebuild", "<TRACKS>"],
+                command=[
+                    "python",
+                    "-m",
+                    "work.clean_rebuild.rebuild",
+                    "<TRACKS>",
+                ],
                 runtime={
-                    "python": {"implementation": "CPython", "version": "changed"},
+                    "python": {
+                        "implementation": "CPython",
+                        "version": "changed",
+                    },
                     "platform": {
                         "system": "test",
                         "release": "test",
@@ -162,7 +184,9 @@ class VerificationManifestTests(unittest.TestCase):
                 explanation="Exact unit-test artifact binding.",
             )
             machine = json.loads(
-                (root / "verification_manifest.json").read_text(encoding="utf-8")
+                (root / "verification_manifest.json").read_text(
+                    encoding="utf-8"
+                )
             )
             self.assertEqual(machine["outputs"], snapshot)
             self.assertEqual(report["provenance"]["outputs"], snapshot)
@@ -182,7 +206,9 @@ class VerificationManifestTests(unittest.TestCase):
             )
             self.assertEqual(validation["status"], "FAIL")
             self.assertTrue(
-                any("outputs differ" in item for item in validation["failures"])
+                any(
+                    "outputs differ" in item for item in validation["failures"]
+                )
             )
 
     def test_malformed_bound_manifest_returns_failure_report(self) -> None:
@@ -194,7 +220,10 @@ class VerificationManifestTests(unittest.TestCase):
             validation = provenance.validate_bound_verification(manifest, {})
             self.assertEqual(validation["status"], "FAIL")
             self.assertEqual(validation["failure_count"], 1)
-            self.assertIn("cannot read bound verification manifest", validation["failures"][0])
+            self.assertIn(
+                "cannot read bound verification manifest",
+                validation["failures"][0],
+            )
 
     def test_stale_artifact_cannot_be_reported_as_current(self) -> None:
         """Mutation after generation must abort before either report is written."""
