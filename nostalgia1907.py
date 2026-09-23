@@ -803,8 +803,10 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
         "mode": "release" if release_mode else "build",
         "independent_clean_builds": 2 if release_mode else 1,
         "independent_region_builds": (
-            2 if release_mode and region == "north-america"
-            else 1 if region == "north-america"
+            2
+            if release_mode and region == "north-america"
+            else 1
+            if region == "north-america"
             else 0
         ),
         "validation": "full semantic/layout/static preflight",
