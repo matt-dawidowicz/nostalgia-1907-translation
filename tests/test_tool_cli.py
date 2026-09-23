@@ -115,7 +115,15 @@ class CliContractTests(unittest.TestCase):
         )
         self.assertEqual(
             set(subparsers_action.choices),
-            {"doctor", "prepare", "edit", "compare", "validate", "build", "release"},
+            {
+                "doctor",
+                "prepare",
+                "edit",
+                "compare",
+                "validate",
+                "build",
+                "release",
+            },
         )
 
     def test_project_defaults_new_builds_to_north_america(self) -> None:
@@ -449,7 +457,9 @@ class CliContractTests(unittest.TestCase):
 
             with (
                 patch.object(nostalgia1907, "require_file"),
-                patch.object(nostalgia1907, "command_validate", return_value=0),
+                patch.object(
+                    nostalgia1907, "command_validate", return_value=0
+                ),
                 patch.object(
                     nostalgia1907, "run_script", side_effect=fake_run_script
                 ),
