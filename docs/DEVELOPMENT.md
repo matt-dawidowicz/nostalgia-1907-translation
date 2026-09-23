@@ -52,9 +52,7 @@ Do not maintain a separate copied checklist as the contract. The command owns:
 
 1. **Source health** — UTF-8/LF policy, structured-source parsing, duplicate JSON
    keys, source-only publication rules, and forbidden-media/local-state checks.
-2. **Source manifest** — exact `MANIFEST.sha256` identity for the tracked review
-   tree.
-3. **Production dependency policy** — the `PRODUCTION_MODULES` import/data
+2. **Production dependency policy** — the `PRODUCTION_MODULES` import/data
    boundary used by the byte-producing clean build.
 4. **Compilation** — every maintained Python surface, including tests.
 5. **Unit tests** — CLI, format parsers, renderer contracts, source policy,
@@ -66,12 +64,8 @@ Do not maintain a separate copied checklist as the contract. The command owns:
 9. **Public API documentation audit** — repository-specific structural
    documentation policy in addition to Ruff's PEP 257 rules.
 
-After intentional tracked-source changes:
-
-```powershell
-python tools/source_manifest.py --root . --write
-python -m tools.source_checks --root . --strict-release
-```
+Git is the tracked-source inventory; no second source-review hash manifest is
+maintained.
 
 The historical filename `tools/style_audit.py` remains, but generic Python style
 is owned by Ruff; `style_audit.py` enforces the project-specific public-API
@@ -214,8 +208,8 @@ hash guard to accept another retail revision.
 **`prepare`** — investigate raw-sector, ISO, archive, MES/SCN, or fixed-font
 identity before translation logic.
 
-**source gate** — fix the named health, manifest, dependency, compile, unit,
-format, lint, type, or documentation failure. Do not skip a later stage because
+**source gate** — fix the named health, dependency, compile, unit, format, lint,
+type, or documentation failure. Do not skip a later stage because
 an earlier one is inconvenient.
 
 **`edit` / renderer audit** — check stable ID, inferred role, cell geometry,
@@ -238,8 +232,7 @@ or reverse-engineered step exists rather than narrating Python syntax.
 
 ## Before committing
 
-After refreshing `MANIFEST.sha256` when needed, run the unified source gate and
-inspect:
+Run the unified source gate and inspect:
 
 ```powershell
 git status --short
