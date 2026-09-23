@@ -36,7 +36,6 @@ VERIFICATION_MODULES = (
     "translation_audit.py",
     "bomb_audit.py",
     "export_bilingual_comparison.py",
-    "export_fixed_layout_review.py",
 )
 CONFIGURATION_FILES = (
     "font_patterns.json",
