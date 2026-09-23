@@ -183,8 +183,9 @@ part of the maintained code surface.
 5. [Text-box contracts](docs/TEXT_BOX_CONTRACTS.md)
 6. [Development and validation](docs/DEVELOPMENT.md)
 7. [Binary formats](docs/BINARY_FORMATS.md)
-8. [Whole-game testing](docs/WHOLE_GAME_TESTING.md)
-9. [Release policy](docs/RELEASE.md)
+8. [Reverse engineering](docs/REVERSE_ENGINEERING.md)
+9. [Whole-game testing](docs/WHOLE_GAME_TESTING.md)
+10. [Release policy](docs/RELEASE.md)
 
 For contribution requirements, read [CONTRIBUTING.md](CONTRIBUTING.md). Python
 callables and explanatory comments follow
