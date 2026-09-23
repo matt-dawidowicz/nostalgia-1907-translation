@@ -105,18 +105,15 @@ No game media is needed for the public source contract:
 python -m tools.source_checks --root . --strict-release
 ```
 
-That single command owns the maintained source-health, manifest, production
-boundary, compilation, unit-test, Ruff-format, Ruff-lint, mypy, and public-API
+That single command owns the maintained source-health, production-boundary,
+compilation, unit-test, Ruff-format, Ruff-lint, mypy, and public-API
 documentation checks. CI runs the complete gate on Ubuntu/Python 3.12 and
 Windows/Python 3.14, with additional Python 3.13/3.14 compatibility coverage on
 Ubuntu.
 
-`MANIFEST.sha256` is the deterministic inventory for the source-only review
-bundle. Regenerate it only after intentional tracked-source changes:
-
-```powershell
-python tools/source_manifest.py --root . --write
-```
+Git itself is the tracked source inventory; the source gate checks repository
+health directly and does not maintain a second hash manifest for documentation
+or test files.
 
 ## Translation source
 
@@ -165,7 +162,7 @@ Those remain runtime-test responsibilities.
 | `work/region_variant/` | Guarded North American security/region wrapper |
 | `provenance/` | Dated reviewed-change ledgers; never build inputs |
 | `tests/` | Source-only, synthetic, integration, and regression tests |
-| `tools/` | Unified source gate, repository inventory/health, manifest, and documentation audit |
+| `tools/` | Unified source gate, repository inventory/health, and documentation audit |
 | `docs/` | Current status, architecture, formats, editing, testing, historical revision, and release policy |
 | `outputs/` | Ignored generated reports and build products |
 
