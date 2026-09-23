@@ -421,7 +421,6 @@ class CliContractTests(unittest.TestCase):
                 "Nostalgia1907_CleanRebuild_test_NorthAmerica", region_args
             )
 
-
     def test_release_uses_double_build_modes(self) -> None:
         """Keep publication certification separate from ordinary iteration."""
         with tempfile.TemporaryDirectory() as temporary:
