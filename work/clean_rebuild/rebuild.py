@@ -592,6 +592,32 @@ def _manifest(
     }
 
 
+# Supported build modes.
+
+
+def build_once(
+    track1: Path,
+    track2: Path,
+    runs_root: Path,
+    delivery_root: Path,
+    basename: str,
+) -> dict[str, object]:
+    """Build one fully validated developer product without double-build proof.
+
+    This uses the exact production path used by release builds. It omits only
+    the second independent rebuild and publication comparison, making it suitable
+    for iteration and runtime debugging but not release certification.
+    """
+    basename = _validate_basename(basename)
+    return _build_once(
+        track1,
+        track2,
+        runs_root / "build",
+        delivery_root,
+        basename,
+    )
+
+
 # Two-run determinism proof and publication.
 
 
@@ -701,26 +727,42 @@ def main() -> None:
         default=WORKSPACE / "outputs" / DEFAULT_BASENAME,
     )
     parser.add_argument("--basename", default=DEFAULT_BASENAME)
+    parser.add_argument(
+        "--single-run",
+        action="store_true",
+        help="build one validated developer product without release determinism proof",
+    )
     args = parser.parse_args()
-    result = rebuild(
-        args.track1,
-        args.track2,
-        args.runs_root,
-        args.delivery_root,
-        args.basename,
-    )
-    print(
-        json.dumps(
-            {
-                "status": result["status"],
-                "two_clean_builds_byte_identical": result[
-                    "two_clean_builds_byte_identical"
-                ],
-                "delivery_root": str(args.delivery_root),
-            },
-            indent=2,
+    if args.single_run:
+        result = build_once(
+            args.track1,
+            args.track2,
+            args.runs_root,
+            args.delivery_root,
+            args.basename,
         )
-    )
+        summary = {
+            "status": result["status"],
+            "mode": "single-run",
+            "delivery_root": str(args.delivery_root),
+        }
+    else:
+        result = rebuild(
+            args.track1,
+            args.track2,
+            args.runs_root,
+            args.delivery_root,
+            args.basename,
+        )
+        summary = {
+            "status": result["status"],
+            "mode": "release",
+            "two_clean_builds_byte_identical": result[
+                "two_clean_builds_byte_identical"
+            ],
+            "delivery_root": str(args.delivery_root),
+        }
+    print(json.dumps(summary, indent=2))
 
 
 if __name__ == "__main__":

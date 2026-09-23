@@ -739,10 +739,10 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
     """Build a deterministic BIN/CUE for the selected console region.
 
     Exact input hashes and non-overlapping output roots are resolved before the
-    dry-run boundary. A real build additionally requires fresh destinations,
-    runs the complete validation gate, and delegates two-run byte-identity
-    proof. North American builds then wrap that proven clean result twice and
-    publish only the region-adjusted delivery.
+    dry-run boundary. Both developer and release builds run the complete
+    validation gate. Normal ``build`` performs one fully validated clean build
+    and one North American wrapper for iteration; ``release`` adds the second
+    independent clean and region runs required for publication proof.
     """
     manifest = load_manifest(root)
     local = load_local_config(root)
@@ -790,6 +790,7 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
         else rooted(root, manifest["paths"]["outputs"]) / basename
     )
     require_separate_build_directories(runs, delivery)
+    release_mode = bool(getattr(args, "release", False))
     plan = {
         "region": region,
         "track1": str(track1),
@@ -799,8 +800,15 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
         "runs_root_state": directory_state(runs),
         "delivery_root": str(delivery),
         "delivery_root_state": directory_state(delivery),
-        "independent_clean_builds": 2,
-        "independent_region_builds": 2 if region == "north-america" else 0,
+        "mode": "release" if release_mode else "build",
+        "independent_clean_builds": 2 if release_mode else 1,
+        "independent_region_builds": (
+            2
+            if release_mode and region == "north-america"
+            else 1
+            if region == "north-america"
+            else 0
+        ),
         "validation": "full semantic/layout/static preflight",
     }
     if bios is not None:
@@ -814,9 +822,7 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
     require_fresh_build_directory("delivery root", delivery)
     command_validate(root, argparse.Namespace(skip_comparison=False))
     if region == "japan":
-        run_script(
-            root,
-            "work/clean_rebuild/rebuild.py",
+        build_args = [
             str(track1),
             str(track2),
             "--runs-root",
@@ -825,7 +831,18 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
             str(delivery),
             "--basename",
             basename,
-            label=f"Deterministic clean rebuild {args.name}",
+        ]
+        if not release_mode:
+            build_args.append("--single-run")
+        run_script(
+            root,
+            "work/clean_rebuild/rebuild.py",
+            *build_args,
+            label=(
+                f"Release clean rebuild {args.name}"
+                if release_mode
+                else f"Developer clean build {args.name}"
+            ),
         )
         return 0
 
@@ -836,9 +853,7 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
     clean_runs = runs / "clean_runs"
     clean_delivery = runs / "clean_delivery"
     region_runs = runs / "north_america_runs"
-    run_script(
-        root,
-        "work/clean_rebuild/rebuild.py",
+    clean_args = [
         str(track1),
         str(track2),
         "--runs-root",
@@ -847,7 +862,18 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
         str(clean_delivery),
         "--basename",
         base_basename,
-        label=f"Deterministic clean rebuild stage {args.name}",
+    ]
+    if not release_mode:
+        clean_args.append("--single-run")
+    run_script(
+        root,
+        "work/clean_rebuild/rebuild.py",
+        *clean_args,
+        label=(
+            f"Release clean rebuild stage {args.name}"
+            if release_mode
+            else f"Developer clean build stage {args.name}"
+        ),
     )
     baseline_track1 = clean_delivery / f"{base_basename}_Track1.bin"
     baseline_track2 = clean_delivery / f"{base_basename}_Track2.bin"
@@ -856,9 +882,7 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
             "clean build returned without its proven BIN artifacts"
         )
     baseline_track1_sha256 = sha256(baseline_track1)
-    run_script(
-        root,
-        "work/region_variant/build_us_bios_test.py",
+    region_args = [
         str(baseline_track1),
         str(baseline_track2),
         str(bios),
@@ -870,7 +894,18 @@ def command_build(root: Path, args: argparse.Namespace) -> int:
         basename,
         "--expected-track1-sha256",
         baseline_track1_sha256,
-        label=f"Deterministic North American region stage {args.name}",
+    ]
+    if not release_mode:
+        region_args.append("--single-run")
+    run_script(
+        root,
+        "work/region_variant/build_us_bios_test.py",
+        *region_args,
+        label=(
+            f"Release North American region stage {args.name}"
+            if release_mode
+            else f"Developer North American region stage {args.name}"
+        ),
     )
     return 0
 
@@ -936,30 +971,41 @@ def parser() -> argparse.ArgumentParser:
     )
     validate.set_defaults(handler=command_validate)
 
+    def add_build_arguments(command: argparse.ArgumentParser) -> None:
+        """Add the shared build/release arguments to one subcommand."""
+        command.add_argument(
+            "--name",
+            help="optional descriptive output label; omit for the neutral name",
+        )
+        command.add_argument("--track1", type=Path)
+        command.add_argument("--track2", type=Path)
+        command.add_argument(
+            "--region",
+            choices=("north-america", "japan"),
+            help="console region; defaults to the project policy (North America)",
+        )
+        command.add_argument("--us-bios", type=Path)
+        command.add_argument("--runs-root", type=Path)
+        command.add_argument("--output", type=Path)
+        command.add_argument(
+            "--dry-run",
+            action="store_true",
+            help="show resolved inputs/outputs only",
+        )
+
     build = commands.add_parser(
         "build",
-        help="build deterministic BIN/CUE; North America is the default region",
+        help="build one fully validated developer BIN/CUE",
     )
-    build.add_argument(
-        "--name",
-        help="optional descriptive output label; omit for the neutral release name",
+    add_build_arguments(build)
+    build.set_defaults(handler=command_build, release=False)
+
+    release = commands.add_parser(
+        "release",
+        help="run publication-grade deterministic double builds",
     )
-    build.add_argument("--track1", type=Path)
-    build.add_argument("--track2", type=Path)
-    build.add_argument(
-        "--region",
-        choices=("north-america", "japan"),
-        help="console region; defaults to the project policy (North America)",
-    )
-    build.add_argument("--us-bios", type=Path)
-    build.add_argument("--runs-root", type=Path)
-    build.add_argument("--output", type=Path)
-    build.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="show resolved inputs/outputs only",
-    )
-    build.set_defaults(handler=command_build)
+    add_build_arguments(release)
+    release.set_defaults(handler=command_build, release=True)
 
     return result
 

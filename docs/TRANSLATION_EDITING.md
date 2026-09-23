@@ -2,10 +2,10 @@
 
 ## The safe mental model
 
-Edit canonical meaning, not compiled bytes. The English under
+Edit canonical meaning, not compiled bytes. English under
 `work/clean_rebuild/sources/` is authoritative. MES, LZ, ISO, BIN/CUE, rendered
-images, audits, and comparison files are generated and should never be used as
-the source of a wording change.
+images, audits, and comparison files are generated and never become the source
+of a wording change.
 
 The supported key is a stable record ID:
 
@@ -19,27 +19,31 @@ START:000
 The numeric component is the zero-based `records[index]` value formatted with
 three digits. It does not change when the sentence changes.
 
-## Current source-fidelity policy
+## Current translation policy
 
-The 2026-08-27 full-corpus audit established an explicit priority order for
-translation work: exact retail Japanese meaning first, then natural English and
-period/character voice. Voice work must never restore an older mistranslation.
-Regional speech should be localized as readable social/regional English without
-phonetic eye dialect, and source-authored oddities or anachronisms must not be
-"corrected" merely because a historically smoother line is available.
+The 2026-08-27 full-corpus Japanese audit established the durable priority:
+retail Japanese meaning first, then natural English, first-play clarity,
+character voice, and period/register choices. The September complete-script
+audit applied that standard across the rest of the game and synchronized
+alternate-route material. See [current project status](CURRENT_STATUS.md) for
+how those dated passes fit into the cumulative successor source line.
 
-The complete change record and examples are in
-[the 2026-08-27 translation revision](TRANSLATION_REVISION_20260827.md), while
-character/terminology rules live in [the glossary and style
+Voice work must never restore an older mistranslation. Regional speech should be
+readable social/regional English without phonetic eye dialect. Source-authored
+oddities and anachronisms are preserved when the Japanese evidence supports
+them.
+
+Character/terminology rules live in [the glossary and style
 guide](GLOSSARY_STYLE_GUIDE.md).
 
 ## Prerequisites
 
-Install the editable package, provide exact Japanese retail tracks, and prepare
-the retail reference:
+Run directly from the repository checkout; **do not install the project as an
+editable package**. Install development tools only when needed, then provide
+exact Japanese retail tracks and prepare the retail reference:
 
 ```powershell
-python -m pip install -e .
+python -m pip install -r requirements-dev.txt
 python nostalgia1907.py doctor
 python nostalgia1907.py prepare
 ```
@@ -56,17 +60,9 @@ A chapter source has four conceptual sections:
   "schema_version": 1,
   "chapter": "PART1A",
   "record_count": 136,
-  "retail_mes": {
-    "size": 5321,
-    "sha256": "..."
-  },
-  "retail_scn": {
-    "size": 3354,
-    "sha256": "..."
-  },
-  "profile": {
-    "translation_status": "locked"
-  },
+  "retail_mes": {"size": 5321, "sha256": "..."},
+  "retail_scn": {"size": 3354, "sha256": "..."},
+  "profile": {"translation_status": "locked"},
   "text_mode": "render-ready",
   "records": [
     {
@@ -85,90 +81,63 @@ A chapter source has four conceptual sections:
 | --- | --- | --- |
 | `index` | Zero-based MES record position | Never renumber, insert, delete, or reorder |
 | `policy: "translate"` | Record is generated from canonical English | Edit only through the reviewed workflow |
-| `policy: "preserve"` | Retail record bytes are semantically non-prose or intentionally retained | Keep `text` null; do not translate casually |
+| `policy: "preserve"` | Retail record is intentionally retained | Keep `text` null; do not translate casually |
 | `text` | Canonical English | Adaptive records store normalized semantic text |
-| `display_text` | Optional renderer-only compact label | Keep `text` as the full semantic translation; use only when runtime evidence proves a constrained label cannot display it |
-| `layout_policy: "adaptive"` | SCN proves a shared renderer contract | Do not add manual line breaks or padding |
-| `layout_policy: "fixed"` | No safe reflow geometry is proven | Exact spaces/lines are part of the reviewed layout |
+| `display_text` | Optional constrained renderer text when supported | Keep semantic ownership explicit; use only with proven contract |
+| `layout_policy: "adaptive"` | Shared renderer contract owns reflow | Do not add manual line breaks or padding |
+| `layout_policy: "fixed"` | Reviewer-owned physical layout | Exact spaces/lines are part of the reviewed source |
 
-Top-level `text_mode` is retained for compiler compatibility. Per-record
-`layout_policy` is the current authority for the global formatter.
+Top-level `text_mode` remains part of the canonical schema, while per-record
+`layout_policy` owns adaptive versus fixed formatting behavior.
 
-### Profile fields
+## Active profile fields
 
-The embedded `profile` records reviewed structural exceptions and regression
-requirements. `profile_schema.py` validates the object before compilation and
-semantic validation. Unknown keys are errors: a setting cannot look active
-while being silently ignored.
+`profile_schema.py` is fail-closed. Unknown fields and retired migration flags
+are errors; they are **not** retained as compatibility state.
 
-Active fields include:
+Active fields are:
 
-| Field | Purpose |
-| --- | --- |
-| `required_text_prefixes` | Text whose beginning is a gameplay/UI invariant |
-| `required_text_exact` | Exact text locked by a regression |
-| `forbidden_text_patterns` | Known bad wording or format variants |
-| `layout_overrides` | Reviewed visible cell widths where SCN inference alone is insufficient |
-| `runtime_layout_overrides` | Engine stride when it differs from visible width |
-| `row_limit_overrides` | Reviewed vertical capacity |
-| `role_overrides` | Renderer role for a structurally exceptional record |
+- `schema_version`, `name`, and `translation_status`;
+- `required_text_exact`, `required_text_prefixes`, and
+  `forbidden_text_patterns`;
+- `scn_dialogue_layout`, `scn_continuation_layout`,
+  `scn_dialogue_runtime_layout`, `scn_continuation_runtime_layout`, and
+  `scn_window_text_subtypes`;
+- `layout_overrides`, `runtime_layout_overrides`, and `row_limit_overrides`;
+- `text_box_overrides`; and
+- `role_overrides`.
 
-`required_text_exact`, `required_text_prefixes`, and
-`forbidden_text_patterns` are executable source-only rules. They are checked
-against stable zero-based record indexes before direct MES compilation and
-during semantic validation. Geometry and role fields are consumed by
-`scn_layout.py`.
+Indexed production rules must address valid translated records and use canonical
+zero-based decimal keys. Do not add an override merely to make one screenshot
+pass; first establish why shared SCN inference does not model the renderer.
 
-Some existing profiles retain named migration-era switches such as
-`validate_wrapped_text_integrity`, `infer_scn_layouts`, and
-`choice_render_cell_limit`. Those keys are explicitly classified as legacy
-provenance and have no production effect. Do not add new legacy keys. Remove an
-old one only in a dedicated source-policy change whose tests and documentation
-show that its history is no longer needed.
+## Find and preview a record
 
-Do not add an override merely to make one screenshot pass. First show why the
-original SCN selects a renderer that the shared inference does not yet model.
-
-Values in `text_sources` are portable historical-provenance labels. They are
-not machine paths, production dependencies, recoverable source files, or a
-license to copy historical generated text into current logic.
-
-## Find a record
-
-Search by stable ID indirectly through chapter and index:
+Use the stable ID:
 
 ```powershell
 python nostalgia1907.py edit PART1A:003
 ```
 
-That command prints the current semantic text, inferred roles, visible/runtime
-cell capacities, row limit, and rendered preview.
+The command reports current semantic text, inferred roles, visible/runtime
+capacities, row limits, and the rendered preview when retail evidence is
+available.
 
-Search canonical wording:
+Search canonical wording with ordinary source tools when useful, but scripts
+that apply changes must still target stable IDs rather than mutable English.
 
-```powershell
-rg -n -F '"text": "How about we switch games' work/clean_rebuild/sources
-```
-
-Search a record with a short read-only Python query:
-
-```powershell
-python -c "import json,pathlib; p=pathlib.Path('work/clean_rebuild/sources/PART1A.json'); d=json.loads(p.read_text(encoding='utf-8')); print(d['records'][3])"
-```
-
-The bilingual comparison package is the best way to correlate visible Japanese
-and English across all chapters:
+The bilingual comparison package correlates visible Japanese and English across
+all chapters:
 
 ```powershell
 python nostalgia1907.py compare
 ```
 
-Its JSON preserves IDs and raw Japanese source bytes; its HTML and images are
-for human review. The exporter uses fresh run-specific staging, packages only
-the current expected-file manifest, and writes an exact inventory/hash
-sidecar. Static comparison previews do not prove runtime correctness.
+The exporter uses fresh staging, an exact expected inventory, deterministic
+text/PNG/ZIP generation, and package validation. A comparison preview is human
+review evidence, not proof of emulator behavior.
 
-## Preview a single edit
+## Preview and apply one edit
 
 Previewing is read-only:
 
@@ -177,22 +146,12 @@ python nostalgia1907.py edit PART1A:003 `
   --text "How about we switch games and play one more round?"
 ```
 
-Review:
+Review the stable ID, current/proposed wording, inferred role, preview rows,
+visible/runtime widths, and row limit. For adaptive records, whitespace is
+normalized and the semantic text must round-trip through wrapping without losing
+or fragmenting words.
 
-- the stable ID and current/proposed wording;
-- inferred roles such as `main_dialogue` or `menu_choice`;
-- `preview_rows`;
-- visible cell widths versus runtime stride;
-- floating-window `max_rows`;
-- any failure explaining why the edit cannot be applied.
-
-For adaptive records, whitespace is normalized before storage. Wording must
-round-trip from semantic text to preview rows and back without losing or
-changing words.
-
-## Apply a single edit
-
-After reviewing the preview:
+Apply only after review:
 
 ```powershell
 python nostalgia1907.py edit PART1A:003 `
@@ -200,11 +159,11 @@ python nostalgia1907.py edit PART1A:003 `
   --apply
 ```
 
-The tool writes only the owning chapter JSON. It updates an applicable
-`required_text_exact` entry and chooses adaptive or fixed policy from the SCN
-contract. It does not patch a MES, archive, or disc image.
+The tool writes only the owning chapter JSON, updates applicable profile text
+rules, and chooses layout ownership from the validated contract. It does not
+patch MES/LZ/BIN output.
 
-Immediately inspect the diff:
+Inspect the canonical diff immediately:
 
 ```powershell
 git diff -- work/clean_rebuild/sources/PART1A.json
@@ -229,50 +188,47 @@ Apply:
 python nostalgia1907.py edit --changes reviewed-changes.json
 ```
 
-All entries are validated before chapter files are written. Duplicate keys are
-rejected before JSON object construction can silently discard an earlier edit.
-Affected chapters are staged beside their canonical files with byte-for-byte
-backups; a later write or replacement failure rolls back chapters already
-replaced. If the rollback itself fails, the tool retains the affected byte-for-byte
-backup and reports its recovery path. This is an all-or-rollback process
-guarantee, not a claim of multi-file crash atomicity. Do not combine `--changes` with a positional record,
-`--text`, or `--apply`.
+All entries are validated before replacement. Duplicate JSON keys are rejected.
+Affected chapters are staged beside canonical files; replacement failures roll
+back already-replaced targets and retain recovery material if rollback itself
+fails. This is an all-or-rollback process guarantee, not a claim of multi-file
+crash atomicity.
 
 ## Screenshot-driven investigation
 
 When a screenshot looks wrong:
 
-1. Record the chapter/scene and exact visible text.
-2. Search the canonical source or comparison JSON for candidate IDs.
-3. Preview each candidate ID without changing data.
-4. Confirm the inferred role matches the on-screen renderer.
-5. Decide whether the problem is wording, general layout inference, or a stale
-   generated artifact.
-6. Change canonical wording only if the meaning is wrong.
-7. Change shared layout code only if the renderer contract is wrong.
-8. Regenerate the comparison and validate.
-9. Playtest the same scene and nearby branches.
+1. Record the exact candidate, chapter/scene, and visible text.
+2. Resolve the stable record ID.
+3. Preview the canonical record without changing source.
+4. Confirm the inferred role matches the renderer.
+5. Decide whether the problem is wording, shared layout inference, fixed layout,
+   or stale generated output.
+6. Change canonical wording only if meaning/English is wrong.
+7. Change shared layout code only if the general renderer contract is wrong.
+8. Regenerate comparison evidence and run complete validation.
+9. Playtest the same scene, transitions, and nearby branches.
 
-Do not identify records by their current English alone when scripting a change.
-Use stable IDs so duplicate wording cannot target the wrong record.
+The existing two-byte PART1A SCN fix is a closed hash-locked exception backed by
+specific runtime evidence; it is not a template for screenshot-specific binary
+patches.
 
 ## Semantic consistency data
 
-Use [`GLOSSARY_STYLE_GUIDE.md`](GLOSSARY_STYLE_GUIDE.md) for the reviewed English naming, terminology, dialogue, warning, choice, and layout conventions. The machine-enforced tables below remain authoritative where they define a source fingerprint or record-scoped exception.
+Use [`GLOSSARY_STYLE_GUIDE.md`](GLOSSARY_STYLE_GUIDE.md) for reviewed naming,
+terminology, dialogue, warning, choice, and layout conventions. Machine-enforced
+rules include:
 
-The validation layer uses:
-
-- `translation_glossary.json` for source-fingerprint terms, controlled phrases,
-  authoritative records, and reviewed contextual distinctions;
+- `translation_glossary.json` for source-fingerprinted terms and contextual
+  distinctions;
 - `translation_exemptions.json` for reviewed visible/control exceptions;
-- `translation_repairs.json` for bounded repair rules and preserve decisions;
-- `bomb_semantics.json` for the dedicated bomb/cord/wire terminology audit;
-- `script_layout_rules.json` for renderer roles and project-wide layout gates.
+- `translation_repairs.json` for bounded repairs and preserve decisions;
+- `bomb_semantics.json` for bomb/cord/wire semantic constraints; and
+- `script_layout_rules.json` for renderer/layout policy.
 
-Add a glossary rule when a term must remain consistent across future edits.
-Use a contextual exception when identical-looking source material is
-intentionally translated differently because the scene meaning differs. Every
-exception should point to a stable record and source fingerprint.
+Add a glossary rule when a term must remain stable across future edits. Use a
+record-scoped contextual exception when similar source material legitimately
+requires different English.
 
 ## Validate after editing
 
@@ -282,45 +238,48 @@ Run:
 python nostalgia1907.py validate
 ```
 
-This first audits the actual source tree, recursively compiles maintained
-Python, runs source-only tests, and runs the maintained-source style
-audit. It then requires the prepared retail reference, audits every renderer
-contract, runs layout compilation tests, regenerates the comparison package,
-and checks semantic/profile/generated-artifact consistency.
+Validation first invokes the maintained unified source gate, then requires the
+prepared retail reference and runs renderer/layout, retail integration,
+comparison, semantic/profile, compilation, archive, ISO, raw-track, and Track-2
+checks.
 
-Validation does not prove that prose is elegant or that every branch was
-visited. Manual playtesting remains the final release gate.
+Validation does not prove prose quality or live emulator behavior. A candidate
+whose playable bytes change still requires candidate-bound Ares evidence.
 
 ## Direct JSON editing
 
-Direct editing is sometimes useful for research or carefully reviewed bulk
-work, but it bypasses the CLI's preview/apply guard. If you edit JSON directly:
+Direct editing is useful for carefully reviewed bulk work, but it bypasses the
+CLI's preview/apply guard. If editing JSON directly:
 
-1. preserve UTF-8 and the existing JSON structure;
-2. keep record indexes contiguous and unchanged;
-3. do not change retail MES/SCN guards;
-4. do not change preserved records without source analysis;
-5. do not add wrapping to adaptive text;
-6. update glossary/profile invariants when intentionally changing locked text;
-7. run the complete validation sequence.
+1. preserve UTF-8 and the existing schema;
+2. keep indexes contiguous and unchanged;
+3. do not change retail MES/SCN guards casually;
+4. do not change `policy: "preserve"` records without source analysis;
+5. do not add wrapping/padding to adaptive text;
+6. update active glossary/profile invariants when intentionally changing locked
+   text; and
+7. run complete validation.
 
-Never edit generated MES/LZ/BIN output and then attempt to reverse-import it as
-canonical English.
+Never edit generated MES/LZ/BIN output and reverse-import it as canonical
+English.
 
 ## Fixed-layout runtime evidence
 
-A record marked `layout_policy: "fixed"` has no safe general SCN-derived reflow
-contract. Static character counts and preview rows may guide review, but they do
-not prove runtime width, centering, clipping, row stride, page behavior, or
-timing. Use `export_fixed_layout_review.py` to generate the complete review
-queue. Capture the exact retail and candidate scene before changing layout
-ownership; start with `PART4C:051` through `PART4C:059`.
+A record marked `layout_policy: "fixed"` has reviewer-owned physical layout
+rather than shared adaptive reflow. Fixed records are included in the permanent
+release-validation inventory; static checks protect their encoded constraints,
+but do not prove every live centering, transition, clearing, or timing state.
 
-## Non-applied wording proposals
+Use `export_fixed_layout_review.py` when preparing runtime evidence. For the
+current successor release, `PART4C:051` through `PART4C:059` remain an explicit
+uninterrupted ending-path checkpoint.
 
-`export_translation_proposals.py` produces evidence reports only. It does not
-write canonical JSON. For Japanese claims, cite a tracked human-reviewed source
-such as `bomb_semantics.json` by file hash and record key. Do not derive Japanese
-readings from mojibake, uncertain byte decoding, or an unlabeled screenshot.
-After human approval, preview and apply a canonical edit through the normal
-`nostalgia1907.py edit` workflow, then rerun all validation.
+## Retired proposal workflow
+
+The old active `export_translation_proposals.py` workflow and no-pending
+compatibility machinery have been removed. There is no maintained proposal
+queue that can write or stand in for canonical source.
+
+For a new wording change, establish source evidence, preview the stable ID with
+`nostalgia1907.py edit`, apply the reviewed canonical edit, regenerate comparison
+evidence when appropriate, and rerun the maintained validation/release gates.

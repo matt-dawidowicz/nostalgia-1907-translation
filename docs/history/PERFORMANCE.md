@@ -1,3 +1,5 @@
+> Historical benchmark record. Current operating guidance lives in `../DEVELOPMENT.md` and `../RELEASE.md`.
+
 # Performance benchmarks
 
 This document records the benchmark basis for rebuild optimizations. Performance

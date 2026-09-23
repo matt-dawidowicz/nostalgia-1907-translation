@@ -1,9 +1,9 @@
 # Binary format reference
 
-This document describes the subset of each format that the production pipeline
-reads or writes. It is not a claim to document every Mega-CD or game opcode.
-The executable code remains authoritative and rejects structures outside these
-proven contracts.
+This document describes the subset of each game/disc format that the maintained
+production pipeline reads or writes. It is not a complete Mega-CD or game-opcode
+specification. Executable parsers and validators remain authoritative and reject
+structures outside the proven contracts below.
 
 All numeric offsets below are hexadecimal unless stated otherwise.
 
@@ -24,53 +24,69 @@ contains 2,048 bytes of ISO user data.
 | `0x8C8` | 104 | ECC Q plane |
 | `0x930` | - | End of sector |
 
-Sector zero has the absolute address `00:02:00`, reflecting the standard
-150-frame lead-in. During rebuilding, the retail raw sector is used as a
-template, only the 2,048-byte user-data region is replaced, and EDC/ECC are
-regenerated.
+Sector zero has absolute address `00:02:00`, reflecting the standard 150-frame
+lead-in.
 
-Safety invariants:
+### Authenticated-reference reconstruction
+
+Older documentation described the rebuild as regenerating EDC/ECC for every
+output sector. That is no longer the maintained algorithm. The rebuild first
+authenticates the complete retail Track 1 against its frozen SHA-256. For each
+logical sector:
+
+- if the generated 2,048-byte user payload is unchanged, the complete
+  authenticated retail raw sector is copied byte-for-byte; and
+- if the logical payload changed, the sector is reconstructed with the retail
+  geometry/header as its template and fresh EDC/ECC is generated and checked.
+
+Final regression uses the same evidence model: an unchanged raw sector inherits
+checksum/parity evidence through exact identity to the already authenticated
+retail reference; every changed sector receives direct EDC/ECC verification.
+This is a performance optimization, not a relaxation of disc integrity.
+
+Safety invariants include:
 
 - raw and logical sector counts must match retail;
-- every header, mode, and address is validated;
-- every output EDC/ECC is verified;
-- the Mega-CD boot signature is present;
-- the first 16 sectors' boot payload matches retail;
-- Track 2 is not decoded or resampled by the production build.
+- sector sync/header/mode/address geometry is validated;
+- every changed output sector has freshly verified EDC/ECC;
+- every unchanged output sector must be byte-identical to its authenticated
+  retail counterpart;
+- the Mega-CD boot signature and guarded boot/security boundaries are checked;
+- the North American wrapper may mutate only its explicitly proven raw-sector
+  range; and
+- Track 2 is copied exactly rather than decoded, resampled, or regenerated.
+
+See [Performance benchmarks](PERFORMANCE.md) for the measured equivalence and
+speedup of the authenticated-reference path.
 
 ## ISO 9660 fixed extents
 
 `iso9660.py` reads the primary volume descriptor at logical sector 16 and walks
 directory records recursively.
 
-An `IsoEntry` records:
-
-- normalized path;
-- starting logical extent;
-- logical byte size;
-- flags;
-- absolute location of the directory record that declares the file.
-
-ISO 9660 stores extent and size in both little- and big-endian copies. The
-parser requires those copies to agree.
+An `IsoEntry` records the normalized path, starting logical extent, logical byte
+size, flags, and the absolute location of the directory record that declares the
+file. ISO 9660 stores extent and size in little- and big-endian copies; the
+parser requires them to agree.
 
 The patcher never allocates a new extent. A replacement may change logical size
-only when it fits the full sector allocation already occupied by the retail
-file:
+only when it fits the complete sector allocation occupied by the retail file:
 
 ```text
 allocated_size = ceil(retail_size / 2048) * 2048
 ```
 
-Before installation, the complete allocation is zeroed. The new payload is
-written at the original extent, and every duplicate directory record receives
-the new logical size in both byte orders. Output ISO length must equal input ISO
-length.
+Before installation the allocation is zeroed, the new payload is written at the
+original extent, and every duplicate directory record receives the new logical
+size in both byte orders. Output ISO length must equal input ISO length.
+
+Writers reject destructive source/output aliasing and malformed or conflicting
+extent metadata before a candidate can be published.
 
 ## Chapter LZ archive
 
-Each chapter file such as `PART1A.LZ` contains a fixed member table followed by
-member payload slots.
+Each chapter archive such as `PART1A.LZ` contains a fixed member table followed
+by member payload slots.
 
 ### Header
 
@@ -90,37 +106,42 @@ member payload slots.
 | `0x1A` | 4 | preserved marker bytes |
 
 When stored size equals unpacked size, the payload is uncompressed. Otherwise
-the backward LZ codec is used.
+the game's backward LZ codec is used.
 
-The normal replacement strategy compresses a generated MES and writes it into
-the original member slot, zeroing unused slot bytes. If it does not fit,
-`replace_members_reflow` may repack all member payloads in their original order,
-but only up to the chapter archive's existing ISO allocation. Non-replaced
-member payload bytes, especially SCN, must remain exact.
+The normal replacement strategy compresses a generated MES and writes it inside
+the original member slot, zeroing unused slot bytes. If a replacement cannot
+fit, guarded reflow may repack member payloads in original order, but only inside
+the chapter archive's existing ISO allocation. The overflow path uses a typed
+capacity failure rather than parsing an exception message, and capacity reports
+identify the tightest relevant headroom.
+
+Non-replaced members remain authoritative retail data except for the single
+closed PART1A SCN correction described below.
 
 ### Backward LZ stream
 
 The decoder works from the end of the payload toward the beginning of both the
-compressed stream and output. Its footer contains three or more aligned
-big-endian words:
-
-1. unpacked size;
-2. XOR checksum;
-3. initial bit buffer;
-4. preceding stream words as required.
+compressed stream and output. The footer contains aligned big-endian words for
+unpacked size, XOR checksum, initial bit state, and preceding stream words as
+required.
 
 Commands encode literal runs or backward-output copies with several
-distance/length widths. `compress()` uses dynamic programming to choose a
-minimum-bit parse with deterministic tie breaking and immediately
-round-trips its result through `decompress()`.
+length/distance widths. `compress()` uses dynamic programming and deterministic
+tie-breaking, then immediately round-trips through `decompress()`.
 
-For analysis, use `parse_archive()` and `member_bytes()` rather than slicing at
-guessed offsets.
+The current implementation keeps the previous compressed representation while
+avoiding materialization of every legal long-copy length. A range-minimum data
+structure selects the lowest-cost legal predecessor and retains the legacy
+tie preference. Regression tests compare optimized output byte-for-byte with the
+preserved reference algorithm, including long repetitive inputs.
+
+For analysis, use `parse_archive()` and `member_bytes()` rather than guessed
+slices.
 
 ## MES script container
 
-MES combines a pointer table, encoded records, and a chapter-local dynamic
-glyph bank.
+MES combines a pointer table, encoded records, and a chapter-local dynamic glyph
+bank.
 
 ```text
 0x0000  u16be split_offset
@@ -140,8 +161,8 @@ record_count = (first_pointer - 2) / 2
 ```
 
 Pointers are big-endian, strictly increasing, and bounded before
-`split_offset`. Adjacent pointers define a nonempty record; the final record
-ends at `split_offset`. Every record must end in the `0x00` terminator.
+`split_offset`. Adjacent pointers define a nonempty record; the final record ends
+at `split_offset`. Every record ends with `0x00`.
 
 ### Record codes
 
@@ -152,75 +173,64 @@ Values `0xF0` through `0xFF` begin a two-byte dynamic-glyph reference:
 index = (prefix - 0xF0) * 255 + low - 1
 ```
 
-The low byte may not be zero. Generated English and preserved retail records
-must end in `0x00`. Preserved retail records otherwise remain
-byte-authoritative except that their dynamic references may be remapped when
-unused retail glyphs are removed.
+The low byte may not be zero. Preserved retail records remain semantically
+byte-authoritative, although a dynamic reference may be remapped when unused
+retail glyphs are compacted; regression therefore verifies their rendered token
+identity as well as fixed/control bytes.
 
-`MAIN.BIN` lower-dialogue code at `$FF1DAA-$FF1DE0` has an additional
-row-edge lookahead path for the next one-byte values `02`, `03`, `04`, `05`,
-`08`, and `11`. They are valid retail fixed-font values, but are not
-interchangeable with arbitrary generated English cells at a full-row boundary.
-Generated English must encode bitmaps assigned to those values dynamically
-(`F0xx`); preserved retail bytes are not changed. A fixed and a dynamic
-reference otherwise each advance the native dialogue cursor by one cell.
+The `MAIN.BIN` lower-dialogue reader has a special row-edge lookahead for the
+one-byte values `02`, `03`, `04`, `05`, `08`, and `11`. They are legitimate
+fixed-font cells elsewhere, but generated lower-dialogue English must not place
+them at the guarded row edge. Equivalent glyphs are emitted dynamically there.
 
-The runtime permits at most 1,020 dynamic glyphs. All MES pointers must fit
-16-bit offsets. PART3C also has a proven hard file boundary at `0x3FFF`.
+The runtime permits at most 1,020 dynamic glyphs. MES pointers must fit 16-bit
+offsets. PART3C additionally has a proven hard file boundary at `0x3FFF`.
 
 ## Font cells
 
-Both fixed and dynamic glyphs are one-bit 12x12 images stored in 18 bytes.
-`font_render.py` generates English cells in display orientation and rotates
-them into the storage orientation expected by the game.
+Fixed and dynamic glyphs are one-bit 12x12 images stored in 18 bytes.
+`font_render.py` generates English cells in display orientation and rotates them
+into the storage orientation expected by the game.
 
 A normal generated cell contains one or two six-pixel English character slots.
-Selected three-character punctuation clusters, such as an ellipsis or a numeric
-decimal fragment, may use a compact bitmap while preserving the same visible
-text. Apostrophes deliberately remain on the ordinary six-pixel character grid
-so contractions cannot switch between incompatible spacing algorithms based on
-pair phase.
+Reviewed punctuation clusters may use a compact bitmap when the visible text is
+preserved. Apostrophes deliberately remain on the ordinary six-pixel grid so
+contractions cannot switch spacing models according to pair phase.
 
-The MES compiler deduplicates identical bitmaps into the chapter's dynamic
-glyph bank. This is why text capacity depends on unique rendered cells as well
-as encoded record length.
+The compiler deduplicates immutable glyph bitmaps and reuses the resulting row
+bitmap plans for frequency ordering, first use, and final encoding. This does
+not alter visible output; it removes repeated analysis.
 
-The compiler uses one frozen, shared dictionary of reviewed English cells in
-otherwise unused fixed-font slots. Every chapter may reference that dictionary;
-it is a storage encoding, not a scene-specific formatting rule. Regression
-checks prove the dictionary is unused by all byte-preserved retail records,
-changes only its declared fixed-font cells, and produces the same bitmap
-sequences as an all-dynamic encoding. The six lower-dialogue row-edge values
-listed above are deliberately excluded from that dictionary. This avoids using
-a visible leading blank to alter pair phase while retaining PART3C's
-hard-boundary safety margin. The
-lower-dialogue renderer is separate: its retail main-dialogue records normally
-begin with fixed code `0x10`, a Japanese opening-quote cell drawn in the left
-gutter. The English compiler replaces that one initial cell with the shared
-blank fixed cell. This is the named `lower_dialogue` renderer contract: its
-physical geometry is one initial 12-cell row followed by an 11-cell
-continuation stride. The initial gutter uses one cell of row zero; later visual
-page starts retain the continuation X-coordinate and width. No extra cell is
-emitted at a page transition.
-The complete contract catalogue and evidence rules are in
-[`TEXT_BOX_CONTRACTS.md`](TEXT_BOX_CONTRACTS.md).
+A frozen shared dictionary uses otherwise-unused fixed-font slots for reviewed
+English cells. Regression proves those slots are not used by preserved retail
+records, that only declared cells change, and that each dictionary cell renders
+identically to its dynamic equivalent. The six guarded lower-dialogue row-edge
+codes above are excluded.
 
+For `lower_dialogue`, the retail opening quote (`0x10`) occupies a one-cell
+left gutter. English replaces that initial cell with the shared blank cell. The
+physical contract is one initial 12-cell row followed by an 11-cell
+continuation stride; later page clears do not emit a second opening gutter.
+`lower_continuation` starts directly on the native continuation stride.
+
+See [Text-box contracts](TEXT_BOX_CONTRACTS.md) for the complete renderer
+catalogue.
 
 ## SCN renderer references
 
-Retail SCN remains the read-only structural authority used for renderer
-inference. Generated archives preserve it byte-for-byte except for one closed,
-hash-locked correction in `PART1A.SCN`: the two Call/Fold selector-window X
-bytes at offsets `0x065D` and `0x0666` change from `0x17` (23) to `0x18` (24).
-That aligns the transient selectors with the persistent poker status panel
-already relocated by the frozen `MAIN.BIN` patch; Ares runtime testing confirmed
-that the old coordinates clipped the panel's top border. `scn_patch.py` requires
-the exact retail and patched hashes and proves that no other SCN byte changes.
+Retail SCN is the structural authority for renderer inference. Generated
+archives preserve it byte-for-byte except for one closed, hash-locked correction
+in `PART1A.SCN`: selector-window X bytes at offsets `0x065D` and `0x0666` change
+from `0x17` (23) to `0x18` (24).
 
-The project otherwise reads only structurally proven command shapes needed to
-relate MES records to renderers.
+That aligns the transient Call/Fold selectors with the persistent Game Hall
+status panel already relocated by the frozen `MAIN.BIN` patch. Ares testing
+confirmed that the retail selector coordinates clipped the relocated panel's top
+border. `scn_patch.py` requires exact retail/patched hashes, exact old bytes,
+unchanged length, and the exact two-offset mutation set.
 
-Relevant commands include:
+The parser interprets only complete, proven command shapes and valid operand
+ranges. Relevant structures include:
 
 | Shape | Inferred use |
 | --- | --- |
@@ -228,38 +238,33 @@ Relevant commands include:
 | adjacent `0x22` / `0x23` | location and perspective labels |
 | `0x24 ... subtype text-id` | floating thought/overlay window |
 | immediate `0x27 text-id` | continuation in the preceding floating window |
-| `0x31 text-id ... branch` | menu choice with a valid target |
+| `0x31 text-id ... branch` | menu choice with a valid branch target |
 | `0x42` / `0x43` table targeting `0x24` | selector-driven display window |
 
-SCN IDs are one-based. Canonical record indexes are zero-based.
-
-Floating width bytes map to visible cell counts through the reviewed
-`FLOATING_WIDTHS` table. The window Y position yields a maximum visible row
-count. A record referenced by multiple windows receives the tightest valid
-contract.
-
-The parser scans for complete command shapes and valid ranges rather than
-treating every matching byte as an opcode. Profile overrides exist only for
-reviewed structural exceptions.
+SCN text IDs are one-based; canonical record indexes are zero-based. A record
+seen through multiple windows receives the tightest valid contract. Current role,
+geometry, and row-limit inference share one structural display-occurrence
+inventory rather than independently rescanning the SCN.
 
 ## CUE and Track 2
 
-The delivery CUE uses CRLF and describes:
-
-- Track 1 as `MODE1/2352`, index `00:00:00`;
-- Track 2 as audio with pregap index `00:00:00` and program index `00:02:00`.
+The delivery CUE uses CRLF and describes Track 1 as `MODE1/2352` at index
+`00:00:00`, followed by Track 2 audio with pregap index `00:00:00` and program
+index `00:02:00`.
 
 CUE and both BIN files must be in one directory. Track 2 size and SHA-256 must
-match the original Japanese audio track exactly.
+match the original Japanese audio track exactly. The production pipeline never
+uses decoded/resampled Track 2 audio as an intermediate.
 
 ## Format-analysis rules
 
 When investigating an unknown:
 
 1. begin with hash-locked retail bytes;
-2. parse through the strict module instead of guessing offsets in a hex editor;
+2. parse through the strict maintained module instead of guessed offsets;
 3. separate observation from a confirmed invariant;
-4. create a minimal fixture or report;
-5. add a parser/round-trip regression before permitting writes;
+4. create a minimal synthetic fixture or report where possible;
+5. add parser, malformed-input, round-trip, or equivalence regression coverage;
 6. prove unchanged bytes outside the intended structure;
-7. never turn an historical translated build into an input.
+7. reject source/output aliasing and unbounded writes; and
+8. never turn an historical translated build into a build input.
