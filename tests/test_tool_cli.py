@@ -115,7 +115,7 @@ class CliContractTests(unittest.TestCase):
         )
         self.assertEqual(
             set(subparsers_action.choices),
-            {"doctor", "prepare", "edit", "compare", "validate", "build"},
+            {"doctor", "prepare", "edit", "compare", "validate", "build", "release"},
         )
 
     def test_project_defaults_new_builds_to_north_america(self) -> None:
@@ -125,6 +125,10 @@ class CliContractTests(unittest.TestCase):
         args = nostalgia1907.parser().parse_args(["build"])
         self.assertIsNone(args.region)
         self.assertIsNone(args.name)
+        self.assertFalse(args.release)
+
+        release_args = nostalgia1907.parser().parse_args(["release"])
+        self.assertTrue(release_args.release)
 
     def test_release_names_are_normalized_without_paths(self) -> None:
         """Reject path-like release labels before output construction."""
@@ -336,6 +340,7 @@ class CliContractTests(unittest.TestCase):
             ):
                 self.assertEqual(nostalgia1907.command_build(ROOT, args), 0)
             self.assertEqual(events, ["validate", "build"])
+            self.assertIn("--single-run", run_script.call_args.args)
 
     def test_north_american_build_wraps_only_a_proven_clean_stage(
         self,
@@ -402,6 +407,8 @@ class CliContractTests(unittest.TestCase):
                 scripts[1][0],
                 "work/region_variant/build_us_bios_test.py",
             )
+            self.assertIn("--single-run", scripts[0][1])
+            self.assertIn("--single-run", scripts[1][1])
             region_args = scripts[1][1]
             expected_hash = (
                 hashlib.sha256(b"clean track 1").hexdigest().upper()
@@ -413,6 +420,45 @@ class CliContractTests(unittest.TestCase):
             self.assertIn(
                 "Nostalgia1907_CleanRebuild_test_NorthAmerica", region_args
             )
+
+
+    def test_release_uses_double_build_modes(self) -> None:
+        """Keep publication certification separate from ordinary iteration."""
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary_root = Path(temporary)
+            args = Namespace(
+                name="test",
+                track1=temporary_root / "track1.bin",
+                track2=temporary_root / "track2.bin",
+                region="japan",
+                us_bios=None,
+                runs_root=temporary_root / "runs",
+                output=temporary_root / "delivery",
+                dry_run=False,
+                release=True,
+            )
+            calls: list[tuple[str, ...]] = []
+
+            def fake_run_script(
+                _root: Path,
+                _script: str,
+                *script_args: str,
+                **_kwargs: object,
+            ) -> None:
+                """Capture release builder arguments without writing outputs."""
+                calls.append(script_args)
+
+            with (
+                patch.object(nostalgia1907, "require_file"),
+                patch.object(nostalgia1907, "command_validate", return_value=0),
+                patch.object(
+                    nostalgia1907, "run_script", side_effect=fake_run_script
+                ),
+            ):
+                self.assertEqual(nostalgia1907.command_build(ROOT, args), 0)
+
+            self.assertEqual(len(calls), 1)
+            self.assertNotIn("--single-run", calls[0])
 
 
 class RepositoryPolicyTests(unittest.TestCase):
