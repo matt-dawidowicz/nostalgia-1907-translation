@@ -125,18 +125,14 @@ Run the maintained source contract:
 python -m tools.source_checks --root . --strict-release
 ```
 
-That command includes source health, exact manifest verification, the production
-dependency audit, maintained-Python compilation, source-only tests, Ruff format,
-Ruff lint, the maintained mypy ratchet, and the public-API documentation audit.
+That command includes source health, the production dependency audit,
+maintained-Python compilation, source-only tests, Ruff format, Ruff lint, the
+maintained mypy ratchet, and the public-API documentation audit.
 Do not maintain a separate hand-copied checklist as the authoritative source
 gate.
 
-If intentional tracked source changed, regenerate the review manifest first:
-
-```powershell
-python tools/source_manifest.py --root . --write
-python -m tools.source_checks --root . --strict-release
-```
+Git is the tracked-source inventory; there is no separate source-review hash
+manifest to refresh before running the gate.
 
 Then inspect:
 
