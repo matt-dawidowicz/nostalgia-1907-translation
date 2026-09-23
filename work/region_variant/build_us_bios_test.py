@@ -644,6 +644,46 @@ def _publish_verified_runs(
     return report
 
 
+def build_once(
+    baseline_track1: Path,
+    baseline_track2: Path,
+    us_bios: Path,
+    delivery_root: Path,
+    basename: str,
+    expected_track1_sha256: str,
+) -> dict[str, object]:
+    """Build one validated North American developer product.
+
+    The same guarded wrapper and verification path used by release builds is
+    executed once. This omits only the second independent wrapper run and the
+    publication comparison, so it is suitable for iteration but not release
+    certification.
+    """
+    basename = _validate_basename(basename)
+    expected_track1_sha256 = expected_track1_sha256.upper()
+    if len(expected_track1_sha256) != 64 or any(
+        character not in "0123456789ABCDEF"
+        for character in expected_track1_sha256
+    ):
+        raise RegionVariantError(
+            "expected Track 1 SHA-256 is not a 64-digit hexadecimal value"
+        )
+    if sha256(baseline_track1) != expected_track1_sha256:
+        raise RegionVariantError(
+            "Track 1 does not match the selected validated baseline"
+        )
+    if sha256(baseline_track2) != EXPECTED_TRACK2_SHA256:
+        raise RegionVariantError("Track 2 is not the exact retail audio track")
+    return _build_once(
+        baseline_track1,
+        baseline_track2,
+        us_bios,
+        delivery_root,
+        basename,
+        expected_track1_sha256,
+    )
+
+
 def build_twice(
     baseline_track1: Path,
     baseline_track2: Path,
@@ -730,28 +770,45 @@ def main() -> None:
     parser.add_argument(
         "--basename", default="Nostalgia1907_CleanRebuild_NorthAmerica"
     )
+    parser.add_argument(
+        "--single-run",
+        action="store_true",
+        help="build one validated developer wrapper without release comparison",
+    )
     args = parser.parse_args()
-    result = build_twice(
-        args.baseline_track1,
-        args.baseline_track2,
-        args.us_bios,
-        args.runs_root,
-        args.delivery_root,
-        args.basename,
-        args.expected_track1_sha256,
-    )
-    print(
-        json.dumps(
-            {
-                "status": result["status"],
-                "two_clean_region_builds_byte_identical": result[
-                    "two_clean_region_builds_byte_identical"
-                ],
-                "delivery_root": str(args.delivery_root),
-            },
-            indent=2,
+    if args.single_run:
+        result = build_once(
+            args.baseline_track1,
+            args.baseline_track2,
+            args.us_bios,
+            args.delivery_root,
+            args.basename,
+            args.expected_track1_sha256,
         )
-    )
+        summary = {
+            "status": result["status"],
+            "mode": "single-run",
+            "delivery_root": str(args.delivery_root),
+        }
+    else:
+        result = build_twice(
+            args.baseline_track1,
+            args.baseline_track2,
+            args.us_bios,
+            args.runs_root,
+            args.delivery_root,
+            args.basename,
+            args.expected_track1_sha256,
+        )
+        summary = {
+            "status": result["status"],
+            "mode": "release",
+            "two_clean_region_builds_byte_identical": result[
+                "two_clean_region_builds_byte_identical"
+            ],
+            "delivery_root": str(args.delivery_root),
+        }
+    print(json.dumps(summary, indent=2))
 
 
 if __name__ == "__main__":
