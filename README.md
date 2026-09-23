@@ -39,20 +39,22 @@ boundary.
 Normal work uses one operator-facing command surface:
 
 ```text
-doctor -> prepare -> edit/compare -> validate -> build -> Ares playtest
+prepare -> edit -> validate -> build -> runtime test
 ```
 
-- `doctor` checks Python, source identity, and configured local inputs.
 - `prepare` verifies the original Japanese Track 1 and creates an ignored,
   hash-locked retail reference.
 - `edit` previews or applies an English change by stable record ID.
-- `compare` regenerates the bilingual human-review package.
 - `validate` runs the maintained source gate plus renderer, semantic,
   compilation, archive, and retail-backed regression checks.
-- `build` performs two independent clean rebuilds and, by default, two guarded
-  North American region-wrapper runs before publication.
-- Ares playtesting remains the final gate for behavior static analysis cannot
+- `build` creates one fully validated developer BIN/CUE for iteration.
+- `release` adds the independent second clean build and second North American
+  wrapper required for publication-grade determinism proof.
+- Runtime testing remains the final gate for behavior static analysis cannot
   prove.
+
+`doctor` is an optional setup diagnostic and `compare` is an optional human-
+review export; neither is a mandatory stage in the normal build path.
 
 North America is the default build target. Japan is an explicit diagnostic
 option. Europe is not currently supported.
@@ -163,7 +165,8 @@ Those remain runtime-test responsibilities.
 | `provenance/` | Dated reviewed-change ledgers; never build inputs |
 | `tests/` | Source-only, synthetic, integration, and regression tests |
 | `tools/` | Unified source gate, repository inventory/health, and documentation audit |
-| `docs/` | Current status, architecture, formats, editing, testing, historical revision, and release policy |
+| `docs/` | Current operating documentation and release policy |
+| `docs/history/` | Dated engineering/review snapshots; never build inputs |
 | `outputs/` | Ignored generated reports and build products |
 
 Historical reverse-engineering outcomes are retained as documentation or small
