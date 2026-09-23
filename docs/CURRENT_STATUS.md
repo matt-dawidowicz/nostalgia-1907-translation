@@ -3,7 +3,7 @@
 Last synchronized: 2026-09-06.
 
 This document is the authoritative current-state summary for the maintained
-source tree. Dated revision and maintenance reports under `docs/` and
+source tree. Dated revision and maintenance reports under `docs/history/` and
 `provenance/` are historical snapshots; they remain useful evidence, but their
 then-current test counts, candidate hashes, and pending-work lists must not be
 read as the status of today's source.
@@ -88,8 +88,8 @@ modernization campaign**. Freeze an exact source commit and, using the verified
 retail tracks and U.S. BIOS:
 
 1. run `doctor`, `prepare`, and the complete `validate` path;
-2. run the normal build and record the exact two-clean-build and two-region-build
-   deterministic evidence;
+2. run `python nostalgia1907.py release` and record the exact two-clean-build
+   and two-region-build deterministic evidence;
 3. record the final translated ISO, North American Track 1, unchanged Track 2,
    CUE, and verification-manifest hashes;
 4. generate the candidate-bound whole-game runtime plan;
