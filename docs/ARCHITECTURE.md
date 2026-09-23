@@ -25,7 +25,7 @@ own exact candidate-bound deterministic and Ares evidence before publication.
 Normal work goes through the top-level CLI:
 
 ```text
-doctor -> prepare -> edit/compare -> validate -> build -> runtime test
+prepare -> edit -> validate -> build -> runtime test
 ```
 
 `nostalgia1907.py` owns operator-facing path resolution, input guards, command
@@ -48,8 +48,8 @@ The build path is deliberately staged:
 6. `regression.py` checks cross-layer preservation invariants, preserved-record
    rendering identity, SCN-to-MES referential integrity, and raw-disc integrity.
 7. `verification_manifest.py` binds declared inputs and direct output hashes.
-8. `rebuild.py` repeats the clean build independently and publishes only when
-   both runs agree.
+8. `build` uses the same clean path once for development; `release` repeats it
+   independently and publishes only when both runs agree.
 9. The North American wrapper under `work/region_variant/` repeats its guarded
    region stage independently before publication.
 
@@ -122,8 +122,8 @@ comparison exporter, semantic validation, and
 `tests/test_script_layout_integration.py` after verified retail prerequisites are
 available.
 
-`export_fixed_layout_review.py` and `whole_game_test.py` support runtime-evidence
-planning. Whole-game certification is fail-closed against incomplete static
+`whole_game_test.py` supports candidate-bound runtime-evidence planning.
+Whole-game certification is fail-closed against incomplete static
 summaries, candidate identity, generated route/text-box inventories, evidence
 notes, and open runtime issues.
 
@@ -214,7 +214,7 @@ Determinism proves reproducibility. It does not convert static evidence into a
 
 ## Historical provenance policy
 
-Historical outcomes belong in `docs/` or `provenance/`, not as executable
+Historical outcomes belong in `docs/history/` or `provenance/`, not as executable
 one-off scripts beside production code. Dated reports must preserve their
 historical measurements while clearly pointing readers to `CURRENT_STATUS.md`
 for the present release boundary.
