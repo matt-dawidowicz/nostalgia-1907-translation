@@ -26,8 +26,8 @@ Start with:
 - [the Python documentation standard](docs/DOCSTRING_STANDARD.md) for maintained
   code comments and docstrings.
 
-Dated documents such as the 2026-08-27 translation revision and the 2026-09-01
-prologue review are provenance snapshots. They explain how the current source
+Dated documents under `docs/history/`, including the 2026-08-27 translation
+revision and 2026-09-01 prologue review, are provenance snapshots. They explain how the current source
 was reached; they are not substitutes for `docs/CURRENT_STATUS.md`.
 
 ## Contribution licensing
@@ -75,9 +75,9 @@ ad-hoc patches.
 6. Apply only after the preview shows the expected role and rows.
 7. Regenerate the comparison package when translation content changed.
 8. Run complete validation.
-9. Build only when a new BIN/CUE candidate is actually needed.
-10. Playtest changed runtime behavior; automated checks do not replace runtime
-    evidence.
+9. Use `build` when a developer BIN/CUE is needed for iteration.
+10. Use `release` only for a frozen publication candidate, then playtest that
+    exact release output; automated checks do not replace runtime evidence.
 
 Typical commands:
 
