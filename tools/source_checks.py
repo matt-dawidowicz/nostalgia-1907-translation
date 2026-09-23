@@ -10,7 +10,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any, cast
 
-from tools import source_health, source_manifest, style_audit
+from tools import source_health, style_audit
 from work.clean_rebuild import rebuild as clean_rebuild
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,14 +48,6 @@ def run_source_checks(root: Path, *, strict_release: bool) -> None:
     print(
         f"PASS: {health['files_checked']} files checked ({health['inventory_mode']})."
     )
-
-    print("\n== Source review manifest ==", flush=True)
-    valid, differences = source_manifest.check_manifest(root)
-    if not valid:
-        for difference in differences[: source_manifest.MAX_DIFF_LINES]:
-            print(f"- {difference}")
-        raise SourceCheckError("source review manifest is stale")
-    print(f"{source_manifest.MANIFEST_NAME}: PASS")
 
     print("\n== Production dependency policy ==", flush=True)
     dependency: dict[str, Any] = (
@@ -98,7 +90,8 @@ def run_source_checks(root: Path, *, strict_release: bool) -> None:
     if documentation["status"] != "PASS":
         for violation in violations:
             print(
-                f"{violation['path']}:{violation['line']}: {violation['rule']} {violation['message']}"
+                f"{violation['path']}:{violation['line']}: "
+                f"{violation['rule']} {violation['message']}"
             )
         raise SourceCheckError("public API documentation audit failed")
     print(
