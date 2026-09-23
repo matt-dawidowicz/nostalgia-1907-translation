@@ -34,9 +34,9 @@ A source-only checkout cannot replay that emulator session or re-prove excluded
 artifact hashes. Every candidate whose playable bytes differ needs fresh
 verification reports and runtime evidence tied to its own exact hashes.
 
-## What a build proves
+## What release certification proves
 
-A successful `nostalgia1907.py build` proves that:
+A successful `nostalgia1907.py release` proves that:
 
 - the supplied Japanese Track 1 and Track 2 match their required hashes;
 - canonical source, production code, and configuration pass the maintained
@@ -51,7 +51,7 @@ Authenticated unchanged raw sectors may inherit checksum evidence by exact
 identity to the verified retail reference; changed sectors are regenerated and
 checked directly. This is a preservation proof, not an emulator-behavior claim.
 
-A successful build does **not** prove visible window clearing, timing,
+A successful release build does **not** prove visible window clearing, timing,
 transitions, branch behavior, save/reload behavior, or emulator compatibility.
 
 ## Source gate before a release build
@@ -63,17 +63,8 @@ python -m pip install -r requirements-dev.txt
 python -m tools.source_checks --root . --strict-release
 ```
 
-If tracked source changed, regenerate `MANIFEST.sha256` first:
-
-```powershell
-python tools/source_manifest.py --root . --write
-python -m tools.source_checks --root . --strict-release
-```
-
-Do not substitute an older hand-copied list of source-health, Black, style, or
-lint commands. The unified gate is authoritative and includes Ruff format,
-Ruff lint, mypy, production-dependency, manifest, test, compilation, and
-public-API documentation checks.
+The unified gate is authoritative and includes Ruff format, Ruff lint, mypy,
+production-dependency, test, compilation, and public-API documentation checks.
 
 ## Successor release procedure
 
@@ -82,7 +73,7 @@ Freeze an exact commit before beginning candidate certification. Then:
 1. run `python nostalgia1907.py doctor`;
 2. run `python nostalgia1907.py prepare` against the verified retail Track 1;
 3. run `python nostalgia1907.py validate`;
-4. run the normal North American `build` from new, empty staging/delivery roots;
+4. run the North American `release` command from new, empty staging/delivery roots;
 5. confirm both clean builds and both region builds agree;
 6. record final translated ISO, Track 1, Track 2, CUE, aggregate input
    fingerprint, and verification-manifest identities;
@@ -91,9 +82,8 @@ Freeze an exact commit before beginning candidate certification. Then:
 9. verify the completed runtime log before publishing a new version.
 
 Any source or production-path change after the freeze creates a different
-candidate and resets the build/runtime certification obligation. Documentation-
-only changes do not change playable bytes, but they must still keep
-`MANIFEST.sha256` and source CI synchronized.
+candidate and resets the build/runtime certification obligation. Documentation-only changes do not change playable bytes, but the normal source
+CI gate must still pass.
 
 ## Required manual checks
 
@@ -125,7 +115,7 @@ Before publishing a build or patch:
 
 1. confirm the exact frozen source commit and a green unified source gate;
 2. confirm the complete retail-backed `validate` path passed;
-3. build from new, empty staging/delivery roots;
+3. run `release` from new, empty staging/delivery roots;
 4. confirm the final verification manifest reports both deterministic stages;
 5. complete and verify the candidate-bound Ares runtime log;
 6. ensure the runtime issue inventory is empty; and
