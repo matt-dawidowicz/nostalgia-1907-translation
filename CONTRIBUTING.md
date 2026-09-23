@@ -19,6 +19,8 @@ Start with:
 - [Text-box contracts](docs/TEXT_BOX_CONTRACTS.md) for renderer ownership.
 - [Binary formats](docs/BINARY_FORMATS.md) for MES, LZ, ISO, raw-CD, font, and
   SCN structures.
+- [Reverse engineering](docs/REVERSE_ENGINEERING.md) for durable MAIN.BIN/SCN
+  runtime findings and the rule for promoting future discoveries.
 - [Development and validation](docs/DEVELOPMENT.md) for the unified source gate,
   retail validation, CI, and generated evidence.
 - [Whole-game testing](docs/WHOLE_GAME_TESTING.md) and
