@@ -7,7 +7,7 @@ build inputs.
 
 Canonical English remains under `work/clean_rebuild/sources/`. The authoritative
 human-readable summary of this dated revision is
-[`docs/TRANSLATION_REVISION_20260827.md`](../../docs/TRANSLATION_REVISION_20260827.md).
+[`docs/history/TRANSLATION_REVISION_20260827.md`](../../docs/history/TRANSLATION_REVISION_20260827.md).
 For current project/release status, use
 [`docs/CURRENT_STATUS.md`](../../docs/CURRENT_STATUS.md).
 
