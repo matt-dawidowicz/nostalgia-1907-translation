@@ -56,10 +56,10 @@ The maintained public source gate is:
 python -m tools.source_checks --root . --strict-release
 ```
 
-It performs source-health and exact tracked-inventory checks, verifies
-`MANIFEST.sha256`, audits the production dependency boundary, compiles maintained
-Python, runs the source-only unit suite, checks Ruff formatting and lint, runs
-the maintained mypy targets, and enforces the public-API documentation policy.
+It performs source-health and exact tracked-inventory checks, audits the
+production dependency boundary, compiles maintained Python, runs the source-only
+unit suite, checks Ruff formatting and lint, runs the maintained mypy targets,
+and enforces the public-API documentation policy.
 
 Current CI runs the complete source gate on Ubuntu/Python 3.12 and
 Windows/Python 3.14, with additional compile/unit compatibility coverage on
@@ -115,4 +115,4 @@ source-supported change, regression coverage should be added, and the candidate
 must then be rebuilt and re-certified because its identity changed.
 
 Documentation-only corrections may proceed when they do not alter playable
-bytes, but `MANIFEST.sha256` and the source gate must remain synchronized.
+bytes; the normal source gate remains authoritative.
