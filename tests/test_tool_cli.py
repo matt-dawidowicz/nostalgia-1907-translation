@@ -336,11 +336,11 @@ class CliContractTests(unittest.TestCase):
                     side_effect=lambda *_args, **_kwargs: events.append(
                         "build"
                     ),
-                ),
+                ) as run_script_mock,
             ):
                 self.assertEqual(nostalgia1907.command_build(ROOT, args), 0)
             self.assertEqual(events, ["validate", "build"])
-            self.assertIn("--single-run", run_script.call_args.args)
+            self.assertIn("--single-run", run_script_mock.call_args.args)
 
     def test_north_american_build_wraps_only_a_proven_clean_stage(
         self,
