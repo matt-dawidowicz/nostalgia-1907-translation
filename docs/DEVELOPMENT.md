@@ -35,8 +35,9 @@ narrow testing/diagnosis rather than the normal release workflow.
 | `compare` | Regenerate the complete bilingual review package |
 | `validate` | Run the unified source gate plus retail renderer/semantic/compilation/archive/regression gates |
 | `build --dry-run` | Show resolved region, inputs, hashes, and output-root state |
-| `build` | Validate, perform two clean rebuilds, then two guarded North American wrappers and publish only agreeing products |
-| `build --region japan` | Produce the explicit diagnostic Japanese-region variant |
+| `build` | Validate and produce one developer build for fast iteration |
+| `build --region japan` | Produce one diagnostic Japanese-region developer build |
+| `release` | Validate, perform two clean rebuilds and two guarded North American wrappers, and publish only agreeing products |
 
 North America is the manifest default.
 
@@ -54,14 +55,14 @@ Do not maintain a separate copied checklist as the contract. The command owns:
    keys, source-only publication rules, and forbidden-media/local-state checks.
 2. **Production dependency policy** — the `PRODUCTION_MODULES` import/data
    boundary used by the byte-producing clean build.
-4. **Compilation** — every maintained Python surface, including tests.
-5. **Unit tests** — CLI, format parsers, renderer contracts, source policy,
+3. **Compilation** — every maintained Python surface, including tests.
+4. **Unit tests** — CLI, format parsers, renderer contracts, source policy,
    deterministic reports, hardening, performance equivalence, and region logic.
-6. **Ruff format** — canonical 79-column layout check.
-7. **Ruff lint** — PEP 8/Pyflakes/import-order/pyupgrade/pydocstyle rules from
+5. **Ruff format** — canonical 79-column layout check.
+6. **Ruff lint** — PEP 8/Pyflakes/import-order/pyupgrade/pydocstyle rules from
    `pyproject.toml`.
-8. **mypy** — the maintained incremental target set.
-9. **Public API documentation audit** — repository-specific structural
+7. **mypy** — the maintained incremental target set.
+8. **Public API documentation audit** — repository-specific structural
    documentation policy in addition to Ruff's PEP 257 rules.
 
 Git is the tracked-source inventory; no second source-review hash manifest is
@@ -112,7 +113,6 @@ outputs include:
 | `retail_report.json` | `prepare_retail.py` | Retail Track/ISO/member identity |
 | `script_layout_audit.json` | `translation_formatter.py` | Per-record renderer/layout classification |
 | bilingual JSON/HTML/images/ZIP + package manifest | `export_bilingual_comparison.py` | Human Japanese/English review |
-| fixed-layout TSV/Markdown | `export_fixed_layout_review.py` | Runtime geometry review inventory |
 | `mes_report.json` | `build_mes_set.py` | Chapter size/glyph measurements |
 | `archive_report.json` | `build_archives.py` | Archive slot/reflow mode and headroom |
 | ISO patch report | ISO build stage | Extents, logical sizes, allocations, headroom |
