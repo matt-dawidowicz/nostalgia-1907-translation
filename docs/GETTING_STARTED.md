@@ -62,10 +62,9 @@ python -m pip install -r requirements-dev.txt
 python -m tools.source_checks --root . --strict-release
 ```
 
-The unified source gate performs source health, exact manifest verification,
-production-dependency auditing, compilation, source-only tests, Ruff format and
-lint checks, the maintained mypy ratchet, and the public-API documentation
-audit. These checks require no game media or BIOS.
+The unified source gate performs source health, production-dependency auditing,
+compilation, source-only tests, Ruff format and lint checks, the maintained mypy
+ratchet, and the public-API documentation audit. These checks require no game media or BIOS.
 
 Read failures from top to bottom. Do not remove a check, relax a hash, or add a
 generated file merely to make the command pass. A contributor without private
@@ -85,14 +84,17 @@ python nostalgia1907.py validate
 python nostalgia1907.py build --dry-run
 ```
 
-The real `build` command uses empty staging and delivery directories, then
-performs two clean builds and two North American wrapper builds. It creates the
-neutral `Nostalgia1907_CleanRebuild_NorthAmerica` candidate name by default.
-Load the resulting `.cue` in Ares; do not load an individual `.bin` file.
+The real `build` command uses empty staging and delivery directories and creates
+one fully validated clean build plus one North American wrapper for development
+and runtime debugging. It creates the neutral
+`Nostalgia1907_CleanRebuild_NorthAmerica` name by default. Load the resulting
+`.cue` in Ares; do not load an individual `.bin` file.
 
-For a release candidate, freeze the exact source commit before the real build.
-Later source or production-path changes invalidate candidate identity and
-require a fresh build/certification cycle.
+For a publication candidate, freeze the exact source commit and run
+`python nostalgia1907.py release`. That command retains the independent second
+clean build and second North American wrapper used to prove determinism. Later
+source or production-path changes invalidate candidate identity and require a
+fresh release/certification cycle.
 
 ## Make a translation change safely
 
@@ -130,13 +132,14 @@ prove emulator redraw behavior.
 
 ## Before opening a pull request
 
-If tracked source changed, refresh the source manifest and rerun the unified
-gate:
+Run the unified source gate:
 
 ```powershell
-python tools/source_manifest.py --root . --write
 python -m tools.source_checks --root . --strict-release
 ```
+
+Git is the tracked-source inventory; there is no separate review hash manifest
+to regenerate.
 
 Inspect `git diff`, and make sure no BIOS, retail input, extracted member,
 generated image, comparison screenshot, or local configuration file is staged.
