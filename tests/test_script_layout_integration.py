@@ -582,15 +582,18 @@ class ScriptLayoutTests(unittest.TestCase):
         retail_scn = (retail_dir / "PART3C.SCN").read_bytes()
         canonical = source("PART3C")
         dictionary = mes_compiler.FIXED_ENGLISH_UNITS
+        blank_cell_enabled = mes_compiler.FIXED_BLANK_CELL_ENABLED
         hard_limit = mes_compiler.PART3C_HARD_LIMIT
         try:
             mes_compiler.FIXED_ENGLISH_UNITS = ()
+            mes_compiler.FIXED_BLANK_CELL_ENABLED = False
             mes_compiler.PART3C_HARD_LIMIT = 0xFFFF
             before = mes_compiler.compile_mes(
                 retail_mes, retail_scn, canonical
             )
         finally:
             mes_compiler.FIXED_ENGLISH_UNITS = dictionary
+            mes_compiler.FIXED_BLANK_CELL_ENABLED = blank_cell_enabled
             mes_compiler.PART3C_HARD_LIMIT = hard_limit
         after = mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
         self.assertGreater(len(before.data), 0x3FFF)
