@@ -75,6 +75,43 @@ last cell and ends exactly at x=127 within the local 128-pixel canvas. Treating
 all scene labels as the older generic 18-cell strip was therefore both too
 permissive and geometrically incorrect.
 
+## Special-line renderer
+
+SCN opcode `0x20` stores its MES record ID at `$FF3DEA` and selects text
+mode 3 at `$FF3DE8`. The common text-state machine then renders the record
+into the scratch buffer at `$FF3E0C`.
+
+The rasterizer starts each record at local x=2 and advances by 12 pixels per
+MES cell. Before drawing it advances the tile-buffer pointer by eight bytes,
+which is two 4bpp pixel rows, so the glyph origin is local (2, 2). The scratch
+surface is 0x700 bytes = 56 Genesis tiles = a 224x16-pixel strip. Therefore one
+line owns exactly 18 complete 12-pixel cells (216 pixels), leaving the expected
+edge margin inside the 224-pixel surface.
+
+The line-index byte `$FF3DFA` selects one of three VRAM destinations:
+
+| Index | VRAM bytes | Tiles | Screen canvas | Text origin |
+| --- | --- | --- | --- | --- |
+| 0 | `$0700-$0DFF` | 56-111 | x=16..239, y=168..183 | (18, 170) |
+| 1 | `$0E00-$14FF` | 112-167 | x=16..239, y=184..199 | (18, 186) |
+| 2 | `$1500-$1BFF` | 168-223 | x=16..239, y=200..215 | (18, 202) |
+
+Every retail `SCREEN0.BS` and `SCREEN1.BS` in all 19 chapter archives maps
+those tile banks to the same plane columns 2 through 29 and row pairs 21-22,
+23-24, and 25-26 respectively.
+
+When a new line arrives with the index already at 3, the native scroll routine
+copies VRAM `$0E00-$1BFF` upward to `$0700-$14FF`, clears the bottom
+`$1500-$1BFF` bank, reduces the index to 2, and draws the new line there.
+Opcode `0x55` selects text mode 9, which clears the complete
+`$0700-$1BFF` three-strip region and resets the line index to zero. STAFF
+uses that reset before each credit group, explaining why its centered pairs
+occupy the first two strips.
+
+This renderer is fixed-layout even though its geometry is now fully known:
+leading and trailing spaces are presentation data for centered credits and
+title/card composition rather than semantic prose to reflow automatically.
+
 ## Window and renderer state
 
 Important state observed during executable analysis includes:
