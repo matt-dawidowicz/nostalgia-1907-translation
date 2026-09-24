@@ -398,7 +398,7 @@ class ScriptLayoutTests(unittest.TestCase):
             ("PART2F", 56, 4, ["Below", "Deck"]),
             ("PART3A", 150, 4, ["Who", "taught", "you?"]),
             ("PART3B", 67, 4, ["That's", "the", "point."]),
-            ("PART3B_", 123, 4, ["Nonsense", "!"]),
+            ("PART3B_", 123, 4, ["Absurd!"]),
             ("PART2C", 102, 6, ["Don't lose", "it."]),
         )
         for chapter, index, cells, rows in cases:
@@ -407,10 +407,9 @@ class ScriptLayoutTests(unittest.TestCase):
                 contract = contracts(chapter)[index]
                 self.assertEqual(contract.layout.visible_first, cells)
                 self.assertEqual(contract.layout.runtime_first, cells)
-                self.assertEqual(
-                    format_preview(canonical["records"][index]["text"], contract),
-                    rows,
-                )
+                record = canonical["records"][index]
+                display_text = record.get("display_text", record["text"])
+                self.assertEqual(format_preview(display_text, contract), rows)
                 self.assertLessEqual(len(rows), contract.max_rows)
 
     def test_floating_window_overflow_is_rejected_during_compilation(
