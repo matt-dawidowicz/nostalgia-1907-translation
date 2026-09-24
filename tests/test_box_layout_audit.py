@@ -8,6 +8,12 @@ import unittest
 from work.clean_rebuild.box_layout_audit import _row_details
 from work.clean_rebuild.renderer_format import measure_literal
 from work.clean_rebuild.scn_layout import (
+    SCENE_LOCATION_CANVAS,
+    SCENE_LOCATION_CHARACTERS,
+    SCENE_LOCATION_TEXT_ORIGIN,
+    SCENE_PERSPECTIVE_CANVAS,
+    SCENE_PERSPECTIVE_CHARACTERS,
+    SCENE_PERSPECTIVE_TEXT_ORIGIN,
     SPECIAL_LINE_CELLS,
     display_occurrences,
 )
@@ -23,10 +29,8 @@ from work.clean_rebuild.translation_audit import SOURCES
 class BoxLayoutAuditTests(unittest.TestCase):
     """Protect geometry learned from the retail script and MAIN.BIN renderer."""
 
-    def test_special_line_and_paired_labels_have_eighteen_cell_contract(
-        self,
-    ) -> None:
-        """Use 18 cells for 0x20 and the exact adjacent 0x22/0x23 label pair."""
+    def test_special_line_and_paired_labels_use_native_geometry(self) -> None:
+        """Bind 0x20 and paired 0x22/0x23 labels to their real canvases."""
         fixed = display_occurrences(b"\x20\x00\x01", 1, None)
         self.assertEqual(len(fixed[0]), 1)
         self.assertEqual(fixed[0][0]["permitted_cells"], SPECIAL_LINE_CELLS)
@@ -37,12 +41,26 @@ class BoxLayoutAuditTests(unittest.TestCase):
             2,
             None,
         )
-        self.assertEqual(labels[0][0]["part"], "location_name")
-        self.assertEqual(labels[0][0]["permitted_cells"], SPECIAL_LINE_CELLS)
-        self.assertEqual(labels[0][0]["max_rows"], 1)
-        self.assertEqual(labels[1][0]["part"], "perspective_name")
-        self.assertEqual(labels[1][0]["permitted_cells"], SPECIAL_LINE_CELLS)
-        self.assertEqual(labels[1][0]["max_rows"], 1)
+        location = labels[0][0]
+        self.assertEqual(location["part"], "location_name")
+        self.assertEqual(
+            location["permitted_characters"], SCENE_LOCATION_CHARACTERS
+        )
+        self.assertEqual(location["canvas"], SCENE_LOCATION_CANVAS)
+        self.assertEqual(location["text_origin"], SCENE_LOCATION_TEXT_ORIGIN)
+        self.assertEqual(location["max_rows"], 1)
+
+        perspective = labels[1][0]
+        self.assertEqual(perspective["part"], "perspective_name")
+        self.assertEqual(
+            perspective["permitted_characters"],
+            SCENE_PERSPECTIVE_CHARACTERS,
+        )
+        self.assertEqual(perspective["canvas"], SCENE_PERSPECTIVE_CANVAS)
+        self.assertEqual(
+            perspective["text_origin"], SCENE_PERSPECTIVE_TEXT_ORIGIN
+        )
+        self.assertEqual(perspective["max_rows"], 1)
 
     def test_isolated_label_opcode_bytes_are_not_occurrences(self) -> None:
         """Do not certify operand bytes as scene labels without the paired shape."""
