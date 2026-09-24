@@ -8,6 +8,7 @@ import unittest
 from work.clean_rebuild.box_layout_audit import _row_details
 from work.clean_rebuild.renderer_format import measure_literal
 from work.clean_rebuild.scn_layout import (
+    FLOATING_WIDTHS,
     SCENE_LOCATION_CANVAS,
     SCENE_LOCATION_CHARACTERS,
     SCENE_LOCATION_TEXT_ORIGIN,
@@ -75,6 +76,43 @@ class BoxLayoutAuditTests(unittest.TestCase):
         for scn in (b"\x22\x00\x01", b"\x23\x00\x01"):
             with self.subTest(scn=scn):
                 self.assertEqual(display_occurrences(scn, 1, None), {})
+
+    def test_floating_window_geometry_matches_native_arithmetic(self) -> None:
+        """Derive cell width, origin, and indicator mode from SCN operands."""
+        expected_widths = {
+            0x07: 3,
+            0x08: 4,
+            0x09: 4,
+            0x0A: 5,
+            0x0B: 6,
+            0x0C: 6,
+            0x0D: 7,
+            0x0E: 8,
+            0x0F: 8,
+            0x10: 9,
+            0x11: 10,
+            0x12: 10,
+        }
+        self.assertEqual(FLOATING_WIDTHS, expected_widths)
+
+        thought = display_occurrences(
+            bytes((0x24, 0x02, 0x0E, 0x0C, 0x0C, 0x27, 0x00, 0x01)),
+            1,
+            None,
+        )[0][0]
+        self.assertEqual(thought["permitted_cells"], 6)
+        self.assertEqual(thought["text_origin"], (24, 122))
+        self.assertEqual(thought["row_stride_pixels"], 16)
+        self.assertEqual(thought["indicator"], "blinking_bottom_center")
+
+        overlay = display_occurrences(
+            bytes((0x24, 0x02, 0x0F, 0x0E, 0x0C, 0x28, 0x00, 0x01)),
+            1,
+            {"scn_window_text_subtypes": [0x28]},
+        )[0][0]
+        self.assertEqual(overlay["permitted_cells"], 8)
+        self.assertEqual(overlay["text_origin"], (24, 130))
+        self.assertEqual(overlay["indicator"], "none")
 
     def test_special_countdown_window_has_two_cell_contract(self) -> None:
         """The retail 0x24/.../0x28 countdown form is a two-cell window."""
