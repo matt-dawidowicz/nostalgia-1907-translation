@@ -951,9 +951,7 @@ def infer_row_limits(
             if not isinstance(raw_y, int):
                 continue
             max_rows = (
-                FLOATING_SCREEN_TILE_ROWS
-                - raw_y
-                - FLOATING_BORDER_TILES
+                FLOATING_SCREEN_TILE_ROWS - raw_y - FLOATING_BORDER_TILES
             ) // 2
             if max_rows <= 0:
                 offset = occurrence.get("offset", "unknown SCN offset")
