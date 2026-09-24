@@ -786,7 +786,8 @@
       "index": 123,
       "policy": "translate",
       "text": "Nonsense!",
-      "layout_policy": "adaptive"
+      "layout_policy": "adaptive",
+      "display_text": "Absurd!"
     },
     {
       "index": 124,
