@@ -395,11 +395,14 @@ class ScriptLayoutTests(unittest.TestCase):
     def test_narrow_floating_windows_use_native_cell_counts(self) -> None:
         """Keep translated wrapping aligned with MAIN.BIN's width arithmetic."""
         cases = (
-            ("PART2F", 56, 4, ["Below", "Deck"]),
-            ("PART3A", 150, 4, ["Who", "taught", "you?"]),
-            ("PART3B", 67, 4, ["That's", "the", "point."]),
-            ("PART3B_", 123, 4, ["Absurd!"]),
             ("PART2C", 102, 6, ["Don't lose", "it."]),
+            ("PART2F", 56, 4, ["Likely."]),
+            ("PART3A", 176, 4, ["Dawn", "will", "break", "first."]),
+            ("PART3B", 64, 6, ["Don't rush", "me."]),
+            ("PART3B", 67, 4, ["That's", "the", "point."]),
+            ("PART3B_", 107, 4, ["It is", "good", "enough."]),
+            ("PART3B_", 123, 4, ["Absurd!"]),
+            ("PART3B_", 132, 6, ["Salesmen", "too?"]),
         )
         for chapter, index, cells, rows in cases:
             with self.subTest(chapter=chapter, index=index):
