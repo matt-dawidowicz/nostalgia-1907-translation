@@ -392,6 +392,29 @@ class ScriptLayoutTests(unittest.TestCase):
                     canonical["record_count"],
                 )
 
+    def test_narrow_floating_windows_use_native_cell_counts(self) -> None:
+        """Keep translated wrapping aligned with MAIN.BIN's width arithmetic."""
+        cases = (
+            ("PART2C", 102, 6, ["Don't lose", "it."]),
+            ("PART2F", 56, 4, ["Likely."]),
+            ("PART3A", 176, 4, ["Dawn", "will", "break", "first."]),
+            ("PART3B", 64, 6, ["Don't rush", "me."]),
+            ("PART3B", 67, 4, ["That's", "the", "point."]),
+            ("PART3B_", 107, 4, ["It is", "good", "enough."]),
+            ("PART3B_", 123, 4, ["Absurd!"]),
+            ("PART3B_", 132, 6, ["Salesmen", "too?"]),
+        )
+        for chapter, index, cells, rows in cases:
+            with self.subTest(chapter=chapter, index=index):
+                canonical = source(chapter)
+                contract = contracts(chapter)[index]
+                self.assertEqual(contract.layout.visible_first, cells)
+                self.assertEqual(contract.layout.runtime_first, cells)
+                record = canonical["records"][index]
+                display_text = record.get("display_text", record["text"])
+                self.assertEqual(format_preview(display_text, contract), rows)
+                self.assertLessEqual(len(rows), contract.max_rows)
+
     def test_floating_window_overflow_is_rejected_during_compilation(
         self,
     ) -> None:

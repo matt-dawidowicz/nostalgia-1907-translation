@@ -417,7 +417,8 @@
       "index": 56,
       "policy": "translate",
       "text": "Probably.",
-      "layout_policy": "adaptive"
+      "layout_policy": "adaptive",
+      "display_text": "Likely."
     },
     {
       "index": 57,

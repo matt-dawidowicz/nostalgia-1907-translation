@@ -114,6 +114,55 @@ This renderer is fixed-layout even though its geometry is now fully known:
 leading and trailing spaces are presentation data for centered credits and
 title/card composition rather than semantic prose to reflow automatically.
 
+## Floating-window renderer
+
+SCN opcode `0x24` copies four descriptor bytes into `$FF3D28-$FF3D2B`.
+The `0x27` and `0x28` handlers parse that descriptor through the same native
+window setup routine before selecting different display-state flags.
+
+The descriptor is:
+
+| Byte | Meaning |
+| --- | --- |
+| 0 | outer window X in 8-pixel tiles |
+| 1 | outer window Y in 8-pixel tiles |
+| 2 | outer window width in tiles |
+| 3 | initial height field used by the generic window state |
+
+MAIN.BIN computes the plane-A tilemap address as
+`$C000 + 2 * (X + 64 * Y)`. For translated text, the usable horizontal
+interior excludes the one-tile left/right borders. The native cell loop then
+uses exactly:
+
+`floor(((width_tiles - 2) * 8) / 12)`
+
+MES cells per text row. This arithmetic replaces the older hand-maintained
+width table, which overestimated widths 0x07, 0x08, 0x09, and 0x0C by one cell
+and underestimated width 0x11 by one cell.
+
+The first text row starts one border tile inside the window. The 12x12 glyph
+rasterizer itself adds a two-pixel vertical offset, so the screen-space text
+origin is `(8*X + 8, 8*Y + 10)`; later rows advance by 16 pixels.
+
+The renderer does not preserve the descriptor's fourth byte as the final
+visible height. After consuming the MES record it replaces the active height
+with `2*rows + 2` tiles: one top border, two tile rows per 12-pixel text row,
+and one bottom border. The corresponding screen-bottom safety bound is
+`floor((28 - Y - 2) / 2)` text rows.
+
+Both display opcodes start from the same descriptor and MES path. Their visible
+difference is a high-byte mode flag at `$FF465C`:
+
+- `0x27` uses state `$0001`. On completion it computes a point at the
+  bottom-center of the final window, stores it in `$FF4670/$FF4672`, and
+  enables `$FF466E`. The periodic UI routine then blinks a sprite at that
+  anchor every 30 ticks.
+- `0x28` uses state `$0101`. It skips that bottom-center indicator setup;
+  the window body and text geometry are otherwise shared.
+
+The indicator coordinates before the Mega Drive sprite +128 bias are
+`X*8 + width*4 - 4` and `(Y + final_height - 1)*8`.
+
 ## Window and renderer state
 
 Important state observed during executable analysis includes:

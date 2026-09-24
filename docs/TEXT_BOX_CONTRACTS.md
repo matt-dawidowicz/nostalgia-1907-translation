@@ -18,7 +18,7 @@ without rewriting English prose to compensate for stale storage geometry.
 | --- | --- | --- |
 | `lower_dialogue` | SCN `0x21 <speaker> <text>` | One initial 12-cell physical row, then 11-cell continuation stride. Retail `0x10` quote becomes a one-time blank opening gutter; later page clears do not reset the wider opening row. |
 | `lower_continuation` | SCN `0x21 <text> 0x0000` | No opening gutter; begins directly on the native 11-cell continuation stride. |
-| `floating_window` | Valid `0x24` window and `0x27` continuation chain, including selector targets | Width and row limit come from SCN operands. A selector can retain `menu_choice` semantics while using the same physical window. |
+| `floating_window` | SCN `0x24` descriptor plus MAIN.BIN `0x27`/`0x28` renderer | Descriptor bytes are X tile, Y tile, width tiles, and an initial height field. Text begins at `(8·X+8, 8·Y+10)`, advances 16 px per row, and owns `floor(((width-2)·8)/12)` 12-pixel cells. Final window height is recomputed as `2·rows+2` tiles. `0x27` enables a blinking bottom-center indicator sprite; `0x28` does not. |
 | `full_screen_narration` | Reviewed START evidence | Explicit 16-cell full-screen narration contract. |
 | `lower_caption` | Reviewed PART2A:093 evidence | Explicit lower-area route-caption contract. |
 | `scene_label` | MAIN.BIN `0x22`/`0x23` DMA destinations plus invariant `SCREEN0.BS`/`SCREEN1.BS` tilemaps in all 19 archives | Location canvas is x=16..143, y=8..23 with text origin x=18 and 21 six-pixel character slots. Perspective canvas is x=152..239, y=8..23 with text origin x=154 and 14 character slots. |
