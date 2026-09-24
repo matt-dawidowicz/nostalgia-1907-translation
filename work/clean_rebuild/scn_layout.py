@@ -46,6 +46,13 @@ FLOATING_WIDTHS = {
 # scene labels use separate top-screen canvases whose exact geometry comes from
 # the DMA destinations plus the invariant SCREEN0/SCREEN1 tile maps.
 SPECIAL_LINE_CELLS = 18
+SPECIAL_LINE_TILE_BANKS = ((56, 111), (112, 167), (168, 223))
+SPECIAL_LINE_CANVASES = (
+    (16, 168, 224, 16),
+    (16, 184, 224, 16),
+    (16, 200, 224, 16),
+)
+SPECIAL_LINE_TEXT_ORIGINS = ((18, 170), (18, 186), (18, 202))
 SCENE_LOCATION_CHARACTERS = 21
 SCENE_PERSPECTIVE_CHARACTERS = 14
 SCENE_LOCATION_CANVAS = (16, 8, 128, 16)
@@ -517,7 +524,13 @@ def display_occurrences(
                     box="special_line",
                     permitted_cells=SPECIAL_LINE_CELLS,
                     max_rows=1,
-                    evidence="MAIN.BIN 12px/cell special-line renderer",
+                    tile_banks=SPECIAL_LINE_TILE_BANKS,
+                    canvases=SPECIAL_LINE_CANVASES,
+                    text_origins=SPECIAL_LINE_TEXT_ORIGINS,
+                    evidence=(
+                        "MAIN.BIN mode-3 text state DMA plus invariant "
+                        "SCREEN0/1.BS bottom-strip tile maps"
+                    ),
                 )
         elif (
             opcode == 0x22
