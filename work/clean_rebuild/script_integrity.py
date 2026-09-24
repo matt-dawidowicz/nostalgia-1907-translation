@@ -317,8 +317,11 @@ def audit_project_scn_references(
         fixed_certified = 0
         for record_index in sorted(fixed_indexes):
             record = source["records"][record_index]
-            text = record.get("text")
-            if not isinstance(text, str):
+            canonical_text = record.get("text")
+            display_text = record.get("display_text", canonical_text)
+            if not isinstance(canonical_text, str) or not isinstance(
+                display_text, str
+            ):
                 failures.append(
                     f"{chapter}:{record_index:03d}: fixed translated record has no text"
                 )
@@ -327,7 +330,7 @@ def audit_project_scn_references(
                 reference.command
                 for reference in references_by_record.get(record_index, [])
             )
-            width_failure = fixed_layout_width_failure(text, commands)
+            width_failure = fixed_layout_width_failure(display_text, commands)
             if width_failure is not None:
                 failures.append(
                     f"{chapter}:{record_index:03d}: {width_failure}"
