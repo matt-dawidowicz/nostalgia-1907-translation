@@ -42,8 +42,16 @@ FLOATING_WIDTHS = {
     0x11: 9,
     0x12: 10,
 }
-# MAIN.BIN special one-line handlers use an 18-cell physical canvas.
+# MAIN.BIN opcode 0x20 uses an 18-cell one-line canvas. The 0x22/0x23
+# scene labels use separate top-screen canvases whose exact geometry comes from
+# the DMA destinations plus the invariant SCREEN0/SCREEN1 tile maps.
 SPECIAL_LINE_CELLS = 18
+SCENE_LOCATION_CHARACTERS = 21
+SCENE_PERSPECTIVE_CHARACTERS = 14
+SCENE_LOCATION_CANVAS = (16, 8, 128, 16)
+SCENE_PERSPECTIVE_CANVAS = (152, 8, 88, 16)
+SCENE_LOCATION_TEXT_ORIGIN = (18, 8)
+SCENE_PERSPECTIVE_TEXT_ORIGIN = (154, 8)
 # The overloaded 0x24/0x28 countdown form with width operand 0x05 is two cells.
 SPECIAL_28_WIDTHS = {0x05: 2}
 
@@ -531,9 +539,14 @@ def display_occurrences(
                     part="location_name",
                     box="scene_label/location",
                     role=ROLE_LOCATION,
-                    permitted_cells=SPECIAL_LINE_CELLS,
+                    permitted_characters=SCENE_LOCATION_CHARACTERS,
                     max_rows=1,
-                    evidence="MAIN.BIN 12px/cell special-line renderer",
+                    canvas=SCENE_LOCATION_CANVAS,
+                    text_origin=SCENE_LOCATION_TEXT_ORIGIN,
+                    evidence=(
+                        "MAIN.BIN 0x22 writes VRAM tiles 2-33; all retail "
+                        "SCREEN0/1.BS maps them to columns 2-17, rows 1-2"
+                    ),
                 )
                 add(
                     perspective_id - 1,
@@ -542,9 +555,14 @@ def display_occurrences(
                     part="perspective_name",
                     box="scene_label/perspective",
                     role=ROLE_PERSPECTIVE,
-                    permitted_cells=SPECIAL_LINE_CELLS,
+                    permitted_characters=SCENE_PERSPECTIVE_CHARACTERS,
                     max_rows=1,
-                    evidence="MAIN.BIN 12px/cell special-line renderer",
+                    canvas=SCENE_PERSPECTIVE_CANVAS,
+                    text_origin=SCENE_PERSPECTIVE_TEXT_ORIGIN,
+                    evidence=(
+                        "MAIN.BIN 0x23 writes VRAM tiles 34-55; all retail "
+                        "SCREEN0/1.BS maps them to columns 19-29, rows 1-2"
+                    ),
                 )
         elif (
             opcode == 0x24
