@@ -30,7 +30,8 @@ from .source_json import load_json_object
 HERE = Path(__file__).resolve().parent
 SOURCES = HERE / "sources"
 DEFAULT_RETAIL_ROOT = HERE / "retail_reference"
-SPECIAL_FIXED_WIDTHS = {"0x20": 18, "0x22": 18, "0x23": 18, "0x24/0x28": 2}
+SPECIAL_FIXED_CELL_WIDTHS = {"0x20": 18, "0x24/0x28": 2}
+SPECIAL_FIXED_CHARACTER_WIDTHS = {"0x22": 21, "0x23": 14}
 
 
 @dataclass(frozen=True)
@@ -199,24 +200,38 @@ def fixed_layout_width_failure(
 ) -> str | None:
     """Return a fixed one-line geometry failure, or ``None`` when it fits.
 
-    The special 0x20/0x22/0x23 renderers share the 18-cell width proven from
-    MAIN.BIN. The immediate 0x24/0x28 countdown form has a two-cell window.
-    When one record is reused by more than one renderer, the tightest proven
-    width owns the safety decision.
+    Opcode 0x20 and the immediate 0x24/0x28 countdown form use whole-cell
+    limits. Scene-label opcodes 0x22 and 0x23 instead expose 21 and 14 six-pixel
+    character slots: the 0x22 canvas intentionally permits an odd final
+    character in the first half of its last 12-pixel cell. When one record is
+    reused by more than one renderer, every applicable limit must pass.
     """
-    widths = [
-        SPECIAL_FIXED_WIDTHS[command]
+    cell_widths = [
+        SPECIAL_FIXED_CELL_WIDTHS[command]
         for command in commands
-        if command in SPECIAL_FIXED_WIDTHS
+        if command in SPECIAL_FIXED_CELL_WIDTHS
     ]
-    if not widths:
+    character_widths = [
+        SPECIAL_FIXED_CHARACTER_WIDTHS[command]
+        for command in commands
+        if command in SPECIAL_FIXED_CHARACTER_WIDTHS
+    ]
+    if not cell_widths and not character_widths:
         return "fixed translated record has no proven special-renderer width"
     if "\n" in text or "\r" in text:
         return "fixed one-line renderer contains an explicit line break"
-    permitted = min(widths)
-    used = measure_literal(text)
-    if used > permitted:
-        return f"fixed renderer overflow: {used} > {permitted} cells"
+    if cell_widths:
+        permitted = min(cell_widths)
+        used = measure_literal(text)
+        if used > permitted:
+            return f"fixed renderer overflow: {used} > {permitted} cells"
+    if character_widths:
+        permitted_characters = min(character_widths)
+        if len(text) > permitted_characters:
+            return (
+                "fixed renderer overflow: "
+                f"{len(text)} > {permitted_characters} characters"
+            )
     return None
 
 

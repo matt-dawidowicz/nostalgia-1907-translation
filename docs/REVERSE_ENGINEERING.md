@@ -54,6 +54,27 @@ The opening dialogue row and continuation rows also use different native
 geometry. That rule belongs in the shared renderer/compiler contract, not in
 record-specific formatting.
 
+## Top scene-label renderer
+
+SCN opcodes `0x22` and `0x23` share the same 12x12 MES-cell rasterizer but
+DMA the resulting pattern data into separate reserved VRAM tile ranges.
+
+- `0x22` writes tiles 2 through 33. Every retail `SCREEN0.BS` and
+  `SCREEN1.BS` maps those tiles to plane columns 2 through 17 and rows 1
+  through 2, a 128x16-pixel rectangle at x=16..143, y=8..23. The rasterizer
+  starts two pixels inside that canvas, so text begins at x=18. The remaining
+  126 pixels hold exactly 21 six-pixel English character slots.
+- `0x23` writes tiles 34 through 55. The screen maps them to columns 19
+  through 29 and rows 1 through 2, an 88x16-pixel rectangle at x=152..239,
+  y=8..23. Text begins at x=154, leaving 86 pixels; exactly 14 complete
+  six-pixel character slots fit.
+
+The 21-character `0x22` limit is intentionally not represented as ten whole
+12-pixel cells: its odd final character occupies the first six pixels of the
+last cell and ends exactly at x=127 within the local 128-pixel canvas. Treating
+all scene labels as the older generic 18-cell strip was therefore both too
+permissive and geometrically incorrect.
+
 ## Window and renderer state
 
 Important state observed during executable analysis includes:

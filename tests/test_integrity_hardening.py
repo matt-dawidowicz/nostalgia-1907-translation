@@ -47,11 +47,24 @@ class ScriptIntegrityTests(unittest.TestCase):
         self.assertFalse(any(item.command == "0x21" for item in refs))
 
     def test_fixed_special_renderer_rejects_one_cell_overflow(self) -> None:
-        """Reject a 19-cell line in the proven 18-cell 0x20/0x22/0x23 family."""
+        """Reject a 19-cell line in the proven 18-cell 0x20 canvas."""
         self.assertIsNone(fixed_layout_width_failure("A" * 36, ("0x20",)))
         self.assertEqual(
             fixed_layout_width_failure("A" * 37, ("0x20",)),
             "fixed renderer overflow: 19 > 18 cells",
+        )
+
+    def test_scene_label_character_slot_limits(self) -> None:
+        """Accept exact 0x22/0x23 slot limits and reject one extra character."""
+        self.assertIsNone(fixed_layout_width_failure("A" * 21, ("0x22",)))
+        self.assertEqual(
+            fixed_layout_width_failure("A" * 22, ("0x22",)),
+            "fixed renderer overflow: 22 > 21 characters",
+        )
+        self.assertIsNone(fixed_layout_width_failure("A" * 14, ("0x23",)))
+        self.assertEqual(
+            fixed_layout_width_failure("A" * 15, ("0x23",)),
+            "fixed renderer overflow: 15 > 14 characters",
         )
 
     def test_countdown_renderer_uses_two_cell_limit(self) -> None:

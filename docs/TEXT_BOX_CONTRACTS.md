@@ -21,7 +21,7 @@ without rewriting English prose to compensate for stale storage geometry.
 | `floating_window` | Valid `0x24` window and `0x27` continuation chain, including selector targets | Width and row limit come from SCN operands. A selector can retain `menu_choice` semantics while using the same physical window. |
 | `full_screen_narration` | Reviewed START evidence | Explicit 16-cell full-screen narration contract. |
 | `lower_caption` | Reviewed PART2A:093 evidence | Explicit lower-area route-caption contract. |
-| `scene_label` | Reviewed PART3C location/speaker evidence | Explicit top scene-label contract. |
+| `scene_label` | MAIN.BIN `0x22`/`0x23` DMA destinations plus invariant `SCREEN0.BS`/`SCREEN1.BS` tilemaps in all 19 archives | Location canvas is x=16..143, y=8..23 with text origin x=18 and 21 six-pixel character slots. Perspective canvas is x=152..239, y=8..23 with text origin x=154 and 14 character slots. |
 
 `text_box_overrides` is allowed only for a reviewed exceptional renderer whose
 geometry is already supported by active layout data. The profile schema rejects
