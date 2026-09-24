@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
-"""Validate STAFF credits against the native centered 18-cell canvas.
+"""Validate STAFF credits centered within the native 0x20 text strip.
 
-The STAFF renderer exposes 18 12-pixel cells. English cells contain two
-six-pixel character slots, so one complete credit row owns exactly 36 source
-characters. Canonical STAFF text is fixed-layout and therefore preserves its
+Opcode 0x20 renders into one of three 224x16-pixel strips at the bottom of the
+screen. Each strip begins text at local (2, 2), leaving an 18-cell/216-pixel
+text area. English cells contain two six-pixel character slots, so one complete
+credit row owns exactly 36 source characters. The native 0x20 renderer itself is left-aligned at x=18; STAFF
+centering is produced entirely by literal leading/trailing spaces in the MES
+record. Opcode 0x55 clears and resets the three-line stack before each credit
+group. Canonical STAFF text is fixed-layout and therefore preserves its
 leading and trailing spaces verbatim; those spaces are presentation data, not
 semantic whitespace.
 

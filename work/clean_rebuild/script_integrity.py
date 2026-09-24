@@ -200,8 +200,8 @@ def fixed_layout_width_failure(
 ) -> str | None:
     """Return a fixed one-line geometry failure, or ``None`` when it fits.
 
-    Opcode 0x20 and the immediate 0x24/0x28 countdown form use whole-cell
-    limits. Scene-label opcodes 0x22 and 0x23 instead expose 21 and 14 six-pixel
+    Opcode 0x20 uses the native 18-cell/224-pixel bottom-strip renderer; the
+    immediate 0x24/0x28 countdown form uses a two-cell window. Scene-label opcodes 0x22 and 0x23 instead expose 21 and 14 six-pixel
     character slots: the 0x22 canvas intentionally permits an odd final
     character in the first half of its last 12-pixel cell. When one record is
     reused by more than one renderer, every applicable limit must pass.
