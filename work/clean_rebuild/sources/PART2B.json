@@ -150,7 +150,8 @@
       "index": 16,
       "policy": "translate",
       "text": "First-Class Cabin Block",
-      "layout_policy": "fixed"
+      "layout_policy": "fixed",
+      "display_text": "First-Class Cabins"
     },
     {
       "index": 17,
@@ -384,7 +385,8 @@
       "index": 55,
       "policy": "translate",
       "text": "Starboard Promenade Deck",
-      "layout_policy": "fixed"
+      "layout_policy": "fixed",
+      "display_text": "Starboard Prom. Deck"
     },
     {
       "index": 56,
@@ -558,7 +560,8 @@
       "index": 84,
       "policy": "translate",
       "text": "Crew Meeting Room",
-      "layout_policy": "fixed"
+      "layout_policy": "fixed",
+      "display_text": "Crew Mtg. Room"
     },
     {
       "index": 85,
