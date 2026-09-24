@@ -14,7 +14,10 @@ from work.clean_rebuild.scn_layout import (
     SCENE_PERSPECTIVE_CANVAS,
     SCENE_PERSPECTIVE_CHARACTERS,
     SCENE_PERSPECTIVE_TEXT_ORIGIN,
+    SPECIAL_LINE_CANVASES,
     SPECIAL_LINE_CELLS,
+    SPECIAL_LINE_TEXT_ORIGINS,
+    SPECIAL_LINE_TILE_BANKS,
     display_occurrences,
 )
 from work.clean_rebuild.source_json import load_json_object
@@ -34,6 +37,11 @@ class BoxLayoutAuditTests(unittest.TestCase):
         fixed = display_occurrences(b"\x20\x00\x01", 1, None)
         self.assertEqual(len(fixed[0]), 1)
         self.assertEqual(fixed[0][0]["permitted_cells"], SPECIAL_LINE_CELLS)
+        self.assertEqual(fixed[0][0]["tile_banks"], SPECIAL_LINE_TILE_BANKS)
+        self.assertEqual(fixed[0][0]["canvases"], SPECIAL_LINE_CANVASES)
+        self.assertEqual(
+            fixed[0][0]["text_origins"], SPECIAL_LINE_TEXT_ORIGINS
+        )
         self.assertEqual(fixed[0][0]["max_rows"], 1)
 
         labels = display_occurrences(
