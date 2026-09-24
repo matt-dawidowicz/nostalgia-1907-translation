@@ -28,19 +28,15 @@ from dataclasses import dataclass
 
 from .profile_schema import canonical_profile_index
 
+FLOATING_TILE_PIXELS = 8
+FLOATING_BORDER_TILES = 2
+FLOATING_CELL_PIXELS = 12
+FLOATING_ROW_PIXELS = 16
+FLOATING_SCREEN_TILE_ROWS = 28
 FLOATING_WIDTHS = {
-    0x07: 4,
-    0x08: 5,
-    0x09: 5,
-    0x0A: 5,
-    0x0B: 6,
-    0x0C: 7,
-    0x0D: 7,
-    0x0E: 8,
-    0x0F: 8,
-    0x10: 9,
-    0x11: 9,
-    0x12: 10,
+    width: ((width - FLOATING_BORDER_TILES) * FLOATING_TILE_PIXELS)
+    // FLOATING_CELL_PIXELS
+    for width in range(0x07, 0x13)
 }
 # MAIN.BIN opcode 0x20 uses an 18-cell one-line canvas. The 0x22/0x23
 # scene labels use separate top-screen canvases whose exact geometry comes from
@@ -643,11 +639,24 @@ def display_occurrences(
                 box="floating_window",
                 role=role,
                 subtype=f"0x{subtype:02X}",
-                width_operand=f"0x{width_byte:02X}",
+                x_operand=scn[offset + 1],
                 y_operand=raw_y,
+                width_operand=f"0x{width_byte:02X}",
+                height_operand=scn[offset + 4],
                 chain_position=chain_index,
                 permitted_cells=FLOATING_WIDTHS.get(width_byte),
-                evidence="SCN floating-window width operand",
+                text_origin=(
+                    (scn[offset + 1] + 1) * FLOATING_TILE_PIXELS,
+                    (raw_y + 1) * FLOATING_TILE_PIXELS + 2,
+                ),
+                row_stride_pixels=FLOATING_ROW_PIXELS,
+                indicator=(
+                    "blinking_bottom_center" if subtype == 0x27 else "none"
+                ),
+                evidence=(
+                    "MAIN.BIN floating-window descriptor and native "
+                    "12px-cell rasterizer"
+                ),
             )
     for (
         offset,
@@ -665,10 +674,22 @@ def display_occurrences(
                 box="floating_window",
                 role=ROLE_CHOICE,
                 subtype=f"0x{subtype:02X}",
-                width_operand=f"0x{width_byte:02X}",
+                x_operand=scn[offset + 1],
                 y_operand=raw_y,
+                width_operand=f"0x{width_byte:02X}",
+                height_operand=scn[offset + 4],
                 permitted_cells=FLOATING_WIDTHS.get(width_byte),
-                evidence="SCN selector-window width operand",
+                text_origin=(
+                    (scn[offset + 1] + 1) * FLOATING_TILE_PIXELS,
+                    (raw_y + 1) * FLOATING_TILE_PIXELS + 2,
+                ),
+                row_stride_pixels=FLOATING_ROW_PIXELS,
+                indicator=(
+                    "blinking_bottom_center" if subtype == 0x27 else "none"
+                ),
+                evidence=(
+                    "MAIN.BIN selector-target floating-window descriptor"
+                ),
             )
     return result
 
@@ -929,7 +950,11 @@ def infer_row_limits(
             raw_y = occurrence.get("y_operand")
             if not isinstance(raw_y, int):
                 continue
-            max_rows = (28 - raw_y - 2) // 2
+            max_rows = (
+                FLOATING_SCREEN_TILE_ROWS
+                - raw_y
+                - FLOATING_BORDER_TILES
+            ) // 2
             if max_rows <= 0:
                 offset = occurrence.get("offset", "unknown SCN offset")
                 raise ScnLayoutError(
