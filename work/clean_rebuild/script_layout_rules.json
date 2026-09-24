@@ -26,14 +26,14 @@
       "format": "word-wrap to the command or reviewed override"
     },
     "location_name": {
-      "source": "SCN adjacent 0x22/0x23 pair, 0x22 text ID",
+      "source": "MAIN.BIN 0x22 + invariant SCREEN0/1.BS 128px top-left canvas",
       "format": "one normalized line",
-      "max_characters": 26
+      "max_characters": 21
     },
     "perspective_name": {
-      "source": "SCN adjacent 0x22/0x23 pair, 0x23 text ID",
+      "source": "MAIN.BIN 0x23 + invariant SCREEN0/1.BS 88px top-right canvas",
       "format": "one normalized line",
-      "max_characters": 20
+      "max_characters": 14
     },
     "narration": {
       "source": "reviewed record override for a distinct narration renderer",
