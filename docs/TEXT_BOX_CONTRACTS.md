@@ -22,6 +22,7 @@ without rewriting English prose to compensate for stale storage geometry.
 | `full_screen_narration` | Reviewed START evidence | Explicit 16-cell full-screen narration contract. |
 | `lower_caption` | Reviewed PART2A:093 evidence | Explicit lower-area route-caption contract. |
 | `scene_label` | MAIN.BIN `0x22`/`0x23` DMA destinations plus invariant `SCREEN0.BS`/`SCREEN1.BS` tilemaps in all 19 archives | Location canvas is x=16..143, y=8..23 with text origin x=18 and 21 six-pixel character slots. Perspective canvas is x=152..239, y=8..23 with text origin x=154 and 14 character slots. |
+| `special_line` | SCN `0x20`, MAIN.BIN mode-3 text state, and invariant bottom-strip tile maps | Three 224x16 strips at y=168, 184, and 200. Text starts at x=18 and y=170/186/202, with 18 12-pixel cells per line. `0x55` clears all three strips and resets the line index; a fourth successive line scrolls the lower two strips upward and reuses the bottom strip. |
 
 `text_box_overrides` is allowed only for a reviewed exceptional renderer whose
 geometry is already supported by active layout data. The profile schema rejects
