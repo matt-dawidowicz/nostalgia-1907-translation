@@ -105,8 +105,10 @@ copies VRAM `$0E00-$1BFF` upward to `$0700-$14FF`, clears the bottom
 `$1500-$1BFF` bank, reduces the index to 2, and draws the new line there.
 Opcode `0x55` selects text mode 9, which clears the complete
 `$0700-$1BFF` three-strip region and resets the line index to zero. STAFF
-uses that reset before each credit group, explaining why its centered pairs
-occupy the first two strips.
+uses that reset before each credit group, explaining why its credit pairs
+occupy the first two strips. The renderer does not center text: every line
+starts at x=18, and STAFF's visual centering comes from literal source padding
+that is rendered like any other spaces.
 
 This renderer is fixed-layout even though its geometry is now fully known:
 leading and trailing spaces are presentation data for centered credits and
