@@ -423,7 +423,8 @@
       "index": 60,
       "policy": "translate",
       "text": "First-Class Cabin Block",
-      "layout_policy": "fixed"
+      "layout_policy": "fixed",
+      "display_text": "First-Class Cabins"
     },
     {
       "index": 61,
