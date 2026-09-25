@@ -203,14 +203,25 @@ These are three distinct VM operations, not one filename-bearing `0x5A`
 command:
 
 1. `0x55` selects the proven text-clear/reset mode;
-2. `0x5A 01` consumes one byte and updates a MAIN.BIN bitfield/state flag;
+2. `0x5A 01` is a flag operation. The handler at `$FF0A2C` reads the
+   operand, adds four, and executes a dynamic `BSET` against `$FF4DC0`;
+   operand `01` therefore sets bit 5;
 3. `0x10 "part4a" 00` performs the actual chapter/archive switch.
 
-The `0x10` handler at approximately `$FF039E` calls the loader at
-approximately `$FF0B80`. That routine copies the basename into the shared
-filename buffer, appends `.LZ`, loads the chapter archive, then resolves
-`.SCN` and `.MES` from that newly loaded archive. It installs fresh SCN and
-MES pointers before returning to the VM dispatcher.
+The `0x10` handler at `$FF039E` passes the inline basename to the chapter
+loader beginning at approximately `$FF0B7E`. The loader:
+
+1. copies the basename into the shared filename buffer at `$FF3D18`;
+2. appends `.LZ` and loads the new chapter archive;
+3. appends `.SCN`, resolves that member from the new archive, and stores the
+   resulting pointer in both `$FF3CB4` and `$FF3CB8`;
+4. appends `.MES`, resolves that member, stores its base at `$FF3E08`, then
+   derives and stores the MES data/table pointer at `$FF3E04`; and
+5. reinitializes the active script-side pointer state before returning to the
+   VM dispatcher.
+
+This is direct executable evidence that PART4A begins with newly installed SCN
+and MES sources rather than continuing to execute PART3C's text/script buffers.
 
 This weakens a simple persistent-text-state explanation for the black screen:
 the chapter switch replaces the script/text data sources after an explicit
