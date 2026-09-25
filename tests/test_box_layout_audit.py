@@ -80,8 +80,7 @@ class BoxLayoutAuditTests(unittest.TestCase):
     def test_floating_window_geometry_matches_native_arithmetic(self) -> None:
         """Derive cell width, origin, and indicator mode from SCN operands."""
         expected_widths = {
-            width: ((width - 2) * 8) // 12
-            for width in range(0x05, 0x1B)
+            width: ((width - 2) * 8) // 12 for width in range(0x05, 0x1B)
         }
         self.assertEqual(FLOATING_WIDTHS, expected_widths)
 
