@@ -578,6 +578,28 @@ class ScriptLayoutTests(unittest.TestCase):
         self.assertEqual(runtime["status"], "PENDING_RUNTIME")
         self.assertGreater(runtime["pending_count"], 19)
 
+    def test_part3c_to_part4a_transition_keeps_native_loader_boundary(
+        self,
+    ) -> None:
+        """Lock the retail chapter switch and first unique PART4A background."""
+        part3c = (
+            DEFAULT_RETAIL_ROOT
+            / "retail_unpacked"
+            / "PART3C"
+            / "PART3C.SCN"
+        ).read_bytes()
+        self.assertTrue(
+            part3c.endswith(b"\x55\x5A\x01\x10part4a\x00")
+        )
+
+        part4a = (
+            DEFAULT_RETAIL_ROOT
+            / "retail_unpacked"
+            / "PART4A"
+            / "PART4A.SCN"
+        ).read_bytes()
+        self.assertIn(b"\x71inbou3\x00\x52131.bg\x00", part4a[:64])
+
     def test_every_chapter_compiles_from_hash_locked_inputs(self) -> None:
         """Compile all chapters while preserving record and glyph limits."""
         index = load_json_object(SOURCES / "index.json")
