@@ -579,7 +579,9 @@ class ScriptLayoutTests(unittest.TestCase):
         self.assertEqual(runtime["status"], "PENDING_RUNTIME")
         self.assertGreater(runtime["pending_count"], 19)
 
-    def test_every_fixed_layout_record_has_proven_generic_renderer(self) -> None:
+    def test_every_fixed_layout_record_has_proven_generic_renderer(
+        self,
+    ) -> None:
         """Require the complete fixed corpus to resolve to known native widths."""
         report = audit_project_scn_references()
         self.assertEqual(report["status"], "PASS")
