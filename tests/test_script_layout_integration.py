@@ -26,6 +26,7 @@ from work.clean_rebuild.scn_layout import (
     TEXT_BOX_LOWER_DIALOGUE,
     infer_contracts,
 )
+from work.clean_rebuild.script_integrity import audit_project_scn_references
 from work.clean_rebuild.source_json import load_json_object
 from work.clean_rebuild.translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 from work.clean_rebuild.translation_formatter import (
@@ -577,6 +578,20 @@ class ScriptLayoutTests(unittest.TestCase):
         runtime = verify_runtime_log(plan)
         self.assertEqual(runtime["status"], "PENDING_RUNTIME")
         self.assertGreater(runtime["pending_count"], 19)
+
+    def test_every_fixed_layout_record_has_proven_generic_renderer(
+        self,
+    ) -> None:
+        """Require the complete fixed corpus to resolve to known native widths."""
+        report = audit_project_scn_references()
+        self.assertEqual(report["status"], "PASS")
+        self.assertEqual(report["fixed_layout_certified_count"], 123)
+        for chapter in report["chapters"]:
+            self.assertEqual(
+                chapter["fixed_layout_certified_count"],
+                chapter["fixed_layout_record_count"],
+                msg=chapter["chapter"],
+            )
 
     def test_every_chapter_compiles_from_hash_locked_inputs(self) -> None:
         """Compile all chapters while preserving record and glyph limits."""

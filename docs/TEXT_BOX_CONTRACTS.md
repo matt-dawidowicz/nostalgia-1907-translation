@@ -63,15 +63,33 @@ row-edge rule.
 
 ## Fixed layouts and STAFF
 
-A `layout_policy: "fixed"` record remains reviewer-owned because a safe general
-reflow contract has not been proven. Fixed does not mean unchecked: fixed-width
-and capacity rules are part of permanent release validation, and STAFF credits
-have their own maintained centering/layout logic and regression coverage.
+A `layout_policy: "fixed"` record remains reviewer-owned because its literal
+spacing/composition must not be semantically reflowed. Fixed no longer means
+that its renderer family is unknown. The complete current corpus contains 123
+fixed translated records, and retail SCN proves a generic renderer contract for
+all 123:
 
-Static evidence still cannot prove every live centering, clear, transition, or
-animation state. The successor candidate must therefore exercise fixed-layout
+- 76 records are displayed only by `0x20`;
+- 38 are displayed only by `0x22`;
+- 2 are displayed only by `0x23`;
+- 3 are the PART1A width-`0x05` `0x24/0x28` countdown; and
+- 4 records are deliberately reused by more than one of those already-proven
+  families.
+
+The SCN referential-integrity audit requires every fixed record to pass the
+applicable native width contract for every renderer that references it. There
+are therefore no remaining fixed records whose text placement depends on an
+unclassified or bespoke renderer.
+
+STAFF's 62 fixed records remain literal because visual centering is encoded by
+source padding, but their renderer is the ordinary proven `0x20` three-strip
+path.
+
+Static evidence still cannot prove every live timing, transition, or animation
+state. The successor candidate must therefore exercise fixed-layout
 representatives in Ares. `PART4C:051` through `PART4C:059` remain an explicit
-uninterrupted ending-path runtime checkpoint.
+uninterrupted ending-path runtime checkpoint even though their renderer family
+is now fully classified.
 
 ## Required evidence for a renderer change
 
