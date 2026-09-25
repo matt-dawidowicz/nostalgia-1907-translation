@@ -259,7 +259,7 @@ class RowPackingTests(unittest.TestCase):
         """Never assign the quote gutter to a continuation stream fragment."""
         retail_records = (b"\x01\x00", b"\x10\x00")
         main = scn_layout.infer_layouts(
-            b"\x21\x00\x01\x00\x02",
+            b"\x21\x00\x01\x00\x02\x00",
             2,
             {1},
             None,
@@ -275,7 +275,7 @@ class RowPackingTests(unittest.TestCase):
         self.assertFalse(main[1].repeat_first_row_on_page)
         self.assertEqual(main[1].visible_cells(3), 11)
         continuation = scn_layout.infer_layouts(
-            b"\x21\x00\x02\x00\x00",
+            b"\x21\x00\x02\x00\x00\x00",
             2,
             {1},
             None,
