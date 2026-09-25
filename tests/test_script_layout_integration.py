@@ -583,20 +583,12 @@ class ScriptLayoutTests(unittest.TestCase):
     ) -> None:
         """Lock the retail chapter switch and first unique PART4A background."""
         part3c = (
-            DEFAULT_RETAIL_ROOT
-            / "retail_unpacked"
-            / "PART3C"
-            / "PART3C.SCN"
+            DEFAULT_RETAIL_ROOT / "retail_unpacked" / "PART3C" / "PART3C.SCN"
         ).read_bytes()
-        self.assertTrue(
-            part3c.endswith(b"\x55\x5A\x01\x10part4a\x00")
-        )
+        self.assertTrue(part3c.endswith(b"\x55\x5a\x01\x10part4a\x00"))
 
         part4a = (
-            DEFAULT_RETAIL_ROOT
-            / "retail_unpacked"
-            / "PART4A"
-            / "PART4A.SCN"
+            DEFAULT_RETAIL_ROOT / "retail_unpacked" / "PART4A" / "PART4A.SCN"
         ).read_bytes()
         self.assertIn(b"\x71inbou3\x00\x52131.bg\x00", part4a[:64])
 
