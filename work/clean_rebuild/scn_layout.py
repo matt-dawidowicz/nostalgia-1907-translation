@@ -61,6 +61,15 @@ SPEAKER_NAME_CELLS = (
 SPEAKER_NAME_CHARACTERS = SPEAKER_NAME_CELLS * 2
 SPEAKER_NAME_TEXT_WIDTH_PIXELS = SPEAKER_NAME_CELLS * FLOATING_CELL_PIXELS
 SPEAKER_NAME_TEXT_ORIGINS = SPECIAL_LINE_TEXT_ORIGINS
+# Neutral mechanical descriptions of the five state values observed in retail
+# 0x21 commands. These describe MAIN.BIN side effects, not scene semantics.
+DIALOGUE_STATE_EFFECTS = {
+    0x00: "advance_reset_with_indicator",
+    0x3B: "retain_cursor_set_continuation",
+    0x70: "advance_reset_without_indicator",
+    0x77: "advance_reset_without_indicator_clear_3c2e",
+    0x6B: "prepare_rows_advance_set_continuation",
+}
 SCENE_LOCATION_CHARACTERS = 21
 SCENE_PERSPECTIVE_CHARACTERS = 14
 SCENE_LOCATION_CANVAS = (16, 8, 128, 16)
@@ -502,7 +511,10 @@ def display_occurrences(
             state_byte = scn[offset + 5]
             state_fields = {
                 "state_byte": f"0x{state_byte:02X}",
-                "continuation_latch": state_byte == 0x3B,
+                "state_effect": DIALOGUE_STATE_EFFECTS.get(
+                    state_byte, "unknown"
+                ),
+                "continuation_latch": state_byte in (0x3B, 0x6B),
             }
             if 1 <= second_id <= record_count:
                 if 1 <= first_id <= record_count:
