@@ -43,6 +43,7 @@ from .renderer_format import (
 )
 from .scn_layout import (
     DIALOGUE_OPENING_ANCHOR_CODE,
+    LABEL_CHARACTER_LIMITS,
     LABEL_ROLES,
     PROSE_ROLES,
     ROLE_CHOICE,
@@ -740,6 +741,16 @@ def compile_mes(
                 ):
                     working = normalize_ellipsis_style(
                         normalize_semantic_text(text)
+                    )
+                label_limits = [
+                    LABEL_CHARACTER_LIMITS[role]
+                    for role in record_roles
+                    if role in LABEL_CHARACTER_LIMITS
+                ]
+                if label_limits and len(working) > min(label_limits):
+                    raise CompileError(
+                        f"{chapter}:{index:03d}: label is {len(working)} "
+                        f"characters; renderer permits {min(label_limits)}"
                     )
             row_specs = _prose_rows(
                 working,
