@@ -80,18 +80,7 @@ class BoxLayoutAuditTests(unittest.TestCase):
     def test_floating_window_geometry_matches_native_arithmetic(self) -> None:
         """Derive cell width, origin, and indicator mode from SCN operands."""
         expected_widths = {
-            0x07: 3,
-            0x08: 4,
-            0x09: 4,
-            0x0A: 5,
-            0x0B: 6,
-            0x0C: 6,
-            0x0D: 7,
-            0x0E: 8,
-            0x0F: 8,
-            0x10: 9,
-            0x11: 10,
-            0x12: 10,
+            width: ((width - 2) * 8) // 12 for width in range(0x05, 0x1B)
         }
         self.assertEqual(FLOATING_WIDTHS, expected_widths)
 
@@ -113,6 +102,31 @@ class BoxLayoutAuditTests(unittest.TestCase):
         self.assertEqual(overlay["permitted_cells"], 8)
         self.assertEqual(overlay["text_origin"], (24, 130))
         self.assertEqual(overlay["indicator"], "none")
+
+    def test_large_retail_0x28_window_uses_same_native_formula(self) -> None:
+        """Treat START's width-0x1A narration as an ordinary floating window."""
+        scn = bytes((0x24, 0x03, 0x0D, 0x1A, 0x08, 0x28, 0x00, 0x01))
+        use = display_occurrences(
+            scn,
+            1,
+            {"scn_window_text_subtypes": [0x27, 0x28]},
+        )[0][0]
+        self.assertEqual(use["permitted_cells"], 16)
+        self.assertEqual(use["text_origin"], (32, 114))
+        self.assertEqual(use["row_stride_pixels"], 16)
+        self.assertEqual(use["indicator"], "none")
+
+    def test_part2a_caption_shape_is_generic_0x28_geometry(self) -> None:
+        """Bind the route caption to its encoded descriptor, not an override."""
+        scn = bytes((0x24, 0x10, 0x10, 0x0E, 0x0C, 0x28, 0x00, 0x01))
+        use = display_occurrences(
+            scn,
+            1,
+            {"scn_window_text_subtypes": [0x27, 0x28]},
+        )[0][0]
+        self.assertEqual(use["permitted_cells"], 8)
+        self.assertEqual(use["text_origin"], (136, 138))
+        self.assertEqual(use["indicator"], "none")
 
     def test_special_countdown_window_has_two_cell_contract(self) -> None:
         """The retail 0x24/.../0x28 countdown form is a two-cell window."""
