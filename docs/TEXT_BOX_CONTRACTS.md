@@ -16,7 +16,7 @@ without rewriting English prose to compensate for stale storage geometry.
 
 | Contract | Evidence | Geometry ownership |
 | --- | --- | --- |
-| `lower_dialogue` | SCN `0x21 <speaker> <text>` | One initial 12-cell physical row, then 11-cell continuation stride. Retail `0x10` quote becomes a one-time blank opening gutter; later page clears do not reset the wider opening row. |
+| `lower_dialogue` | SCN `0x21 <speaker> <text> <state>` plus MAIN.BIN mode-1 text state | Speaker text starts at local x=2 in the shared 224x16 strip and owns exactly six 12-pixel cells (12 English character slots) before the dialogue anchor at local x=$4A. Dialogue uses one initial 12-cell physical row, then 11-cell continuation stride. Retail `0x10` quote becomes a one-time blank opening gutter; later page clears do not reset the wider opening row. The command's sixth byte is retained as renderer state; `0x3B` is the proven continuation-page latch. |
 | `lower_continuation` | SCN `0x21 <text> 0x0000` | No opening gutter; begins directly on the native 11-cell continuation stride. |
 | `floating_window` | SCN `0x24` descriptor plus MAIN.BIN `0x27`/`0x28` renderer | Descriptor bytes are X tile, Y tile, width tiles, and an initial height field. Text begins at `(8·X+8, 8·Y+10)`, advances 16 px per row, and owns `floor(((width-2)·8)/12)` 12-pixel cells. Final window height is recomputed as `2·rows+2` tiles. `0x27` enables a blinking bottom-center indicator sprite; `0x28` does not. |
 | `full_screen_narration` | Reviewed START evidence | Explicit 16-cell full-screen narration contract. |
