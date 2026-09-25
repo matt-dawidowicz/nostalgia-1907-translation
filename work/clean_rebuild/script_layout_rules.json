@@ -14,8 +14,8 @@
     },
     "speaker_name": {
       "source": "SCN 0x21 first text ID",
-      "format": "one normalized line",
-      "max_characters": 24
+      "format": "one normalized line in the six-cell 0x21 speaker region",
+      "max_characters": 12
     },
     "side_thought": {
       "source": "SCN 0x24/0x27 initial text ID and immediate standalone 0x27 continuation IDs",
