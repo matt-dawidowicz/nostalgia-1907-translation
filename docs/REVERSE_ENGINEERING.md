@@ -183,9 +183,7 @@ a runtime investigation, not as a proven translation defect.
 Static analysis established:
 
 - all observed PART3C ending routes converge before the final transition;
-- the common transition sequence is also used successfully by other chapters;
-- temporary background/FSD allocations are released, and chapter loading resets
-  the relevant allocation stack;
+- temporary background/FSD allocations are released before the chapter change;
 - the historical 1.0.2 English PART3C MES is larger than retail but remains
   structurally valid;
 - no simple `0x3FFF` mask was found in the normal MES lookup paths; and
@@ -195,12 +193,57 @@ Static analysis established:
 One notable example is PART3C:218, which occupies two dialogue pages in the
 historical English build versus one in retail Japanese.
 
-The next useful experiment is a differential runtime trace between retail and
-the exact affected English candidate around the final PART3C renderer activity,
-the last background loads, the `part4a` chapter load, and the first PART4A
-background initialization.
+### Exact transition command sequence
 
-Do not add a workaround until such evidence identifies the failing subsystem.
+Retail PART3C ends with:
+
+`55 5A 01 10 "part4a" 00`
+
+These are three distinct VM operations, not one filename-bearing `0x5A`
+command:
+
+1. `0x55` selects the proven text-clear/reset mode;
+2. `0x5A 01` consumes one byte and updates a MAIN.BIN bitfield/state flag;
+3. `0x10 "part4a" 00` performs the actual chapter/archive switch.
+
+The `0x10` handler at approximately `$FF039E` calls the loader at
+approximately `$FF0B80`. That routine copies the basename into the shared
+filename buffer, appends `.LZ`, loads the chapter archive, then resolves
+`.SCN` and `.MES` from that newly loaded archive. It installs fresh SCN and
+MES pointers before returning to the VM dispatcher.
+
+This weakens a simple persistent-text-state explanation for the black screen:
+the chapter switch replaces the script/text data sources after an explicit
+`0x55` clear.
+
+### First PART4A resource boundary
+
+PART4A begins by reinitializing screen state, then requests:
+
+- `0x71 "inbou3"`: load the `INBOU3.FSD/.PSD` resource pair;
+- `0x52 "131.bg"`: load the first PART4A background.
+
+`INBOU3.FSD/.PSD` also exist in PART3C. By contrast, `131.BG` is unique to
+PART4A. Therefore a stale or malformed chapter-archive switch can appear to
+survive the first resource request and fail only when `131.BG` is resolved.
+That makes the `131.BG` lookup/display boundary the first high-value runtime
+breakpoint for the black-screen investigation.
+
+The current clean rebuild also reduces structural archive risk: it attempts
+fixed-slot MES replacement first, preserving member offsets and total archive
+size. Guarded reflow is permitted only on typed slot overflow and still
+preserves member names/order while remaining inside the original ISO allocation.
+
+The next useful experiment is therefore a differential runtime trace between
+retail and the exact affected English candidate at:
+
+1. completion of PART3C's final `0x55`;
+2. entry/return of the `0x10 "part4a"` loader;
+3. the new SCN/MES pointers installed by the loader;
+4. PART4A's `0x71 "inbou3"` resource lookup; and
+5. the first unique PART4A `0x52 "131.bg"` lookup/decode/display path.
+
+Do not add a workaround until that trace identifies the failing subsystem.
 
 ## Maintenance rule
 
