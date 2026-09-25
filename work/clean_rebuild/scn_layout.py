@@ -794,7 +794,11 @@ def infer_layouts(
         raise ScnLayoutError(
             "retail MES record count does not match SCN layout input"
         )
-    inventory = occurrences or display_occurrences(scn, record_count, profile)
+    inventory = (
+        occurrences
+        if occurrences is not None
+        else display_occurrences(scn, record_count, profile)
+    )
     dialogue_anchor_indexes: set[int] = set()
 
     def add(index: int, layout: Layout, source: str) -> None:
@@ -943,7 +947,11 @@ def infer_roles(
     """Infer UI roles from one shared structural display inventory."""
     settings = profile or {}
     roles: dict[int, set[str]] = {}
-    inventory = occurrences or display_occurrences(scn, record_count, profile)
+    inventory = (
+        occurrences
+        if occurrences is not None
+        else display_occurrences(scn, record_count, profile)
+    )
 
     for index, record_occurrences in inventory.items():
         if index not in translated_indexes:
@@ -972,7 +980,11 @@ def infer_row_limits(
     """Infer floating-window row limits from shared structural occurrences."""
     settings = profile or {}
     limits: dict[int, int] = {}
-    inventory = occurrences or display_occurrences(scn, record_count, profile)
+    inventory = (
+        occurrences
+        if occurrences is not None
+        else display_occurrences(scn, record_count, profile)
+    )
     floating_roles = {ROLE_THOUGHT, ROLE_OVERLAY, ROLE_CHOICE}
     for index, record_occurrences in inventory.items():
         if index not in translated_indexes:
