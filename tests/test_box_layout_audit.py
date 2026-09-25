@@ -19,6 +19,9 @@ from work.clean_rebuild.scn_layout import (
     SPECIAL_LINE_CELLS,
     SPECIAL_LINE_TEXT_ORIGINS,
     SPECIAL_LINE_TILE_BANKS,
+    SPEAKER_NAME_CELLS,
+    SPEAKER_NAME_CHARACTERS,
+    SPEAKER_NAME_TEXT_ORIGINS,
     display_occurrences,
 )
 from work.clean_rebuild.source_json import load_json_object
@@ -70,6 +73,28 @@ class BoxLayoutAuditTests(unittest.TestCase):
             perspective["text_origin"], SCENE_PERSPECTIVE_TEXT_ORIGIN
         )
         self.assertEqual(perspective["max_rows"], 1)
+
+    def test_dialogue_speaker_uses_six_cell_native_region(self) -> None:
+        """Bind 0x21 speaker names and state byte to the lower-strip geometry."""
+        uses = display_occurrences(
+            bytes((0x21, 0x00, 0x01, 0x00, 0x02, 0x3B)),
+            2,
+            None,
+        )
+        speaker = uses[0][0]
+        self.assertEqual(speaker["part"], "speaker_name")
+        self.assertEqual(speaker["permitted_cells"], SPEAKER_NAME_CELLS)
+        self.assertEqual(
+            speaker["permitted_characters"], SPEAKER_NAME_CHARACTERS
+        )
+        self.assertEqual(speaker["text_origins"], SPEAKER_NAME_TEXT_ORIGINS)
+        self.assertEqual(speaker["local_text_origin_x"], 2)
+        self.assertEqual(speaker["local_dialogue_anchor_x"], 0x4A)
+        self.assertEqual(speaker["state_byte"], "0x3B")
+        self.assertTrue(speaker["continuation_latch"])
+        dialogue = uses[1][0]
+        self.assertEqual(dialogue["state_byte"], "0x3B")
+        self.assertTrue(dialogue["continuation_latch"])
 
     def test_isolated_label_opcode_bytes_are_not_occurrences(self) -> None:
         """Do not certify operand bytes as scene labels without the paired shape."""
