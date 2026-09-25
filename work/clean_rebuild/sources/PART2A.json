@@ -19,6 +19,10 @@
   "profile": {
     "schema_version": 1,
     "name": "PART2A",
+    "scn_window_text_subtypes": [
+      39,
+      40
+    ],
     "scn_dialogue_layout": {
       "first": 12,
       "continuation": 10
@@ -34,23 +38,6 @@
     "scn_continuation_runtime_layout": {
       "first": 11,
       "continuation": 11
-    },
-    "layout_overrides": {
-      "93": {
-        "first": 12,
-        "continuation": 10,
-        "reason": "SCN opcode 0x28 renders this route caption in the ordinary lower text area."
-      }
-    },
-    "runtime_layout_overrides": {
-      "93": {
-        "first": 12,
-        "continuation": 11,
-        "reason": "Opcode 0x28 uses the lower renderer's 11-cell continuation stride."
-      }
-    },
-    "text_box_overrides": {
-      "93": "lower_caption"
     },
     "required_text_prefixes": {
       "1": "ACTION 2:"
