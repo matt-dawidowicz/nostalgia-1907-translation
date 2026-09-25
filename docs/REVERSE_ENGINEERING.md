@@ -163,6 +163,32 @@ difference is a high-byte mode flag at `$FF465C`:
 The indicator coordinates before the Mega Drive sprite +128 bias are
 `X*8 + width*4 - 4` and `(Y + final_height - 1)*8`.
 
+## Generic 0x28 narration and caption paths
+
+Two records previously carried reviewed geometry overrides because their
+presentation looked unlike ordinary floating dialogue. Retail SCN and MAIN.BIN
+show that both are normal `0x24` descriptor + `0x28` display paths.
+
+- START:000 is encoded as `24 03 0D 1A 08 28 00 01`. Its descriptor is
+  `X=3, Y=13, width=26, initial-height=8`. The common formula gives text
+  origin `(32, 114)`, 16 native 12-pixel cells per row (32 English character
+  slots), and a six-row screen bound.
+- PART2A:093 is encoded as `24 10 10 0E 0C 28 00 5E`. Its descriptor is
+  `X=16, Y=16, width=14, initial-height=12`. The same formula gives origin
+  `(136, 138)`, eight cells per row (16 English character slots), and a
+  five-row screen bound.
+
+The apparent full-screen narration and lower-caption presentations therefore do
+not identify separate text engines. START retains a semantic `narration` role
+for editing/review purposes, but geometry comes entirely from the generic
+floating-window renderer. PART2A:093 likewise uses ordinary `0x28` overlay
+geometry.
+
+A complete scan of retail visible-text descriptors finds widths from `0x05`
+through `0x1A`. MAIN.BIN applies the same border/pixel/cell arithmetic rather
+than selecting from a width-specific dispatch table, so the maintained derived
+width map covers that complete observed range.
+
 ## Window and renderer state
 
 Important state observed during executable analysis includes:
