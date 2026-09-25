@@ -300,6 +300,55 @@ retail and the exact affected English candidate at:
 
 Do not add a workaround until that trace identifies the failing subsystem.
 
+### Ares v148 runtime control trace
+
+A controlled retail-derived fast-path disc was executed under Ares v148 using
+the original Japanese two-track disc layout and Japanese Mega-CD BIOS. The
+diagnostic build changes only the START/PART3C SCN flow needed to reach the
+transition immediately:
+
+`START -> PART3C -> 55 -> 5A 01 -> 10 "part4a"`
+
+The chapter archives retain their retail member ordering, offsets, and resource
+payloads outside those diagnostic SCN bytes. This is a control experiment for
+the native transition path, not a reproduction of the historical English
+runtime state.
+
+Runtime result:
+
+- the diagnostic disc passes Mega-CD boot/security and enters the game;
+- the transition visibly reaches the `ACTION4` title;
+- PART4A proceeds beyond the title and displays its first room/background;
+- therefore the controlled transition successfully completes the chapter
+  switch, PART4A archive lookup, `INBOU3` setup, unique `131.BG` lookup,
+  background processing, and initial display path.
+
+A masked Mega Drive CPU instruction trace independently hit the expected native
+routines during the run:
+
+- `$FF039E` — opcode `0x10` handler;
+- `$FF0B7E` — chapter-loader entry;
+- `$FF0B30` — filename buffer setup;
+- `$FF0C16` — extension helper;
+- `$FF0A7E` — opcode `0x71` resource handler;
+- `$FF07B0` — opcode `0x52` background handler;
+- `$FF184A/$FF1858` — resource extraction request/result path;
+- `$FF1834` — Word-RAM allocation pop;
+- `$FF2CB8/$FF298E/$FF330E` — background processing and VDP-transfer chain.
+
+Because the instruction tracer was address-masked, a routine that executes
+multiple times is logged only on its first execution. The visual PART4A result
+is therefore the decisive evidence that the second chapter switch and first
+PART4A-only background path completed; individual first-hit trace lines are not
+used to claim which invocation they represent.
+
+This control result falsifies a broad failure of the generic `0x10` loader or
+`131.BG` path. It does **not** reproduce the reported 1.0.2 black screen,
+because it intentionally omits the complete preceding English PART3C dialogue,
+page-clear, timing, and VDP history. The highest-value remaining experiment is
+the same trace against the exact historical English candidate (or a byte-exact
+reconstruction of its late PART3C state).
+
 ## Maintenance rule
 
 Promote a reverse-engineering discovery only when it produces a reusable rule:
