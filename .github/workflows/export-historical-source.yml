@@ -1,0 +1,22 @@
+name: Export historical source snapshot
+
+on:
+  push:
+    branches:
+      - forensics/release-1.0.2-source-export-20260925
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-1.0.2-source-snapshot
+          path: |
+            nostalgia1907.project.json
+            work/clean_rebuild/*.py
+            work/clean_rebuild/*.json
+            work/clean_rebuild/sources/PART3C.json
+            work/clean_rebuild/sources/index.json
+          if-no-files-found: error
