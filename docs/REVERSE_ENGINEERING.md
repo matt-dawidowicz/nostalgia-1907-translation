@@ -75,8 +75,10 @@ why speaker text and dialogue share the same bottom-strip vertical origin and
 why overlong names can collide with the dialogue region rather than clipping in
 a separate canvas.
 
-The sixth `0x21` byte is live renderer state, not padding. Values observed in
-retail scripts include `00`, `3B`, `70`, `6B`, and `77`.
+The sixth `0x21` byte is live renderer state, not padding. Structural
+recognition therefore requires the complete six-byte command; a five-byte
+prefix is not a valid `0x21` occurrence. Values observed in retail scripts
+include `00`, `3B`, `70`, `6B`, and `77`.
 The state machine explicitly tests `$3B`; this value is used on continuation
 chains and suppresses the ordinary fresh-dialogue setup while retaining the
 current lower-text state. Other nonzero state values are preserved and exposed
