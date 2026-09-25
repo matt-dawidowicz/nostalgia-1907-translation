@@ -667,13 +667,18 @@ def compile_mes(
     if text_mode == "adaptive":
         adaptive_indexes = set(translated)
     # Roles such as speaker/location/perspective are native renderer facts, not
-    # reflow policy. Fixed translated labels must retain their literal layout
-    # while still obeying the same one-line canvas limits as adaptive labels.
-    all_roles = infer_roles(
-        scn_data,
-        retail.record_count,
-        set(translated),
-        profile,
+    # reflow policy. Only records outside adaptive contract inference need this
+    # extra role-only scan; normal adaptive chapters still inventory the SCN once.
+    nonadaptive_indexes = set(translated) - adaptive_indexes
+    all_roles = (
+        infer_roles(
+            scn_data,
+            retail.record_count,
+            nonadaptive_indexes,
+            profile,
+        )
+        if nonadaptive_indexes
+        else {}
     )
     needs_layouts = text_mode == "prose" or bool(adaptive_indexes)
     if adaptive_indexes:
@@ -732,6 +737,22 @@ def compile_mes(
     for index, text in sorted(translated.items()):
         adaptive_record = index in adaptive_indexes
         layout_policy = raw_records[index].get("layout_policy")
+        record_roles = roles.get(index, frozenset())
+        label_text = (
+            normalize_ellipsis_style(normalize_semantic_text(text))
+            if adaptive_record
+            else text
+        )
+        label_limits = [
+            LABEL_CHARACTER_LIMITS[role]
+            for role in record_roles
+            if role in LABEL_CHARACTER_LIMITS
+        ]
+        if label_limits and len(label_text) > min(label_limits):
+            raise CompileError(
+                f"{chapter}:{index:03d}: label is {len(label_text)} "
+                f"characters; renderer permits {min(label_limits)}"
+            )
         if layout_policy == "anchor":
             row_specs = [((), "  ")]
         elif text_mode == "render-ready" and not adaptive_record:
@@ -739,7 +760,6 @@ def compile_mes(
         else:
             working = text
             layout = layouts.get(index)
-            record_roles = roles.get(index, frozenset())
             if adaptive_record:
                 non_prose_contract = record_roles & (
                     LABEL_ROLES | {ROLE_CHOICE}
@@ -755,16 +775,6 @@ def compile_mes(
                     working = normalize_ellipsis_style(
                         normalize_semantic_text(text)
                     )
-            label_limits = [
-                LABEL_CHARACTER_LIMITS[role]
-                for role in record_roles
-                if role in LABEL_CHARACTER_LIMITS
-            ]
-            if label_limits and len(working) > min(label_limits):
-                raise CompileError(
-                    f"{chapter}:{index:03d}: label is {len(working)} "
-                    f"characters; renderer permits {min(label_limits)}"
-                )
             row_specs = _prose_rows(
                 working,
                 layout,
