@@ -69,7 +69,7 @@ class ContinuationAlignmentTests(unittest.TestCase):
     def test_lower_continuation_starts_on_eleven_cell_stride(self) -> None:
         """Never reintroduce the stale twelfth cell that indented later rows."""
         layouts = scn_layout.infer_layouts(
-            b"\x21\x00\x01\x00\x00",
+            b"\x21\x00\x01\x00\x00\x00",
             1,
             {0},
             None,
