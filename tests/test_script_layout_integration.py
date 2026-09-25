@@ -13,7 +13,6 @@ from work.clean_rebuild.font_render import GLYPH_BYTES, stored_cell
 from work.clean_rebuild.mes_compiler import compile_files
 from work.clean_rebuild.mes_format import DYNAMIC_PREFIX_START, parse_mes
 from work.clean_rebuild.renderer_format import measure_literal
-from work.clean_rebuild.script_integrity import audit_project_scn_references
 from work.clean_rebuild.scn_layout import (
     ROLE_CHOICE,
     ROLE_CONTINUATION,
@@ -27,6 +26,7 @@ from work.clean_rebuild.scn_layout import (
     TEXT_BOX_LOWER_DIALOGUE,
     infer_contracts,
 )
+from work.clean_rebuild.script_integrity import audit_project_scn_references
 from work.clean_rebuild.source_json import load_json_object
 from work.clean_rebuild.translation_audit import DEFAULT_RETAIL_ROOT, SOURCES
 from work.clean_rebuild.translation_formatter import (
