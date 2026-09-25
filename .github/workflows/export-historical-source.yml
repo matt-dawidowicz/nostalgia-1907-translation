@@ -17,6 +17,5 @@ jobs:
             nostalgia1907.project.json
             work/clean_rebuild/*.py
             work/clean_rebuild/*.json
-            work/clean_rebuild/sources/PART3C.json
-            work/clean_rebuild/sources/index.json
+            work/clean_rebuild/sources/*.json
           if-no-files-found: error
