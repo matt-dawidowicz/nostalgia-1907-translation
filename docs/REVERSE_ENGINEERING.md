@@ -79,11 +79,23 @@ The sixth `0x21` byte is live renderer state, not padding. Structural
 recognition therefore requires the complete six-byte command; a five-byte
 prefix is not a valid `0x21` occurrence. Values observed in retail scripts
 include `00`, `3B`, `70`, `6B`, and `77`.
-The state machine explicitly tests `$3B`; this value is used on continuation
-chains and suppresses the ordinary fresh-dialogue setup while retaining the
-current lower-text state. Other nonzero state values are preserved and exposed
-by the static occurrence model but should not be assigned semantics without
-additional executable/runtime evidence.
+The completion dispatcher mechanically distinguishes all five state values
+observed in retail:
+
+- `00`: run the ordinary cursor/strip advance-reset helper, then place and
+  enable the blinking lower-text advance indicator;
+- `3B`: retain the current X/strip state and set `$FF3DFB=1`, the
+  continuation latch;
+- `70`: run the same cursor/strip advance-reset helper but skip indicator
+  setup;
+- `77`: perform the `70` behavior and additionally clear `$FF3C2E`;
+- `6B`: set the remaining-row counter to three, prepare the scratch strip,
+  conditionally advance the strip index when the X cursor moved, clear the
+  text delay, and set `$FF3DFB=1`, without the ordinary indicator.
+
+These are executable side effects rather than guessed narrative meanings. The
+static occurrence model exposes the neutral mechanical effect for each value;
+scene-level names should not be invented where MAIN.BIN does not provide one.
 
 ## Top scene-label renderer
 
