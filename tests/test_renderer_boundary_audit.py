@@ -89,7 +89,7 @@ class RendererBoundaryUnitTests(unittest.TestCase):
     def test_compile_mes_rejects_an_overlong_unbreakable_token(self) -> None:
         """Keep semantic token integrity mandatory in the compiler itself."""
         retail_mes = b"\x00\x06\x00\x04\x01\x00"
-        retail_scn = b"\x21\x00\x01\x00\x01"
+        retail_scn = b"\x21\x00\x01\x00\x01\x00"
         canonical = {
             "schema_version": 1,
             "chapter": "TEST",
