@@ -175,6 +175,44 @@ Important state observed during executable analysis includes:
 These addresses are debugging landmarks, not a license to patch RAM or
 `MAIN.BIN` speculatively.
 
+## Exhaustive fixed-layout renderer inventory
+
+The post-PR-28 canonical corpus contains 123 records marked
+`layout_policy: "fixed"`. Exhaustive retail SCN cross-reference leaves no
+unknown fixed renderer family.
+
+| Renderer ownership | Fixed records |
+| --- | ---: |
+| `0x20` only | 76 |
+| `0x22` only | 38 |
+| `0x23` only | 2 |
+| width-`0x05` `0x24/0x28` only | 3 |
+| reused across multiple proven families | 4 |
+| unclassified/bespoke | 0 |
+
+The four multi-use records are not exceptions to native geometry. They are
+simply referenced by more than one already-proven renderer and must satisfy the
+narrowest applicable contract at every use.
+
+The apparently bespoke ending sequence `PART4C:051-059` is entirely ordinary
+`0x20` text. Its retail SCN grouping is:
+
+- `0x55; 0x20:051; 0x20:052`
+- `0x55; 0x20:053`
+- `0x55; 0x20:054`
+- `0x20:055; 0x20:056`
+- `0x55; 0x20:057; 0x20:058; 0x20:059`
+
+Thus the already-proven three-strip placement, fourth-line scroll, and
+`0x55` clear/reset behavior fully explain its text layout. The uninterrupted
+ending remains a runtime checkpoint for timing/composition, not because it owns
+a separate text engine.
+
+The action cards at PART1C:001, PART2A:001, PART3A:001, and PART4A:001 and the
+PART1B:005 date/location card likewise use ordinary `0x20`. The three PART1A
+countdown records use the proven width-`0x05` `0x24/0x28` window. The
+remaining fixed room/location/perspective records resolve to `0x22`/`0x23`.
+
 ## PART3C to PART4A investigation
 
 The reported post-1.0.2 black-screen defect at the end of Action 3 is tracked as
