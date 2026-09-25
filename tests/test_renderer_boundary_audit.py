@@ -122,7 +122,7 @@ class RendererBoundaryUnitTests(unittest.TestCase):
 
     def test_compile_mes_rejects_overlong_fixed_speaker_label(self) -> None:
         """Apply native speaker width even when fixed text is not reflowed."""
-        retail_mes = b"\x00\x0A\x00\x06\x00\x08\x01\x00\x01\x00"
+        retail_mes = b"\x00\x0a\x00\x06\x00\x08\x01\x00\x01\x00"
         retail_scn = b"\x21\x00\x01\x00\x02\x00"
         canonical = {
             "schema_version": 1,
