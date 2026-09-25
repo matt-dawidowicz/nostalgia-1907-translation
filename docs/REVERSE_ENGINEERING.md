@@ -245,14 +245,58 @@ fixed-slot MES replacement first, preserving member offsets and total archive
 size. Guarded reflow is permitted only on typed slot overflow and still
 preserves member names/order while remaining inside the original ISO allocation.
 
+### Runtime breakpoint map
+
+The retail executable provides a compact breakpoint set for a differential
+trace. Addresses below are MAIN.BIN absolute 68000 addresses with the retail
+load base at `$FF0000`.
+
+| Address | Purpose |
+| --- | --- |
+| `$FF039E` | SCN opcode `0x10` handler; entry to chapter-switch command |
+| `$FF0B7E` | chapter-loader entry |
+| `$FF0B30` | copy inline SCN filename/basename into `$FF3D18` |
+| `$FF0C16` | append/copy extension text used by loader/resource paths |
+| `$FF07B0` | SCN opcode `0x52` background handler |
+| `$FF0A7E` | SCN opcode `0x71` FSD/PSD handler |
+| `$FF184A` | sub-CPU command-3 resource extraction request |
+| `$FF1858` | shared sub-CPU completion/result path |
+| `$FF1834` | Word-RAM allocation pop (`SUBQ.W #1,$00200000`) |
+| `$FF2CB8` | BG-processing setup reached by `0x52` |
+| `$FF298E` | BG/VDP setup path reached by `0x52` |
+| `$FF330E` | final VDP/DMA-related transfer path reached by `0x52` |
+
+For the PART3C -> PART4A transition, capture at minimum:
+
+- `$FF3CB4/$FF3CB8`: newly installed SCN base/current pointer;
+- `$FF3E08/$FF3E04`: newly installed MES base/data pointer;
+- `$FF3D18`: current resource filename buffer;
+- `$00200000`: Word-RAM allocation count;
+- `$FF3DE8-$FF3DEE`: lower-text state;
+- `$FF465C/$FF465E`: floating-text state;
+- VDP register state and the relevant plane/name-table VRAM around the first
+  `131.BG` transfer.
+
+A one-pass differential trace should classify the failure as follows:
+
+1. **loader failure**: PART4A SCN/MES pointers differ or remain PART3C-owned
+   immediately after `$FF0B7E` returns;
+2. **archive lookup/extraction failure**: the filename buffer reaches
+   `131.bg` but the command-3 resource path does not return a valid payload;
+3. **BG decode/transfer failure**: extraction succeeds but execution diverges
+   in the `$FF2CB8/$FF298E/$FF330E` processing chain;
+4. **display-state failure**: the BG transfer completes identically but VDP
+   plane-enable/name-table state differs afterward.
+
 The next useful experiment is therefore a differential runtime trace between
 retail and the exact affected English candidate at:
 
 1. completion of PART3C's final `0x55`;
-2. entry/return of the `0x10 "part4a"` loader;
-3. the new SCN/MES pointers installed by the loader;
-4. PART4A's `0x71 "inbou3"` resource lookup; and
-5. the first unique PART4A `0x52 "131.bg"` lookup/decode/display path.
+2. entry and return of `$FF039E -> $FF0B7E` for `0x10 "part4a"`;
+3. verification of the new SCN/MES pointers;
+4. PART4A's `$FF0A7E` `0x71 "inbou3"` resource path; and
+5. the first unique PART4A `$FF07B0` `0x52 "131.bg"` path through
+   extraction, BG processing, and VDP transfer.
 
 Do not add a workaround until that trace identifies the failing subsystem.
 
