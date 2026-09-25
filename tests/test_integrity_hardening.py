@@ -36,13 +36,13 @@ class ScriptIntegrityTests(unittest.TestCase):
 
     def test_dialogue_reference_requires_in_range_record(self) -> None:
         """Accept valid 0x21 IDs and reject the same shape with a stale ID."""
-        valid = bytes((0x21, 0x00, 0x01, 0x00, 0x02))
+        valid = bytes((0x21, 0x00, 0x01, 0x00, 0x02, 0x00))
         refs = scan_scn_text_references(valid, 2, None)
         self.assertEqual(
             {(item.record_index, item.role) for item in refs},
             {(0, "speaker_name"), (1, "dialogue_body")},
         )
-        invalid = bytes((0x21, 0x00, 0x01, 0x00, 0x03))
+        invalid = bytes((0x21, 0x00, 0x01, 0x00, 0x03, 0x00))
         refs = scan_scn_text_references(invalid, 2, None)
         self.assertFalse(any(item.command == "0x21" for item in refs))
 
