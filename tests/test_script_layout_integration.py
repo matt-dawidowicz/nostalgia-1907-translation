@@ -704,11 +704,32 @@ class ScriptLayoutTests(unittest.TestCase):
         finally:
             mes_compiler.FIXED_ENGLISH_UNITS = dictionary
 
+    def test_speaker_name_overflow_is_rejected_during_compilation(
+        self,
+    ) -> None:
+        """Reject a 13-character speaker label before MES emission."""
+        chapter = "PART1C"
+        canonical = source(chapter)
+        altered = json.loads(json.dumps(canonical))
+        altered["records"][148]["display_text"] = "Chief Officer"
+        retail = DEFAULT_RETAIL_ROOT / "retail_unpacked" / chapter
+        with self.assertRaisesRegex(
+            mes_compiler.CompileError,
+            r"PART1C:148: label is 13 characters; renderer permits 12",
+        ):
+            mes_compiler.compile_mes(
+                (retail / f"{chapter}.MES").read_bytes(),
+                (retail / f"{chapter}.SCN").read_bytes(),
+                altered,
+            )
+
     def test_compact_display_labels_preserve_canonical_translation(
         self,
     ) -> None:
         """Render compact nameplate text without weakening glossary authority."""
         cases = (
+            ("PART1C", 148, "Chief Officer", "Chief Off.", 5),
+            ("PART1D", 114, "Chief Officer", "Chief Off.", 5),
             ("PART2D", 145, "Chief Engineer", "Chief Eng.", 5),
             ("PART2E", 47, "Chief Engineer", "Chief Eng.", 5),
             ("PART2E", 26, "Royal Suite B", "Royal Suite B", 7),
