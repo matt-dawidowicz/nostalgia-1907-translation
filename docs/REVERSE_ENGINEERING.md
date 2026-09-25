@@ -54,6 +54,49 @@ The opening dialogue row and continuation rows also use different native
 geometry. That rule belongs in the shared renderer/compiler contract, not in
 record-specific formatting.
 
+## Lower-dialogue speaker-name renderer
+
+SCN opcode `0x21` consumes two 16-bit MES IDs followed by one state byte.
+MAIN.BIN stores those fields at `$FF3DEA`, `$FF3DEC`, and
+`$FF3DEE` respectively before selecting dialogue mode 1.
+
+The first MES ID is not rendered through an independent name-box routine.
+When present, the mode-1 state machine resolves that record and rasterizes it
+into the same `$FF3E0C` 224x16 scratch strip used by the bottom text family.
+The name starts at local x=2. MAIN.BIN then establishes the first dialogue-cell
+anchor at local x=`$4A` (74), leaving exactly 72 pixels for the name:
+
+`(0x4A - 2) / 12 = 6` native MES cells.
+
+Generated English therefore has exactly 12 six-pixel character slots for a
+speaker name. The dialogue body begins at x=`$4A` for its one-time opening
+cell and subsequently uses x=`$56` for continuation rows. This also explains
+why speaker text and dialogue share the same bottom-strip vertical origin and
+why overlong names can collide with the dialogue region rather than clipping in
+a separate canvas.
+
+The sixth `0x21` byte is live renderer state, not padding. Structural
+recognition therefore requires the complete six-byte command; a five-byte
+prefix is not a valid `0x21` occurrence. Values observed in retail scripts
+include `00`, `3B`, `70`, `6B`, and `77`.
+The completion dispatcher mechanically distinguishes all five state values
+observed in retail:
+
+- `00`: run the ordinary cursor/strip advance-reset helper, then place and
+  enable the blinking lower-text advance indicator;
+- `3B`: retain the current X/strip state and set `$FF3DFB=1`, the
+  continuation latch;
+- `70`: run the same cursor/strip advance-reset helper but skip indicator
+  setup;
+- `77`: perform the `70` behavior and additionally clear `$FF3C2E`;
+- `6B`: set the remaining-row counter to three, prepare the scratch strip,
+  conditionally advance the strip index when the X cursor moved, clear the
+  text delay, and set `$FF3DFB=1`, without the ordinary indicator.
+
+These are executable side effects rather than guessed narrative meanings. The
+static occurrence model exposes the neutral mechanical effect for each value;
+scene-level names should not be invented where MAIN.BIN does not provide one.
+
 ## Top scene-label renderer
 
 SCN opcodes `0x22` and `0x23` share the same 12x12 MES-cell rasterizer but

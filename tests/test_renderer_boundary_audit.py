@@ -89,7 +89,7 @@ class RendererBoundaryUnitTests(unittest.TestCase):
     def test_compile_mes_rejects_an_overlong_unbreakable_token(self) -> None:
         """Keep semantic token integrity mandatory in the compiler itself."""
         retail_mes = b"\x00\x06\x00\x04\x01\x00"
-        retail_scn = b"\x21\x00\x01\x00\x01"
+        retail_scn = b"\x21\x00\x00\x00\x01\x00"
         canonical = {
             "schema_version": 1,
             "chapter": "TEST",
@@ -117,6 +117,44 @@ class RendererBoundaryUnitTests(unittest.TestCase):
         with self.assertRaisesRegex(
             mes_compiler.CompileError,
             "renderer row boundary splits or alters source token",
+        ):
+            mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
+
+    def test_compile_mes_rejects_overlong_fixed_speaker_label(self) -> None:
+        """Apply native speaker width even when fixed text is not reflowed."""
+        retail_mes = b"\x00\x0a\x00\x06\x00\x08\x01\x00\x01\x00"
+        retail_scn = b"\x21\x00\x01\x00\x02\x00"
+        canonical = {
+            "schema_version": 1,
+            "chapter": "TEST",
+            "record_count": 2,
+            "retail_mes": {
+                "size": len(retail_mes),
+                "sha256": hashlib.sha256(retail_mes).hexdigest().upper(),
+            },
+            "retail_scn": {
+                "size": len(retail_scn),
+                "sha256": hashlib.sha256(retail_scn).hexdigest().upper(),
+            },
+            "profile": {"schema_version": 1, "name": "TEST"},
+            "text_mode": "render-ready",
+            "records": [
+                {
+                    "index": 0,
+                    "policy": "translate",
+                    "text": "Chief Officer",
+                    "layout_policy": "fixed",
+                },
+                {
+                    "index": 1,
+                    "policy": "preserve",
+                    "text": None,
+                },
+            ],
+        }
+        with self.assertRaisesRegex(
+            mes_compiler.CompileError,
+            r"TEST:000: label is 13 characters; renderer permits 12",
         ):
             mes_compiler.compile_mes(retail_mes, retail_scn, canonical)
 

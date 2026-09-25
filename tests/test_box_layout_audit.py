@@ -15,6 +15,9 @@ from work.clean_rebuild.scn_layout import (
     SCENE_PERSPECTIVE_CANVAS,
     SCENE_PERSPECTIVE_CHARACTERS,
     SCENE_PERSPECTIVE_TEXT_ORIGIN,
+    SPEAKER_NAME_CELLS,
+    SPEAKER_NAME_CHARACTERS,
+    SPEAKER_NAME_TEXT_ORIGINS,
     SPECIAL_LINE_CANVASES,
     SPECIAL_LINE_CELLS,
     SPECIAL_LINE_TEXT_ORIGINS,
@@ -70,6 +73,52 @@ class BoxLayoutAuditTests(unittest.TestCase):
             perspective["text_origin"], SCENE_PERSPECTIVE_TEXT_ORIGIN
         )
         self.assertEqual(perspective["max_rows"], 1)
+
+    def test_dialogue_speaker_uses_six_cell_native_region(self) -> None:
+        """Bind 0x21 speaker names and state byte to the lower-strip geometry."""
+        uses = display_occurrences(
+            bytes((0x21, 0x00, 0x01, 0x00, 0x02, 0x3B)),
+            2,
+            None,
+        )
+        speaker = uses[0][0]
+        self.assertEqual(speaker["part"], "speaker_name")
+        self.assertEqual(speaker["permitted_cells"], SPEAKER_NAME_CELLS)
+        self.assertEqual(
+            speaker["permitted_characters"], SPEAKER_NAME_CHARACTERS
+        )
+        self.assertEqual(speaker["text_origins"], SPEAKER_NAME_TEXT_ORIGINS)
+        self.assertEqual(speaker["local_text_origin_x"], 2)
+        self.assertEqual(speaker["local_dialogue_anchor_x"], 0x4A)
+        self.assertEqual(speaker["state_byte"], "0x3B")
+        self.assertEqual(
+            speaker["state_effect"], "retain_cursor_set_continuation"
+        )
+        self.assertTrue(speaker["continuation_latch"])
+        dialogue = uses[1][0]
+        self.assertEqual(dialogue["state_byte"], "0x3B")
+        self.assertTrue(dialogue["continuation_latch"])
+
+    def test_dialogue_state_values_expose_proven_mechanical_effects(
+        self,
+    ) -> None:
+        """Describe every retail 0x21 state without assigning scene semantics."""
+        expected = {
+            0x00: ("advance_reset_with_indicator", False),
+            0x3B: ("retain_cursor_set_continuation", True),
+            0x70: ("advance_reset_without_indicator", False),
+            0x77: ("advance_reset_without_indicator_clear_3c2e", False),
+            0x6B: ("prepare_rows_advance_set_continuation", True),
+        }
+        for state, (effect, latch) in expected.items():
+            with self.subTest(state=state):
+                use = display_occurrences(
+                    bytes((0x21, 0, 1, 0, 2, state)),
+                    2,
+                    None,
+                )[0][0]
+                self.assertEqual(use["state_effect"], effect)
+                self.assertEqual(use["continuation_latch"], latch)
 
     def test_isolated_label_opcode_bytes_are_not_occurrences(self) -> None:
         """Do not certify operand bytes as scene labels without the paired shape."""

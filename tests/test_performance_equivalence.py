@@ -131,7 +131,7 @@ class ScnInventoryEquivalenceTests(unittest.TestCase):
 
     def test_contracts_share_one_display_inventory(self) -> None:
         """Build role/layout/row contracts from one structural inventory."""
-        scn = bytes((0x21, 0x00, 0x01, 0x00, 0x02))
+        scn = bytes((0x21, 0x00, 0x01, 0x00, 0x02, 0x00))
         with patch.object(
             scn_layout,
             "display_occurrences",

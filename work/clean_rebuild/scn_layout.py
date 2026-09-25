@@ -49,6 +49,27 @@ SPECIAL_LINE_CANVASES = (
     (16, 200, 224, 16),
 )
 SPECIAL_LINE_TEXT_ORIGINS = ((18, 170), (18, 186), (18, 202))
+# 0x21 rasterizes the speaker record into the same 224x16 scratch strip as
+# 0x20. The speaker starts at local x=2; the first dialogue cell begins at
+# local x=$4A. The 72 pixels between those anchors hold exactly six 12px MES
+# cells. Generated English packs at most two six-pixel characters per cell.
+SPEAKER_NAME_LOCAL_X = 2
+DIALOGUE_FIRST_CELL_LOCAL_X = 0x4A
+SPEAKER_NAME_CELLS = (
+    DIALOGUE_FIRST_CELL_LOCAL_X - SPEAKER_NAME_LOCAL_X
+) // FLOATING_CELL_PIXELS
+SPEAKER_NAME_CHARACTERS = SPEAKER_NAME_CELLS * 2
+SPEAKER_NAME_TEXT_WIDTH_PIXELS = SPEAKER_NAME_CELLS * FLOATING_CELL_PIXELS
+SPEAKER_NAME_TEXT_ORIGINS = SPECIAL_LINE_TEXT_ORIGINS
+# Neutral mechanical descriptions of the five state values observed in retail
+# 0x21 commands. These describe MAIN.BIN side effects, not scene semantics.
+DIALOGUE_STATE_EFFECTS = {
+    0x00: "advance_reset_with_indicator",
+    0x3B: "retain_cursor_set_continuation",
+    0x70: "advance_reset_without_indicator",
+    0x77: "advance_reset_without_indicator_clear_3c2e",
+    0x6B: "prepare_rows_advance_set_continuation",
+}
 SCENE_LOCATION_CHARACTERS = 21
 SCENE_PERSPECTIVE_CHARACTERS = 14
 SCENE_LOCATION_CANVAS = (16, 8, 128, 16)
@@ -98,6 +119,11 @@ TEXT_BOX_IDS = frozenset(
 DIALOGUE_OPENING_ANCHOR_CODE = 0x10
 
 LABEL_ROLES = frozenset((ROLE_SPEAKER, ROLE_LOCATION, ROLE_PERSPECTIVE))
+LABEL_CHARACTER_LIMITS = {
+    ROLE_SPEAKER: SPEAKER_NAME_CHARACTERS,
+    ROLE_LOCATION: SCENE_LOCATION_CHARACTERS,
+    ROLE_PERSPECTIVE: SCENE_PERSPECTIVE_CHARACTERS,
+}
 PROSE_ROLES = frozenset(
     (
         ROLE_DIALOGUE,
@@ -479,9 +505,17 @@ def display_occurrences(
 
     for offset in range(len(scn)):
         opcode = scn[offset]
-        if opcode == 0x21 and offset + 5 <= len(scn):
+        if opcode == 0x21 and offset + 6 <= len(scn):
             first_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
             second_id = int.from_bytes(scn[offset + 3 : offset + 5], "big")
+            state_byte = scn[offset + 5]
+            state_fields = {
+                "state_byte": f"0x{state_byte:02X}",
+                "state_effect": DIALOGUE_STATE_EFFECTS.get(
+                    state_byte, "unknown"
+                ),
+                "continuation_latch": state_byte in (0x3B, 0x6B),
+            }
             if 1 <= second_id <= record_count:
                 if 1 <= first_id <= record_count:
                     add(
@@ -489,8 +523,20 @@ def display_occurrences(
                         offset=f"0x{offset:X}",
                         command="0x21",
                         part="speaker_name",
-                        box="scene_label/speaker",
+                        box="lower_dialogue/speaker",
                         role=ROLE_SPEAKER,
+                        permitted_cells=SPEAKER_NAME_CELLS,
+                        permitted_characters=SPEAKER_NAME_CHARACTERS,
+                        text_width_pixels=SPEAKER_NAME_TEXT_WIDTH_PIXELS,
+                        text_origins=SPEAKER_NAME_TEXT_ORIGINS,
+                        local_text_origin_x=SPEAKER_NAME_LOCAL_X,
+                        local_dialogue_anchor_x=DIALOGUE_FIRST_CELL_LOCAL_X,
+                        evidence=(
+                            "MAIN.BIN 0x21 mode-1 path shares the 224x16 "
+                            "bottom-strip rasterizer; speaker x=2 and first "
+                            "dialogue cell x=$4A"
+                        ),
+                        **state_fields,
                     )
                 add(
                     second_id - 1,
@@ -499,6 +545,7 @@ def display_occurrences(
                     part="dialogue_body",
                     box="lower_dialogue",
                     role=ROLE_DIALOGUE,
+                    **state_fields,
                 )
             elif second_id == 0 and 1 <= first_id <= record_count:
                 add(
@@ -508,6 +555,7 @@ def display_occurrences(
                     part="dialogue_continuation",
                     box="lower_continuation",
                     role=ROLE_CONTINUATION,
+                    **state_fields,
                 )
         elif opcode == 0x20 and offset + 3 <= len(scn):
             text_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
@@ -758,7 +806,11 @@ def infer_layouts(
         raise ScnLayoutError(
             "retail MES record count does not match SCN layout input"
         )
-    inventory = occurrences or display_occurrences(scn, record_count, profile)
+    inventory = (
+        occurrences
+        if occurrences is not None
+        else display_occurrences(scn, record_count, profile)
+    )
     dialogue_anchor_indexes: set[int] = set()
 
     def add(index: int, layout: Layout, source: str) -> None:
@@ -907,7 +959,11 @@ def infer_roles(
     """Infer UI roles from one shared structural display inventory."""
     settings = profile or {}
     roles: dict[int, set[str]] = {}
-    inventory = occurrences or display_occurrences(scn, record_count, profile)
+    inventory = (
+        occurrences
+        if occurrences is not None
+        else display_occurrences(scn, record_count, profile)
+    )
 
     for index, record_occurrences in inventory.items():
         if index not in translated_indexes:
@@ -936,7 +992,11 @@ def infer_row_limits(
     """Infer floating-window row limits from shared structural occurrences."""
     settings = profile or {}
     limits: dict[int, int] = {}
-    inventory = occurrences or display_occurrences(scn, record_count, profile)
+    inventory = (
+        occurrences
+        if occurrences is not None
+        else display_occurrences(scn, record_count, profile)
+    )
     floating_roles = {ROLE_THOUGHT, ROLE_OVERLAY, ROLE_CHOICE}
     for index, record_occurrences in inventory.items():
         if index not in translated_indexes:

@@ -43,6 +43,7 @@ from .renderer_format import (
 )
 from .scn_layout import (
     DIALOGUE_OPENING_ANCHOR_CODE,
+    LABEL_CHARACTER_LIMITS,
     LABEL_ROLES,
     PROSE_ROLES,
     ROLE_CHOICE,
@@ -51,6 +52,7 @@ from .scn_layout import (
     Layout,
     infer_contracts,
     infer_layouts,
+    infer_roles,
 )
 from .source_json import load_json_object
 
@@ -664,6 +666,20 @@ def compile_mes(
 
     if text_mode == "adaptive":
         adaptive_indexes = set(translated)
+    # Roles such as speaker/location/perspective are native renderer facts, not
+    # reflow policy. Only records outside adaptive contract inference need this
+    # extra role-only scan; normal adaptive chapters still inventory the SCN once.
+    nonadaptive_indexes = set(translated) - adaptive_indexes
+    all_roles = (
+        infer_roles(
+            scn_data,
+            retail.record_count,
+            nonadaptive_indexes,
+            profile,
+        )
+        if nonadaptive_indexes
+        else {}
+    )
     needs_layouts = text_mode == "prose" or bool(adaptive_indexes)
     if adaptive_indexes:
         contracts = infer_contracts(
@@ -678,11 +694,14 @@ def compile_mes(
             for index, contract in contracts.items()
             if contract.layout is not None
         }
-        roles = {
-            index: contract.roles
-            for index, contract in contracts.items()
-            if contract.roles
-        }
+        roles = dict(all_roles)
+        roles.update(
+            {
+                index: contract.roles
+                for index, contract in contracts.items()
+                if contract.roles
+            }
+        )
         row_limits = {
             index: contract.max_rows
             for index, contract in contracts.items()
@@ -696,11 +715,11 @@ def compile_mes(
             profile,
             retail_records=retail.records,
         )
-        roles = {}
+        roles = dict(all_roles)
         row_limits = {}
     else:
         layouts = {}
-        roles = {}
+        roles = dict(all_roles)
         row_limits = {}
     retained_indexes = sorted(
         {
@@ -718,6 +737,22 @@ def compile_mes(
     for index, text in sorted(translated.items()):
         adaptive_record = index in adaptive_indexes
         layout_policy = raw_records[index].get("layout_policy")
+        record_roles = roles.get(index, frozenset())
+        label_text = (
+            normalize_ellipsis_style(normalize_semantic_text(text))
+            if adaptive_record
+            else text
+        )
+        label_limits = [
+            LABEL_CHARACTER_LIMITS[role]
+            for role in record_roles
+            if role in LABEL_CHARACTER_LIMITS
+        ]
+        if label_limits and len(label_text) > min(label_limits):
+            raise CompileError(
+                f"{chapter}:{index:03d}: label is {len(label_text)} "
+                f"characters; renderer permits {min(label_limits)}"
+            )
         if layout_policy == "anchor":
             row_specs = [((), "  ")]
         elif text_mode == "render-ready" and not adaptive_record:
@@ -726,7 +761,6 @@ def compile_mes(
             working = text
             layout = layouts.get(index)
             if adaptive_record:
-                record_roles = roles.get(index, frozenset())
                 non_prose_contract = record_roles & (
                     LABEL_ROLES | {ROLE_CHOICE}
                 )

@@ -124,7 +124,7 @@ def scan_scn_text_references(
                     0x23: "perspective_name",
                 }[opcode]
                 add(offset, f"0x{opcode:02X}", text_id - 1, role)
-        elif opcode == 0x21 and offset + 5 <= len(scn):
+        elif opcode == 0x21 and offset + 6 <= len(scn):
             first_id = int.from_bytes(scn[offset + 1 : offset + 3], "big")
             second_id = int.from_bytes(scn[offset + 3 : offset + 5], "big")
             if 1 <= second_id <= record_count:
