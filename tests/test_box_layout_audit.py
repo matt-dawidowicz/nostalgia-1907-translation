@@ -99,7 +99,9 @@ class BoxLayoutAuditTests(unittest.TestCase):
         self.assertEqual(dialogue["state_byte"], "0x3B")
         self.assertTrue(dialogue["continuation_latch"])
 
-    def test_dialogue_state_values_expose_proven_mechanical_effects(self) -> None:
+    def test_dialogue_state_values_expose_proven_mechanical_effects(
+        self,
+    ) -> None:
         """Describe every retail 0x21 state without assigning scene semantics."""
         expected = {
             0x00: ("advance_reset_with_indicator", False),
