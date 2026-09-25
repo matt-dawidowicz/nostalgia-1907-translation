@@ -190,9 +190,15 @@ unknown fixed renderer family.
 | reused across multiple proven families | 4 |
 | unclassified/bespoke | 0 |
 
-The four multi-use records are not exceptions to native geometry. They are
-simply referenced by more than one already-proven renderer and must satisfy the
-narrowest applicable contract at every use.
+The four multi-use records are not exceptions to native geometry:
+
+- `PART1C:034`: `0x20` + `0x22`;
+- `PART1D:113`: `0x20` + `0x22` + `0x23`;
+- `PART2B:084`: `0x22` + `0x23`; and
+- `PART4B:000`: `0x20` + `0x22`.
+
+They must satisfy every applicable already-proven canvas rather than receiving
+a bespoke contract.
 
 The apparently bespoke ending sequence `PART4C:051-059` is entirely ordinary
 `0x20` text. Its retail SCN grouping is:
