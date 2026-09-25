@@ -36,8 +36,8 @@
       "max_characters": 14
     },
     "narration": {
-      "source": "reviewed record override for a distinct narration renderer",
-      "format": "word-wrap and enforce the reviewed row limit"
+      "source": "START SCN 0x24/0x28 floating window; semantic role override only",
+      "format": "word-wrap to the encoded floating-window width and native row limit"
     },
     "menu_choice": {
       "source": "SCN 0x31 text ID with a valid branch target",
