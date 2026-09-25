@@ -33,10 +33,14 @@ FLOATING_BORDER_TILES = 2
 FLOATING_CELL_PIXELS = 12
 FLOATING_ROW_PIXELS = 16
 FLOATING_SCREEN_TILE_ROWS = 28
+# Retail visible-text descriptors use widths 0x05 through 0x1A. MAIN.BIN does
+# not dispatch through a width table: it applies the same border/pixel/cell
+# arithmetic to the descriptor byte. Keep the derived map only as a convenient
+# public view of that exact formula across the complete observed retail range.
 FLOATING_WIDTHS = {
     width: ((width - FLOATING_BORDER_TILES) * FLOATING_TILE_PIXELS)
     // FLOATING_CELL_PIXELS
-    for width in range(0x07, 0x13)
+    for width in range(0x05, 0x1B)
 }
 # MAIN.BIN opcode 0x20 uses an 18-cell one-line canvas. The 0x22/0x23
 # scene labels use separate top-screen canvases whose exact geometry comes from
