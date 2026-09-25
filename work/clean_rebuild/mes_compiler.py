@@ -52,6 +52,7 @@ from .scn_layout import (
     Layout,
     infer_contracts,
     infer_layouts,
+    infer_roles,
 )
 from .source_json import load_json_object
 
@@ -665,6 +666,15 @@ def compile_mes(
 
     if text_mode == "adaptive":
         adaptive_indexes = set(translated)
+    # Roles such as speaker/location/perspective are native renderer facts, not
+    # reflow policy. Fixed translated labels must retain their literal layout
+    # while still obeying the same one-line canvas limits as adaptive labels.
+    all_roles = infer_roles(
+        scn_data,
+        retail.record_count,
+        set(translated),
+        profile,
+    )
     needs_layouts = text_mode == "prose" or bool(adaptive_indexes)
     if adaptive_indexes:
         contracts = infer_contracts(
@@ -679,11 +689,14 @@ def compile_mes(
             for index, contract in contracts.items()
             if contract.layout is not None
         }
-        roles = {
-            index: contract.roles
-            for index, contract in contracts.items()
-            if contract.roles
-        }
+        roles = dict(all_roles)
+        roles.update(
+            {
+                index: contract.roles
+                for index, contract in contracts.items()
+                if contract.roles
+            }
+        )
         row_limits = {
             index: contract.max_rows
             for index, contract in contracts.items()
@@ -697,11 +710,11 @@ def compile_mes(
             profile,
             retail_records=retail.records,
         )
-        roles = {}
+        roles = dict(all_roles)
         row_limits = {}
     else:
         layouts = {}
-        roles = {}
+        roles = dict(all_roles)
         row_limits = {}
     retained_indexes = sorted(
         {
@@ -726,8 +739,8 @@ def compile_mes(
         else:
             working = text
             layout = layouts.get(index)
+            record_roles = roles.get(index, frozenset())
             if adaptive_record:
-                record_roles = roles.get(index, frozenset())
                 non_prose_contract = record_roles & (
                     LABEL_ROLES | {ROLE_CHOICE}
                 )
@@ -742,16 +755,16 @@ def compile_mes(
                     working = normalize_ellipsis_style(
                         normalize_semantic_text(text)
                     )
-                label_limits = [
-                    LABEL_CHARACTER_LIMITS[role]
-                    for role in record_roles
-                    if role in LABEL_CHARACTER_LIMITS
-                ]
-                if label_limits and len(working) > min(label_limits):
-                    raise CompileError(
-                        f"{chapter}:{index:03d}: label is {len(working)} "
-                        f"characters; renderer permits {min(label_limits)}"
-                    )
+            label_limits = [
+                LABEL_CHARACTER_LIMITS[role]
+                for role in record_roles
+                if role in LABEL_CHARACTER_LIMITS
+            ]
+            if label_limits and len(working) > min(label_limits):
+                raise CompileError(
+                    f"{chapter}:{index:03d}: label is {len(working)} "
+                    f"characters; renderer permits {min(label_limits)}"
+                )
             row_specs = _prose_rows(
                 working,
                 layout,
