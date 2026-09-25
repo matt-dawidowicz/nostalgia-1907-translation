@@ -91,10 +91,32 @@ class BoxLayoutAuditTests(unittest.TestCase):
         self.assertEqual(speaker["local_text_origin_x"], 2)
         self.assertEqual(speaker["local_dialogue_anchor_x"], 0x4A)
         self.assertEqual(speaker["state_byte"], "0x3B")
+        self.assertEqual(
+            speaker["state_effect"], "retain_cursor_set_continuation"
+        )
         self.assertTrue(speaker["continuation_latch"])
         dialogue = uses[1][0]
         self.assertEqual(dialogue["state_byte"], "0x3B")
         self.assertTrue(dialogue["continuation_latch"])
+
+    def test_dialogue_state_values_expose_proven_mechanical_effects(self) -> None:
+        """Describe every retail 0x21 state without assigning scene semantics."""
+        expected = {
+            0x00: ("advance_reset_with_indicator", False),
+            0x3B: ("retain_cursor_set_continuation", True),
+            0x70: ("advance_reset_without_indicator", False),
+            0x77: ("advance_reset_without_indicator_clear_3c2e", False),
+            0x6B: ("prepare_rows_advance_set_continuation", True),
+        }
+        for state, (effect, latch) in expected.items():
+            with self.subTest(state=state):
+                use = display_occurrences(
+                    bytes((0x21, 0, 1, 0, 2, state)),
+                    2,
+                    None,
+                )[0][0]
+                self.assertEqual(use["state_effect"], effect)
+                self.assertEqual(use["continuation_latch"], latch)
 
     def test_isolated_label_opcode_bytes_are_not_occurrences(self) -> None:
         """Do not certify operand bytes as scene labels without the paired shape."""
