@@ -260,22 +260,35 @@ Word-RAM resource accounting has a separate rollback mechanism:
   `$FF3D12` for the newly loaded chapter.
 
 PART3C does not execute `0x5D` immediately before PART4A. That is legal and
-not unique: several successful retail transitions also omit it. It does mean,
-however, that PART3C depends on every temporary resource operation being
-balanced before the chapter switch, because an unbalanced counter would become
-PART4A's new baseline.
+not unique: several successful retail transitions also omit it.
 
-The two high-value PART3C resource paths inspected statically are balanced:
+More importantly, the chapter loader has a two-level allocation baseline. At
+entry around `$FF0B7E` it first restores the live Word-RAM allocation counter
+at `$00200000` from the lower/global baseline at `$FF3D10`. Only after the
+new chapter archive and its SCN/MES members are installed does it snapshot the
+new live count into the chapter-local baseline at `$FF3D12`. The `0x5D`
+rollback restores to `$FF3D12`, not `$FF3D10`.
+
+Therefore an ordinary unbalanced temporary PART3C allocation cannot simply
+become PART4A's baseline: the `0x10` chapter switch discards that excess by
+restoring `$FF3D10` before loading PART4A.
+
+The high-value PART3C resource paths inspected statically are also balanced in
+their normal success paths:
 
 - `0x52` executes resource extraction, BG processing, VDP transfer, and then
   the allocation pop at `$FF1834`;
 - `0x71` performs its FSD extraction/processing and then the same allocation
-  pop before continuing with the PSD-side resource command.
+  pop before continuing with the PSD-side resource command;
+- retained foreground/resource commands such as PART3C's `0x50 "sea.fg"`
+  can intentionally keep an allocation live, but the later `0x5D` in that
+  sequence rolls those retained pointers and the chapter-local allocation
+  count back before the final scene sequence.
 
-This makes a generic leak in the normal `0x52` or `0x71` path less likely.
-A runtime reproduction should still record `$00200000` immediately before
-and after the final PART3C `0x55`, because a rare earlier command or error
-path could still leave the counter above its chapter baseline.
+This substantially weakens Word-RAM allocation leakage as the cause of the
+reported end-of-Action-3 black screen. A runtime reproduction should still
+capture both `$FF3D10` and `$FF3D12` together with `$00200000` so an
+abnormal loader/error path can be distinguished from normal rollback.
 
 ### First PART4A resource boundary
 
