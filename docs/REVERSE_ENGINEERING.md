@@ -227,6 +227,56 @@ This weakens a simple persistent-text-state explanation for the black screen:
 the chapter switch replaces the script/text data sources after an explicit
 `0x55` clear.
 
+### Text-idle gate and resource-allocation invariants
+
+The transition tail is not unique to PART3C. Retail SCN contains the exact
+`55 5A 01 10 <next-chapter>` sequence at eight chapter boundaries:
+PART1B, PART1C, PART1D, PART2A, PART2B, PART2D, PART3C, and PART4A. This makes
+the PART3C tail itself ordinary engine behavior and moves suspicion toward the
+state entering that sequence.
+
+The `0x55` handler is also more specific than a synchronous "clear" label
+suggests. It first checks the combined lower-text / window-indicator activity
+state through the helper at approximately `$FF0314`. When those systems are
+idle, it selects lower-text state 9 at `$FF3DE8`. The text state machine then
+runs the native clear/reset path around `$FF1D3E-$FF1D88`, which clears the
+three lower-screen text strips and resets the active lower-text mode plus its
+line/page cursor fields. It is therefore an engine state transition, not a
+direct bulk-RAM zero.
+
+Resource commands use the related gate around `$FF0322` before beginning
+their work. In particular, both `0x52` (background) and `0x71` (FSD/PSD)
+wait for the text systems to be idle and for the sub-CPU resource interface to
+be ready before continuing. This substantially weakens a simple race in which
+longer English dialogue overlaps an already-running background load.
+
+Word-RAM resource accounting has a separate rollback mechanism:
+
+- `0x5D` clears the four tracked resource pointers at
+  `$FF3CBC/$FF3CC0/$FF3CC4/$FF3CC8`;
+- it restores the live Word-RAM allocation counter at `$00200000` from the
+  chapter baseline saved at `$FF3D12`;
+- the chapter loader itself snapshots the current allocation counter into
+  `$FF3D12` for the newly loaded chapter.
+
+PART3C does not execute `0x5D` immediately before PART4A. That is legal and
+not unique: several successful retail transitions also omit it. It does mean,
+however, that PART3C depends on every temporary resource operation being
+balanced before the chapter switch, because an unbalanced counter would become
+PART4A's new baseline.
+
+The two high-value PART3C resource paths inspected statically are balanced:
+
+- `0x52` executes resource extraction, BG processing, VDP transfer, and then
+  the allocation pop at `$FF1834`;
+- `0x71` performs its FSD extraction/processing and then the same allocation
+  pop before continuing with the PSD-side resource command.
+
+This makes a generic leak in the normal `0x52` or `0x71` path less likely.
+A runtime reproduction should still record `$00200000` immediately before
+and after the final PART3C `0x55`, because a rare earlier command or error
+path could still leave the counter above its chapter baseline.
+
 ### First PART4A resource boundary
 
 PART4A begins by reinitializing screen state, then requests:
