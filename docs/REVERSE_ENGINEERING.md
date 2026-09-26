@@ -290,6 +290,73 @@ reported end-of-Action-3 black screen. A runtime reproduction should still
 capture both `$FF3D10` and `$FF3D12` together with `$00200000` so an
 abnormal loader/error path can be distinguished from normal rollback.
 
+### Late PART3C background and Word-RAM audit
+
+The reported symptom did not include a screenshot, save state, emulator build,
+or exact trigger. Therefore "the end of the third act" cannot be assumed to
+mean the PART3C -> PART4A loader boundary. The late PART3C display sequence was
+also audited directly: `128.BG`, `129.BG`, `130.BG`, and
+`130A.BG`.
+
+The normal `0x52` background path establishes a strict VRAM separation from
+the text renderers:
+
+- BG header bytes 2 and 3 are the width and height in 8x8 tiles;
+- all of `128.BG`, `129.BG`, `130.BG`, `130A.BG`, and PART4A's
+  `131.BG` are 24x16 tiles and unpack to 12,304 bytes;
+- the 16-byte header is skipped and exactly 384 * 32 = `0x3000` bytes of
+  tile patterns are transferred to VRAM `$3000-$5FFF`;
+- the BG tile map is written in the plane region beginning at VRAM `$E000`
+  with a 64-tile row stride; and
+- header bytes 4-15 are six Genesis color words copied to the CRAM shadow at
+  `$FFFBF4`, then the palette-dirty flag at `$FFFE29` is asserted.
+
+The five late BG headers are byte-identical:
+
+`00 00 18 10 00 E0 0E 0E 00 0E 06 66 08 88 0C CC`
+
+Thus those scenes share placement, dimensions, and palette metadata as well as
+the same native display path. The exact header is also a common retail BG
+format, not a late-game special case.
+
+The translated fixed font cannot directly overwrite this background state.
+`FIX_CODE.FNT` is loaded into Word RAM and its pointer is stored at
+`$FF3E00`. The glyph rasterizer selects either that fixed-font pointer or the
+MES dynamic-font pointer at `$FF3E04`, indexes 18-byte glyph cells, and draws
+them into the text scratch surface at `$FF3E0C`. The complete font file is
+not DMA-loaded into the BG pattern or BG name-table regions. The established
+lower-text VRAM strips at `$0700-$1BFF` are also disjoint from BG pattern
+VRAM `$3000-$5FFF`.
+
+The sub-CPU command-3 member extractor was traced as well. It resolves the
+member table entry, reads the entry's unpacked-size field at +`0x16`, passes
+that exact size to the Word-RAM allocator, then copies/decompresses into the
+result. Allocations are rounded upward to eight bytes. The allocator begins at
+Word-RAM offset `$0100`; the first `$100` bytes hold allocator metadata.
+Consequently the historical English PART3C MES is allocated at its actual
+larger unpacked size rather than inside a retail-sized buffer.
+
+A complete PART3C allocation high-water audit includes the persistent fixed
+font, PART3C SCN and MES, retained `0x40/0x41` KAS/QES resources, retained
+`0x50` foregrounds, temporary `0x52` BG resources, `0x71` FSD work,
+and every `0x5D` rollback. The worst cases are the early 114/116 KAS+QES
+pairs, not the late backgrounds.
+
+| Build/state | Word-RAM high-water | Headroom to `$40000` |
+| --- | ---: | ---: |
+| Retail PART3C maximum | `$24B38` (150,328) | 111,816 bytes |
+| Historical 1.0.2 PART3C maximum | `$25050` (151,632) | 110,512 bytes |
+| Historical 1.0.2 late-BG peak | `$09080` (36,992) | 225,152 bytes |
+
+The historical MES expansion moves the allocation baseline by only `$518`
+(1,304 bytes). It therefore cannot explain the reported late black graphics
+through Word-RAM exhaustion, allocator wrapping, or a retail-sized MES
+allocation.
+
+No late SCN palette-write command occurs between the audited `0x52` loads and
+their dialogue/label/audio sequences, so the ordinary script path also does not
+immediately overwrite the six BG palette words after installation.
+
 ### First PART4A resource boundary
 
 PART4A begins by reinitializing screen state, then requests:
