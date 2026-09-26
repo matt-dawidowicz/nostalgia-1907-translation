@@ -357,6 +357,86 @@ No late SCN palette-write command occurs between the audited `0x52` loads and
 their dialogue/label/audio sequences, so the ordinary script path also does not
 immediately overwrite the six BG palette words after installation.
 
+### Late PART3C background and VDP isolation
+
+The late Action 3 background sequence is:
+
+- scene/state ID `$0025` -> `128.BG`;
+- scene/state ID `$0026` -> `0x71 "g"` -> `129.BG`;
+- scene/state ID `$0027` -> `130.BG`;
+- one ordinary lower-dialogue record -> flag update -> `130A.BG`;
+- then the final dialogue/window activity, `0x55`, and `0x10 "part4a"`.
+
+The values `$0025/$0026/$0027` are operands to opcode `0x01`, not SCN
+opcodes. Handler `0x01` selects a word in the script-variable table rooted at
+`$FF3C34` and stores the following big-endian 16-bit value.
+
+The apparently unusual dialogue-to-background edge before `130A.BG` is not
+unique engine behavior. PART1A also performs `0x21 -> 0x5A -> 0x52` without
+an intervening `0x55`. In the historical English PART3C build the dialogue
+immediately before `130A.BG` is only the one-row record `"..."`; the
+multi-page late dialogue record is earlier and is followed by a full `0x55`
+reset before `130.BG`.
+
+The `G.FSD/G.PSD` pair loaded before `129.BG` is likewise not unique.
+Byte-identical copies are used in PART1C, PART3B, PART3B_, PART3C, and PART4A,
+and the same `0x71 "g" -> 0x52 <background>` pattern occurs in other retail
+chapters.
+
+The normal `0x52` background path also isolates background graphics from
+translated text in VRAM. At approximately `$FF298E`, the BG member header is
+interpreted as:
+
+- byte 0: X tile coordinate;
+- byte 1: Y tile coordinate;
+- byte 2: width in tiles;
+- byte 3: height in tiles;
+- bytes 4-15: twelve bytes copied into the background display/palette state
+  buffer before the palette-update flag is raised.
+
+The tile payload begins at member offset 16. For the normal 24x16 backgrounds,
+the engine transfers 384 8x8 4bpp tiles = `$3000` bytes. The transfer begins
+at VRAM tile `$180`, byte address `$3000`, so the background pattern bank is
+`$3000-$5FFF`.
+
+The background name-table writer uses `$E000` as its plane base. By contrast,
+the translated text/window renderers use low pattern VRAM below `$1C00` and
+plane-A name-table addresses rooted at `$C000`. Therefore expanded English
+text cannot directly overwrite either the background pattern bank or the
+background name table.
+
+The late resources are also structurally ordinary:
+
+- `128.BG`, `129.BG`, `130.BG`, `130A.BG`, and PART4A `131.BG`
+  are all 12,304-byte unpacked 24x16 backgrounds;
+- 186 retail backgrounds use the same 24x16 geometry;
+- the 12-byte header tail used by those five backgrounds is the game's most
+  common variant, appearing on 117 retail backgrounds;
+- all five members decode to coherent nonblank graphics.
+
+The byte-exact historical 1.0.2 PART3C archive differs from retail only in
+`PART3C.MES`. Its SCN and every graphics/resource member, including
+`128.BG` through `130A.BG` and `G.FSD/G.PSD`, remain byte-identical to
+retail.
+
+PART3C's multi-frame `0x56` display transitions occur earlier in the sea
+sequence. One transition has a 384-frame duration and is followed by an
+explicit 384-frame wait; the later transition has a one-frame duration. No
+further `0x56` command occurs from that point through the end of PART3C, so a
+long-lived transition/scroll command is not a strong explanation for a failure
+at `128.BG` or later.
+
+The common VDP DMA helper temporarily selects register-15 auto-increment 1 for
+its transfer and restores the normal auto-increment value 2 afterward. The
+background path therefore does not depend on a translated text renderer leaving
+register 15 in a particular transient DMA state.
+
+These facts eliminate direct text/BG VRAM collision, unusual late BG geometry,
+a unique `G` animation resource, and an obvious unfinished `0x56` transition
+as explanations. Remaining display-layer runtime work should concentrate on
+shared palette state, plane visibility/scroll state, and emulator-specific
+behavior rather than member placement.
+
 ### First PART4A resource boundary
 
 PART4A begins by reinitializing screen state, then requests:
