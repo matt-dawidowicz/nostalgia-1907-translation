@@ -437,6 +437,55 @@ as explanations. Remaining display-layer runtime work should concentrate on
 shared palette state, plane visibility/scroll state, and emulator-specific
 behavior rather than member placement.
 
+### SCN burst execution and palette-transition serialization
+
+The SCN interpreter does not advance at a fixed one-opcode-per-frame cadence.
+Once the per-frame main loop releases script execution, ordinary handlers can
+branch directly back to the dispatcher at approximately `$FF01F0` and execute
+additional opcodes in the same VM burst. Commands that own visible or timed
+state arrange for script execution to yield until that state is ready.
+
+This matters for the common scene-transition idiom:
+
+`0x5A 01 -> ... -> 0x52 <background> -> ... -> 0x59 01`
+
+`0x59` and `0x5A` manipulate the palette-transition bitfield at
+`$FF4DC0`:
+
+- `0x5A 01` selects bit 5, the second palette bank's fade-to-black state;
+- `0x59 01` selects bit 1, the corresponding restore/fade-in state.
+
+The per-frame palette routine around `$FF2EE2-$FF2FAA` services the two
+palette banks using live buffers rooted at `$FFFFFB80/$FFFFFBA0` and target
+buffers 0x40 bytes later. The normal BG path installs its twelve-byte palette
+target into the second target bank before requesting a palette upload.
+
+The compact SCN encoding does **not** allow fade-out and fade-in to race. The
+main-loop script-admission test ORs `$FF4DC0` into the global busy state
+(alongside other display/resource state). Any active palette-transition bit
+therefore prevents another SCN burst from starting. After `0x5A 01`, script
+execution remains blocked until the fade-to-black routine clears bit 5.
+Likewise `0x59 01` blocks subsequent script execution until its fade-in bit
+clears.
+
+This explains why many retail scenes safely place only a background/resource
+load between the two palette commands. The shortest late PART3C case,
+`0x5A 01 -> 0x52 "130a.bg" -> 0x59 01`, is not a special timing shortcut;
+equivalent direct forms occur much earlier in retail chapters.
+
+Resource command 3 itself is synchronous from the main-CPU VM's perspective.
+The path at approximately `$FF184A/$FF1858` sends the request to the Mega-CD
+sub-CPU, prepares the uppercase resource name, and busy-waits on the completion
+word and communication registers before returning. This does not weaken the
+palette serialization because script admission is governed by the higher-level
+main-loop busy state.
+
+Therefore a normal historical English text/resource timing change cannot cause
+`0x59` to overtake an unfinished `0x5A` fade. A persistent black background
+would require a different failure: corruption of the palette state/target,
+failure of the per-frame palette service itself, or behavior outside the
+canonical engine state machine.
+
 ### First PART4A resource boundary
 
 PART4A begins by reinitializing screen state, then requests:
